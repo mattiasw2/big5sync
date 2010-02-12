@@ -7,6 +7,6 @@ namespace Syncless.Helper
 {
     public static class ErrorMessage
     {
-        //public static const string TAG_NOT_FOUND = "101";
+        
     }
 }
