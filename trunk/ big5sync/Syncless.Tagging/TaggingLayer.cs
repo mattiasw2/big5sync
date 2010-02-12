@@ -36,7 +36,7 @@ namespace Syncless.Tagging
         
         private TaggingLayer()
         {
-            _tagList = new List<Tag>();
+            _tagList = Load();
         }
 
         /// <summary>
@@ -50,6 +50,7 @@ namespace Syncless.Tagging
             {
                 FolderTag tag = new FolderTag(tagname);
                 _tagList.Add(tag);
+                Save();
                 return tag;
             }
             else
@@ -68,6 +69,7 @@ namespace Syncless.Tagging
             if (CheckTagExists(tagname))
             {
                 _tagList.Remove((FolderTag)GetTag(tagname));
+                Save();
                 return true;
             }
             else
@@ -90,6 +92,7 @@ namespace Syncless.Tagging
             {
                 tag.AddPath(path);
                 AddTag(tag);
+                Save();
                 return tag;
             }
             else
@@ -112,6 +115,7 @@ namespace Syncless.Tagging
                 bool success = tag.RemovePath(path);
                 if (success)
                 {
+                    Save();
                     return tag;
                 }
                 else
@@ -136,6 +140,7 @@ namespace Syncless.Tagging
             {
                 FileTag tag = new FileTag(tagname);
                 _tagList.Add(tag);
+                Save();
                 return tag;
             }
             else
@@ -154,6 +159,7 @@ namespace Syncless.Tagging
             if (CheckTagExists(tagname))
             {
                 _tagList.Remove((FileTag)GetTag(tagname));
+                Save();
                 return true;
             }
             else
@@ -175,6 +181,7 @@ namespace Syncless.Tagging
             {
                 tag.AddPath(path);
                 AddTag(tag);
+                Save();
                 return tag;
             }
             else
@@ -197,6 +204,7 @@ namespace Syncless.Tagging
                 bool success = tag.RemovePath(path);
                 if (success)
                 {
+                    Save();
                     return tag;
                 }
                 else
@@ -402,6 +410,24 @@ namespace Syncless.Tagging
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Write to _tagging.xml the updated tag list
+        /// TODO: write the logic to write the current tag list to xml
+        /// </summary>
+        private void Save()
+        {
+        }
+
+        /// <summary>
+        /// Load from _tagging.xml to create the tag list
+        /// TODO: write the logic to read from xml and create tag list
+        /// </summary>
+        /// <returns>A list of Tags</returns>
+        private List<Tag> Load()
+        {
+            return new List<Tag>();
         }
     }
 }
