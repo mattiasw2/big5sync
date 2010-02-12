@@ -7,6 +7,9 @@ namespace Syncless.CompareAndSync
 {
     public enum FileChangeType
     {
-        NEW,UPDATED,RENAMED,DELETED
+        Create,
+        Delete,
+        Update,
+        Rename
     }
 }
