@@ -1,5 +1,0 @@
-C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Tagging\bin\Debug\Syncless.Tagging.dll
-C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Tagging\bin\Debug\Syncless.Tagging.pdb
-C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Tagging\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Tagging\obj\Debug\Syncless.Tagging.dll
-C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Tagging\obj\Debug\Syncless.Tagging.pdb
