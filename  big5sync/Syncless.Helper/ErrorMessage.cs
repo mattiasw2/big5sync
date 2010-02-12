@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Syncless.Core
+namespace Syncless.Helper
 {
     public static class ErrorMessage
     {
-        public static const string TAG_NOT_FOUND = "101";
+        //public static const string TAG_NOT_FOUND = "101";
     }
 }
