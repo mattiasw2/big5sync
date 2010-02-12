@@ -26,18 +26,7 @@
         	</Menu>
 		</DockPanel>
 		<ToolBar DockPanel.Dock="Top" OpacityMask="Black" Background="#FF00B0FF">
-            <Button><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" Height="32" Source="addnewjob.ico" Stretch="Fill" ToolTip="Add New Job"/></Button>
-			<Button><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" Height="32" Source="deletejob.ico" Stretch="Fill" ToolTip="Delete Job"/></Button>
-			<Separator />
-			<Button Click="Analyse_Click"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" Height="32" Source="anal.ico" Stretch="Fill" ToolTip="Analyse"/></Button>
-			<Button Click="Synchronize_Click"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" Height="32" Source="synch.ico" Stretch="Fill" ToolTip="Synchronize"/></Button>
-			<Button><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" Height="32" Source="stop.ico" Stretch="Fill" ToolTip="Stop"/></Button>
-			<Separator />
-			<Button Click="Analyse_Click"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" Height="32" Source="analyseall.ico" Stretch="Fill" ToolTip="Analyse All"/></Button>
-			<Button Click="Synchronize_Click"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" Height="32" Source="synchall.ico" Stretch="Fill" ToolTip="Synchronize All"/></Button>
-			<Button><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" Height="32" Source="stopall.ico" Stretch="Fill" ToolTip="Stop All"/></Button>
-			<Separator />
-			<Button><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" Height="32" Source="preferences.ico" Stretch="Fill" ToolTip="Preferences"/></Button>
+            <Button><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="32" Height="32" Source="Syncless Logo.ico" Stretch="Fill" ToolTip="Add New Job"/></Button>
 		</ToolBar>
     </Grid>
 </Window>
