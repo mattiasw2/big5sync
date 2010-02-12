@@ -1,0 +1,7 @@
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Monitor\bin\Debug\Syncless.Monitor.dll
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Monitor\bin\Debug\Syncless.Monitor.pdb
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Monitor\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Monitor\obj\Debug\Syncless.Monitor.dll
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Monitor\obj\Debug\Syncless.Monitor.pdb
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Monitor\bin\Debug\Syncless.Tagging.dll
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Monitor\bin\Debug\Syncless.Tagging.pdb

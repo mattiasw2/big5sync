@@ -1,0 +1,7 @@
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.CompareAndSync\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.CompareAndSync\bin\Debug\Syncless.CompareAndSync.dll
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.CompareAndSync\bin\Debug\Syncless.CompareAndSync.pdb
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.CompareAndSync\bin\Debug\Syncless.Tagging.dll
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.CompareAndSync\bin\Debug\Syncless.Tagging.pdb
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.CompareAndSync\obj\Debug\Syncless.CompareAndSync.dll
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.CompareAndSync\obj\Debug\Syncless.CompareAndSync.pdb

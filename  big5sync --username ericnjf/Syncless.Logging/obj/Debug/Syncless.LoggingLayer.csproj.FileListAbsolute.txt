@@ -1,0 +1,10 @@
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\LoggingLayer\bin\Debug\Syncless.Logging.dll
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\LoggingLayer\bin\Debug\Syncless.Logging.pdb
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\LoggingLayer\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\LoggingLayer\obj\Debug\Syncless.Logging.dll
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\LoggingLayer\obj\Debug\Syncless.Logging.pdb
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Logging\bin\Debug\Syncless.Logging.dll
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Logging\bin\Debug\Syncless.Logging.pdb
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Logging\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Logging\obj\Debug\Syncless.Logging.dll
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Syncless\Syncless.Logging\obj\Debug\Syncless.Logging.pdb
