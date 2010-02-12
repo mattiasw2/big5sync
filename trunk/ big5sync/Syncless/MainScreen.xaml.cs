@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace Syncless
 {
     /// <summary>
-    /// Interaction logic for Window1.xaml
+    /// Interaction logic for MainScreen.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class MainScreen : Window
     {
-        public Window1()
+        public MainScreen()
         {
             InitializeComponent();
         }
