@@ -24,9 +24,39 @@ namespace Syncless.Profiling
 
         public void CreateMapping(string logicalAddress, string physicalAddress)
         {
+            if (FindLogicalFromPhysical(physicalAddress) != null || FindPhysicalFromLogical(logicalAddress))
+            {
+                //Mapping Exist Exception
+                //TODO
+                throw new Exception();
+
+            }
             ProfileMapping map = new ProfileMapping(logicalAddress, physicalAddress);
+            _mappingList.Add(map);
+            
         }
-        
+        public string FindPhysicalFromLogical(string logical)
+        {
+            foreach (ProfileMapping mapping in _mappingList)
+            {
+                if (mapping.LogicalAddress.Equals(logical))
+                {
+                    return mapping.PhyiscalAddress;
+                }
+            }
+            return null;
+        }
+        public string FindLogicalFromPhysical(string physical)
+        {
+            foreach (ProfileMapping mapping in _mappingList)
+            {
+                if (mapping.PhyiscalAddress.Equals(physical))
+                {
+                    return mapping.LogicalAddress;
+                }
+            }
+            return null;
+        }
 
     }
 }
