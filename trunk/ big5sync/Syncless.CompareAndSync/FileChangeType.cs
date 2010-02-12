@@ -10,6 +10,7 @@ namespace Syncless.CompareAndSync
         Create,
         Delete,
         Update,
-        Rename
+        Rename,
+        None
     }
 }
