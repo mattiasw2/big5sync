@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ErrorMessage.cs" />
+    <Compile Include="DeviceWatcher.cs" />
     <Compile Include="ICommandLineControllerInterface.cs" />
     <Compile Include="IMonitorControllerInterface.cs" />
     <Compile Include="IUIControllerInterface.cs" />
