@@ -5,30 +5,39 @@ using System.Text;
 
 namespace Syncless.CompareAndSync
 {
-    public class CompareResult
+    public class CompareResult : Result
     {
-        private string _fromPath;
-        private string _toPath;
-
-        public string FromPath
+        public CompareResult(FileChangeType changeType, string from, string to)
         {
-            get { return _fromPath; }
-            set { this._fromPath = value; }
+            base.ChangeType = changeType;
+            base.From = from;
+            base.To = to;
         }
 
-        public string ToPath
+        public override string ToString()
         {
-            get { return _toPath; }
-            set { this._toPath = value; }
+            String s = null;
+            switch (ChangeType)
+            {
+                case FileChangeType.Create:
+                    s = "Create:";
+                    break;
+                case FileChangeType.Delete:
+                    s = "Delete:";
+                    break;
+                case FileChangeType.Rename:
+                    s = "Rename:";
+                    break;
+                case FileChangeType.Update:
+                    s = "Update";
+                    break;
+            }
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(s);
+            sb.AppendLine("Source: " + base.From);
+            sb.AppendLine("Destination: " + base.To);
+            //sb.Append(s + " Source: " + base.From + " Destination: " + base.To);
+            return sb.ToString();
         }
-
-        private FileChangeType _change;
-        public FileChangeType Change
-        {
-            get { return _change; }
-            set { _change = value; }
-        }
-
     }
-    
 }
