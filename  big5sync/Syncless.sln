@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless.CompareAndSync", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless.Helper", "Syncless.Helper\Syncless.Helper.csproj", "{576092CC-8371-4DB1-A877-ADCDFDC22EB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless.Tester", "Syncless.Tester\Syncless.Tester.csproj", "{C1C35440-3A99-49A2-9460-082EC9966030}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{367E21DA-3838-4A53-A393-A283203C6597}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,10 +51,10 @@ Global
 		{576092CC-8371-4DB1-A877-ADCDFDC22EB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{576092CC-8371-4DB1-A877-ADCDFDC22EB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{576092CC-8371-4DB1-A877-ADCDFDC22EB6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C1C35440-3A99-49A2-9460-082EC9966030}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1C35440-3A99-49A2-9460-082EC9966030}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1C35440-3A99-49A2-9460-082EC9966030}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1C35440-3A99-49A2-9460-082EC9966030}.Release|Any CPU.Build.0 = Release|Any CPU
+		{367E21DA-3838-4A53-A393-A283203C6597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{367E21DA-3838-4A53-A393-A283203C6597}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{367E21DA-3838-4A53-A393-A283203C6597}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{367E21DA-3838-4A53-A393-A283203C6597}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
