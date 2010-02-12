@@ -7,7 +7,8 @@ namespace Syncless.Tagging
 {
     public abstract class Tag
     {
-        private string _tagName;
+        protected string _tagName;
+
         public string TagName
         {
             get { return _tagName; }
@@ -22,8 +23,10 @@ namespace Syncless.Tagging
             this._pathList = new List<TaggedPath>();
         }
 
-        public abstract Boolean AddPath(string path);
-        public abstract Boolean AddPath(string path, string date);
+        public abstract bool AddPath(string path);
+        
+        public abstract bool AddPath(string path, string date);
+
         public bool Contain(string path)
         {
             foreach (TaggedPath p in _pathList)
@@ -35,5 +38,16 @@ namespace Syncless.Tagging
             }
             return false;
         }
+
+        /*Private Implementation*/
+        public abstract bool RemovePath(string path);
+
+        protected string GetLogicalID(string path)
+        {
+            string[] tokens = path.Split(':');
+            return tokens[0];
+        }
+
+        protected abstract TaggedPath RetrieveTaggedPath(string path);
     }
 }

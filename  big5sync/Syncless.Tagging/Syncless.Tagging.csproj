@@ -45,6 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\PathAlreadyExistsException.cs" />
+    <Compile Include="Exceptions\PathNotFoundException.cs" />
+    <Compile Include="Exceptions\TagAlreadyExistsException.cs" />
+    <Compile Include="Exceptions\TagNotFoundException.cs" />
     <Compile Include="FileTag.cs" />
     <Compile Include="FolderTag.cs" />
     <Compile Include="Tag.cs" />
