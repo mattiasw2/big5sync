@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless", "Syncless\Syncless.csproj", "{959BEEF5-C187-4546-B030-532D470CC893}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless.Profiling", "Syncless.Profiling\Syncless.Profiling.csproj", "{041C9915-0A36-46EE-9707-57BB21006ADB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless.Core", "Syncless.Core\Syncless.Core.csproj", "{A50EB031-1E52-4846-BEF5-8B696581E90F}"
@@ -15,16 +13,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless.LoggingLayer", "Sy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless.CompareAndSync", "Syncless.CompareAndSync\Syncless.CompareAndSync.csproj", "{11A68547-BB7C-4864-A63B-B84BED65410E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless", "Syncless\Syncless.csproj", "{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{959BEEF5-C187-4546-B030-532D470CC893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{959BEEF5-C187-4546-B030-532D470CC893}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{959BEEF5-C187-4546-B030-532D470CC893}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{959BEEF5-C187-4546-B030-532D470CC893}.Release|Any CPU.Build.0 = Release|Any CPU
 		{041C9915-0A36-46EE-9707-57BB21006ADB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{041C9915-0A36-46EE-9707-57BB21006ADB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{041C9915-0A36-46EE-9707-57BB21006ADB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -49,6 +45,10 @@ Global
 		{11A68547-BB7C-4864-A63B-B84BED65410E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11A68547-BB7C-4864-A63B-B84BED65410E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11A68547-BB7C-4864-A63B-B84BED65410E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
