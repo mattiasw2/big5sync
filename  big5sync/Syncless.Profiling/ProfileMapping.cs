@@ -19,5 +19,10 @@ namespace Syncless.Profiling
             get { return _phyiscalAddress; }
             set { _phyiscalAddress = value; }
         }
+        public ProfileMapping(string logical, string physical)
+        {
+            this._logicalAddress = logical;
+            this._phyiscalAddress = physical;
+        }
     }
 }
