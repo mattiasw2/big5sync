@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Syncless.Tagging;
 using Syncless.CompareAndSync;
+using Syncless.Monitor;
 namespace Syncless.Core
 {
     public class SystemLogicLayer : IUIControllerInterface,IMonitorControllerInterface
@@ -164,23 +165,23 @@ namespace Syncless.Core
             throw new NotImplementedException();
         }
 
+        #endregion
 
-
-        
+        #region IMonitorControllerInterface Members
 
         public void HandleFileChange(FileInfo info, FileChangeType type)
         {
             throw new NotImplementedException();
         }
 
-        public void HandleDriveChange(DriveInfo info, Syncless.Monitor.DriveChangeType type)
+        public void HandleDriveChange(DriveInfo info, DriveChangeType type)
         {
             throw new NotImplementedException();
         }
 
-        #endregion
+        
 
-        #region IMonitorControllerInterface Members
+        
 
 
         public void HandleFolderChange(DirectoryInfo info, FileChangeType type)
