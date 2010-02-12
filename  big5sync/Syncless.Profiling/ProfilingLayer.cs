@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 namespace Syncless.Profiling
 {
     public class ProfilingLayer
@@ -19,9 +20,12 @@ namespace Syncless.Profiling
                 return _instance;
             }
         }
+        private Profile _profile;
+        private bool _saved;
         private ProfilingLayer()
         {
-
+            _profile = new Profile("Unnamed");
+            _saved = false;
         }
         /// <summary>
         /// Convert a Logical address to a Physical address
@@ -29,9 +33,12 @@ namespace Syncless.Profiling
         /// </summary>
         /// <param name="path">The Logical Address to be converted</param>
         /// <returns>The Physical Address</returns>
+        
         public string ConvertLogicalToPhysical(string path)
         {
-            return null;
+            Debug.Assert(path != null);
+            Debug.Assert(_profile != null);
+            return _profile.FindPhysicalFromLogical(path);                
         }
         /// <summary>
         /// Convert a Physical address to a Logical address
@@ -41,17 +48,25 @@ namespace Syncless.Profiling
         /// <returns>The Logical Address</returns>
         public string ConvertPhysicalToLogical(string path)
         {
-            return null;
+            Debug.Assert(path != null);
+            Debug.Assert(_profile != null);
+            return _profile.FindLogicalFromPhysical(path);
         }
         /// <summary>
         /// Get the relative path of a path.
         ///    001:/Lectures will return /Lectures
+        ///    C:/Lectures will return /Lectures
+        ///    C:/ will return /
+        ///    path assert not null.
         /// </summary>
         /// <param name="path">The path to process</param>
         /// <returns>The Relative path</returns>
         public string GetRelativePath(string path)
         {
-            return null;
+            Debug.Assert(path != null);
+            Debug.Assert(path.IndexOf(':') != -1);
+            return path.Substring(path.IndexOf(':') + 1);
+
         }
         /// <summary>
         /// Take in a list of logical address , convert them to physical and return only those that are currently available.
@@ -71,6 +86,20 @@ namespace Syncless.Profiling
         {
             return null;
         }
-
+        public bool LoadProfile(string path, bool merge)
+        {
+            _saved = true;
+            return true;
+        }
+        public bool SaveProfile()
+        {
+            _saved = true;
+            return true;
+        }
+        private Profile LoadMapping(string path)
+        {
+            return null;
+        }
+        
     }
 }

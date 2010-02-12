@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.IO;
 namespace Syncless.Profiling
 {
     public class Profile
@@ -22,7 +22,7 @@ namespace Syncless.Profiling
             _mappingList = new List<ProfileMapping>();
         }
 
-        public void CreateMapping(string logicalAddress, string physicalAddress)
+        public void CreateMapping(string logicalAddress, string physicalAddress,string guid)
         {
             if (FindLogicalFromPhysical(physicalAddress) != null || FindPhysicalFromLogical(logicalAddress) != null)
             {
@@ -31,7 +31,7 @@ namespace Syncless.Profiling
                 throw new Exception();
 
             }
-            ProfileMapping map = new ProfileMapping(logicalAddress, physicalAddress);
+            ProfileMapping map = new ProfileMapping(logicalAddress, physicalAddress, guid);
             _mappingList.Add(map);
             
         }
