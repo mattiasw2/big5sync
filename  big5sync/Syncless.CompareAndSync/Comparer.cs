@@ -5,6 +5,7 @@ using System.Text;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
+using Syncless.Tagging;
 
 namespace Syncless.CompareAndSync
 {
@@ -12,39 +13,46 @@ namespace Syncless.CompareAndSync
     {
         private const int CREATE_TABLE = 0, DELETE_TABLE = 1, RENAME_TABLE = 2, UPDATE_TABLE = 3;
         private Dictionary<int, Dictionary<string, List<string>>> _changeTable;
-        private Dictionary<string, string> propogateTable;
 
-        public List<CompareResult> CompareFolder(DummyTag dTag)
+        public List<CompareResult> CompareFolder(/*FolderTag fTag*/ List<string> paths)
         {
-            Debug.Assert(dTag != null);
+            //Debug.Assert(fTag != null);
             _changeTable = new Dictionary<int, Dictionary<string, List<string>>>();
             _changeTable.Add(CREATE_TABLE, new Dictionary<string, List<string>>());
             _changeTable.Add(DELETE_TABLE, new Dictionary<string, List<string>>());
             _changeTable.Add(RENAME_TABLE, new Dictionary<string, List<string>>());
             _changeTable.Add(UPDATE_TABLE, new Dictionary<string, List<string>>());
-            propogateTable = new Dictionary<string, string>();
 
-            List<string> paths = dTag.Paths;
-            List<FileInfo> currSrcFolder = GetAllDirectoryFiles(paths[0]);
+            //YC: Please change this soon, Eric. I should not be processing TaggedPaths.
+            /*
+            List<TaggedPath> taggedPaths = fTag.FolderPaths;
+            List<string> paths = null;
+            foreach (TaggedPath path in taggedPaths)
+            {
+                paths.Add(path.Path);
+            }
+             */
+            
+            List<CompareInfoObject> currSrcFolder = GetAllCompareObjects(paths[0]);
 
             for (int i = 1; i < paths.Count; i++)
             {
-                currSrcFolder = OneWayCompareFolder(paths[i - 1], paths[i], currSrcFolder, GetAllDirectoryFiles(paths[i]));
+                currSrcFolder = OneWayCompareFolder(currSrcFolder, GetAllCompareObjects(paths[i]), paths[i]);
             }
             for (int i = paths.Count - 2; i >= 0; i--)
             {
-                currSrcFolder = OneWayCompareFolder(paths[i + 1], paths[i], currSrcFolder, GetAllDirectoryFiles(paths[i]));
+                currSrcFolder = OneWayCompareFolder(currSrcFolder, GetAllCompareObjects(paths[i]), paths[i]);
             }
             ProcessRawResults();
             return null;
         }
 
-        public List<FileInfo> OneWayCompareFolder(string sourcePath, string targetPath, List<FileInfo> source, List<FileInfo> target)
+        public List<CompareInfoObject> OneWayCompareFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath)
         {
             Debug.Assert(source != null && target != null);
-            List<FileInfo> querySrcExceptTgt = source.Except(target, new FileNameCompare()).ToList<FileInfo>();
-            List<FileInfo> querySrcIntersectTgt = source.Intersect(target, new FileNameCompare()).ToList<FileInfo>();
-            List<FileInfo> queryTgtIntersectSrc = target.Intersect(source, new FileNameCompare()).ToList<FileInfo>();
+            List<CompareInfoObject> querySrcExceptTgt = source.Except(target, new FileNameCompare()).ToList<CompareInfoObject>();
+            List<CompareInfoObject> querySrcIntersectTgt = source.Intersect(target, new FileNameCompare()).ToList<CompareInfoObject>();
+            List<CompareInfoObject> queryTgtIntersectSrc = target.Intersect(source, new FileNameCompare()).ToList<CompareInfoObject>();
             int exceptItemsCount = querySrcExceptTgt.Count;
             Debug.Assert(querySrcIntersectTgt.Count == queryTgtIntersectSrc.Count);
             int commonItemsCount = queryTgtIntersectSrc.Count;
@@ -53,7 +61,7 @@ namespace Syncless.CompareAndSync
 
             for (int i = 0; i < exceptItemsCount; i++)
             {
-                newFilePath = CreateNewItemPath(sourcePath, querySrcExceptTgt[i].FullName, targetPath);
+                newFilePath = CreateNewItemPath(querySrcExceptTgt[i], targetPath);
                 if (_changeTable[CREATE_TABLE].TryGetValue(querySrcExceptTgt[i].FullName, out createList))
                 {
                     if (!createList.Contains(newFilePath))
@@ -67,18 +75,12 @@ namespace Syncless.CompareAndSync
                     createList.Add(newFilePath);
                     _changeTable[CREATE_TABLE].Add(querySrcExceptTgt[i].FullName, createList);
                 }
-
-                if (!propogateTable.ContainsKey(querySrcExceptTgt[i].FullName))
-                {
-                    propogateTable.Add(querySrcExceptTgt[i].FullName, sourcePath);
-                }
-
             }
 
             for (int i = 0; i < commonItemsCount; i++)
             {
-                FileInfo srcFile = (FileInfo)querySrcIntersectTgt[i];
-                FileInfo tgtFile = (FileInfo)queryTgtIntersectSrc[i];
+                CompareInfoObject srcFile = (CompareInfoObject)querySrcIntersectTgt[i];
+                CompareInfoObject tgtFile = (CompareInfoObject)queryTgtIntersectSrc[i];
                 int compareResult = new FileContentCompare().Compare(srcFile, tgtFile);
 
                 if (compareResult > 0)
@@ -96,13 +98,15 @@ namespace Syncless.CompareAndSync
                         updateList.Add(tgtFile.FullName);
                         _changeTable[UPDATE_TABLE].Add(srcFile.FullName, updateList);
                     }
-                    queryTgtIntersectSrc.RemoveAt(i);
-                    queryTgtIntersectSrc.Insert(i, srcFile);
-                    if (!propogateTable.ContainsKey(querySrcIntersectTgt[i].FullName))
+
+                    //YC: Experimental
+                    if (_changeTable[CREATE_TABLE].ContainsKey(tgtFile.FullName))
                     {
-                        propogateTable.Add(querySrcIntersectTgt[i].FullName, sourcePath);
+                        _changeTable[CREATE_TABLE].Remove(tgtFile.FullName);
                     }
 
+                    queryTgtIntersectSrc.RemoveAt(i);
+                    queryTgtIntersectSrc.Insert(i, srcFile);
                 }
                 else if (compareResult < 0)
                 {
@@ -110,41 +114,28 @@ namespace Syncless.CompareAndSync
                     {
                         _changeTable[UPDATE_TABLE].Remove(srcFile.FullName);
                     }
-                    if (propogateTable.ContainsKey(srcFile.FullName))
-                    {
-                        propogateTable.Remove(srcFile.FullName);
-                    }
                 }
 
             }
 
-            return (queryTgtIntersectSrc.Union(querySrcExceptTgt)).Union(target).ToList<FileInfo>();
+            return (queryTgtIntersectSrc.Union(querySrcExceptTgt)).Union(target).ToList<CompareInfoObject>();
         }
 
-        public List<FileInfo> GetAllDirectoryFiles(string path)
+        public List<CompareInfoObject> GetAllCompareObjects(string path)
         {
-            return new DirectoryInfo(path).GetFiles("*", SearchOption.AllDirectories).ToList<FileInfo>();
-        }
-
-        private string GetOriginFolder(string sourceFolder, string fullFilePath)
-        {
-            if (fullFilePath.Contains(sourceFolder))
+            FileInfo[] allFiles = new DirectoryInfo(path).GetFiles("*", SearchOption.AllDirectories);
+            List<CompareInfoObject> results = new List<CompareInfoObject>();
+            foreach (FileInfo f in allFiles)
             {
-                return sourceFolder;
+                results.Add(new CompareInfoObject(path, f.FullName, f.Name, f.LastWriteTime));
             }
-            else
-            {
-                Debug.Assert(propogateTable.ContainsKey(fullFilePath));
-                return propogateTable[fullFilePath];
-            }
+            return results;
         }
 
-        private string CreateNewItemPath(string sourceFolder, string fullFilePath, string targetOrigin)
+        private string CreateNewItemPath(CompareInfoObject source, string targetOrigin)
         {
-            String sourceOrigin = GetOriginFolder(sourceFolder, fullFilePath);
-            Debug.Assert(fullFilePath.Contains(sourceOrigin));
-            String rPath = fullFilePath.Substring(sourceOrigin.Length + 1);
-            return Path.Combine(targetOrigin, rPath);
+            Debug.Assert(source != null && targetOrigin != null);            
+            return Path.Combine(targetOrigin, source.RelativePathToOrigin);
         }
 
         private List<CompareResult> ProcessRawResults()
@@ -196,23 +187,26 @@ namespace Syncless.CompareAndSync
         /// Simple file name comparer.
         /// TODO: Compare by relative path to origin folder
         /// </summary>
-        private class FileNameCompare : IEqualityComparer<FileInfo>
+        private class FileNameCompare : IEqualityComparer<CompareInfoObject>
         {
-            public bool Equals(FileInfo f1, FileInfo f2)
+            public bool Equals(CompareInfoObject c1, CompareInfoObject c2)
             {
-                return (f1.Name.ToLower() == f2.Name.ToLower());
+                return (c1.RelativePathToOrigin.ToLower() == c2.RelativePathToOrigin.ToLower());
             }
 
-            public int GetHashCode(FileInfo f)
+            public int GetHashCode(CompareInfoObject c)
             {
-                return f.Name.ToLower().GetHashCode();
+                return c.RelativePathToOrigin.ToLower().GetHashCode();
             }
         }
 
-        class FileContentCompare : IComparer<FileInfo>
+        class FileContentCompare : IComparer<CompareInfoObject>
         {
-            public int Compare(FileInfo f1, FileInfo f2)
+            public int Compare(CompareInfoObject c1, CompareInfoObject c2)
             {
+                FileInfo f1 = new FileInfo(c1.FullName);
+                FileInfo f2 = new FileInfo(c2.FullName);
+
                 bool isEqual = true;
 
                 // YC: If file length is different, they are definitely different files
