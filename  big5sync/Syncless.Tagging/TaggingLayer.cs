@@ -39,6 +39,11 @@ namespace Syncless.Tagging
             _tagList = new List<Tag>();
         }
 
+        /// <summary>
+        /// Create a Folder Tag of tagname, raise a TagAlreadyExistsException if the tag has been created
+        /// </summary>
+        /// <param name="tagname">The name of the Tag to be created</param>
+        /// <returns>The created Tag</returns>
         public FolderTag CreateFolderTag(string tagname)
         {
             if (!CheckTagExists(tagname))
@@ -53,6 +58,11 @@ namespace Syncless.Tagging
             }
         }
 
+        /// <summary>
+        /// Remove the Folder Tag of tagname, raise TagNotFoundException if the tag does not exist
+        /// </summary>
+        /// <param name="tagname">The name of the Tag to be removed</param>
+        /// <returns>True if the tag is removed successfully, else raise an exception</returns>
         public bool RemoveFolderTag(string tagname)
         {
             if (CheckTagExists(tagname))
@@ -67,7 +77,8 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Tag a Folder with a tagname. If the tagname does not exist , create it. If a Folder is tagged with a tagname of a file, raise an exception.
+        /// Tag a Folder with a tagname. If the tagname does not exist , create it. If a Folder is tagged with a tagname of a file, 
+        /// raise an exception.
         /// </summary>
         /// <param name="path">The path to be tagged.</param>
         /// <param name="tagname">The name of the Tag</param>
@@ -114,6 +125,11 @@ namespace Syncless.Tagging
             }
         }
 
+        /// <summary>
+        /// Create a File Tag of tagname, raise a TagAlreadyExistsException if the tag has been created
+        /// </summary>
+        /// <param name="tagname">The name of the Tag to be created</param>
+        /// <returns>The created Tag</returns>
         public FileTag CreateFileTag(string tagname)
         {
             if (!CheckTagExists(tagname))
@@ -128,6 +144,11 @@ namespace Syncless.Tagging
             }
         }
 
+        /// <summary>
+        /// Remove the File Tag of tagname, raise TagNotFoundException if the tag does not exist
+        /// </summary>
+        /// <param name="tagname">The name of the Tag to be removed</param>
+        /// <returns>True if the tag is removed successfully, else raise an exception</returns>
         public bool RemoveFileTag(string tagname)
         {
             if (CheckTagExists(tagname))
@@ -269,11 +290,19 @@ namespace Syncless.Tagging
         }
         
         /*Private implementation*/
-        private Tag RetrieveTag(string tagName, bool toCreate, bool isFolder)
+        /// <summary>
+        /// Get the tag of tagname. If toCreate is true, if the Tag has not been created, then create the Tag.
+        /// If isFolder is true, a Folder Tag is created, else a Folder Tag is created.
+        /// </summary>
+        /// <param name="tagname">The name of the tag to be retrieved</param>
+        /// <param name="toCreate">Indicate whether to create the Tag if not found</param>
+        /// <param name="isFolder">Indicate whether to create a Folder Tag or a File Tag</param>
+        /// <returns>The Tag that has been created/found</returns>
+        private Tag RetrieveTag(string tagname, bool toCreate, bool isFolder)
         {
-            if (CheckTagExists(tagName))
+            if (CheckTagExists(tagname))
             {
-                return GetTag(tagName);
+                return GetTag(tagname);
             }
             else
             {
@@ -281,12 +310,12 @@ namespace Syncless.Tagging
                 {
                     if (isFolder)
                     {
-                        FolderTag tag = new FolderTag(tagName);
+                        FolderTag tag = new FolderTag(tagname);
                         return tag;
                     }
                     else
                     {
-                        FileTag tag = new FileTag(tagName);
+                        FileTag tag = new FileTag(tagname);
                         return tag;
                     }
                 }
@@ -297,6 +326,10 @@ namespace Syncless.Tagging
             }
         }
 
+        /// <summary>
+        /// Add a Tag to the tag list if it does not exist in the list
+        /// </summary>
+        /// <param name="tag">The Tag object to be added to the tag list</param>
         private void AddTag(Tag tag)
         {
             if (!CheckTagExists(tag.TagName))
@@ -305,11 +338,16 @@ namespace Syncless.Tagging
             }
         }
 
-        private Tag GetTag(string tagName)
+        /// <summary>
+        /// Get the Tag of tagname.
+        /// </summary>
+        /// <param name="tagname">The name of the Tag to be retrieved</param>
+        /// <returns>If the Tag exists in the tag list, return the Tag, else return null</returns>
+        private Tag GetTag(string tagname)
         {
             foreach (Tag tag in _tagList)
             {
-                if (tag.TagName.Equals(tagName))
+                if (tag.TagName.Equals(tagname))
                 {
                     return tag;
                 }
@@ -317,18 +355,30 @@ namespace Syncless.Tagging
             return null;
         }
 
-        private bool CheckTagExists(string tagName)
+        /// <summary>
+        /// Check whether the Tag of tagname exist in the tag list.
+        /// </summary>
+        /// <param name="tagname">The name of the Tag to check</param>
+        /// <returns>True if the Tag is found in the list, else return false</returns>
+        private bool CheckTagExists(string tagname)
         {
             foreach (Tag tag in _tagList)
             {
-                if (tag.TagName.Equals(tagName))
+                if (tag.TagName.Equals(tagname))
                 {
                     return true;
                 }
             }
             return false;
         }
-
+        
+        /// <summary>
+        /// Check whether a Tag contains paths of logical drive ID same as ID.
+        /// </summary>
+        /// <param name="tag">The Tag object to be checked</param>
+        /// <param name="ID">The ID to be searched</param>
+        /// <param name="isFolder">Indicate whether the given Tag is a Folder Tag or File Tag</param>
+        /// <returns>True if the Tag contains paths with ID, else return false</returns>
         private bool CheckID(Tag tag, string ID, bool isFolder)
         {
             if (isFolder)
