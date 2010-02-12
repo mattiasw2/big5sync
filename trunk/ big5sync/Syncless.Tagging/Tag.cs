@@ -26,6 +26,13 @@ namespace Syncless.Tagging
         public abstract Boolean AddPath(string path, string date);
         public bool Contain(string path)
         {
+            foreach (TaggedPath p in _pathList)
+            {
+                if (p.Path.Equals(path))
+                {
+                    return true;
+                }
+            }
             return false;
         }
     }
