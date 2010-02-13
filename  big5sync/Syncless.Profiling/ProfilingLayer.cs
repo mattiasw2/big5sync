@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Xml;
 namespace Syncless.Profiling
 {
     public class ProfilingLayer
     {
         private static ProfilingLayer _instance;
-        public ProfilingLayer Instance
+        public static ProfilingLayer Instance
         {
             get
             {
@@ -86,6 +87,7 @@ namespace Syncless.Profiling
         {
             return null;
         }
+        
         public bool LoadProfile(string path, bool merge)
         {
             _saved = true;
@@ -96,10 +98,107 @@ namespace Syncless.Profiling
             _saved = true;
             return true;
         }
+        /*
         private Profile LoadMapping(string path)
         {
+            XmlDocument profilexml = LoadFile(path);
+            Profile profile = ProcessXML(profilexml);
+
+
+            return profile;
+        }
+        private Profile ProcessXML(XmlDocument profilexml)
+        {
+            List<ProfileMapping> mappings = new List<ProfileMapping>();
+            Profile profile = ProcessHeader(profilexml);
+            return profile;
+        }
+        private Profile ProcessHeader(XmlDocument profilexml)
+        {
+            profilexml.FirstChild;
+        }
+
+        private static XmlDocument LoadFile(string path)
+        {
+            try
+            {
+                FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                XmlDocument xml = new XmlDocument();
+                xml.Load(fs);
+            }
+            catch (FileNotFoundException fnfe)
+            {
+                Console.WriteLine(fnfe.StackTrace);
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return null;
+            }
+
             return null;
         }
-        
+        */
+        private bool SaveMapping(Profile profile,string path)
+        {
+            XmlDocument xml = ConvertToXMLDocument(profile);
+            
+            XmlTextWriter textWriter = new XmlTextWriter(path, Encoding.UTF8);
+            textWriter.Formatting = Formatting.Indented;
+            xml.WriteContentTo(textWriter);
+            textWriter.Close();
+            return true;
+        }
+        private XmlDocument ConvertToXMLDocument(Profile profile)
+        {
+            XmlDocument profilexml = new XmlDocument();
+            XmlElement root = CreateRoot(profilexml,profile);
+            foreach (ProfileMapping mapping in profile.Mappings)
+            {
+                XmlElement map = CreateElementForMapping(profilexml, mapping);
+                root.AppendChild(map);
+            }
+            profilexml.AppendChild(root);
+            return profilexml;
+        }
+        private XmlElement CreateRoot(XmlDocument profilexml, Profile profile)
+        {
+            XmlElement root = profilexml.CreateElement("profile");
+            XmlAttribute nameAttr = profilexml.CreateAttribute("name");
+            nameAttr.Value = profile.ProfileName;
+            root.SetAttributeNode(nameAttr);
+            return root;
+        }
+        private XmlElement CreateElementForMapping(XmlDocument profilexml, ProfileMapping mapping)
+        {
+            XmlElement map = profilexml.CreateElement("drive");
+            XmlElement logical = profilexml.CreateElement("logical");
+            XmlElement physical = profilexml.CreateElement("physical");
+            XmlElement guid = profilexml.CreateElement("guid");
+            Debug.Assert(mapping.GUID != null);
+            Debug.Assert(mapping.LogicalAddress != null);
+            if (mapping.PhyiscalAddress != null || !mapping.PhyiscalAddress.Equals(""))
+            {
+                physical.InnerText = mapping.PhyiscalAddress;
+            }
+            logical.InnerText = mapping.LogicalAddress;
+            guid.InnerText = mapping.GUID;
+
+            map.AppendChild(logical);
+            map.AppendChild(physical);
+            map.AppendChild(guid);
+            return map;
+        }
+        /*
+        public void DebugMode()
+        {
+            _profile = new Profile("new profile");
+            _profile.CreateMapping("001", "C:", "128319478127312389178");
+            _profile.CreateMapping("002", "D:", "219481938175817381736");
+
+            
+        }
+        */
     }
 }
