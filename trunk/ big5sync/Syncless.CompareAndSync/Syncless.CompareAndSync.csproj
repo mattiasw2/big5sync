@@ -54,6 +54,7 @@
     <Compile Include="FileSyncLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Result.cs" />
+    <Compile Include="Syncer.cs" />
     <Compile Include="SyncRequest.cs" />
     <Compile Include="SyncResult.cs" />
   </ItemGroup>

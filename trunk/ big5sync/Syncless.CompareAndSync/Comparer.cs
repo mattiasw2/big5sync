@@ -298,6 +298,7 @@ namespace Syncless.CompareAndSync
         {
             FileStream fileStream = fileInput.OpenRead();
             byte[] fileHash = MD5.Create().ComputeHash(fileStream);
+            fileStream.Close();
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < fileHash.Length; i++)
             {
