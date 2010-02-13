@@ -100,10 +100,90 @@ namespace Syncless.CompareAndSync
         private List<CompareInfoObject> GetDiffMetaActual(string path)
         {
             //Do some processing between meta and actual files
+            List<CompareInfoObject> results = new List<CompareInfoObject>();
+
             List<CompareInfoObject> actual = GetAllCompareObjects(path);
             List<CompareInfoObject> meta = GetDiffMetaActual(path);
 
-            return null;
+            // YC: This will give us files that exist but are not in the
+            // metadata. Implies either new or renamed files.
+            List<CompareInfoObject> actualExceptMeta = actual.Except<CompareInfoObject>(meta, new FileNameCompare()).ToList<CompareInfoObject>();
+
+            // YC: This will give us files that exist in metadata but in the
+            // actual folder. Implies either deleted or renamed files.
+            List<CompareInfoObject> metaExceptActual = meta.Except<CompareInfoObject>(actual, new FileNameCompare()).ToList<CompareInfoObject>();
+            bool rename = false;
+
+            foreach (CompareInfoObject a in actualExceptMeta)
+            {
+                rename = false;
+                foreach (CompareInfoObject m in meta)
+                {
+                    if (a.MD5Hash == m.MD5Hash)
+                    {
+                        rename = true;
+                        break;
+                    }
+                }
+                if (rename)
+                {
+                    //add to rename list
+                }
+                else
+                {
+                    //add to new list
+                }
+            }
+
+            foreach (CompareInfoObject a in metaExceptActual)
+            {
+                rename = false;
+                foreach (CompareInfoObject m in meta)
+                {
+                    if (a.MD5Hash == m.MD5Hash)
+                    {
+                        rename = true;
+                        break;
+                    }
+                }
+                if (rename)
+                {
+                    //add to rename list
+                }
+                else
+                {
+                    //add to delete list
+                }
+            }
+
+            List<CompareInfoObject> actualIntersectMeta = actual.Intersect<CompareInfoObject>(meta, new FileNameCompare()).ToList<CompareInfoObject>();
+            List<CompareInfoObject> metaIntersectActual = meta.Intersect<CompareInfoObject>(actual, new FileNameCompare()).ToList<CompareInfoObject>();
+            Debug.Assert(actualIntersectMeta.Count == metaIntersectActual.Count);
+            int numOfCommonItems = actualIntersectMeta.Count;
+            CompareInfoObject actualFile = null;
+            CompareInfoObject metaFile = null;
+            int compareResult = 0;
+
+            for (int i = 0; i < numOfCommonItems; i++)
+            {
+                actualFile = (CompareInfoObject)actualIntersectMeta[i];
+                metaFile = (CompareInfoObject)metaIntersectActual[i];
+                compareResult = new FileContentCompare().Compare(actualFile, metaFile);
+
+                if (actualFile.Length != metaFile.Length)
+                {
+                    results.Add(actualFile);
+                    continue;
+                }
+                if (actualFile.MD5Hash != metaFile.MD5Hash)
+                {
+                    results.Add(actualFile);
+                    continue;
+                }
+            }
+
+
+            return results;
         }
 
         private List<CompareInfoObject> DoOptimizedOneWayCompareFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath)
@@ -173,11 +253,15 @@ namespace Syncless.CompareAndSync
                 }
             }
 
+            CompareInfoObject srcFile = null;
+            CompareInfoObject tgtFile = null;
+            int compareResult = 0;
+
             for (int i = 0; i < commonItemsCount; i++)
             {
-                CompareInfoObject srcFile = (CompareInfoObject)querySrcIntersectTgt[i];
-                CompareInfoObject tgtFile = (CompareInfoObject)queryTgtIntersectSrc[i];
-                int compareResult = new FileContentCompare().Compare(srcFile, tgtFile);
+                srcFile = (CompareInfoObject)querySrcIntersectTgt[i];
+                tgtFile = (CompareInfoObject)queryTgtIntersectSrc[i];
+                compareResult = new FileContentCompare().Compare(srcFile, tgtFile);
 
                 if (compareResult > 0)
                 {
