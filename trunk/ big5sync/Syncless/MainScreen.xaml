@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Syncless.MainScreen"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Syncless" SizeToContent="WidthAndHeight" MinHeight="300" MinWidth="500">
+    Title="Syncless" SizeToContent="WidthAndHeight" MinHeight="300" MinWidth="500" Height="300" Width="500">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="65"></RowDefinition>
