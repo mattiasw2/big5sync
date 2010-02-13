@@ -15,11 +15,17 @@ namespace Syncless.Profiling
             set { _profilename = value; }
         }
 
-        public List<ProfileMapping> _mappingList;
+        private List<ProfileMapping> _mappingList;
+        public List<ProfileMapping> Mappings
+        {
+            get { return _mappingList; }
+        }
+        
         public Profile(string name)
         {
             this._profilename = name;
             _mappingList = new List<ProfileMapping>();
+            
         }
 
         public void CreateMapping(string logicalAddress, string physicalAddress,string guid)
