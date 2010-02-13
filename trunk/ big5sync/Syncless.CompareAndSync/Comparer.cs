@@ -14,6 +14,11 @@ namespace Syncless.CompareAndSync
         private const int CREATE_TABLE = 0, DELETE_TABLE = 1, RENAME_TABLE = 2, UPDATE_TABLE = 3;
         private Dictionary<int, Dictionary<string, List<string>>> _changeTable;
 
+        public List<CompareResult> CompareFolder(Tag tag)
+        {
+            //2cases. with and without metadata
+        }
+
         public List<CompareResult> CompareFolder(/*FolderTag fTag*/ List<string> paths)
         {
             //Debug.Assert(fTag != null);
@@ -43,8 +48,7 @@ namespace Syncless.CompareAndSync
             {
                 currSrcFolder = OneWayCompareFolder(currSrcFolder, GetAllCompareObjects(paths[i]), paths[i]);
             }
-            ProcessRawResults();
-            return null;
+            return ProcessRawResults();
         }
 
         public List<CompareInfoObject> OneWayCompareFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath)
