@@ -13,15 +13,17 @@ namespace Syncless.CompareAndSync
     {
         private const int CREATE_TABLE = 0, DELETE_TABLE = 1, RENAME_TABLE = 2, UPDATE_TABLE = 3;
         private Dictionary<int, Dictionary<string, List<string>>> _changeTable;
+        private List<string> deleteList;
         private const string METADATANAME = "_syncless.xml";
 
         public List<CompareResult> CompareFolder(List<string> paths)
         {
             _changeTable = new Dictionary<int, Dictionary<string, List<string>>>();
             _changeTable.Add(CREATE_TABLE, new Dictionary<string, List<string>>());
+            _changeTable.Add(UPDATE_TABLE, new Dictionary<string, List<string>>());
             _changeTable.Add(DELETE_TABLE, new Dictionary<string, List<string>>());
             _changeTable.Add(RENAME_TABLE, new Dictionary<string, List<string>>());
-            _changeTable.Add(UPDATE_TABLE, new Dictionary<string, List<string>>());
+            deleteList = new List<string>();
 
             List<string> withMeta = new List<string>();
             List<string> noMeta = new List<string>();
@@ -113,6 +115,9 @@ namespace Syncless.CompareAndSync
             // actual folder. Implies either deleted or renamed files.
             List<CompareInfoObject> metaExceptActual = meta.Except<CompareInfoObject>(actual, new FileNameCompare()).ToList<CompareInfoObject>();
             bool rename = false;
+            List<string> renameList = null;
+            List<string> deleteList = null;
+            CompareInfoObject tempMeta = null;
 
             foreach (CompareInfoObject a in actualExceptMeta)
             {
@@ -122,16 +127,30 @@ namespace Syncless.CompareAndSync
                     if (a.MD5Hash == m.MD5Hash)
                     {
                         rename = true;
+                        tempMeta = m;
                         break;
                     }
                 }
                 if (rename)
                 {
-                    //add to rename list
+                    if (_changeTable[RENAME_TABLE].TryGetValue(tempMeta.RelativePathToOrigin, out renameList))
+                    {
+                        if (!renameList.Contains(a.RelativePathToOrigin))
+                        {
+                            renameList.Add(a.RelativePathToOrigin);
+                        }
+                    }
+                    else
+                    {
+                        renameList = new List<string>();
+                        renameList.Add(a.RelativePathToOrigin);
+                        _changeTable[RENAME_TABLE].Add(tempMeta.RelativePathToOrigin, renameList);
+                    }
                 }
                 else
                 {
-                    //add to new list
+                    //add to new/updated list
+                    results.Add(a);
                 }
             }
 
@@ -143,16 +162,31 @@ namespace Syncless.CompareAndSync
                     if (a.MD5Hash == m.MD5Hash)
                     {
                         rename = true;
+                        tempMeta = m;
                         break;
                     }
                 }
                 if (rename)
                 {
-                    //add to rename list
+                    if (_changeTable[RENAME_TABLE].TryGetValue(tempMeta.RelativePathToOrigin, out renameList))
+                    {
+                        if (!renameList.Contains(a.RelativePathToOrigin))
+                        {
+                            renameList.Add(a.RelativePathToOrigin);
+                        }
+                    }
+                    else
+                    {
+                        renameList = new List<string>();
+                        renameList.Add(a.RelativePathToOrigin);
+                        _changeTable[RENAME_TABLE].Add(tempMeta.RelativePathToOrigin, renameList);
+                    }
                 }
                 else
                 {
-                    //add to delete list
+                    if (!deleteList.Contains(tempMeta.RelativePathToOrigin)) {
+                        deleteList.Add(tempMeta.RelativePathToOrigin);
+                    }
                 }
             }
 
@@ -181,7 +215,6 @@ namespace Syncless.CompareAndSync
                     continue;
                 }
             }
-
 
             return results;
         }
@@ -393,7 +426,6 @@ namespace Syncless.CompareAndSync
 
         /// <summary>
         /// Simple file name comparer.
-        /// TODO: Compare by relative path to origin folder
         /// </summary>
         private class FileNameCompare : IEqualityComparer<CompareInfoObject>
         {
