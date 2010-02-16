@@ -115,8 +115,7 @@ namespace Syncless.CompareAndSync
             List<CompareInfoObject> metaExceptActual = meta.Except<CompareInfoObject>(actual, new FileNameCompare()).ToList<CompareInfoObject>();
             bool rename = false;
             List<string> renameList = null;
-            //List<string> deleteList = null;
-            CompareInfoObject tempMeta = null;
+            CompareInfoObject tempObject = null;
 
             foreach (CompareInfoObject a in actualExceptMeta)
             {
@@ -126,13 +125,13 @@ namespace Syncless.CompareAndSync
                     if (a.MD5Hash == m.MD5Hash)
                     {
                         rename = true;
-                        tempMeta = m;
+                        tempObject = m;
                         break;
                     }
                 }
                 if (rename)
                 {
-                    if (_changeTable[RENAME_TABLE].TryGetValue(tempMeta.RelativePathToOrigin, out renameList))
+                    if (_changeTable[RENAME_TABLE].TryGetValue(tempObject.RelativePathToOrigin, out renameList))
                     {
                         if (!renameList.Contains(a.RelativePathToOrigin))
                         {
@@ -143,7 +142,7 @@ namespace Syncless.CompareAndSync
                     {
                         renameList = new List<string>();
                         renameList.Add(a.RelativePathToOrigin);
-                        _changeTable[RENAME_TABLE].Add(tempMeta.RelativePathToOrigin, renameList);
+                        _changeTable[RENAME_TABLE].Add(tempObject.RelativePathToOrigin, renameList);
                     }
                 }
                 else
@@ -161,24 +160,24 @@ namespace Syncless.CompareAndSync
                     if (a.MD5Hash == m.MD5Hash)
                     {
                         rename = true;
-                        tempMeta = m;
+                        tempObject = a;
                         break;
                     }
                 }
                 if (rename)
                 {
-                    if (_changeTable[RENAME_TABLE].TryGetValue(tempMeta.RelativePathToOrigin, out renameList))
+                    if (_changeTable[RENAME_TABLE].TryGetValue(m.RelativePathToOrigin, out renameList))
                     {
-                        if (!renameList.Contains(m.RelativePathToOrigin))
+                        if (!renameList.Contains(tempObject.RelativePathToOrigin))
                         {
-                            renameList.Add(m.RelativePathToOrigin);
+                            renameList.Add(tempObject.RelativePathToOrigin);
                         }
                     }
                     else
                     {
                         renameList = new List<string>();
-                        renameList.Add(m.RelativePathToOrigin);
-                        _changeTable[RENAME_TABLE].Add(tempMeta.RelativePathToOrigin, renameList);
+                        renameList.Add(tempObject.RelativePathToOrigin);
+                        _changeTable[RENAME_TABLE].Add(m.RelativePathToOrigin, renameList);
                     }
                 }
                 else
@@ -381,9 +380,6 @@ namespace Syncless.CompareAndSync
         /// <returns>List of CompareInfoObject</returns>
         private List<CompareInfoObject> GetMetadataCompareObjects(string tagName, string path)
         {
-
-            //Process XML here
-
             return XMLHelper.GetCompareInfoObjects(tagName, path);
         }
 
