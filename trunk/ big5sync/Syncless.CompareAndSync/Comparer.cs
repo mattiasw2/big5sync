@@ -14,9 +14,9 @@ namespace Syncless.CompareAndSync
         private const int CREATE_TABLE = 0, DELETE_TABLE = 1, RENAME_TABLE = 2, UPDATE_TABLE = 3;
         private Dictionary<int, Dictionary<string, List<string>>> _changeTable;
         private List<string> deleteList;
-        private const string METADATANAME = "_syncless.xml";
+        private const string METADATAFOLDER = "_syncless\\";
 
-        public List<CompareResult> CompareFolder(List<string> paths)
+        public List<CompareResult> CompareFolder(string tagName, List<string> paths)
         {
             _changeTable = new Dictionary<int, Dictionary<string, List<string>>>();
             _changeTable.Add(CREATE_TABLE, new Dictionary<string, List<string>>());
@@ -27,10 +27,11 @@ namespace Syncless.CompareAndSync
 
             List<string> withMeta = new List<string>();
             List<string> noMeta = new List<string>();
+            string metaPath = Path.Combine(METADATAFOLDER, tagName + ".xml");
 
             foreach (string path in paths)
             {
-                if (File.Exists(Path.Combine(path, METADATANAME)))
+                if (File.Exists(Path.Combine(path, metaPath)))
                 {
                     withMeta.Add(path);
                 }
@@ -51,7 +52,7 @@ namespace Syncless.CompareAndSync
             {
                 // YC: We compare the folders with metadata first, then
                 // we do a raw compare for folders without metadata
-                mostUpdated = DoOptimizedCompareFolder(withMeta, noMeta);
+                mostUpdated = DoOptimizedCompareFolder(metaPath, withMeta, noMeta);
             }
 
             return ProcessRawResults();
@@ -65,18 +66,18 @@ namespace Syncless.CompareAndSync
         /// <param name="withMeta">List of folders with metadata</param>
         /// <param name="noMeta">LIst of folders without metadata</param>
         /// <returns>The most updated files across all folders</returns>
-        private List<CompareInfoObject> DoOptimizedCompareFolder(List<string> withMeta, List<string> noMeta)
+        private List<CompareInfoObject> DoOptimizedCompareFolder(string metaPath, List<string> withMeta, List<string> noMeta)
         {
             // YC: Handle metadata and differences
-            List<CompareInfoObject> currSrcFolder = GetDiffMetaActual(withMeta[0]);
+            List<CompareInfoObject> currSrcFolder = GetDiffMetaActual(metaPath, withMeta[0]);
 
             for (int i = 1; i < withMeta.Count; i++)
             {
-                currSrcFolder = DoOptimizedOneWayCompareFolder(currSrcFolder, GetDiffMetaActual(withMeta[i]), withMeta[i]);
+                currSrcFolder = DoOptimizedOneWayCompareFolder(currSrcFolder, GetDiffMetaActual(metaPath, withMeta[i]), withMeta[i]);
             }
             for (int i = withMeta.Count - 2; i >= 0; i--)
             {
-                currSrcFolder = DoOptimizedOneWayCompareFolder(currSrcFolder, GetDiffMetaActual(withMeta[i]), withMeta[i]);
+                currSrcFolder = DoOptimizedOneWayCompareFolder(currSrcFolder, GetDiffMetaActual(metaPath, withMeta[i]), withMeta[i]);
             }
 
             // YC: Create a virtual most-updated folder for comparison against the folders with no metadata
@@ -89,7 +90,7 @@ namespace Syncless.CompareAndSync
                 currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i]);
             }
 
-            for (int i = noMeta.Count -2; i >= 0; i--)
+            for (int i = noMeta.Count - 2; i >= 0; i--)
             {
                 currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i]);
             }
@@ -99,13 +100,13 @@ namespace Syncless.CompareAndSync
             return currSrcFolder;
         }
 
-        private List<CompareInfoObject> GetDiffMetaActual(string path)
+        private List<CompareInfoObject> GetDiffMetaActual(string metaPath, string path)
         {
             //Do some processing between meta and actual files
             List<CompareInfoObject> results = new List<CompareInfoObject>();
 
             List<CompareInfoObject> actual = GetAllCompareObjects(path);
-            List<CompareInfoObject> meta = GetDiffMetaActual(path);
+            List<CompareInfoObject> meta = GetMetadataCompareObjects(metaPath, path);
 
             // YC: This will give us files that exist but are not in the
             // metadata. Implies either new or renamed files.
@@ -221,6 +222,7 @@ namespace Syncless.CompareAndSync
 
         private List<CompareInfoObject> DoOptimizedOneWayCompareFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath)
         {
+            //TODO
             return null;
         }
 
@@ -230,18 +232,8 @@ namespace Syncless.CompareAndSync
         /// </summary>
         /// <param name="paths">List of folders</param>
         /// <returns>The most updated files across all folders</returns>
-        private List<CompareInfoObject> DoRawCompareFolder(/*FolderTag fTag*/ List<string> paths)
-        {
-            //YC: Please change this soon. I should not be processing TaggedPaths.
-            /*
-            List<TaggedPath> taggedPaths = fTag.FolderPaths;
-            List<string> paths = null;
-            foreach (TaggedPath path in taggedPaths)
-            {
-                paths.Add(path.Path);
-            }
-             */
-            
+        private List<CompareInfoObject> DoRawCompareFolder(List<string> paths)
+        {            
             List<CompareInfoObject> currSrcFolder = GetAllCompareObjects(paths[0]);
 
             for (int i = 1; i < paths.Count; i++)
@@ -340,7 +332,7 @@ namespace Syncless.CompareAndSync
             List<CompareInfoObject> results = new List<CompareInfoObject>();
             foreach (FileInfo f in allFiles)
             {
-                results.Add(new CompareInfoObject(path, f.FullName, f.Name, f.LastWriteTime, f.Length, CalculateMD5Hash(f)));
+                results.Add(new CompareInfoObject(path, f.FullName, f.Name, f.LastWriteTime.Ticks, f.Length, CalculateMD5Hash(f)));
             }
             return results;
         }
@@ -350,9 +342,9 @@ namespace Syncless.CompareAndSync
         /// </summary>
         /// <param name="path"></param>
         /// <returns>List of CompareInfoObject</returns>
-        private List<CompareInfoObject> GetMetadataCompareObjects(string path)
+        private List<CompareInfoObject> GetMetadataCompareObjects(string metaPath, string path)
         {
-            String s = Path.Combine(path, METADATANAME);
+            String s = Path.Combine(path, metaPath);
             Debug.Assert(File.Exists(s));
 
             //Process XML here
@@ -403,7 +395,6 @@ namespace Syncless.CompareAndSync
 
             foreach (CompareResult cr in results)
             {
-
                 Console.WriteLine(cr.ToString());
                 Console.WriteLine();
             }
