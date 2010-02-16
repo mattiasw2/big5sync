@@ -51,8 +51,6 @@
     <Compile Include="FileChangeType.cs" />
     <Compile Include="CompareResult.cs" />
     <Compile Include="CompareSyncController.cs" />
-    <Compile Include="FileCompareLayer.cs" />
-    <Compile Include="FileSyncLayer.cs" />
     <Compile Include="GenerateXML.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Result.cs" />
