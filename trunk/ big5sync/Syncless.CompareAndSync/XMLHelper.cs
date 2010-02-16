@@ -46,13 +46,14 @@ namespace Syncless.CompareAndSync
         /// <param name="xmlDoc"> XMLDocument object that already been loaded with the xml file</param>
         /// <param name="fullPath"> C:\...\...\</param>
         /// <returns> The list of paths in string that can be found given a folder path</returns>
-        public static List<CompareInfoObject> GetCompareInfoObjects(string pathOfFile)
+        public static List<CompareInfoObject> GetCompareInfoObjects(string folderPath, string fileName)
         {
 
             string path = "";
+            string namePath = folderPath + "\\" + "_syncless" + "\\" + fileName;
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(pathOfFile);
-            FileInfo fileInfo = new FileInfo(pathOfFile);
+            xmlDoc.Load(namePath);
+            FileInfo fileInfo = new FileInfo(namePath);
             string directory = fileInfo.Directory.Parent.FullName;
 
             try
@@ -129,5 +130,80 @@ namespace Syncless.CompareAndSync
             return new CompareInfoObject(origin, fullPath, name, long.Parse(lastModified),
                 long.Parse(size), hash);
         }
+
+        /// <summary>
+        /// Creates an xml writer and reads the path given by the user and generate all folders
+        /// and files according to the directory structure
+        /// </summary>
+        /// <param name="nameOfFile"> Name of the xml file to write to</param>
+        /// <param name="readFrom"> Read from a given folder path </param>
+        public static void GenerateXMLFile(string nameOfFile, string folderPath)
+        {
+            Debug.Assert(!(nameOfFile.Equals("") || nameOfFile == null));
+            Debug.Assert(!(folderPath.Equals("") || folderPath == null));
+            string writeTo = folderPath + "\\" + "_syncless" + "\\" + nameOfFile;
+            string directoryPath = folderPath + "\\_syncless";
+
+            DirectoryInfo dirInfo = new DirectoryInfo(directoryPath);
+            if (!dirInfo.Exists)
+                Directory.CreateDirectory(directoryPath);
+
+
+            XmlTextWriter writer = new XmlTextWriter(writeTo, null);
+            writer.Formatting = Formatting.Indented;
+            writer.WriteStartDocument();
+            writer.WriteStartElement("meta-data");
+            writer.WriteElementString("last_modified", (DateTime.Now.Ticks).ToString());
+            HandleSubDirectories(writer, new DirectoryInfo(folderPath));
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+            writer.Flush();
+            writer.Close();
+
+        }
+
+        /// <summary>
+        /// Recursively writes files in the current folders and sub directories through the XMLWriter
+        /// </summary>
+        /// <param name="writer"> XmltextWriter that is currently connected to a xml file stream</param>
+        /// <param name="dirInfo"> directory info </param>
+        public static void HandleSubDirectories(XmlTextWriter writer, DirectoryInfo dirInfo)
+        {
+            Debug.Assert(writer != null);
+            Debug.Assert(dirInfo != null);
+
+            foreach (DirectoryInfo subDirInfo in dirInfo.GetDirectories())
+            {
+                if (subDirInfo.Name != "_syncless")
+                {
+                    writer.WriteStartElement("folder");
+                    writer.WriteElementString("name_of_folder", subDirInfo.Name);
+                    HandleSubDirectories(writer, subDirInfo);
+                    writer.WriteEndElement();
+                }
+            }
+
+            foreach (FileInfo fileInfo in dirInfo.GetFiles())
+            {
+
+                FileStream fileStream = fileInfo.OpenRead();
+                byte[] md5bytes = MD5.Create().ComputeHash(fileStream);
+                fileStream.Close();
+                string hashedVal = "";
+                foreach (byte md5 in md5bytes)
+                {
+                    hashedVal = hashedVal + md5;
+                }
+
+                writer.WriteStartElement("files");
+                writer.WriteElementString("name", fileInfo.Name);
+                writer.WriteElementString("size", fileInfo.Length.ToString());
+                writer.WriteElementString("hash", hashedVal);
+                writer.WriteElementString("last_modified", fileInfo.LastWriteTime.Ticks.ToString());
+                writer.WriteEndElement();
+
+            }
+        }
+
     }
 }
