@@ -48,8 +48,15 @@
     <Compile Include="Profile.cs" />
     <Compile Include="ProfileConflictException.cs" />
     <Compile Include="ProfileMapping.cs" />
+    <Compile Include="ProfileMappingConflictException.cs" />
     <Compile Include="ProfilingLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Syncless.Helper\Syncless.Helper.csproj">
+      <Project>{576092CC-8371-4DB1-A877-ADCDFDC22EB6}</Project>
+      <Name>Syncless.Helper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

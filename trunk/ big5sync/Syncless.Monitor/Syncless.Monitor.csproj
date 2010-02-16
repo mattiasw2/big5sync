@@ -45,7 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DriveChangeEvent.cs" />
     <Compile Include="DriveChangeType.cs" />
+    <Compile Include="FileChangeEvent.cs" />
+    <Compile Include="FolderChangeEvent.cs" />
     <Compile Include="MonitorLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
