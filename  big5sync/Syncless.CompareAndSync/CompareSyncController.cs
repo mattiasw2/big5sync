@@ -49,9 +49,9 @@ namespace Syncless.CompareAndSync
         /// </summary>
         /// <param name="tag">The Folder Tag to preview</param>
         /// <returns>The list of Compare Result</returns>
-        public List<CompareResult> PreviewFolderCompare(FolderTag tag)
+        public List<CompareResult> CompareFolder(string tagName, List<string> paths)
         {
-            return null;
+            return new Comparer().CompareFolder(tagName, paths);
         }
         /// <summary>
         /// Preview the result of a foldertag synchronization

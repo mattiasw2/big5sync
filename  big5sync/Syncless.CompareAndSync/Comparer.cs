@@ -349,7 +349,7 @@ namespace Syncless.CompareAndSync
 
             //Process XML here
 
-            return null;
+            return XMLHelper.GetCompareInfoObjects(;
         }
 
         private string CreateNewItemPath(CompareInfoObject source, string targetOrigin)

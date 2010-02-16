@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="CompareInfoObject.cs" />
     <Compile Include="Comparer.cs" />
-    <Compile Include="ExtractXML.cs" />
+    <Compile Include="XMLHelper.cs" />
     <Compile Include="FileChangeType.cs" />
     <Compile Include="CompareResult.cs" />
     <Compile Include="CompareSyncController.cs" />
