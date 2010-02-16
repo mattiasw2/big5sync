@@ -34,8 +34,25 @@ namespace Syncless.Profiling
         }
         public Boolean Equals(ProfileMapping mapping)
         {
-
-            return true;
+            int equalCount = 0;
+            if (this._guid.Equals(mapping.GUID))
+            {
+                equalCount++;
+            }
+            if (this._logicalAddress.Equals(mapping.LogicalAddress))
+            {
+                equalCount++;
+            }
+            if (equalCount == 0)
+            {
+                return false;
+            }
+            if (equalCount == 2)
+            {
+                return true;
+            }
+            throw new ProfileMappingConflictException(this, mapping);
+            
         }
     }
 }

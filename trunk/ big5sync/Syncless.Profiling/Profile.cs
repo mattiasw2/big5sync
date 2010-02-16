@@ -18,7 +18,7 @@ namespace Syncless.Profiling
         private List<ProfileMapping> _mappingList;
         public List<ProfileMapping> Mappings
         {
-            get { return _mappingList; }
+            get { return _mappingList;}
         }
         
         public Profile(string name)
@@ -27,19 +27,37 @@ namespace Syncless.Profiling
             _mappingList = new List<ProfileMapping>();
             
         }
-
+        /// <summary>
+        /// Check if a Profilemapping is Contain in this profile.
+        ///   throw ProfileMappingConflictException if Profile Mapping has Conflict.
+        ///   conflict is identified as there is a similar in 1 or 2 field.
+        /// </summary>
+        /// <param name="mapping">The Mapping to Check</param>
+        /// <returns>true if there is a mapping that is equals to the mapping. Else return false</returns>
+        public bool Contains(ProfileMapping mapping)
+        {
+            foreach (ProfileMapping map in _mappingList)
+            {
+                if (mapping.Equals(mapping))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public void CreateMapping(string logicalAddress, string physicalAddress,string guid)
         {
-            if (FindLogicalFromPhysical(physicalAddress) != null || FindPhysicalFromLogical(logicalAddress) != null)
-            {
-                //Mapping Exist Exception
-                //TODO
-                throw new Exception();
-
-            }
             ProfileMapping map = new ProfileMapping(logicalAddress, physicalAddress, guid);
+            if (Contains(map))
+            {
+                throw new ProfileMappingExistException(map);
+            }            
             _mappingList.Add(map);
             
+        }
+        public void CreateMapping(ProfileMapping mapping)
+        {
+            this.CreateMapping(mapping.LogicalAddress, mapping.PhyiscalAddress, mapping.GUID);
         }
         public string FindPhysicalFromLogical(string logical)
         {
@@ -63,6 +81,68 @@ namespace Syncless.Profiling
             }
             return null;
         }
+        public void UpdateDrive(string guid, string driveid)
+        {
+            ProfileMapping mapping = FindMappingFromGUID(guid);
+            if (mapping == null)
+            {
+                // why lol ?
+                return;
+            }
+            if (mapping.PhyiscalAddress.Equals(""))
+            {
+                mapping.PhyiscalAddress = driveid;
+            }
+            else if (!mapping.PhyiscalAddress.Equals(driveid))
+            {
+                throw new ProfileGuidConflictException();
+            }
 
+        }
+        private ProfileMapping FindMappingFromGUID(string guid)
+        {
+            foreach (ProfileMapping mapping in _mappingList)
+            {
+                if (mapping.GUID.Equals(guid))
+                {
+                    return mapping;
+                }
+            }
+            return null;
+        }
+        public bool CanMerge(Profile profile)
+        {
+            try
+            {
+                foreach (ProfileMapping mapping in profile.Mappings)
+                {
+                    Contains(mapping);
+                }
+                foreach (ProfileMapping mapping in Mappings)
+                {
+                    profile.Contains(mapping);
+                }
+            }
+            catch (ProfileMappingConflictException pmce)
+            {
+                throw new ProfileConflictException(pmce);
+            }
+
+            return true;
+        }
+        public Profile Merge(Profile profile)
+        {
+            if (CanMerge(profile))
+            {
+                foreach (ProfileMapping mapping in profile.Mappings)
+                {
+                    if(!Contains(mapping))
+                    {
+                        CreateMapping(mapping);
+                    }
+                }
+            }
+            return profile;
+        }
     }
 }

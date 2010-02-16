@@ -151,19 +151,15 @@ namespace Syncless.Profiling
         {
             XmlElement map = profilexml.CreateElement("drive");
             XmlElement logical = profilexml.CreateElement("logical");
-            XmlElement physical = profilexml.CreateElement("physical");
+            
             XmlElement guid = profilexml.CreateElement("guid");
             Debug.Assert(mapping.GUID != null);
             Debug.Assert(mapping.LogicalAddress != null);
-            if (mapping.PhyiscalAddress != null || !mapping.PhyiscalAddress.Equals(""))
-            {
-                physical.InnerText = mapping.PhyiscalAddress;
-            }
             logical.InnerText = mapping.LogicalAddress;
             guid.InnerText = mapping.GUID;
 
             map.AppendChild(logical);
-            map.AppendChild(physical);
+            
             map.AppendChild(guid);
             return map;
         }
@@ -200,9 +196,9 @@ namespace Syncless.Profiling
             {
                 XmlElement drive = (XmlElement)node;
                 XmlElement logical = (XmlElement)drive.GetElementsByTagName("logical").Item(0);
-                XmlElement physical = (XmlElement)drive.GetElementsByTagName("physical").Item(0);
+                
                 XmlElement guid = (XmlElement)drive.GetElementsByTagName("guid").Item(0);
-                profile.CreateMapping(logical.InnerText, physical.InnerText, guid.InnerText);
+                profile.CreateMapping(logical.InnerText, "", guid.InnerText);
             }
             return profile;
         }
@@ -212,25 +208,33 @@ namespace Syncless.Profiling
         #region static methods 
         private static XmlDocument LoadFile(string path)
         {
+            FileStream fs = null;
             try
             {
-                FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                FileInfo info = new FileInfo(path);
+                if (!info.Exists)
+                {
+                    return null;
+                }
+                fs = info.Open(FileMode.Open);
                 XmlDocument xml = new XmlDocument();
                 xml.Load(fs);
                 return xml;
             }
-            catch (FileNotFoundException fnfe)
+            catch (XmlException xml)
             {
-                Console.WriteLine(fnfe.StackTrace);
+                Console.WriteLine(xml.ToString());
                 return null;
             }
-            catch (Exception e)
+            finally
             {
-                Console.WriteLine(e.StackTrace);
-                return null;
+                if (fs != null)
+                {
+                    try { fs.Close(); }
+                    catch (Exception) { }
+                }
             }
-
-
+            
         }
         private static string ExtractRelativePath(string path)
         {
@@ -244,13 +248,16 @@ namespace Syncless.Profiling
             Debug.Assert(path.IndexOf(':') != -1);
             return path.Substring(0,path.IndexOf(':'));
         }
-        #endregion
-        
-        #region Save method Deprecated
-
-        private bool SaveMapping(Profile profile,string path)
+        private static string ExtractDriveName(DriveInfo driveInfo)
         {
-            XmlDocument xml = ConvertToXMLDocument(profile);
+            Debug.Assert(driveInfo != null);
+            return ExtractDriveName(driveInfo.RootDirectory.Name);
+        }
+        #endregion
+
+        private bool SaveProfile(XmlDocument xml,string path)
+        {
+            
             XmlTextWriter textWriter = null;
             FileStream fs = null;
             try
@@ -281,8 +288,6 @@ namespace Syncless.Profiling
             return true;
         }
         
-        #endregion
-
         public bool Init(string path)
         {
             try
@@ -303,10 +308,19 @@ namespace Syncless.Profiling
 
             foreach (DriveInfo driveinfo in driveList)
             {
+                #region Get Profiling XML
                 FileInfo info = new FileInfo(driveinfo.RootDirectory.Name + RELATIVE_PROFILING_SAVE_PATH);
                 if (info.Exists)
                 {
-                    Profile profile = ConvertToProfile(info.FullName);
+                    Profile profile = null;
+                    try
+                    {
+                        profile = ConvertToProfile(info.FullName);
+                    }
+                    catch (FileNotFoundException)
+                    {
+
+                    }
                     if (profile == null)
                     {
                         //TODO throw EXCEPTION
@@ -315,7 +329,7 @@ namespace Syncless.Profiling
                     {
                         try
                         {
-                            MergeProfile(profile, _profile);
+                            _profile.Merge(profile);
                         }
                         catch (ProfileConflictException pce)
                         {
@@ -323,12 +337,48 @@ namespace Syncless.Profiling
                         }
                     }
                 }
+                #endregion
             }
+            
+            foreach (DriveInfo driveinfo in driveList)
+            {
+                UpdateDrive(driveinfo);
+            }
+            SaveToAllUsedDrive();
             return true;
         }
-        private void MergeProfile(Profile profile1, Profile profile2)
-        {
 
+        public bool UpdateDrive(DriveInfo driveinfo)
+        {
+            FileInfo info = new FileInfo(driveinfo.RootDirectory.Name + RELATIVE_GUID_SAVE_PATH);
+            if (info.Exists)
+            {
+                string guid = ReadGUID(info);
+                string driveid = ExtractDriveName(info.FullName);
+                _profile.UpdateDrive(guid, driveid);
+                return true;
+            }
+            return false;
+        }
+
+        public bool SaveToAllUsedDrive()
+        {
+            //Save to Root Directory
+
+
+            DriveInfo[] drives = DriveInfo.GetDrives();
+            XmlDocument xml = ConvertToXMLDocument(_profile);
+            foreach (DriveInfo driveInfo in drives)
+            {
+                FileInfo fileInfo = new FileInfo(ExtractDriveName(driveInfo) + ":"+ RELATIVE_GUID_SAVE_PATH);
+                if (fileInfo.Exists)
+                {
+                    //GUID Exist
+                    FileInfo profileInfo = new FileInfo(ExtractDriveName(driveInfo) + ":" + RELATIVE_PROFILING_SAVE_PATH);
+                    SaveProfile(xml, profileInfo.FullName);
+                }
+            }
+            return true;
         }
         private Profile CreateDefaultProfile(string path)
         {
@@ -341,6 +391,7 @@ namespace Syncless.Profiling
                 try
                 {
                     fs = fileInfo.Create();
+                    
                 }
                 catch (DirectoryNotFoundException)
                 {
@@ -361,8 +412,11 @@ namespace Syncless.Profiling
                 }
                 
             }
+            SaveProfile(xml, fileInfo.FullName);
             return profile;
         }
+
+        #region GUID Generation
         private string GetGUID(string driveid)
         {
             FileInfo fileInfo = new FileInfo(driveid + ":" + RELATIVE_GUID_SAVE_PATH);
@@ -414,6 +468,11 @@ namespace Syncless.Profiling
 
             return guidString;
         }
-        
+        #endregion
+
+        public void Debug2()
+        {
+            Console.WriteLine(_profile.Mappings.Count);
+        }
     }
 }
