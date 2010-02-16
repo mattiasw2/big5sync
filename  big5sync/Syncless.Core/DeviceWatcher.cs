@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Management;
-
+using Syncless.Monitor;
 namespace Syncless.Core
 {
     public class DeviceWatcher
@@ -80,7 +80,8 @@ namespace Syncless.Core
                 }
                 else
                 {
-                    control.HandleDriveChange(drive, Syncless.Monitor.DriveChangeType.DRIVE_IN);
+                    DriveChangeEvent dce = new DriveChangeEvent(Syncless.Monitor.DriveChangeType.DRIVE_IN,drive);
+                    control.HandleDriveChange(dce);
                 }
             }
             connectedDrives = newConnectedDrives;
@@ -125,7 +126,8 @@ namespace Syncless.Core
                 }
                 else
                 {
-                    control.HandleDriveChange(drive, Syncless.Monitor.DriveChangeType.DRIVE_OUT);
+                    DriveChangeEvent dce = new DriveChangeEvent(Syncless.Monitor.DriveChangeType.DRIVE_OUT, drive);
+                    control.HandleDriveChange(dce);
                 }
             }
             connectedDrives = newConnectedDrives;

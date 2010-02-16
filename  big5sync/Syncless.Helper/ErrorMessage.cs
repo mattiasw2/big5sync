@@ -11,7 +11,8 @@ namespace Syncless.Helper
 
         #endregion
         #region Profiling Error Messages (Error Code : 200~299)
-
+        public const string PROFILE_CONFLICT_EXCEPTION = "210";
+        public const string PROFILE_MAPPING_CONFLICT_EXCEPTION = "211";
         #endregion
         #region CompareAndSync Error Messages (Error Code : 300~499)
 

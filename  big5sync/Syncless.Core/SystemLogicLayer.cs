@@ -167,24 +167,21 @@ namespace Syncless.Core
 
         #endregion
 
+
+
         #region IMonitorControllerInterface Members
 
-        public void HandleFileChange(FileInfo info, FileChangeType type)
+        public void HandleFileChange(FileChangeEvent fe)
         {
             throw new NotImplementedException();
         }
 
-        public void HandleDriveChange(DriveInfo info, DriveChangeType type)
+        public void HandleFolderChange(FolderChangeEvent fe)
         {
             throw new NotImplementedException();
         }
 
-        
-
-        
-
-
-        public void HandleFolderChange(DirectoryInfo info, FileChangeType type)
+        public void HandleDriveChange(DriveChangeEvent dce)
         {
             throw new NotImplementedException();
         }

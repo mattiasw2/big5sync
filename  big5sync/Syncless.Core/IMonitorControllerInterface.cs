@@ -9,9 +9,9 @@ namespace Syncless.Core
 {
     public interface IMonitorControllerInterface
     {
-        
-        void HandleFileChange(FileInfo info, FileChangeType type);
-        void HandleFolderChange(DirectoryInfo info, FileChangeType type);
-        void HandleDriveChange(DriveInfo info, DriveChangeType type);
+
+        void HandleFileChange(FileChangeEvent fe);
+        void HandleFolderChange(FolderChangeEvent fe);
+        void HandleDriveChange(DriveChangeEvent dce);
     }
 }

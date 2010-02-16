@@ -32,6 +32,10 @@ namespace Syncless.Profiling
             this._phyiscalAddress = physical;
             this._guid = guid;
         }
-        
+        public Boolean Equals(ProfileMapping mapping)
+        {
+
+            return true;
+        }
     }
 }
