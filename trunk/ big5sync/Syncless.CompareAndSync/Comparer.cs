@@ -21,7 +21,7 @@ namespace Syncless.CompareAndSync
             _changeTable = new Dictionary<int, Dictionary<string, List<string>>>();
             _changeTable.Add(CREATE_TABLE, new Dictionary<string, List<string>>());
             _changeTable.Add(UPDATE_TABLE, new Dictionary<string, List<string>>());
-            _changeTable.Add(DELETE_TABLE, new Dictionary<string, List<string>>());
+            //_changeTable.Add(DELETE_TABLE, new Dictionary<string, List<string>>());
             _changeTable.Add(RENAME_TABLE, new Dictionary<string, List<string>>());
             deleteList = new List<string>();
 
@@ -87,15 +87,15 @@ namespace Syncless.CompareAndSync
 
             for (int i = 0; i < noMeta.Count; i++)
             {
-                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i]);
+                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], withMeta);
             }
 
             for (int i = noMeta.Count - 2; i >= 0; i--)
             {
-                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i]);
+                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], withMeta);
             }
 
-            currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0]);
+            currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0], withMeta);
 
             return currSrcFolder;
         }
@@ -238,17 +238,17 @@ namespace Syncless.CompareAndSync
 
             for (int i = 1; i < paths.Count; i++)
             {
-                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(paths[i]), paths[i]);
+                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(paths[i]), paths[i], null);
             }
             for (int i = paths.Count - 2; i >= 0; i--)
             {
-                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(paths[i]), paths[i]);
+                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(paths[i]), paths[i], null);
             }
 
             return currSrcFolder;
         }
 
-        private List<CompareInfoObject> DoRawOneWayCompareFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath)
+        private List<CompareInfoObject> DoRawOneWayCompareFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath, List<string> withMeta)
         {
             Debug.Assert(source != null && target != null);
             List<CompareInfoObject> querySrcExceptTgt = source.Except(target, new FileNameCompare()).ToList<CompareInfoObject>();
@@ -258,22 +258,42 @@ namespace Syncless.CompareAndSync
             Debug.Assert(querySrcIntersectTgt.Count == queryTgtIntersectSrc.Count);
             int commonItemsCount = queryTgtIntersectSrc.Count;
             List<string> createList, updateList;
-            string newFilePath = null;
 
             for (int i = 0; i < exceptItemsCount; i++)
             {
-                newFilePath = CreateNewItemPath(querySrcExceptTgt[i], targetPath);
+                List<string> newFilePaths = new List<string>();
+                if (withMeta != null && withMeta.Contains(targetPath))
+                {
+                    foreach (string withMetaPath in withMeta)
+                    {
+                        newFilePaths.Add(CreateNewItemPath(querySrcExceptTgt[i], withMetaPath));
+                    }
+                }
+                else
+                {
+                    newFilePaths.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
+                }
+                
                 if (_changeTable[CREATE_TABLE].TryGetValue(querySrcExceptTgt[i].FullName, out createList))
                 {
-                    if (!createList.Contains(newFilePath))
+                    foreach (string newFilePath in newFilePaths)
                     {
-                        createList.Add(newFilePath);
+                        if (!createList.Contains(newFilePath))
+                        {
+                            createList.Add(newFilePath);
+                        }
                     }
                 }
                 else
                 {
                     createList = new List<string>();
-                    createList.Add(newFilePath);
+                    foreach (string newFilePath in newFilePaths)
+                    {
+                        if (!createList.Contains(newFilePath))
+                        {
+                            createList.Add(newFilePath);
+                        }
+                    }
                     _changeTable[CREATE_TABLE].Add(querySrcExceptTgt[i].FullName, createList);
                 }
             }
@@ -290,17 +310,36 @@ namespace Syncless.CompareAndSync
 
                 if (compareResult > 0)
                 {
+                    List<string> updatePaths = new List<string>();
+                    if (withMeta != null && withMeta.Contains(targetPath))
+                    {
+                        foreach (string withMetaPath in withMeta)
+                        {
+                            updatePaths.Add(CreateNewItemPath(tgtFile, withMetaPath));
+                        }
+                    }
+                    else
+                    {
+                        updatePaths.Add(tgtFile.FullName);
+                    }
+
                     if (_changeTable[UPDATE_TABLE].TryGetValue(srcFile.FullName, out updateList))
                     {
-                        if (!updateList.Contains(tgtFile.FullName))
+                        foreach (string updatePath in updatePaths)
                         {
-                            updateList.Add(tgtFile.FullName);
+                            if (!updateList.Contains(updatePath))
+                            {
+                                updateList.Add(updatePath);
+                            }
                         }
                     }
                     else
                     {
                         updateList = new List<string>();
-                        updateList.Add(tgtFile.FullName);
+                        foreach (string updatePath in updatePaths)
+                        {
+                            updateList.Add(updatePath);
+                        }
                         _changeTable[UPDATE_TABLE].Add(srcFile.FullName, updateList);
                     }
 
@@ -322,7 +361,6 @@ namespace Syncless.CompareAndSync
                 }
 
             }
-
             return (queryTgtIntersectSrc.Union(querySrcExceptTgt)).Union(target).ToList<CompareInfoObject>();
         }
 
@@ -349,7 +387,7 @@ namespace Syncless.CompareAndSync
 
             //Process XML here
 
-            return XMLHelper.GetCompareInfoObjects(;
+            return null;
         }
 
         private string CreateNewItemPath(CompareInfoObject source, string targetOrigin)
@@ -372,9 +410,6 @@ namespace Syncless.CompareAndSync
                 {
                     case CREATE_TABLE:
                         changeType = FileChangeType.Create;
-                        break;
-                    case DELETE_TABLE:
-                        changeType = FileChangeType.Delete;
                         break;
                     case RENAME_TABLE:
                         changeType = FileChangeType.Rename;
