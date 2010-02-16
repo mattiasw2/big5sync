@@ -8,6 +8,10 @@ namespace Syncless.Core
     public class DeviceWatcher
     {
         private static DeviceWatcher _instance;
+
+        /// <summary>
+        /// The singleton instance of DeviceWatcher object.
+        /// </summary>
         public static DeviceWatcher Instance
         {
             get
@@ -28,6 +32,10 @@ namespace Syncless.Core
             AddRemoveUSBHandler();
         }
 
+        /// <summary>
+        /// Retrieve all fixed and removable connected drives.
+        /// </summary>
+        /// <returns></returns>
         private List<DriveInfo> RetrieveAllDrives()
         {
             List<DriveInfo> drives = new List<DriveInfo>();
