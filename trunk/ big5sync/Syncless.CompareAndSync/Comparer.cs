@@ -21,7 +21,6 @@ namespace Syncless.CompareAndSync
             _changeTable = new Dictionary<int, Dictionary<string, List<string>>>();
             _changeTable.Add(CREATE_TABLE, new Dictionary<string, List<string>>());
             _changeTable.Add(UPDATE_TABLE, new Dictionary<string, List<string>>());
-            //_changeTable.Add(DELETE_TABLE, new Dictionary<string, List<string>>());
             _changeTable.Add(RENAME_TABLE, new Dictionary<string, List<string>>());
             deleteList = new List<string>();
 
@@ -52,11 +51,10 @@ namespace Syncless.CompareAndSync
             {
                 // YC: We compare the folders with metadata first, then
                 // we do a raw compare for folders without metadata
-                mostUpdated = DoOptimizedCompareFolder(metaPath, withMeta, noMeta);
+                mostUpdated = DoOptimizedCompareFolder(tagName, withMeta, noMeta);
             }
 
-            return ProcessRawResults();
-
+            return ProcessRawResults(paths);
         }
 
         /// <summary>
@@ -66,18 +64,18 @@ namespace Syncless.CompareAndSync
         /// <param name="withMeta">List of folders with metadata</param>
         /// <param name="noMeta">LIst of folders without metadata</param>
         /// <returns>The most updated files across all folders</returns>
-        private List<CompareInfoObject> DoOptimizedCompareFolder(string metaPath, List<string> withMeta, List<string> noMeta)
+        private List<CompareInfoObject> DoOptimizedCompareFolder(string tagName, List<string> withMeta, List<string> noMeta)
         {
             // YC: Handle metadata and differences
-            List<CompareInfoObject> currSrcFolder = GetDiffMetaActual(metaPath, withMeta[0]);
+            List<CompareInfoObject> currSrcFolder = GetDiffMetaActual(tagName, withMeta[0]);
 
             for (int i = 1; i < withMeta.Count; i++)
             {
-                currSrcFolder = DoOptimizedOneWayCompareFolder(currSrcFolder, GetDiffMetaActual(metaPath, withMeta[i]), withMeta[i]);
+                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetDiffMetaActual(tagName, withMeta[i]), withMeta[i], null);
             }
             for (int i = withMeta.Count - 2; i >= 0; i--)
             {
-                currSrcFolder = DoOptimizedOneWayCompareFolder(currSrcFolder, GetDiffMetaActual(metaPath, withMeta[i]), withMeta[i]);
+                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetDiffMetaActual(tagName, withMeta[i]), withMeta[i], null);
             }
 
             // YC: Create a virtual most-updated folder for comparison against the folders with no metadata
@@ -100,13 +98,13 @@ namespace Syncless.CompareAndSync
             return currSrcFolder;
         }
 
-        private List<CompareInfoObject> GetDiffMetaActual(string metaPath, string path)
+        private List<CompareInfoObject> GetDiffMetaActual(string tagName, string path)
         {
             //Do some processing between meta and actual files
             List<CompareInfoObject> results = new List<CompareInfoObject>();
 
             List<CompareInfoObject> actual = GetAllCompareObjects(path);
-            List<CompareInfoObject> meta = GetMetadataCompareObjects(metaPath, path);
+            List<CompareInfoObject> meta = GetMetadataCompareObjects(tagName, path);
 
             // YC: This will give us files that exist but are not in the
             // metadata. Implies either new or renamed files.
@@ -370,7 +368,8 @@ namespace Syncless.CompareAndSync
             List<CompareInfoObject> results = new List<CompareInfoObject>();
             foreach (FileInfo f in allFiles)
             {
-                results.Add(new CompareInfoObject(path, f.FullName, f.Name, f.LastWriteTime.Ticks, f.Length, CalculateMD5Hash(f)));
+                if (f.Directory.Name != "_syncless")
+                    results.Add(new CompareInfoObject(path, f.FullName, f.Name, f.LastWriteTime.Ticks, f.Length, CalculateMD5Hash(f)));
             }
             return results;
         }
@@ -380,14 +379,12 @@ namespace Syncless.CompareAndSync
         /// </summary>
         /// <param name="path"></param>
         /// <returns>List of CompareInfoObject</returns>
-        private List<CompareInfoObject> GetMetadataCompareObjects(string metaPath, string path)
+        private List<CompareInfoObject> GetMetadataCompareObjects(string tagName, string path)
         {
-            String s = Path.Combine(path, metaPath);
-            Debug.Assert(File.Exists(s));
 
             //Process XML here
 
-            return null;
+            return XMLHelper.GetCompareInfoObjects(tagName, path);
         }
 
         private string CreateNewItemPath(CompareInfoObject source, string targetOrigin)
@@ -396,7 +393,7 @@ namespace Syncless.CompareAndSync
             return Path.Combine(targetOrigin, source.RelativePathToOrigin);
         }
 
-        private List<CompareResult> ProcessRawResults()
+        private List<CompareResult> ProcessRawResults(List<string> paths)
         {
             Dictionary<int, Dictionary<string, List<string>>>.KeyCollection keys = _changeTable.Keys;
             Dictionary<string, List<string>>.KeyCollection currTableKeys = null;
@@ -421,10 +418,39 @@ namespace Syncless.CompareAndSync
 
                 foreach (string sourceKey in currTableKeys)
                 {
-                    foreach (string dest in _changeTable[key][sourceKey])
+                    if (changeType == FileChangeType.Create || changeType == FileChangeType.Update)
                     {
-                        results.Add(new CompareResult(changeType, sourceKey, dest));
+                        foreach (string dest in _changeTable[key][sourceKey])
+                        {
+                            results.Add(new CompareResult(changeType, sourceKey, dest));
+                        }
                     }
+                    else if (changeType == FileChangeType.Rename)
+                    {
+                        List<string> rename = _changeTable[key][sourceKey];
+                        if (rename.Count == 1)
+                        {
+                            foreach (string path in paths)
+                            {
+                                results.Add(new CompareResult(changeType, Path.Combine(path, sourceKey), Path.Combine(path, rename[0])));
+                            }
+                        }
+                        else if (rename.Count > 1)
+                        {
+                            foreach (string path in paths)
+                            {
+                                results.Add(new CompareResult(changeType, Path.Combine(path, sourceKey), Path.Combine(path, rename[0])));
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (string deleteItem in deleteList)
+            {
+                foreach (string path in paths)
+                {
+                    results.Add(new CompareResult(changeType, Path.Combine(path, deleteItem), null));
                 }
             }
 

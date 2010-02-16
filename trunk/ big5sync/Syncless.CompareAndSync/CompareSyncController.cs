@@ -28,9 +28,9 @@ namespace Syncless.CompareAndSync
         /// </summary>
         /// <param name="tag">The tag to be synchronized</param>
         /// <returns>The list of Sync Results</returns>
-        public List<SyncResult> SyncTag(Tag tag)
+        public List<SyncResult> SyncFolder(string tagName, List<string> paths, List<CompareResult> results)
         {
-            return null;
+            return new Syncer().Sync(tagName, paths, results);
         }
         /// <summary>
         /// Sync a source Path to a list of  destination paths. The path can be File or Folder.
