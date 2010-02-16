@@ -9,6 +9,9 @@ namespace Syncless.Profiling
 {
     public class ProfilingLayer
     {
+        private  const string RELATIVE_PROFILING_SAVE_PATH = "\\_syncless\\profiling.xml";
+        private const string RELATIVE_GUID_SAVE_PATH = "\\_syncless\\guid.id";
+        #region Singleton
         private static ProfilingLayer _instance;
         public static ProfilingLayer Instance
         {
@@ -22,24 +25,30 @@ namespace Syncless.Profiling
             }
         }
         private Profile _profile;
-        private bool _saved;
         private ProfilingLayer()
         {
             _profile = new Profile("Unnamed");
-            _saved = false;
         }
+        #endregion
+
+        #region conversion methods
         /// <summary>
         /// Convert a Logical address to a Physical address
         ///    will replace 001:/Lectures with C:/Lectures
         /// </summary>
         /// <param name="path">The Logical Address to be converted</param>
         /// <returns>The Physical Address</returns>
-        
         public string ConvertLogicalToPhysical(string path)
         {
-            Debug.Assert(path != null);
-            Debug.Assert(_profile != null);
-            return _profile.FindPhysicalFromLogical(path);                
+            string logicalid = ExtractDriveName(path);
+            string driveid = GetDriveFromLogicalId(logicalid);
+            if (driveid == null)
+            {
+                return null;
+            }
+            string relativepath = ExtractRelativePath(path);
+            return driveid + ":" + relativepath;
+            
         }
         /// <summary>
         /// Convert a Physical address to a Logical address
@@ -47,27 +56,26 @@ namespace Syncless.Profiling
         /// </summary>
         /// <param name="path">The Physical Address to be converted</param>
         /// <returns>The Logical Address</returns>
-        public string ConvertPhysicalToLogical(string path)
+        public string ConvertPhysicalToLogical(string path,bool create)
         {
-            Debug.Assert(path != null);
-            Debug.Assert(_profile != null);
-            return _profile.FindLogicalFromPhysical(path);
-        }
-        /// <summary>
-        /// Get the relative path of a path.
-        ///    001:/Lectures will return /Lectures
-        ///    C:/Lectures will return /Lectures
-        ///    C:/ will return /
-        ///    path assert not null.
-        /// </summary>
-        /// <param name="path">The path to process</param>
-        /// <returns>The Relative path</returns>
-        public string GetRelativePath(string path)
-        {
-            Debug.Assert(path != null);
-            Debug.Assert(path.IndexOf(':') != -1);
-            return path.Substring(path.IndexOf(':') + 1);
-
+            string driveid = ExtractDriveName(path);
+            string logicalid = GetLogicalIdFromDrive(driveid);
+            if (logicalid == null)
+            {
+                if (!create)
+                {
+                    return null;
+                }
+                else
+                {
+                    string guid = GetGUID(driveid);
+                    Debug.Assert(guid != null && !guid.Equals(""));
+                    _profile.CreateMapping(guid, driveid, guid);
+                    logicalid = guid;
+                }
+            }
+            string relativepath = ExtractRelativePath(path);
+            return logicalid + ":" + relativepath; 
         }
         /// <summary>
         /// Take in a list of logical address , convert them to physical and return only those that are currently available.
@@ -79,81 +87,50 @@ namespace Syncless.Profiling
             return null;
         }
         /// <summary>
+        /// Get the relative path of a path.
+        ///    001:/Lectures will return /Lectures
+        ///    C:/Lectures will return /Lectures
+        ///    C:/ will return /
+        ///    path assert not null.
+        /// </summary>
+        /// <param name="path">The path to process</param>
+        /// <returns>The Relative path</returns>
+        
+        /// <summary>
         /// Get the Logical Id for a Drive.
         /// </summary>
         /// <param name="info">The Drive</param>
         /// <returns>The logical Id Assigned to the drive. null - if drive is not assigned.</returns>
-        public string GetLogicalId(DriveInfo info)
+        public string GetLogicalIdFromDrive(DriveInfo info)
         {
-            return null;
+            Debug.Assert(info != null);
+            String name = info.Name.Substring(0, info.Name.IndexOf(":"));
+            return GetLogicalIdFromDrive(name);
         }
-        
-        public bool LoadProfile(string path, bool merge)
-        {
-            _saved = true;
-            return true;
+        public string GetLogicalIdFromDrive(string name)
+        {            
+            Debug.Assert(_profile != null);
+            return _profile.FindLogicalFromPhysical(name);
         }
-        public bool SaveProfile()
+        public String GetDriveFromLogicalId(string id)
         {
-            _saved = true;
-            return true;
+            Debug.Assert(id != null);
+            Debug.Assert(_profile != null);
+            return _profile.FindPhysicalFromLogical(id);
         }
-        /*
-        private Profile LoadMapping(string path)
-        {
-            XmlDocument profilexml = LoadFile(path);
-            Profile profile = ProcessXML(profilexml);
+        #endregion
 
-
-            return profile;
-        }
-        private Profile ProcessXML(XmlDocument profilexml)
+        public XmlDocument ToXml()
         {
-            List<ProfileMapping> mappings = new List<ProfileMapping>();
-            Profile profile = ProcessHeader(profilexml);
-            return profile;
-        }
-        private Profile ProcessHeader(XmlDocument profilexml)
-        {
-            profilexml.FirstChild;
+            return this.ConvertToXMLDocument(_profile);
         }
 
-        private static XmlDocument LoadFile(string path)
-        {
-            try
-            {
-                FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                XmlDocument xml = new XmlDocument();
-                xml.Load(fs);
-            }
-            catch (FileNotFoundException fnfe)
-            {
-                Console.WriteLine(fnfe.StackTrace);
-                return null;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.StackTrace);
-                return null;
-            }
+        #region convert xmldocument private method
 
-            return null;
-        }
-        */
-        private bool SaveMapping(Profile profile,string path)
-        {
-            XmlDocument xml = ConvertToXMLDocument(profile);
-            
-            XmlTextWriter textWriter = new XmlTextWriter(path, Encoding.UTF8);
-            textWriter.Formatting = Formatting.Indented;
-            xml.WriteContentTo(textWriter);
-            textWriter.Close();
-            return true;
-        }
         private XmlDocument ConvertToXMLDocument(Profile profile)
         {
             XmlDocument profilexml = new XmlDocument();
-            XmlElement root = CreateRoot(profilexml,profile);
+            XmlElement root = CreateRoot(profilexml, profile);
             foreach (ProfileMapping mapping in profile.Mappings)
             {
                 XmlElement map = CreateElementForMapping(profilexml, mapping);
@@ -190,15 +167,253 @@ namespace Syncless.Profiling
             map.AppendChild(guid);
             return map;
         }
-        /*
-        public void DebugMode()
+        #endregion
+               
+        #region convert to profile private methods
+        private Profile ConvertToProfile(string path)
         {
-            _profile = new Profile("new profile");
-            _profile.CreateMapping("001", "C:", "128319478127312389178");
-            _profile.CreateMapping("002", "D:", "219481938175817381736");
-
-            
+            XmlDocument profilexml = LoadFile(path);
+            if (profilexml == null)
+            {
+                //TODO
+                throw new FileNotFoundException();
+            }
+            return ConvertToProfile(profilexml);
         }
-        */
+        private Profile ConvertToProfile(XmlDocument profilexml)
+        {
+            XmlNodeList list = profilexml.GetElementsByTagName("profile");
+            if (list.Count != 0)
+            {
+                XmlElement element = (XmlElement)list.Item(0);
+                string profilename = element.GetAttribute("name");
+                Profile profile = new Profile(profilename);
+                profile = ProcessListing(profile, element);
+                return profile;
+            }
+            return null;
+        }
+        private Profile ProcessListing(Profile profile, XmlElement root)
+        {
+            XmlNodeList nodeList = root.GetElementsByTagName("drive");
+            foreach (XmlNode node in nodeList)
+            {
+                XmlElement drive = (XmlElement)node;
+                XmlElement logical = (XmlElement)drive.GetElementsByTagName("logical").Item(0);
+                XmlElement physical = (XmlElement)drive.GetElementsByTagName("physical").Item(0);
+                XmlElement guid = (XmlElement)drive.GetElementsByTagName("guid").Item(0);
+                profile.CreateMapping(logical.InnerText, physical.InnerText, guid.InnerText);
+            }
+            return profile;
+        }
+
+        #endregion
+                       
+        #region static methods 
+        private static XmlDocument LoadFile(string path)
+        {
+            try
+            {
+                FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                XmlDocument xml = new XmlDocument();
+                xml.Load(fs);
+                return xml;
+            }
+            catch (FileNotFoundException fnfe)
+            {
+                Console.WriteLine(fnfe.StackTrace);
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.StackTrace);
+                return null;
+            }
+
+
+        }
+        private static string ExtractRelativePath(string path)
+        {
+            Debug.Assert(path != null);
+            Debug.Assert(path.IndexOf(':') != -1);
+            return path.Substring(path.IndexOf(':') + 1);
+
+        }
+        private static string ExtractDriveName(string path){
+            Debug.Assert(path!=null);
+            Debug.Assert(path.IndexOf(':') != -1);
+            return path.Substring(0,path.IndexOf(':'));
+        }
+        #endregion
+        
+        #region Save method Deprecated
+
+        private bool SaveMapping(Profile profile,string path)
+        {
+            XmlDocument xml = ConvertToXMLDocument(profile);
+            XmlTextWriter textWriter = null;
+            FileStream fs = null;
+            try
+            {
+                fs = new FileStream(path, FileMode.OpenOrCreate);
+                textWriter = new XmlTextWriter(fs, Encoding.UTF8);
+                textWriter.Formatting = Formatting.Indented;
+                xml.WriteContentTo(textWriter);
+            }
+            catch (IOException io)
+            {
+                //TODO : Error Log
+                Console.WriteLine(io.StackTrace);
+                return false;
+            }finally{
+                if (textWriter != null)
+                {
+                    try
+                    {
+                        textWriter.Close();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+
+            }
+            return true;
+        }
+        
+        #endregion
+
+        public bool Init(string path)
+        {
+            try
+            {
+                Profile p = ConvertToProfile(path);
+                Debug.Assert(p != null);
+                _profile = p;
+            }
+            catch (FileNotFoundException)
+            {
+                
+                Profile profile = CreateDefaultProfile(path);
+                _profile = profile;
+                //Since the profile is newly created , no need to traverse all the drive
+                return true;
+            }
+            DriveInfo[] driveList = DriveInfo.GetDrives();
+
+            foreach (DriveInfo driveinfo in driveList)
+            {
+                FileInfo info = new FileInfo(driveinfo.RootDirectory.Name + RELATIVE_PROFILING_SAVE_PATH);
+                if (info.Exists)
+                {
+                    Profile profile = ConvertToProfile(info.FullName);
+                    if (profile == null)
+                    {
+                        //TODO throw EXCEPTION
+                    }
+                    else
+                    {
+                        try
+                        {
+                            MergeProfile(profile, _profile);
+                        }
+                        catch (ProfileConflictException pce)
+                        {
+                            //Log ?
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        private void MergeProfile(Profile profile1, Profile profile2)
+        {
+
+        }
+        private Profile CreateDefaultProfile(string path)
+        {
+            Profile profile = new Profile("Unnamed Profile");
+            XmlDocument xml = ConvertToXMLDocument(profile);
+            FileInfo fileInfo = new FileInfo(path);
+            if (!fileInfo.Exists)
+            {
+                FileStream fs = null;
+                try
+                {
+                    fs = fileInfo.Create();
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    Directory.CreateDirectory(fileInfo.Directory.FullName);
+                    fs = fileInfo.Create();
+                }
+                finally
+                {
+                    Debug.Assert(fs != null);
+                    try
+                    {
+                        fs.Close();
+                    }
+                    catch (IOException)
+                    {
+
+                    }
+                }
+                
+            }
+            return profile;
+        }
+        private string GetGUID(string driveid)
+        {
+            FileInfo fileInfo = new FileInfo(driveid + ":" + RELATIVE_GUID_SAVE_PATH);
+            if (fileInfo.Exists)
+            {
+                return ReadGUID(fileInfo);
+            }
+            else
+            {
+                return CreateGUID(fileInfo.FullName);
+            }
+        }
+        private string ReadGUID(FileInfo fileInfo)
+        {
+            Debug.Assert(fileInfo.Exists);
+            FileStream fs = fileInfo.Open(FileMode.Open);
+            StreamReader reader = new StreamReader(fs);
+            string guid = reader.ReadLine();
+            return guid;
+
+        }
+        private string CreateGUID(string path)
+        {
+            Guid guid = Guid.NewGuid();
+            string guidString = guid.ToString();
+            FileInfo fileInfo = new FileInfo(path);
+            Debug.Assert(!fileInfo.Exists);
+            
+            FileStream fs = null;
+            try
+            {
+                fs = fileInfo.Create();
+            }
+            catch (DirectoryNotFoundException)
+            {
+                Directory.CreateDirectory(fileInfo.Directory.FullName);
+                fs = fileInfo.Create();
+            }
+
+            StreamWriter sw = new StreamWriter(fs);
+            sw.WriteLine(guidString);
+            sw.Flush();
+            try
+            {
+                sw.Close();
+            }catch(IOException){
+
+            }
+
+            return guidString;
+        }
+        
     }
 }
