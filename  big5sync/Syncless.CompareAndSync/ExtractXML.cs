@@ -17,19 +17,24 @@ namespace ExtractingXMLData
         /// There are 2 strings that we need. The folder path where the meta-data explains its stuff
         /// as well as the path that we want to search in the meta-data.
         /// relative path = path where the user wants to search - folder path
+        /// If the user wants the entire folder , it will pass in an empty string
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string pathToSearch = @"C:\Documents and Settings\Nil\Desktop\3212\C";
+            string pathToSearch = @"C:\Documents and Settings\Nil\Desktop\3212\haskell";
             string directoryWhereItResides = @"C:\Documents and Settings\Nil\Desktop\3212";
-            string relativePath = pathToSearch.Replace(directoryWhereItResides, "");
+
+            string relativePath = "";
+
+            if (!pathToSearch.Equals(directoryWhereItResides))
+                relativePath = pathToSearch.Replace(directoryWhereItResides, "");
 
             XmlDocument xmlDoc = new XmlDocument();
 
             xmlDoc.Load("C:\\Documents and Settings\\Nil\\Desktop\\meta-data.xml");
 
-            List<string> list = printNodes(relativePath,xmlDoc,pathToSearch);
+            List<string> list = printNodes(relativePath, xmlDoc, pathToSearch);
 
             foreach (string path in list)
             {
@@ -41,20 +46,25 @@ namespace ExtractingXMLData
 
         /// <summary>
         /// Given a dirpath , breaks it up into a folder and returns an Xpath Expression
-        /// For each 
+        /// If it is an empty string , return the root of the xml
         /// </summary>
         /// <param name="dirPath"></param>
         /// <returns> the final Xpath expression</returns>
         private static string concatPath(string dirPath)
         {
-            Debug.Assert(!(dirPath.Equals("") || dirPath == null));
-            
-            string[] splitWords = dirPath.Split('\\');
+            Debug.Assert(!(dirPath == null));
             string finalExpr = "/meta-data";
+
+            if (dirPath.Equals(""))
+                return finalExpr;
+
+            string[] splitWords = dirPath.Split('\\');
+
+
             for (int i = 0; i < splitWords.Length; i++)
             {
                 if (!splitWords[i].Equals(""))
-                    finalExpr = finalExpr + "/folder" + "[name_of_folder='" + splitWords[i] +"']";
+                    finalExpr = finalExpr + "/folder" + "[name_of_folder='" + splitWords[i] + "']";
             }
             return finalExpr;
         }
@@ -72,7 +82,7 @@ namespace ExtractingXMLData
         /// <returns> The list of paths in string that can be found given a folder path</returns>
         private static List<string> printNodes(string path, XmlDocument xmlDoc, string fullPath)
         {
-            Debug.Assert(!(path.Equals("") || path == null));
+            Debug.Assert(path != null);
             Debug.Assert(xmlDoc != null);
             Debug.Assert(!(fullPath.Equals("") || fullPath == null));
 
@@ -82,9 +92,11 @@ namespace ExtractingXMLData
                 Stack<string> stack = new Stack<string>();
                 stack.Push(path);
 
+
                 while (stack.Count > 0)
                 {
                     string dirPath = stack.Pop();
+                    string temp = dirPath;
 
                     XmlNodeList nodeList = xmlDoc.SelectNodes(concatPath(dirPath));
 
@@ -96,23 +108,26 @@ namespace ExtractingXMLData
                             if (childNodes[i].FirstChild.Name.Equals("name_of_folder"))
                             {
                                 stack.Push(dirPath + "\\" + childNodes[i].FirstChild.InnerText);
-
                             }
                             else
                             {
-                                string temp = dirPath.Replace(path, "");
+
+                                if (!path.Equals(""))
+                                    temp = dirPath.Replace(path, "");
+
                                 pathList.Add(fullPath + temp + "\\" + childNodes[i].FirstChild.InnerText);
-                              
                             }
                         }
                     }
+
+
                 }
 
                 return pathList;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Console.WriteLine("Error");
+                Console.WriteLine(e.StackTrace);
                 return null;
             }
         }
