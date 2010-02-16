@@ -7,7 +7,14 @@ namespace Syncless.Monitor
 {
     public enum DriveChangeType
     {
-        DRIVE_IN,DRIVE_OUT
+        /// <summary>
+        /// A drive is connected to the computer.
+        /// </summary>
+        DRIVE_IN,
+        /// <summary>
+        /// A drive is disconnected from the computer.
+        /// </summary>
+        DRIVE_OUT
     }
 
 }

@@ -47,12 +47,18 @@
   <ItemGroup>
     <Compile Include="DriveChangeEvent.cs" />
     <Compile Include="DriveChangeType.cs" />
+    <Compile Include="Exceptions\MonitorDriveNotFoundException.cs" />
+    <Compile Include="Exceptions\MonitorPathNotFoundException.cs" />
     <Compile Include="FileChangeEvent.cs" />
     <Compile Include="FolderChangeEvent.cs" />
     <Compile Include="MonitorLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Syncless.Helper\Syncless.Helper.csproj">
+      <Project>{576092CC-8371-4DB1-A877-ADCDFDC22EB6}</Project>
+      <Name>Syncless.Helper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Syncless.Tagging\Syncless.Tagging.csproj">
       <Project>{03FA244C-0A1E-45D2-BCD0-01DBD93E993A}</Project>
       <Name>Syncless.Tagging</Name>

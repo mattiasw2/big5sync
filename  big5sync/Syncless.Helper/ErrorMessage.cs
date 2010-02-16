@@ -18,7 +18,8 @@ namespace Syncless.Helper
 
         #endregion
         #region Monitor Error Messages (Error Code : 500~599)
-
+        public const string PATH_NOT_FOUND = "500";
+        public const string DRIVE_NOT_FOUND = "501";
         #endregion
     }
 }
