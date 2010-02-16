@@ -187,6 +187,7 @@ namespace Syncless.CompareAndSync
 
             foreach (FileInfo fileInfo in dirInfo.GetFiles())
             {
+                /*
                 FileStream fileStream = fileInfo.OpenRead();
                 byte[] md5bytes = MD5.Create().ComputeHash(fileStream);
                 fileStream.Close();
@@ -195,11 +196,21 @@ namespace Syncless.CompareAndSync
                 {
                     hashedVal = hashedVal + md5;
                 }
+                */
+
+                FileStream fileStream = fileInfo.OpenRead();
+                byte[] fileHash = MD5.Create().ComputeHash(fileStream);
+                fileStream.Close();
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < fileHash.Length; i++)
+                {
+                    sb.Append(fileHash[i].ToString("X2"));
+                }
 
                 writer.WriteStartElement("files");
                 writer.WriteElementString("name", fileInfo.Name);
                 writer.WriteElementString("size", fileInfo.Length.ToString());
-                writer.WriteElementString("hash", hashedVal);
+                writer.WriteElementString("hash", sb.ToString());
                 writer.WriteElementString("last_modified", fileInfo.LastWriteTime.Ticks.ToString());
                 writer.WriteEndElement();
 
