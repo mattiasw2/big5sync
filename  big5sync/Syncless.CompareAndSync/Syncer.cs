@@ -8,7 +8,7 @@ namespace Syncless.CompareAndSync
 {
     public class Syncer
     {
-        public List<SyncResult> Sync(List<CompareResult> results)
+        public List<SyncResult> Sync(string tagName, List<string> paths, List<CompareResult> results)
         {
             foreach (CompareResult result in results)
             {
@@ -18,8 +18,10 @@ namespace Syncless.CompareAndSync
                         CopyFile(result.From, result.To);
                         break;
                     case FileChangeType.Delete:
+                        DeleteFile(result.From);
                         break;
                     case FileChangeType.Rename:
+                        MoveFile(result.From, result.To);
                         break;
                     case FileChangeType.Update:
                         CopyFile(result.From, result.To);
@@ -27,7 +29,24 @@ namespace Syncless.CompareAndSync
                 }
             }
 
+            foreach (string path in paths)
+            {
+                XMLHelper.GenerateXMLFile(tagName, path);
+            }
+
             return null;
+        }
+
+        public bool DeleteFile(string from)
+        {
+            File.Delete(from);
+            return true;
+        }
+
+        public bool MoveFile(string from, string to)
+        {
+            File.Move(from, to);
+            return true;
         }
 
         public bool CopyFile(string from, string to)

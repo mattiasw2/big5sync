@@ -5,6 +5,8 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using System.Diagnostics;
+using System.IO;
+using System.Security.Cryptography;
 
 namespace Syncless.CompareAndSync
 {
@@ -46,11 +48,11 @@ namespace Syncless.CompareAndSync
         /// <param name="xmlDoc"> XMLDocument object that already been loaded with the xml file</param>
         /// <param name="fullPath"> C:\...\...\</param>
         /// <returns> The list of paths in string that can be found given a folder path</returns>
-        public static List<CompareInfoObject> GetCompareInfoObjects(string folderPath, string fileName)
+        public static List<CompareInfoObject> GetCompareInfoObjects(string tagName, string folderPath)
         {
 
             string path = "";
-            string namePath = folderPath + "\\" + "_syncless" + "\\" + fileName;
+            string namePath = folderPath + "\\" + "_syncless" + "\\" + tagName + ".xml";
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(namePath);
             FileInfo fileInfo = new FileInfo(namePath);
@@ -137,11 +139,11 @@ namespace Syncless.CompareAndSync
         /// </summary>
         /// <param name="nameOfFile"> Name of the xml file to write to</param>
         /// <param name="readFrom"> Read from a given folder path </param>
-        public static void GenerateXMLFile(string nameOfFile, string folderPath)
+        public static void GenerateXMLFile(string tagName, string folderPath)
         {
-            Debug.Assert(!(nameOfFile.Equals("") || nameOfFile == null));
+            Debug.Assert(!(tagName.Equals("") || tagName == null));
             Debug.Assert(!(folderPath.Equals("") || folderPath == null));
-            string writeTo = folderPath + "\\" + "_syncless" + "\\" + nameOfFile;
+            string writeTo = folderPath + "\\" + "_syncless" + "\\" + tagName + ".xml";
             string directoryPath = folderPath + "\\_syncless";
 
             DirectoryInfo dirInfo = new DirectoryInfo(directoryPath);
@@ -185,7 +187,6 @@ namespace Syncless.CompareAndSync
 
             foreach (FileInfo fileInfo in dirInfo.GetFiles())
             {
-
                 FileStream fileStream = fileInfo.OpenRead();
                 byte[] md5bytes = MD5.Create().ComputeHash(fileStream);
                 fileStream.Close();
