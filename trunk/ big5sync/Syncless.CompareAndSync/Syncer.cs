@@ -45,7 +45,13 @@ namespace Syncless.CompareAndSync
 
         public bool MoveFile(string from, string to)
         {
-            File.Move(from, to);
+            try
+            {
+                File.Move(from, to);
+            }
+            catch (Exception)
+            {
+            }
             return true;
         }
 

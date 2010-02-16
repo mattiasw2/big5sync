@@ -115,7 +115,7 @@ namespace Syncless.CompareAndSync
             List<CompareInfoObject> metaExceptActual = meta.Except<CompareInfoObject>(actual, new FileNameCompare()).ToList<CompareInfoObject>();
             bool rename = false;
             List<string> renameList = null;
-            List<string> deleteList = null;
+            //List<string> deleteList = null;
             CompareInfoObject tempMeta = null;
 
             foreach (CompareInfoObject a in actualExceptMeta)
@@ -153,10 +153,10 @@ namespace Syncless.CompareAndSync
                 }
             }
 
-            foreach (CompareInfoObject a in metaExceptActual)
+            foreach (CompareInfoObject m in metaExceptActual)
             {
                 rename = false;
-                foreach (CompareInfoObject m in meta)
+                foreach (CompareInfoObject a in actual)
                 {
                     if (a.MD5Hash == m.MD5Hash)
                     {
@@ -169,22 +169,22 @@ namespace Syncless.CompareAndSync
                 {
                     if (_changeTable[RENAME_TABLE].TryGetValue(tempMeta.RelativePathToOrigin, out renameList))
                     {
-                        if (!renameList.Contains(a.RelativePathToOrigin))
+                        if (!renameList.Contains(m.RelativePathToOrigin))
                         {
-                            renameList.Add(a.RelativePathToOrigin);
+                            renameList.Add(m.RelativePathToOrigin);
                         }
                     }
                     else
                     {
                         renameList = new List<string>();
-                        renameList.Add(a.RelativePathToOrigin);
+                        renameList.Add(m.RelativePathToOrigin);
                         _changeTable[RENAME_TABLE].Add(tempMeta.RelativePathToOrigin, renameList);
                     }
                 }
                 else
                 {
-                    if (!deleteList.Contains(tempMeta.RelativePathToOrigin)) {
-                        deleteList.Add(tempMeta.RelativePathToOrigin);
+                    if (!deleteList.Contains(m.RelativePathToOrigin)) {
+                        deleteList.Add(m.RelativePathToOrigin);
                     }
                 }
             }
