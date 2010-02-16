@@ -47,8 +47,10 @@
   <ItemGroup>
     <Compile Include="Profile.cs" />
     <Compile Include="ProfileConflictException.cs" />
+    <Compile Include="ProfileGuidConflictException.cs" />
     <Compile Include="ProfileMapping.cs" />
     <Compile Include="ProfileMappingConflictException.cs" />
+    <Compile Include="ProfileMappingExistException.cs" />
     <Compile Include="ProfilingLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
