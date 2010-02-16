@@ -8,6 +8,7 @@ namespace Syncless.Tagging
     public class TaggedPath
     {
         private string _logicalid;
+
         public string LogicalDriveId
         {
             get { return _logicalid; }
@@ -15,16 +16,19 @@ namespace Syncless.Tagging
         }
 
         private string _path;
+
         public string Path
         {
             get { return _path; }
             set { _path = value;}
         }
-        private string _date;
-        public string Date
+
+        private long _lastUpdated;
+
+        public long LastUpdated
         {
-            get { return _date; }
-            set { _date = value; }
+            get { return _lastUpdated; }
+            set { _lastUpdated = value; }
         }
 
     }

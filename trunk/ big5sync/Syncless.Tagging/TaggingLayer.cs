@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Xml;
 using Syncless.Tagging.Exceptions;
 
 namespace Syncless.Tagging
 {
     public class TaggingLayer
     {
+        #region attributes
         private static TaggingLayer _instance;
 
         /// <summary>
@@ -26,31 +28,42 @@ namespace Syncless.Tagging
             }
         }
 
-        private List<Tag> _tagList;
+        private List<FolderTag> _folderTagList;
 
-        public List<Tag> TagList
+        public List<FolderTag> FolderTagList
         {
-            get { return _tagList; }
-            set { _tagList = value; }
+            get { return _folderTagList; }
+            set { _folderTagList = value; }
         }
-        
+
+        private List<FileTag> _fileTagList;
+
+        public List<FileTag> FileTagList
+        {
+            get { return _fileTagList; }
+            set { _fileTagList = value; }
+        }
+        #endregion
+
         private TaggingLayer()
         {
-            _tagList = Load();
+            _folderTagList = LoadFolderTagList();
+            _fileTagList = LoadFileTagList();
         }
 
+        #region FolderTag public implementations
         /// <summary>
-        /// Create a Folder Tag of tagname, raise a TagAlreadyExistsException if the tag has been created
+        /// Create a Folder Tag of tagname
         /// </summary>
         /// <param name="tagname">The name of the Tag to be created</param>
-        /// <returns>The created Tag</returns>
-        public FolderTag CreateFolderTag(string tagname)
+        /// <param name="lastupdated">The last updated time of the Tag to be created</param>
+        /// <returns>The created Tag, else raise TagAlreadyExistsException</returns>
+        public FolderTag CreateFolderTag(string tagname, long lastupdated)
         {
-            if (!CheckTagExists(tagname))
+            if (!CheckFolderTagExists(tagname))
             {
-                FolderTag tag = new FolderTag(tagname);
-                _tagList.Add(tag);
-                Save();
+                FolderTag tag = new FolderTag(tagname, lastupdated);
+                _folderTagList.Add(tag);
                 return tag;
             }
             else
@@ -60,17 +73,18 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Remove the Folder Tag of tagname, raise TagNotFoundException if the tag does not exist
+        /// Remove the Folder Tag of tagname
         /// </summary>
         /// <param name="tagname">The name of the Tag to be removed</param>
-        /// <returns>True if the tag is removed successfully, else raise an exception</returns>
-        public bool RemoveFolderTag(string tagname)
+        /// <returns>The Tag that is removed successfully, else raise TagNotFoundException</returns>
+        public FolderTag RemoveFolderTag(string tagname)
         {
-            if (CheckTagExists(tagname))
+            FolderTag toRemove;
+            if (CheckFolderTagExists(tagname))
             {
-                _tagList.Remove((FolderTag)GetTag(tagname));
-                Save();
-                return true;
+                toRemove = GetFolderTag(tagname);
+                _folderTagList.Remove(toRemove);
+                return toRemove;
             }
             else
             {
@@ -79,137 +93,45 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Tag a Folder with a tagname. If the tagname does not exist , create it. If a Folder is tagged with a tagname of a file, 
-        /// raise an exception.
+        /// Tag a folder with a tagname
         /// </summary>
         /// <param name="path">The path to be tagged.</param>
         /// <param name="tagname">The name of the Tag</param>
-        /// <returns>The FolderTag that contain the path.</returns>
-        public FolderTag TagFolder(string path, string tagname)
+        /// <returns>The FolderTag that contains the path, else raise PathAlreadyExistsException</returns>
+        public FolderTag TagFolder(string path, string tagname, long lastupdated)
         {
-            FolderTag tag = RetrieveFolderTag(tagname, true);
-            if (tag != null)
+            FolderTag tag = RetrieveFolderTag(tagname, true, lastupdated);
+            if (!tag.Contain(path))
             {
-                tag.AddPath(path);
-                AddTag(tag);
-                Save();
+                tag.AddPath(path, lastupdated);
+                AddFolderTag(tag);
                 return tag;
             }
             else
             {
-                throw new TagNotFoundException();
+                throw new PathAlreadyExistsException();
             }
+
         }
-        
+
         /// <summary>
-        /// Untag a Folder from a tagname. If the Folder is not tagged with the tagname , raise an exception. 
+        /// Untag a Folder from a tagname
         /// </summary>
         /// <param name="path">The path to untag</param>
         /// <param name="tagname">The name of the Tag</param>
-        /// <returns>The FolderTag that contain the path</returns>
-        public FolderTag UntagFolder(string path, string tagname)
+        /// <returns>1 if the path is removed, 0 if the path is not found in the Tag, else raise TagNotFoundException</returns>
+        public int UntagFolder(string path, string tagname)
         {
             FolderTag tag = RetrieveFolderTag(tagname);
             if (tag != null)
             {
-                bool success = tag.RemovePath(path);
-                if (success)
+                if (tag.RemovePath(path))
                 {
-                    Save();
-                    return tag;
+                    return 1;
                 }
                 else
                 {
-                    throw new PathNotFoundException();
-                }
-            }
-            else
-            {
-                throw new TagNotFoundException();
-            }
-        }
-
-        /// <summary>
-        /// Create a File Tag of tagname, raise a TagAlreadyExistsException if the tag has been created
-        /// </summary>
-        /// <param name="tagname">The name of the Tag to be created</param>
-        /// <returns>The created Tag</returns>
-        public FileTag CreateFileTag(string tagname)
-        {
-            if (!CheckTagExists(tagname))
-            {
-                FileTag tag = new FileTag(tagname);
-                _tagList.Add(tag);
-                Save();
-                return tag;
-            }
-            else
-            {
-                throw new TagAlreadyExistsException();
-            }
-        }
-
-        /// <summary>
-        /// Remove the File Tag of tagname, raise TagNotFoundException if the tag does not exist
-        /// </summary>
-        /// <param name="tagname">The name of the Tag to be removed</param>
-        /// <returns>True if the tag is removed successfully, else raise an exception</returns>
-        public bool RemoveFileTag(string tagname)
-        {
-            if (CheckTagExists(tagname))
-            {
-                _tagList.Remove((FileTag)GetTag(tagname));
-                Save();
-                return true;
-            }
-            else
-            {
-                throw new TagNotFoundException();
-            }
-        }
-
-        /// <summary>
-        /// Tag a File with a tagname. If the tagname does not exist , create it. If a File is tagged with a tagname of a folder, raise an exception.
-        /// </summary>
-        /// <param name="path">The path to be tagged.</param>
-        /// <param name="tagname">The name of the Tag</param>
-        /// <returns>The FileTag that contain the path.</returns>
-        public FileTag TagFile(string path, string tagname)
-        {
-            FileTag tag = RetrieveFileTag(tagname, true);
-            if (tag != null)
-            {
-                tag.AddPath(path);
-                AddTag(tag);
-                Save();
-                return tag;
-            }
-            else
-            {
-                throw new TagNotFoundException();
-            }
-        }
-        
-        /// <summary>
-        /// Untag a File from a tagname. If the File is not tagged with the tagname , raise an exception. 
-        /// </summary>
-        /// <param name="path">The path to untag</param>
-        /// <param name="tagname">The name of the Tag</param>
-        /// <returns>The FileTag that contain the path</returns>
-        public FileTag UntagFile(string path, string tagname)
-        {
-            FileTag tag = RetrieveFileTag(tagname);
-            if (tag != null)
-            {
-                bool success = tag.RemovePath(path);
-                if (success)
-                {
-                    Save();
-                    return tag;
-                }
-                else
-                {
-                    throw new PathNotFoundException();
+                    return 0;
                 }
             }
             else
@@ -222,212 +144,444 @@ namespace Syncless.Tagging
         /// Retrieve the FolderTag with the particular tag name
         /// </summary>
         /// <param name="tagname">The name of the FolderTag</param>
-        /// <returns>The FolderTag</returns>
+        /// <returns>The FolderTag that is to be found, else null</returns>
         public FolderTag RetrieveFolderTag(string tagname)
         {
-            return RetrieveFolderTag(tagname, false);
+            return RetrieveFolderTag(tagname, false, 0);
+        }
+        #endregion
+
+        #region FileTag public implementations
+        /// <summary>
+        /// Create a File Tag of tagname
+        /// </summary>
+        /// <param name="tagname">The name of the Tag to be created</param>
+        /// <param name="lastupdated">The last updated time of the Tag to be created</param>
+        /// <returns>The created Tag, else raise TagAlreadyExistsException</returns>
+        public FileTag CreateFileTag(string tagname, long lastupdated)
+        {
+            if (!CheckFileTagExists(tagname))
+            {
+                FileTag tag = new FileTag(tagname, lastupdated);
+                _fileTagList.Add(tag);
+                return tag;
+            }
+            else
+            {
+                throw new TagAlreadyExistsException();
+            }
         }
 
         /// <summary>
-        /// Retrieve the FolderTag with the particular tag name. If create is set to true, if the FolderTag does not exist, a new FolderTag will be created.
+        /// Remove the File Tag of tagname
         /// </summary>
-        /// <param name="tagname">The name of the FolderTag</param>
-        /// <param name="create">flag to determinte whether a FolderTag should be created if it is not found.</param>
-        /// <returns></returns>
-        public FolderTag RetrieveFolderTag(string tagname, bool create)
+        /// <param name="tagname">The name of the Tag to be removed</param>
+        /// <returns>The Tag that is removed successfully, else raise TagNotFoundException</returns>
+        public FileTag RemoveFileTag(string tagname)
         {
-            return (FolderTag)RetrieveTag(tagname, create, true);
+            FileTag toRemove;
+            if (CheckFileTagExists(tagname))
+            {
+                toRemove = GetFileTag(tagname);
+                _fileTagList.Remove(toRemove);
+                return toRemove;
+            }
+            else
+            {
+                throw new TagNotFoundException();
+            }
         }
-        
+
+        /// <summary>
+        /// Tag a folder with a tagname
+        /// </summary>
+        /// <param name="path">The path to be tagged.</param>
+        /// <param name="tagname">The name of the Tag</param>
+        /// <returns>The FileTag that contains the path, else raise PathAlreadyExistsException</returns>
+        public FileTag TagFile(string path, string tagname, long lastupdated)
+        {
+            FileTag tag = RetrieveFileTag(tagname, true, lastupdated);
+            if (!tag.Contain(path))
+            {
+                tag.AddPath(path, lastupdated);
+                AddFileTag(tag);
+                return tag;
+            }
+            else
+            {
+                throw new PathAlreadyExistsException();
+            }
+
+        }
+
+        /// <summary>
+        /// Untag a Folder from a tagname
+        /// </summary>
+        /// <param name="path">The path to untag</param>
+        /// <param name="tagname">The name of the Tag</param>
+        /// <returns>1 if the path is removed, 0 if the path is not found in the Tag, else raise TagNotFoundException</returns>
+        public int UntagFile(string path, string tagname)
+        {
+            FileTag tag = RetrieveFileTag(tagname);
+            if (tag != null)
+            {
+                if (tag.RemovePath(path))
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                throw new TagNotFoundException();
+            }
+        }
+
         /// <summary>
         /// Retrieve the FileTag with the particular tag name
         /// </summary>
         /// <param name="tagname">The name of the FileTag</param>
-        /// <returns>The FileTag</returns>
+        /// <returns>The FileTag that is to be found, else null</returns>
         public FileTag RetrieveFileTag(string tagname)
         {
-            return RetrieveFileTag(tagname, false);
+            return RetrieveFileTag(tagname, false, 0);
         }
-        
-        /// <summary>
-        /// Retrieve the FileTag with the particular tag name. If create is set to true, if the FileTag does not exist, a new FileTag will be created.
-        /// </summary>
-        /// <param name="tagname">The name of the FileTag</param>
-        /// <param name="create">flag to determinte whether a FileTag should be created if it is not found.</param>
-        /// <returns></returns>
-        public FileTag RetrieveFileTag(string tagname, bool create)
+        #endregion
+
+        #region miscellaneous public implementations
+        public Tag RetrieveTag(string tagname)
         {
-            return (FileTag)RetrieveTag(tagname, create, false);
+            Tag tag = GetFolderTag(tagname);
+            if (tag == null)
+            {
+                tag = GetFileTag(tagname);
+            }
+            return tag;
         }
 
-        /// <summary>
-        /// Retrieve all the tag that have path in a logical drive.
-        /// </summary>
-        /// <param name="logicalId">The Logical Id</param>
-        /// <returns>The list of Tag</returns>
-        public List<Tag> RetrieveTagByLogicalId(string logicalId)
+        public Tag RemoveTag(string tagname)
         {
-            bool found;
-            List<Tag> tagList = new List<Tag>();
-            foreach (Tag tag in _tagList)
+            Tag toRemove;
+            if (CheckFolderTagExists(tagname))
             {
-                if (tag is FolderTag)
+                toRemove = GetFolderTag(tagname);
+                _folderTagList.Remove((FolderTag)toRemove);
+            }
+            else if (CheckFileTagExists(tagname))
+            {
+                toRemove = GetFileTag(tagname);
+                _fileTagList.Remove((FileTag)toRemove);
+            }
+            else
+            {
+                throw new TagNotFoundException();
+            }
+            return toRemove;
+        }
+
+        public int Untag(string path, string tagname)
+        {
+            Tag tag;
+            if (CheckFolderTagExists(tagname))
+            {
+                tag = GetFolderTag(tagname);
+                if (tag.Contain(path))
                 {
-                    found = CheckID(tag, logicalId, true);
+                    tag.RemovePath(path);
+                    return 1;
                 }
                 else
                 {
-                    found = CheckID(tag, logicalId, false);
+                    return 0;
                 }
+            }
+            else if (CheckFileTagExists(tagname))
+            {
+                tag = GetFileTag(tagname);
+                if (tag.Contain(path))
+                {
+                    tag.RemovePath(path);
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                throw new TagNotFoundException();
+            }
+        }
+
+        public int Untag(string path)
+        {
+            int noOfPath = 0;
+            foreach (FolderTag folderTag in _folderTagList)
+            {
+                if (folderTag.Contain(path))
+                {
+                    folderTag.RemovePath(path);
+                    noOfPath++;
+                }
+            }
+            foreach (FileTag fileTag in _fileTagList)
+            {
+                if (fileTag.Contain(path))
+                {
+                    fileTag.RemovePath(path);
+                    noOfPath++;
+                }
+            }
+            return noOfPath;
+        }
+
+        /// <summary>
+        /// Retrieve all the tags that have path in a logical drive having logicalid.
+        /// </summary>
+        /// <param name="logicalId">The Logical Id</param>
+        /// <returns>The list of Tags</returns>
+        public List<Tag> RetrieveTagByLogicalId(string logicalid)
+        {
+            bool found;
+            List<Tag> tagList = new List<Tag>();
+            foreach (FolderTag folderTag in _folderTagList)
+            {
+                found = CheckFolderID(folderTag, logicalid);
                 if (found)
                 {
-                    tagList.Add(tag);
+                    tagList.Add(folderTag);
+                }
+            }
+            foreach (FileTag fileTag in _fileTagList)
+            {
+                found = CheckFileID(fileTag, logicalid);
+                if (found)
+                {
+                    tagList.Add(fileTag);
                 }
             }
             return tagList;
         }
-        
+
         /// <summary>
         /// Find the Similar Path of a particular path. (*see me)
         /// </summary>
         /// <param name="path">The path to search.</param>
         /// <returns>The List of Tagged Paths</returns>
-        public List<TaggedPath> FindSimilarPath(string path)
+        public List<String> FindSimilarPath(string path)
         {
             return null;
         }
-        
-        /*Private implementation*/
-        /// <summary>
-        /// Get the tag of tagname. If toCreate is true, if the Tag has not been created, then create the Tag.
-        /// If isFolder is true, a Folder Tag is created, else a Folder Tag is created.
-        /// </summary>
-        /// <param name="tagname">The name of the tag to be retrieved</param>
-        /// <param name="toCreate">Indicate whether to create the Tag if not found</param>
-        /// <param name="isFolder">Indicate whether to create a Folder Tag or a File Tag</param>
-        /// <returns>The Tag that has been created/found</returns>
-        private Tag RetrieveTag(string tagname, bool toCreate, bool isFolder)
+
+        #region create xml document
+        public XmlDocument ConvertToXML(string profilename, long created, long lastupdated)
         {
-            if (CheckTagExists(tagname))
+            XmlDocument TaggingDataDocument = new XmlDocument();
+            XmlElement taggingElement = TaggingDataDocument.CreateElement("tagging");
+            XmlElement profileElement = TaggingDataDocument.CreateElement("profile");
+            profileElement.SetAttribute("name", profilename);
+            profileElement.SetAttribute("createdDate", created.ToString());
+            profileElement.SetAttribute("lastUpdated", lastupdated.ToString());
+            foreach (FolderTag folderTag in _folderTagList)
             {
-                return GetTag(tagname);
+                profileElement.AppendChild(CreateFolderTagElement(TaggingDataDocument, folderTag));
             }
-            else
+            foreach (FileTag fileTag in _fileTagList)
             {
-                if (toCreate)
+                profileElement.AppendChild(CreateFileTagElement(TaggingDataDocument, fileTag));
+            }
+            taggingElement.AppendChild(profileElement);
+            TaggingDataDocument.AppendChild(taggingElement);
+            return TaggingDataDocument;
+        }
+
+        private static XmlElement CreateFolderTagElement(XmlDocument TaggingDataDocument, FolderTag folderTag)
+        {
+            XmlElement folderTagElement = TaggingDataDocument.CreateElement("folderTag");
+            folderTagElement.SetAttribute("name", folderTag.TagName);
+            folderTagElement.SetAttribute("lastUpdated", folderTag.LastUpdated.ToString());
+            foreach (TaggedPath path in folderTag.PathList)
+            {
+                folderTagElement.AppendChild(CreateTaggedFolderElement(TaggingDataDocument, path));
+            }
+            return folderTagElement;
+        }
+
+        private static XmlElement CreateTaggedFolderElement(XmlDocument TaggingDataDocument, TaggedPath path)
+        {
+            XmlElement taggedFolderElement = TaggingDataDocument.CreateElement("taggedFolder");
+            taggedFolderElement.SetAttribute("lastUpdated", path.LastUpdated.ToString());
+            XmlElement folderPathElement = TaggingDataDocument.CreateElement("path");
+            folderPathElement.InnerText = path.Path;
+            taggedFolderElement.AppendChild(folderPathElement);
+            return taggedFolderElement;
+        }
+
+        private static XmlElement CreateFileTagElement(XmlDocument TaggingDataDocument, FileTag fileTag)
+        {
+            XmlElement fileTagElement = TaggingDataDocument.CreateElement("fileTag");
+            fileTagElement.SetAttribute("name", fileTag.TagName);
+            fileTagElement.SetAttribute("lastUpdated", fileTag.LastUpdated.ToString());
+            foreach (TaggedPath path in fileTag.PathList)
+            {
+                fileTagElement.AppendChild(CreatedTaggedFileElement(TaggingDataDocument, path));
+            }
+            return fileTagElement;
+        }
+
+        private static XmlElement CreatedTaggedFileElement(XmlDocument TaggingDataDocument, TaggedPath path)
+        {
+            XmlElement taggedFileElement = TaggingDataDocument.CreateElement("taggedFile");
+            taggedFileElement.SetAttribute("lastUpdated", path.LastUpdated.ToString());
+            XmlElement filePathElement = TaggingDataDocument.CreateElement("path");
+            filePathElement.InnerText = path.Path;
+            taggedFileElement.AppendChild(filePathElement);
+            return taggedFileElement;
+        }
+        #endregion
+        #endregion
+
+        #region private methods implementations
+        private FolderTag RetrieveFolderTag(string tagname, bool create, long lastupdated)
+        {
+            FolderTag tag = GetFolderTag(tagname);
+            if (tag == null)
+            {
+                if (create)
                 {
-                    if (isFolder)
-                    {
-                        FolderTag tag = new FolderTag(tagname);
-                        return tag;
-                    }
-                    else
-                    {
-                        FileTag tag = new FileTag(tagname);
-                        return tag;
-                    }
+                    tag = new FolderTag(tagname, lastupdated);
                 }
-                else
+            }
+            return tag;
+        }
+
+        private FileTag RetrieveFileTag(string tagname, bool create, long lastupdated)
+        {
+            FileTag tag = GetFileTag(tagname);
+            if (tag == null)
+            {
+                if (create)
                 {
-                    return null;
+                    tag = new FileTag(tagname, lastupdated);
                 }
+            }
+            return tag;
+        }
+
+        private void AddFolderTag(FolderTag tag)
+        {
+            if (!CheckFolderTagExists(tag.TagName))
+            {
+                _folderTagList.Add(tag);
             }
         }
 
-        /// <summary>
-        /// Add a Tag to the tag list if it does not exist in the list
-        /// </summary>
-        /// <param name="tag">The Tag object to be added to the tag list</param>
-        private void AddTag(Tag tag)
+        private void AddFileTag(FileTag tag)
         {
-            if (!CheckTagExists(tag.TagName))
+            if (!CheckFileTagExists(tag.TagName))
             {
-                _tagList.Add(tag);
+                _fileTagList.Add(tag);
             }
         }
 
-        /// <summary>
-        /// Get the Tag of tagname.
-        /// </summary>
-        /// <param name="tagname">The name of the Tag to be retrieved</param>
-        /// <returns>If the Tag exists in the tag list, return the Tag, else return null</returns>
-        private Tag GetTag(string tagname)
+        private FolderTag GetFolderTag(string tagname)
         {
-            foreach (Tag tag in _tagList)
+            if (CheckFolderTagExists(tagname))
             {
-                if (tag.TagName.Equals(tagname))
+                foreach (FolderTag folderTag in _folderTagList)
                 {
-                    return tag;
+                    if (folderTag.TagName.Equals(tagname))
+                    {
+                        return folderTag;
+                    }
                 }
             }
             return null;
         }
 
-        /// <summary>
-        /// Check whether the Tag of tagname exist in the tag list.
-        /// </summary>
-        /// <param name="tagname">The name of the Tag to check</param>
-        /// <returns>True if the Tag is found in the list, else return false</returns>
-        private bool CheckTagExists(string tagname)
+        private FileTag GetFileTag(string tagname)
         {
-            foreach (Tag tag in _tagList)
+            if (CheckFileTagExists(tagname))
             {
-                if (tag.TagName.Equals(tagname))
+                foreach (FileTag fileTag in _fileTagList)
+                {
+                    if (fileTag.TagName.Equals(tagname))
+                    {
+                        return fileTag;
+                    }
+                }
+            }
+            return null;
+        }
+
+        private bool CheckFolderTagExists(string tagname)
+        {
+            foreach (FolderTag folderTag in _folderTagList)
+            {
+                if (folderTag.TagName.Equals(tagname))
                 {
                     return true;
                 }
             }
             return false;
         }
-        
-        /// <summary>
-        /// Check whether a Tag contains paths of logical drive ID same as ID.
-        /// </summary>
-        /// <param name="tag">The Tag object to be checked</param>
-        /// <param name="ID">The ID to be searched</param>
-        /// <param name="isFolder">Indicate whether the given Tag is a Folder Tag or File Tag</param>
-        /// <returns>True if the Tag contains paths with ID, else return false</returns>
-        private bool CheckID(Tag tag, string ID, bool isFolder)
+
+        private bool CheckFileTagExists(string tagname)
         {
-            if (isFolder)
+            foreach (FileTag fileTag in _fileTagList)
             {
-                foreach (TaggedPath path in ((FolderTag)tag).FolderPaths)
+                if (fileTag.TagName.Equals(tagname))
                 {
-                    if (path.LogicalDriveId.Equals(ID))
-                    {
-                        return true;
-                    }
-                }
-            }
-            else
-            {
-                foreach (TaggedPath path in ((FileTag)tag).FilePaths)
-                {
-                    if (path.LogicalDriveId.Equals(ID))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             return false;
         }
 
-        /// <summary>
-        /// Write to _tagging.xml the updated tag list
-        /// TODO: write the logic to write the current tag list to xml
-        /// </summary>
-        private void Save()
+        private bool CheckFolderID(FolderTag tag, string ID)
         {
+            foreach (TaggedPath path in tag.PathList)
+            {
+                if (path.LogicalDriveId.Equals(ID))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        /// <summary>
-        /// Load from _tagging.xml to create the tag list
-        /// TODO: write the logic to read from xml and create tag list
-        /// </summary>
-        /// <returns>A list of Tags</returns>
-        private List<Tag> Load()
+        private bool CheckFileID(FileTag tag, string ID)
         {
-            return new List<Tag>();
+            foreach (TaggedPath path in tag.PathList)
+            {
+                if (path.LogicalDriveId.Equals(ID))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
+
+        private List<FolderTag> LoadFolderTagList()
+        {
+            return new List<FolderTag>();
+        }
+
+        private List<FileTag> LoadFileTagList()
+        {
+            return new List<FileTag>();
+        }
+
+        public bool WriteXmlToFile()
+        {
+            XmlDocument xml = ConvertToXML("Khoon\'s sync", 1622010183523, 1622010183523);
+            xml.Save(@"D:\My Homework\SEM2 AY0910\CS3215\Project\Syncless.SVN\Syncless.Tester\_tagging.xml");
+            return true;
+        }
+        #endregion
     }
 }
