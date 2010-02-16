@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless.CompareAndSync", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless.Helper", "Syncless.Helper\Syncless.Helper.csproj", "{576092CC-8371-4DB1-A877-ADCDFDC22EB6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless", "Syncless\Syncless.csproj", "{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xml.Gordon", "Xml.Gordon\Xml.Gordon.csproj", "{4B434E60-22FC-471B-8EBF-9C671E0D966A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +53,14 @@ Global
 		{576092CC-8371-4DB1-A877-ADCDFDC22EB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{576092CC-8371-4DB1-A877-ADCDFDC22EB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{576092CC-8371-4DB1-A877-ADCDFDC22EB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B434E60-22FC-471B-8EBF-9C671E0D966A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B434E60-22FC-471B-8EBF-9C671E0D966A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B434E60-22FC-471B-8EBF-9C671E0D966A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B434E60-22FC-471B-8EBF-9C671E0D966A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
