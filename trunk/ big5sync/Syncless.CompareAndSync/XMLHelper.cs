@@ -6,57 +6,17 @@ using System.Xml;
 using System.Xml.XPath;
 using System.Diagnostics;
 
-namespace ExtractingXMLData
+namespace Syncless.CompareAndSync
 {
-    class ExtractXML
+    class XMLHelper
     {
-
-        /// <summary>
-        /// XMLDocuments load the xml file
-        /// 
-        /// There are 2 strings that we need. The folder path where the meta-data explains its stuff
-        /// as well as the path that we want to search in the meta-data.
-        /// relative path = path where the user wants to search - folder path
-        /// If the user wants the entire folder , it will pass in an empty string
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
-        {
-            string pathToSearch = @"C:\Documents and Settings\Nil\Desktop\3212\C";
-            string directoryWhereItResides = @"C:\Documents and Settings\Nil\Desktop\3212";
-
-            string relativePath = "";
-
-            if (!pathToSearch.Equals(directoryWhereItResides))
-                relativePath = pathToSearch.Replace(directoryWhereItResides, "");               
-
-            XmlDocument xmlDoc = new XmlDocument();
-
-            xmlDoc.Load("C:\\Documents and Settings\\Nil\\Desktop\\meta-data.xml");
-
-            List<CompareInfoObject> list = printNodes(relativePath,xmlDoc,pathToSearch,directoryWhereItResides);
-
-            foreach (CompareInfoObject compareInfo in list)
-            {
-                Console.WriteLine(compareInfo.Origin);
-                Console.WriteLine(compareInfo.FullName);
-                Console.WriteLine(compareInfo.MD5Hash);
-                Console.WriteLine(compareInfo.LastWriteTime);
-                Console.WriteLine(compareInfo.Length);
-                Console.WriteLine(compareInfo.RelativePathToOrigin);
-                Console.WriteLine();
-            }
-
-           Console.ReadKey();
-        }
-
         /// <summary>
         /// Given a dirpath , breaks it up into a folder and returns an Xpath Expression
         /// If it is an empty string , return the root of the xml
         /// </summary>
         /// <param name="dirPath"></param>
         /// <returns> the final Xpath expression</returns>
-        private static string concatPath(string dirPath)
+        private static string ConcatPath(string dirPath)
         {
             Debug.Assert(!(dirPath == null));
             string finalExpr = "/meta-data";
@@ -86,7 +46,7 @@ namespace ExtractingXMLData
         /// <param name="xmlDoc"> XMLDocument object that already been loaded with the xml file</param>
         /// <param name="fullPath"> C:\...\...\</param>
         /// <returns> The list of paths in string that can be found given a folder path</returns>
-        private static List<CompareInfoObject> printNodes(string path, XmlDocument xmlDoc, string fullPath,string directory)
+        public static List<CompareInfoObject> GetCompareInfoObjects(string path, XmlDocument xmlDoc, string fullPath,string directory)
         {
             Debug.Assert(path != null);
             Debug.Assert(xmlDoc != null);
@@ -105,7 +65,7 @@ namespace ExtractingXMLData
                     string dirPath = stack.Pop();
                     string temp = dirPath; 
 
-                    XmlNodeList nodeList = xmlDoc.SelectNodes(concatPath(dirPath));
+                    XmlNodeList nodeList = xmlDoc.SelectNodes(ConcatPath(dirPath));
 
                     foreach (XmlNode node in nodeList)
                     {
@@ -117,21 +77,17 @@ namespace ExtractingXMLData
                                 stack.Push(dirPath + "\\" + childNodes[i].FirstChild.InnerText);
                             }
                             else
-                            {
-                               
+                            {                               
                                 if (!path.Equals(""))
                                     temp = dirPath.Replace(path, "");
 
                                 string entirePath = fullPath + temp + "\\" + childNodes[i].FirstChild.InnerText;
-                                infoObject = generateInfo(childNodes[i], directory, entirePath);
+                                infoObject = GenerateInfo(childNodes[i], directory, entirePath);
                                 pathList.Add(infoObject);
                             }
                         }
                     }
-
-
                 }
-
                 return pathList;
             }
             catch (Exception e)
@@ -141,7 +97,7 @@ namespace ExtractingXMLData
             }
         }
 
-        private static CompareInfoObject generateInfo(XmlNode node , string origin , string fullPath)
+        private static CompareInfoObject GenerateInfo(XmlNode node , string origin , string fullPath)
         {
             XmlNodeList nodeList = node.ChildNodes;
             int counter = 0 ;
