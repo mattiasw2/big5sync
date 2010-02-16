@@ -450,7 +450,7 @@ namespace Syncless.CompareAndSync
             {
                 foreach (string path in paths)
                 {
-                    results.Add(new CompareResult(changeType, Path.Combine(path, deleteItem), null));
+                    results.Add(new CompareResult(FileChangeType.Delete, Path.Combine(path, deleteItem), null));
                 }
             }
 
