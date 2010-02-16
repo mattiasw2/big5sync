@@ -25,12 +25,12 @@ namespace Syncless.CompareAndSync
                 return finalExpr;
 
             string[] splitWords = dirPath.Split('\\');
-            
+
 
             for (int i = 0; i < splitWords.Length; i++)
             {
                 if (!splitWords[i].Equals(""))
-                    finalExpr = finalExpr + "/folder" + "[name_of_folder='" + splitWords[i] +"']";
+                    finalExpr = finalExpr + "/folder" + "[name_of_folder='" + splitWords[i] + "']";
             }
             return finalExpr;
         }
@@ -46,24 +46,28 @@ namespace Syncless.CompareAndSync
         /// <param name="xmlDoc"> XMLDocument object that already been loaded with the xml file</param>
         /// <param name="fullPath"> C:\...\...\</param>
         /// <returns> The list of paths in string that can be found given a folder path</returns>
-        public static List<CompareInfoObject> GetCompareInfoObjects(string path, XmlDocument xmlDoc, string fullPath,string directory)
+        public static List<CompareInfoObject> GetCompareInfoObjects(string pathOfFile)
         {
-            Debug.Assert(path != null);
-            Debug.Assert(xmlDoc != null);
-            Debug.Assert(!(fullPath.Equals("") || fullPath == null));
+
+            string path = "";
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(pathOfFile);
+            FileInfo fileInfo = new FileInfo(pathOfFile);
+            string directory = fileInfo.Directory.Parent.FullName;
 
             try
             {
+
                 CompareInfoObject infoObject = null;
                 List<CompareInfoObject> pathList = new List<CompareInfoObject>();
                 Stack<string> stack = new Stack<string>();
                 stack.Push(path);
-                
+
 
                 while (stack.Count > 0)
                 {
                     string dirPath = stack.Pop();
-                    string temp = dirPath; 
+                    string temp = dirPath;
 
                     XmlNodeList nodeList = xmlDoc.SelectNodes(ConcatPath(dirPath));
 
@@ -75,13 +79,14 @@ namespace Syncless.CompareAndSync
                             if (childNodes[i].FirstChild.Name.Equals("name_of_folder"))
                             {
                                 stack.Push(dirPath + "\\" + childNodes[i].FirstChild.InnerText);
+                                Console.WriteLine(dirPath + "\\" + childNodes[i].FirstChild.InnerText);
                             }
                             else
-                            {                               
+                            {
                                 if (!path.Equals(""))
                                     temp = dirPath.Replace(path, "");
 
-                                string entirePath = fullPath + temp + "\\" + childNodes[i].FirstChild.InnerText;
+                                string entirePath = directory + temp + "\\" + childNodes[i].FirstChild.InnerText;
                                 infoObject = GenerateInfo(childNodes[i], directory, entirePath);
                                 pathList.Add(infoObject);
                             }
@@ -97,16 +102,16 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        private static CompareInfoObject GenerateInfo(XmlNode node , string origin , string fullPath)
+        private static CompareInfoObject GenerateInfo(XmlNode node, string origin, string fullPath)
         {
             XmlNodeList nodeList = node.ChildNodes;
-            int counter = 0 ;
+            int counter = 0;
 
             string name = "";
             string size = "";
             string hash = "";
             string lastModified = "";
-            
+
             foreach (XmlNode childNode in nodeList)
             {
                 if (counter == 0)
@@ -121,8 +126,8 @@ namespace Syncless.CompareAndSync
                 counter++;
             }
 
-            return new CompareInfoObject(origin, fullPath, name, long.Parse(lastModified) ,
-                long.Parse(size) , hash);
+            return new CompareInfoObject(origin, fullPath, name, long.Parse(lastModified),
+                long.Parse(size), hash);
         }
     }
 }
