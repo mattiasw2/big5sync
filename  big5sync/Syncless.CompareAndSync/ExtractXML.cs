@@ -22,26 +22,32 @@ namespace ExtractingXMLData
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string pathToSearch = @"C:\Documents and Settings\Nil\Desktop\3212\haskell";
+            string pathToSearch = @"C:\Documents and Settings\Nil\Desktop\3212\C";
             string directoryWhereItResides = @"C:\Documents and Settings\Nil\Desktop\3212";
 
             string relativePath = "";
 
             if (!pathToSearch.Equals(directoryWhereItResides))
-                relativePath = pathToSearch.Replace(directoryWhereItResides, "");
+                relativePath = pathToSearch.Replace(directoryWhereItResides, "");               
 
             XmlDocument xmlDoc = new XmlDocument();
 
             xmlDoc.Load("C:\\Documents and Settings\\Nil\\Desktop\\meta-data.xml");
 
-            List<string> list = printNodes(relativePath, xmlDoc, pathToSearch);
+            List<CompareInfoObject> list = printNodes(relativePath,xmlDoc,pathToSearch,directoryWhereItResides);
 
-            foreach (string path in list)
+            foreach (CompareInfoObject compareInfo in list)
             {
-                Console.WriteLine(path);
+                Console.WriteLine(compareInfo.Origin);
+                Console.WriteLine(compareInfo.FullName);
+                Console.WriteLine(compareInfo.MD5Hash);
+                Console.WriteLine(compareInfo.LastWriteTime);
+                Console.WriteLine(compareInfo.Length);
+                Console.WriteLine(compareInfo.RelativePathToOrigin);
+                Console.WriteLine();
             }
 
-            Console.ReadKey();
+           Console.ReadKey();
         }
 
         /// <summary>
@@ -59,12 +65,12 @@ namespace ExtractingXMLData
                 return finalExpr;
 
             string[] splitWords = dirPath.Split('\\');
-
+            
 
             for (int i = 0; i < splitWords.Length; i++)
             {
                 if (!splitWords[i].Equals(""))
-                    finalExpr = finalExpr + "/folder" + "[name_of_folder='" + splitWords[i] + "']";
+                    finalExpr = finalExpr + "/folder" + "[name_of_folder='" + splitWords[i] +"']";
             }
             return finalExpr;
         }
@@ -80,7 +86,7 @@ namespace ExtractingXMLData
         /// <param name="xmlDoc"> XMLDocument object that already been loaded with the xml file</param>
         /// <param name="fullPath"> C:\...\...\</param>
         /// <returns> The list of paths in string that can be found given a folder path</returns>
-        private static List<string> printNodes(string path, XmlDocument xmlDoc, string fullPath)
+        private static List<CompareInfoObject> printNodes(string path, XmlDocument xmlDoc, string fullPath,string directory)
         {
             Debug.Assert(path != null);
             Debug.Assert(xmlDoc != null);
@@ -88,15 +94,16 @@ namespace ExtractingXMLData
 
             try
             {
-                List<string> pathList = new List<string>();
+                CompareInfoObject infoObject = null;
+                List<CompareInfoObject> pathList = new List<CompareInfoObject>();
                 Stack<string> stack = new Stack<string>();
                 stack.Push(path);
-
+                
 
                 while (stack.Count > 0)
                 {
                     string dirPath = stack.Pop();
-                    string temp = dirPath;
+                    string temp = dirPath; 
 
                     XmlNodeList nodeList = xmlDoc.SelectNodes(concatPath(dirPath));
 
@@ -111,11 +118,13 @@ namespace ExtractingXMLData
                             }
                             else
                             {
-
+                               
                                 if (!path.Equals(""))
                                     temp = dirPath.Replace(path, "");
 
-                                pathList.Add(fullPath + temp + "\\" + childNodes[i].FirstChild.InnerText);
+                                string entirePath = fullPath + temp + "\\" + childNodes[i].FirstChild.InnerText;
+                                infoObject = generateInfo(childNodes[i], directory, entirePath);
+                                pathList.Add(infoObject);
                             }
                         }
                     }
@@ -130,6 +139,34 @@ namespace ExtractingXMLData
                 Console.WriteLine(e.StackTrace);
                 return null;
             }
+        }
+
+        private static CompareInfoObject generateInfo(XmlNode node , string origin , string fullPath)
+        {
+            XmlNodeList nodeList = node.ChildNodes;
+            int counter = 0 ;
+
+            string name = "";
+            string size = "";
+            string hash = "";
+            string lastModified = "";
+            
+            foreach (XmlNode childNode in nodeList)
+            {
+                if (counter == 0)
+                    name = childNode.InnerText;
+                else if (counter == 1)
+                    size = childNode.InnerText;
+                else if (counter == 2)
+                    hash = childNode.InnerText;
+                else
+                    lastModified = childNode.InnerText;
+
+                counter++;
+            }
+
+            return new CompareInfoObject(origin, fullPath, name, long.Parse(lastModified) ,
+                long.Parse(size) , hash);
         }
     }
 }
