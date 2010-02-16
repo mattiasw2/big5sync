@@ -12,11 +12,10 @@ namespace Syncless.CompareAndSync
     public class CompareInfoObject
     {
         private string _origin, _fullName, _name, _hash;
-        private DateTime _lastWriteTime;
-        long _length;
-        FileChangeType _changeType;
+        private long _lastWriteTime, _length;
+        private FileChangeType _changeType;
 
-        public CompareInfoObject(string origin, string fullName, string name, DateTime lastWriteTime, long length, string hash)
+        public CompareInfoObject(string origin, string fullName, string name, long lastWriteTime, long length, string hash)
         {
             _origin = origin;
             _fullName = fullName;
@@ -51,7 +50,7 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        public DateTime LastWriteTime
+        public long LastWriteTime
         {
             get
             {
