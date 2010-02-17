@@ -1,22 +1,29 @@
 ﻿<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Class="Syncless.MainWindow"
-    Title="Syncless" Height="400" Width="800" Background="Transparent" Icon="Icons/logo.ico" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" WindowStyle="None" Foreground="Transparent" mc:Ignorable="d" AllowsTransparency="True">
-    <Grid x:Name="LayoutRoot" Width="700" Height="350">
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:dropShadow="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Class="Syncless.MainWindow"
+    Title="Syncless" Height="600" Width="800" Background="Transparent" Icon="Icons/logo.ico" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" WindowStyle="None" Foreground="Transparent" mc:Ignorable="d" AllowsTransparency="True">
+    <Grid x:Name="LayoutRoot" Width="700" Height="550">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="20"/>
 			<RowDefinition Height="50"/>
 			<RowDefinition Height="60"/>
-			<RowDefinition Height="0.798*"/>
-			<RowDefinition Height="27"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="150"/>
+			<RowDefinition Height="20"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="20"/>
-			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="0.66*"/>
+			<ColumnDefinition Width="20"/>
+			<ColumnDefinition Width="0.34*"/>
 			<ColumnDefinition Width="20"/>
 		</Grid.ColumnDefinitions>
-    	<Rectangle Grid.Row="0" Grid.RowSpan="5" x:Name="Canvas" RadiusX="10" RadiusY="10" Margin="0,1,0,0" Stroke="Black" Grid.ColumnSpan="3">
+    	
+		<!-- Overall Canvas -->
+		<Rectangle Grid.Row="0" Grid.RowSpan="7" x:Name="Canvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.ColumnSpan="5">
     		<Rectangle.Fill>
     			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
     				<GradientStop Color="#FF707271" Offset="0"/>
@@ -25,15 +32,18 @@
     			</LinearGradientBrush>
     		</Rectangle.Fill>
     	</Rectangle>
-    	<TextBlock Grid.Row="0" Margin="0" Padding="5" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Grid.ColumnSpan="3" Cursor="Hand"/>
-    	<StackPanel x:Name="MinMaxClosePanel" Grid.Row="0" Grid.Column="1" Height="20" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,-5,0" Cursor="Hand">
+    	<TextBlock Grid.Row="0" Margin="0" Padding="5" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Grid.ColumnSpan="5" Cursor="Hand"/>
+    	<!-- MinClose Panel -->
+		<StackPanel x:Name="MinClosePanel" Grid.Row="0" Grid.Column="3" Height="20" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,-5,0" Cursor="Hand">
 			<Image x:Name="BtnMin" Source="Icons/min.ico" Width="20" Height="20" Stretch="UniformToFill" d:LayoutOverrides="VerticalMargin" MouseLeftButtonDown="BtnMin_MouseLeftButtonDown" />
 			<Image x:Name="BtnClose" Source="Icons/close.ico" Width="19" Height="20" Stretch="UniformToFill" d:LayoutOverrides="VerticalMargin" MouseLeftButtonDown="BtnClose_MouseLeftButtonDown" />
 		</StackPanel>
-		<StackPanel x:Name="HeaderPanel" Grid.Row="1" Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Top" Height="50" Grid.ColumnSpan="2" d:LayoutOverrides="GridBox">
-    		<Image Source="Icons/logo.ico" Width="40" Height="40" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Margin="-5,0,-10,0" Stretch="Fill"/>
-    		<Label x:Name="Title" Content="Syncless" Foreground="#FFEEEEEE" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="0,-5,250,0" FontFamily="Fonts/#BankGothic Md BT"/>		
-			<Menu x:Name="MainMenu" VerticalAlignment="Center" FontFamily="Century Gothic" FontSize="13.333" Background="{x:Null}" Margin="0,8,0,0" FontWeight="Bold" HorizontalAlignment="Right">
+		<!-- Header Panel -->
+		<StackPanel x:Name="HeaderPanel" Grid.Row="1" Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Top" Height="50" Grid.ColumnSpan="4">
+    		<Image x:Name="SynclessLogo" Source="Icons/logo.ico" Width="40" Height="40" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Margin="-5,0,-10,0" Stretch="Fill"/>
+    		<Label x:Name="AppTitle" Content="Syncless" Foreground="#FFEEEEEE" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="0,-5,250,0" FontFamily="Fonts/#BankGothic Md BT"/>		
+			<!-- Menubar -->
+			<Menu x:Name="MainMenu" VerticalAlignment="Center" FontSize="13.333" Background="{x:Null}" Margin="0,8,0,0" FontWeight="Bold" HorizontalAlignment="Right">
 				<MenuItem Header="_File" Foreground="#FF8799EB">
 					<MenuItem Header="Minimize to System Tray" InputGestureText="Ctrl + M" />
 					<MenuItem Header="Exit" />
@@ -54,13 +64,136 @@
 				</MenuItem>
 			</Menu>
 		</StackPanel>
-		<StackPanel Grid.Row="2" x:Name="ToolBar" OpacityMask="Black" Orientation="Horizontal" VerticalAlignment="Center" Background="#FF626262" Margin="0" Height="60" Grid.ColumnSpan="3" Width="698">
-			<StackPanel Orientation="Vertical" Margin="20,0,2,0" VerticalAlignment="Bottom"><Button Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/createtag.ico" Stretch="Fill" ToolTip="Create Tag"/></Button><Label HorizontalAlignment="Center" Content="Create" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
-			<StackPanel Orientation="Vertical" Margin="0,0,5,0" VerticalAlignment="Bottom"><Button x:Name="btnRemoveTag" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/removetag.ico" Stretch="Fill" ToolTip="Remove Tag"/></Button><Label HorizontalAlignment="Center" Content="Remove" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
-			<StackPanel Orientation="Vertical" Margin="0,0,11,0" VerticalAlignment="Bottom"><Button Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/tag.ico" Stretch="Fill" ToolTip="Tag File/Folder"/></Button><Label HorizontalAlignment="Center" Content="Tag" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
-			<StackPanel Orientation="Vertical" Margin="0,0,10,0" VerticalAlignment="Bottom"><Button Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/placetag.ico" Stretch="Fill" ToolTip="Place Tag"/></Button><Label HorizontalAlignment="Center" Content="Place" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
-			<StackPanel Orientation="Vertical" Margin="0,0,5,0" VerticalAlignment="Bottom"><Button Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/properties.ico" Stretch="Fill" ToolTip="Tag Properties"/></Button><Label HorizontalAlignment="Center" Content="Details" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
-		</StackPanel>
-		<Label Grid.Row="3" Grid.Column="1" Foreground="White" Content="Test" Grid.RowSpan="2" Grid.ColumnSpan="2" d:LayoutOverrides="GridBox" />
+		<!-- ToolBar -->
+		<dropShadow:SystemDropShadowChrome Grid.Row="2" Grid.ColumnSpan="5">
+			<StackPanel  x:Name="ToolBar" OpacityMask="Black" Orientation="Horizontal" VerticalAlignment="Center" Background="#FF626262" Margin="1,0" Height="60"  Width="698">
+				<StackPanel x:Name="BtnCreatePanel" Orientation="Vertical" Margin="20,0,2,0" VerticalAlignment="Bottom"><Button x:Name="BtnCreate" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/createtag.ico" Stretch="Fill" ToolTip="Create Tag"/></Button><Label x:Name="LblCreate" HorizontalAlignment="Center" Content="Create" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+				<StackPanel x:Name="BtnRemovePanel" Orientation="Vertical" Margin="0,0,5,0" VerticalAlignment="Bottom"><Button x:Name="btnRemove" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/removetag.ico" Stretch="Fill" ToolTip="Remove Tag"/></Button><Label x:Name="LblRemove" HorizontalAlignment="Center" Content="Remove" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE" Background="#00BDBDBD"/></StackPanel>
+				<StackPanel x:Name="BtnTagPanel" Orientation="Vertical" Margin="0,0,11,0" VerticalAlignment="Bottom"><Button x:Name="btnTag" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/tag.ico" Stretch="Fill" ToolTip="Tag File/Folder"/></Button><Label x:Name="LblTag" HorizontalAlignment="Center" Content="Tag" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+				<StackPanel x:Name="BtnPlacePanel" Orientation="Vertical" Margin="0,0,10,0" VerticalAlignment="Bottom"><Button x:Name="BtnPlace" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/placetag.ico" Stretch="Fill" ToolTip="Place Tag"/></Button><Label x:Name="LblPlace" HorizontalAlignment="Center" Content="Place" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+				<StackPanel x:Name="BtnDetailsPanel" Orientation="Vertical" Margin="0,0,5,0" VerticalAlignment="Bottom"><Button x:Name="BtnDetails" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/properties.ico" Stretch="Fill" ToolTip="Tag Properties"/></Button><Label x:Name="LblDetails" HorizontalAlignment="Center" Content="Details" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+			</StackPanel>
+		</dropShadow:SystemDropShadowChrome>
+		<!-- Tag Info Panel -->
+		<Grid x:Name="TagInfoLayoutRoot" Grid.Row="3" Grid.Column="1" Grid.RowSpan="1" Grid.ColumnSpan="1">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="20"/>
+				<RowDefinition Height="30"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="25"/>
+				<RowDefinition Height="10"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="10"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="60"/>
+				<ColumnDefinition Width="10"/>
+			</Grid.ColumnDefinitions>
+			
+			<!-- Tag Info Canvas -->
+			<dropShadow:SystemDropShadowChrome Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="4">			
+				<Rectangle x:Name="TagInfoCanvas" RadiusX="10" RadiusY="10" Stroke="Black">
+					<Rectangle.Fill>
+						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+							<GradientStop Color="#FF626262" Offset="0"/>
+							<GradientStop Color="#FF20262b" Offset="1"/>
+						</LinearGradientBrush>
+					</Rectangle.Fill>
+				</Rectangle>
+			</dropShadow:SystemDropShadowChrome>
+			
+			<!-- Tag General Details -->
+			<Label x:Name="TagTitle" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Foreground="#FFEEEEEE" FontSize="16" Content="Sample Lecture Folder Tag" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Margin="1,0" Padding="10,5,0,0"/>
+			<Image x:Name="TagIcon" Source="Icons\folder.ico" HorizontalAlignment="Right" Margin="0,0,-5,0" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="3" VerticalAlignment="Top" d:LayoutOverrides="HorizontalMargin" Grid.ColumnSpan="2"/>
+			
+			<!-- Tag Status Panel -->
+			<StackPanel x:Name="TagStatusPanel" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
+				<Label FontSize="10.667" FontFamily="Century Gothic" FontWeight="Bold" Content="Status:" Foreground="White"/>
+				<Label FontFamily="Century Gothic" FontSize="10.667" Content="Last Synchronized at 10:00am" Foreground="White"/> 
+			</StackPanel>
+			
+			<!-- Tag Sync Panel -->
+			<StackPanel x:Name="SyncPanel" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Right" Margin="0,30,0,0">
+				<Button x:Name="BtnDirection" Height="28" Margin="0,0,0,5">
+					<Button.Background>
+						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+							<GradientStop Color="#FFFF6464" Offset="0"/>
+							<GradientStop Color="Red" Offset="1"/>
+							<GradientStop Color="#FFFF6464" Offset="0.5"/>
+						</LinearGradientBrush>
+					</Button.Background>
+					<Label x:Name="LblDirection" FontFamily="Century Gothic" FontSize="9.333" Foreground="White" OpacityMask="Black" BorderBrush="Black" HorizontalAlignment="Right" Content="Uni-Dir.."/>
+				</Button>
+				<Button x:Name="BtnSyncMode" Height="28" Margin="0,0,0,5">
+					<Button.Background>
+						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+							<GradientStop Color="#FFFF6464" Offset="0"/>
+							<GradientStop Color="Red" Offset="1"/>
+							<GradientStop Color="#FFFF6464" Offset="0.5"/>
+						</LinearGradientBrush>
+					</Button.Background>
+					<Label x:Name="LblSyncMode" FontFamily="Century Gothic" FontSize="9.333" Foreground="White" OpacityMask="Black" BorderBrush="Black" HorizontalAlignment="Right" Content="Manual"/>
+				</Button>
+				<Button x:Name="BtnPreview" Height="28" Margin="0,0,0,5">
+					<Label x:Name="LblPreview" FontFamily="Century Gothic" FontSize="9.333" Content="Preview"/>
+				</Button>
+				<Button x:Name="BtnSyncNow" Height="28" Margin="0,0,0,5">
+					<Label x:Name="LblSyncNow" FontFamily="Century Gothic" FontSize="9.333" Content="Sync Now"/>
+				</Button>
+			</StackPanel>
+		</Grid>
+		
+		<!-- Tag List Info Panel -->
+		<Grid x:Name="TagListLayoutRoot" Grid.Row="3" Grid.Column="3" Grid.RowSpan="1" Grid.ColumnSpan="1">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="20"/>
+				<RowDefinition Height="30"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="15"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="10"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="10"/>
+			</Grid.ColumnDefinitions>
+
+			<dropShadow:SystemDropShadowChrome Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="3">	
+				<Rectangle x:Name="TagListCanvas" RadiusX="10" RadiusY="10" Stroke="Black">
+					<Rectangle.Fill>
+						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+							<GradientStop Color="#FF626262" Offset="0"/>
+							<GradientStop Color="#FF20262b" Offset="1"/>
+						</LinearGradientBrush>
+					</Rectangle.Fill>
+				</Rectangle>
+			</dropShadow:SystemDropShadowChrome>
+		</Grid>
+		
+		<!-- Log Panel -->
+		<Grid x:Name="LogPanelLayoutRoot" Grid.Row="4" Grid.Column="1" Grid.RowSpan="1" Grid.ColumnSpan="3">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="20"/>
+				<RowDefinition Height="25"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="15"/>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="10"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="10"/>
+			</Grid.ColumnDefinitions>
+
+			<dropShadow:SystemDropShadowChrome Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="3">	
+				<Rectangle x:Name="TagListCanvas1" RadiusX="10" RadiusY="10" Stroke="Black">
+					<Rectangle.Fill>
+						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+							<GradientStop Color="#FF626262" Offset="0"/>
+							<GradientStop Color="#FF20262b" Offset="1"/>
+						</LinearGradientBrush>
+					</Rectangle.Fill>
+				</Rectangle>
+			</dropShadow:SystemDropShadowChrome>
+			<Label x:Name="LogTitle" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Foreground="#FFEEEEEE" Content="Logs Panel" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,0,0,0" Margin="2,0" FontSize="13.333" VerticalAlignment="Center"/>
+		</Grid>
     </Grid>	
 </Window>

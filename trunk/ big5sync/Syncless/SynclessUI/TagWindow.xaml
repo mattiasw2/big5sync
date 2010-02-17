@@ -26,7 +26,7 @@
 		</Rectangle>
 		<TextBlock Grid.Row="0" Margin="0" Padding="5" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Cursor="Hand" Grid.ColumnSpan="3"/>
 		<StackPanel Grid.Row="1" Grid.Column="1">
-			<Label x:Name="Title" Content="Tag List" Foreground="#FFEEEEEE" FontFamily="BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Margin="0" Grid.Column="1" d:LayoutOverrides="Width" Height="30"/>
+			<Label x:Name="AppTitle" Content="Tag List" Foreground="#FFEEEEEE" FontFamily="BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Margin="0" Grid.Column="1" d:LayoutOverrides="Width" Height="30"/>
 		</StackPanel>
 	</Grid>
 </Window>
