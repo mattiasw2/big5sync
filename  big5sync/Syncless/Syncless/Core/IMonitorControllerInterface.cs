@@ -12,5 +12,6 @@ namespace Syncless.Core
         void HandleFileChange(FileChangeEvent fe);
         void HandleFolderChange(FolderChangeEvent fe);
         void HandleDriveChange(DriveChangeEvent dce);
+        void HandleDeleteChange(DeleteChangeEvent dce);
     }
 }

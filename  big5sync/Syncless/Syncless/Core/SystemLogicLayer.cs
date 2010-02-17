@@ -229,6 +229,11 @@ namespace Syncless.Core
             
         }
 
+        public void HandleDeleteChange(DeleteChangeEvent dce)
+        {
+
+        }
+
         #endregion
     }
 }

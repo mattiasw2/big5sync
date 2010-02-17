@@ -65,6 +65,7 @@
     <Compile Include="Core\SystemLogicLayer.cs" />
     <Compile Include="Helper\ErrorMessage.cs" />
     <Compile Include="LoggingLayer\LoggingLayer.cs" />
+    <Compile Include="Monitor\DeleteChangeEvent.cs" />
     <Compile Include="Monitor\DriveChangeEvent.cs" />
     <Compile Include="Monitor\DriveChangeType.cs" />
     <Compile Include="Monitor\EventChangeType.cs" />

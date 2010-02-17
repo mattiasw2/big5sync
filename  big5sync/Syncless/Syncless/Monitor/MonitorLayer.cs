@@ -311,7 +311,7 @@ namespace Syncless.Monitor
             if (File.Exists(e.FullPath))
             {
                 Console.WriteLine("File Modified: " + e.FullPath);
-                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), null, EventChangeType.MODIFIED);
+                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), EventChangeType.MODIFIED);
                 monitor.HandleFileChange(fileEvent);
             }
         }
@@ -322,32 +322,38 @@ namespace Syncless.Monitor
             if (File.Exists(e.FullPath))
             {
                 Console.WriteLine("File Created: " + e.FullPath);
-                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), null, EventChangeType.CREATED);
+                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), EventChangeType.CREATED);
                 monitor.HandleFileChange(fileEvent);
             }
             else
             {
                 Console.WriteLine("Folder Created: " + e.FullPath);
-                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.FullPath), null, EventChangeType.CREATED);
+                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.FullPath), EventChangeType.CREATED);
                 monitor.HandleFolderChange(folderEvent);
             }
         }
 
         private static void OnDeleted(object source, FileSystemEventArgs e)
         {
-            //TODO Solve Detect file bug
             IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
-            if (File.Exists(e.FullPath))
+            FileSystemWatcher watcher = (FileSystemWatcher)source;
+            if (!watcher.Filter.Equals("*.*"))
             {
                 Console.WriteLine("File Deleted: " + e.FullPath);
-                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), null, EventChangeType.DELETED);
+                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), EventChangeType.DELETED);
                 monitor.HandleFileChange(fileEvent);
+            }
+            else if (watcher.Path.ToLower().Equals(e.FullPath)) // Strangely this will never happen as watcher cannot detect any event from the root folder
+            {
+                Console.WriteLine("Folder Deleted: " + e.FullPath);
+                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.FullPath), EventChangeType.DELETED);
+                monitor.HandleFolderChange(folderEvent);
             }
             else
             {
-                Console.WriteLine("Folder Deleted: " + e.FullPath);
-                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.FullPath), null, EventChangeType.DELETED);
-                monitor.HandleFolderChange(folderEvent);
+                Console.WriteLine("File/Folder Deleted: " + e.FullPath);
+                DeleteChangeEvent deleteEvent = new DeleteChangeEvent(new DirectoryInfo(e.FullPath), new DirectoryInfo(watcher.Path));
+                monitor.HandleDeleteChange(deleteEvent);
             }
         }
 
@@ -357,13 +363,13 @@ namespace Syncless.Monitor
             if (File.Exists(e.OldFullPath))
             {
                 Console.WriteLine("File Renamed: " + e.OldFullPath + " " + e.FullPath);
-                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.OldFullPath), new FileInfo(e.FullPath), EventChangeType.DELETED);
+                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.OldFullPath), new FileInfo(e.FullPath));
                 monitor.HandleFileChange(fileEvent);
             }
             else
             {
                 Console.WriteLine("Folder Renamed: " + e.OldFullPath + " " + e.FullPath);
-                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.OldFullPath), new DirectoryInfo(e.FullPath), EventChangeType.DELETED);
+                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.OldFullPath), new DirectoryInfo(e.FullPath));
                 monitor.HandleFolderChange(folderEvent);
             }
         }
