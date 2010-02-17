@@ -148,6 +148,7 @@
     <Resource Include="Icons\createtag.ico" />
     <Resource Include="Icons\file.ico" />
     <Resource Include="Icons\folder.ico" />
+    <Resource Include="Icons\log.ico" />
     <Resource Include="Icons\logo.ico" />
     <Resource Include="Icons\max.ico" />
     <Resource Include="Icons\min.ico" />
@@ -156,6 +157,7 @@
     <Resource Include="Icons\removetag.ico" />
     <Resource Include="Icons\small-down-arrow.ico" />
     <Resource Include="Icons\tag.ico" />
+    <Resource Include="Icons\taglist.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
