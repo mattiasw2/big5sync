@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using Syncless.Tagging.Exceptions;
+using System.Diagnostics;
 
 namespace Syncless.Tagging
 {
@@ -100,18 +101,37 @@ namespace Syncless.Tagging
         /// <returns>The FolderTag that contains the path, else raise PathAlreadyExistsException</returns>
         public FolderTag TagFolder(string path, string tagname, long lastupdated)
         {
-            FolderTag tag = RetrieveFolderTag(tagname, true, lastupdated);
-            if (!tag.Contain(path))
+            Tag tag = FindTag(tagname);
+            if (tag == null)
             {
-                tag.AddPath(path, lastupdated);
-                AddFolderTag(tag);
-                return tag;
+                tag = new FolderTag(tagname, lastupdated);
+            }
+            Debug.Assert(tag != null);
+            if (tag is FileTag)
+            {
+                throw new TagTypeConflictException();
             }
             else
             {
-                throw new PathAlreadyExistsException();
+                Debug.Assert(tag is FolderTag);
+                if (!tag.Contain(path))
+                {
+                    if (!CheckRecursiveDirectory((FolderTag)tag, path))
+                    {
+                        tag.AddPath(path, lastupdated);
+                        AddFolderTag((FolderTag)tag);
+                        return (FolderTag)tag;
+                    }
+                    else
+                    {
+                        throw new RecursiveDirectoryException();
+                    }
+                }
+                else
+                {
+                    throw new PathAlreadyExistsException();
+                }
             }
-
         }
 
         /// <summary>
@@ -200,18 +220,30 @@ namespace Syncless.Tagging
         /// <returns>The FileTag that contains the path, else raise PathAlreadyExistsException</returns>
         public FileTag TagFile(string path, string tagname, long lastupdated)
         {
-            FileTag tag = RetrieveFileTag(tagname, true, lastupdated);
-            if (!tag.Contain(path))
+            Tag tag = FindTag(tagname);
+            if (tag == null)
             {
-                tag.AddPath(path, lastupdated);
-                AddFileTag(tag);
-                return tag;
+                tag = new FileTag(tagname, lastupdated);
+            }
+            Debug.Assert(tag != null);
+            if (tag is FolderTag)
+            {
+                throw new TagTypeConflictException();
             }
             else
             {
-                throw new PathAlreadyExistsException();
+                Debug.Assert(tag is FileTag);
+                if (!tag.Contain(path))
+                {
+                    tag.AddPath(path, lastupdated);
+                    AddFileTag((FileTag)tag);
+                    return (FileTag)tag;
+                }
+                else
+                {
+                    throw new PathAlreadyExistsException();
+                }
             }
-
         }
 
         /// <summary>
@@ -252,6 +284,13 @@ namespace Syncless.Tagging
         #endregion
 
         #region miscellaneous public implementations
+        public bool WriteXmlToFile()
+        {
+            XmlDocument xml = ConvertToXML("Khoon\'s sync", 1622010183523, 1622010183523);
+            xml.Save(@"_tagging.xml");
+            return true;
+        }
+
         public Tag RetrieveTag(string tagname)
         {
             Tag tag = GetFolderTag(tagname);
@@ -372,9 +411,60 @@ namespace Syncless.Tagging
         /// </summary>
         /// <param name="path">The path to search.</param>
         /// <returns>The List of Tagged Paths</returns>
-        public List<String> FindSimilarPath(string path)
+        public List<string> FindSimilarPathForFolder(string folderPath)
         {
-            return null;
+            List<string> folderPathList = new List<string>();
+            foreach (FolderTag folderTag in _folderTagList)
+            {
+                if (folderTag.Contain(folderPath))
+                {
+                    foreach (TaggedPath p in folderTag.PathList)
+                    {
+                        if (!folderPathList.Contains(p.Path) && !p.Path.Equals(folderPath))
+                        {
+                            folderPathList.Add(p.Path);
+                        }
+                    }
+                }
+            }
+            return folderPathList;
+        }
+
+        public List<string> FindSimilarPathForFile(string filePath)
+        {
+            string logicalid = filePath.Split('\\')[0].TrimEnd(':');
+            List<string> filePathList = new List<string>();
+            foreach (FileTag fileTag in _fileTagList)
+            {
+                if (fileTag.Contain(filePath))
+                {
+                    foreach (TaggedPath p in fileTag.PathList)
+                    {
+                        if (!filePathList.Contains(p.Path) && !p.Path.Equals(filePath))
+                        {
+                            filePathList.Add(p.Path);
+                        }
+                    }
+                }
+            }
+            List<FolderTag> matchingFolderTag = RetrieveFolderTagById(logicalid);
+            foreach (FolderTag folderTag in matchingFolderTag)
+            {
+                string appendedPath;
+                string trailingPath = folderTag.FindMatchedParentDirectory(filePath);
+                if (trailingPath != null)
+                {
+                    foreach (TaggedPath p in folderTag.PathList)
+                    {
+                        appendedPath = p.Append(trailingPath);
+                        if (!filePathList.Contains(appendedPath) && !appendedPath.Equals(filePath))
+                        {
+                            filePathList.Add(appendedPath);
+                        }
+                    }
+                }
+            }
+            return filePathList;
         }
 
         #region create xml document
@@ -446,6 +536,37 @@ namespace Syncless.Tagging
         #endregion
 
         #region private methods implementations
+        private bool CheckRecursiveDirectory(FolderTag folderTag, string path)
+        {
+            foreach (TaggedPath p in folderTag.PathList)
+            {
+                if (p.Path.StartsWith(path) || path.StartsWith(p.Path))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private Tag FindTag(string tagname)
+        {
+            foreach (FolderTag folderTag in _folderTagList)
+            {
+                if (folderTag.TagName.Equals(tagname))
+                {
+                    return folderTag;
+                }
+            }
+            foreach (FileTag fileTag in _fileTagList)
+            {
+                if (fileTag.TagName.Equals(tagname))
+                {
+                    return fileTag;
+                }
+            }
+            return null;
+        }
+
         private FolderTag RetrieveFolderTag(string tagname, bool create, long lastupdated)
         {
             FolderTag tag = GetFolderTag(tagname);
@@ -527,6 +648,13 @@ namespace Syncless.Tagging
                     return true;
                 }
             }
+            foreach (FileTag fileTag in _fileTagList)
+            {
+                if (fileTag.TagName.Equals(tagname))
+                {
+                    return true;
+                }
+            }
             return false;
         }
 
@@ -539,7 +667,29 @@ namespace Syncless.Tagging
                     return true;
                 }
             }
+            foreach (FolderTag folderTag in _folderTagList)
+            {
+                if (folderTag.TagName.Equals(tagname))
+                {
+                    return false;
+                }
+            }
             return false;
+        }
+
+        private List<FolderTag> RetrieveFolderTagById(string logicalid)
+        {
+            bool found;
+            List<FolderTag> tagList = new List<FolderTag>();
+            foreach (FolderTag folderTag in _folderTagList)
+            {
+                found = CheckFolderID(folderTag, logicalid);
+                if (found)
+                {
+                    tagList.Add(folderTag);
+                }
+            }
+            return tagList;
         }
 
         private bool CheckFolderID(FolderTag tag, string ID)
@@ -574,13 +724,6 @@ namespace Syncless.Tagging
         private List<FileTag> LoadFileTagList()
         {
             return new List<FileTag>();
-        }
-
-        public bool WriteXmlToFile()
-        {
-            XmlDocument xml = ConvertToXML("Khoon\'s sync", 1622010183523, 1622010183523);
-            xml.Save(@"D:\My Homework\SEM2 AY0910\CS3215\Project\Syncless.SVN\Syncless.Tester\_tagging.xml");
-            return true;
         }
         #endregion
     }

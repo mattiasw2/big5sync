@@ -79,7 +79,7 @@ namespace Syncless.Tagging
         #region private implementations
         protected string GetLogicalID(string path)
         {
-            string[] tokens = path.Split(':');
+            string[] tokens = path.Split('\\');
             return tokens[0];
         }
 
