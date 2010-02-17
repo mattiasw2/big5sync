@@ -13,6 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless.LoggingLayer", "Sy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless.CompareAndSync", "Syncless.CompareAndSync\Syncless.CompareAndSync.csproj", "{11A68547-BB7C-4864-A63B-B84BED65410E}"
 EndProject
+<<<<<<< .mine
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless", "Syncless\Syncless.csproj", "{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}"
+EndProject
+=======
+>>>>>>> .r26
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless.Helper", "Syncless.Helper\Syncless.Helper.csproj", "{576092CC-8371-4DB1-A877-ADCDFDC22EB6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless", "Syncless\Syncless.csproj", "{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}"
