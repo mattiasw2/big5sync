@@ -51,7 +51,10 @@
     <Compile Include="ProfileMapping.cs" />
     <Compile Include="ProfileMappingConflictException.cs" />
     <Compile Include="ProfileMappingExistException.cs" />
+    <Compile Include="ProfilingGUIDHelper.cs" />
+    <Compile Include="ProfilingHelper.cs" />
     <Compile Include="ProfilingLayer.cs" />
+    <Compile Include="ProfilingXMLHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

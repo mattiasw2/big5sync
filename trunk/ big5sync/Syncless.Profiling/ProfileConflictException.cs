@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using Syncless.Helper;
 namespace Syncless.Profiling
 {
     public class ProfileConflictException : Exception
@@ -12,7 +12,7 @@ namespace Syncless.Profiling
             get { return _conflict; }
         }
 
-        public ProfileConflictException(ProfileMappingConflictException conflict):base("puterrormessagehere")
+        public ProfileConflictException(ProfileMappingConflictException conflict):base(ErrorMessage.PROFILE_CONFLICT_EXCEPTION)
         {
             this._conflict = conflict;
         }
