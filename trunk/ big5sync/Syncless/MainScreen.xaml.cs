@@ -23,5 +23,27 @@ namespace Syncless
         {
             InitializeComponent();
         }
+
+        private void btnRemoveTag_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+			if(TagListBox.SelectedItem != null) {
+				string messageBoxText = "Are you sure you want to remove this tag?";
+				string caption = "Remove Tag";
+				MessageBoxButton button = MessageBoxButton.YesNo;
+				MessageBoxImage icon = MessageBoxImage.Warning;
+	
+				MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
+	
+				switch (result) {
+					case MessageBoxResult.Yes:
+						TagListBox.Items.RemoveAt(TagListBox.Items.IndexOf(TagListBox.SelectedItem));
+						break;
+					case MessageBoxResult.No:
+						break;
+				}
+			} else {
+				// MessageBox.Show("No Tag Selected!", "Remove Tag", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+        }
     }
 }
