@@ -25,5 +25,12 @@ namespace Syncless.Monitor
             get { return _event; }
             set { _event = value; }
         }
+
+        public FolderChangeEvent(DirectoryInfo oldPath, DirectoryInfo newPath, EventChangeType e)
+        {
+            this._oldPath = oldPath;
+            this._newPath = newPath;
+            this._event = e;
+        }
     }
 }

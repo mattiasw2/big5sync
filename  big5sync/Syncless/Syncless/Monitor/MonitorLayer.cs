@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Syncless.Core;
 using Syncless.Helper;
 using Syncless.Monitor.Exceptions;
 namespace Syncless.Monitor
@@ -19,8 +20,6 @@ namespace Syncless.Monitor
                 return _instance;
             }
         }
-
-        //public 
 
         private List<FileSystemWatcher> watchers;
         private List<string> monitoredPaths;
@@ -308,24 +307,65 @@ namespace Syncless.Monitor
 
         private static void OnModified(object source, FileSystemEventArgs e)
         {
-            //IMoni
-            //if(
-            Console.WriteLine("File Modified: "+e.FullPath);
+            IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
+            if (File.Exists(e.FullPath))
+            {
+                Console.WriteLine("File Modified: " + e.FullPath);
+                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), null, EventChangeType.MODIFIED);
+                monitor.HandleFileChange(fileEvent);
+            }
         }
 
         private static void OnCreated(object source, FileSystemEventArgs e)
         {
-            Console.WriteLine("File Created: " + e.FullPath);
+            IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
+            if (File.Exists(e.FullPath))
+            {
+                Console.WriteLine("File Created: " + e.FullPath);
+                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), null, EventChangeType.CREATED);
+                monitor.HandleFileChange(fileEvent);
+            }
+            else
+            {
+                Console.WriteLine("Folder Created: " + e.FullPath);
+                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.FullPath), null, EventChangeType.CREATED);
+                monitor.HandleFolderChange(folderEvent);
+            }
         }
 
         private static void OnDeleted(object source, FileSystemEventArgs e)
         {
-            Console.WriteLine("File Deleted: " + e.FullPath);
+            //TODO Solve Detect file bug
+            IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
+            if (File.Exists(e.FullPath))
+            {
+                Console.WriteLine("File Deleted: " + e.FullPath);
+                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), null, EventChangeType.DELETED);
+                monitor.HandleFileChange(fileEvent);
+            }
+            else
+            {
+                Console.WriteLine("Folder Deleted: " + e.FullPath);
+                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.FullPath), null, EventChangeType.DELETED);
+                monitor.HandleFolderChange(folderEvent);
+            }
         }
 
         private static void OnRenamed(object source, RenamedEventArgs e)
         {
-            Console.WriteLine("File Renamed: " + e.OldFullPath + " " + e.FullPath);
+            IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
+            if (File.Exists(e.OldFullPath))
+            {
+                Console.WriteLine("File Renamed: " + e.OldFullPath + " " + e.FullPath);
+                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.OldFullPath), new FileInfo(e.FullPath), EventChangeType.DELETED);
+                monitor.HandleFileChange(fileEvent);
+            }
+            else
+            {
+                Console.WriteLine("Folder Renamed: " + e.OldFullPath + " " + e.FullPath);
+                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.OldFullPath), new DirectoryInfo(e.FullPath), EventChangeType.DELETED);
+                monitor.HandleFolderChange(folderEvent);
+            }
         }
 
     }
