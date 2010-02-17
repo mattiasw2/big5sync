@@ -6,7 +6,6 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using System.Diagnostics;
-using System.IO;
 using System.Security.Cryptography;
 
 namespace Syncless.CompareAndSync

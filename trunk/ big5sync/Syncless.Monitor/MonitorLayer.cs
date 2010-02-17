@@ -19,6 +19,9 @@ namespace Syncless.Monitor
                 return _instance;
             }
         }
+
+        //public 
+
         private List<FileSystemWatcher> watchers;
         private List<string> monitoredPaths;
 
@@ -69,15 +72,25 @@ namespace Syncless.Monitor
                 {
                     return false;
                 }
-                else if (watchPath.StartsWith(path.ToLower())) // Adding a parent directory
+                else if (watchPath.StartsWith(path.ToLower())) // Adding a parent directory or Adding another directory to the same directory
                 {
-                    watcher.Dispose();
-                    watchers.RemoveAt(i);
-                    i--;
+                    DirectoryInfo newDirectory = new DirectoryInfo(path);
+                    DirectoryInfo existingDirectory = new DirectoryInfo(watchPath);
+                    if (!newDirectory.Parent.FullName.ToLower().Equals(existingDirectory.Parent.FullName.ToLower())) // Adding a parent directory
+                    {
+                        watcher.Dispose();
+                        watchers.RemoveAt(i);
+                        i--;
+                    }
                 }
-                else if (path.ToLower().StartsWith(watchPath)) // Adding a child directory
+                else if (path.ToLower().StartsWith(watchPath)) // Adding a child directory or Adding another directory to the same directory
                 {
-                    addToWatcher = false;
+                    DirectoryInfo newDirectory = new DirectoryInfo(path);
+                    DirectoryInfo existingDirectory = new DirectoryInfo(watchPath);
+                    if (!newDirectory.Parent.FullName.ToLower().Equals(existingDirectory.Parent.FullName.ToLower())) // Adding a child directory
+                    {
+                        addToWatcher = false;
+                    }
                 }
             }
             if (addToWatcher)
@@ -285,7 +298,7 @@ namespace Syncless.Monitor
             FileSystemWatcher watcher = new FileSystemWatcher(path, filter);
             watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
             watcher.IncludeSubdirectories = true;
-            watcher.Changed += new FileSystemEventHandler(OnUpdated);
+            watcher.Changed += new FileSystemEventHandler(OnModified);
             watcher.Created += new FileSystemEventHandler(OnCreated);
             watcher.Deleted += new FileSystemEventHandler(OnDeleted);
             watcher.Renamed += new RenamedEventHandler(OnRenamed);
@@ -293,9 +306,11 @@ namespace Syncless.Monitor
             return watcher;
         }
 
-        private static void OnUpdated(object source, FileSystemEventArgs e)
+        private static void OnModified(object source, FileSystemEventArgs e)
         {
-            Console.WriteLine("File Updated: "+e.FullPath);
+            //IMoni
+            //if(
+            Console.WriteLine("File Modified: "+e.FullPath);
         }
 
         private static void OnCreated(object source, FileSystemEventArgs e)
