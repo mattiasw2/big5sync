@@ -1,0 +1,5 @@
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Synclessbackup\Syncless\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Synclessbackup\Syncless\bin\Debug\Syncless.dll
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Synclessbackup\Syncless\bin\Debug\Syncless.pdb
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Synclessbackup\Syncless\obj\Debug\Syncless.dll
+C:\Users\ZwodahS\Documents\WorkSpaces\C# Workspace\Synclessbackup\Syncless\obj\Debug\Syncless.pdb
