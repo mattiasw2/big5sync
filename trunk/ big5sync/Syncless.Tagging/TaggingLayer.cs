@@ -44,12 +44,28 @@ namespace Syncless.Tagging
             get { return _fileTagList; }
             set { _fileTagList = value; }
         }
+
+        private TaggingProfile _taggingProfile;
+
+        public TaggingProfile TaggingProfile
+        {
+            get { return _taggingProfile; }
+            set { _taggingProfile = value; }
+        }
         #endregion
 
         private TaggingLayer()
         {
-            _folderTagList = LoadFolderTagList();
-            _fileTagList = LoadFileTagList();
+            _folderTagList = new List<FolderTag>();
+            _fileTagList = new List<FileTag>();
+            _taggingProfile = new TaggingProfile();
+        }
+
+        public void Init(string profileFilePath)
+        {
+            _folderTagList = LoadFolderTagList(profileFilePath);
+            _fileTagList = LoadFileTagList(profileFilePath);
+            _taggingProfile = LoadTaggingProfile(profileFilePath);
         }
 
         #region FolderTag public implementations
@@ -59,12 +75,14 @@ namespace Syncless.Tagging
         /// <param name="tagname">The name of the Tag to be created</param>
         /// <param name="lastupdated">The last updated time of the Tag to be created</param>
         /// <returns>The created Tag, else raise TagAlreadyExistsException</returns>
-        public FolderTag CreateFolderTag(string tagname, long lastupdated)
+        public FolderTag CreateFolderTag(string tagname)
         {
             if (!CheckFolderTagExists(tagname))
             {
-                FolderTag tag = new FolderTag(tagname, lastupdated);
+                long created = DateTime.Now.Ticks;
+                FolderTag tag = new FolderTag(tagname, created);
                 _folderTagList.Add(tag);
+                UpdateTaggingProfileDate(created);
                 return tag;
             }
             else
@@ -83,8 +101,10 @@ namespace Syncless.Tagging
             FolderTag toRemove;
             if (CheckFolderTagExists(tagname))
             {
+                long updated = DateTime.Now.Ticks;
                 toRemove = GetFolderTag(tagname);
                 _folderTagList.Remove(toRemove);
+                UpdateTaggingProfileDate(updated);
                 return toRemove;
             }
             else
@@ -99,8 +119,9 @@ namespace Syncless.Tagging
         /// <param name="path">The path to be tagged.</param>
         /// <param name="tagname">The name of the Tag</param>
         /// <returns>The FolderTag that contains the path, else raise PathAlreadyExistsException</returns>
-        public FolderTag TagFolder(string path, string tagname, long lastupdated)
+        public FolderTag TagFolder(string path, string tagname)
         {
+            long lastupdated = DateTime.Now.Ticks;
             Tag tag = FindTag(tagname);
             if (tag == null)
             {
@@ -120,6 +141,7 @@ namespace Syncless.Tagging
                     {
                         tag.AddPath(path, lastupdated);
                         AddFolderTag((FolderTag)tag);
+                        UpdateTaggingProfileDate(lastupdated);
                         return (FolderTag)tag;
                     }
                     else
@@ -142,11 +164,13 @@ namespace Syncless.Tagging
         /// <returns>1 if the path is removed, 0 if the path is not found in the Tag, else raise TagNotFoundException</returns>
         public int UntagFolder(string path, string tagname)
         {
+            long lastupdated = DateTime.Now.Ticks;
             FolderTag tag = RetrieveFolderTag(tagname);
             if (tag != null)
             {
-                if (tag.RemovePath(path))
+                if (tag.RemovePath(path, lastupdated))
                 {
+                    UpdateTaggingProfileDate(lastupdated);
                     return 1;
                 }
                 else
@@ -178,12 +202,14 @@ namespace Syncless.Tagging
         /// <param name="tagname">The name of the Tag to be created</param>
         /// <param name="lastupdated">The last updated time of the Tag to be created</param>
         /// <returns>The created Tag, else raise TagAlreadyExistsException</returns>
-        public FileTag CreateFileTag(string tagname, long lastupdated)
+        public FileTag CreateFileTag(string tagname)
         {
             if (!CheckFileTagExists(tagname))
             {
-                FileTag tag = new FileTag(tagname, lastupdated);
+                long created = DateTime.Now.Ticks;
+                FileTag tag = new FileTag(tagname, created);
                 _fileTagList.Add(tag);
+                UpdateTaggingProfileDate(created);
                 return tag;
             }
             else
@@ -202,8 +228,10 @@ namespace Syncless.Tagging
             FileTag toRemove;
             if (CheckFileTagExists(tagname))
             {
+                long updated = DateTime.Now.Ticks;
                 toRemove = GetFileTag(tagname);
                 _fileTagList.Remove(toRemove);
+                UpdateTaggingProfileDate(updated);
                 return toRemove;
             }
             else
@@ -218,8 +246,9 @@ namespace Syncless.Tagging
         /// <param name="path">The path to be tagged.</param>
         /// <param name="tagname">The name of the Tag</param>
         /// <returns>The FileTag that contains the path, else raise PathAlreadyExistsException</returns>
-        public FileTag TagFile(string path, string tagname, long lastupdated)
+        public FileTag TagFile(string path, string tagname)
         {
+            long lastupdated = DateTime.Now.Ticks;
             Tag tag = FindTag(tagname);
             if (tag == null)
             {
@@ -237,6 +266,7 @@ namespace Syncless.Tagging
                 {
                     tag.AddPath(path, lastupdated);
                     AddFileTag((FileTag)tag);
+                    UpdateTaggingProfileDate(lastupdated);
                     return (FileTag)tag;
                 }
                 else
@@ -254,11 +284,13 @@ namespace Syncless.Tagging
         /// <returns>1 if the path is removed, 0 if the path is not found in the Tag, else raise TagNotFoundException</returns>
         public int UntagFile(string path, string tagname)
         {
+            long lastupdated = DateTime.Now.Ticks;
             FileTag tag = RetrieveFileTag(tagname);
             if (tag != null)
             {
-                if (tag.RemovePath(path))
+                if (tag.RemovePath(path, lastupdated))
                 {
+                    UpdateTaggingProfileDate(lastupdated);
                     return 1;
                 }
                 else
@@ -284,6 +316,24 @@ namespace Syncless.Tagging
         #endregion
 
         #region miscellaneous public implementations
+        #region incomplete
+        public TaggingProfile LoadTaggingProfile(string profileFilePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        private List<FileTag> LoadFileTagList(string profileFilePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        private List<FolderTag> LoadFolderTagList(string profileFilePath)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region completed
         public bool WriteXmlToFile()
         {
             XmlDocument xml = ConvertToXML("Khoon\'s sync", 1622010183523, 1622010183523);
@@ -324,12 +374,14 @@ namespace Syncless.Tagging
         public int Untag(string path, string tagname)
         {
             Tag tag;
+            long lastupdated = DateTime.Now.Ticks;
             if (CheckFolderTagExists(tagname))
             {
                 tag = GetFolderTag(tagname);
                 if (tag.Contain(path))
                 {
-                    tag.RemovePath(path);
+                    tag.RemovePath(path, lastupdated);
+                    UpdateTaggingProfileDate(lastupdated);
                     return 1;
                 }
                 else
@@ -342,7 +394,8 @@ namespace Syncless.Tagging
                 tag = GetFileTag(tagname);
                 if (tag.Contain(path))
                 {
-                    tag.RemovePath(path);
+                    tag.RemovePath(path, lastupdated);
+                    UpdateTaggingProfileDate(lastupdated);
                     return 1;
                 }
                 else
@@ -359,11 +412,14 @@ namespace Syncless.Tagging
         public int Untag(string path)
         {
             int noOfPath = 0;
+            long lastupdated = 0;
             foreach (FolderTag folderTag in _folderTagList)
             {
                 if (folderTag.Contain(path))
                 {
-                    folderTag.RemovePath(path);
+                    lastupdated = DateTime.Now.Ticks;
+                    folderTag.RemovePath(path, lastupdated);
+                    UpdateTaggingProfileDate(lastupdated);
                     noOfPath++;
                 }
             }
@@ -371,7 +427,9 @@ namespace Syncless.Tagging
             {
                 if (fileTag.Contain(path))
                 {
-                    fileTag.RemovePath(path);
+                    lastupdated = DateTime.Now.Ticks;
+                    fileTag.RemovePath(path, lastupdated);
+                    UpdateTaggingProfileDate(lastupdated);
                     noOfPath++;
                 }
             }
@@ -467,7 +525,6 @@ namespace Syncless.Tagging
             return filePathList;
         }
 
-        #region create xml document
         public XmlDocument ConvertToXML(string profilename, long created, long lastupdated)
         {
             XmlDocument TaggingDataDocument = new XmlDocument();
@@ -488,11 +545,57 @@ namespace Syncless.Tagging
             TaggingDataDocument.AppendChild(taggingElement);
             return TaggingDataDocument;
         }
+        #endregion
+        #endregion
 
+        #region private methods implementations
+        private static XmlDocument ConvertTaggingProfileToXml(TaggingProfile taggingProfile)
+        {
+            XmlDocument TaggingDataDocument = new XmlDocument();
+            XmlElement taggingElement = TaggingDataDocument.CreateElement("tagging");
+            XmlElement profileElement = TaggingDataDocument.CreateElement("profile");
+            profileElement.SetAttribute("name", taggingProfile.ProfileName);
+            profileElement.SetAttribute("createdDate", taggingProfile.Created.ToString());
+            profileElement.SetAttribute("lastUpdated", taggingProfile.LastUpdated.ToString());
+            foreach (FolderTag folderTag in taggingProfile.FolderTagList)
+            {
+                profileElement.AppendChild(CreateFolderTagElement(TaggingDataDocument, folderTag));
+            }
+            foreach (FileTag fileTag in taggingProfile.FileTagList)
+            {
+                profileElement.AppendChild(CreateFileTagElement(TaggingDataDocument, fileTag));
+            }
+            taggingElement.AppendChild(profileElement);
+            TaggingDataDocument.AppendChild(taggingElement);
+            return TaggingDataDocument;
+        }
+
+        private static TaggingProfile ConvertXmlToTaggingProfile(XmlDocument xml)
+        {
+            //XmlNodeList profileList = xml.GetElementsByTagName("profile");
+            //XmlNodeList tagList = profileList.Item().ChildNodes;
+            //foreach (XmlElement tag in tagList)
+            //{
+            //    if (tag.Name.Equals("folderTag"))
+            //    {
+            //        string tagname = tag.GetAttribute("name");
+            //        long created = long.Parse(tag.GetAttribute("created"));
+            //        long lastupdated = long.Parse(tag.GetAttribute("lastUpdated"));
+            //        FolderTag folderTag = new FolderTag(tagname, created);
+            //        folderTag.LastUpdated = lastupdated;
+
+            //    }
+            //}
+            
+            return null;
+        }
+
+        #region create xml document
         private static XmlElement CreateFolderTagElement(XmlDocument TaggingDataDocument, FolderTag folderTag)
         {
             XmlElement folderTagElement = TaggingDataDocument.CreateElement("folderTag");
             folderTagElement.SetAttribute("name", folderTag.TagName);
+            folderTagElement.SetAttribute("created", folderTag.Created.ToString());
             folderTagElement.SetAttribute("lastUpdated", folderTag.LastUpdated.ToString());
             foreach (TaggedPath path in folderTag.PathList)
             {
@@ -504,6 +607,7 @@ namespace Syncless.Tagging
         private static XmlElement CreateTaggedFolderElement(XmlDocument TaggingDataDocument, TaggedPath path)
         {
             XmlElement taggedFolderElement = TaggingDataDocument.CreateElement("taggedFolder");
+            taggedFolderElement.SetAttribute("created", path.Created.ToString());
             taggedFolderElement.SetAttribute("lastUpdated", path.LastUpdated.ToString());
             XmlElement folderPathElement = TaggingDataDocument.CreateElement("path");
             folderPathElement.InnerText = path.Path;
@@ -515,6 +619,7 @@ namespace Syncless.Tagging
         {
             XmlElement fileTagElement = TaggingDataDocument.CreateElement("fileTag");
             fileTagElement.SetAttribute("name", fileTag.TagName);
+            fileTagElement.SetAttribute("created", fileTag.Created.ToString());
             fileTagElement.SetAttribute("lastUpdated", fileTag.LastUpdated.ToString());
             foreach (TaggedPath path in fileTag.PathList)
             {
@@ -526,6 +631,7 @@ namespace Syncless.Tagging
         private static XmlElement CreatedTaggedFileElement(XmlDocument TaggingDataDocument, TaggedPath path)
         {
             XmlElement taggedFileElement = TaggingDataDocument.CreateElement("taggedFile");
+            taggedFileElement.SetAttribute("created", path.Created.ToString());
             taggedFileElement.SetAttribute("lastUpdated", path.LastUpdated.ToString());
             XmlElement filePathElement = TaggingDataDocument.CreateElement("path");
             filePathElement.InnerText = path.Path;
@@ -533,9 +639,13 @@ namespace Syncless.Tagging
             return taggedFileElement;
         }
         #endregion
-        #endregion
 
-        #region private methods implementations
+        #region completed
+        private void UpdateTaggingProfileDate(long created)
+        {
+            _taggingProfile.LastUpdated = created;
+        }
+        
         private bool CheckRecursiveDirectory(FolderTag folderTag, string path)
         {
             foreach (TaggedPath p in folderTag.PathList)
@@ -715,16 +825,17 @@ namespace Syncless.Tagging
             }
             return false;
         }
+        #endregion
+        //private List<FolderTag> LoadFolderTagList()
+        //{
+        //    XmlDocument xml = new XmlDocument();
+        //    return new List<FolderTag>();
+        //}
 
-        private List<FolderTag> LoadFolderTagList()
-        {
-            return new List<FolderTag>();
-        }
-
-        private List<FileTag> LoadFileTagList()
-        {
-            return new List<FileTag>();
-        }
+        //private List<FileTag> LoadFileTagList()
+        //{
+        //    return new List<FileTag>();
+        //}
         #endregion
     }
 }
