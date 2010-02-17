@@ -137,6 +137,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <BlendEmbeddedFont Include="Fonts\bankgthd.ttf">
+      <All>True</All>
+      <AutoFill>True</AutoFill>
+    </BlendEmbeddedFont>
     <Resource Include="Icons\close.ico" />
     <Resource Include="Icons\createtag.ico" />
     <Resource Include="Icons\file.ico" />
@@ -172,9 +176,6 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Fonts\" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -183,4 +184,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Expression\Blend\3.0\WPF\Microsoft.Expression.Blend.WPF.targets" />
 </Project>
