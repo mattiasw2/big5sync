@@ -31,6 +31,14 @@ namespace Syncless.Tagging
             set { _lastUpdated = value; }
         }
 
+        private long _created;
+
+        public long Created
+        {
+            get { return _created; }
+            set { _created = value; }
+        }
+
         public string Append(string trailingPath)
         {
             if (_path.EndsWith("\\"))

@@ -16,6 +16,11 @@ namespace Syncless.Tagging
         public string FindMatchedParentDirectory(string path)
         {
             string[] pathTokens = path.Split('\\');
+            int count1 = pathTokens.Length;
+            if (pathTokens[pathTokens.Length-1].Equals(""))
+            {
+                count1--;
+            }
             string logicalid = pathTokens[0].TrimEnd(':');
             string trailingPath = null;
             foreach (TaggedPath p in _pathList)
@@ -23,7 +28,12 @@ namespace Syncless.Tagging
                 if (p.LogicalDriveId.Equals(logicalid))
                 {
                     string[] pTokens = p.Path.Split('\\');
-                    if (pathTokens.Length > pTokens.Length)
+                    int count2 = pTokens.Length;
+                    if (pTokens[pTokens.Length - 1].Equals(""))
+                    {
+                        count2--;
+                    }
+                    if (count1 > count2)
                     {
                         int trailingIndex = Match(pathTokens, pTokens);
                         if (trailingIndex > 0)
@@ -46,7 +56,7 @@ namespace Syncless.Tagging
             int trailingIndex = 0;
             for (int i = 0; i < pTokens.Length; i++)
             {
-                if (pTokens[i].Equals(pathTokens))
+                if (pTokens[i].Equals(pathTokens[i]))
                 {
                     trailingIndex++;
                 }
