@@ -48,18 +48,18 @@ namespace Syncless.Core
 
         public FileTag CreateFileTag(string tagname)
         {
-            return TaggingLayer.Instance.CreateFileTag(tagname, DateTime.Now.Ticks);
+            return TaggingLayer.Instance.CreateFileTag(tagname);
         }
 
         public FolderTag CreateFolderTag(string tagname)
         {
-            return TaggingLayer.Instance.CreateFolderTag(tagname,DateTime.Now.Ticks);
+            return TaggingLayer.Instance.CreateFolderTag(tagname);
         }
 
         public FileTag TagFile(string tagname, FileInfo file)
         {
             string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(file.FullName,true);
-            return TaggingLayer.Instance.TagFile(path, tagname, DateTime.Now.Ticks);
+            return TaggingLayer.Instance.TagFile(path, tagname);
         }
 
         public FileTag TagFile(FileTag tag, FileInfo file)
@@ -70,7 +70,7 @@ namespace Syncless.Core
         public FolderTag TagFolder(string tagname, DirectoryInfo folder)
         {
             string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
-            return TaggingLayer.Instance.TagFolder(path, tagname, DateTime.Now.Ticks);
+            return TaggingLayer.Instance.TagFolder(path, tagname);
         }
 
         public FolderTag TagFolder(FolderTag tag, DirectoryInfo folder)

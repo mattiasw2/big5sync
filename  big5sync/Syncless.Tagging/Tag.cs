@@ -92,7 +92,7 @@ namespace Syncless.Tagging
         protected string GetLogicalID(string path)
         {
             string[] tokens = path.Split('\\');
-            return (tokens[0].TrimEnd(':'));
+             return (tokens[0].TrimEnd(':'));
         }
 
         protected TaggedPath RetrieveTaggedPath(string path)
