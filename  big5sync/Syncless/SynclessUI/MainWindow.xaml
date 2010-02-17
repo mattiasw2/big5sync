@@ -148,6 +148,7 @@
 			<Grid.RowDefinitions>
 				<RowDefinition Height="20"/>
 				<RowDefinition Height="30"/>
+				<RowDefinition Height="20"/>
 				<RowDefinition Height="*"/>
 				<RowDefinition Height="15"/>
 			</Grid.RowDefinitions>
@@ -157,7 +158,7 @@
 				<ColumnDefinition Width="10"/>
 			</Grid.ColumnDefinitions>
 
-			<dropShadow:SystemDropShadowChrome Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="3">	
+			<dropShadow:SystemDropShadowChrome Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="4">	
 				<Rectangle x:Name="TagListCanvas" RadiusX="10" RadiusY="10" Stroke="Black">
 					<Rectangle.Fill>
 						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -168,7 +169,15 @@
 				</Rectangle>
 			</dropShadow:SystemDropShadowChrome>
 			<Label x:Name="LblTagList" Grid.Row="1" Grid.Column="0" Foreground="#FFEEEEEE" Content="Tag List [10]" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,4,0,4" Margin="2,0" FontSize="13.333" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
-			<Image x:Name="TagIcon_Copy" Source="Icons/taglist.ico" HorizontalAlignment="Right" Margin="0,-30,-25,0" Width="120" Height="120" VerticalAlignment="Top" Grid.RowSpan="3" Grid.ColumnSpan="3"/>
+			<Image x:Name="TagListIcon" Source="Icons/taglist.ico" HorizontalAlignment="Right" Margin="0,-35,-15,0" Width="120" Height="120" VerticalAlignment="Top" Grid.RowSpan="3" d:LayoutOverrides="GridBox" Grid.ColumnSpan="3" Panel.ZIndex="1"/>
+			<TextBox Grid.Row="2" Grid.Column="1" Background="#FF666666" Foreground="#FFAAAAAA" FontFamily="Century Gothic" FontSize="10.667">
+				<TextBox.BorderBrush>
+					<LinearGradientBrush EndPoint="0,20" StartPoint="0,0" MappingMode="Absolute">
+						<GradientStop Color="#FFABADB3" Offset="0.05"/>
+						<GradientStop Color="#FFE2E3EA" Offset="0.07"/>
+						<GradientStop Color="#FF828790" Offset="1"/>
+					</LinearGradientBrush>
+				</TextBox.BorderBrush>Filter</TextBox>
 		</Grid>
 		
 		<!-- Log Panel -->
@@ -186,7 +195,7 @@
 			</Grid.ColumnDefinitions>
 
 			<dropShadow:SystemDropShadowChrome Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="3">	
-				<Rectangle x:Name="TagListCanvas1" RadiusX="10" RadiusY="10" Stroke="Black">
+				<Rectangle x:Name="LogPanelCanvas" RadiusX="10" RadiusY="10" Stroke="Black">
 					<Rectangle.Fill>
 						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 							<GradientStop Color="#FF626262" Offset="0"/>
@@ -197,38 +206,20 @@
 			</dropShadow:SystemDropShadowChrome>
 			<Label x:Name="LogTitle" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Foreground="#FFEEEEEE" Content="Logs Panel" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,4,0,4" Margin="2,0" FontSize="13.333" VerticalAlignment="Top"/>
 			<Image x:Name="LogIcon" Margin="0,-20,0,0" Grid.Column="1" Grid.RowSpan="3" Source="Icons/log.ico" Stretch="Fill" Height="80" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top"/>
-			<ScrollViewer x:Name="Log_Scroller" Grid.Row="2" Grid.Column="1" Margin="3,5,3,0" Foreground="#00AB0606">
-				<TextBlock x:Name="TxtBlkLog"  TextWrapping="Wrap"  FontFamily="Century Gothic" FontSize="10.667">
-					<TextBlock.Foreground>
-						<SolidColorBrush Color="#FFFFFF"/>
-					</TextBlock.Foreground>
-					<!-- Sample Log Content -->
-					Test
-					<LineBreak />
-					Test
-					<LineBreak />
-					Test
-					<LineBreak />
-					Test
-					<LineBreak />
-					Test
-					<LineBreak />
-					Test
-					<LineBreak />
-					Test
-					<LineBreak />
-					Test
-					<LineBreak />
-					Test
-					<LineBreak />
-					Test
-					<LineBreak />
-					Test
-					<LineBreak />
-					Test
-					<LineBreak />				
-				</TextBlock>
-			</ScrollViewer>
+			<ListBox Background="#FF666666" Margin="3,10,3,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" Grid.Column="1" Grid.Row="2">
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+			</ListBox>
 		</Grid>
     </Grid>	
 </Window>
