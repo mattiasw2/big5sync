@@ -46,5 +46,11 @@ namespace Syncless.Tagging
             get { return _fileTagList; }
             set { _fileTagList = value; }
         }
+
+        public TaggingProfile()
+        {
+            _folderTagList = new List<FolderTag>();
+            _fileTagList = new List<FileTag>();
+        }
     }
 }
