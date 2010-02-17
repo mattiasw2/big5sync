@@ -27,6 +27,13 @@ namespace Syncless.Profiling
             _mappingList = new List<ProfileMapping>();
             
         }
+        private long _lastUpdatedTime;
+        public long LastUpdatedTime
+        {
+            get { return _lastUpdatedTime; }
+            set { _lastUpdatedTime = value; }
+        }
+            
         /// <summary>
         /// Check if a Profilemapping is Contain in this profile.
         ///   throw ProfileMappingConflictException if Profile Mapping has Conflict.
