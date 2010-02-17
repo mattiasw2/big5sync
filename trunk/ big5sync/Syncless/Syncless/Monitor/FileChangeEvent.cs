@@ -26,11 +26,18 @@ namespace Syncless.Monitor
             set { _event = value; }
         }
 
-        public FileChangeEvent(FileInfo oldPath, FileInfo newPath, EventChangeType e)
+        public FileChangeEvent(FileInfo oldPath, EventChangeType e)
+        {
+            this._oldPath = oldPath;
+            this._newPath = null;
+            this._event = e;
+        }
+
+        public FileChangeEvent(FileInfo oldPath, FileInfo newPath)
         {
             this._oldPath = oldPath;
             this._newPath = newPath;
-            this._event = e;
+            this._event = EventChangeType.RENAMED;
         }
     }
 }
