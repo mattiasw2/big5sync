@@ -60,25 +60,37 @@ namespace Syncless.Monitor
             for (int i = 0; i < watchers.Count; i++)
             {
                 FileSystemWatcher watcher = watchers[i];
-                if (watcher.Path.ToLower().Equals(path.ToLower())) // Duplicate directory
+                string watchPath = watcher.Path.ToLower();
+                if (!watcher.Filter.Equals("*.*"))
+                {
+                    watchPath = watchPath + "\\" + watcher.Filter.ToLower();
+                }
+                if (watchPath.Equals(path.ToLower())) // Duplicate directory
                 {
                     return false;
                 }
-                else if (watcher.Path.ToLower().StartsWith(path.ToLower())) // Adding a parent directory
+                else if (watchPath.StartsWith(path.ToLower())) // Adding a parent directory
                 {
                     watcher.Dispose();
                     watchers.RemoveAt(i);
                     i--;
                 }
-                else if (path.ToLower().StartsWith(watcher.Path.ToLower())) // Adding a child directory
+                else if (path.ToLower().StartsWith(watchPath)) // Adding a child directory
                 {
                     addToWatcher = false;
                 }
             }
             if (addToWatcher)
             {
-                FileSystemWatcher watcher = CreateWatcher(path);
+                FileSystemWatcher watcher = CreateWatcher(path, "*.*");
                 watchers.Add(watcher);
+            }
+            foreach (string mPath in monitoredPaths)
+            {
+                if (mPath.ToLower().Equals(path.ToLower()))
+                {
+                    return false;
+                }
             }
             monitoredPaths.Add(path);
             return true;
@@ -92,13 +104,18 @@ namespace Syncless.Monitor
             for (int i = 0; i < watchers.Count; i++)
             {
                 FileSystemWatcher watcher = watchers[i];
-                if (watcher.Path.ToLower().Equals(path.ToLower())) // Duplicate file
+                string watchPath = watcher.Path.ToLower();
+                if (!watcher.Filter.Equals("*.*"))
+                {
+                    watchPath = watchPath + "\\" + watcher.Filter.ToLower();
+                }
+                if (watchPath.Equals(path.ToLower())) // Duplicate file
                 {
                     return false;
                 }
-                else if (watcher.Path.ToLower().StartsWith(pathDirectory)) // Adding a file to a parent or monitored directory or Adding a different file
+                else if (watchPath.StartsWith(pathDirectory)) // Adding a file to a parent or monitored directory or Adding a different file
                 {
-                    if (watcher.Path.ToLower().Equals(pathDirectory)) // Adding to a monitored directory
+                    if (watchPath.Equals(pathDirectory)) // Adding to a monitored directory
                     {
                         addToWatcher = false;
                         break;
@@ -107,8 +124,15 @@ namespace Syncless.Monitor
             }
             if (addToWatcher)
             {
-                FileSystemWatcher watcher = CreateWatcher(path);
+                FileSystemWatcher watcher = CreateWatcher(file.DirectoryName, file.Name);
                 watchers.Add(watcher);
+            }
+            foreach (string mPath in monitoredPaths)
+            {
+                if (mPath.ToLower().Equals(path.ToLower()))
+                {
+                    return false;
+                }
             }
             monitoredPaths.Add(path);
             return true;
@@ -122,8 +146,101 @@ namespace Syncless.Monitor
         /// </summary>
         /// <param name="path">The Path to be monitored</param>
         /// <returns>Boolean stating if the monitor can be stopped</returns>
+        /// <exception cref="Syncless.Monitor.MonitorPathNotFoundException">Throw when the path is not found.</exception>
         public bool UnMonitorPath(string path)
         {
+            if (!File.Exists(path) && !Directory.Exists(path))
+            {
+                throw new MonitorPathNotFoundException(ErrorMessage.PATH_NOT_FOUND, path);
+            }
+            if (File.Exists(path))
+            {
+                return UnMonitorFile(path);
+            }
+            else
+            {
+                return UnMonitorDirectory(path);
+            }
+        }
+
+        private bool UnMonitorDirectory(string path)
+        {
+            bool isMonitored = false;
+            for (int i = 0; i < monitoredPaths.Count; i++)
+            {
+                if (monitoredPaths[i].ToLower().Equals(path.ToLower()))
+                {
+                    monitoredPaths.RemoveAt(i);
+                    isMonitored = true;
+                    break;
+                }
+            }
+            if (!isMonitored)
+            {
+                return false;
+            }
+            bool unMonitored = false;
+            for (int i = 0; i < watchers.Count; i++)
+            {
+                FileSystemWatcher watcher = watchers[i];
+                string watchPath = watcher.Path.ToLower();
+                if (!watcher.Filter.Equals("*.*"))
+                {
+                    watchPath = watchPath + "\\" + watcher.Filter.ToLower();
+                }
+                if (watchPath.Equals(path.ToLower()))
+                {
+                    watcher.Dispose();
+                    watchers.RemoveAt(i);
+                    unMonitored = true;
+                    break;
+                }
+            }
+            if (!unMonitored)
+            {
+                return true;
+            }
+            foreach (string mPath in monitoredPaths)
+            {
+                if (mPath.ToLower().StartsWith(path.ToLower()))
+                {
+                    MonitorPath(mPath);
+                }
+            }
+            return true;
+        }
+
+        private bool UnMonitorFile(string path)
+        {
+            bool isMonitored = false;
+            for (int i = 0; i < monitoredPaths.Count; i++)
+            {
+                if (monitoredPaths[i].ToLower().Equals(path.ToLower()))
+                {
+                    monitoredPaths.RemoveAt(i);
+                    isMonitored = true;
+                    break;
+                }
+            }
+            if (!isMonitored)
+            {
+                return false;
+            }
+            for (int i = 0; i < watchers.Count; i++)
+            {
+                FileSystemWatcher watcher = watchers[i];
+                string watchPath = watcher.Path.ToLower();
+                if (!watcher.Filter.Equals("*.*"))
+                {
+                    watchPath = watchPath + "\\" + watcher.Filter.ToLower();
+                }
+                if (watchPath.Equals(path.ToLower()))
+                {
+                    watcher.Dispose();
+                    watchers.RemoveAt(i);
+                    return true;
+                }
+            }
             return true;
         }
 
@@ -163,9 +280,9 @@ namespace Syncless.Monitor
             return count;
         }
 
-        private FileSystemWatcher CreateWatcher(string path)
+        private FileSystemWatcher CreateWatcher(string path, string filter)
         {
-            FileSystemWatcher watcher = new FileSystemWatcher(path);
+            FileSystemWatcher watcher = new FileSystemWatcher(path, filter);
             watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
             watcher.IncludeSubdirectories = true;
             watcher.Changed += new FileSystemEventHandler(OnUpdated);
@@ -178,22 +295,22 @@ namespace Syncless.Monitor
 
         private static void OnUpdated(object source, FileSystemEventArgs e)
         {
-            
+            Console.WriteLine("File Updated: "+e.FullPath);
         }
 
         private static void OnCreated(object source, FileSystemEventArgs e)
         {
-
+            Console.WriteLine("File Created: " + e.FullPath);
         }
 
         private static void OnDeleted(object source, FileSystemEventArgs e)
         {
-
+            Console.WriteLine("File Deleted: " + e.FullPath);
         }
 
         private static void OnRenamed(object source, RenamedEventArgs e)
         {
-            
+            Console.WriteLine("File Renamed: " + e.OldFullPath + " " + e.FullPath);
         }
 
     }
