@@ -38,7 +38,7 @@ namespace Syncless.Profiling
         {
             foreach (ProfileMapping map in _mappingList)
             {
-                if (mapping.Equals(mapping))
+                if (map.Equals(mapping))
                 {
                     return true;
                 }
