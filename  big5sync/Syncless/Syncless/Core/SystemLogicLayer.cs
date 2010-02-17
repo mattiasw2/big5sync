@@ -127,13 +127,21 @@ namespace Syncless.Core
 
         public bool StartManualSync(FileTag tagname)
         {
-            //For Safety purpose , get the latest from tagging Layer
+            
             return false;
         }
 
         public bool StartManualSync(FolderTag tagname)
         {
-            return false;
+            FolderTag folderTag = TaggingLayer.Instance.RetrieveFolderTag(tagname.TagName);
+            List<string> paths = new List<string>();
+            foreach (TaggedPath path in folderTag.PathList)
+            {
+                paths.Add(path.Path);
+            }
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
+            CompareSyncController.Instance.SyncFolder(folderTag.TagName, convertedPath);
+            return true;
         }
 
         public bool MonitorTag(FileTag tag, bool mode)
