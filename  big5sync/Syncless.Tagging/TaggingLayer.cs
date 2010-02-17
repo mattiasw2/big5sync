@@ -572,23 +572,92 @@ namespace Syncless.Tagging
 
         private static TaggingProfile ConvertXmlToTaggingProfile(XmlDocument xml)
         {
-            //XmlNodeList profileList = xml.GetElementsByTagName("profile");
-            //XmlNodeList tagList = profileList.Item().ChildNodes;
-            //foreach (XmlElement tag in tagList)
-            //{
-            //    if (tag.Name.Equals("folderTag"))
-            //    {
-            //        string tagname = tag.GetAttribute("name");
-            //        long created = long.Parse(tag.GetAttribute("created"));
-            //        long lastupdated = long.Parse(tag.GetAttribute("lastUpdated"));
-            //        FolderTag folderTag = new FolderTag(tagname, created);
-            //        folderTag.LastUpdated = lastupdated;
-
-            //    }
-            //}
-            
-            return null;
+            XmlElement profileElement = (XmlElement)xml.GetElementsByTagName("profile").Item(0);
+            TaggingProfile taggingProfile = CreateTaggingProfile(profileElement);
+            XmlNodeList tagList = profileElement.ChildNodes;
+            foreach (XmlElement tag in tagList)
+            {
+                if (tag.Name.Equals("folderTag"))
+                {
+                    FolderTag folderTag = CreateFolderTagFromXml(tag);
+                    taggingProfile.FolderTagList.Add(folderTag);
+                }
+                else
+                {
+                    FileTag fileTag = CreateFileTagFromXml(tag);
+                    taggingProfile.FileTagList.Add(fileTag);
+                }
+            }
+            return taggingProfile;
         }
+
+        #region create tagging profile
+        private static TaggingProfile CreateTaggingProfile(XmlElement profileElement)
+        {
+            TaggingProfile taggingProfile = new TaggingProfile();
+            string profilename = profileElement.GetAttribute("name");
+            long profilecreated = long.Parse(profileElement.GetAttribute("created"));
+            long profilelastupdated = long.Parse(profileElement.GetAttribute("lastUpdated"));
+            taggingProfile.ProfileName = profilename;
+            taggingProfile.Created = profilecreated;
+            taggingProfile.LastUpdated = profilelastupdated;
+            return taggingProfile;
+        }
+
+        private static FolderTag CreateFolderTagFromXml(XmlElement tag)
+        {
+            string tagname = tag.GetAttribute("name");
+            long created = long.Parse(tag.GetAttribute("created"));
+            long lastupdated = long.Parse(tag.GetAttribute("lastUpdated"));
+            FolderTag folderTag = new FolderTag(tagname, created);
+            folderTag.LastUpdated = lastupdated;
+            XmlNodeList pathList = tag.ChildNodes;
+            foreach (XmlElement path in pathList)
+            {
+                TaggedPath taggedPath = CreatePath(path);
+                folderTag.PathList.Add(taggedPath);
+            }
+            return folderTag;
+        }
+
+        private static FileTag CreateFileTagFromXml(XmlElement tag)
+        {
+            string tagname = tag.GetAttribute("name");
+            long created = long.Parse(tag.GetAttribute("created"));
+            long lastupdated = long.Parse(tag.GetAttribute("lastUpdated"));
+            FileTag fileTag = new FileTag(tagname, created);
+            fileTag.LastUpdated = lastupdated;
+            XmlNodeList pathList = tag.ChildNodes;
+            foreach (XmlElement path in pathList)
+            {
+                TaggedPath taggedPath = CreatePath(path);
+                fileTag.PathList.Add(taggedPath);
+            }
+            return fileTag;
+        }
+
+        private static TaggedPath CreatePath(XmlElement path)
+        {
+            long pathcreated, pathlastupdated;
+            string pathname;
+            pathcreated = long.Parse(path.GetAttribute("created"));
+            pathlastupdated = long.Parse(path.GetAttribute("lastUpdated"));
+            XmlNodeList pathValues = path.ChildNodes;
+            pathname = pathValues.Item(0).InnerText;
+            TaggedPath taggedPath = CreateTaggedPath(pathcreated, pathlastupdated, pathname);
+            return taggedPath;
+        }
+
+        private static TaggedPath CreateTaggedPath(long pathcreated, long pathlastupdated, string pathname)
+        {
+            TaggedPath taggedPath = new TaggedPath();
+            taggedPath.Path = pathname;
+            taggedPath.Created = pathcreated;
+            taggedPath.LastUpdated = pathlastupdated;
+            taggedPath.LogicalDriveId = pathname.Split('\\')[0].TrimEnd(':');
+            return taggedPath;
+        }
+        #endregion
 
         #region create xml document
         private static XmlElement CreateFolderTagElement(XmlDocument TaggingDataDocument, FolderTag folderTag)
@@ -645,7 +714,7 @@ namespace Syncless.Tagging
         {
             _taggingProfile.LastUpdated = created;
         }
-        
+
         private bool CheckRecursiveDirectory(FolderTag folderTag, string path)
         {
             foreach (TaggedPath p in folderTag.PathList)
