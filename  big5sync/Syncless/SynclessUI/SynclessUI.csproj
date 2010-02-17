@@ -137,10 +137,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <BlendEmbeddedFont Include="Fonts\bankgthd.ttf">
+    <Resource Include="Fonts\bankgthd.ttf">
       <All>True</All>
       <AutoFill>True</AutoFill>
-    </BlendEmbeddedFont>
+    </Resource>
     <Resource Include="Icons\close.ico" />
     <Resource Include="Icons\createtag.ico" />
     <Resource Include="Icons\file.ico" />
