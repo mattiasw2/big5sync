@@ -21,8 +21,8 @@ namespace Syncless.Core
 		FolderTag TagFolder(string tagname, DirectoryInfo folder);
 		FolderTag TagFolder(FolderTag tag, DirectoryInfo file);
 
-		FileTag UntagFile(FileTag tag, FileInfo file);
-		FolderTag UntagFolder(FolderTag tag, DirectoryInfo folder);
+		int UntagFile(FileTag tag, FileInfo file);
+		int UntagFolder(FolderTag tag, DirectoryInfo folder);
 
 		bool DeleteTag(FolderTag tag);
 		bool DeleteTag(FileTag tag);
@@ -69,9 +69,6 @@ namespace Syncless.Core
 		// ViewAllVersion();
 		// RestoreVersion();
 	
-
-        Tag TagPath(string tagname, string path); //Try not to use
-
         // TO CHANGE LATER
         /*
         void GetAllConnectedDrives();

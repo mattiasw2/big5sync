@@ -7,7 +7,7 @@ using System.IO;
 using System.Diagnostics;
 namespace Syncless.Profiling
 {
-    public class ProfilingXMLHelper
+    internal class ProfilingXMLHelper
     {
         public static bool SaveProfile(XmlDocument xml, string path)
         {

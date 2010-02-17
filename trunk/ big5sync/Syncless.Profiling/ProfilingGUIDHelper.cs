@@ -6,7 +6,7 @@ using System.IO;
 using System.Diagnostics;
 namespace Syncless.Profiling
 {
-    internal class ProfilingGUIDHelper
+    internal static class ProfilingGUIDHelper
     {
         #region GUID Generation
         internal static string GetGUID(string driveid)

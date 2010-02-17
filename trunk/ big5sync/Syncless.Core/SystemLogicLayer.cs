@@ -6,6 +6,7 @@ using System.IO;
 using Syncless.Tagging;
 using Syncless.CompareAndSync;
 using Syncless.Monitor;
+using Syncless.Profiling;
 namespace Syncless.Core
 {
     public class SystemLogicLayer : IUIControllerInterface,IMonitorControllerInterface
@@ -47,51 +48,65 @@ namespace Syncless.Core
 
         public FileTag CreateFileTag(string tagname)
         {
-            return null;
+            return TaggingLayer.Instance.CreateFileTag(tagname, DateTime.Now.Ticks);
         }
 
         public FolderTag CreateFolderTag(string tagname)
         {
-            return null;
+            return TaggingLayer.Instance.CreateFolderTag(tagname,DateTime.Now.Ticks);
         }
 
         public FileTag TagFile(string tagname, FileInfo file)
         {
-            return null;
+            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(file.FullName,true);
+            return TaggingLayer.Instance.TagFile(path, tagname, DateTime.Now.Ticks);
         }
 
         public FileTag TagFile(FileTag tag, FileInfo file)
         {
-            return null;
+            return TagFile(tag.TagName, file);
         }
 
         public FolderTag TagFolder(string tagname, DirectoryInfo folder)
         {
-            return null;
+            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
+            return TaggingLayer.Instance.TagFolder(path, tagname, DateTime.Now.Ticks);
         }
 
-        public FolderTag TagFolder(FolderTag tag, DirectoryInfo file)
+        public FolderTag TagFolder(FolderTag tag, DirectoryInfo folder)
         {
-            return null;
+            return TagFolder(tag.TagName, folder);
         }
 
-        public FileTag UntagFile(FileTag tag, FileInfo file)
+        public int UntagFile(FileTag tag, FileInfo file)
         {
-            return null;
+            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(file.FullName, true);
+            return TaggingLayer.Instance.UntagFile(path, tag.TagName);
         }
 
-        public FolderTag UntagFolder(FolderTag tag, DirectoryInfo folder)
+        public int UntagFolder(FolderTag tag, DirectoryInfo folder)
         {
-            return null;
+            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
+            return TaggingLayer.Instance.UntagFolder(path, tag.TagName);
         }
 
         public bool DeleteTag(FolderTag tag)
         {
+            FolderTag folderTag =  TaggingLayer.Instance.RemoveFolderTag(tag.TagName);
+            if (folderTag != null)
+            {
+                return true;
+            }
             return false;
         }
 
         public bool DeleteTag(FileTag tag)
         {
+            FileTag fileTag = TaggingLayer.Instance.RemoveFileTag(tag.TagName);
+            if (fileTag != null)
+            {
+                return true;
+            }
             return false;
         }
 
@@ -122,7 +137,28 @@ namespace Syncless.Core
 
         public bool MonitorTag(FileTag tag, bool mode)
         {
-            return false;
+            //may need to return a list of error.
+            List<string> pathList = new List<string>();
+            foreach (TaggedPath path in tag.PathList)
+            {
+                pathList.Add(path.Path);
+            }
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(pathList);
+            if (mode)
+            {
+                foreach (string path in convertedPath)
+                {
+                    MonitorLayer.Instance.MonitorPath(path);
+                }
+            }
+            else
+            {
+                foreach (string path in convertedPath)
+                {
+                    MonitorLayer.Instance.UnMonitorPath(path);
+                }
+            }
+            return true;
         }
 
         public bool SetTagBidirectional(FileTag tag)
@@ -157,12 +193,7 @@ namespace Syncless.Core
 
         public bool Initiate()
         {
-            return false;
-        }
-
-        public Tag TagPath(string tagname, string path)
-        {
-            return null;
+            return ProfilingLayer.Instance.Init(ProfilingLayer.RELATIVE_PROFILING_ROOT_SAVE_PATH);
         }
 
         #endregion
