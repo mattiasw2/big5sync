@@ -63,9 +63,9 @@ namespace Syncless.Tagging
 
         public void Init(string profileFilePath)
         {
-            _folderTagList = LoadFolderTagList(profileFilePath);
-            _fileTagList = LoadFileTagList(profileFilePath);
             _taggingProfile = LoadTaggingProfile(profileFilePath);
+            _folderTagList = _taggingProfile.FolderTagList;
+            _fileTagList = _taggingProfile.FileTagList;
         }
 
         #region FolderTag public implementations
@@ -316,31 +316,46 @@ namespace Syncless.Tagging
         #endregion
 
         #region miscellaneous public implementations
-        #region incomplete
-        public TaggingProfile LoadTaggingProfile(string profileFilePath)
-        {
-            throw new NotImplementedException();
-        }
-
-        private List<FileTag> LoadFileTagList(string profileFilePath)
-        {
-            throw new NotImplementedException();
-        }
-
-        private List<FolderTag> LoadFolderTagList(string profileFilePath)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-
         #region completed
-        public bool WriteXmlToFile()
+        public TaggingProfile LoadFrom(string xmlFilePath)
         {
-            XmlDocument xml = ConvertToXML("Khoon\'s sync", 1622010183523, 1622010183523);
-            xml.Save(@"_tagging.xml");
+            TaggingProfile taggingProfile = new TaggingProfile();
+            XmlDocument xml = new XmlDocument();
+            if (File.Exists(xmlFilePath))
+            {
+                xml.Load(xmlFilePath);
+                taggingProfile = ConvertXmlToTaggingProfile(xml);
+                return taggingProfile;
+            }
+            else
+            {
+                throw new FileNotFoundException();
+            }
+        }
+
+        public bool SaveTo(string xmlFilePath)
+        {
+            if (!File.Exists(xmlFilePath))
+            {
+                File.Create(xmlFilePath);
+            }
+            XmlDocument xml = ConvertTaggingProfileToXml(_taggingProfile);
+            xml.Save(xmlFilePath);
             return true;
         }
 
+        private TaggingProfile LoadTaggingProfile(string profileFilePath)
+        {
+            TaggingProfile taggingProfile = new TaggingProfile();
+            XmlDocument xml = new XmlDocument();
+            if (File.Exists(xmlFilePath))
+            {
+                xml.Load(xmlFilePath);
+                taggingProfile = ConvertXmlToTaggingProfile(xml);
+            }
+            return taggingProfile;
+        }
+        
         public Tag RetrieveTag(string tagname)
         {
             Tag tag = GetFolderTag(tagname);
@@ -549,6 +564,7 @@ namespace Syncless.Tagging
         #endregion
 
         #region private methods implementations
+        #region completed
         private static XmlDocument ConvertTaggingProfileToXml(TaggingProfile taggingProfile)
         {
             XmlDocument TaggingDataDocument = new XmlDocument();
@@ -709,7 +725,6 @@ namespace Syncless.Tagging
         }
         #endregion
 
-        #region completed
         private void UpdateTaggingProfileDate(long created)
         {
             _taggingProfile.LastUpdated = created;
@@ -895,16 +910,6 @@ namespace Syncless.Tagging
             return false;
         }
         #endregion
-        //private List<FolderTag> LoadFolderTagList()
-        //{
-        //    XmlDocument xml = new XmlDocument();
-        //    return new List<FolderTag>();
-        //}
-
-        //private List<FileTag> LoadFileTagList()
-        //{
-        //    return new List<FileTag>();
-        //}
         #endregion
     }
 }
