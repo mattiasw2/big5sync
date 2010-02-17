@@ -29,20 +29,14 @@ namespace Syncless.Tagging
             }
         }
 
-        private List<FolderTag> _folderTagList;
-
         public List<FolderTag> FolderTagList
         {
-            get { return _folderTagList; }
-            set { _folderTagList = value; }
+            get { return _taggingProfile.FolderTagList; }
         }
-
-        private List<FileTag> _fileTagList;
 
         public List<FileTag> FileTagList
         {
-            get { return _fileTagList; }
-            set { _fileTagList = value; }
+            get { return _taggingProfile.FileTagList; }
         }
 
         private TaggingProfile _taggingProfile;
@@ -56,16 +50,12 @@ namespace Syncless.Tagging
 
         private TaggingLayer()
         {
-            _folderTagList = new List<FolderTag>();
-            _fileTagList = new List<FileTag>();
             _taggingProfile = new TaggingProfile();
         }
 
         public void Init(string profileFilePath)
         {
             _taggingProfile = LoadTaggingProfile(profileFilePath);
-            _folderTagList = _taggingProfile.FolderTagList;
-            _fileTagList = _taggingProfile.FileTagList;
         }
 
         #region FolderTag public implementations
@@ -81,7 +71,7 @@ namespace Syncless.Tagging
             {
                 long created = DateTime.Now.Ticks;
                 FolderTag tag = new FolderTag(tagname, created);
-                _folderTagList.Add(tag);
+                _taggingProfile.FolderTagList.Add(tag);
                 UpdateTaggingProfileDate(created);
                 return tag;
             }
@@ -103,7 +93,7 @@ namespace Syncless.Tagging
             {
                 long updated = DateTime.Now.Ticks;
                 toRemove = GetFolderTag(tagname);
-                _folderTagList.Remove(toRemove);
+                _taggingProfile.FolderTagList.Remove(toRemove);
                 UpdateTaggingProfileDate(updated);
                 return toRemove;
             }
@@ -208,7 +198,7 @@ namespace Syncless.Tagging
             {
                 long created = DateTime.Now.Ticks;
                 FileTag tag = new FileTag(tagname, created);
-                _fileTagList.Add(tag);
+                _taggingProfile.FileTagList.Add(tag);
                 UpdateTaggingProfileDate(created);
                 return tag;
             }
@@ -230,7 +220,7 @@ namespace Syncless.Tagging
             {
                 long updated = DateTime.Now.Ticks;
                 toRemove = GetFileTag(tagname);
-                _fileTagList.Remove(toRemove);
+                _taggingProfile.FileTagList.Remove(toRemove);
                 UpdateTaggingProfileDate(updated);
                 return toRemove;
             }
@@ -348,9 +338,9 @@ namespace Syncless.Tagging
         {
             TaggingProfile taggingProfile = new TaggingProfile();
             XmlDocument xml = new XmlDocument();
-            if (File.Exists(xmlFilePath))
+            if (File.Exists(profileFilePath))
             {
-                xml.Load(xmlFilePath);
+                xml.Load(profileFilePath);
                 taggingProfile = ConvertXmlToTaggingProfile(xml);
             }
             return taggingProfile;
@@ -372,12 +362,12 @@ namespace Syncless.Tagging
             if (CheckFolderTagExists(tagname))
             {
                 toRemove = GetFolderTag(tagname);
-                _folderTagList.Remove((FolderTag)toRemove);
+                _taggingProfile.FolderTagList.Remove((FolderTag)toRemove);
             }
             else if (CheckFileTagExists(tagname))
             {
                 toRemove = GetFileTag(tagname);
-                _fileTagList.Remove((FileTag)toRemove);
+                _taggingProfile.FileTagList.Remove((FileTag)toRemove);
             }
             else
             {
@@ -428,7 +418,7 @@ namespace Syncless.Tagging
         {
             int noOfPath = 0;
             long lastupdated = 0;
-            foreach (FolderTag folderTag in _folderTagList)
+            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
                 if (folderTag.Contain(path))
                 {
@@ -438,7 +428,7 @@ namespace Syncless.Tagging
                     noOfPath++;
                 }
             }
-            foreach (FileTag fileTag in _fileTagList)
+            foreach (FileTag fileTag in _taggingProfile.FileTagList)
             {
                 if (fileTag.Contain(path))
                 {
@@ -460,7 +450,7 @@ namespace Syncless.Tagging
         {
             bool found;
             List<Tag> tagList = new List<Tag>();
-            foreach (FolderTag folderTag in _folderTagList)
+            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
                 found = CheckFolderID(folderTag, logicalid);
                 if (found)
@@ -468,7 +458,7 @@ namespace Syncless.Tagging
                     tagList.Add(folderTag);
                 }
             }
-            foreach (FileTag fileTag in _fileTagList)
+            foreach (FileTag fileTag in _taggingProfile.FileTagList)
             {
                 found = CheckFileID(fileTag, logicalid);
                 if (found)
@@ -487,7 +477,7 @@ namespace Syncless.Tagging
         public List<string> FindSimilarPathForFolder(string folderPath)
         {
             List<string> folderPathList = new List<string>();
-            foreach (FolderTag folderTag in _folderTagList)
+            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
                 if (folderTag.Contain(folderPath))
                 {
@@ -507,7 +497,7 @@ namespace Syncless.Tagging
         {
             string logicalid = filePath.Split('\\')[0].TrimEnd(':');
             List<string> filePathList = new List<string>();
-            foreach (FileTag fileTag in _fileTagList)
+            foreach (FileTag fileTag in _taggingProfile.FileTagList)
             {
                 if (fileTag.Contain(filePath))
                 {
@@ -548,11 +538,11 @@ namespace Syncless.Tagging
             profileElement.SetAttribute("name", profilename);
             profileElement.SetAttribute("createdDate", created.ToString());
             profileElement.SetAttribute("lastUpdated", lastupdated.ToString());
-            foreach (FolderTag folderTag in _folderTagList)
+            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
                 profileElement.AppendChild(CreateFolderTagElement(TaggingDataDocument, folderTag));
             }
-            foreach (FileTag fileTag in _fileTagList)
+            foreach (FileTag fileTag in _taggingProfile.FileTagList)
             {
                 profileElement.AppendChild(CreateFileTagElement(TaggingDataDocument, fileTag));
             }
@@ -744,14 +734,14 @@ namespace Syncless.Tagging
 
         private Tag FindTag(string tagname)
         {
-            foreach (FolderTag folderTag in _folderTagList)
+            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
                 if (folderTag.TagName.Equals(tagname))
                 {
                     return folderTag;
                 }
             }
-            foreach (FileTag fileTag in _fileTagList)
+            foreach (FileTag fileTag in _taggingProfile.FileTagList)
             {
                 if (fileTag.TagName.Equals(tagname))
                 {
@@ -791,7 +781,7 @@ namespace Syncless.Tagging
         {
             if (!CheckFolderTagExists(tag.TagName))
             {
-                _folderTagList.Add(tag);
+                _taggingProfile.FolderTagList.Add(tag);
             }
         }
 
@@ -799,7 +789,7 @@ namespace Syncless.Tagging
         {
             if (!CheckFileTagExists(tag.TagName))
             {
-                _fileTagList.Add(tag);
+                _taggingProfile.FileTagList.Add(tag);
             }
         }
 
@@ -807,7 +797,7 @@ namespace Syncless.Tagging
         {
             if (CheckFolderTagExists(tagname))
             {
-                foreach (FolderTag folderTag in _folderTagList)
+                foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
                 {
                     if (folderTag.TagName.Equals(tagname))
                     {
@@ -822,7 +812,7 @@ namespace Syncless.Tagging
         {
             if (CheckFileTagExists(tagname))
             {
-                foreach (FileTag fileTag in _fileTagList)
+                foreach (FileTag fileTag in _taggingProfile.FileTagList)
                 {
                     if (fileTag.TagName.Equals(tagname))
                     {
@@ -835,14 +825,14 @@ namespace Syncless.Tagging
 
         private bool CheckFolderTagExists(string tagname)
         {
-            foreach (FolderTag folderTag in _folderTagList)
+            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
                 if (folderTag.TagName.Equals(tagname))
                 {
                     return true;
                 }
             }
-            foreach (FileTag fileTag in _fileTagList)
+            foreach (FileTag fileTag in _taggingProfile.FileTagList)
             {
                 if (fileTag.TagName.Equals(tagname))
                 {
@@ -854,14 +844,14 @@ namespace Syncless.Tagging
 
         private bool CheckFileTagExists(string tagname)
         {
-            foreach (FileTag fileTag in _fileTagList)
+            foreach (FileTag fileTag in _taggingProfile.FileTagList)
             {
                 if (fileTag.TagName.Equals(tagname))
                 {
                     return true;
                 }
             }
-            foreach (FolderTag folderTag in _folderTagList)
+            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
                 if (folderTag.TagName.Equals(tagname))
                 {
@@ -875,7 +865,7 @@ namespace Syncless.Tagging
         {
             bool found;
             List<FolderTag> tagList = new List<FolderTag>();
-            foreach (FolderTag folderTag in _folderTagList)
+            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
                 found = CheckFolderID(folderTag, logicalid);
                 if (found)
