@@ -106,6 +106,11 @@ namespace Syncless.CompareAndSync
             List<CompareInfoObject> actual = GetAllCompareObjects(path);
             List<CompareInfoObject> meta = GetMetadataCompareObjects(tagName, path);
 
+            List<CompareInfoObject> actualTemp = new List<CompareInfoObject>(actual); ;
+            List<CompareInfoObject> metaTemp = new List<CompareInfoObject>(meta);
+
+            removeCommonObjects(actualTemp, metaTemp);
+
             // YC: This will give us files that exist but are not in the
             // metadata. Implies either new or renamed files.
             List<CompareInfoObject> actualExceptMeta = actual.Except<CompareInfoObject>(meta, new FileNameCompare()).ToList<CompareInfoObject>();
@@ -120,7 +125,7 @@ namespace Syncless.CompareAndSync
             foreach (CompareInfoObject a in actualExceptMeta)
             {
                 rename = false;
-                foreach (CompareInfoObject m in meta)
+                foreach (CompareInfoObject m in metaTemp)
                 {
                     if (a.MD5Hash == m.MD5Hash)
                     {
@@ -155,7 +160,7 @@ namespace Syncless.CompareAndSync
             foreach (CompareInfoObject m in metaExceptActual)
             {
                 rename = false;
-                foreach (CompareInfoObject a in actual)
+                foreach (CompareInfoObject a in actualTemp)
                 {
                     if (a.MD5Hash == m.MD5Hash)
                     {
@@ -470,6 +475,29 @@ namespace Syncless.CompareAndSync
                 sb.Append(fileHash[i].ToString("X2"));
             }
             return sb.ToString();
+        }
+
+        private static void removeCommonObjects(List<CompareInfoObject> firstList, List<CompareInfoObject> secondList)
+        {
+            Debug.Assert(firstList != null && secondList != null);
+            for (int i = 0; i < firstList.Count; i++)
+            {
+                for (int j = 0; j < secondList.Count; j++)
+                {
+                    if (firstList[i].Name.Equals(secondList[j].Name) && firstList[i].MD5Hash.Equals(secondList[j].MD5Hash))
+                    {
+                        firstList.RemoveAt(i);
+                        secondList.RemoveAt(j);
+                        j--;
+                        i--;
+                        if (j < 0)
+                            j = 0;
+                        if (i < 0)
+                            i = 0;
+                    }
+
+                }
+            }
         }
 
         /// <summary>
