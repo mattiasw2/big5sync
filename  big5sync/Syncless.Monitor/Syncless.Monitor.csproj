@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="DriveChangeEvent.cs" />
     <Compile Include="DriveChangeType.cs" />
+    <Compile Include="EventChangeType.cs" />
     <Compile Include="Exceptions\MonitorDriveNotFoundException.cs" />
     <Compile Include="Exceptions\MonitorPathNotFoundException.cs" />
     <Compile Include="FileChangeEvent.cs" />

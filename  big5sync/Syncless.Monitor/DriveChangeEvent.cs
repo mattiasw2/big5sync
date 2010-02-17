@@ -14,7 +14,6 @@ namespace Syncless.Monitor
             set { _type = value; }
         }
 
-
         private DriveInfo _info;
         public DriveInfo Info
         {
