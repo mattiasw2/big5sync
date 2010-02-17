@@ -364,17 +364,24 @@ namespace Syncless.Profiling
         public bool SaveToAllUsedDrive()
         {
             //Save to Root Directory
-
+            
+                
+            
 
             DriveInfo[] drives = DriveInfo.GetDrives();
             XmlDocument xml = ConvertToXMLDocument(_profile);
+
+            FileInfo profileInfo = new FileInfo("profiling.xml");
+            SaveProfile(xml, profileInfo.FullName);
+
+
             foreach (DriveInfo driveInfo in drives)
             {
                 FileInfo fileInfo = new FileInfo(ExtractDriveName(driveInfo) + ":"+ RELATIVE_GUID_SAVE_PATH);
                 if (fileInfo.Exists)
                 {
                     //GUID Exist
-                    FileInfo profileInfo = new FileInfo(ExtractDriveName(driveInfo) + ":" + RELATIVE_PROFILING_SAVE_PATH);
+                    profileInfo = new FileInfo(ExtractDriveName(driveInfo) + ":" + RELATIVE_PROFILING_SAVE_PATH);
                     SaveProfile(xml, profileInfo.FullName);
                 }
             }
