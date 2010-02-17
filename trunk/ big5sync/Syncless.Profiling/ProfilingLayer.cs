@@ -9,8 +9,8 @@ namespace Syncless.Profiling
 {
     public class ProfilingLayer
     {
-        private  const string RELATIVE_PROFILING_SAVE_PATH = "\\_syncless\\profiling.xml";
-        private const string RELATIVE_GUID_SAVE_PATH = "\\_syncless\\guid.id";
+        public const string RELATIVE_PROFILING_SAVE_PATH = "\\_syncless\\profiling.xml";
+        public const string RELATIVE_GUID_SAVE_PATH = "\\_syncless\\guid.id";
         #region Singleton
         private static ProfilingLayer _instance;
         public static ProfilingLayer Instance
@@ -202,7 +202,6 @@ namespace Syncless.Profiling
             }
             return profile;
         }
-
         #endregion
                        
         #region static methods 
@@ -254,6 +253,15 @@ namespace Syncless.Profiling
             return ExtractDriveName(driveInfo.RootDirectory.Name);
         }
         #endregion
+
+        public void ChangeProfileName(string newName)
+        {
+            _profile.ProfileName = newName;
+        }
+        public Profile CurrentProfile
+        {
+            get { return _profile; }
+        }
 
         private bool SaveProfile(XmlDocument xml,string path)
         {
@@ -363,18 +371,12 @@ namespace Syncless.Profiling
 
         public bool SaveToAllUsedDrive()
         {
-            //Save to Root Directory
-            
-                
-            
-
             DriveInfo[] drives = DriveInfo.GetDrives();
             XmlDocument xml = ConvertToXMLDocument(_profile);
-
+            
+            //Save to Root Directory
             FileInfo profileInfo = new FileInfo("profiling.xml");
             SaveProfile(xml, profileInfo.FullName);
-
-
             foreach (DriveInfo driveInfo in drives)
             {
                 FileInfo fileInfo = new FileInfo(ExtractDriveName(driveInfo) + ":"+ RELATIVE_GUID_SAVE_PATH);
@@ -477,9 +479,6 @@ namespace Syncless.Profiling
         }
         #endregion
 
-        public void Debug2()
-        {
-            Console.WriteLine(_profile.Mappings.Count);
-        }
+
     }
 }
