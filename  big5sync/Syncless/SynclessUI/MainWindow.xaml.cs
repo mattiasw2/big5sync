@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SynclessUI;
 
 namespace Syncless
 {
@@ -17,17 +18,12 @@ namespace Syncless
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-		TagWindow tagWindow;
-		
+    {		
         public MainWindow()
         {
             InitializeComponent();
 						
-			tagWindow = new TagWindow();
-			tagWindow.Left = 1075;
-			tagWindow.Top = 250;
-			tagWindow.Show();
+			MinimizeToTray.Enable(this);
         }
 		
         private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -47,12 +43,16 @@ namespace Syncless
 			
 			switch (result) {
 				case MessageBoxResult.Yes:
-					tagWindow.Close();
 					this.Close();
 					break;
 				case MessageBoxResult.No:
 					break;
 			}        	
+        }
+
+        private void BtnMin_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+			this.WindowState = WindowState.Minimized;
         }
     }
 }
