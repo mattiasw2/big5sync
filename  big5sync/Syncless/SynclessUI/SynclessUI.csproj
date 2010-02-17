@@ -137,6 +137,17 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <BlendEmbeddedFont Include="Fonts\bankgthd.ttf">
+      <IsSystemFont>True</IsSystemFont>
+      <All>True</All>
+      <AutoFill>True</AutoFill>
+      <Characters>
+      </Characters>
+      <Uppercase>True</Uppercase>
+      <Lowercase>True</Lowercase>
+      <Numbers>True</Numbers>
+      <Punctuation>True</Punctuation>
+    </BlendEmbeddedFont>
     <Resource Include="Icons\close.ico" />
     <Resource Include="Icons\createtag.ico" />
     <Resource Include="Icons\file.ico" />
@@ -180,4 +191,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Expression\Blend\3.0\WPF\Microsoft.Expression.Blend.WPF.targets" />
 </Project>

@@ -32,7 +32,7 @@
 		</StackPanel>
 		<StackPanel x:Name="HeaderPanel" Grid.Row="1" Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Top" Height="50" Grid.ColumnSpan="2" d:LayoutOverrides="GridBox">
     		<Image Source="Icons/logo.ico" Width="40" Height="40" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Margin="-5,0,-10,0" Stretch="Fill"/>
-    		<Label x:Name="Title" Content="Syncless" Foreground="#FFEEEEEE" FontFamily="BankGothic Md BT" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="0,-5,250,0"/>		
+    		<Label x:Name="Title" Content="Syncless" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="0,-5,250,0"/>		
 			<Menu x:Name="MainMenu" VerticalAlignment="Center" FontFamily="Century Gothic" FontSize="13.333" Foreground="#FF8799EB" Background="{x:Null}" Margin="0,8,0,0" FontWeight="Bold" HorizontalAlignment="Right">
 				<MenuItem Header="_File">
 					<MenuItem Header="Minimize to System Tray" InputGestureText="Ctrl + M" />
