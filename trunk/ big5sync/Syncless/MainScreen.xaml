@@ -41,7 +41,7 @@
 					</LinearGradientBrush>
 				</ToolBar.Background>
 				<StackPanel Orientation="Vertical" Margin="0,0,3,0"><Button Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/createtag.ico" Stretch="Fill" ToolTip="Create Tag"/></Button><Label HorizontalAlignment="Center" Content="Create" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667"/></StackPanel>
-				<StackPanel Orientation="Vertical" Margin="0,0,5,0"><Button Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/removetag.ico" Stretch="Fill" ToolTip="Remove Tag"/></Button><Label HorizontalAlignment="Center" Content="Remove" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667"/></StackPanel>
+				<StackPanel Orientation="Vertical" Margin="0,0,5,0"><Button x:Name="btnRemoveTag" Width="40" Click="btnRemoveTag_Click"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/removetag.ico" Stretch="Fill" ToolTip="Remove Tag"/></Button><Label HorizontalAlignment="Center" Content="Remove" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667"/></StackPanel>
 				<StackPanel Orientation="Vertical" Margin="0,0,11,0"><Button Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/tag.ico" Stretch="Fill" ToolTip="Tag File/Folder"/></Button><Label HorizontalAlignment="Center" Content="Tag" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667"/></StackPanel>
 				<StackPanel Orientation="Vertical" Margin="0,0,7,0"><Button Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/placetag.ico" Stretch="Fill" ToolTip="Place Tag"/></Button><Label HorizontalAlignment="Center" Content="Place" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667"/></StackPanel>
 				<Separator />
@@ -49,7 +49,9 @@
 			</ToolBar>
 		</DockPanel>
 		<ScrollViewer Grid.Row="1" Grid.Column="0" VerticalScrollBarVisibility="Auto">
-			<ListBox MinHeight="100" Padding="2 2 2 2">
+			<ListBox x:Name="TagListBox" MinHeight="100" Padding="2 2 2 2">
+
+				<ListBoxItem>			
 				<Border BorderBrush="Gray" BorderThickness="0 0 0 1" VerticalAlignment="Top">
 					<Grid Margin="5 5 5 5" Width="500">
 						<Grid.RowDefinitions>
@@ -69,7 +71,7 @@
 							<Label FontFamily="Century Gothic" FontSize="16" FontWeight="Bold" Content="Sample Folder Tag"/>
 						</StackPanel>
 						<Border Width="380" Grid.Row="1" Grid.Column="1" Padding="2" Margin="10,-5,0, 0" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" VerticalAlignment="Top">
-							<StackPanel Width="370" Orientation="Vertical" HorizontalAlignment="Left" d:LayoutOverrides="HorizontalAlignment">
+							<StackPanel x:Name="TaggedFolders" Width="370" Orientation="Vertical" HorizontalAlignment="Left" d:LayoutOverrides="HorizontalAlignment">
 								<Grid Margin="0 1 0 1">
 									<Grid.ColumnDefinitions>
 										<ColumnDefinition Width="*" />
@@ -130,6 +132,9 @@
 						</StackPanel>
 					</Grid>
 				</Border>
+				</ListBoxItem>
+				
+				<ListBoxItem>
 				<Border BorderBrush="Gray" BorderThickness="0 0 0 1" VerticalAlignment="Top">
 					<Grid Margin="5 5 5 5" Width="500">
 						<Grid.RowDefinitions>
@@ -210,6 +215,8 @@
 						</StackPanel>
 					</Grid>
 				</Border>
+				</ListBoxItem>
+				
 			</ListBox>
 		</ScrollViewer>
 		<StatusBar Padding="0 5 0 0" VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="2">
