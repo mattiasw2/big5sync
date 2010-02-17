@@ -6,7 +6,7 @@ using System.IO;
 using System.Diagnostics;
 namespace Syncless.Profiling
 {
-    public static class ProfilingHelper
+    internal static class ProfilingHelper
     {
         public static string ExtractRelativePath(string path)
         {
