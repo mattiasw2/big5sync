@@ -5,15 +5,15 @@ namespace Syncless.Monitor
 {
     public class FileChangeEvent
     {
-        private DirectoryInfo _oldPath;
-        public DirectoryInfo OldPath
+        private FileInfo _oldPath;
+        public FileInfo OldPath
         {
             get { return _oldPath; }
             set { _oldPath = value; }
         }
 
-        private DirectoryInfo _newPath;
-        public DirectoryInfo NewPath
+        private FileInfo _newPath;
+        public FileInfo NewPath
         {
             get { return _newPath; }
             set { _newPath = value; }
@@ -24,6 +24,13 @@ namespace Syncless.Monitor
         {
             get { return _event; }
             set { _event = value; }
+        }
+
+        public FileChangeEvent(FileInfo oldPath, FileInfo newPath, EventChangeType e)
+        {
+            this._oldPath = oldPath;
+            this._newPath = newPath;
+            this._event = e;
         }
     }
 }
