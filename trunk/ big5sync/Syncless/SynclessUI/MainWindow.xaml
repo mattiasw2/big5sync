@@ -27,29 +27,29 @@
     	</Rectangle>
     	<TextBlock Grid.Row="0" Margin="0" Padding="5" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Grid.ColumnSpan="3" Cursor="Hand"/>
     	<StackPanel x:Name="MinMaxClosePanel" Grid.Row="0" Grid.Column="1" Height="20" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10,-5,0" Cursor="Hand">
-			<Image x:Name="BtnMin" Source="Icons/min.ico" Width="20" Height="20" Stretch="UniformToFill" d:LayoutOverrides="VerticalMargin" />
+			<Image x:Name="BtnMin" Source="Icons/min.ico" Width="20" Height="20" Stretch="UniformToFill" d:LayoutOverrides="VerticalMargin" MouseLeftButtonDown="BtnMin_MouseLeftButtonDown" />
 			<Image x:Name="BtnClose" Source="Icons/close.ico" Width="19" Height="20" Stretch="UniformToFill" d:LayoutOverrides="VerticalMargin" MouseLeftButtonDown="BtnClose_MouseLeftButtonDown" />
 		</StackPanel>
 		<StackPanel x:Name="HeaderPanel" Grid.Row="1" Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Top" Height="50" Grid.ColumnSpan="2" d:LayoutOverrides="GridBox">
     		<Image Source="Icons/logo.ico" Width="40" Height="40" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Margin="-5,0,-10,0" Stretch="Fill"/>
     		<Label x:Name="Title" Content="Syncless" Foreground="#FFEEEEEE" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="0,-5,250,0" FontFamily="Fonts/#BankGothic Md BT"/>		
-			<Menu x:Name="MainMenu" VerticalAlignment="Center" FontFamily="Century Gothic" FontSize="13.333" Foreground="#FF8799EB" Background="{x:Null}" Margin="0,8,0,0" FontWeight="Bold" HorizontalAlignment="Right">
-				<MenuItem Header="_File">
+			<Menu x:Name="MainMenu" VerticalAlignment="Center" FontFamily="Century Gothic" FontSize="13.333" Background="{x:Null}" Margin="0,8,0,0" FontWeight="Bold" HorizontalAlignment="Right">
+				<MenuItem Header="_File" Foreground="#FF8799EB">
 					<MenuItem Header="Minimize to System Tray" InputGestureText="Ctrl + M" />
 					<MenuItem Header="Exit" />
 				</MenuItem>
-				<MenuItem Header="_Edit">
+				<MenuItem Header="_Edit" Foreground="#FF8799EB">
 					<MenuItem Header="Cut" InputGestureText="Ctrl + X"/>
 					<MenuItem Header="Copy" InputGestureText="Ctrl + C"/>
 					<MenuItem Header="Paste" InputGestureText="Ctrl + P"/>
 					<Separator />
 					<MenuItem Header="Find" InputGestureText="Ctrl + F" />
 				</MenuItem>
-				<MenuItem Header="_View">
+				<MenuItem Header="_View" Foreground="#FF8799EB">
 					<MenuItem Header="Options" InputGestureText="Ctrl + O"/>
 					<MenuItem Header="Show log window" />
 				</MenuItem>
-				<MenuItem Header="_Help" >
+				<MenuItem Header="_Help" Foreground="#FF8799EB">
 					<MenuItem Header="About" />
 				</MenuItem>
 			</Menu>
