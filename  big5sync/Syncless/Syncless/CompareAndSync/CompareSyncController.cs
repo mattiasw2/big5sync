@@ -26,8 +26,13 @@ namespace Syncless.CompareAndSync
         /// <summary>
         /// Manually Sync a Tag. 
         /// </summary>
-        /// <param name="tag">The tag to be synchronized</param>
+        /// <param name="tagname">name of the tag</param>
+        /// <param name="paths">list of the paths to sync</param>
         /// <returns>The list of Sync Results</returns>
+        public List<SyncResult> SyncFolder(string tagname, List<String> paths)
+        {
+            return null;
+        }
         public List<SyncResult> SyncFolder(string tagName, List<string> paths, List<CompareResult> results)
         {
             return new Syncer().Sync(tagName, paths, results);
