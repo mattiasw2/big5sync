@@ -30,34 +30,46 @@ namespace Syncless.Tagging
             set { _lastupdated = value; }
         }
 
-        public Tag(string tagname, long lastupdated)
+        protected long _created;
+
+        public long Created
+        {
+            get { return _created; }
+            set { _created = value; }
+        }
+
+        public Tag(string tagname, long created)
         {
             this._tagName = tagname;
-            this._lastupdated = lastupdated;
+            this._created = created;
+            this._lastupdated = created;
             this._pathList = new List<TaggedPath>();
         }
 
-        public bool AddPath(string path, long lastupdated)
+        public bool AddPath(string path, long created)
         {
             if (!Contain(path))
             {
                 TaggedPath taggedPath = new TaggedPath();
                 taggedPath.Path = path;
                 taggedPath.LogicalDriveId = GetLogicalID(path);
-                taggedPath.LastUpdated = lastupdated;
+                taggedPath.Created = created;
+                taggedPath.LastUpdated = created;
+                _lastupdated = created;
                 _pathList.Add(taggedPath);
                 return true;
             }
             return false;
         }
 
-        public bool RemovePath(string path)
+        public bool RemovePath(string path, long lastupdated)
         {
             foreach (TaggedPath p in _pathList)
             {
                 if (p.Path.Equals(path))
                 {
                     _pathList.Remove(p);
+                    _lastupdated = lastupdated;
                     return true;
                 }
             }
@@ -80,7 +92,7 @@ namespace Syncless.Tagging
         protected string GetLogicalID(string path)
         {
             string[] tokens = path.Split('\\');
-            return tokens[0];
+            return (tokens[0].TrimEnd(':'));
         }
 
         protected TaggedPath RetrieveTaggedPath(string path)
