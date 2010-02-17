@@ -51,6 +51,7 @@ namespace Syncless.Tagging
         private TaggingLayer()
         {
             _taggingProfile = new TaggingProfile();
+            _taggingProfile.Created = DateTime.Now.Ticks;
         }
 
         public void Init(string profileFilePath)
