@@ -208,8 +208,6 @@ namespace Syncless
 
                 MessageBox.Show(messageBoxText, caption, button, icon);
             }
-
-
         }
 
         /// <summary>
@@ -291,6 +289,18 @@ namespace Syncless
             LblSyncMode.Content = "Manual";
             BtnPreview.Visibility = System.Windows.Visibility.Visible;
             BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void BtnSyncNow_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+        	if(!_Igui.StartManualSync(_selectedTag)) {
+                string messageBoxText = "' " + _selectedTag.TagName + " ' could not be synchronized.";
+                string caption = "Synchronization Error";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Error;
+
+                MessageBox.Show(messageBoxText, caption, button, icon);
+			}
         }
     }
 }
