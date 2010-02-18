@@ -154,7 +154,7 @@ namespace Syncless.Core
                 paths.Add(path.Path);
             }
             List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            CompareSyncController.Instance.SyncFolder(folderTag.TagName, convertedPath);
+            //CompareSyncController.Instance.SyncFolder(folderTag.TagName, convertedPath);
             return true;
         }
 
@@ -202,6 +202,7 @@ namespace Syncless.Core
 
         public bool Terminate()
         {
+            DeviceWatcher.Instance.Terminate();
             return false;
         }
 
@@ -227,15 +228,15 @@ namespace Syncless.Core
             List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
             if (fe.Event == EventChangeType.CREATED)
             {
-                CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create);
+                //CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create);
             }
             else if (fe.Event == EventChangeType.MODIFIED)
             {
-                CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Update);
+                //CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Update);
             }
             else if (fe.Event == EventChangeType.RENAMED)
             {
-                CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Rename);
+                //CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Rename);
             }
         }
 
@@ -247,12 +248,12 @@ namespace Syncless.Core
             List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
             if (fe.Event == EventChangeType.CREATED)
             {
-                CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create);
+                //CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create);
             }
             else if (fe.Event == EventChangeType.RENAMED)
             {
                 //ASK YC if he need Old Path or New Path
-                CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create);
+               //  CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create);
             }
         }
 
