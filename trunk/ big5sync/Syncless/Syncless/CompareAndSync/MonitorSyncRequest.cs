@@ -10,16 +10,17 @@ namespace Syncless.CompareAndSync
         private string _oldPath, _newPath = null;
         private List<string> _dest;
         private FileChangeType _changeType;
-
-        public MonitorSyncRequest(string oldPath, List<string> dest, FileChangeType changeType)
+        private bool _isFolder;
+        public MonitorSyncRequest(string oldPath, List<string> dest, FileChangeType changeType,bool isFolder)
         {
             _oldPath = oldPath;
             _dest = dest;
             _changeType = changeType;
+            _isFolder = isFolder;
         }
 
-        public MonitorSyncRequest(string oldPath, string newPath, List<string> dest, FileChangeType changeType) :
-            this(oldPath, dest, changeType)
+        public MonitorSyncRequest(string oldPath, string newPath, List<string> dest, FileChangeType changeType,bool isFolder) :
+            this(oldPath, dest, changeType,isFolder)
         {
             _newPath = newPath;
         }
