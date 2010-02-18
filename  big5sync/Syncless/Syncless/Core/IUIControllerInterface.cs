@@ -31,8 +31,7 @@ namespace Syncless.Core
 		bool DeleteAllTags(FileInfo file); // delete all tags associated with a file
 		bool DeleteAllTags(DirectoryInfo folder); // delete all tags associated with a directory
 
-		bool StartManualSync(FileTag tagname);
-		bool StartManualSync(FolderTag tagname);
+		bool StartManualSync(Tag tagname);
 
 		bool MonitorTag(Tag tag, bool mode);
 
