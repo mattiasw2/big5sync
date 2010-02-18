@@ -34,7 +34,7 @@ namespace Syncless.Core
 		bool StartManualSync(FileTag tagname);
 		bool StartManualSync(FolderTag tagname);
 
-		bool MonitorTag(FileTag tag, bool mode);
+		bool MonitorTag(Tag tag, bool mode);
 
 		bool SetTagBidirectional(FileTag tag);
 		bool SetTagBidirectional(FolderTag tag);
