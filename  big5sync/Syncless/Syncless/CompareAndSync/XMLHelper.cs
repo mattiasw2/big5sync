@@ -88,7 +88,7 @@ namespace Syncless.CompareAndSync
                             if (childNodes[i].FirstChild.Name.Equals("name_of_folder"))
                             {
                                 stack.Push(dirPath + "\\" + childNodes[i].FirstChild.InnerText);
-                                Console.WriteLine(dirPath + "\\" + childNodes[i].FirstChild.InnerText);
+                                //Console.WriteLine(dirPath + "\\" + childNodes[i].FirstChild.InnerText);
                             }
                             else
                             {

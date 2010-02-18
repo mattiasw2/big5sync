@@ -71,13 +71,14 @@ namespace Syncless.CompareAndSync
 
             for (int i = 1; i < withMeta.Count; i++)
             {
-                currSrcFolder = DoOneWayCompareFolderHelper(false, currSrcFolder, GetDiffMetaActual(tagName, withMeta[i]), withMeta[i], null);
+                currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetDiffMetaActual(tagName, withMeta[i]), withMeta[i]);
             }
             for (int i = withMeta.Count - 2; i >= 0; i--)
             {
-                currSrcFolder = DoOneWayCompareFolderHelper(false, currSrcFolder, GetDiffMetaActual(tagName, withMeta[i]), withMeta[i], null);
+                currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetDiffMetaActual(tagName, withMeta[i]), withMeta[i]);
             }
 
+            /*
             // YC: Create a virtual most-updated folder for comparison against the folders with no metadata
             // There is a chance that the folders with no metadata have more updated stuff than the folders
             // with metadata
@@ -85,15 +86,16 @@ namespace Syncless.CompareAndSync
 
             for (int i = 0; i < noMeta.Count; i++)
             {
-                currSrcFolder = DoOneWayCompareFolderHelper(true, currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], null);
+                currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i]);
             }
 
             for (int i = noMeta.Count - 2; i >= 0; i--)
             {
-                currSrcFolder = DoOneWayCompareFolderHelper(true, currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], withMeta);
+                currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i]);
             }
 
-            currSrcFolder = DoOneWayCompareFolderHelper(true, currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0], null);
+            currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0]);
+            */
              
             return currSrcFolder;
         }
@@ -147,6 +149,7 @@ namespace Syncless.CompareAndSync
                 }
                 else
                 {
+                    a.ChangeType = FileChangeType.Create;
                     results.Add(a);
                 }
             }
@@ -203,11 +206,13 @@ namespace Syncless.CompareAndSync
 
                 if (actualFile.Length != metaFile.Length)
                 {
+                    actualFile.ChangeType = FileChangeType.Update;
                     results.Add(actualFile);
                     continue;
                 }
                 if (actualFile.MD5Hash != metaFile.MD5Hash)
                 {
+                    actualFile.ChangeType = FileChangeType.Update;
                     results.Add(actualFile);
                     continue;
                 }
@@ -215,10 +220,105 @@ namespace Syncless.CompareAndSync
             return results;
         }
 
-        private List<CompareInfoObject> DoOptimizedOneWayCompareFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath)
+        private List<CompareInfoObject> DoOptimizedOneWayFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath)
         {
-            //TODO
-            return null;
+            Debug.Assert(source != null && target != null);
+            List<CompareInfoObject> querySrcExceptTgt = source.Except(target, new FileNameCompare()).ToList<CompareInfoObject>();
+            List<CompareInfoObject> querySrcIntersectTgt = source.Intersect(target, new FileNameCompare()).ToList<CompareInfoObject>();
+            List<CompareInfoObject> queryTgtIntersectSrc = target.Intersect(source, new FileNameCompare()).ToList<CompareInfoObject>();
+            int exceptItemsCount = querySrcExceptTgt.Count;
+            Debug.Assert(querySrcIntersectTgt.Count == queryTgtIntersectSrc.Count);
+            int commonItemsCount = queryTgtIntersectSrc.Count;
+            List<string> createList, updateList;
+
+            for (int i = 0; i < exceptItemsCount; i++)
+            {
+                if (querySrcExceptTgt[i].ChangeType == FileChangeType.Create)
+                {
+                    if (_changeTable[CREATE_TABLE].TryGetValue(querySrcExceptTgt[i].FullName, out createList))
+                    {
+                        if (!createList.Contains(CreateNewItemPath(querySrcExceptTgt[i], targetPath)))
+                        {
+                            createList.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
+                        }
+                    }
+                    else
+                    {
+                        createList = new List<string>();
+                        createList.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
+                        _changeTable[CREATE_TABLE].Add(querySrcExceptTgt[i].FullName, createList);
+                    }
+                }
+                else if (querySrcExceptTgt[i].ChangeType == FileChangeType.Update)
+                {
+                    if (_changeTable[UPDATE_TABLE].TryGetValue(querySrcExceptTgt[i].FullName, out updateList))
+                    {
+                        if (!updateList.Contains(CreateNewItemPath(querySrcExceptTgt[i], targetPath)))
+                        {
+                            updateList.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
+                        }
+                    }
+                    else
+                    {
+                        updateList = new List<string>();
+                        updateList.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
+                        _changeTable[UPDATE_TABLE].Add(querySrcExceptTgt[i].FullName, updateList);
+                    }
+
+                    //YC: Experimental
+                    if (_changeTable[CREATE_TABLE].ContainsKey(querySrcExceptTgt[i].FullName))
+                    {
+                        _changeTable[CREATE_TABLE].Remove(querySrcExceptTgt[i].FullName);
+                    }
+                }
+            }
+
+            CompareInfoObject srcFile = null;
+            CompareInfoObject tgtFile = null;
+            int compareResult = 0;
+
+            for (int i = 0; i < commonItemsCount; i++)
+            {
+                srcFile = (CompareInfoObject)querySrcIntersectTgt[i];
+                tgtFile = (CompareInfoObject)queryTgtIntersectSrc[i];
+                compareResult = new FileContentCompare().Compare(srcFile, tgtFile);
+
+                if (compareResult > 0)
+                {
+                    Debug.Assert(srcFile.ChangeType == FileChangeType.Update && tgtFile.ChangeType == FileChangeType.Update);
+                    if (_changeTable[UPDATE_TABLE].TryGetValue(srcFile.FullName, out updateList))
+                    {
+                        if (!updateList.Contains(tgtFile.FullName))
+                        {
+                            updateList.Add(tgtFile.FullName);
+                        }
+                    }
+                    else
+                    {
+                        updateList = new List<string>();                        
+                        updateList.Add(tgtFile.FullName);
+                        _changeTable[UPDATE_TABLE].Add(srcFile.FullName, updateList);
+                    }
+
+                    //YC: Experimental
+                    if (_changeTable[CREATE_TABLE].ContainsKey(tgtFile.FullName))
+                    {
+                        _changeTable[CREATE_TABLE].Remove(tgtFile.FullName);
+                    }
+
+                    queryTgtIntersectSrc.RemoveAt(i);
+                    queryTgtIntersectSrc.Insert(i, srcFile);
+                }
+                else if (compareResult < 0)
+                {
+                    if (_changeTable[UPDATE_TABLE].ContainsKey(srcFile.FullName))
+                    {
+                        _changeTable[UPDATE_TABLE].Remove(srcFile.FullName);
+                    }
+                }
+
+            }
+            return (queryTgtIntersectSrc.Union(querySrcExceptTgt)).Union(target).ToList<CompareInfoObject>();
         }
 
         /// <summary>
@@ -233,17 +333,17 @@ namespace Syncless.CompareAndSync
 
             for (int i = 1; i < paths.Count; i++)
             {
-                currSrcFolder = DoOneWayCompareFolderHelper(true, currSrcFolder, GetAllCompareObjects(paths[i]), paths[i], null);
+                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(paths[i]), paths[i]);
             }
             for (int i = paths.Count - 2; i >= 0; i--)
             {
-                currSrcFolder = DoOneWayCompareFolderHelper(true, currSrcFolder, GetAllCompareObjects(paths[i]), paths[i], null);
+                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(paths[i]), paths[i]);
             }
 
             return currSrcFolder;
         }
 
-        private List<CompareInfoObject> DoOneWayCompareFolderHelper(bool rawMode, List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath, List<string> withMeta)
+        private List<CompareInfoObject> DoRawOneWayCompareFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath)
         {
             Debug.Assert(source != null && target != null);
             List<CompareInfoObject> querySrcExceptTgt = source.Except(target, new FileNameCompare()).ToList<CompareInfoObject>();
@@ -255,40 +355,18 @@ namespace Syncless.CompareAndSync
             List<string> createList, updateList;
 
             for (int i = 0; i < exceptItemsCount; i++)
-            {
-                List<string> newFilePaths = new List<string>();
-                if (withMeta != null && withMeta.Contains(targetPath))
-                {
-                    foreach (string withMetaPath in withMeta)
-                    {
-                        newFilePaths.Add(CreateNewItemPath(querySrcExceptTgt[i], withMetaPath));
-                    }
-                }
-                else
-                {
-                    newFilePaths.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
-                }
-                
+            {                
                 if (_changeTable[CREATE_TABLE].TryGetValue(querySrcExceptTgt[i].FullName, out createList))
                 {
-                    foreach (string newFilePath in newFilePaths)
+                    if (!createList.Contains(CreateNewItemPath(querySrcExceptTgt[i], targetPath)))
                     {
-                        if (!createList.Contains(newFilePath))
-                        {
-                            createList.Add(newFilePath);
-                        }
+                        createList.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
                     }
                 }
                 else
                 {
                     createList = new List<string>();
-                    foreach (string newFilePath in newFilePaths)
-                    {
-                        if (!createList.Contains(newFilePath))
-                        {
-                            createList.Add(newFilePath);
-                        }
-                    }
+                    createList.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
                     _changeTable[CREATE_TABLE].Add(querySrcExceptTgt[i].FullName, createList);
                 }
             }
@@ -305,36 +383,17 @@ namespace Syncless.CompareAndSync
 
                 if (compareResult > 0)
                 {
-                    List<string> updatePaths = new List<string>();
-                    if (withMeta != null && withMeta.Contains(targetPath))
-                    {
-                        foreach (string withMetaPath in withMeta)
-                        {
-                            updatePaths.Add(CreateNewItemPath(tgtFile, withMetaPath));
-                        }
-                    }
-                    else
-                    {
-                        updatePaths.Add(tgtFile.FullName);
-                    }
-
                     if (_changeTable[UPDATE_TABLE].TryGetValue(srcFile.FullName, out updateList))
                     {
-                        foreach (string updatePath in updatePaths)
+                        if (!updateList.Contains(tgtFile.FullName))
                         {
-                            if (!updateList.Contains(updatePath))
-                            {
-                                updateList.Add(updatePath);
-                            }
+                            updateList.Add(tgtFile.FullName);
                         }
                     }
                     else
                     {
                         updateList = new List<string>();
-                        foreach (string updatePath in updatePaths)
-                        {
-                            updateList.Add(updatePath);
-                        }
+                        updateList.Add(tgtFile.FullName);
                         _changeTable[UPDATE_TABLE].Add(srcFile.FullName, updateList);
                     }
 
@@ -447,18 +506,28 @@ namespace Syncless.CompareAndSync
             }
 
             // TODO: Handle delete conflicts. Simple way for now.
-            String deletePath = null;
+            string deletePath = null;
+            bool add = true;
             foreach (string deleteItem in deleteList)
             {
+                add = true;
                 foreach (string path in paths)
-                {
+                {                    
                     deletePath = Path.Combine(path, deleteItem);
 
-                    if (!_changeTable[CREATE_TABLE].ContainsKey(deletePath) && !_changeTable[UPDATE_TABLE].ContainsKey(deletePath) && !_changeTable[RENAME_TABLE].ContainsKey(deleteItem))
+                    if (_changeTable[CREATE_TABLE].ContainsKey(deletePath) || _changeTable[UPDATE_TABLE].ContainsKey(deletePath) || _changeTable[RENAME_TABLE].ContainsKey(deleteItem))
                     {
+                        add = false;
+                    }                   
+                }
+                if (add)
+                {
+                    foreach (string path in paths)
+                    {
+                        deletePath = Path.Combine(path, deleteItem);
                         results.Add(new CompareResult(FileChangeType.Delete, deletePath, null));
                     }                    
-                }
+                } 
             }
 
             foreach (CompareResult cr in results)

@@ -102,6 +102,10 @@ namespace Syncless.CompareAndSync
             {
                 return _changeType;
             }
+            set
+            {
+                _changeType = value;
+            }
         }
     }
 }
