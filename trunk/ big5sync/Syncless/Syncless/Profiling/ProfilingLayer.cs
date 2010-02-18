@@ -214,6 +214,10 @@ namespace Syncless.Profiling
             }
             return false;
         }
+        public bool RemoveDrive(DriveInfo driveinfo)
+        {
+            return _profile.RemoveDrive(ProfilingHelper.ExtractDriveName(driveinfo.Name));
+        }
 
         
 

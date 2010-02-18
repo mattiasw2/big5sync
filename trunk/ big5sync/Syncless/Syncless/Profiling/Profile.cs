@@ -106,11 +106,39 @@ namespace Syncless.Profiling
             }
 
         }
+        public bool RemoveDrive(string driveid)
+        {
+            ProfileMapping mapping = FindMappingFromPhysical(driveid);
+            if (mapping == null)
+            {
+                return false;
+            }
+            else
+            {
+                if (mapping.PhyiscalAddress.Equals("driveid"))
+                {
+                    mapping.PhyiscalAddress = "";
+                }
+                
+            }
+            return true;
+        }
         private ProfileMapping FindMappingFromGUID(string guid)
         {
             foreach (ProfileMapping mapping in _mappingList)
             {
                 if (mapping.GUID.Equals(guid))
+                {
+                    return mapping;
+                }
+            }
+            return null;
+        }
+        private ProfileMapping FindMappingFromPhysical(string physical)
+        {
+            foreach (ProfileMapping mapping in _mappingList)
+            {
+                if (mapping.PhyiscalAddress.Equals(physical))
                 {
                     return mapping;
                 }

@@ -226,7 +226,34 @@ namespace Syncless.Core
 
         public void HandleDriveChange(DriveChangeEvent dce)
         {
-            
+            if (dce.Type == DriveChangeType.DRIVE_IN)
+            {
+                ProfilingLayer.Instance.UpdateDrive(dce.Info);
+                string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
+                List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logical);
+                foreach (Tag t in tagList)
+                {
+                    List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.PathStringList);
+                    //CALL FOR SYNC
+                    //
+                    foreach (string path in pathList)
+                    {
+                        try
+                        {
+                            MonitorLayer.Instance.MonitorPath(path);
+                        }
+                        catch (Exception e)
+                        {
+                            //TODO
+                            Console.WriteLine(e.ToString());
+                        }
+                    }
+                }
+            }
+            else
+            {
+                ProfilingLayer.Instance.RemoveDrive(dce.Info);
+            }
         }
 
         public void HandleDeleteChange(DeleteChangeEvent dce)

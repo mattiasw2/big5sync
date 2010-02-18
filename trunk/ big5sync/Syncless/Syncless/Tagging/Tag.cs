@@ -21,7 +21,18 @@ namespace Syncless.Tagging
         {
             get { return _pathList; }
         }
-
+        public List<string> PathStringList
+        {
+            get
+            {
+                List<string> pathList = new List<string>();
+                foreach (TaggedPath path in _pathList)
+                {
+                    pathList.Add(path.Path);
+                }
+                return pathList;
+            }
+        }
         protected long _lastupdated;
 
         public long LastUpdated
