@@ -5,29 +5,21 @@ using System.Text;
 using Syncless.Tagging;
 namespace Syncless.CompareAndSync
 {
-    public class SyncRequest
+    public class SyncRequest : Request
     {
-        private FileChangeType _changeType;
-        public FileChangeType ChangeType
+        List<CompareResult> _results;
+
+        public SyncRequest(string tagName, List<string> paths, bool isFolder, List<CompareResult> results)
         {
-            get { return _changeType; }
-            set { this._changeType = value; }
+            base._tagName = tagName;
+            base._paths = paths;
+            base._isFolder = isFolder;
+            _results = results;
         }
 
-        private string _path;
-        public string Path
+        public List<CompareResult> Results
         {
-            get { return _path; }
-            set { this._path = value; }
+            get { return _results; }
         }
-
-        private List<string> _pathAffected;
-        public List<string> PathAffected
-        {
-            get { return _pathAffected; }
-            set { this._pathAffected = value; }
-        }
-            
-
     }
 }

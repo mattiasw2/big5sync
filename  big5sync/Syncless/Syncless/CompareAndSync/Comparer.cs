@@ -16,6 +16,11 @@ namespace Syncless.CompareAndSync
         private List<string> deleteList;
         private const string METADATAFOLDER = "_syncless\\";
 
+        public List<CompareResult> CompareFile(string tagName, List<string> paths)
+        {
+            return null;
+        }
+
         public List<CompareResult> CompareFolder(string tagName, List<string> paths)
         {
             _changeTable = new Dictionary<int, Dictionary<string, List<string>>>();

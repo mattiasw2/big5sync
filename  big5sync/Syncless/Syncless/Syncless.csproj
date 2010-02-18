@@ -48,9 +48,11 @@
   <ItemGroup>
     <Compile Include="CompareAndSync\CompareInfoObject.cs" />
     <Compile Include="CompareAndSync\Comparer.cs" />
+    <Compile Include="CompareAndSync\CompareRequest.cs" />
     <Compile Include="CompareAndSync\CompareResult.cs" />
     <Compile Include="CompareAndSync\CompareSyncController.cs" />
     <Compile Include="CompareAndSync\CompareAndSyncEnum.cs" />
+    <Compile Include="CompareAndSync\Request.cs" />
     <Compile Include="CompareAndSync\Result.cs" />
     <Compile Include="CompareAndSync\Syncer.cs" />
     <Compile Include="CompareAndSync\SyncRequest.cs" />
