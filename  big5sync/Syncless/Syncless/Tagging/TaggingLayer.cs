@@ -57,7 +57,14 @@ namespace Syncless.Tagging
 
         public void Init(string profileFilePath)
         {
-            _taggingProfile = LoadTaggingProfile(profileFilePath);
+            if (!File.Exists(profileFilePath))
+            {
+                _taggingProfile = new TaggingProfile();
+            }
+            else
+            {
+                _taggingProfile = LoadTaggingProfile(profileFilePath);
+            }
         }
 
         #region FolderTag public implementations
