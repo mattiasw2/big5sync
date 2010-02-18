@@ -78,24 +78,33 @@ namespace Syncless.CompareAndSync
                 currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetDiffMetaActual(tagName, withMeta[i]), withMeta[i]);
             }
 
-            /*
-            // YC: Create a virtual most-updated folder for comparison against the folders with no metadata
-            // There is a chance that the folders with no metadata have more updated stuff than the folders
-            // with metadata
-            currSrcFolder = currSrcFolder.Union(GetAllCompareObjects(withMeta[0])).ToList<CompareInfoObject>();
-
-            for (int i = 0; i < noMeta.Count; i++)
+            if (noMeta.Count > 0)
             {
-                currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i]);
-            }
+                currSrcFolder = currSrcFolder.Union(GetAllCompareObjects(withMeta[0]), new FileNameCompare()).ToList<CompareInfoObject>();
 
-            for (int i = noMeta.Count - 2; i >= 0; i--)
-            {
-                currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i]);
-            }
+                for (int i = 0; i < noMeta.Count; i++)
+                {
+                    currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i]);
+                }
 
-            currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0]);
-            */
+                int loopStart = 0;
+
+                if (noMeta.Count == 1)
+                {
+                    loopStart = noMeta.Count - 1;
+                }
+                else
+                {
+                    loopStart = noMeta.Count - 2;
+                }
+
+                for (int i = loopStart; i >= 0; i--)
+                {
+                    currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i]);
+                }
+
+                currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0]);
+            }            
              
             return currSrcFolder;
         }
@@ -318,7 +327,7 @@ namespace Syncless.CompareAndSync
                 }
 
             }
-            return (queryTgtIntersectSrc.Union(querySrcExceptTgt)).Union(target).ToList<CompareInfoObject>();
+            return (queryTgtIntersectSrc.Union(querySrcExceptTgt, new FileNameCompare())).Union(target, new FileNameCompare()).ToList<CompareInfoObject>();
         }
 
         /// <summary>
@@ -415,7 +424,7 @@ namespace Syncless.CompareAndSync
                 }
 
             }
-            return (queryTgtIntersectSrc.Union(querySrcExceptTgt)).Union(target).ToList<CompareInfoObject>();
+            return (queryTgtIntersectSrc.Union(querySrcExceptTgt, new FileNameCompare())).Union(target, new FileNameCompare()).ToList<CompareInfoObject>();
         }
 
         private List<CompareInfoObject> GetAllCompareObjects(string path)
