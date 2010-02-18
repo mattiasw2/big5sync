@@ -35,6 +35,11 @@ namespace Syncless.CompareAndSync
             get { return _oldPath; }
         }
 
+        public string NewPath
+        {
+            get { return _newPath; }
+        }
+
         public List<string> Dest
         {
             get { return _dest; }
