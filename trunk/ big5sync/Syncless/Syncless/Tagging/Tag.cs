@@ -110,6 +110,21 @@ namespace Syncless.Tagging
             return false;
         }
 
+        public void Rename(string oldPath, string newPath)
+        {
+            foreach (TaggedPath p in _pathList)
+            {
+                if (p.Path.StartsWith(oldPath))
+                {
+                    p.Replace(oldPath, newPath);
+                }
+                else if (p.Path.Equals(oldPath))
+                {
+                    p.Path = newPath;
+                }
+            }
+        }
+
         #region private implementations
         protected string GetLogicalID(string path)
         {
@@ -127,6 +142,51 @@ namespace Syncless.Tagging
                 }
             }
             return null;
+        }
+
+        protected bool CheckMatch(string[] pathTokens, string[] pTokens)
+        {
+            bool allMatched = true;
+            for (int i = 0; i < pTokens.Length; i++)
+            {
+                if (!pTokens[i].Equals(pathTokens[i]))
+                {
+                    allMatched = false;
+                    break;
+                }
+            }
+            return allMatched;
+        }
+
+        protected string[] TrimEnd(string[] tempPathTokens)
+        {
+            string[] pathTokens = new string[tempPathTokens.Length - 1];
+            if (tempPathTokens[tempPathTokens.Length - 1].Equals(""))
+            {
+                for (int i = 0; i < pathTokens.Length; i++)
+                {
+                    pathTokens[i] = tempPathTokens[i];
+                }
+                return pathTokens;
+            }
+            return tempPathTokens;
+        }
+
+        protected int Match(string[] pathTokens, string[] pTokens)
+        {
+            int trailingIndex = 0;
+            for (int i = 0; i < pTokens.Length; i++)
+            {
+                if (pTokens[i].Equals(pathTokens[i]))
+                {
+                    trailingIndex++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return trailingIndex;
         }
 
         private string GetCurrentTime()

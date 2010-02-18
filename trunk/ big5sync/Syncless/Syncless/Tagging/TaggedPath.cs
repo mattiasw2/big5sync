@@ -20,7 +20,7 @@ namespace Syncless.Tagging
         public string Path
         {
             get { return _path; }
-            set { _path = value;}
+            set { _path = value; }
         }
 
         private long _lastUpdated;
@@ -49,6 +49,11 @@ namespace Syncless.Tagging
             {
                 return (_path + "\\" + trailingPath);
             }
+        }
+
+        public void Replace(string oldPath, string newPath)
+        {
+            _path = _path.Replace(oldPath, newPath);
         }
     }
 }
