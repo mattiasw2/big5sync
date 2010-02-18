@@ -478,6 +478,23 @@ namespace Syncless.Tagging
             return tagList;
         }
 
+        public List<string> RetrievePathByLogicalId(string logicalid)
+        {
+            List<string> pathList = new List<string>();
+            List<Tag> tagList = RetrieveTagByLogicalId(logicalid);
+            foreach (Tag tag in tagList)
+            {
+                foreach (TaggedPath path in tag.PathList)
+                {
+                    if (path.LogicalDriveId.Equals(logicalid))
+                    {
+                        pathList.Add(path.Path);
+                    }
+                }
+            }
+            return pathList;
+        }
+
         /// <summary>
         /// Find the Similar Path of a particular path. (*see me)
         /// </summary>
