@@ -114,6 +114,7 @@ namespace Syncless.CompareAndSync
             string size = "";
             string hash = "";
             string lastModified = "";
+            string lastCreated = "";
 
             foreach (XmlNode childNode in nodeList)
             {
@@ -123,8 +124,10 @@ namespace Syncless.CompareAndSync
                     size = childNode.InnerText;
                 else if (counter == 2)
                     hash = childNode.InnerText;
-                else
+                else if (counter == 3)
                     lastModified = childNode.InnerText;
+                else
+                    lastCreated = childNode.InnerText;
 
                 counter++;
             }
@@ -212,6 +215,7 @@ namespace Syncless.CompareAndSync
                 writer.WriteElementString("size", fileInfo.Length.ToString());
                 writer.WriteElementString("hash", sb.ToString());
                 writer.WriteElementString("last_modified", fileInfo.LastWriteTime.Ticks.ToString());
+                writer.WriteElementString("last_created", fileInfo.CreationTime.Ticks.ToString());
                 writer.WriteEndElement();
 
             }
