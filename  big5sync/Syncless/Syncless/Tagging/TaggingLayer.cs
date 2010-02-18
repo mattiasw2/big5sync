@@ -615,6 +615,22 @@ namespace Syncless.Tagging
             return filePathList;
         }
 
+        public void RenameFolder(string oldPath, string newPath)
+        {
+            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
+            {
+                folderTag.Rename(oldPath, newPath);
+            }
+        }
+
+        public void RenameFile(string oldPath, string newPath)
+        {
+            foreach (FileTag fileTag in _taggingProfile.FileTagList)
+            {
+                fileTag.Rename(oldPath, newPath);
+            }
+        }
+
         //public XmlDocument ConvertToXML(string profilename, long created, long lastupdated)
         //{
         //    XmlDocument TaggingDataDocument = new XmlDocument();

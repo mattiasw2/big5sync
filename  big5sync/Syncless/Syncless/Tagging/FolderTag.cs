@@ -15,16 +15,14 @@ namespace Syncless.Tagging
 
         public string FindMatchedParentDirectory(string path)
         {
-            string[] tempPathTokens = path.Split('\\');
-            string[] pathTokens = TrimEnd(tempPathTokens);
+            string[] pathTokens = TrimEnd(path.Split('\\'));
             string logicalid = pathTokens[0].TrimEnd(':');
             string trailingPath = null;
             foreach (TaggedPath p in _pathList)
             {
                 if (p.LogicalDriveId.Equals(logicalid))
                 {
-                    string[] tempPTokens = p.Path.Split('\\');
-                    string[] pTokens = TrimEnd(tempPTokens);
+                    string[] pTokens = TrimEnd(p.Path.Split('\\'));
                     if (pathTokens.Length > pTokens.Length)
                     {
                         if (CheckMatch(pathTokens, pTokens))
@@ -44,51 +42,6 @@ namespace Syncless.Tagging
                 }
             }
             return null;
-        }
-
-        private string[] TrimEnd(string[] tempPathTokens)
-        {
-            string[] pathTokens = new string[tempPathTokens.Length-1];
-            if (tempPathTokens[tempPathTokens.Length - 1].Equals(""))
-            {
-                for (int i = 0; i < pathTokens.Length; i++)
-                {
-                    pathTokens[i] = tempPathTokens[i];
-                }
-                return pathTokens;
-            }
-            return tempPathTokens;
-        }
-
-        private int Match(string[] pathTokens, string[] pTokens)
-        {
-            int trailingIndex = 0;
-            for (int i = 0; i < pTokens.Length; i++)
-            {
-                if (pTokens[i].Equals(pathTokens[i]))
-                {
-                    trailingIndex++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            return trailingIndex;
-        }
-
-        private bool CheckMatch(string[] pathTokens, string[] pTokens)
-        {
-            bool allMatched = true;
-            for (int i = 0; i < pTokens.Length; i++)
-            {
-                if (!pTokens[i].Equals(pathTokens[i]))
-                {
-                    allMatched = false;
-                    break;
-                }
-            }
-            return allMatched;
         }
     }
 }
