@@ -26,7 +26,7 @@ namespace Syncless.CompareAndSync
 
             for (int i = 0; i < paths.Count - 1; i++)
             {
-                for (int j = 1; j <= paths.Count; j++)
+                for (int j = 1; j <= paths.Count - 1; j++)
                 {
                     sourceInfo = new FileInfo(paths[i]);
                     destInfo = new FileInfo(paths[j]);
