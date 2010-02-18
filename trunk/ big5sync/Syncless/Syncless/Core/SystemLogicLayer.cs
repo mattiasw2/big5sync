@@ -10,7 +10,7 @@ using Syncless.Profiling;
 using System.Diagnostics;
 namespace Syncless.Core
 {
-    internal class SystemLogicLayer : IUIControllerInterface,IMonitorControllerInterface
+    internal class SystemLogicLayer : IMonitorControllerInterface
     {
         private static SystemLogicLayer _instance;
         public static SystemLogicLayer Instance
