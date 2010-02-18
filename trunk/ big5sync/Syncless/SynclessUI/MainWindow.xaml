@@ -1,7 +1,7 @@
 ﻿<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:dropShadow="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Class="Syncless.MainWindow"
     Title="Syncless" Height="600" Width="800" Background="Transparent" Icon="Icons/logo.ico" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" WindowStyle="None" Foreground="Transparent" mc:Ignorable="d" AllowsTransparency="True">
@@ -117,22 +117,22 @@
 				<Button x:Name="BtnDirection" Height="28" Margin="0,0,0,5">
 					<Button.Background>
 						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-							<GradientStop Color="#FFFF6464" Offset="0"/>
-							<GradientStop Color="Red" Offset="1"/>
-							<GradientStop Color="#FFFF6464" Offset="0.5"/>
+							<GradientStop Color="#FF8FE2FD" Offset="0"/>
+							<GradientStop Color="#FF0AACE2" Offset="1"/>
+							<GradientStop Color="#FF8FE2FD" Offset="0.5"/>
 						</LinearGradientBrush>
 					</Button.Background>
-					<Label x:Name="LblDirection" FontFamily="Century Gothic" FontSize="9.333" Foreground="White" OpacityMask="Black" BorderBrush="Black" HorizontalAlignment="Right" Content="Uni-Dir.."/>
+					<Label x:Name="LblDirection" FontFamily="Century Gothic" FontSize="9.333" Foreground="Black" OpacityMask="Black" BorderBrush="Black" HorizontalAlignment="Right" Content="Uni-Dir.."/>
 				</Button>
 				<Button x:Name="BtnSyncMode" Height="28" Margin="0,0,0,5">
 					<Button.Background>
 						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-							<GradientStop Color="#FFFF6464" Offset="0"/>
-							<GradientStop Color="Red" Offset="1"/>
-							<GradientStop Color="#FFFF6464" Offset="0.5"/>
+							<GradientStop Color="#FF8FE2FD" Offset="0"/>
+							<GradientStop Color="#FF0AACE2" Offset="1"/>
+							<GradientStop Color="#FF8FE2FD" Offset="0.5"/>
 						</LinearGradientBrush>
 					</Button.Background>
-					<Label x:Name="LblSyncMode" FontFamily="Century Gothic" FontSize="9.333" Foreground="White" OpacityMask="Black" BorderBrush="Black" HorizontalAlignment="Right" Content="Manual"/>
+					<Label x:Name="LblSyncMode" FontFamily="Century Gothic" FontSize="9.333" Foreground="Black" OpacityMask="Black" BorderBrush="Black" HorizontalAlignment="Right" Content="Manual"/>
 				</Button>
 				<Button x:Name="BtnPreview" Height="28" Margin="0,0,0,5">
 					<Label x:Name="LblPreview" FontFamily="Century Gothic" FontSize="9.333" Content="Preview"/>
@@ -141,6 +141,19 @@
 					<Label x:Name="LblSyncNow" FontFamily="Century Gothic" FontSize="9.333" Content="Sync Now"/>
 				</Button>
 			</StackPanel>
+			<Border x:Name="BdrTaggedPath" Padding="10" Grid.Row="2" Grid.Column="1" BorderBrush="#FF6F6F6F" BorderThickness="1" CornerRadius="5" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,10,0,0">
+				<StackPanel>
+					<ListBox x:Name="ListTaggedPath" MaxHeight="130" MinHeight="20" Width="300" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" >
+						<ListBox.ContextMenu>
+							<ContextMenu>
+								<MenuItem x:Name="Untag" Header="Untag"/>
+							</ContextMenu>
+						</ListBox.ContextMenu>
+						<ListBoxItem Content="C:\Lecture\Folder"/>
+						<ListBoxItem Content="C:\Lecture\Folder"/>
+					</ListBox>
+				</StackPanel>
+			</Border>
 		</Grid>
 		
 		<!-- Tag List Info Panel -->
@@ -178,6 +191,18 @@
 						<GradientStop Color="#FF828790" Offset="1"/>
 					</LinearGradientBrush>
 				</TextBox.BorderBrush>Filter</TextBox>
+			<ListBox x:Name="tagList" Margin="0,10,0,0" Grid.Column="1" Grid.Row="3" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White">
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+				<ListBoxItem Content="Test"/>
+			</ListBox>
 		</Grid>
 		
 		<!-- Log Panel -->

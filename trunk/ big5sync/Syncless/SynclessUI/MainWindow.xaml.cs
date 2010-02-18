@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SynclessUI;
+using System.Data;
 
 namespace Syncless
 {
@@ -21,7 +22,7 @@ namespace Syncless
     {		
         public MainWindow()
         {
-            InitializeComponent();
+			InitializeComponent();
 						
 			MinimizeToTray.Enable(this);
         }
