@@ -40,6 +40,22 @@ namespace Syncless.Tagging
             get { return _taggingProfile.FileTagList; }
         }
 
+        public List<Tag> AllTagList
+        {
+            get {
+                List<Tag> allTagList = new List<Tag>();
+                foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
+                {
+                    allTagList.Add(folderTag);
+                }
+                foreach (FileTag fileTag in _taggingProfile.FileTagList)
+                {
+                    allTagList.Add(fileTag);
+                }
+                return allTagList;
+            }
+        }
+
         private TaggingProfile _taggingProfile;
 
         public TaggingProfile TaggingProfile
@@ -488,7 +504,10 @@ namespace Syncless.Tagging
                 {
                     if (path.LogicalDriveId.Equals(logicalid))
                     {
-                        pathList.Add(path.Path);
+                        if (!pathList.Contains(path.Path))
+                        {
+                            pathList.Add(path.Path);
+                        }
                     }
                 }
             }
@@ -556,26 +575,26 @@ namespace Syncless.Tagging
             return filePathList;
         }
 
-        public XmlDocument ConvertToXML(string profilename, long created, long lastupdated)
-        {
-            XmlDocument TaggingDataDocument = new XmlDocument();
-            XmlElement taggingElement = TaggingDataDocument.CreateElement("tagging");
-            XmlElement profileElement = TaggingDataDocument.CreateElement("profile");
-            profileElement.SetAttribute("name", profilename);
-            profileElement.SetAttribute("createdDate", created.ToString());
-            profileElement.SetAttribute("lastUpdated", lastupdated.ToString());
-            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
-            {
-                profileElement.AppendChild(CreateFolderTagElement(TaggingDataDocument, folderTag));
-            }
-            foreach (FileTag fileTag in _taggingProfile.FileTagList)
-            {
-                profileElement.AppendChild(CreateFileTagElement(TaggingDataDocument, fileTag));
-            }
-            taggingElement.AppendChild(profileElement);
-            TaggingDataDocument.AppendChild(taggingElement);
-            return TaggingDataDocument;
-        }
+        //public XmlDocument ConvertToXML(string profilename, long created, long lastupdated)
+        //{
+        //    XmlDocument TaggingDataDocument = new XmlDocument();
+        //    XmlElement taggingElement = TaggingDataDocument.CreateElement("tagging");
+        //    XmlElement profileElement = TaggingDataDocument.CreateElement("profile");
+        //    profileElement.SetAttribute("name", profilename);
+        //    profileElement.SetAttribute("createdDate", created.ToString());
+        //    profileElement.SetAttribute("lastUpdated", lastupdated.ToString());
+        //    foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
+        //    {
+        //        profileElement.AppendChild(CreateFolderTagElement(TaggingDataDocument, folderTag));
+        //    }
+        //    foreach (FileTag fileTag in _taggingProfile.FileTagList)
+        //    {
+        //        profileElement.AppendChild(CreateFileTagElement(TaggingDataDocument, fileTag));
+        //    }
+        //    taggingElement.AppendChild(profileElement);
+        //    TaggingDataDocument.AppendChild(taggingElement);
+        //    return TaggingDataDocument;
+        //}
         #endregion
         #endregion
 
