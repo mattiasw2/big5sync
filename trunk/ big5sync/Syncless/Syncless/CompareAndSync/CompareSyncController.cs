@@ -58,14 +58,6 @@ namespace Syncless.CompareAndSync
         {
             return new Comparer().CompareFolder(tagName, paths);
         }
-        /// <summary>
-        /// Preview the result of a foldertag synchronization
-        /// </summary>
-        /// <param name="tag">The Folder Tag to preview</param>
-        /// <returns>The list of Compare Result</returns>
-        public List<CompareResult> PreviewFileCompare(FileTag tag)
-        {
-            return null;
-        }
+
     }
 }
