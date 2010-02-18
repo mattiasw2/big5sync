@@ -14,6 +14,7 @@ using SynclessUI;
 using System.Data;
 using Syncless.Core;
 using Syncless.Tagging;
+using System.Collections;
 
 namespace Syncless
 {
@@ -26,10 +27,12 @@ namespace Syncless
         private List<Tag> _tagList;
 
         public MainWindow() {
-            InitializeSyncless();
+            
             MinimizeToTray.Enable(this);
 
             InitializeComponent();
+
+            InitializeSyncless();
         }
 
         /// <summary>
@@ -61,27 +64,19 @@ namespace Syncless
             // Gets a list of all tags
             _tagList = Igui.GetAllTags();
 
-            // Populate the
+            ListBoxTag.ItemsSource = (IEnumerable) LoadTagListBoxData();
+        }
 
-            /*
-            for (int i = 0; i < 50; i++)
-            {
-                item = new ListBoxItem();
-                item.Content = "Test 123";
+        private List<string> LoadTagListBoxData()
+        {
+            List<string> strArray = new List<string> ();
 
-                ListBoxTag.Items.Add(item);
-            }
-            */
-
-            /*
             foreach (Tag t in _tagList)
             {
-                item = new ListBoxItem();
-                item.Content = t.TagName;
-
-                ListBoxTag.Items.Add(item);
+                strArray.Add(t.TagName);
             }
-            */
+
+            return strArray;
         }
 
         /// <summary>
