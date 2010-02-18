@@ -17,6 +17,7 @@ namespace Syncless.CompareAndSync
         private const string NODE_HASH = "hash";
         private const string NODE_LAST_MODIFIED = "last_modified";
         private const string NODE_LAST_CREATED = "last_created";
+        public const string METADATAPATH = "_syncless\\syncless.xml";
 
         /// <summary>
         /// Given a dirpath , breaks it up into a folder and returns an Xpath Expression
@@ -54,11 +55,11 @@ namespace Syncless.CompareAndSync
         /// <param name="xmlDoc"> XMLDocument object that already been loaded with the xml file</param>
         /// <param name="fullPath"> C:\...\...\</param>
         /// <returns> The list of paths in string that can be found given a folder path</returns>
-        public static List<CompareInfoObject> GetCompareInfoObjects(string tagName, string folderPath)
+        public static List<CompareInfoObject> GetCompareInfoObjects(string folderPath)
         {
 
             string path = "";
-            string namePath = folderPath + "\\" + "_syncless" + "\\" + tagName + ".xml";
+            string namePath = Path.Combine(folderPath, METADATAPATH);
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(namePath);
             FileInfo fileInfo = new FileInfo(namePath);
@@ -152,17 +153,19 @@ namespace Syncless.CompareAndSync
         /// </summary>
         /// <param name="nameOfFile"> Name of the xml file to write to</param>
         /// <param name="readFrom"> Read from a given folder path </param>
-        public static void GenerateXMLFile(string tagName, string folderPath)
+        public static void GenerateXMLFile(string folderPath)
         {
-            Debug.Assert(!(tagName.Equals("") || tagName == null));
             Debug.Assert(!(folderPath.Equals("") || folderPath == null));
-            string writeTo = folderPath + "\\" + "_syncless" + "\\" + tagName + ".xml";
-            string directoryPath = folderPath + "\\_syncless";
+            string writeTo = Path.Combine(folderPath, METADATAPATH);
 
-            DirectoryInfo dirInfo = new DirectoryInfo(directoryPath);
-            if (!dirInfo.Exists)
-                Directory.CreateDirectory(directoryPath);
-
+            FileInfo metaFile = new FileInfo(writeTo);
+            if (!metaFile.Exists)
+            {
+                if (!Directory.Exists(metaFile.DirectoryName))
+                {
+                    Directory.CreateDirectory(metaFile.DirectoryName);
+                }
+            }
 
             XmlTextWriter writer = new XmlTextWriter(writeTo, null);
             writer.Formatting = Formatting.Indented;

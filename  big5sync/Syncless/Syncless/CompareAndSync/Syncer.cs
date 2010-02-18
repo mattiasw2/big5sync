@@ -8,12 +8,12 @@ namespace Syncless.CompareAndSync
 {
     public class Syncer
     {
-        public List<SyncResult> SyncFile(string tagName, List<string> paths, List<CompareResult> results)
+        public List<SyncResult> SyncFile(List<string> paths, List<CompareResult> results)
         {
             return null;
         }
 
-        public List<SyncResult> SyncFolder(string tagName, List<string> paths, List<CompareResult> results)
+        public List<SyncResult> SyncFolder(List<string> paths, List<CompareResult> results)
         {
             List<SyncResult> syncResults = new List<SyncResult>();
             foreach (CompareResult result in results)
@@ -38,7 +38,7 @@ namespace Syncless.CompareAndSync
             //TODO: Will handle each change separately in future
             foreach (string path in paths)
             {
-                XMLHelper.GenerateXMLFile(tagName, path);
+                XMLHelper.GenerateXMLFile(path);
             }
 
             return syncResults;

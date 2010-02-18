@@ -14,11 +14,11 @@ namespace Syncless.CompareAndSync
         private const int CREATE_TABLE = 0, DELETE_TABLE = 1, RENAME_TABLE = 2, UPDATE_TABLE = 3;
         private Dictionary<int, Dictionary<string, List<string>>> _changeTable;
         private List<string> deleteList;
-        private const string METADATAFOLDER = "_syncless\\";
+        private const string METADATAPATH = "_syncless\\metadata.xml";
 
 
         // Assumes that all paths taken from the tag exists in the directory
-        public List<CompareResult> CompareFile(string tagName, List<string> paths)
+        public List<CompareResult> CompareFile(List<string> paths)
         {
             //string metapath = Path.Combine(METADATAFOLDER, tagName + ".xml");
             List<CompareResult> compareResultList = new List<CompareResult>();
@@ -60,7 +60,7 @@ namespace Syncless.CompareAndSync
             return compareResultList;
         }
 
-        public List<CompareResult> CompareFolder(string tagName, List<string> paths)
+        public List<CompareResult> CompareFolder(List<string> paths)
         {
             _changeTable = new Dictionary<int, Dictionary<string, List<string>>>();
             _changeTable.Add(CREATE_TABLE, new Dictionary<string, List<string>>());
@@ -70,11 +70,10 @@ namespace Syncless.CompareAndSync
 
             List<string> withMeta = new List<string>();
             List<string> noMeta = new List<string>();
-            string metaPath = Path.Combine(METADATAFOLDER, tagName + ".xml");
 
             foreach (string path in paths)
             {
-                if (File.Exists(Path.Combine(path, metaPath)))
+                if (File.Exists(Path.Combine(path, XMLHelper.METADATAPATH)))
                 {
                     withMeta.Add(path);
                 }
@@ -95,7 +94,7 @@ namespace Syncless.CompareAndSync
             {
                 // YC: We compare the folders with metadata first, then
                 // we do a raw compare for folders without metadata
-                mostUpdated = DoOptimizedCompareFolder(tagName, withMeta, noMeta);
+                mostUpdated = DoOptimizedCompareFolder(withMeta, noMeta);
             }
 
             return ProcessRawResults(paths);
@@ -108,18 +107,18 @@ namespace Syncless.CompareAndSync
         /// <param name="withMeta">List of folders with metadata</param>
         /// <param name="noMeta">LIst of folders without metadata</param>
         /// <returns>The most updated files across all folders</returns>
-        private List<CompareInfoObject> DoOptimizedCompareFolder(string tagName, List<string> withMeta, List<string> noMeta)
+        private List<CompareInfoObject> DoOptimizedCompareFolder(List<string> withMeta, List<string> noMeta)
         {
             // YC: Handle metadata and differences
-            List<CompareInfoObject> currSrcFolder = GetDiffMetaActual(tagName, withMeta[0]);
+            List<CompareInfoObject> currSrcFolder = GetDiffMetaActual(withMeta[0]);
 
             for (int i = 1; i < withMeta.Count; i++)
             {
-                currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetDiffMetaActual(tagName, withMeta[i]), withMeta[i]);
+                currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetDiffMetaActual(withMeta[i]), withMeta[i]);
             }
             for (int i = withMeta.Count - 2; i >= 0; i--)
             {
-                currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetDiffMetaActual(tagName, withMeta[i]), withMeta[i]);
+                currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetDiffMetaActual(withMeta[i]), withMeta[i]);
             }
 
             if (noMeta.Count > 0)
@@ -128,7 +127,7 @@ namespace Syncless.CompareAndSync
 
                 for (int i = 0; i < noMeta.Count; i++)
                 {
-                    currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i]);
+                    currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], withMeta);
                 }
 
                 int loopStart = 0;
@@ -144,22 +143,22 @@ namespace Syncless.CompareAndSync
 
                 for (int i = loopStart; i >= 0; i--)
                 {
-                    currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i]);
+                    currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], withMeta);
                 }
 
-                currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0]);
+                //currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0]);
             }            
              
             return currSrcFolder;
         }
 
-        private List<CompareInfoObject> GetDiffMetaActual(string tagName, string path)
+        private List<CompareInfoObject> GetDiffMetaActual(string path)
         {
             //Do some processing between meta and actual files
             List<CompareInfoObject> results = new List<CompareInfoObject>();
 
             List<CompareInfoObject> actual = GetAllCompareObjects(path);
-            List<CompareInfoObject> meta = GetMetadataCompareObjects(tagName, path);
+            List<CompareInfoObject> meta = GetMetadataCompareObjects(path);
 
             // YC: This will give us files that exist but are not in the
             // metadata. Implies either new or renamed files.
@@ -404,11 +403,6 @@ namespace Syncless.CompareAndSync
         private List<CompareInfoObject> DoRawOneWayCompareFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath, List<string> virtualPaths)
         {
             Debug.Assert(source != null && target != null);
-            if (virtualPaths != null)
-            {
-                Debug.Assert(!virtualPaths.Contains(targetPath));
-            }
-
             List<CompareInfoObject> querySrcExceptTgt = source.Except(target, new FileNameCompare()).ToList<CompareInfoObject>();
             List<CompareInfoObject> querySrcIntersectTgt = source.Intersect(target, new FileNameCompare()).ToList<CompareInfoObject>();
             List<CompareInfoObject> queryTgtIntersectSrc = target.Intersect(source, new FileNameCompare()).ToList<CompareInfoObject>();
@@ -421,16 +415,19 @@ namespace Syncless.CompareAndSync
             {                
                 if (_changeTable[CREATE_TABLE].TryGetValue(querySrcExceptTgt[i].FullName, out createList))
                 {
-                    if (!createList.Contains(CreateNewItemPath(querySrcExceptTgt[i], targetPath)))
+                    if (!createList.Contains(CreateNewItemPath(querySrcExceptTgt[i], targetPath)) && querySrcExceptTgt[i].Origin != targetPath)
                     {
                         createList.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
                     }
                 }
                 else
                 {
-                    createList = new List<string>();
-                    createList.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
-                    _changeTable[CREATE_TABLE].Add(querySrcExceptTgt[i].FullName, createList);
+                    if (querySrcExceptTgt[i].Origin != targetPath)
+                    {
+                        createList = new List<string>();
+                        createList.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
+                        _changeTable[CREATE_TABLE].Add(querySrcExceptTgt[i].FullName, createList);
+                    }
                 }
             }
 
@@ -498,9 +495,9 @@ namespace Syncless.CompareAndSync
         /// </summary>
         /// <param name="path"></param>
         /// <returns>List of CompareInfoObject</returns>
-        private List<CompareInfoObject> GetMetadataCompareObjects(string tagName, string path)
+        private List<CompareInfoObject> GetMetadataCompareObjects(string path)
         {
-            return XMLHelper.GetCompareInfoObjects(tagName, path);
+            return XMLHelper.GetCompareInfoObjects(path);
         }
 
         private string CreateNewItemPath(CompareInfoObject source, string targetOrigin)
