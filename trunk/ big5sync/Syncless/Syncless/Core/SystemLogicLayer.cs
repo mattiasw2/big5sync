@@ -141,24 +141,25 @@ namespace Syncless.Core
 
         public bool StartManualSync(FileTag tagname)
         {
-            
-            return false;
+            FileTag fileTag = TaggingLayer.Instance.RetrieveFileTag(tagname.TagName);
+            List<string> paths = fileTag.PathStringList;
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
+            SyncRequest syncRequest = new SyncRequest(convertedPath, false);
+            CompareSyncController.Instance.Sync(syncRequest);
+            return true;
         }
 
         public bool StartManualSync(FolderTag tagname)
         {
             FolderTag folderTag = TaggingLayer.Instance.RetrieveFolderTag(tagname.TagName);
-            List<string> paths = new List<string>();
-            foreach (TaggedPath path in folderTag.PathList)
-            {
-                paths.Add(path.Path);
-            }
+            List<string> paths = folderTag.PathStringList;
+            
             List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            //CompareSyncController.Instance.SyncFolder(folderTag.TagName, convertedPath);
+            SyncRequest syncRequest = new SyncRequest(convertedPath, true);
             return true;
         }
 
-        public bool MonitorTag(FileTag tag, bool mode)
+        public bool MonitorTag(Tag tag, bool mode)
         {
             //may need to return a list of error.
             List<string> pathList = new List<string>();
@@ -293,22 +294,17 @@ namespace Syncless.Core
                 foreach (string path in pathList)
                 {
                     MonitorLayer.Instance.MonitorPath(path);
-
                 }
-
             }
             else
             {
                 
                 string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
-
-
                 List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
 
                 foreach (string path in pathList)
                 {
                     MonitorLayer.Instance.MonitorPath(path);
-
                 }
                 ProfilingLayer.Instance.RemoveDrive(dce.Info);
             }
