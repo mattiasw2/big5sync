@@ -16,9 +16,48 @@ namespace Syncless.CompareAndSync
         private List<string> deleteList;
         private const string METADATAFOLDER = "_syncless\\";
 
+
+        // Assumes that all paths taken from the tag exists in the directory
         public List<CompareResult> CompareFile(string tagName, List<string> paths)
         {
-            return null;
+            //string metapath = Path.Combine(METADATAFOLDER, tagName + ".xml");
+            List<CompareResult> compareResultList = new List<CompareResult>();
+            FileInfo sourceInfo = null;
+            FileInfo destInfo = null;
+
+            for (int i = 0; i < paths.Count - 1; i++)
+            {
+                for (int j = 1; j <= paths.Count; j++)
+                {
+                    sourceInfo = new FileInfo(paths[i]);
+                    destInfo = new FileInfo(paths[j]);
+
+                    //same content but different name (RENAME)
+                    if(CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo))
+                        && !sourceInfo.Name.Equals(destInfo.Name)) // same content different name
+                    {
+                        compareResultList.Add(new CompareResult(FileChangeType.Rename, sourceInfo.FullName,
+                            destInfo.FullName));
+
+                    }    
+                    //different hash , but same name and creation time
+                    else if (sourceInfo.Name.Equals(destInfo.Name) && sourceInfo.CreationTime.Ticks == destInfo.CreationTime.Ticks
+                      && !CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo)))
+                    {
+
+                        compareResultList.Add(new CompareResult(FileChangeType.Update, sourceInfo.FullName,
+                            destInfo.FullName));
+                    }
+                    else if (!(CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo)) &&
+                        sourceInfo.CreationTime.Ticks == destInfo.CreationTime.Ticks && sourceInfo.Name.Equals(destInfo.Name)))
+                    {
+                        compareResultList.Add(new CompareResult(FileChangeType.Create, sourceInfo.FullName,
+                            destInfo.FullName));
+                    }
+                }
+            }
+
+            return compareResultList;
         }
 
         public List<CompareResult> CompareFolder(string tagName, List<string> paths)
