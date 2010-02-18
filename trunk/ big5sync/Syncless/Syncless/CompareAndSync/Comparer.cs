@@ -85,7 +85,7 @@ namespace Syncless.CompareAndSync
 
             for (int i = 0; i < noMeta.Count; i++)
             {
-                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], withMeta);
+                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], null);
             }
 
             for (int i = noMeta.Count - 2; i >= 0; i--)
@@ -93,7 +93,7 @@ namespace Syncless.CompareAndSync
                 currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], withMeta);
             }
 
-            currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0], withMeta);
+            currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0], null);
              
             return currSrcFolder;
         }
@@ -147,7 +147,6 @@ namespace Syncless.CompareAndSync
                 }
                 else
                 {
-                    //add to new/updated list
                     results.Add(a);
                 }
             }
@@ -213,7 +212,6 @@ namespace Syncless.CompareAndSync
                     continue;
                 }
             }
-
             return results;
         }
 
@@ -263,7 +261,6 @@ namespace Syncless.CompareAndSync
                 {
                     foreach (string withMetaPath in withMeta)
                     {
-
                         newFilePaths.Add(CreateNewItemPath(querySrcExceptTgt[i], withMetaPath));
                     }
                 }
@@ -532,9 +529,9 @@ namespace Syncless.CompareAndSync
 
                     if (!isEqual)
                     {
-                        if (c1.MD5Hash != c2.MD5Hash)
+                        if (c1.MD5Hash == c2.MD5Hash)
                         {
-                            isEqual = false;
+                            isEqual = true;
                         }
                     }
                 }
