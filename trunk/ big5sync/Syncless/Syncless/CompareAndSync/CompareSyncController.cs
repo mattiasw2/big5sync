@@ -25,14 +25,21 @@ namespace Syncless.CompareAndSync
 
         }
 
-        public List<SyncResult> Sync(SyncRequest syncRequest)
+        public void Sync(MonitorSyncRequest syncRequest)
         {
+
+        }
+
+        public List<SyncResult> Sync(SyncRequest syncRequest)
+        {            
             if (syncRequest.IsFolder)
             {
+                syncRequest.Results = new Comparer().CompareFolder(syncRequest.TagName, syncRequest.Paths);
                 return new Syncer().SyncFolder(syncRequest.TagName, syncRequest.Paths, syncRequest.Results);
             }
             else
             {
+                syncRequest.Results = new Comparer().CompareFolder(syncRequest.TagName, syncRequest.Paths);
                 return new Syncer().SyncFile(syncRequest.TagName, syncRequest.Paths, syncRequest.Results);
             }
         }

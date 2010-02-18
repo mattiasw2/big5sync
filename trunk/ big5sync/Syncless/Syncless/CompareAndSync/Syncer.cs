@@ -15,21 +15,22 @@ namespace Syncless.CompareAndSync
 
         public List<SyncResult> SyncFolder(string tagName, List<string> paths, List<CompareResult> results)
         {
+            List<SyncResult> syncResults = new List<SyncResult>();
             foreach (CompareResult result in results)
             {
                 switch (result.ChangeType)
                 {
                     case FileChangeType.Create:
-                        CopyFile(result.From, result.To);
+                        syncResults.Add(CreateFile(result.From, result.To));
                         break;
                     case FileChangeType.Delete:
-                        DeleteFile(result.From);
+                        syncResults.Add(DeleteFile(result.From));
                         break;
                     case FileChangeType.Rename:
-                        MoveFile(result.From, result.To);
+                        syncResults.Add(MoveFile(result.From, result.To));
                         break;
                     case FileChangeType.Update:
-                        CopyFile(result.From, result.To);
+                        syncResults.Add(UpdateFile(result.From, result.To));
                         break;
                 }
             }
@@ -40,28 +41,36 @@ namespace Syncless.CompareAndSync
                 XMLHelper.GenerateXMLFile(tagName, path);
             }
 
-            return null;
+            return syncResults;
         }
 
-        public bool DeleteFile(string from)
+        public SyncResult DeleteFile(string from)
         {
-            File.Delete(from);
-            return true;
+            try
+            {
+                File.Delete(from);
+                return new SyncResult(FileChangeType.Delete, from, true);
+            }
+            catch (Exception)
+            {
+                return new SyncResult(FileChangeType.Delete, from, false);
+            }
         }
 
-        public bool MoveFile(string from, string to)
+        public SyncResult MoveFile(string from, string to)
         {
             try
             {
                 File.Move(from, to);
+                return new SyncResult(FileChangeType.Rename, from, to, true);
             }
             catch (Exception)
             {
+                return new SyncResult(FileChangeType.Rename, from, to, false);
             }
-            return true;
         }
 
-        public bool CopyFile(string from, string to)
+        private SyncResult CopyFile(string from, string to, FileChangeType changeType)
         {
             FileInfo source = new FileInfo(from);
             FileInfo target = new FileInfo(to);
@@ -76,12 +85,22 @@ namespace Syncless.CompareAndSync
             if (source.Exists)
             {
                 source.CopyTo(to, true);
-                return true;
+                return new SyncResult(changeType, from, to, true);
             }
             else
             {
-                return false;
+                return new SyncResult(changeType, from, to, false);
             }
+        }
+
+        public SyncResult CreateFile(string from, string to)
+        {
+            return CopyFile(from, to, FileChangeType.Create);
+        }
+
+        public SyncResult UpdateFile(string from, string to)
+        {
+            return CopyFile(from, to, FileChangeType.Update);
         }
     }
 }
