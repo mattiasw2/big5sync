@@ -106,11 +106,6 @@ namespace Syncless.CompareAndSync
             List<CompareInfoObject> actual = GetAllCompareObjects(path);
             List<CompareInfoObject> meta = GetMetadataCompareObjects(tagName, path);
 
-            List<CompareInfoObject> actualTemp = new List<CompareInfoObject>(actual); ;
-            List<CompareInfoObject> metaTemp = new List<CompareInfoObject>(meta);
-
-            RemoveCommonObjects(actualTemp, metaTemp);
-
             // YC: This will give us files that exist but are not in the
             // metadata. Implies either new or renamed files.
             List<CompareInfoObject> actualExceptMeta = actual.Except<CompareInfoObject>(meta, new FileNameCompare()).ToList<CompareInfoObject>();
@@ -125,9 +120,9 @@ namespace Syncless.CompareAndSync
             foreach (CompareInfoObject a in actualExceptMeta)
             {
                 rename = false;
-                foreach (CompareInfoObject m in metaTemp)
+                foreach (CompareInfoObject m in meta)
                 {
-                    if (a.MD5Hash == m.MD5Hash)
+                    if (a.MD5Hash == m.MD5Hash && a.CreationTime == m.CreationTime)
                     {
                         rename = true;
                         tempObject = m;
@@ -160,9 +155,9 @@ namespace Syncless.CompareAndSync
             foreach (CompareInfoObject m in metaExceptActual)
             {
                 rename = false;
-                foreach (CompareInfoObject a in actualTemp)
+                foreach (CompareInfoObject a in actual)
                 {
-                    if (a.MD5Hash == m.MD5Hash)
+                    if (a.MD5Hash == m.MD5Hash && a.CreationTime == m.CreationTime)
                     {
                         rename = true;
                         tempObject = a;
@@ -394,6 +389,11 @@ namespace Syncless.CompareAndSync
             return Path.Combine(targetOrigin, source.RelativePathToOrigin);
         }
 
+        /// <summary>
+        /// Process all the hashtables and lists of results and returns a list of CompareResults
+        /// </summary>
+        /// <param name="paths"></param>
+        /// <returns>List of CompareResults</returns>
         private List<CompareResult> ProcessRawResults(List<string> paths)
         {
             Dictionary<int, Dictionary<string, List<string>>>.KeyCollection keys = _changeTable.Keys;
@@ -436,6 +436,7 @@ namespace Syncless.CompareAndSync
                                 results.Add(new CompareResult(changeType, Path.Combine(path, sourceKey), Path.Combine(path, rename[0])));
                             }
                         }
+                        // TODO: Handle rename conflicts in future
                         else if (rename.Count > 1)
                         {
                             foreach (string path in paths)
@@ -447,11 +448,18 @@ namespace Syncless.CompareAndSync
                 }
             }
 
+            // TODO: Handle delete conflicts. Simple way for now.
+            String deletePath = null;
             foreach (string deleteItem in deleteList)
             {
                 foreach (string path in paths)
                 {
-                    results.Add(new CompareResult(FileChangeType.Delete, Path.Combine(path, deleteItem), null));
+                    deletePath = Path.Combine(path, deleteItem);
+
+                    if (!_changeTable[CREATE_TABLE].ContainsKey(deletePath) && !_changeTable[UPDATE_TABLE].ContainsKey(deletePath) && !_changeTable[RENAME_TABLE].ContainsKey(deleteItem))
+                    {
+                        results.Add(new CompareResult(FileChangeType.Delete, deletePath, null));
+                    }                    
                 }
             }
 
@@ -464,8 +472,14 @@ namespace Syncless.CompareAndSync
             return results;
         }
 
+        /// <summary>
+        /// Calculates the MD5 hash from a FileInfo object
+        /// </summary>
+        /// <param name="fileInput">FileInfo object to be hashed</param>
+        /// <returns>MD5 hash formatted in hexadecimal</returns>
         public static string CalculateMD5Hash(FileInfo fileInput)
         {
+            Debug.Assert(fileInput.Exists);
             FileStream fileStream = fileInput.OpenRead();
             byte[] fileHash = MD5.Create().ComputeHash(fileStream);
             fileStream.Close();
@@ -477,26 +491,9 @@ namespace Syncless.CompareAndSync
             return sb.ToString();
         }
 
-        private static void RemoveCommonObjects(List<CompareInfoObject> firstList, List<CompareInfoObject> secondList)
-        {
-            Debug.Assert(firstList != null && secondList != null);
-            for (int i = 0; i < firstList.Count; i++)
-            {
-                for (int j = 0; j < secondList.Count; j++)
-                {
-                    if (firstList[i].Name.Equals(secondList[j].Name) && firstList[i].MD5Hash.Equals(secondList[j].MD5Hash))
-                    {
-                        firstList.RemoveAt(i);
-                        secondList.RemoveAt(j);
-                        j--;
-                    }
-
-                }
-            }
-        }
-
         /// <summary>
-        /// Simple file name comparer.
+        /// Compares the relative path to origin of one folder to another and determine
+        /// if they have the same path and name.
         /// </summary>
         private class FileNameCompare : IEqualityComparer<CompareInfoObject>
         {
@@ -511,6 +508,10 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        /// <summary>
+        /// Compares the length, last write time, and MD5 hash of the files to determine if they
+        /// are equal
+        /// </summary>
         class FileContentCompare : IComparer<CompareInfoObject>
         {
             public int Compare(CompareInfoObject c1, CompareInfoObject c2)

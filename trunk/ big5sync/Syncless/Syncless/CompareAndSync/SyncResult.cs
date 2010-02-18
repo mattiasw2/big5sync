@@ -13,6 +13,7 @@ namespace Syncless.CompareAndSync
             base.From = from;
             base.To = to;
         }
+
         //TODO: More constructors/properties/attributes that take in Log, etc.
     }
 }
