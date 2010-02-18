@@ -19,44 +19,40 @@ namespace Syncless.CompareAndSync
                 return _instance;
             }
         }
+
         private CompareSyncController()
         {
 
         }
-        /// <summary>
-        /// Manually Sync a Tag. 
-        /// </summary>
-        /// <param name="tagname">name of the tag</param>
-        /// <param name="paths">list of the paths to sync</param>
-        /// <returns>The list of Sync Results</returns>
-        public List<SyncResult> SyncFolder(string tagname, List<String> paths)
+
+        public List<SyncResult> Sync(SyncRequest syncRequest)
         {
-            return null;
+            if (syncRequest.IsFolder)
+            {
+                return new Syncer().SyncFolder(syncRequest.TagName, syncRequest.Paths, syncRequest.Results);
+            }
+            else
+            {
+                return new Syncer().SyncFile(syncRequest.TagName, syncRequest.Paths, syncRequest.Results);
+            }
         }
-        public List<SyncResult> SyncFolder(string tagName, List<string> paths, List<CompareResult> results)
-        {
-            return new Syncer().Sync(tagName, paths, results);
-        }
-        /// <summary>
-        /// Sync a source Path to a list of  destination paths. The path can be File or Folder.
-        /// 
-        /// </summary>
-        /// <param name="sourcePath">The source path</param>
-        /// <param name="destinationPath">The list of destination path</param>
-        /// <param name="changeType">The Change that was detected on source path</param>
-        /// <returns>The list of Sync Results</returns>
-        public List<SyncResult> SyncPath(string sourcePath, List<string> destinationPath, FileChangeType changeType)
-        {
-            return null;
-        }
+
         /// <summary>
         /// Preview the result of a foldertag synchronization
         /// </summary>
         /// <param name="tag">The Folder Tag to preview</param>
         /// <returns>The list of Compare Result</returns>
-        public List<CompareResult> CompareFolder(string tagName, List<string> paths)
+        public List<CompareResult> Compare(CompareRequest compareRequest)
         {
-            return new Comparer().CompareFolder(tagName, paths);
+            if (compareRequest.IsFolder)
+            {
+                return new Comparer().CompareFolder(compareRequest.TagName, compareRequest.Paths);
+            }
+            else
+            {
+                return new Comparer().CompareFile(compareRequest.TagName, compareRequest.Paths);
+            }
+            
         }
 
     }

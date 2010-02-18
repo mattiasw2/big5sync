@@ -8,7 +8,12 @@ namespace Syncless.CompareAndSync
 {
     public class Syncer
     {
-        public List<SyncResult> Sync(string tagName, List<string> paths, List<CompareResult> results)
+        public List<SyncResult> SyncFile(string tagName, List<string> paths, List<CompareResult> results)
+        {
+            return null;
+        }
+
+        public List<SyncResult> SyncFolder(string tagName, List<string> paths, List<CompareResult> results)
         {
             foreach (CompareResult result in results)
             {
