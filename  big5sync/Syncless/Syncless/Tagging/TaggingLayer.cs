@@ -355,8 +355,15 @@ namespace Syncless.Tagging
                 File.Create(xmlFilePath);
             }
             XmlDocument xml = ConvertTaggingProfileToXml(_taggingProfile);
-            xml.Save(xmlFilePath);
-            return true;
+            try
+            {
+                xml.Save(xmlFilePath);
+                return true;
+            }
+            catch (IOException)
+            {
+                return false;
+            }
         }
 
         private TaggingProfile LoadTaggingProfile(string profileFilePath)
@@ -673,7 +680,7 @@ namespace Syncless.Tagging
         {
             TaggingProfile taggingProfile = new TaggingProfile();
             string profilename = profileElement.GetAttribute("name");
-            long profilecreated = long.Parse(profileElement.GetAttribute("created"));
+            long profilecreated = long.Parse(profileElement.GetAttribute("createdDate"));
             long profilelastupdated = long.Parse(profileElement.GetAttribute("lastUpdated"));
             taggingProfile.ProfileName = profilename;
             taggingProfile.Created = profilecreated;
