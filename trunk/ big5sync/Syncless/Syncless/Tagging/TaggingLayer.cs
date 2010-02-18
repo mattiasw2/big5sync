@@ -76,7 +76,7 @@ namespace Syncless.Tagging
         /// <returns>The created Tag, else raise TagAlreadyExistsException</returns>
         public FolderTag CreateFolderTag(string tagname)
         {
-            if (!CheckFolderTagExists(tagname))
+            if (!CheckFolderTagExists(tagname) && !CheckFileTagExists(tagname))
             {
                 long created = DateTime.Now.Ticks;
                 FolderTag tag = new FolderTag(tagname, created);
@@ -203,7 +203,7 @@ namespace Syncless.Tagging
         /// <returns>The created Tag, else raise TagAlreadyExistsException</returns>
         public FileTag CreateFileTag(string tagname)
         {
-            if (!CheckFileTagExists(tagname))
+            if (!CheckFileTagExists(tagname) && !CheckFolderTagExists(tagname))
             {
                 long created = DateTime.Now.Ticks;
                 FileTag tag = new FileTag(tagname, created);
