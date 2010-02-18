@@ -259,7 +259,6 @@ namespace Syncless.Core
 
         public void HandleDriveChange(DriveChangeEvent dce)
         {
-            Console.WriteLine("hello world");
             if (dce.Type == DriveChangeType.DRIVE_IN)
             {
                 ProfilingLayer.Instance.UpdateDrive(dce.Info);
