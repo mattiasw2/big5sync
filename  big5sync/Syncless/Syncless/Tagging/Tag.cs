@@ -21,6 +21,7 @@ namespace Syncless.Tagging
         {
             get { return _pathList; }
         }
+
         public List<string> PathStringList
         {
             get
@@ -33,6 +34,7 @@ namespace Syncless.Tagging
                 return pathList;
             }
         }
+
         protected long _lastupdated;
 
         public long LastUpdated
@@ -49,11 +51,20 @@ namespace Syncless.Tagging
             set { _created = value; }
         }
 
+        protected bool _isSeamless;
+
+        public bool IsSeamless
+        {
+            get { return _isSeamless; }
+            set { _isSeamless = value; }
+        }
+
         public Tag(string tagname, long created)
         {
             this._tagName = tagname;
             this._created = created;
             this._lastupdated = created;
+            this._isSeamless = false;
             this._pathList = new List<TaggedPath>();
         }
 
