@@ -13,7 +13,7 @@ namespace Syncless.CompareAndSync
     {
         private string _origin, _fullName, _name, _hash;
         private long _creationTime, _lastWriteTime, _length;
-        private FileChangeType _changeType;
+        private FileChangeType _changeType = FileChangeType.None;
 
         public CompareInfoObject(string origin, string fullName, string name, long creationTime, long lastWriteTime, long length, string hash)
         {
@@ -24,7 +24,12 @@ namespace Syncless.CompareAndSync
             _lastWriteTime = lastWriteTime;
             _length = length;
             _hash = hash;
-            _changeType = FileChangeType.None;
+        }
+
+        public CompareInfoObject(string origin, string fullName, string name, long creationTime, long lastWriteTime, long length, string hash, FileChangeType changeType) :
+            this(origin, fullName, name, creationTime, lastWriteTime, length, hash)
+        {
+            _changeType = changeType;
         }
 
         public string Origin
@@ -88,6 +93,14 @@ namespace Syncless.CompareAndSync
             get
             {
                 return _fullName.Substring(_origin.Length + 1);
+            }
+        }
+
+        public FileChangeType ChangeType
+        {
+            get
+            {
+                return _changeType;
             }
         }
     }
