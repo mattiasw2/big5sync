@@ -225,7 +225,7 @@ namespace Syncless
 
         private void ListBoxTag_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            ListBoxTag.SelectedItem();
+            //_tagList.contain ListBoxTag.SelectedItem();
         }
     }
 }
