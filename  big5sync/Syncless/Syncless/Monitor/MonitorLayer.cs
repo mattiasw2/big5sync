@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Syncless.Core;
@@ -23,11 +24,17 @@ namespace Syncless.Monitor
 
         private List<FileSystemWatcher> watchers;
         private List<string> monitoredPaths;
+        // new code
+        //private List<FileSystemWatcher> rootWatcher;
+        //private Hashtable rootAndParentPair; 
 
         private MonitorLayer()
         {
             watchers = new List<FileSystemWatcher>();
             monitoredPaths = new List<string>();
+            // new code
+            //rootWatcher = new List<FileSystemWatcher>();
+            //rootAndParentPair = new Hashtable();
         }
 
         /// <summary>
@@ -96,6 +103,7 @@ namespace Syncless.Monitor
             {
                 FileSystemWatcher watcher = CreateWatcher(path, "*.*");
                 watchers.Add(watcher);
+
             }
             foreach (string mPath in monitoredPaths)
             {

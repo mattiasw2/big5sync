@@ -23,7 +23,9 @@ namespace Syncless.Core
                 return _instance;
             }
         }
-        private List<DriveInfo> connectedDrives ;
+        private List<DriveInfo> connectedDrives;
+        private ManagementEventWatcher insertUSBWatcher;
+        private ManagementEventWatcher removeUSBWatcher;
 
         private DeviceWatcher()
         {
@@ -54,22 +56,22 @@ namespace Syncless.Core
             WqlEventQuery query;
             ManagementScope scope = new ManagementScope("root\\CIMV2");
             scope.Options.EnablePrivileges = true;
-            ManagementEventWatcher watcher = null;
+            insertUSBWatcher = null;
             try
             {
                 query = new WqlEventQuery();
                 query.EventClassName = "__InstanceCreationEvent";
-                query.WithinInterval = new TimeSpan(0, 0, 3);
+                query.WithinInterval = new TimeSpan(0, 0, 5);
                 query.Condition = "TargetInstance ISA 'Win32_USBControllerdevice'";
-                watcher = new ManagementEventWatcher(scope, query);
-                watcher.EventArrived += USBInserted;
-                watcher.Start();
+                insertUSBWatcher = new ManagementEventWatcher(scope, query);
+                insertUSBWatcher.EventArrived += USBInserted;
+                insertUSBWatcher.Start();
             }
             catch(Exception e)
             {
-                if (watcher != null)
+                if (insertUSBWatcher != null)
                 {
-                    watcher.Stop();
+                    insertUSBWatcher.Stop();
                 }
                 throw e;
             }
@@ -90,6 +92,7 @@ namespace Syncless.Core
                 {
                     DriveChangeEvent dce = new DriveChangeEvent(Syncless.Monitor.DriveChangeType.DRIVE_IN,drive);
                     control.HandleDriveChange(dce);
+                    Console.WriteLine(drive.Name + " inserted.");
                 }
             }
             connectedDrives = newConnectedDrives;
@@ -100,22 +103,22 @@ namespace Syncless.Core
             WqlEventQuery query;
             ManagementScope scope = new ManagementScope("root\\CIMV2");
             scope.Options.EnablePrivileges = true;
-            ManagementEventWatcher watcher = null;
+            removeUSBWatcher = null;
             try
             {
                 query = new WqlEventQuery();
                 query.EventClassName = "__InstanceDeletionEvent";
                 query.WithinInterval = new TimeSpan(0, 0, 1);
                 query.Condition = "TargetInstance ISA 'Win32_USBControllerdevice'";
-                watcher = new ManagementEventWatcher(scope, query);
-                watcher.EventArrived += USBRemoved;
-                watcher.Start();
+                removeUSBWatcher = new ManagementEventWatcher(scope, query);
+                removeUSBWatcher.EventArrived += USBRemoved;
+                removeUSBWatcher.Start();
             }
             catch (Exception e)
             {
-                if (watcher != null)
+                if (removeUSBWatcher != null)
                 {
-                    watcher.Stop();
+                    removeUSBWatcher.Stop();
                 }
                 throw e;
             }
@@ -136,10 +139,22 @@ namespace Syncless.Core
                 {
                     DriveChangeEvent dce = new DriveChangeEvent(Syncless.Monitor.DriveChangeType.DRIVE_OUT, drive);
                     control.HandleDriveChange(dce);
+                    Console.WriteLine(drive.Name + " removed.");
                 }
             }
             connectedDrives = newConnectedDrives;
         }
 
+        public void Terminate()
+        {
+            if (insertUSBWatcher != null)
+            {
+                insertUSBWatcher.Stop();
+            }
+            if (removeUSBWatcher != null)
+            {
+                removeUSBWatcher.Stop();
+            }
+        }
     }
 }
