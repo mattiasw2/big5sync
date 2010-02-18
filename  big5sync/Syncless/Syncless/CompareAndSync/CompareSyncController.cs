@@ -27,7 +27,28 @@ namespace Syncless.CompareAndSync
 
         public void Sync(MonitorSyncRequest syncRequest)
         {
+            List<CompareResult> results = new List<CompareResult>();
+            
+            switch (syncRequest.ChangeType)
+            {
+                case FileChangeType.Create:
+                case FileChangeType.Update:
+                    foreach (string dest in syncRequest.Dest)
+                    {
+                        results.Add(new CompareResult(syncRequest.ChangeType, syncRequest.OldPath, dest));
+                    }
+                    break;
+                case FileChangeType.Delete:
+                    foreach (string dest in syncRequest.Dest)
+                    {
+                        results.Add(new CompareResult(syncRequest.ChangeType, dest));
+                    }
+                    break;                
+                case FileChangeType.Rename:
 
+
+                    break;
+            }
         }
 
         public List<SyncResult> Sync(SyncRequest syncRequest)

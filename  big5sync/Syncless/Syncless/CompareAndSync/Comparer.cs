@@ -539,7 +539,7 @@ namespace Syncless.CompareAndSync
                     foreach (string path in paths)
                     {
                         deletePath = Path.Combine(path, deleteItem);
-                        results.Add(new CompareResult(FileChangeType.Delete, deletePath, null));
+                        results.Add(new CompareResult(FileChangeType.Delete, deletePath));
                     }                    
                 } 
             }
