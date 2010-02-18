@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Syncless.Tagging;
+using System.IO;
+
 namespace Syncless.CompareAndSync
 {
     public class CompareSyncController
@@ -45,8 +47,13 @@ namespace Syncless.CompareAndSync
                     }
                     break;                
                 case FileChangeType.Rename:
-
-
+                    FileInfo file = new FileInfo(syncRequest.NewPath);
+                    string fileName = file.Name;
+                    foreach (string dest in syncRequest.Dest)
+                    {
+                        string newDestPath = new FileInfo(dest).DirectoryName;
+                        results.Add(new CompareResult(syncRequest.ChangeType, dest, Path.Combine(newDestPath, fileName)));
+                    }
                     break;
             }
         }
