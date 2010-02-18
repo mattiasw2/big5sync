@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Management;
+using System.Threading;
 using Syncless.Monitor;
 namespace Syncless.Core
 {
@@ -61,7 +62,7 @@ namespace Syncless.Core
             {
                 query = new WqlEventQuery();
                 query.EventClassName = "__InstanceCreationEvent";
-                query.WithinInterval = new TimeSpan(0, 0, 5);
+                query.WithinInterval = new TimeSpan(0, 0, 3);
                 query.Condition = "TargetInstance ISA 'Win32_USBControllerdevice'";
                 insertUSBWatcher = new ManagementEventWatcher(scope, query);
                 insertUSBWatcher.EventArrived += USBInserted;
@@ -79,21 +80,33 @@ namespace Syncless.Core
 
         private void USBInserted(object sender, EventArrivedEventArgs e)
         {
+            Thread.Sleep(10000);
             IMonitorControllerInterface control = ServiceLocator.MonitorI;
             List<DriveInfo> newConnectedDrives = RetrieveAllDrives();
             int i = 0;
             foreach (DriveInfo drive in newConnectedDrives)
             {
-                if (drive.Name.Equals(connectedDrives[i].Name))
+                bool inserted = false;
+                if (i >= connectedDrives.Count)
                 {
-                    i++;
+                    inserted = true;
+                }
+                else if (drive.Name.Equals(connectedDrives[i].Name))
+                {
+                    
                 }
                 else
                 {
-                    DriveChangeEvent dce = new DriveChangeEvent(Syncless.Monitor.DriveChangeType.DRIVE_IN,drive);
+                    inserted = true;
+                    i--;
+                }
+                if (inserted)
+                {
+                    DriveChangeEvent dce = new DriveChangeEvent(Syncless.Monitor.DriveChangeType.DRIVE_IN, drive);
                     control.HandleDriveChange(dce);
                     Console.WriteLine(drive.Name + " inserted.");
                 }
+                i++;
             }
             connectedDrives = newConnectedDrives;
         }
@@ -131,16 +144,27 @@ namespace Syncless.Core
             int i = 0;
             foreach (DriveInfo drive in connectedDrives)
             {
-                if (drive.Name.Equals(newConnectedDrives[i].Name))
+                bool removed = false;
+                if (i >= newConnectedDrives.Count)
                 {
-                    i++;
+                    removed = true;
+                }
+                else if (drive.Name.Equals(newConnectedDrives[i].Name))
+                {
+                    
                 }
                 else
+                {
+                    removed = true;
+                    i--;
+                }
+                if (removed)
                 {
                     DriveChangeEvent dce = new DriveChangeEvent(Syncless.Monitor.DriveChangeType.DRIVE_OUT, drive);
                     control.HandleDriveChange(dce);
                     Console.WriteLine(drive.Name + " removed.");
                 }
+                i++;
             }
             connectedDrives = newConnectedDrives;
         }

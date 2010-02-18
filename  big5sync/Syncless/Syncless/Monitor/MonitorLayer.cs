@@ -103,7 +103,6 @@ namespace Syncless.Monitor
             {
                 FileSystemWatcher watcher = CreateWatcher(path, "*.*");
                 watchers.Add(watcher);
-
             }
             foreach (string mPath in monitoredPaths)
             {
