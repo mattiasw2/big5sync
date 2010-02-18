@@ -412,12 +412,30 @@ namespace Syncless.CompareAndSync
 
             for (int i = 0; i < exceptItemsCount; i++)
             {
+                List<string> newFilePaths = new List<string>();
+                if (virtualPaths != null && virtualPaths.Contains(targetPath))
+                {
+                    foreach (string virtualPath in virtualPaths)
+                    {
+                        if (querySrcExceptTgt[i].Origin != virtualPath)
+                        {
+                            newFilePaths.Add(CreateNewItemPath(querySrcExceptTgt[i], virtualPath));
+                        }
+                    }
+                }
+                else
+                {
+                    newFilePaths.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
+                }
 
                 if (_changeTable[CREATE_TABLE].TryGetValue(querySrcExceptTgt[i].FullName, out createList))
                 {
-                    if (!createList.Contains(CreateNewItemPath(querySrcExceptTgt[i], targetPath)))
+                    foreach (string newFilePath in newFilePaths)
                     {
-                        createList.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
+                        if (!createList.Contains(newFilePath))
+                        {
+                            createList.Add(newFilePath);
+                        }
                     }
                 }
                 else
@@ -425,7 +443,13 @@ namespace Syncless.CompareAndSync
                     if (querySrcExceptTgt[i].Origin != targetPath)
                     {
                         createList = new List<string>();
-                        createList.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
+                        foreach (string newFilePath in newFilePaths)
+                        {
+                            if (!createList.Contains(newFilePath))
+                            {
+                                createList.Add(newFilePath);
+                            }
+                        }
                         _changeTable[CREATE_TABLE].Add(querySrcExceptTgt[i].FullName, createList);
                     }
                 }
@@ -443,17 +467,39 @@ namespace Syncless.CompareAndSync
 
                 if (compareResult > 0)
                 {
+                    List<string> updatePaths = new List<string>();
+                    if (virtualPaths != null && virtualPaths.Contains(targetPath))
+                    {
+                        foreach (string virtualPath in virtualPaths)
+                        {
+                            if (querySrcExceptTgt[i].Origin != virtualPath)
+                            {
+                                updatePaths.Add(CreateNewItemPath(tgtFile, virtualPath));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        updatePaths.Add(tgtFile.FullName);
+                    }
+
                     if (_changeTable[UPDATE_TABLE].TryGetValue(srcFile.FullName, out updateList))
                     {
-                        if (!updateList.Contains(tgtFile.FullName))
+                        foreach (string updatePath in updatePaths)
                         {
-                            updateList.Add(tgtFile.FullName);
+                            if (!updateList.Contains(updatePath))
+                            {
+                                updateList.Add(updatePath);
+                            }
                         }
                     }
                     else
                     {
                         updateList = new List<string>();
-                        updateList.Add(tgtFile.FullName);
+                        foreach (string updatePath in updatePaths)
+                        {
+                            updateList.Add(updatePath);
+                        }
                         _changeTable[UPDATE_TABLE].Add(srcFile.FullName, updateList);
                     }
 
