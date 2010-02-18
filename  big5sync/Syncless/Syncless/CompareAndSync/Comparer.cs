@@ -15,8 +15,7 @@ namespace Syncless.CompareAndSync
         private Dictionary<int, Dictionary<string, List<string>>> _changeTable;
         private List<string> deleteList;
         private const string METADATAPATH = "_syncless\\metadata.xml";
-
-
+        
         // Assumes that all paths taken from the tag exists in the directory
         public List<CompareResult> CompareFile(List<string> paths)
         {
@@ -412,10 +411,11 @@ namespace Syncless.CompareAndSync
             List<string> createList, updateList;
 
             for (int i = 0; i < exceptItemsCount; i++)
-            {                
+            {
+
                 if (_changeTable[CREATE_TABLE].TryGetValue(querySrcExceptTgt[i].FullName, out createList))
                 {
-                    if (!createList.Contains(CreateNewItemPath(querySrcExceptTgt[i], targetPath)) && querySrcExceptTgt[i].Origin != targetPath)
+                    if (!createList.Contains(CreateNewItemPath(querySrcExceptTgt[i], targetPath)))
                     {
                         createList.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
                     }
