@@ -126,7 +126,7 @@ namespace Syncless.CompareAndSync
 
                 for (int i = 0; i < noMeta.Count; i++)
                 {
-                    currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], withMeta);
+                    currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], null);
                 }
 
                 int loopStart = 0;
@@ -145,7 +145,7 @@ namespace Syncless.CompareAndSync
                     currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], withMeta);
                 }
 
-                //currSrcFolder = DoOptimizedOneWayFolder(currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0]);
+                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0], withMeta);
             }            
              
             return currSrcFolder;
@@ -472,7 +472,7 @@ namespace Syncless.CompareAndSync
                     {
                         foreach (string virtualPath in virtualPaths)
                         {
-                            if (querySrcExceptTgt[i].Origin != virtualPath)
+                            if (srcFile.Origin != virtualPath)
                             {
                                 updatePaths.Add(CreateNewItemPath(tgtFile, virtualPath));
                             }
