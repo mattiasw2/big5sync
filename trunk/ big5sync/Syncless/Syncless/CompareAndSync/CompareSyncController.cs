@@ -62,13 +62,13 @@ namespace Syncless.CompareAndSync
         {            
             if (syncRequest.IsFolder)
             {
-                syncRequest.Results = new Comparer().CompareFolder(syncRequest.TagName, syncRequest.Paths);
-                return new Syncer().SyncFolder(syncRequest.TagName, syncRequest.Paths, syncRequest.Results);
+                syncRequest.Results = new Comparer().CompareFolder(syncRequest.Paths);
+                return new Syncer().SyncFolder(syncRequest.Paths, syncRequest.Results);
             }
             else
             {
-                syncRequest.Results = new Comparer().CompareFolder(syncRequest.TagName, syncRequest.Paths);
-                return new Syncer().SyncFile(syncRequest.TagName, syncRequest.Paths, syncRequest.Results);
+                syncRequest.Results = new Comparer().CompareFolder(syncRequest.Paths);
+                return new Syncer().SyncFile(syncRequest.Paths, syncRequest.Results);
             }
         }
 
@@ -81,11 +81,11 @@ namespace Syncless.CompareAndSync
         {
             if (compareRequest.IsFolder)
             {
-                return new Comparer().CompareFolder(compareRequest.TagName, compareRequest.Paths);
+                return new Comparer().CompareFolder(compareRequest.Paths);
             }
             else
             {
-                return new Comparer().CompareFile(compareRequest.TagName, compareRequest.Paths);
+                return new Comparer().CompareFile(compareRequest.Paths);
             }
             
         }
