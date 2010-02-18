@@ -23,8 +23,12 @@ namespace Syncless
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IUIControllerInterface Igui;
+        private IUIControllerInterface _Igui;
         private List<Tag> _tagList;
+        private Tag _selectedTag;
+
+        private const string BI_DIRECTIONAL = "Bi-Dir..";
+        private const string UNI_DIRECTIONAL = "Uni-Dir..";
 
         public MainWindow() {
             
@@ -40,8 +44,8 @@ namespace Syncless
         /// </summary>
         private void InitializeSyncless()
         {
-            Igui = ServiceLocator.GUI;
-            if (Igui.Initiate()) {
+            _Igui = ServiceLocator.GUI;
+            if (_Igui.Initiate()) {
                 InitializeTagList();
 				ResetTagInfoPanel();
             }
@@ -57,12 +61,39 @@ namespace Syncless
             }
         }
 
+        private void ListBoxTag_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            _selectedTag = null;
+            
+            String neededTagName = ListBoxTag.SelectedItem.ToString();
+
+            foreach (Tag temp in _tagList)
+            {
+                if (string.Compare(neededTagName, temp.TagName) == 0)
+                {
+                    _selectedTag = temp;
+                    break;
+                }
+            }
+
+            ViewTagInfo(_selectedTag);
+        }
+
         private void ViewTagInfo(Tag t)
         {
             TagTitle.Content = t.TagName;
 			// tag.direction not implemented yet
-			// tag.manual-sync mode not implemented yet
-			LblStatusText.Content = "";
+			
+            if (t.IsSeamless)
+            {
+                AutoMode();
+            }
+            else
+            {
+                ManualMode();
+            }
+
+            LblStatusText.Content = "";
 			ListTaggedPath.ItemsSource = t.PathStringList;
 			
 			if(t is FileTag) {
@@ -85,20 +116,30 @@ namespace Syncless
         private void InitializeTagList()
         {
             // Gets a list of all tags
-            _tagList = Igui.GetAllTags();
+            _tagList = _Igui.GetAllTags();
 
             ListBoxTag.ItemsSource = (IEnumerable) LoadTagListBoxData();
 			
             UpdateTagCount();
         }
 		
+        /// <summary>
+        ///     If lists of tag is empty, reset the UI back to 0, else displayed the first Tag on the list.
+        /// </summary>
 		private void ResetTagInfoPanel()
 		{
-			TagTitle.Content = "Select a Tag";
-			TagIcon.Visibility = System.Windows.Visibility.Hidden;
-			TagStatusPanel.Visibility = System.Windows.Visibility.Hidden;
-			SyncPanel.Visibility = System.Windows.Visibility.Hidden;
-			BdrTaggedPath.Visibility = System.Windows.Visibility.Hidden;
+            if (_tagList.Capacity == 0)
+            {
+                TagTitle.Content = "Select a Tag";
+                TagIcon.Visibility = System.Windows.Visibility.Hidden;
+                TagStatusPanel.Visibility = System.Windows.Visibility.Hidden;
+                SyncPanel.Visibility = System.Windows.Visibility.Hidden;
+                BdrTaggedPath.Visibility = System.Windows.Visibility.Hidden;
+            }
+            else
+            {
+                ViewTagInfo(_tagList[0]);
+            }
 		}
 
         private void UpdateTagCount()
@@ -110,14 +151,10 @@ namespace Syncless
         {
             List<string> strArray = new List<string> ();
 
-            /*
             foreach (Tag t in _tagList)
             {
                 strArray.Add(t.TagName);
             }
-            */
-
-            strArray.Add("test");
             
             return strArray;
         }
@@ -141,7 +178,7 @@ namespace Syncless
         {
             // Prepares the SLL for termination
 
-            if (Igui.PrepareForTermination())
+            if(_Igui.PrepareForTermination())
             {
                 string messageBoxText = "Are you sure you want to exit Syncless?" +
                     "\nExiting Syncless will disable seamless synchronization.";
@@ -155,7 +192,7 @@ namespace Syncless
                 {
                     case MessageBoxResult.Yes:
                         // Terminates the SLL and closes the UI
-                        Igui.Terminate();
+                        _Igui.Terminate();
                         this.Close();
                         break;
                     case MessageBoxResult.No:
@@ -197,13 +234,13 @@ namespace Syncless
 
         private void BtnDirection_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-        	if(string.Compare((string) LblDirection.Content, "Uni-Dir..") == 0)
+        	if(string.Compare((string) LblDirection.Content, UNI_DIRECTIONAL) == 0)
 			{
-				LblDirection.Content = "Bi-Dir..";
+				LblDirection.Content = BI_DIRECTIONAL;
 			}
 			else
 			{
-				LblDirection.Content = "Uni-Dir..";
+                LblDirection.Content = UNI_DIRECTIONAL;
 			}
         }
 
@@ -211,21 +248,49 @@ namespace Syncless
         {
         	if(string.Compare((string) LblSyncMode.Content, "Manual") == 0)
 			{
-				LblSyncMode.Content = "Auto";
-				BtnPreview.Visibility = System.Windows.Visibility.Hidden;
-				BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
+                if (_Igui.MonitorTag(_selectedTag, true))
+                {
+                    AutoMode();
+                }
+                else
+                {
+                    string messageBoxText = "' " + _selectedTag.TagName +" ' could not be set into Seamless Mode.";
+                    string caption = "Change Synchronization Mode Error";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Error;
+
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+                }
 			}
 			else
 			{
-				LblSyncMode.Content = "Manual";
-				BtnPreview.Visibility = System.Windows.Visibility.Visible;
-				BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
+                if (_Igui.MonitorTag(_selectedTag, false))
+                {
+                    ManualMode();
+                }
+                else
+                {
+                    string messageBoxText = "' " + _selectedTag.TagName + " ' could not be set into Manual Mode.";
+                    string caption = "Change Synchronization Mode Error";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Error;
+
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+                }
 			}
         }
 
-        private void ListBoxTag_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void AutoMode() {
+            LblSyncMode.Content = "Auto";
+            BtnPreview.Visibility = System.Windows.Visibility.Hidden;
+            BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
+        }
+
+        private void ManualMode()
         {
-            //_tagList.contain ListBoxTag.SelectedItem();
+            LblSyncMode.Content = "Manual";
+            BtnPreview.Visibility = System.Windows.Visibility.Visible;
+            BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
         }
     }
 }
