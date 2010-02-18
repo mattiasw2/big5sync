@@ -93,25 +93,16 @@ namespace Syncless.Core
             return TaggingLayer.Instance.UntagFolder(path, tag.TagName);
         }
 
-        public bool DeleteTag(FolderTag tag)
+        public bool DeleteTag(Tag tag)
         {
-            FolderTag folderTag =  TaggingLayer.Instance.RemoveFolderTag(tag.TagName);
-            if (folderTag != null)
+            Tag t = TaggingLayer.Instance.RemoveTag(tag.TagName);
+            if (t != null)
             {
                 return true;
             }
             return false;
         }
 
-        public bool DeleteTag(FileTag tag)
-        {
-            FileTag fileTag = TaggingLayer.Instance.RemoveFileTag(tag.TagName);
-            if (fileTag != null)
-            {
-                return true;
-            }
-            return false;
-        }
         #region DO NOT IMPLEMENT
         public bool DeleteAllTags()
         {

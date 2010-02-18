@@ -24,8 +24,11 @@ namespace Syncless.Core
 		int UntagFile(FileTag tag, FileInfo file);
 		int UntagFolder(FolderTag tag, DirectoryInfo folder);
 
-		bool DeleteTag(FolderTag tag);
-		bool DeleteTag(FileTag tag);
+        bool DeleteTag(Tag tag);
+
+        // deprecated
+		//bool DeleteTag(FolderTag tag);
+		//bool DeleteTag(FileTag tag);
 
 		bool DeleteAllTags(); // Delete all existing tags (This one is like a general reset, might not need)
 		bool DeleteAllTags(FileInfo file); // delete all tags associated with a file
