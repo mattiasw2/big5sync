@@ -36,7 +36,7 @@ namespace Syncless
 
             InitializeComponent();
 
-            InitializeSyncless();
+            // InitializeSyncless();
         }
 		
         /// <summary>
@@ -305,7 +305,34 @@ namespace Syncless
 
         private void btnRemove_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-        	
+            string messageBoxText = "Are you sure you want to delete the tag '" + _selectedTag.TagName + "'?";
+            string caption = "Delete Tag";
+            MessageBoxButton button = MessageBoxButton.YesNo;
+            MessageBoxImage icon = MessageBoxImage.Warning;
+
+            MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
+
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    if (_Igui.DeleteTag(_selectedTag))
+                    {
+                        InitializeTagList();
+                        ResetTagInfoPanel();
+                    }
+                    else
+                    {
+                        messageBoxText = "' " + _selectedTag.TagName + " ' could not be deleted.";
+                        caption = "Delete Tag Error";
+                        button = MessageBoxButton.OK;
+                        icon = MessageBoxImage.Error;
+
+                        MessageBox.Show(messageBoxText, caption, button, icon);
+                    }
+                    break;
+                case MessageBoxResult.No:
+                    break;
+            }            
         }
     }
 }
