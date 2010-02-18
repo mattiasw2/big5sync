@@ -338,13 +338,20 @@ namespace Syncless.Tagging
             XmlDocument xml = new XmlDocument();
             if (File.Exists(xmlFilePath))
             {
-                xml.Load(xmlFilePath);
-                taggingProfile = ConvertXmlToTaggingProfile(xml);
-                return taggingProfile;
+                try
+                {
+                    xml.Load(xmlFilePath);
+                    taggingProfile = ConvertXmlToTaggingProfile(xml);
+                    return taggingProfile;
+                }
+                catch (IOException)
+                {
+                    return null;
+                }
             }
             else
             {
-                throw new FileNotFoundException();
+                return null;
             }
         }
 
