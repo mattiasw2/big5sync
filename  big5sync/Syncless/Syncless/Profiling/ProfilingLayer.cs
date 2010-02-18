@@ -185,7 +185,7 @@ namespace Syncless.Profiling
                         {
                             _profile.Merge(profile);
                         }
-                        catch (ProfileConflictException pce)
+                        catch (ProfileConflictException)
                         {
                             //Log ?
                         }
