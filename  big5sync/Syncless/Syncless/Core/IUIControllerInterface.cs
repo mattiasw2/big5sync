@@ -39,8 +39,8 @@ namespace Syncless.Core
 		bool SetTagBidirectional(FileTag tag);
 		bool SetTagBidirectional(FolderTag tag);
 
-		CompareResult PreviewSync(FolderTag tag);
-		CompareResult PreviewSync(FileTag tag);
+		List<CompareResult> PreviewSync(FolderTag tag);
+		List<CompareResult> PreviewSync(FileTag tag);
 
 		//Log ViewLog(LogSettings log);
 

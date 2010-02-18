@@ -199,14 +199,22 @@ namespace Syncless.Core
         }
 
         
-        public CompareResult PreviewSync(FolderTag tag)
+        public List<CompareResult> PreviewSync(FolderTag tag)
         {
-            return null;
+            FolderTag folderTag = TaggingLayer.Instance.RetrieveFolderTag(tag.TagName);
+            List<string> paths = folderTag.PathStringList;
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
+            CompareRequest compareRequest = new CompareRequest(convertedPath, true);
+            return CompareSyncController.Instance.Compare(compareRequest);
         }
 
-        public CompareResult PreviewSync(FileTag tag)
+        public List<CompareResult> PreviewSync(FileTag tag)
         {
-            return null;
+            FileTag fileTag = TaggingLayer.Instance.RetrieveFileTag(tag.TagName);
+            List<string> paths = fileTag.PathStringList;
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
+            CompareRequest compareRequest = new CompareRequest(convertedPath, true);
+            return CompareSyncController.Instance.Compare(compareRequest);
         }
 
         public bool PrepareForTermination()
