@@ -52,6 +52,7 @@
     <Compile Include="CompareAndSync\CompareResult.cs" />
     <Compile Include="CompareAndSync\CompareSyncController.cs" />
     <Compile Include="CompareAndSync\CompareAndSyncEnum.cs" />
+    <Compile Include="CompareAndSync\MonitorSyncRequest.cs" />
     <Compile Include="CompareAndSync\Request.cs" />
     <Compile Include="CompareAndSync\Result.cs" />
     <Compile Include="CompareAndSync\Syncer.cs" />

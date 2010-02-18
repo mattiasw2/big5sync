@@ -9,7 +9,7 @@ namespace Syncless.CompareAndSync
     {
         private FileChangeType changeType;
         private string from;
-        private string to;
+        private string to = null;
 
         public FileChangeType ChangeType
         {
