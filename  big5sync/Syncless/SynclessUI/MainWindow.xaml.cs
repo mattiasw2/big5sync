@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SynclessUI;
 using System.Data;
+using Syncless.Core;
 
 namespace Syncless
 {
@@ -19,12 +20,18 @@ namespace Syncless
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {		
-        public MainWindow()
-        {
+    {
+        IUIControllerInterface Igui;
+
+        public MainWindow() {
+            initializeSyncless();
+
 			InitializeComponent();
-						
-			MinimizeToTray.Enable(this);
+        }
+
+        private void initializeSyncless() {
+            Igui = ServiceLocator.GUI;
+            MinimizeToTray.Enable(this);
         }
 		
         private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
