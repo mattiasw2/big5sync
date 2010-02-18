@@ -359,7 +359,17 @@ namespace Syncless.CompareAndSync
 
         private List<CompareInfoObject> DoRawOneWayCompareFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath)
         {
+            return DoRawOneWayCompareFolder(source, target, targetPath, null);
+        }
+
+        private List<CompareInfoObject> DoRawOneWayCompareFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath, List<string> virtualPaths)
+        {
             Debug.Assert(source != null && target != null);
+            if (virtualPaths != null)
+            {
+                Debug.Assert(!virtualPaths.Contains(targetPath));
+            }
+
             List<CompareInfoObject> querySrcExceptTgt = source.Except(target, new FileNameCompare()).ToList<CompareInfoObject>();
             List<CompareInfoObject> querySrcIntersectTgt = source.Intersect(target, new FileNameCompare()).ToList<CompareInfoObject>();
             List<CompareInfoObject> queryTgtIntersectSrc = target.Intersect(source, new FileNameCompare()).ToList<CompareInfoObject>();
