@@ -7,6 +7,7 @@ using Syncless.Tagging;
 using Syncless.CompareAndSync;
 using Syncless.Monitor;
 using Syncless.Profiling;
+using System.Diagnostics;
 namespace Syncless.Core
 {
     public class SystemLogicLayer : IUIControllerInterface,IMonitorControllerInterface
@@ -216,12 +217,39 @@ namespace Syncless.Core
 
         public void HandleFileChange(FileChangeEvent fe)
         {
-            
+            string logicalPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
+            Debug.Assert(logicalPath != null);
+            List<string> logicalSimilarPaths = TaggingLayer.Instance.FindSimilarPathForFile(logicalPath);
+            List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
+            if (fe.Event == EventChangeType.CREATED)
+            {
+                CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create);
+            }
+            else if (fe.Event == EventChangeType.MODIFIED)
+            {
+                CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Update);
+            }
+            else if (fe.Event == EventChangeType.RENAMED)
+            {
+                CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Rename);
+            }
         }
 
         public void HandleFolderChange(FolderChangeEvent fe)
         {
-            
+            string logicalPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
+            Debug.Assert(logicalPath != null);
+            List<string> logicalSimilarPaths = TaggingLayer.Instance.FindSimilarPathForFolder(logicalPath);
+            List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
+            if (fe.Event == EventChangeType.CREATED)
+            {
+                CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create);
+            }
+            else if (fe.Event == EventChangeType.RENAMED)
+            {
+                //ASK YC if he need Old Path or New Path
+                CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create);
+            }
         }
 
         public void HandleDriveChange(DriveChangeEvent dce)
@@ -231,27 +259,33 @@ namespace Syncless.Core
                 ProfilingLayer.Instance.UpdateDrive(dce.Info);
                 string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
                 List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logical);
+                
                 foreach (Tag t in tagList)
                 {
-                    List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.PathStringList);
-                    //CALL FOR SYNC
-                    //
-                    foreach (string path in pathList)
-                    {
-                        try
-                        {
-                            MonitorLayer.Instance.MonitorPath(path);
-                        }
-                        catch (Exception e)
-                        {
-                            //TODO
-                            Console.WriteLine(e.ToString());
-                        }
-                    }
+                    //Sync the Tag
                 }
+                List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
+
+                foreach (string path in pathList)
+                {
+                    MonitorLayer.Instance.MonitorPath(path);
+
+                }
+
             }
             else
             {
+                
+                string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
+
+
+                List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
+
+                foreach (string path in pathList)
+                {
+                    MonitorLayer.Instance.MonitorPath(path);
+
+                }
                 ProfilingLayer.Instance.RemoveDrive(dce.Info);
             }
         }
