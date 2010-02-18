@@ -94,7 +94,7 @@ namespace Syncless.CompareAndSync
             }
 
             currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0], withMeta);
-
+             
             return currSrcFolder;
         }
 
@@ -263,6 +263,7 @@ namespace Syncless.CompareAndSync
                 {
                     foreach (string withMetaPath in withMeta)
                     {
+
                         newFilePaths.Add(CreateNewItemPath(querySrcExceptTgt[i], withMetaPath));
                     }
                 }
