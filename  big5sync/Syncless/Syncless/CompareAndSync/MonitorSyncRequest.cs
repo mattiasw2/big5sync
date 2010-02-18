@@ -24,5 +24,26 @@ namespace Syncless.CompareAndSync
         {
             _newPath = newPath;
         }
+
+        public string TagName
+        {
+            get { return _tagName; }
+        }
+
+        public string OldPath
+        {
+            get { return _oldPath; }
+        }
+
+        public List<string> Dest
+        {
+            get { return _dest; }
+        }
+
+        public FileChangeType ChangeType
+        {
+            get { return _changeType; }
+        }
+
     }
 }
