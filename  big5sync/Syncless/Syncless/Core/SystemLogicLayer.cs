@@ -175,7 +175,7 @@ namespace Syncless.Core
                     {
                         MonitorLayer.Instance.MonitorPath(path);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
 
                     }
@@ -189,7 +189,7 @@ namespace Syncless.Core
                     {
                         MonitorLayer.Instance.UnMonitorPath(path);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                     }
                 }
@@ -241,15 +241,17 @@ namespace Syncless.Core
             List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
             if (fe.Event == EventChangeType.CREATED)
             {
-                //CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create);
+                MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create,false);
+               
             }
             else if (fe.Event == EventChangeType.MODIFIED)
             {
-                //CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Update);
+                MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create, false);
+
             }
             else if (fe.Event == EventChangeType.RENAMED)
             {
-                //CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Rename);
+                MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create, false);
             }
         }
 
@@ -261,13 +263,13 @@ namespace Syncless.Core
             List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
             if (fe.Event == EventChangeType.CREATED)
             {
-                //MonitorSyncRequest syncRequest = new MonitorSyncRequest(
-                //CompareSyncController.Instance.Sync(syncRequest);
+                MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create,true);
+                CompareSyncController.Instance.Sync(syncRequest);
             }
             else if (fe.Event == EventChangeType.RENAMED)
             {
-                //ASK YC if he need Old Path or New Path
-               //  CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create);
+                MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Rename,true);
+                CompareSyncController.Instance.Sync(syncRequest);
             }
         }
 
@@ -283,7 +285,7 @@ namespace Syncless.Core
                 {
                     List<string> rawPaths = t.PathStringList;
                     List<string> paths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(rawPaths);
-                    SyncRequest syncRequest = new SyncRequest(t.TagName, paths, (t is FolderTag));
+                    SyncRequest syncRequest = new SyncRequest(paths, (t is FolderTag));
                     CompareSyncController.Instance.Sync(syncRequest);
                 }
                 List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
