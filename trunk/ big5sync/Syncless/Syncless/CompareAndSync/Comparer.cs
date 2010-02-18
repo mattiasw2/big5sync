@@ -489,11 +489,6 @@ namespace Syncless.CompareAndSync
                         firstList.RemoveAt(i);
                         secondList.RemoveAt(j);
                         j--;
-                        i--;
-                        if (j < 0)
-                            j = 0;
-                        if (i < 0)
-                            i = 0;
                     }
 
                 }
