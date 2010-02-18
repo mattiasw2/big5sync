@@ -71,11 +71,11 @@ namespace Syncless.CompareAndSync
 
             for (int i = 1; i < withMeta.Count; i++)
             {
-                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetDiffMetaActual(tagName, withMeta[i]), withMeta[i], null);
+                currSrcFolder = DoOneWayCompareFolderHelper(false, currSrcFolder, GetDiffMetaActual(tagName, withMeta[i]), withMeta[i], null);
             }
             for (int i = withMeta.Count - 2; i >= 0; i--)
             {
-                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetDiffMetaActual(tagName, withMeta[i]), withMeta[i], null);
+                currSrcFolder = DoOneWayCompareFolderHelper(false, currSrcFolder, GetDiffMetaActual(tagName, withMeta[i]), withMeta[i], null);
             }
 
             // YC: Create a virtual most-updated folder for comparison against the folders with no metadata
@@ -85,15 +85,15 @@ namespace Syncless.CompareAndSync
 
             for (int i = 0; i < noMeta.Count; i++)
             {
-                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], null);
+                currSrcFolder = DoOneWayCompareFolderHelper(true, currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], null);
             }
 
             for (int i = noMeta.Count - 2; i >= 0; i--)
             {
-                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], withMeta);
+                currSrcFolder = DoOneWayCompareFolderHelper(true, currSrcFolder, GetAllCompareObjects(noMeta[i]), noMeta[i], withMeta);
             }
 
-            currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0], null);
+            currSrcFolder = DoOneWayCompareFolderHelper(true, currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0], null);
              
             return currSrcFolder;
         }
@@ -233,17 +233,17 @@ namespace Syncless.CompareAndSync
 
             for (int i = 1; i < paths.Count; i++)
             {
-                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(paths[i]), paths[i], null);
+                currSrcFolder = DoOneWayCompareFolderHelper(true, currSrcFolder, GetAllCompareObjects(paths[i]), paths[i], null);
             }
             for (int i = paths.Count - 2; i >= 0; i--)
             {
-                currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(paths[i]), paths[i], null);
+                currSrcFolder = DoOneWayCompareFolderHelper(true, currSrcFolder, GetAllCompareObjects(paths[i]), paths[i], null);
             }
 
             return currSrcFolder;
         }
 
-        private List<CompareInfoObject> DoRawOneWayCompareFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath, List<string> withMeta)
+        private List<CompareInfoObject> DoOneWayCompareFolderHelper(bool rawMode, List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath, List<string> withMeta)
         {
             Debug.Assert(source != null && target != null);
             List<CompareInfoObject> querySrcExceptTgt = source.Except(target, new FileNameCompare()).ToList<CompareInfoObject>();
