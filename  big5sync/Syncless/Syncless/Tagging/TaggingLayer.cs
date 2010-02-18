@@ -514,6 +514,32 @@ namespace Syncless.Tagging
             return pathList;
         }
 
+        public List<FolderTag> RetrieveFolderTagByPath(string path)
+        {
+            List<FolderTag> folderTagList = new List<FolderTag>();
+            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
+            {
+                if (folderTag.Contain(path))
+                {
+                    folderTagList.Add(folderTag);
+                }
+            }
+            return folderTagList;
+        }
+
+        public List<FileTag> RetrieveFileTagByPath(string path)
+        {
+            List<FileTag> fileTagList = new List<FileTag>();
+            foreach (FileTag fileTag in _taggingProfile.FileTagList)
+            {
+                if (fileTag.Contain(path))
+                {
+                    fileTagList.Add(fileTag);
+                }
+            }
+            return fileTagList;
+        }
+
         /// <summary>
         /// Find the Similar Path of a particular path. (*see me)
         /// </summary>
