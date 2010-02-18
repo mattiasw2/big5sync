@@ -171,14 +171,27 @@ namespace Syncless.Core
             {
                 foreach (string path in convertedPath)
                 {
-                    MonitorLayer.Instance.MonitorPath(path);
+                    try
+                    {
+                        MonitorLayer.Instance.MonitorPath(path);
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
                 }
             }
             else
             {
                 foreach (string path in convertedPath)
                 {
-                    MonitorLayer.Instance.UnMonitorPath(path);
+                    try
+                    {
+                        MonitorLayer.Instance.UnMonitorPath(path);
+                    }
+                    catch (Exception e)
+                    {
+                    }
                 }
             }
             return true;
@@ -248,7 +261,8 @@ namespace Syncless.Core
             List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
             if (fe.Event == EventChangeType.CREATED)
             {
-                //CompareSyncController.Instance.SyncPath(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create);
+                //MonitorSyncRequest syncRequest = new MonitorSyncRequest(
+                //CompareSyncController.Instance.Sync(syncRequest);
             }
             else if (fe.Event == EventChangeType.RENAMED)
             {
@@ -267,7 +281,10 @@ namespace Syncless.Core
                 
                 foreach (Tag t in tagList)
                 {
-                    //Sync the Tag
+                    List<string> rawPaths = t.PathStringList;
+                    List<string> paths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(rawPaths);
+                    SyncRequest syncRequest = new SyncRequest(t.TagName, paths, (t is FolderTag));
+                    CompareSyncController.Instance.Sync(syncRequest);
                 }
                 List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
 
