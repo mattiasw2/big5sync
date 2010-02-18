@@ -7,7 +7,6 @@ namespace Syncless.Core
 {
     public class ServiceLocator
     {
-        
         public static IUIControllerInterface GUI{
             get { return SystemLogicLayer.Instance; }
         }
