@@ -12,6 +12,12 @@ namespace Syncless.CompareAndSync
 {
     class XMLHelper
     {
+        private const string NODE_NAME = "name";
+        private const string NODE_SIZE = "size";
+        private const string NODE_HASH = "hash";
+        private const string NODE_LAST_MODIFIED = "last_modified";
+        private const string NODE_LAST_CREATED = "last_created";
+
         /// <summary>
         /// Given a dirpath , breaks it up into a folder and returns an Xpath Expression
         /// If it is an empty string , return the root of the xml
@@ -108,8 +114,6 @@ namespace Syncless.CompareAndSync
         private static CompareInfoObject GenerateInfo(XmlNode node, string origin, string fullPath)
         {
             XmlNodeList nodeList = node.ChildNodes;
-            int counter = 0;
-
             string name = "";
             string size = "";
             string hash = "";
@@ -118,21 +122,27 @@ namespace Syncless.CompareAndSync
 
             foreach (XmlNode childNode in nodeList)
             {
-                if (counter == 0)
-                    name = childNode.InnerText;
-                else if (counter == 1)
-                    size = childNode.InnerText;
-                else if (counter == 2)
-                    hash = childNode.InnerText;
-                else if (counter == 3)
-                    lastModified = childNode.InnerText;
-                else
-                    lastCreated = childNode.InnerText;
-
-                counter++;
+                switch (childNode.Name)
+                {
+                    case NODE_NAME:
+                        name = childNode.InnerText;
+                        break;
+                    case NODE_SIZE: 
+                        size = childNode.InnerText;
+                        break;
+                    case NODE_HASH: 
+                        hash = childNode.InnerText;
+                        break;
+                    case NODE_LAST_MODIFIED: 
+                        lastModified = childNode.InnerText;
+                        break;
+                    case NODE_LAST_CREATED: 
+                        lastCreated = childNode.InnerText;
+                        break;
+                }
             }
 
-            return new CompareInfoObject(origin, fullPath, name, long.Parse(lastModified),
+            return new CompareInfoObject(origin, fullPath, name,long.Parse(lastCreated),long.Parse(lastModified),
                 long.Parse(size), hash);
         }
 
@@ -190,16 +200,7 @@ namespace Syncless.CompareAndSync
 
             foreach (FileInfo fileInfo in dirInfo.GetFiles())
             {
-                /*
-                FileStream fileStream = fileInfo.OpenRead();
-                byte[] md5bytes = MD5.Create().ComputeHash(fileStream);
-                fileStream.Close();
-                string hashedVal = "";
-                foreach (byte md5 in md5bytes)
-                {
-                    hashedVal = hashedVal + md5;
-                }
-                */
+
 
                 FileStream fileStream = fileInfo.OpenRead();
                 byte[] fileHash = MD5.Create().ComputeHash(fileStream);
