@@ -10,7 +10,7 @@ using Syncless.Profiling;
 using System.Diagnostics;
 namespace Syncless.Core
 {
-    public class SystemLogicLayer : IUIControllerInterface,IMonitorControllerInterface
+    internal class SystemLogicLayer : IUIControllerInterface,IMonitorControllerInterface
     {
         private static SystemLogicLayer _instance;
         public static SystemLogicLayer Instance
@@ -34,17 +34,19 @@ namespace Syncless.Core
 
         public List<Tag> GetAllTags()
         {
-            return null;    
+            return TaggingLayer.Instance.AllTagList;
         }
 
         public List<Tag> GetAllTags(FileInfo file)
         {
             return null;
+            //return TaggingLayer.Instance.RetrieveFileTagByPath(file.FullName);
         }
 
         public List<Tag> GetAllTags(DirectoryInfo info)
         {
             return null;
+            //return TaggingLayer.Instance.RetrieveFolderTagByPath(info.FullName);
         }
 
         public FileTag CreateFileTag(string tagname)
@@ -110,7 +112,7 @@ namespace Syncless.Core
             }
             return false;
         }
-
+        #region DO NOT IMPLEMENT
         public bool DeleteAllTags()
         {
             return false;
@@ -125,6 +127,17 @@ namespace Syncless.Core
         {
             return false;
         }
+        public bool SetTagBidirectional(FileTag tag)
+        {
+            return false;
+        }
+
+        public bool SetTagBidirectional(FolderTag tag)
+        {
+            return false;
+        }
+
+        #endregion
 
         public bool StartManualSync(FileTag tagname)
         {
@@ -171,16 +184,7 @@ namespace Syncless.Core
             return true;
         }
 
-        public bool SetTagBidirectional(FileTag tag)
-        {
-            return false;
-        }
-
-        public bool SetTagBidirectional(FolderTag tag)
-        {
-            return false;
-        }
-
+        
         public CompareResult PreviewSync(FolderTag tag)
         {
             return null;
@@ -205,7 +209,7 @@ namespace Syncless.Core
         {
             ProfilingLayer.Instance.Init(ProfilingLayer.RELATIVE_PROFILING_ROOT_SAVE_PATH);
             TaggingLayer.Instance.Init(TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH);
-
+            DeviceWatcher.Instance.ToString();
             return true;
         }
 
@@ -254,6 +258,7 @@ namespace Syncless.Core
 
         public void HandleDriveChange(DriveChangeEvent dce)
         {
+            Console.WriteLine("hello world");
             if (dce.Type == DriveChangeType.DRIVE_IN)
             {
                 ProfilingLayer.Instance.UpdateDrive(dce.Info);
@@ -296,5 +301,7 @@ namespace Syncless.Core
         }
 
         #endregion
+
+        
     }
 }
