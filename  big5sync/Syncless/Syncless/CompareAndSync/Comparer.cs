@@ -109,7 +109,7 @@ namespace Syncless.CompareAndSync
             List<CompareInfoObject> actualTemp = new List<CompareInfoObject>(actual); ;
             List<CompareInfoObject> metaTemp = new List<CompareInfoObject>(meta);
 
-            removeCommonObjects(actualTemp, metaTemp);
+            RemoveCommonObjects(actualTemp, metaTemp);
 
             // YC: This will give us files that exist but are not in the
             // metadata. Implies either new or renamed files.
@@ -373,7 +373,7 @@ namespace Syncless.CompareAndSync
             foreach (FileInfo f in allFiles)
             {
                 if (f.Directory.Name != "_syncless")
-                    results.Add(new CompareInfoObject(path, f.FullName, f.Name, f.LastWriteTime.Ticks, f.Length, CalculateMD5Hash(f)));
+                    results.Add(new CompareInfoObject(path, f.FullName, f.Name, f.CreationTime.Ticks, f.LastWriteTime.Ticks, f.Length, CalculateMD5Hash(f)));
             }
             return results;
         }
@@ -477,7 +477,7 @@ namespace Syncless.CompareAndSync
             return sb.ToString();
         }
 
-        private static void removeCommonObjects(List<CompareInfoObject> firstList, List<CompareInfoObject> secondList)
+        private static void RemoveCommonObjects(List<CompareInfoObject> firstList, List<CompareInfoObject> secondList)
         {
             Debug.Assert(firstList != null && secondList != null);
             for (int i = 0; i < firstList.Count; i++)
