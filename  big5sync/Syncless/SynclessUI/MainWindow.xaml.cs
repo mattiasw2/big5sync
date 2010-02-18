@@ -34,7 +34,7 @@ namespace Syncless
 
             InitializeSyncless();
         }
-
+		
         /// <summary>
         ///     Starts up the system logic layer and initializes it
         /// </summary>
@@ -43,6 +43,7 @@ namespace Syncless
             Igui = ServiceLocator.GUI;
             if (Igui.Initiate()) {
                 InitializeTagList();
+				ResetTagInfoPanel();
             }
             else {
                 string messageBoxText = "Syncless has failed to initialize and will now exit.";
@@ -56,6 +57,28 @@ namespace Syncless
             }
         }
 
+        private void ViewTagInfo(Tag t)
+        {
+            TagTitle.Content = t.TagName;
+			// tag.direction not implemented yet
+			// tag.manual-sync mode not implemented yet
+			LblStatusText.Content = "";
+			ListTaggedPath.ItemsSource = t.PathStringList;
+			
+			if(t is FileTag) {
+				var uriSource = new Uri(@"/SynclessUI;component/Icons/file.ico", UriKind.Relative);
+				TagIcon.Source = new BitmapImage(uriSource);
+			} else {
+				var uriSource = new Uri(@"/SynclessUI;component/Icons/folder.ico", UriKind.Relative);
+				TagIcon.Source = new BitmapImage(uriSource);
+			}
+			
+			TagIcon.Visibility = System.Windows.Visibility.Visible;
+			TagStatusPanel.Visibility = System.Windows.Visibility.Visible;
+			SyncPanel.Visibility = System.Windows.Visibility.Visible;
+			BdrTaggedPath.Visibility = System.Windows.Visibility.Visible;
+        }
+		
         /// <summary>
         ///     Gets the list of tags and then populates the Tag List Box
         /// </summary>
@@ -65,17 +88,37 @@ namespace Syncless
             _tagList = Igui.GetAllTags();
 
             ListBoxTag.ItemsSource = (IEnumerable) LoadTagListBoxData();
+			
+            UpdateTagCount();
+        }
+		
+		private void ResetTagInfoPanel()
+		{
+			TagTitle.Content = "Select a Tag";
+			TagIcon.Visibility = System.Windows.Visibility.Hidden;
+			TagStatusPanel.Visibility = System.Windows.Visibility.Hidden;
+			SyncPanel.Visibility = System.Windows.Visibility.Hidden;
+			BdrTaggedPath.Visibility = System.Windows.Visibility.Hidden;
+		}
+
+        private void UpdateTagCount()
+        {
+            LblTagCount.Content = "[" + _tagList.Capacity + "]";
         }
 
         private List<string> LoadTagListBoxData()
         {
             List<string> strArray = new List<string> ();
 
+            /*
             foreach (Tag t in _tagList)
             {
                 strArray.Add(t.TagName);
             }
+            */
 
+            strArray.Add("test");
+            
             return strArray;
         }
 
@@ -140,6 +183,49 @@ namespace Syncless
         private void BtnMin_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
 			this.WindowState = WindowState.Minimized;
+        }
+
+        private void TxtBoxFilterTag_GotFocus(object sender, System.Windows.RoutedEventArgs e)
+        {
+        	TxtBoxFilterTag.Text = "";
+        }
+
+        private void TxtBoxFilterTag_LostFocus(object sender, System.Windows.RoutedEventArgs e)
+        {
+        	TxtBoxFilterTag.Text = "Filter";
+        }
+
+        private void BtnDirection_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+        	if(string.Compare((string) LblDirection.Content, "Uni-Dir..") == 0)
+			{
+				LblDirection.Content = "Bi-Dir..";
+			}
+			else
+			{
+				LblDirection.Content = "Uni-Dir..";
+			}
+        }
+
+        private void BtnSyncMode_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+        	if(string.Compare((string) LblSyncMode.Content, "Manual") == 0)
+			{
+				LblSyncMode.Content = "Auto";
+				BtnPreview.Visibility = System.Windows.Visibility.Hidden;
+				BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
+			}
+			else
+			{
+				LblSyncMode.Content = "Manual";
+				BtnPreview.Visibility = System.Windows.Visibility.Visible;
+				BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
+			}
+        }
+
+        private void ListBoxTag_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            ListBoxTag.SelectedItem.ToString();
         }
     }
 }
