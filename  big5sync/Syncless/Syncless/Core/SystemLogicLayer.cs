@@ -138,10 +138,17 @@ namespace Syncless.Core
         }
 
         #endregion
-
-        public bool StartManualSync(FileTag tagname)
+        public bool StartManualSync(Tag tag)
         {
-            FileTag fileTag = TaggingLayer.Instance.RetrieveFileTag(tagname.TagName);
+            List<string> paths = tag.PathStringList;
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
+            SyncRequest syncRequest = new SyncRequest(convertedPath, false);
+            CompareSyncController.Instance.Sync(syncRequest);
+            return true;
+        }
+
+        public bool StartManualSync(FileTag fileTag)
+        {            
             List<string> paths = fileTag.PathStringList;
             List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
             SyncRequest syncRequest = new SyncRequest(convertedPath, false);
@@ -149,13 +156,12 @@ namespace Syncless.Core
             return true;
         }
 
-        public bool StartManualSync(FolderTag tagname)
-        {
-            FolderTag folderTag = TaggingLayer.Instance.RetrieveFolderTag(tagname.TagName);
+        public bool StartManualSync(FolderTag folderTag)
+        {            
             List<string> paths = folderTag.PathStringList;
-            
             List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
             SyncRequest syncRequest = new SyncRequest(convertedPath, true);
+            CompareSyncController.Instance.Sync(syncRequest);
             return true;
         }
 
@@ -178,7 +184,6 @@ namespace Syncless.Core
                     }
                     catch (Exception)
                     {
-
                     }
                 }
             }
