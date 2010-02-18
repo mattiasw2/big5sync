@@ -128,7 +128,7 @@ namespace Syncless
         /// </summary>
 		private void ResetTagInfoPanel()
 		{
-            if (_tagList.Capacity == 0)
+            if (_tagList.Count == 0)
             {
                 TagTitle.Content = "Select a Tag";
                 TagIcon.Visibility = System.Windows.Visibility.Hidden;
@@ -144,7 +144,7 @@ namespace Syncless
 
         private void UpdateTagCount()
         {
-            LblTagCount.Content = "[" + _tagList.Capacity + "]";
+            LblTagCount.Content = "[" + _tagList.Count + "]";
         }
 
         private List<string> LoadTagListBoxData()
@@ -301,6 +301,11 @@ namespace Syncless
 
                 MessageBox.Show(messageBoxText, caption, button, icon);
 			}
+        }
+
+        private void btnRemove_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+        	
         }
     }
 }
