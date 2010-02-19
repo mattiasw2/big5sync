@@ -63,9 +63,12 @@ namespace Syncless
 
         private void ListBoxTag_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            _selectedTagName = ListBoxTag.SelectedItem.ToString();
+            if (ListBoxTag.SelectedItem != null)
+            {
+                _selectedTagName = ListBoxTag.SelectedItem.ToString();
 
-            ViewTagInfo(_selectedTagName);
+                ViewTagInfo(_selectedTagName);
+            }
         }
 
         public void ViewTagInfo(string tagname)
@@ -297,7 +300,7 @@ namespace Syncless
 
         private void btnRemove_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (_selectedTagName != null)
+            if (_selectedTagName != String.Empty)
             {
                 string messageBoxText = "Are you sure you want to delete the tag '" + _selectedTagName + "'?";
                 string caption = "Delete Tag";
@@ -309,7 +312,8 @@ namespace Syncless
                 switch (result)
                 {
                     case MessageBoxResult.Yes:
-                        if (_Igui.DeleteTag(_selectedTagName))
+                        bool success = _Igui.DeleteTag(_selectedTagName);
+                        if(success)
                         {
                             InitializeTagList(string.Empty);
                             ResetTagInfoPanel();
@@ -330,7 +334,7 @@ namespace Syncless
             }
             else
             {
-                string messageBoxText = "Please selected a tag.";
+                string messageBoxText = "Please select a tag.";
                 string caption = "No Tag Selected";
                 MessageBoxButton button = MessageBoxButton.OK;
                 MessageBoxImage icon = MessageBoxImage.Error;
