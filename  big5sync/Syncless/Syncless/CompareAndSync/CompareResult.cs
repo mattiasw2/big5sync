@@ -7,14 +7,15 @@ namespace Syncless.CompareAndSync
 {
     public class CompareResult : Result
     {
-        public CompareResult(FileChangeType changeType, string from)
+        public CompareResult(FileChangeType changeType, string from, bool isFolder)
         {
             base.ChangeType = changeType;
             base.From = from;
+            base.IsFolder = isFolder;
         }
 
-        public CompareResult(FileChangeType changeType, string from, string to) :
-            this(changeType, from)
+        public CompareResult(FileChangeType changeType, string from, string to, bool isFolder) :
+            this(changeType, from, isFolder)
         {
             base.To = to;
         }

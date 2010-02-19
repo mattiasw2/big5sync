@@ -7,11 +7,12 @@ namespace Syncless.CompareAndSync
 {
     public class MonitorSyncRequest
     {
-        private string _oldPath, _newPath = null;
-        private List<string> _dest;
+        private MonitorPathPair _oldPath, _newPath = null;
+        private List<MonitorPathPair> _dest;
         private FileChangeType _changeType;
         private bool _isFolder;
-        public MonitorSyncRequest(string oldPath, List<string> dest, FileChangeType changeType,bool isFolder)
+
+        public MonitorSyncRequest(MonitorPathPair oldPath, List<MonitorPathPair> dest, FileChangeType changeType, bool isFolder)
         {
             _oldPath = oldPath;
             _dest = dest;
@@ -19,23 +20,23 @@ namespace Syncless.CompareAndSync
             _isFolder = isFolder;
         }
 
-        public MonitorSyncRequest(string oldPath, string newPath, List<string> dest, FileChangeType changeType,bool isFolder) :
+        public MonitorSyncRequest(MonitorPathPair oldPath, MonitorPathPair newPath, List<MonitorPathPair> dest, FileChangeType changeType, bool isFolder) :
             this(oldPath, dest, changeType,isFolder)
         {
             _newPath = newPath;
         }
 
-        public string OldPath
+        public MonitorPathPair OldPath
         {
             get { return _oldPath; }
         }
 
-        public string NewPath
+        public MonitorPathPair NewPath
         {
             get { return _newPath; }
         }
 
-        public List<string> Dest
+        public List<MonitorPathPair> Dest
         {
             get { return _dest; }
         }
@@ -43,6 +44,11 @@ namespace Syncless.CompareAndSync
         public FileChangeType ChangeType
         {
             get { return _changeType; }
+        }
+
+        public bool IsFolder
+        {
+            get { return _isFolder; }
         }
 
     }

@@ -59,8 +59,18 @@ namespace Syncless.CompareAndSync
 
         public SyncResult MoveFile(string from, string to)
         {
+            FileInfo source = new FileInfo(from);
+            FileInfo target = new FileInfo(to);
+
             try
             {
+                if (!target.Exists)
+                {
+                    if (!Directory.Exists(target.Directory.FullName))
+                    {
+                        Directory.CreateDirectory(target.Directory.FullName);
+                    }
+                }
                 File.Move(from, to);
                 return new SyncResult(FileChangeType.Rename, from, to, true);
             }
@@ -82,12 +92,12 @@ namespace Syncless.CompareAndSync
                     Directory.CreateDirectory(target.Directory.FullName);
                 }               
             }
-            if (source.Exists)
-            {
+            
+            try {
                 source.CopyTo(to, true);
                 return new SyncResult(changeType, from, to, true);
             }
-            else
+            catch (Exception)
             {
                 return new SyncResult(changeType, from, to, false);
             }
