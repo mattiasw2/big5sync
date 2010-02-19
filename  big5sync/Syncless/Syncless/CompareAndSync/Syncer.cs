@@ -39,6 +39,7 @@ namespace Syncless.CompareAndSync
             foreach (string path in paths)
             {
                 XMLHelper.GenerateXMLFile(path);
+                RemoveEmptyFolders(path);
             }
 
             return syncResults;
@@ -111,6 +112,21 @@ namespace Syncless.CompareAndSync
         public SyncResult UpdateFile(string from, string to)
         {
             return CopyFile(from, to, FileChangeType.Update);
+        }
+
+        private void RemoveEmptyFolders(string path)
+        {
+            DirectoryInfo[] directories = new DirectoryInfo(path).GetDirectories("*", SearchOption.AllDirectories);
+            //List<DirectoryInfo> emptyList = new List<DirectoryInfo>();
+            foreach (DirectoryInfo dInfo in directories)
+            {
+                FileInfo[] files = dInfo.GetFiles();
+                if (files.Length == 0)
+                {
+                    dInfo.Delete();
+                    //emptyList.Add(dInfo);
+                }
+            }
         }
     }
 }
