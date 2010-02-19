@@ -55,7 +55,7 @@ namespace Syncless.CompareAndSync
                     string folderName = folder.Name;
                     foreach (MonitorPathPair dest in syncRequest.Dest)
                     {
-                        string newDestPath = new DirectoryInfo(dest.FullPath).Parent.Name;
+                        string newDestPath = new DirectoryInfo(dest.FullPath).Parent.FullName;
                         Console.WriteLine(newDestPath);
                         results.Add(new CompareResult(syncRequest.ChangeType, dest.FullPath, Path.Combine(newDestPath, folderName), syncRequest.IsFolder));
                     }
