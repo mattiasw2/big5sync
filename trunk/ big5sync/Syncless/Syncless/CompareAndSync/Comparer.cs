@@ -15,6 +15,75 @@ namespace Syncless.CompareAndSync
         private Dictionary<int, Dictionary<string, List<string>>> _changeTable;
         private List<string> deleteList;
         private const string METADATAPATH = "_syncless\\metadata.xml";
+
+        private List<CompareInfoObject> GetMonitorCompareObjects(List<MonitorPathPair> paths)
+        {
+            List<CompareInfoObject> results = new List<CompareInfoObject>();
+            foreach (MonitorPathPair path in paths)
+            {
+                FileInfo f = new FileInfo(path.FullPath);
+                results.Add(new CompareInfoObject(f.FullName, f.Name, f.CreationTime.Ticks, f.LastWriteTime.Ticks, f.Length, CalculateMD5Hash(f)));
+            }
+            return results;
+        }
+
+        public void MonitorCompareFile(MonitorSyncRequest syncRequest, out List<string> paths, out List<CompareResult> results)
+        {
+            FileInfo oldPath = new FileInfo(syncRequest.OldPath.FullPath);
+            FileInfo newPath = new FileInfo(syncRequest.NewPath.FullPath);
+
+            paths = new List<string>();
+            results = new List<CompareResult>();
+
+            CompareInfoObject source = null;
+            List<CompareInfoObject> dests = GetMonitorCompareObjects(syncRequest.Dest);
+
+            switch (syncRequest.ChangeType)
+            {
+                case FileChangeType.Create:
+                case FileChangeType.Update:
+                    source = new CompareInfoObject(oldPath.FullName, oldPath.Name, oldPath.CreationTime.Ticks, oldPath.LastWriteTime.Ticks, oldPath.Length, CalculateMD5Hash(oldPath));
+                    foreach (CompareInfoObject dest in dests)
+                    {
+                        int compareResult = new FileContentCompare().Compare(source, dest);
+                        if (compareResult != 0)
+                        {
+                            results.Add(new CompareResult(syncRequest.ChangeType, syncRequest.OldPath.FullPath, dest.FullName, syncRequest.IsFolder));
+                        }
+                    }
+                    break;
+                case FileChangeType.Delete:
+                    foreach (CompareInfoObject dest in dests)
+                    {
+                        results.Add(new CompareResult(syncRequest.ChangeType, dest.FullName, syncRequest.IsFolder));
+                    }
+                    break;
+                case FileChangeType.Rename:
+                    FileInfo file = new FileInfo(syncRequest.NewPath.FullPath);
+                    string fileName = file.Name;
+                    foreach (MonitorPathPair dest in syncRequest.Dest)
+                    {
+                        string newDestPath = new FileInfo(dest.FullPath).DirectoryName;
+                        results.Add(new CompareResult(syncRequest.ChangeType, dest.FullPath, Path.Combine(newDestPath, fileName), syncRequest.IsFolder));
+                    }
+                    break;
+            }
+
+            Debug.Assert(syncRequest.OldPath != null);
+            paths.AddRange(syncRequest.OldPath.Origin);
+
+            if (syncRequest.NewPath != null)
+            {
+                paths.AddRange(syncRequest.NewPath.Origin);
+            }
+
+            foreach (MonitorPathPair dest in syncRequest.Dest)
+            {
+                paths.AddRange(dest.Origin);
+            }
+
+            paths.Distinct<string>();
+        }
         
         // Assumes that all paths taken from the tag exists in the directory
         public List<CompareResult> CompareFile(List<string> paths)

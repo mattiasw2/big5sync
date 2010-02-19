@@ -11,20 +11,25 @@ namespace Syncless.CompareAndSync
     /// </summary>
     public class CompareInfoObject : IComparable<CompareInfoObject>
     {
-        private string _origin, _fullName, _name, _hash;
+        private string _origin = null, _fullName, _name, _hash;
         private long _creationTime, _lastWriteTime, _length;
         private FileChangeType _changeType = FileChangeType.None;
         private bool _isFolder;
 
-        public CompareInfoObject(string origin, string fullName, string name, long creationTime, long lastWriteTime, long length, string hash)
+        public CompareInfoObject(string fullName, string name, long creationTime, long lastWriteTime, long length, string hash)
         {
-            _origin = origin;
             _fullName = fullName;
             _name = name;
             _creationTime = creationTime;
             _lastWriteTime = lastWriteTime;
             _length = length;
             _hash = hash;
+        }
+
+        public CompareInfoObject(string origin, string fullName, string name, long creationTime, long lastWriteTime, long length, string hash) :
+            this(fullName, name, creationTime, lastWriteTime, length, hash)
+        {
+            _origin = origin;
         }
 
         public CompareInfoObject(string origin, string fullName, string name, long creationTime, long lastWriteTime, long length, string hash, FileChangeType changeType) :
