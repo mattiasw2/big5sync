@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Syncless.Core;
 
 namespace Syncless.Logging
 {
     public class LoggingLayer
     {
         private static LoggingLayer _instance;
-        public LoggingLayer Instance
+        public static LoggingLayer Instance
         {
             get
             {
@@ -19,9 +17,26 @@ namespace Syncless.Logging
                 return _instance;
             }
         }
+
+        private Logger userLog;
+        private Logger debugLog;
+
         private LoggingLayer()
         {
+            userLog = Logger.GetInstance(ServiceLocator.USER_LOG);
+            debugLog = Logger.GetInstance(ServiceLocator.DEBUG_LOG);
+        }
 
+        public Logger GetLogger(string type)
+        {
+            if (type.Equals(ServiceLocator.USER_LOG))
+            {
+                return userLog;
+            }
+            else
+            {
+                return debugLog;
+            }
         }
     }
 }
