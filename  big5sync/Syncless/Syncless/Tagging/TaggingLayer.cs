@@ -457,7 +457,7 @@ namespace Syncless.Tagging
 
         public Tag RemoveTag(string tagname)
         {
-            Tag toRemove;
+            Tag toRemove = null;
             if (CheckFolderTagExists(tagname))
             {
                 toRemove = GetFolderTag(tagname);
