@@ -51,7 +51,7 @@ namespace Syncless.CompareAndSync
                         compareResultList.Add(new CompareResult(FileChangeType.Create, sourceInfo.FullName,
                             destInfo.FullName, false));
                     }
-
+                        // same file with same content  NONE
                     else if (CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo)) &&
                         sourceInfo.Name.Equals(destInfo.Name))
                     {
