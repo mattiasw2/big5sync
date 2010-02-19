@@ -297,6 +297,7 @@ namespace Syncless.Core
             //may need to return a list of error.
             List<string> pathList = new List<string>();
             Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            tag.IsSeamless = mode;
             foreach (TaggedPath path in tag.PathList)
             {
                 pathList.Add(path.Path);
@@ -308,6 +309,7 @@ namespace Syncless.Core
                 {
                     try
                     {
+                        StartManualSync(tag.TagName);
                         MonitorLayer.Instance.MonitorPath(path);
                     }
                     catch (Exception)
