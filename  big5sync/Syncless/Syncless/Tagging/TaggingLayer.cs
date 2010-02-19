@@ -398,20 +398,57 @@ namespace Syncless.Tagging
 
         public bool SaveTo(string xmlFilePath)
         {
-            if (!File.Exists(xmlFilePath))
-            {
-                File.Create(xmlFilePath);
-            }
+            //if (!File.Exists(xmlFilePath))
+            //{
+            //    File.Create(xmlFilePath);
+            //}
             XmlDocument xml = ConvertTaggingProfileToXml(_taggingProfile);
+            return SaveTagging(xml, "tagging.xml");
+            //try
+            //{
+            //    //xml.Save(xmlFilePath);
+                
+            //    return true;
+            //}
+            //catch (IOException)
+            //{
+            //    return false;
+            //}
+        }
+
+        public static bool SaveTagging(XmlDocument xml, string path)
+        {
+
+            XmlTextWriter textWriter = null;
+            FileStream fs = null;
             try
             {
-                xml.Save(xmlFilePath);
-                return true;
+                fs = new FileStream(path, FileMode.OpenOrCreate);
+                textWriter = new XmlTextWriter(fs, Encoding.UTF8);
+                textWriter.Formatting = Formatting.Indented;
+                xml.WriteContentTo(textWriter);
             }
-            catch (IOException)
+            catch (IOException io)
             {
+                //TODO : Error Log
+                Console.WriteLine(io.StackTrace);
                 return false;
             }
+            finally
+            {
+                if (textWriter != null)
+                {
+                    try
+                    {
+                        textWriter.Close();
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+
+            }
+            return true;
         }
 
         private TaggingProfile LoadTaggingProfile(string profileFilePath)
