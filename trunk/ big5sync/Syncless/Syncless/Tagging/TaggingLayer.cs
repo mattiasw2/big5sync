@@ -71,7 +71,6 @@ namespace Syncless.Tagging
             _taggingProfile = new TaggingProfile();
             _taggingProfile.Created = DateTime.Now.Ticks;
         }
-
         public void Init(string profileFilePath)
         {
             if (!File.Exists(profileFilePath))
