@@ -61,7 +61,7 @@ namespace Syncless.CompareAndSync
             foreach (string path in paths)
             {
                 XMLHelper.GenerateXMLFile(path);
-                RemoveEmptyFolders(path);
+                //RemoveEmptyFolders(path);
             }
 
             return syncResults;
