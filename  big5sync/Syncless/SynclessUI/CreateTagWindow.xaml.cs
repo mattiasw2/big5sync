@@ -46,7 +46,7 @@ namespace Syncless
                 {
 					_main.CreateFolderTag(tagName);
 				}
-                _main.InitializeTagList();
+                _main.InitializeTagList(string.Empty);
                 _main.ViewTagInfo(tagName);
 				
 				this.Close();
