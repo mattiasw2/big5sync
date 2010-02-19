@@ -25,7 +25,7 @@ namespace Syncless
     public partial class MainWindow : Window
     {
         private IUIControllerInterface _Igui;
-        private string _selectedTagName;
+        private string _selectedTagName = String.Empty;
 
         private const string BI_DIRECTIONAL = "Bi-Dir..";
         private const string UNI_DIRECTIONAL = "Uni-Dir..";
@@ -46,7 +46,7 @@ namespace Syncless
         {
             _Igui = ServiceLocator.GUI;
             if (_Igui.Initiate()) {
-                InitializeTagList();
+                InitializeTagList(string.Empty);
 				ResetTagInfoPanel();
             }
             else {
@@ -108,22 +108,24 @@ namespace Syncless
             {
                 BdrTaggedPath.Visibility = System.Windows.Visibility.Visible;
             }
-
-			
         }
 		
         /// <summary>
         ///     Gets the list of tags and then populates the Tag List Box and keeps a count
         /// </summary>
-        public void InitializeTagList()
+        public void InitializeTagList(String tagToSelect)
         {
             List<string> taglist = _Igui.GetAllTags();
-
-            int test = taglist.Count;
 
             ListBoxTag.ItemsSource = taglist;
 
             LblTagCount.Content = "[" + taglist.Count + "]";
+
+            if (tagToSelect != string.Empty)
+            {
+                int index = taglist.IndexOf(tagToSelect);
+                ListBoxTag.SelectedIndex = index;
+            }
         }
 		
         /// <summary>
@@ -309,7 +311,7 @@ namespace Syncless
                     case MessageBoxResult.Yes:
                         if (_Igui.DeleteTag(_selectedTagName))
                         {
-                            InitializeTagList();
+                            InitializeTagList(string.Empty);
                             ResetTagInfoPanel();
                         }
                         else
@@ -342,8 +344,8 @@ namespace Syncless
             {
                 TagView tv = _Igui.CreateFileTag(tagName);
 			    if(tv != null) {
-				    InitializeTagList();
                     ViewTagInfo(tagName);
+                    InitializeTagList(tagName);
 			    } else {
                     string messageBoxText = "File Tag could not be created.";
                     string caption = "File Tag Creation Error";
@@ -370,8 +372,8 @@ namespace Syncless
                 TagView tv = _Igui.CreateFolderTag(tagName);
                 if (tv != null)
                 {
-                    InitializeTagList();
                     ViewTagInfo(tagName);
+                    InitializeTagList(tagName);
                 }
                 else
                 {
@@ -432,7 +434,7 @@ namespace Syncless
 
                 if (tv != null)
                 {
-                    InitializeTagList();
+                    InitializeTagList(string.Empty);
                     ViewTagInfo(_selectedTagName);
                 }
                 else
