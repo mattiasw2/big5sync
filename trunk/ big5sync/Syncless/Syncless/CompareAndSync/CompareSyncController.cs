@@ -32,7 +32,14 @@ namespace Syncless.CompareAndSync
         {
             List<string> paths = null;
             List<CompareResult> results = null;
-            new Comparer().MonitorCompareFile(syncRequest, out paths, out results);
+            if (syncRequest.IsFolder)
+            {
+                new Comparer().MonitorCompareFolder(syncRequest, out paths, out results);
+            }
+            else
+            {
+                new Comparer().MonitorCompareFile(syncRequest, out paths, out results);
+            }
             new Syncer().SyncFolder(paths, results);
         }
 
