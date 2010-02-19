@@ -17,27 +17,21 @@ namespace Syncless.Tagging
         {
             string[] pathTokens = TrimEnd(path.Split('\\'));
             string logicalid = pathTokens[0].TrimEnd(':');
-            string trailingPath = null;
+            string trailingPath = "";
             foreach (TaggedPath p in _pathList)
             {
-                if (p.LogicalDriveId.Equals(logicalid))
+                if (path.StartsWith(p.Path))
                 {
                     string[] pTokens = TrimEnd(p.Path.Split('\\'));
-                    if (pathTokens.Length > pTokens.Length)
+                    int trailingIndex = Match(pathTokens, pTokens);
+                    if (trailingIndex > 0)
                     {
-                        if (CheckMatch(pathTokens, pTokens))
+                        for (int i = trailingIndex; i < pathTokens.Length - 1; i++)
                         {
-                            int trailingIndex = Match(pathTokens, pTokens);
-                            if (trailingIndex > 0)
-                            {
-                                for (int i = trailingIndex; i < pathTokens.Length - 1; i++)
-                                {
-                                    trailingPath += (pathTokens[i] + "\\");
-                                }
-                                trailingPath += pathTokens[pathTokens.Length - 1];
-                                return trailingPath;
-                            }
+                            trailingPath += (pathTokens[i] + "\\");
                         }
+                        trailingPath += pathTokens[pathTokens.Length - 1];
+                        return trailingPath;
                     }
                 }
             }
