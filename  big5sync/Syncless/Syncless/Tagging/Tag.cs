@@ -64,7 +64,7 @@ namespace Syncless.Tagging
             this._tagName = tagname;
             this._created = created;
             this._lastupdated = created;
-            this._isSeamless = false;
+            this._isSeamless = true;
             this._pathList = new List<TaggedPath>();
         }
 
