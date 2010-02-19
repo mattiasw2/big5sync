@@ -22,16 +22,19 @@ namespace Syncless.Tagging
             {
                 if (path.StartsWith(p.Path))
                 {
-                    string[] pTokens = TrimEnd(p.Path.Split('\\'));
-                    int trailingIndex = Match(pathTokens, pTokens);
-                    if (trailingIndex > 0)
+                    if (!path.Equals(p.Path))
                     {
-                        for (int i = trailingIndex; i < pathTokens.Length - 1; i++)
+                        string[] pTokens = TrimEnd(p.Path.Split('\\'));
+                        int trailingIndex = Match(pathTokens, pTokens);
+                        if (trailingIndex > 0)
                         {
-                            trailingPath += (pathTokens[i] + "\\");
+                            for (int i = trailingIndex; i < pathTokens.Length - 1; i++)
+                            {
+                                trailingPath += (pathTokens[i] + "\\");
+                            }
+                            trailingPath += pathTokens[pathTokens.Length - 1];
+                            return trailingPath;
                         }
-                        trailingPath += pathTokens[pathTokens.Length - 1];
-                        return trailingPath;
                     }
                 }
             }
