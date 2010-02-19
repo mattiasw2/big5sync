@@ -206,8 +206,6 @@ namespace Syncless.CompareAndSync
 
             foreach (FileInfo fileInfo in dirInfo.GetFiles())
             {
-
-
                 FileStream fileStream = fileInfo.OpenRead();
                 byte[] fileHash = MD5.Create().ComputeHash(fileStream);
                 fileStream.Close();

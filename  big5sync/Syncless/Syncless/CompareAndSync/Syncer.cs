@@ -87,10 +87,6 @@ namespace Syncless.CompareAndSync
 
             try
             {
-                if (!target.Exists)
-                {
-                    Directory.CreateDirectory(target.FullName);
-                }
                 Directory.Move(from, to);
                 return new SyncResult(FileChangeType.Rename, from, to, true);
             }
