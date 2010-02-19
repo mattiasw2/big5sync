@@ -106,6 +106,26 @@ namespace Syncless.Tagging
             }
         }
 
+        public void RenameFolderTag(string oldname, string newname)
+        {
+            if (CheckFolderTagExists(oldname))
+            {
+                if (!CheckFolderTagExists(newname))
+                {
+                    Debug.Assert(GetFolderTag(oldname) != null);
+                    GetFolderTag(oldname).TagName = newname;
+                }
+                else
+                {
+                    throw new TagAlreadyExistsException();
+                }
+            }
+            else
+            {
+                throw new TagNotFoundException();
+            }
+        }
+
         /// <summary>
         /// Remove the Folder Tag of tagname
         /// </summary>
@@ -230,6 +250,26 @@ namespace Syncless.Tagging
             else
             {
                 throw new TagAlreadyExistsException();
+            }
+        }
+
+        public void RenameFileTag(string oldname, string newname)
+        {
+            if (CheckFileTagExists(oldname))
+            {
+                if (!CheckFileTagExists(newname))
+                {
+                    Debug.Assert(GetFileTag(oldname) != null);
+                    GetFileTag(oldname).TagName = newname;
+                }
+                else
+                {
+                    throw new TagAlreadyExistsException();
+                }
+            }
+            else
+            {
+                throw new TagNotFoundException();
             }
         }
 
