@@ -645,6 +645,7 @@ namespace Syncless.Tagging
         /// <returns>The List of Tagged Paths</returns>
         public List<string> FindSimilarPathForFolder(string folderPath)
         {
+            string logicalid = folderPath.Split('\\')[0].TrimEnd(':');
             List<string> folderPathList = new List<string>();
             foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
@@ -655,6 +656,23 @@ namespace Syncless.Tagging
                         if (!folderPathList.Contains(p.Path) && !p.Path.Equals(folderPath))
                         {
                             folderPathList.Add(p.Path);
+                        }
+                    }
+                }
+            }
+            List<FolderTag> matchingFolderTag = RetrieveFolderTagById(logicalid);
+            foreach (FolderTag folderTag in matchingFolderTag)
+            {
+                string appendedPath;
+                string trailingPath = folderTag.FindMatchedParentDirectory(folderPath);
+                if (trailingPath != null)
+                {
+                    foreach (TaggedPath p in folderTag.PathList)
+                    {
+                        appendedPath = p.Append(trailingPath) + "\\";
+                        if (!folderPathList.Contains(appendedPath) && !appendedPath.Equals(folderPath))
+                        {
+                            folderPathList.Add(appendedPath);
                         }
                     }
                 }
