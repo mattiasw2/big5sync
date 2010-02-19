@@ -18,7 +18,7 @@ namespace Syncless.CompareAndSync
         private const string NODE_LAST_MODIFIED = "last_modified";
         private const string NODE_LAST_CREATED = "last_created";
         public const string METADATAPATH = "_syncless\\syncless.xml";
-
+        private static readonly object syncLock = new object(); 
         /// <summary>
         /// Given a dirpath , breaks it up into a folder and returns an Xpath Expression
         /// If it is an empty string , return the root of the xml
@@ -167,16 +167,19 @@ namespace Syncless.CompareAndSync
                 }
             }
 
-            XmlTextWriter writer = new XmlTextWriter(writeTo, null);
-            writer.Formatting = Formatting.Indented;
-            writer.WriteStartDocument();
-            writer.WriteStartElement("meta-data");
-            writer.WriteElementString("last_modified", (DateTime.Now.Ticks).ToString());
-            HandleSubDirectories(writer, new DirectoryInfo(folderPath));
-            writer.WriteEndElement();
-            writer.WriteEndDocument();
-            writer.Flush();
-            writer.Close();
+            lock (syncLock)
+            {
+                XmlTextWriter writer = new XmlTextWriter(writeTo, null);
+                writer.Formatting = Formatting.Indented;
+                writer.WriteStartDocument();
+                writer.WriteStartElement("meta-data");
+                writer.WriteElementString("last_modified", (DateTime.Now.Ticks).ToString());
+                HandleSubDirectories(writer, new DirectoryInfo(folderPath));
+                writer.WriteEndElement();
+                writer.WriteEndDocument();
+                writer.Flush();
+                writer.Close();
+            }
 
         }
 
