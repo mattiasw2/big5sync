@@ -30,8 +30,12 @@ namespace Syncless.CompareAndSync
         public void MonitorCompareFile(MonitorSyncRequest syncRequest, out List<string> paths, out List<CompareResult> results)
         {
             FileInfo oldPath = new FileInfo(syncRequest.OldPath.FullPath);
-            FileInfo newPath = new FileInfo(syncRequest.NewPath.FullPath);
+            FileInfo newPath = null;
 
+            if (syncRequest.NewPath != null)
+            {
+                newPath = new FileInfo(syncRequest.NewPath.FullPath);
+            }
             paths = new List<string>();
             results = new List<CompareResult>();
 

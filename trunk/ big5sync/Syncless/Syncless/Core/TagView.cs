@@ -14,11 +14,11 @@ namespace Syncless.Core
             get { return _tagName; }
             set { this._tagName = value; }
         }
-
+        private List<string> _pathStringList;
         public List<string> PathStringList
         {
-            get { return PathStringList; }
-            set { this.PathStringList = value; }
+            get { return _pathStringList; }
+            set { this._pathStringList = value; }
         }
 
         protected long _lastupdated;
@@ -51,7 +51,7 @@ namespace Syncless.Core
             this._created = created;
             this._lastupdated = created;
             this._isSeamless = false;
-            this.PathStringList = new List<string> ();
+            this._pathStringList = new List<string> ();
         }
     }
 }

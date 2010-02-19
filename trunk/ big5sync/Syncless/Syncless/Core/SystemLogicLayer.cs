@@ -32,211 +32,7 @@ namespace Syncless.Core
             
         }
 
-        #region IUIControllerInterface Members
 
-        public List<Tag> GetAllTags()
-        {
-            return TaggingLayer.Instance.AllTagList;
-        }
-
-        public List<Tag> GetAllTags(FileInfo file)
-        {
-            return null;
-            //return TaggingLayer.Instance.RetrieveFileTagByPath(file.FullName);
-        }
-
-        public List<Tag> GetAllTags(DirectoryInfo info)
-        {
-            return null;
-            //return TaggingLayer.Instance.RetrieveFolderTagByPath(info.FullName);
-        }
-
-        public FileTag CreateFileTag(string tagname)
-        {
-            return TaggingLayer.Instance.CreateFileTag(tagname);
-        }
-
-        public FolderTag CreateFolderTag(string tagname)
-        {
-            return TaggingLayer.Instance.CreateFolderTag(tagname);
-        }
-
-        public FileTag TagFile(string tagname, FileInfo file)
-        {
-            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(file.FullName,true);
-            return TaggingLayer.Instance.TagFile(path, tagname);
-        }
-
-        public FileTag TagFile(FileTag tag, FileInfo file)
-        {
-            return TagFile(tag.TagName, file);
-        }
-
-        public FolderTag TagFolder(string tagname, DirectoryInfo folder)
-        {
-            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
-            FolderTag tag = TaggingLayer.Instance.TagFolder(path, tagname);
-            StartManualSync(tag);
-            return tag;
-        }
-
-        public FolderTag TagFolder(FolderTag tag, DirectoryInfo folder)
-        {
-            return TagFolder(tag.TagName, folder);
-        }
-
-        public int UntagFile(FileTag tag, FileInfo file)
-        {
-            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(file.FullName, true);
-            return TaggingLayer.Instance.UntagFile(path, tag.TagName);
-        }
-
-        public int UntagFolder(FolderTag tag, DirectoryInfo folder)
-        {
-            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
-            return TaggingLayer.Instance.UntagFolder(path, tag.TagName);
-        }
-
-        public bool DeleteTag(Tag tag)
-        {
-            Tag t = TaggingLayer.Instance.RemoveTag(tag.TagName);
-            if (t != null)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        #region DO NOT IMPLEMENT
-        public bool DeleteAllTags()
-        {
-            return false;
-        }
-
-        public bool DeleteAllTags(FileInfo file)
-        {
-            return false;
-        }
-
-        public bool DeleteAllTags(DirectoryInfo folder)
-        {
-            return false;
-        }
-        public bool SetTagBidirectional(FileTag tag)
-        {
-            return false;
-        }
-
-        public bool SetTagBidirectional(FolderTag tag)
-        {
-            return false;
-        }
-
-        #endregion
-        public bool StartManualSync(Tag tag)
-        {
-            List<string> paths = tag.PathStringList;
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            SyncRequest syncRequest = new SyncRequest(convertedPath, false);
-            CompareSyncController.Instance.Sync(syncRequest);
-            return true;
-        }
-
-        public bool StartManualSync(FileTag fileTag)
-        {            
-            List<string> paths = fileTag.PathStringList;
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            SyncRequest syncRequest = new SyncRequest(convertedPath, false);
-            CompareSyncController.Instance.Sync(syncRequest);
-            return true;
-        }
-
-        public bool StartManualSync(FolderTag folderTag)
-        {            
-            List<string> paths = folderTag.PathStringList;
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            SyncRequest syncRequest = new SyncRequest(convertedPath, true);
-            CompareSyncController.Instance.Sync(syncRequest);
-            return true;
-        }
-
-        public bool MonitorTag(Tag tag, bool mode)
-        {
-            //may need to return a list of error.
-            List<string> pathList = new List<string>();
-            foreach (TaggedPath path in tag.PathList)
-            {
-                pathList.Add(path.Path);
-            }
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(pathList);
-            if (mode)
-            {
-                foreach (string path in convertedPath)
-                {
-                    try
-                    {
-                        MonitorLayer.Instance.MonitorPath(path);
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-            }
-            else
-            {
-                foreach (string path in convertedPath)
-                {
-                    try
-                    {
-                        MonitorLayer.Instance.UnMonitorPath(path);
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-            }
-            return true;
-        }
-
-        
-        public List<CompareResult> PreviewSync(FolderTag tag)
-        {
-            FolderTag folderTag = TaggingLayer.Instance.RetrieveFolderTag(tag.TagName);
-            List<string> paths = folderTag.PathStringList;
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            CompareRequest compareRequest = new CompareRequest(convertedPath, true);
-            return CompareSyncController.Instance.Compare(compareRequest);
-        }
-
-        public List<CompareResult> PreviewSync(FileTag tag)
-        {
-            FileTag fileTag = TaggingLayer.Instance.RetrieveFileTag(tag.TagName);
-            List<string> paths = fileTag.PathStringList;
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            CompareRequest compareRequest = new CompareRequest(convertedPath, true);
-            return CompareSyncController.Instance.Compare(compareRequest);
-        }
-
-        public bool PrepareForTermination()
-        {
-            return true;
-        }
-
-        public bool Terminate()
-        {
-            DeviceWatcher.Instance.Terminate();
-            return false;
-        }
-
-        public bool Initiate()
-        {
-            ProfilingLayer.Instance.Init(ProfilingLayer.RELATIVE_PROFILING_ROOT_SAVE_PATH);
-            TaggingLayer.Instance.Init(TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH);
-            DeviceWatcher.Instance.ToString();
-            return true;
-        }
-
-        #endregion
 
 
 
@@ -244,7 +40,7 @@ namespace Syncless.Core
 
         public void HandleFileChange(FileChangeEvent fe)
         {
-            
+             
             string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
             if(logicalOldPath == null){
                 return;
@@ -370,6 +166,186 @@ namespace Syncless.Core
             return LoggingLayer.Instance.GetLogger(type);
         }
         */
+        #endregion
+
+        #region IUIControllerInterface Members
+
+        public List<string> GetAllTags()
+        {
+            List<Tag> tagList= TaggingLayer.Instance.AllTagList;
+            List<string> tagNames = new List<string>();
+            foreach(Tag t in tagList){
+                tagNames.Add(t.TagName);
+            }
+            return tagNames;
+        }
+        public TagView GetTag(string tagname)
+        {
+            Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
+            if (t is FolderTag)
+            {
+                return ConvertToFolderTagView((FolderTag)t);
+            }
+            else if (t is FileTag)
+            {
+                return ConvertToFileTagView((FileTag)t);
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+        public bool StartManualSync(string tagname)
+        {
+            Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            List<string> paths = tag.PathStringList;
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
+            SyncRequest syncRequest = new SyncRequest(convertedPath, false);
+            CompareSyncController.Instance.Sync(syncRequest);
+            return true;
+        }
+
+        public bool DeleteTag(string tagname)
+        {
+            throw new NotImplementedException();
+        }
+
+        public FileTagView CreateFileTag(string tagname)
+        {
+            return ConvertToFileTagView(TaggingLayer.Instance.CreateFileTag(tagname));
+        }
+
+        public FolderTagView CreateFolderTag(string tagname)
+        {
+            return ConvertToFolderTagView(TaggingLayer.Instance.CreateFolderTag(tagname));
+        }
+
+        public FileTagView TagFile(string tagname, FileInfo file)
+        {
+            return TagFile(tagname, file);
+        }
+        private FolderTagView ConvertToFolderTagView(FolderTag t)
+        {
+            FolderTagView view = new FolderTagView(t.TagName, t.LastUpdated);
+            List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.PathStringList);
+            view.PathStringList = pathList;
+            view.Created = t.Created;
+            view.IsSeamless = t.IsSeamless;
+            return view;
+        }
+        private FileTagView ConvertToFileTagView(FileTag t)
+        {
+            FileTagView view = new FileTagView(t.TagName, t.LastUpdated);
+            List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.PathStringList);
+            view.PathStringList = pathList;
+            view.Created = t.Created;
+            view.IsSeamless = t.IsSeamless;
+            return view;
+        }
+        public FolderTagView TagFolder(string tagname, DirectoryInfo folder)
+        {
+            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
+            FolderTag tag = TaggingLayer.Instance.TagFolder(path, tagname);
+            StartManualSync(tag.TagName);
+            return ConvertToFolderTagView(tag);
+        }
+        public int UntagFile(string tagname, FileInfo file)
+        {
+            Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(file.FullName, true);
+            return TaggingLayer.Instance.UntagFile(path, tag.TagName);
+        }
+
+        public int UntagFolder(string tagname, DirectoryInfo folder)
+        {
+            Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
+            return TaggingLayer.Instance.UntagFolder(path, tag.TagName);
+        }
+
+        public bool MonitorTag(string tagname, bool mode)
+        {
+            //may need to return a list of error.
+            List<string> pathList = new List<string>();
+            Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            foreach (TaggedPath path in tag.PathList)
+            {
+                pathList.Add(path.Path);
+            }
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(pathList);
+            if (mode)
+            {
+                foreach (string path in convertedPath)
+                {
+                    try
+                    {
+                        MonitorLayer.Instance.MonitorPath(path);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+            else
+            {
+                foreach (string path in convertedPath)
+                {
+                    try
+                    {
+                        MonitorLayer.Instance.UnMonitorPath(path);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+            return true;
+        }
+
+        public bool SetTagMultiDirectional(string tagname)
+        {
+            return false;
+        }
+
+        public bool PrepareForTermination()
+        {
+            return true;
+        }
+
+        public bool Terminate()
+        {
+            DeviceWatcher.Instance.Terminate();
+            return false;
+        }
+
+        public bool Initiate()
+        {
+            ProfilingLayer.Instance.Init(ProfilingLayer.RELATIVE_PROFILING_ROOT_SAVE_PATH);
+            TaggingLayer.Instance.Init(TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH);
+            DeviceWatcher.Instance.ToString();
+            return true;
+        }
+
+        public List<CompareResult> PreviewSync(FolderTag tag)
+        {
+            FolderTag folderTag = TaggingLayer.Instance.RetrieveFolderTag(tag.TagName);
+            List<string> paths = folderTag.PathStringList;
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
+            CompareRequest compareRequest = new CompareRequest(convertedPath, true);
+            return CompareSyncController.Instance.Compare(compareRequest);
+        }
+
+        public List<CompareResult> PreviewSync(FileTag tag)
+        {
+            FileTag fileTag = TaggingLayer.Instance.RetrieveFileTag(tag.TagName);
+            List<string> paths = fileTag.PathStringList;
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
+            CompareRequest compareRequest = new CompareRequest(convertedPath, true);
+            return CompareSyncController.Instance.Compare(compareRequest);
+        }
+
         #endregion
     }
 }
