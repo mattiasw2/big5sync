@@ -100,7 +100,16 @@ namespace Syncless
 			TagIcon.Visibility = System.Windows.Visibility.Visible;
 			TagStatusPanel.Visibility = System.Windows.Visibility.Visible;
 			SyncPanel.Visibility = System.Windows.Visibility.Visible;
-			BdrTaggedPath.Visibility = System.Windows.Visibility.Visible;
+            if (tv.PathStringList.Count == 0)
+            {
+                BdrTaggedPath.Visibility = System.Windows.Visibility.Hidden;
+            }
+            else
+            {
+                BdrTaggedPath.Visibility = System.Windows.Visibility.Visible;
+            }
+
+			
         }
 		
         /// <summary>
