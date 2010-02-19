@@ -37,9 +37,13 @@ namespace Syncless
 			string tagName = TxtBoxTagName.Text.Trim();
 			
             if(tagName != "") {
-				if(CmbBoxType.SelectedItem.ToString() == "File") {
+                Console.WriteLine(CmbBoxType.SelectionBoxItem.ToString());
+                if (CmbBoxType.SelectionBoxItem.ToString() == "File")
+                {
                     _main.CreateFileTag(tagName);
-				} else if(CmbBoxType.SelectedItem.ToString() == "Folder") {
+                }
+                else if (CmbBoxType.SelectionBoxItem.ToString() == "Folder")
+                {
 					_main.CreateFolderTag(tagName);
 				}
                 _main.InitializeTagList();
