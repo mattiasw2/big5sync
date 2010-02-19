@@ -7,10 +7,28 @@ namespace Syncless.Tagging.Exceptions
 {
     public class TagNotFoundException : Exception
     {
-        //error code : 100-199
+        private string _tagname;
+
+        public string Tagname
+        {
+            get { return _tagname; }
+        }
+        
         public TagNotFoundException()
             : base()
         {
+        }
+
+        public TagNotFoundException(string tagname)
+            : base()
+        {
+            this._tagname = tagname;
+        }
+
+        public TagNotFoundException(string message, string tagname)
+            : base(message)
+        {
+            this._tagname = tagname;
         }
             
     }
