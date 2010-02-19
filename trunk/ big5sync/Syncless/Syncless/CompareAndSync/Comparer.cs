@@ -53,6 +53,14 @@ namespace Syncless.CompareAndSync
                         compareResultList.Add(new CompareResult(FileChangeType.Create, sourceInfo.FullName,
                             destInfo.FullName));
                     }
+
+                    else if (CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo)) &&
+                        sourceInfo.Name.Equals(destInfo.Name))
+                    {
+                        compareResultList.Add(new CompareResult(FileChangeType.None, sourceInfo.FullName,
+                            destInfo.FullName));
+                    }
+
                 }
             }
 
