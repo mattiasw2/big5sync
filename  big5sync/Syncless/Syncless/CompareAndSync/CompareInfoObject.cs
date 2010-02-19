@@ -109,6 +109,18 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        public bool IsFolder
+        {
+            get
+            {
+                return _isFolder;
+            }
+            set
+            {
+                _isFolder = value;
+            }
+        }
+
         #region IComparable<CompareInfoObject> Members
 
         public int CompareTo(CompareInfoObject other)
