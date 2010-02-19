@@ -12,15 +12,15 @@ namespace Syncless.Core
 
         public static IUIControllerInterface GUI{
             get { 
-                //return SystemLogicLayer.Instance; 
-                return null;
+                return SystemLogicLayer.Instance; 
+                //return null;
             }
         } // SystemLogicLayer.Instance;
         public static IMonitorControllerInterface MonitorI
         {
             get { 
-                //return SystemLogicLayer.Instance;
-                return null;
+                return SystemLogicLayer.Instance;
+                //return null;
             }
         }
         /*
@@ -29,7 +29,7 @@ namespace Syncless.Core
             get { return SystemLogicLayer.Instance; }
         }
         */
-        
+        /*
         public static Logger GetLogger(string type)
         {
             if (type.Equals(USER_LOG))
@@ -47,6 +47,6 @@ namespace Syncless.Core
                 throw new LoggerNotFoundException(ErrorMessage.LOGGER_NOT_FOUND);
             }
         }
-        
+        */
     }
 }

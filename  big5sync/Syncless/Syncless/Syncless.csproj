@@ -72,7 +72,6 @@
     <Compile Include="Core\SystemLogicLayer.cs" />
     <Compile Include="Core\TagView.cs" />
     <Compile Include="Helper\ErrorMessage.cs" />
-    <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LoggingLayer.cs" />
     <Compile Include="Monitor\DeleteChangeEvent.cs" />
     <Compile Include="Monitor\DriveChangeEvent.cs" />
