@@ -29,7 +29,6 @@ namespace Syncless.Core
 
         }
 
-
         #region IUIControllerInterface Members
 
         public List<Tag> GetAllTags()
@@ -240,41 +239,56 @@ namespace Syncless.Core
 
         public void HandleFileChange(FileChangeEvent fe)
         {
-            string logicalPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
-            Debug.Assert(logicalPath != null);
-            List<string> logicalSimilarPaths = TaggingLayer.Instance.FindSimilarPathForFile(logicalPath);
+            string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
+            if(logicalOldPath == null){
+                return;
+            }
+            
+            List<string> logicalSimilarPaths = TaggingLayer.Instance.FindSimilarPathForFile(logicalOldPath);
             List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
             if (fe.Event == EventChangeType.CREATED)
             {
                 MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create,false);
-               
+                CompareSyncController.Instance.Sync(syncRequest);
             }
             else if (fe.Event == EventChangeType.MODIFIED)
             {
                 MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create, false);
-
+                CompareSyncController.Instance.Sync(syncRequest);
             }
             else if (fe.Event == EventChangeType.RENAMED)
             {
-                MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create, false);
+                string physicalNewPath = fe.NewPath.FullName;
+                string logicalNewPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(physicalNewPath,false);
+                Debug.Assert(logicalNewPath != null);
+                MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName,physicalNewPath, physicalSimilarPaths, FileChangeType.Create, false);
+                TaggingLayer.Instance.RenameFile(logicalOldPath, logicalNewPath);
+                CompareSyncController.Instance.Sync(syncRequest);
             }
         }
 
         public void HandleFolderChange(FolderChangeEvent fe)
         {
             string logicalPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
-            Debug.Assert(logicalPath != null);
+            if (logicalPath == null)
+            {
+                return;
+            }
             List<string> logicalSimilarPaths = TaggingLayer.Instance.FindSimilarPathForFolder(logicalPath);
             List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
             if (fe.Event == EventChangeType.CREATED)
             {
                 MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create,true);
                 CompareSyncController.Instance.Sync(syncRequest);
+
             }
             else if (fe.Event == EventChangeType.RENAMED)
             {
+                string physicalNewPath = fe.NewPath.FullName;
+                string logicalNewPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(physicalNewPath, false);
                 MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Rename,true);
                 CompareSyncController.Instance.Sync(syncRequest);
+                TaggingLayer.Instance.RenameFolder(logicalPath, logicalNewPath);
             }
         }
 
