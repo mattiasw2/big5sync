@@ -9,47 +9,45 @@ namespace Syncless.Core
 {
     public interface IUIControllerInterface
     {
-	    List<Tag> GetAllTags();
-	    List<Tag> GetAllTags(FileInfo file);
-	    List<Tag> GetAllTags(DirectoryInfo info);
+        List<string> GetAllTags();
+        List<Tag> GetAllTags(FileInfo file);
+        List<Tag> GetAllTags(DirectoryInfo info);
 
-		FileTag CreateFileTag(string tagname);
-		FolderTag CreateFolderTag(string tagname);
+        TagView GetTag(String tagname);
 
-		FileTag TagFile(string tagname, FileInfo file);
-		FileTag TagFile(FileTag tag, FileInfo file);
-		FolderTag TagFolder(string tagname, DirectoryInfo folder);
-		FolderTag TagFolder(FolderTag tag, DirectoryInfo file);
+        bool MonitorTag(String tagname);
 
-		int UntagFile(FileTag tag, FileInfo file);
-		int UntagFolder(FolderTag tag, DirectoryInfo folder);
+        bool StartManualSync(String tagname);
 
-        bool DeleteTag(Tag tag);
+        bool DeleteTag(String tagname);
 
-        // deprecated
-		//bool DeleteTag(FolderTag tag);
-		//bool DeleteTag(FileTag tag);
+        FileTagView CreateFileTag(String tagname);
 
-		bool DeleteAllTags(); // Delete all existing tags (This one is like a general reset, might not need)
-		bool DeleteAllTags(FileInfo file); // delete all tags associated with a file
-		bool DeleteAllTags(DirectoryInfo folder); // delete all tags associated with a directory
+        FolderTagView CreateFolderTag(String tagname);
 
-		bool StartManualSync(Tag tagname);
+        FileTag TagFile(string tagname, FileInfo file);
+        FolderTag TagFolder(string tagname, DirectoryInfo folder);
 
-		bool MonitorTag(Tag tag, bool mode);
+        int UntagFile(string tagname, FileInfo file);
+        int UntagFolder(string tagname, DirectoryInfo folder);
 
-		bool SetTagBidirectional(FileTag tag);
-		bool SetTagBidirectional(FolderTag tag);
+        bool MonitorTag(string tagname, bool mode);
+
+        bool SetTagMultiDirectional(string tagname);
+
+        bool PrepareForTermination();
+        bool Terminate();
+
+        bool Initiate();
 
 		List<CompareResult> PreviewSync(FolderTag tag);
 		List<CompareResult> PreviewSync(FileTag tag);
 
+        // bool DeleteAllTags(); // Delete all existing tags (This one is like a general reset, might not need)
+        // bool DeleteAllTags(FileInfo file); // delete all tags associated with a file
+        // bool DeleteAllTags(DirectoryInfo folder); // delete all tags associated with a directory
+
 		//Log ViewLog(LogSettings log);
-
-		bool PrepareForTermination();
-		bool Terminate();
-
-		bool Initiate();
 
 		// 8) Set Uni-direction/Source (Tentative - 0.9)
 		// bool SetUnidirectional(FileTag, FileInfo file);

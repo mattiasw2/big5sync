@@ -119,7 +119,7 @@ namespace Syncless
             // Gets a list of all tags
             _tagList = _Igui.GetAllTags();
 
-            ListBoxTag.ItemsSource = (IEnumerable) LoadTagListBoxData();
+            ListBoxTag.ItemsSource = LoadTagListBoxData();
 			
             UpdateTagCount();
         }
