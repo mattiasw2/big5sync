@@ -328,33 +328,60 @@ namespace Syncless
         }
 		
 		public void CreateFileTag(string tagName) {
-			TagView tv = _Igui.CreateFileTag(tagName);
-			if(tv != null) {
-				InitializeTagList();
-                ViewTagInfo(tagName);
-			} else {
-                string messageBoxText = "File Tag could not be created.";
-                string caption = "File Tag Creation Error";
+            try
+            {
+                TagView tv = _Igui.CreateFileTag(tagName);
+			    if(tv != null) {
+				    InitializeTagList();
+                    ViewTagInfo(tagName);
+			    } else {
+                    string messageBoxText = "File Tag could not be created.";
+                    string caption = "File Tag Creation Error";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Error;
+
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+			    }
+                }
+            catch (Syncless.Tagging.Exceptions.TagAlreadyExistsException e)
+            {
+                string messageBoxText = "Please specify another tagname.";
+                string caption = "Tag Already Exist";
                 MessageBoxButton button = MessageBoxButton.OK;
                 MessageBoxImage icon = MessageBoxImage.Error;
 
                 MessageBox.Show(messageBoxText, caption, button, icon);
-			}
+            }
 		}
 		
 		public void CreateFolderTag(string tagName) {
-			TagView tv =_Igui.CreateFolderTag(tagName);
-			if(tv != null) {
-				InitializeTagList();
-                ViewTagInfo(tagName);
-			} else {
-                string messageBoxText = "Folder Tag could not be created.";
-                string caption = "Folder Tag Creation Error";
+            try
+            {
+                TagView tv = _Igui.CreateFolderTag(tagName);
+                if (tv != null)
+                {
+                    InitializeTagList();
+                    ViewTagInfo(tagName);
+                }
+                else
+                {
+                    string messageBoxText = "Please specify another tagname.";
+                    string caption = "Folder Tag Creation Error";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Error;
+
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+                }
+            }
+            catch (Syncless.Tagging.Exceptions.TagAlreadyExistsException e)
+            {
+                string messageBoxText = "Please specify another tagname.";
+                string caption = "Tag Already Exist";
                 MessageBoxButton button = MessageBoxButton.OK;
                 MessageBoxImage icon = MessageBoxImage.Error;
 
                 MessageBox.Show(messageBoxText, caption, button, icon);
-			}
+            }
 		}
 
 		private void BtnCreate_Click(object sender, System.Windows.RoutedEventArgs e)
