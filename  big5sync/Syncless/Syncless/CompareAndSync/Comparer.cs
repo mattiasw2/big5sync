@@ -76,6 +76,7 @@ namespace Syncless.CompareAndSync
                     foreach (MonitorPathPair dest in syncRequest.Dest)
                     {
                         string newDestPath = new FileInfo(dest.FullPath).DirectoryName;
+                        Console.WriteLine(newDestPath);
                         results.Add(new CompareResult(syncRequest.ChangeType, dest.FullPath, Path.Combine(newDestPath, fileName), syncRequest.IsFolder));
                     }
                     break;
@@ -752,6 +753,8 @@ namespace Syncless.CompareAndSync
         public static string CalculateMD5Hash(FileInfo fileInput)
         {
             Debug.Assert(fileInput.Exists);
+            Debug.Assert(fileInput.Name != "syncless.xml");
+            Debug.Assert(fileInput.Directory.Name != "_syncless");
             FileStream fileStream = fileInput.OpenRead();
             byte[] fileHash = MD5.Create().ComputeHash(fileStream);
             fileStream.Close();
