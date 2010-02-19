@@ -398,27 +398,12 @@ namespace Syncless.Tagging
 
         public bool SaveTo(string xmlFilePath)
         {
-            //if (!File.Exists(xmlFilePath))
-            //{
-            //    File.Create(xmlFilePath);
-            //}
             XmlDocument xml = ConvertTaggingProfileToXml(_taggingProfile);
             return SaveTagging(xml, "tagging.xml");
-            //try
-            //{
-            //    //xml.Save(xmlFilePath);
-                
-            //    return true;
-            //}
-            //catch (IOException)
-            //{
-            //    return false;
-            //}
         }
 
-        public static bool SaveTagging(XmlDocument xml, string path)
+        private bool SaveTagging(XmlDocument xml, string path)
         {
-
             XmlTextWriter textWriter = null;
             FileStream fs = null;
             try
@@ -428,10 +413,8 @@ namespace Syncless.Tagging
                 textWriter.Formatting = Formatting.Indented;
                 xml.WriteContentTo(textWriter);
             }
-            catch (IOException io)
+            catch (IOException)
             {
-                //TODO : Error Log
-                Console.WriteLine(io.StackTrace);
                 return false;
             }
             finally
@@ -446,7 +429,6 @@ namespace Syncless.Tagging
                     {
                     }
                 }
-
             }
             return true;
         }
