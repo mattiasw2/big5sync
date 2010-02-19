@@ -9,7 +9,7 @@ namespace Syncless.CompareAndSync
     /// Stores only necessary information for file comparison
     /// TODO: Include hash value, changetype soon
     /// </summary>
-    public class CompareInfoObject
+    public class CompareInfoObject : IComparable<CompareInfoObject>
     {
         private string _origin, _fullName, _name, _hash;
         private long _creationTime, _lastWriteTime, _length;
@@ -107,5 +107,14 @@ namespace Syncless.CompareAndSync
                 _changeType = value;
             }
         }
+
+        #region IComparable<CompareInfoObject> Members
+
+        public int CompareTo(CompareInfoObject other)
+        {
+            return this.RelativePathToOrigin.CompareTo(other.RelativePathToOrigin);
+        }
+
+        #endregion
     }
 }
