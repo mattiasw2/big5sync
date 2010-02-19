@@ -68,7 +68,7 @@ namespace Syncless
             ViewTagInfo(_selectedTagName);
         }
 
-        private void ViewTagInfo(string tagname)
+        public void ViewTagInfo(string tagname)
         {
             TagView tv = _Igui.GetTag(tagname);
 
@@ -106,9 +106,11 @@ namespace Syncless
         /// <summary>
         ///     Gets the list of tags and then populates the Tag List Box and keeps a count
         /// </summary>
-        private void InitializeTagList()
+        public void InitializeTagList()
         {
             List<string> taglist = _Igui.GetAllTags();
+
+            int test = taglist.Count;
 
             ListBoxTag.ItemsSource = taglist;
 
