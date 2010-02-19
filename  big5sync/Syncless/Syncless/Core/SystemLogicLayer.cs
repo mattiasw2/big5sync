@@ -10,7 +10,7 @@ using Syncless.Profiling;
 using System.Diagnostics;
 namespace Syncless.Core
 {
-    internal class SystemLogicLayer : IMonitorControllerInterface
+    internal class SystemLogicLayer
     {
         private static SystemLogicLayer _instance;
         public static SystemLogicLayer Instance
@@ -72,7 +72,9 @@ namespace Syncless.Core
         public FolderTag TagFolder(string tagname, DirectoryInfo folder)
         {
             string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
-            return TaggingLayer.Instance.TagFolder(path, tagname);
+            FolderTag tag = TaggingLayer.Instance.TagFolder(path, tagname);
+            StartManualSync(tag);
+            return tag;
         }
 
         public FolderTag TagFolder(FolderTag tag, DirectoryInfo folder)
@@ -239,12 +241,19 @@ namespace Syncless.Core
 
         public void HandleFileChange(FileChangeEvent fe)
         {
+            /*
             string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
             if(logicalOldPath == null){
                 return;
             }
             
             List<string> logicalSimilarPaths = TaggingLayer.Instance.FindSimilarPathForFile(logicalOldPath);
+            foreach (string logical in logicalSimilarPaths)
+            {
+                //List<Tag> tagList = TaggingLayer.Instance.Retrieve
+
+            }
+
             List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
             if (fe.Event == EventChangeType.CREATED)
             {
@@ -265,10 +274,12 @@ namespace Syncless.Core
                 TaggingLayer.Instance.RenameFile(logicalOldPath, logicalNewPath);
                 CompareSyncController.Instance.Sync(syncRequest);
             }
+            */
         }
 
         public void HandleFolderChange(FolderChangeEvent fe)
         {
+            /*
             string logicalPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
             if (logicalPath == null)
             {
@@ -290,10 +301,12 @@ namespace Syncless.Core
                 CompareSyncController.Instance.Sync(syncRequest);
                 TaggingLayer.Instance.RenameFolder(logicalPath, logicalNewPath);
             }
+             */
         }
 
         public void HandleDriveChange(DriveChangeEvent dce)
         {
+            /*
             if (dce.Type == DriveChangeType.DRIVE_IN)
             {
                 ProfilingLayer.Instance.UpdateDrive(dce.Info);
@@ -326,6 +339,7 @@ namespace Syncless.Core
                 }
                 ProfilingLayer.Instance.RemoveDrive(dce.Info);
             }
+             */
         }
 
         public void HandleDeleteChange(DeleteChangeEvent dce)

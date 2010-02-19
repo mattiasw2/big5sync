@@ -8,11 +8,17 @@ namespace Syncless.Core
     public class ServiceLocator
     {
         public static IUIControllerInterface GUI{
-            get { return null; }
+            get { 
+                //return SystemLogicLayer.Instance; 
+                return null;
+            }
         } // SystemLogicLayer.Instance;
         public static IMonitorControllerInterface MonitorI
         {
-            get { return SystemLogicLayer.Instance; }
+            get { 
+                //return SystemLogicLayer.Instance;
+                return null;
+            }
         }
         /*
         public static ICommandLineControllerInterface CommandLine
