@@ -169,6 +169,7 @@ namespace Syncless.CompareAndSync
 
             lock (syncLock)
             {
+                Debug.Assert(!writeTo.Equals(""));
                 XmlTextWriter writer = new XmlTextWriter(writeTo, null);
                 writer.Formatting = Formatting.Indented;
                 writer.WriteStartDocument();
@@ -179,6 +180,7 @@ namespace Syncless.CompareAndSync
                 writer.WriteEndDocument();
                 writer.Flush();
                 writer.Close();
+        
             }
 
         }
