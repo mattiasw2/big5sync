@@ -405,7 +405,9 @@ namespace Syncless
                     ofd.ShowDialog();
                     string path = ofd.FileName;
 
-                    tv = _Igui.TagFile(_selectedTagName, new FileInfo(path));
+                    if(path != string.Empty) {	
+                        tv = _Igui.TagFile(_selectedTagName, new FileInfo(path));
+                    }
                 } else if(tv is FolderTagView) {
                     System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog();
                     folderDialog.Description = "Select Folder to Tag";
