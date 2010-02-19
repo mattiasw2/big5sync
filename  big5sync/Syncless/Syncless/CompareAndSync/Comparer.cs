@@ -27,6 +27,57 @@ namespace Syncless.CompareAndSync
             return results;
         }
 
+        public void MonitorCompareFolder(MonitorSyncRequest syncRequest, out List<string> paths, out List<CompareResult> results)
+        {
+            DirectoryInfo oldPath = new DirectoryInfo(syncRequest.OldPath.FullPath);
+            DirectoryInfo newPath = null;
+
+            if (syncRequest.NewPath != null)
+            {
+                newPath = new DirectoryInfo(syncRequest.NewPath.FullPath);
+            }
+            paths = new List<string>();
+            results = new List<CompareResult>();
+
+            switch (syncRequest.ChangeType)
+            {
+                case FileChangeType.Create:
+                    foreach (MonitorPathPair dest in syncRequest.Dest)
+                    {
+                        results.Add(new CompareResult(syncRequest.ChangeType, syncRequest.OldPath.FullPath, dest.FullPath, syncRequest.IsFolder));
+                    }
+                    break;
+                case FileChangeType.Delete:
+                    //TO BE DONE
+                    break;
+                case FileChangeType.Rename:
+                    DirectoryInfo folder = new DirectoryInfo(syncRequest.NewPath.FullPath);
+                    string fileName = folder.Name;
+                    foreach (MonitorPathPair dest in syncRequest.Dest)
+                    {
+                        string newDestPath = new DirectoryInfo(dest.FullPath).Parent.Name;
+                        Console.WriteLine(newDestPath);
+                        results.Add(new CompareResult(syncRequest.ChangeType, dest.FullPath, Path.Combine(newDestPath, fileName), syncRequest.IsFolder));
+                    }
+                    break;
+            }
+
+            Debug.Assert(syncRequest.OldPath != null);
+            paths.AddRange(syncRequest.OldPath.Origin);
+
+            if (syncRequest.NewPath != null)
+            {
+                paths.AddRange(syncRequest.NewPath.Origin);
+            }
+
+            foreach (MonitorPathPair dest in syncRequest.Dest)
+            {
+                paths.AddRange(dest.Origin);
+            }
+
+            paths.Distinct<string>();
+        }
+
         public void MonitorCompareFile(MonitorSyncRequest syncRequest, out List<string> paths, out List<CompareResult> results)
         {
             FileInfo oldPath = new FileInfo(syncRequest.OldPath.FullPath);
