@@ -7,6 +7,7 @@ using Syncless.Tagging;
 using Syncless.CompareAndSync;
 using Syncless.Monitor;
 using Syncless.Profiling;
+using Syncless.Logging;
 using System.Diagnostics;
 namespace Syncless.Core
 {
@@ -359,6 +360,13 @@ namespace Syncless.Core
 
         #endregion
 
-        
+        #region Logging
+
+        public Logger GetLogger(string type)
+        {
+            return LoggingLayer.Instance.GetLogger(type);
+        }
+
+        #endregion
     }
 }

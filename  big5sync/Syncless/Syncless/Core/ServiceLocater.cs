@@ -1,12 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Syncless.Core.Exceptions;
+using Syncless.Helper;
+using Syncless.Logging;
 
 namespace Syncless.Core
 {
     public class ServiceLocator
     {
+        public const string USER_LOG = "user";
+        public const string DEBUG_LOG = "debug";
+
         public static IUIControllerInterface GUI{
             get { 
                 //return SystemLogicLayer.Instance; 
@@ -26,11 +29,24 @@ namespace Syncless.Core
             get { return SystemLogicLayer.Instance; }
         }
         */
-        /*
-        public static ILoggerInterface Logging
+        
+        public static Logger GetLogger(string type)
         {
-            get { return new Logger(); }
+            if (type.Equals(USER_LOG))
+            {
+                SystemLogicLayer sll = SystemLogicLayer.Instance;
+                return sll.GetLogger(USER_LOG);
+            }
+            else if (type.Equals(DEBUG_LOG))
+            {
+                SystemLogicLayer sll = SystemLogicLayer.Instance;
+                return sll.GetLogger(DEBUG_LOG);
+            }
+            else
+            {
+                throw new LoggerNotFoundException(ErrorMessage.LOGGER_NOT_FOUND);
+            }
         }
-        */
+        
     }
 }
