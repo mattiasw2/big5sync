@@ -42,7 +42,8 @@ namespace Syncless.Tagging
 
         public List<Tag> AllTagList
         {
-            get {
+            get
+            {
                 List<Tag> allTagList = new List<Tag>();
                 foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
                 {
@@ -424,7 +425,7 @@ namespace Syncless.Tagging
             }
             return taggingProfile;
         }
-        
+
         public Tag RetrieveTag(string tagname)
         {
             Tag tag = GetFolderTag(tagname);
@@ -525,6 +526,7 @@ namespace Syncless.Tagging
         /// </summary>
         /// <param name="logicalId">The Logical Id</param>
         /// <returns>The list of Tags</returns>
+        /// 
         public List<Tag> RetrieveTagByLogicalId(string logicalid)
         {
             bool found;
@@ -566,6 +568,29 @@ namespace Syncless.Tagging
                 }
             }
             return pathList;
+        }
+
+        public List<string> RetrieveParentByPath(string path)
+        {
+            List<string> parentPathList = new List<string>();
+            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
+            {
+                foreach (TaggedPath p in folderTag.PathList)
+                {
+                    if (path.StartsWith(p.Path))
+                    {
+                        if (!path.Equals(p.Path))
+                        {
+                            if (!parentPathList.Contains(p.Path))
+                            {
+                                parentPathList.Add(p.Path);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return parentPathList;
         }
 
         public List<FolderTag> RetrieveFolderTagByPath(string path)

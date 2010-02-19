@@ -8,7 +8,12 @@ namespace Syncless.Helper
     public static class ErrorMessage
     {
         #region Tagging Error Messages (Error Code : 100~199)
-
+        public const string PATH_NOT_FOUND_EXCEPTION = "100";
+        public const string PATH_ALREADY_EXISTS_EXCEPTION = "110";
+        public const string TAG_NOT_FOUND_EXCEPTION = "101";
+        public const string TAG_ALREADY_EXISTS_EXCEPTION = "111";
+        public const string RECURSIVE_DIRECTORY_EXCEPTION = "120";
+        public const string TAG_TYPE_CONFLICT_EXCEPTION = "130";
         #endregion
         #region Profiling Error Messages (Error Code : 200~299)
         public const string PROFILE_CONFLICT_EXCEPTION = "210";
