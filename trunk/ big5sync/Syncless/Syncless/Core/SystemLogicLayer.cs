@@ -11,9 +11,10 @@ using Syncless.Logging;
 using System.Diagnostics;
 namespace Syncless.Core
 {
-    internal class SystemLogicLayer
+    internal class SystemLogicLayer :IUIControllerInterface,IMonitorControllerInterface
     {
         private static SystemLogicLayer _instance;
+        
         public static SystemLogicLayer Instance
         {
             get
@@ -21,13 +22,14 @@ namespace Syncless.Core
                 if (_instance == null)
                 {
                     _instance = new SystemLogicLayer();
+                    
                 }
                 return _instance;
             }
         }
         private SystemLogicLayer()
         {
-
+            
         }
 
         #region IUIControllerInterface Members
@@ -262,6 +264,7 @@ namespace Syncless.Core
             }
 
             List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
+            
             if (fe.Event == EventChangeType.CREATED)
             {
                 MonitorSyncRequest syncRequest = new MonitorSyncRequest(oldPair,monitorPair,FileChangeType.Create,false);
@@ -361,12 +364,12 @@ namespace Syncless.Core
         #endregion
 
         #region Logging
-
+        /*
         public Logger GetLogger(string type)
         {
             return LoggingLayer.Instance.GetLogger(type);
         }
-
+        */
         #endregion
     }
 }

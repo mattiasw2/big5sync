@@ -436,6 +436,10 @@ namespace Syncless.Monitor
             IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
             if (File.Exists(e.FullPath))
             {
+                if(e.FullPath.ToLower().EndsWith(@"_syncless\syncless.xml")){
+                    Console.WriteLine("Test");
+                    return;
+                }
                 Console.WriteLine("File Modified: " + e.FullPath);
                 FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), EventChangeType.MODIFIED);
                 monitor.HandleFileChange(fileEvent);

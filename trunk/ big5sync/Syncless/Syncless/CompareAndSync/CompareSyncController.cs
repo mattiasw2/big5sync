@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Syncless.Tagging;
 using System.IO;
+using System.Diagnostics;
 
 namespace Syncless.CompareAndSync
 {
@@ -58,8 +59,13 @@ namespace Syncless.CompareAndSync
                     break;
             }
 
+            Debug.Assert(syncRequest.OldPath != null);
             paths.AddRange(syncRequest.OldPath.Origin);
-            paths.AddRange(syncRequest.NewPath.Origin);
+
+            if (syncRequest.NewPath != null)
+            {
+                paths.AddRange(syncRequest.NewPath.Origin);
+            }
 
             foreach (MonitorPathPair dest in syncRequest.Dest)
             {
