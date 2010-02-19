@@ -56,7 +56,7 @@ namespace Syncless.CompareAndSync
                         sourceInfo.Name.Equals(destInfo.Name))
                     {
                         compareResultList.Add(new CompareResult(FileChangeType.None, sourceInfo.FullName,
-                            destInfo.FullName));
+                            destInfo.FullName, false));
                     }
 
                 }
