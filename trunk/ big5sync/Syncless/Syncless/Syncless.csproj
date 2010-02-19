@@ -107,6 +107,9 @@
     <Compile Include="Tagging\TaggingProfile.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CompareAndSync\ClassDiagramCompareAndSync.cd" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="lib\log4net.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
