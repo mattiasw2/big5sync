@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 namespace Syncless.CompareAndSync
 {
@@ -21,13 +22,34 @@ namespace Syncless.CompareAndSync
                 switch (result.ChangeType)
                 {
                     case FileChangeType.Create:
-                        syncResults.Add(CreateFile(result.From, result.To));
+                        if (result.IsFolder)
+                        {
+                            syncResults.Add(CreateFolder(result.From, result.To));
+                        }
+                        else
+                        {
+                            syncResults.Add(CreateFile(result.From, result.To));
+                        }
                         break;
                     case FileChangeType.Delete:
-                        syncResults.Add(DeleteFile(result.From));
+                        if (result.IsFolder)
+                        {
+                            syncResults.Add(DeleteFolder(result.From));
+                        }
+                        else
+                        {
+                            syncResults.Add(DeleteFile(result.From));
+                        }                       
                         break;
                     case FileChangeType.Rename:
-                        syncResults.Add(MoveFile(result.From, result.To));
+                        if (result.IsFolder)
+                        {
+                            syncResults.Add(MoveFolder(result.From, result.To));
+                        }
+                        else
+                        {
+                            syncResults.Add(MoveFile(result.From, result.To));
+                        }
                         break;
                     case FileChangeType.Update:
                         syncResults.Add(UpdateFile(result.From, result.To));
@@ -45,7 +67,61 @@ namespace Syncless.CompareAndSync
             return syncResults;
         }
 
-        public SyncResult DeleteFile(string from)
+        private SyncResult DeleteFolder(string from)
+        {
+            try
+            {
+                Directory.Delete(from);
+                return new SyncResult(FileChangeType.Delete, from, true);
+            }
+            catch (Exception)
+            {
+                return new SyncResult(FileChangeType.Delete, from, false);
+            }
+        }
+
+        private SyncResult MoveFolder(string from, string to)
+        {
+            DirectoryInfo source = new DirectoryInfo(from);
+            DirectoryInfo target = new DirectoryInfo(to);
+
+            try
+            {
+                if (!target.Exists)
+                {
+                    Directory.CreateDirectory(target.FullName);
+                }
+                Directory.Move(from, to);
+                return new SyncResult(FileChangeType.Rename, from, to, true);
+            }
+            catch (Exception)
+            {
+                return new SyncResult(FileChangeType.Rename, from, to, false);
+            }
+        }
+
+        private SyncResult CreateFolder(string from, string to)
+        {
+            DirectoryInfo source = new DirectoryInfo(from);
+            DirectoryInfo target = new DirectoryInfo(to);
+
+            if (!target.Exists)
+            {
+                Directory.CreateDirectory(target.FullName);
+            }
+
+            try
+            {
+                CopyDirectory(from, to, true);
+                return new SyncResult(FileChangeType.Create, from, to, true);
+            }
+            catch (Exception)
+            {
+                return new SyncResult(FileChangeType.Create, from, to, false);
+            }
+        }
+
+        private SyncResult DeleteFile(string from)
         {
             try
             {
@@ -58,7 +134,7 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        public SyncResult MoveFile(string from, string to)
+        private SyncResult MoveFile(string from, string to)
         {
             FileInfo source = new FileInfo(from);
             FileInfo target = new FileInfo(to);
@@ -104,12 +180,12 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        public SyncResult CreateFile(string from, string to)
+        private SyncResult CreateFile(string from, string to)
         {
             return CopyFile(from, to, FileChangeType.Create);
         }
 
-        public SyncResult UpdateFile(string from, string to)
+        private SyncResult UpdateFile(string from, string to)
         {
             return CopyFile(from, to, FileChangeType.Update);
         }
@@ -117,16 +193,36 @@ namespace Syncless.CompareAndSync
         private void RemoveEmptyFolders(string path)
         {
             DirectoryInfo[] directories = new DirectoryInfo(path).GetDirectories("*", SearchOption.AllDirectories);
-            //List<DirectoryInfo> emptyList = new List<DirectoryInfo>();
             foreach (DirectoryInfo dInfo in directories)
             {
                 FileInfo[] files = dInfo.GetFiles();
                 if (files.Length == 0)
                 {
                     dInfo.Delete();
-                    //emptyList.Add(dInfo);
                 }
             }
+        }
+
+        public static string CopyDirectory(string source, string destination, bool overwrite)
+        {
+            DirectoryInfo sourceInfo = new DirectoryInfo(source);
+            DirectoryInfo[] directoryInfos = sourceInfo.GetDirectories();
+            DirectoryInfo destinationInfo = new DirectoryInfo(destination);
+            if (!destinationInfo.Exists)
+            {
+                Directory.CreateDirectory(destination);
+            }
+            foreach (DirectoryInfo tempInfo in directoryInfos)
+            {
+                DirectoryInfo newDirectory = destinationInfo.CreateSubdirectory(tempInfo.Name);
+                CopyDirectory(tempInfo.FullName, newDirectory.FullName, overwrite);
+            }
+            FileInfo[] fileInfos = sourceInfo.GetFiles();
+            foreach (FileInfo fileInfo in fileInfos)
+            {
+                fileInfo.CopyTo(destination + "\\" + fileInfo.Name, overwrite);                
+            }
+            return destinationInfo.FullName;
         }
     }
 }
