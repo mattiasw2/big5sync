@@ -241,40 +241,50 @@ namespace Syncless.Core
 
         public void HandleFileChange(FileChangeEvent fe)
         {
-            /*
+            
             string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
             if(logicalOldPath == null){
                 return;
             }
-            
+            List<string> oldLogicalOrigin = TaggingLayer.Instance.RetrieveParentByPath(logicalOldPath);
+            List<string> oldPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(oldLogicalOrigin);
+            MonitorPathPair oldPair = new MonitorPathPair(oldPhysicalOrigin,fe.OldPath.FullName);
+
             List<string> logicalSimilarPaths = TaggingLayer.Instance.FindSimilarPathForFile(logicalOldPath);
+            List<MonitorPathPair> monitorPair = new List<MonitorPathPair>();
             foreach (string logical in logicalSimilarPaths)
             {
-                //List<Tag> tagList = TaggingLayer.Instance.Retrieve
-
+                List<string> logicalOrigins = TaggingLayer.Instance.RetrieveParentByPath(logical);
+                string physical = ProfilingLayer.Instance.ConvertLogicalToPhysical(logical);
+                List<string> physicalOrigins = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalOrigins);
+                monitorPair.Add(new MonitorPathPair(physicalOrigins,physical));
             }
 
             List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
             if (fe.Event == EventChangeType.CREATED)
             {
-                MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create,false);
+                MonitorSyncRequest syncRequest = new MonitorSyncRequest(oldPair,monitorPair,FileChangeType.Create,false);
                 CompareSyncController.Instance.Sync(syncRequest);
             }
             else if (fe.Event == EventChangeType.MODIFIED)
             {
-                MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create, false);
+                MonitorSyncRequest syncRequest = new MonitorSyncRequest(oldPair, monitorPair, FileChangeType.Update, false);
                 CompareSyncController.Instance.Sync(syncRequest);
             }
             else if (fe.Event == EventChangeType.RENAMED)
             {
                 string physicalNewPath = fe.NewPath.FullName;
                 string logicalNewPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(physicalNewPath,false);
+                List<string> newLogicalOrigin = TaggingLayer.Instance.RetrieveParentByPath(logicalNewPath);
+                List<string> newPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(newLogicalOrigin);
+                MonitorPathPair newPair = new MonitorPathPair(newPhysicalOrigin, physicalNewPath);
                 Debug.Assert(logicalNewPath != null);
-                MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName,physicalNewPath, physicalSimilarPaths, FileChangeType.Create, false);
+                MonitorSyncRequest syncRequest = new MonitorSyncRequest(oldPair, newPair, monitorPair, FileChangeType.Rename, false);
+                
                 TaggingLayer.Instance.RenameFile(logicalOldPath, logicalNewPath);
                 CompareSyncController.Instance.Sync(syncRequest);
             }
-            */
+            
         }
 
         public void HandleFolderChange(FolderChangeEvent fe)
@@ -306,7 +316,7 @@ namespace Syncless.Core
 
         public void HandleDriveChange(DriveChangeEvent dce)
         {
-            /*
+            
             if (dce.Type == DriveChangeType.DRIVE_IN)
             {
                 ProfilingLayer.Instance.UpdateDrive(dce.Info);
@@ -339,7 +349,7 @@ namespace Syncless.Core
                 }
                 ProfilingLayer.Instance.RemoveDrive(dce.Info);
             }
-             */
+             
         }
 
         public void HandleDeleteChange(DeleteChangeEvent dce)
