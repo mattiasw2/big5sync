@@ -25,8 +25,7 @@ namespace Syncless
     public partial class MainWindow : Window
     {
         private IUIControllerInterface _Igui;
-        private List<Tag> _tagList;
-        private Tag _selectedTag;
+        private string _selectedTagName;
 
         private const string BI_DIRECTIONAL = "Bi-Dir..";
         private const string UNI_DIRECTIONAL = "Uni-Dir..";
@@ -37,7 +36,7 @@ namespace Syncless
 
             InitializeComponent();
 
-            // InitializeSyncless();
+            InitializeSyncless();
         }
 		
         /// <summary>
@@ -64,28 +63,19 @@ namespace Syncless
 
         private void ListBoxTag_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            _selectedTag = null;
-            
-            String neededTagName = ListBoxTag.SelectedItem.ToString();
+            _selectedTagName = ListBoxTag.SelectedItem.ToString();
 
-            foreach (Tag temp in _tagList)
-            {
-                if (string.Compare(neededTagName, temp.TagName) == 0)
-                {
-                    _selectedTag = temp;
-                    break;
-                }
-            }
-
-            ViewTagInfo(_selectedTag);
+            ViewTagInfo(_selectedTagName);
         }
 
-        private void ViewTagInfo(Tag t)
+        private void ViewTagInfo(string tagname)
         {
-            TagTitle.Content = t.TagName;
+            TagView tv = _Igui.GetTag(tagname);
+
+            TagTitle.Content = tagname;
 			// tag.direction not implemented yet
 			
-            if (t.IsSeamless)
+            if (tv.IsSeamless)
             {
                 AutoMode();
             }
@@ -95,12 +85,14 @@ namespace Syncless
             }
 
             LblStatusText.Content = "";
-			ListTaggedPath.ItemsSource = t.PathStringList;
+            ListTaggedPath.ItemsSource = tv.PathStringList;
 			
-			if(t is FileTag) {
+			if(tv is FileTagView) {
 				var uriSource = new Uri(@"/SynclessUI;component/Icons/file.ico", UriKind.Relative);
 				TagIcon.Source = new BitmapImage(uriSource);
-			} else {
+            }
+            else if (tv is FolderTagView)
+            {
 				var uriSource = new Uri(@"/SynclessUI;component/Icons/folder.ico", UriKind.Relative);
 				TagIcon.Source = new BitmapImage(uriSource);
 			}
@@ -112,16 +104,15 @@ namespace Syncless
         }
 		
         /// <summary>
-        ///     Gets the list of tags and then populates the Tag List Box
+        ///     Gets the list of tags and then populates the Tag List Box and keeps a count
         /// </summary>
         private void InitializeTagList()
         {
-            // Gets a list of all tags
-            _tagList = _Igui.GetAllTags();
+            List<string> taglist = _Igui.GetAllTags();
 
-            ListBoxTag.ItemsSource = LoadTagListBoxData();
-			
-            UpdateTagCount();
+            ListBoxTag.ItemsSource = taglist;
+
+            LblTagCount.Content = "[" + taglist.Count + "]";
         }
 		
         /// <summary>
@@ -129,7 +120,9 @@ namespace Syncless
         /// </summary>
 		private void ResetTagInfoPanel()
 		{
-            if (_tagList.Count == 0)
+            List<string> taglist = _Igui.GetAllTags();
+
+            if (taglist.Count == 0)
             {
                 TagTitle.Content = "Select a Tag";
                 TagIcon.Visibility = System.Windows.Visibility.Hidden;
@@ -139,26 +132,9 @@ namespace Syncless
             }
             else
             {
-                ViewTagInfo(_tagList[0]);
+                ViewTagInfo(taglist[0]);
             }
 		}
-
-        private void UpdateTagCount()
-        {
-            LblTagCount.Content = "[" + _tagList.Count + "]";
-        }
-
-        private List<string> LoadTagListBoxData()
-        {
-            List<string> strArray = new List<string> ();
-
-            foreach (Tag t in _tagList)
-            {
-                strArray.Add(t.TagName);
-            }
-            
-            return strArray;
-        }
 
         /// <summary>
         ///     Makes the title bar draggable and movable
@@ -247,13 +223,13 @@ namespace Syncless
         {
         	if(string.Compare((string) LblSyncMode.Content, "Manual") == 0)
 			{
-                if (_Igui.MonitorTag(_selectedTag, true))
+                if (_Igui.MonitorTag(_selectedTagName, true))
                 {
                     AutoMode();
                 }
                 else
                 {
-                    string messageBoxText = "' " + _selectedTag.TagName +" ' could not be set into Seamless Mode.";
+                    string messageBoxText = "' " + _selectedTagName +" ' could not be set into Seamless Mode.";
                     string caption = "Change Synchronization Mode Error";
                     MessageBoxButton button = MessageBoxButton.OK;
                     MessageBoxImage icon = MessageBoxImage.Error;
@@ -263,13 +239,13 @@ namespace Syncless
 			}
 			else
 			{
-                if (_Igui.MonitorTag(_selectedTag, false))
+                if (_Igui.MonitorTag(_selectedTagName, false))
                 {
                     ManualMode();
                 }
                 else
                 {
-                    string messageBoxText = "' " + _selectedTag.TagName + " ' could not be set into Manual Mode.";
+                    string messageBoxText = "' " + _selectedTagName + " ' could not be set into Manual Mode.";
                     string caption = "Change Synchronization Mode Error";
                     MessageBoxButton button = MessageBoxButton.OK;
                     MessageBoxImage icon = MessageBoxImage.Error;
@@ -294,8 +270,9 @@ namespace Syncless
 
         private void BtnSyncNow_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-        	if(!_Igui.StartManualSync(_selectedTag)) {
-                string messageBoxText = "' " + _selectedTag.TagName + " ' could not be synchronized.";
+            if (!_Igui.StartManualSync(_selectedTagName))
+            {
+                string messageBoxText = "' " + _selectedTagName + " ' could not be synchronized.";
                 string caption = "Synchronization Error";
                 MessageBoxButton button = MessageBoxButton.OK;
                 MessageBoxImage icon = MessageBoxImage.Error;
@@ -306,42 +283,53 @@ namespace Syncless
 
         private void btnRemove_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            string messageBoxText = "Are you sure you want to delete the tag '" + _selectedTag.TagName + "'?";
-            string caption = "Delete Tag";
-            MessageBoxButton button = MessageBoxButton.YesNo;
-            MessageBoxImage icon = MessageBoxImage.Warning;
-
-            MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
-
-            switch (result)
+            if (_selectedTagName != null)
             {
-                case MessageBoxResult.Yes:
-                    if (_Igui.DeleteTag(_selectedTag))
-                    {
-                        InitializeTagList();
-                        ResetTagInfoPanel();
-                    }
-                    else
-                    {
-                        messageBoxText = "' " + _selectedTag.TagName + " ' could not be deleted.";
-                        caption = "Delete Tag Error";
-                        button = MessageBoxButton.OK;
-                        icon = MessageBoxImage.Error;
+                string messageBoxText = "Are you sure you want to delete the tag '" + _selectedTagName + "'?";
+                string caption = "Delete Tag";
+                MessageBoxButton button = MessageBoxButton.YesNo;
+                MessageBoxImage icon = MessageBoxImage.Warning;
 
-                        MessageBox.Show(messageBoxText, caption, button, icon);
-                    }
-                    break;
-                case MessageBoxResult.No:
-                    break;
-            }            
+                MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
+
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        if (_Igui.DeleteTag(_selectedTagName))
+                        {
+                            InitializeTagList();
+                            ResetTagInfoPanel();
+                        }
+                        else
+                        {
+                            messageBoxText = "' " + _selectedTagName + " ' could not be deleted.";
+                            caption = "Delete Tag Error";
+                            button = MessageBoxButton.OK;
+                            icon = MessageBoxImage.Error;
+
+                            MessageBox.Show(messageBoxText, caption, button, icon);
+                        }
+                        break;
+                    case MessageBoxResult.No:
+                        break;
+                }
+            }
+            else
+            {
+                string messageBoxText = "Please selected a tag.";
+                string caption = "No Tag Selected";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Error;
+
+                MessageBox.Show(messageBoxText, caption, button, icon);
+            }
         }
 		
 		public void CreateFileTag(string tagName) {
-			Tag t = _Igui.CreateFileTag(tagName);
-			if(t != null) {
+			TagView tv = _Igui.CreateFileTag(tagName);
+			if(tv != null) {
 				InitializeTagList();
-				_selectedTag = t;
-				ViewTagInfo(_selectedTag);
+                ViewTagInfo(tagName);
 			} else {
                 string messageBoxText = "File Tag could not be created.";
                 string caption = "File Tag Creation Error";
@@ -353,11 +341,10 @@ namespace Syncless
 		}
 		
 		public void CreateFolderTag(string tagName) {
-			Tag t =_Igui.CreateFolderTag(tagName);
-			if(t != null) {
+			TagView tv =_Igui.CreateFolderTag(tagName);
+			if(tv != null) {
 				InitializeTagList();
-				_selectedTag = t;
-				ViewTagInfo(_selectedTag);
+                ViewTagInfo(tagName);
 			} else {
                 string messageBoxText = "Folder Tag could not be created.";
                 string caption = "Folder Tag Creation Error";
@@ -372,15 +359,15 @@ namespace Syncless
 		{
 			CreateTagWindow ctw = new CreateTagWindow(this);
 			
-			ctw.Show();
+			ctw.ShowDialog();
 		}
 
 		private void btnTag_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-            if(_selectedTag != null) {
-                Tag t = null;
+            if(_selectedTagName != null) {
+                TagView tv = _Igui.GetTag(_selectedTagName);
 
-                if(_selectedTag is FileTag) {	
+                if(tv is FileTagView) {	
                     Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
 					
                     ofd.Filter = "All Files(*.*)|*.*";
@@ -388,8 +375,8 @@ namespace Syncless
                     ofd.ShowDialog();
                     string path = ofd.FileName;
 
-                    t = _Igui.TagFile((FileTag)_selectedTag, new FileInfo(path));
-                } else if(_selectedTag is FolderTag) {
+                    tv = _Igui.TagFile(_selectedTagName, new FileInfo(path));
+                } else if(tv is FolderTagView) {
                     System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog();
                     folderDialog.Description = "Select Folder to Tag";
 
@@ -397,19 +384,19 @@ namespace Syncless
 
                     if(folderDialog.SelectedPath != string.Empty) {	
                         string path = folderDialog.SelectedPath;
-                        t =_Igui.TagFolder((FolderTag)_selectedTag, new DirectoryInfo(path));
+                        tv = _Igui.TagFolder(_selectedTagName, new DirectoryInfo(path));
                     }
                     
                 }
 
-                if (t != null)
+                if (tv != null)
                 {
                     InitializeTagList();
-                    ViewTagInfo(t);
+                    ViewTagInfo(_selectedTagName);
                 }
                 else
                 {
-                    string messageBoxText = "Tagging has fail.";
+                    string messageBoxText = "Tagging has failed.";
                     string caption = "Tagging Unsuccessful";
                     MessageBoxButton button = MessageBoxButton.OK;
                     MessageBoxImage icon = MessageBoxImage.Error;
