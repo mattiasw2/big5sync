@@ -30,34 +30,45 @@ namespace Syncless.CompareAndSync
         public void Sync(MonitorSyncRequest syncRequest)
         {
             List<CompareResult> results = new List<CompareResult>();
+            List<string> paths = new List<string>();
 
             switch (syncRequest.ChangeType)
             {
                 case FileChangeType.Create:
                 case FileChangeType.Update:
-                    foreach (string dest in syncRequest.Dest)
+                    foreach (MonitorPathPair dest in syncRequest.Dest)
                     {
-                        results.Add(new CompareResult(syncRequest.ChangeType, syncRequest.OldPath, dest, syncRequest.IsFolder));
+                        results.Add(new CompareResult(syncRequest.ChangeType, syncRequest.OldPath.FullPath, dest.FullPath, syncRequest.IsFolder));
                     }
                     break;
                 case FileChangeType.Delete:
-                    foreach (string dest in syncRequest.Dest)
+                    foreach (MonitorPathPair dest in syncRequest.Dest)
                     {
-                        results.Add(new CompareResult(syncRequest.ChangeType, dest, syncRequest.IsFolder));
+                        results.Add(new CompareResult(syncRequest.ChangeType, dest.FullPath, syncRequest.IsFolder));
                     }
                     break;                
                 case FileChangeType.Rename:
-                    FileInfo file = new FileInfo(syncRequest.NewPath);
+                    FileInfo file = new FileInfo(syncRequest.NewPath.FullPath);
                     string fileName = file.Name;
-                    foreach (string dest in syncRequest.Dest)
+                    foreach (MonitorPathPair dest in syncRequest.Dest)
                     {
-                        string newDestPath = new FileInfo(dest).DirectoryName;
-                        results.Add(new CompareResult(syncRequest.ChangeType, dest, Path.Combine(newDestPath, fileName), syncRequest.IsFolder));
+                        string newDestPath = new FileInfo(dest.FullPath).DirectoryName;
+                        results.Add(new CompareResult(syncRequest.ChangeType, dest.FullPath, Path.Combine(newDestPath, fileName), syncRequest.IsFolder));
                     }
                     break;
             }
 
-            new Syncer().SyncFolder(null, results);
+            paths.AddRange(syncRequest.OldPath.Origin);
+            paths.AddRange(syncRequest.NewPath.Origin);
+
+            foreach (MonitorPathPair dest in syncRequest.Dest)
+            {
+                paths.AddRange(dest.Origin);
+            }
+
+            paths.Distinct<string>();
+
+            new Syncer().SyncFolder(paths, results);
         }
 
         public List<SyncResult> Sync(SyncRequest syncRequest)
