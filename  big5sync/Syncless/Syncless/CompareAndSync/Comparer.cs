@@ -39,7 +39,7 @@ namespace Syncless.CompareAndSync
             paths = new List<string>();
             results = new List<CompareResult>();
 
-            if (syncRequest.OldPath.FullPath.EndsWith(METADATAPATH) || syncRequest.NewPath.FullPath.EndsWith(METADATAPATH))
+            if (syncRequest.OldPath.FullPath.EndsWith(METADATAPATH) || (syncRequest.NewPath != null && syncRequest.NewPath.FullPath.EndsWith(METADATAPATH)))
             {
                 return;
             }
