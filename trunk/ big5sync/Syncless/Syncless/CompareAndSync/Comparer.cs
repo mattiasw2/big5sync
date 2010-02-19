@@ -52,12 +52,12 @@ namespace Syncless.CompareAndSync
                     break;
                 case FileChangeType.Rename:
                     DirectoryInfo folder = new DirectoryInfo(syncRequest.NewPath.FullPath);
-                    string fileName = folder.Name;
+                    string folderName = folder.Name;
                     foreach (MonitorPathPair dest in syncRequest.Dest)
                     {
                         string newDestPath = new DirectoryInfo(dest.FullPath).Parent.Name;
                         Console.WriteLine(newDestPath);
-                        results.Add(new CompareResult(syncRequest.ChangeType, dest.FullPath, Path.Combine(newDestPath, fileName), syncRequest.IsFolder));
+                        results.Add(new CompareResult(syncRequest.ChangeType, dest.FullPath, Path.Combine(newDestPath, folderName), syncRequest.IsFolder));
                     }
                     break;
             }

@@ -96,7 +96,11 @@ namespace Syncless.CompareAndSync
             }
             catch (Exception)
             {
+                Console.WriteLine("RENAME FROM: " + from);
+                Console.WriteLine("RENAME TO: " + to);
                 return new SyncResult(FileChangeType.Rename, from, to, false);
+                
+
             }
         }
 
@@ -109,6 +113,8 @@ namespace Syncless.CompareAndSync
             {
                 Directory.CreateDirectory(target.FullName);
             }
+
+            Console.WriteLine("YCYCYC: CREATE FOLDER");
 
             try
             {
