@@ -61,11 +61,14 @@
     <Compile Include="CompareAndSync\SyncResult.cs" />
     <Compile Include="CompareAndSync\XMLHelper.cs" />
     <Compile Include="Core\DeviceWatcher.cs" />
+    <Compile Include="Core\FileTagView.cs" />
+    <Compile Include="Core\FolderTagView.cs" />
     <Compile Include="Core\ICommandLineControllerInterface.cs" />
     <Compile Include="Core\IMonitorControllerInterface.cs" />
     <Compile Include="Core\IUIControllerInterface.cs" />
     <Compile Include="Core\ServiceLocater.cs" />
     <Compile Include="Core\SystemLogicLayer.cs" />
+    <Compile Include="Core\TagView.cs" />
     <Compile Include="Helper\ErrorMessage.cs" />
     <Compile Include="LoggingLayer\LoggingLayer.cs" />
     <Compile Include="Monitor\DeleteChangeEvent.cs" />
