@@ -10,6 +10,7 @@ namespace Syncless.CompareAndSync
         private FileChangeType changeType;
         private string from;
         private string to = null;
+        private bool _isFolder;
 
         public FileChangeType ChangeType
         {
@@ -44,6 +45,18 @@ namespace Syncless.CompareAndSync
             set
             {
                 to = value;
+            }
+        }
+
+        public bool IsFolder
+        {
+            get
+            {
+                return _isFolder;
+            }
+            set
+            {
+                _isFolder = value;
             }
         }
     }

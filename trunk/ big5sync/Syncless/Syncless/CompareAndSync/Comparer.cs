@@ -19,7 +19,6 @@ namespace Syncless.CompareAndSync
         // Assumes that all paths taken from the tag exists in the directory
         public List<CompareResult> CompareFile(List<string> paths)
         {
-            //string metapath = Path.Combine(METADATAFOLDER, tagName + ".xml");
             List<CompareResult> compareResultList = new List<CompareResult>();
             FileInfo sourceInfo = null;
             FileInfo destInfo = null;
@@ -36,8 +35,7 @@ namespace Syncless.CompareAndSync
                         && !sourceInfo.Name.Equals(destInfo.Name)) // same content different name
                     {
                         compareResultList.Add(new CompareResult(FileChangeType.Rename, sourceInfo.FullName,
-                            destInfo.FullName));
-
+                            destInfo.FullName, false));
                     }    
                     //different hash , but same name and creation time
                     else if (sourceInfo.Name.Equals(destInfo.Name) && sourceInfo.CreationTime.Ticks == destInfo.CreationTime.Ticks
@@ -45,13 +43,13 @@ namespace Syncless.CompareAndSync
                     {
 
                         compareResultList.Add(new CompareResult(FileChangeType.Update, sourceInfo.FullName,
-                            destInfo.FullName));
+                            destInfo.FullName, false));
                     }
                     else if (!(CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo)) &&
                         sourceInfo.CreationTime.Ticks == destInfo.CreationTime.Ticks && sourceInfo.Name.Equals(destInfo.Name)))
                     {
                         compareResultList.Add(new CompareResult(FileChangeType.Create, sourceInfo.FullName,
-                            destInfo.FullName));
+                            destInfo.FullName, false));
                     }
 
                     else if (CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo)) &&
@@ -606,7 +604,7 @@ namespace Syncless.CompareAndSync
                     {
                         foreach (string dest in _changeTable[key][sourceKey])
                         {
-                            results.Add(new CompareResult(changeType, sourceKey, dest));
+                            results.Add(new CompareResult(changeType, sourceKey, dest, false));
                         }
                     }
                     else if (changeType == FileChangeType.Rename)
@@ -616,7 +614,7 @@ namespace Syncless.CompareAndSync
                         {
                             foreach (string path in paths)
                             {
-                                results.Add(new CompareResult(changeType, Path.Combine(path, sourceKey), Path.Combine(path, rename[0])));
+                                results.Add(new CompareResult(changeType, Path.Combine(path, sourceKey), Path.Combine(path, rename[0]), false));
                             }
                         }
                         // TODO: Handle rename conflicts in future
@@ -624,7 +622,7 @@ namespace Syncless.CompareAndSync
                         {
                             foreach (string path in paths)
                             {
-                                results.Add(new CompareResult(changeType, Path.Combine(path, sourceKey), Path.Combine(path, rename[0])));
+                                results.Add(new CompareResult(changeType, Path.Combine(path, sourceKey), Path.Combine(path, rename[0]), false));
                             }
                         }
                     }
@@ -651,7 +649,7 @@ namespace Syncless.CompareAndSync
                     foreach (string path in paths)
                     {
                         deletePath = Path.Combine(path, deleteItem);
-                        results.Add(new CompareResult(FileChangeType.Delete, deletePath));
+                        results.Add(new CompareResult(FileChangeType.Delete, deletePath, false));
                     }                    
                 } 
             }

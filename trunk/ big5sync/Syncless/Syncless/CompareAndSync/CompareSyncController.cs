@@ -30,20 +30,20 @@ namespace Syncless.CompareAndSync
         public void Sync(MonitorSyncRequest syncRequest)
         {
             List<CompareResult> results = new List<CompareResult>();
-            
+
             switch (syncRequest.ChangeType)
             {
                 case FileChangeType.Create:
                 case FileChangeType.Update:
                     foreach (string dest in syncRequest.Dest)
                     {
-                        results.Add(new CompareResult(syncRequest.ChangeType, syncRequest.OldPath, dest));
+                        results.Add(new CompareResult(syncRequest.ChangeType, syncRequest.OldPath, dest, syncRequest.IsFolder));
                     }
                     break;
                 case FileChangeType.Delete:
                     foreach (string dest in syncRequest.Dest)
                     {
-                        results.Add(new CompareResult(syncRequest.ChangeType, dest));
+                        results.Add(new CompareResult(syncRequest.ChangeType, dest, syncRequest.IsFolder));
                     }
                     break;                
                 case FileChangeType.Rename:
@@ -52,10 +52,12 @@ namespace Syncless.CompareAndSync
                     foreach (string dest in syncRequest.Dest)
                     {
                         string newDestPath = new FileInfo(dest).DirectoryName;
-                        results.Add(new CompareResult(syncRequest.ChangeType, dest, Path.Combine(newDestPath, fileName)));
+                        results.Add(new CompareResult(syncRequest.ChangeType, dest, Path.Combine(newDestPath, fileName), syncRequest.IsFolder));
                     }
                     break;
             }
+
+            new Syncer().SyncFolder(null, results);
         }
 
         public List<SyncResult> Sync(SyncRequest syncRequest)
