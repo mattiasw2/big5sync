@@ -6,22 +6,16 @@ namespace Syncless.Logging
 {
     public class Logger
     {
-        private static Logger _instance;
         private ILog log;
 
-        private Logger(string name)
+        public Logger(string name)
         {
-            log = LogManager.GetLogger(ServiceLocator.USER_LOG);
-            
+            log = LogManager.GetLogger(name);
         }
 
-        public static Logger GetInstance(string name)
+        public void WriteLine(string message)
         {
-            if (_instance == null)
-            {
-                _instance = new Logger(name);
-            }
-            return _instance;
+            log.Info(message);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using log4net.Config;
 using Syncless.Core;
 
 namespace Syncless.Logging
@@ -23,20 +24,37 @@ namespace Syncless.Logging
 
         private LoggingLayer()
         {
-            userLog = Logger.GetInstance(ServiceLocator.USER_LOG);
-            debugLog = Logger.GetInstance(ServiceLocator.DEBUG_LOG);
+            XmlConfigurator.Configure();
         }
 
         public Logger GetLogger(string type)
         {
             if (type.Equals(ServiceLocator.USER_LOG))
             {
+                if (userLog == null)
+                {
+                    CreateUserLog();
+                }
                 return userLog;
             }
             else
             {
+                if (debugLog == null)
+                {
+                    CreateDebugLog();
+                }
                 return debugLog;
             }
+        }
+
+        private void CreateUserLog()
+        {
+            userLog = new Logger(ServiceLocator.USER_LOG);
+        }
+
+        private void CreateDebugLog()
+        {
+            debugLog = new Logger(ServiceLocator.DEBUG_LOG);
         }
     }
 }

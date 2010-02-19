@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Syncless", "Syncless\Syncle
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynclessUI", "SynclessUI\SynclessUI.csproj", "{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CG Testing", "CG Testing\CG Testing.csproj", "{10255E44-3F32-45BD-8754-459C837E1223}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10255E44-3F32-45BD-8754-459C837E1223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10255E44-3F32-45BD-8754-459C837E1223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10255E44-3F32-45BD-8754-459C837E1223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10255E44-3F32-45BD-8754-459C837E1223}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
