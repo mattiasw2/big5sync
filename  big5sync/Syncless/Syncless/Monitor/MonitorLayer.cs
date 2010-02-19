@@ -433,13 +433,14 @@ namespace Syncless.Monitor
 
         private static void OnModified(object source, FileSystemEventArgs e)
         {
+            if (e.FullPath.ToLower().EndsWith(@"syncless.xml"))
+            {
+                return;
+            }
             IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
             if (File.Exists(e.FullPath))
             {
-                if(e.FullPath.ToLower().EndsWith(@"_syncless\syncless.xml")){
-                    Console.WriteLine("Test");
-                    return;
-                }
+                
                 Console.WriteLine("File Modified: " + e.FullPath);
                 FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), EventChangeType.MODIFIED);
                 monitor.HandleFileChange(fileEvent);
@@ -448,6 +449,10 @@ namespace Syncless.Monitor
 
         private static void OnCreated(object source, FileSystemEventArgs e)
         {
+            if (e.FullPath.ToLower().EndsWith(@"syncless.xml"))
+            {
+                return;
+            }
             IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
             if (File.Exists(e.FullPath))
             {
@@ -465,6 +470,10 @@ namespace Syncless.Monitor
 
         private static void OnDeleted(object source, FileSystemEventArgs e)
         {
+            if (e.FullPath.ToLower().EndsWith(@"syncless.xml"))
+            {
+                return;
+            }
             IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
             FileSystemWatcher watcher = (FileSystemWatcher)source;
             if (!watcher.Filter.Equals("*.*"))
@@ -489,8 +498,12 @@ namespace Syncless.Monitor
 
         private static void OnRenamed(object source, RenamedEventArgs e)
         {
+            if (e.FullPath.ToLower().EndsWith(@"syncless.xml"))
+            {
+                return;
+            }
             IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
-            if (File.Exists(e.OldFullPath))
+            if (File.Exists(e.FullPath))
             {
                 Console.WriteLine("File Renamed: " + e.OldFullPath + " " + e.FullPath);
                 FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.OldFullPath), new FileInfo(e.FullPath));

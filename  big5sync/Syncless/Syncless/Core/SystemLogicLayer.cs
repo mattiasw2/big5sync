@@ -40,7 +40,8 @@ namespace Syncless.Core
 
         public void HandleFileChange(FileChangeEvent fe)
         {
-             
+
+            Console.WriteLine(fe.OldPath);
             string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
             if(logicalOldPath == null){
                 return;
@@ -111,7 +112,7 @@ namespace Syncless.Core
                 CompareSyncController.Instance.Sync(syncRequest);
                 TaggingLayer.Instance.RenameFolder(logicalPath, logicalNewPath);
             }
-             */
+         */   
         }
 
         public void HandleDriveChange(DriveChangeEvent dce)
