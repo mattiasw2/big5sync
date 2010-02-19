@@ -35,12 +35,15 @@ namespace Syncless
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
 			string tagName = TxtBoxTagName.Text.Trim();
-			if(tagName != "") {
+			
+            if(tagName != "") {
 				if(CmbBoxType.SelectedItem.ToString() == "File") {
-					_main.CreateFileTag(tagName);
+                    _main.CreateFileTag(tagName);
 				} else if(CmbBoxType.SelectedItem.ToString() == "Folder") {
 					_main.CreateFolderTag(tagName);
 				}
+                _main.InitializeTagList();
+                _main.ViewTagInfo(tagName);
 				
 				this.Close();
 			} else {
@@ -50,7 +53,7 @@ namespace Syncless
                 MessageBoxImage icon = MessageBoxImage.Error;
 
                 MessageBox.Show(messageBoxText, caption, button, icon);
-			}
+			}            
         }
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)

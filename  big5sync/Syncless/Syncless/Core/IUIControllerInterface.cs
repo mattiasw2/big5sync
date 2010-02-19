@@ -13,8 +13,6 @@ namespace Syncless.Core
 
         TagView GetTag(String tagname);
 
-        
-
         bool StartManualSync(String tagname);
 
         bool DeleteTag(String tagname);
