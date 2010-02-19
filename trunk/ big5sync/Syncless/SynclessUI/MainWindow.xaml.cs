@@ -257,7 +257,8 @@ namespace Syncless
 			}
         }
 
-        private void AutoMode() {
+        private void AutoMode()
+        {
             LblSyncMode.Content = "Auto";
             BtnPreview.Visibility = System.Windows.Visibility.Hidden;
             BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
