@@ -40,13 +40,20 @@ namespace Syncless.CompareAndSync
             results = new List<CompareResult>();
 
             CompareInfoObject source = null;
-            List<CompareInfoObject> dests = GetMonitorCompareObjects(syncRequest.Dest);
+            List<CompareInfoObject> dests = null;
 
             switch (syncRequest.ChangeType)
             {
                 case FileChangeType.Create:
+                    source = new CompareInfoObject(oldPath.FullName, oldPath.Name, oldPath.CreationTime.Ticks, oldPath.LastWriteTime.Ticks, oldPath.Length, CalculateMD5Hash(oldPath));
+                    foreach (MonitorPathPair dest in syncRequest.Dest)
+                    {
+                        results.Add(new CompareResult(syncRequest.ChangeType, syncRequest.OldPath.FullPath, dest.FullPath, syncRequest.IsFolder));
+                    }
+                    break;
                 case FileChangeType.Update:
                     source = new CompareInfoObject(oldPath.FullName, oldPath.Name, oldPath.CreationTime.Ticks, oldPath.LastWriteTime.Ticks, oldPath.Length, CalculateMD5Hash(oldPath));
+                    dests = GetMonitorCompareObjects(syncRequest.Dest);
                     foreach (CompareInfoObject dest in dests)
                     {
                         int compareResult = new FileContentCompare().Compare(source, dest);
@@ -57,6 +64,7 @@ namespace Syncless.CompareAndSync
                     }
                     break;
                 case FileChangeType.Delete:
+                    dests = GetMonitorCompareObjects(syncRequest.Dest);
                     foreach (CompareInfoObject dest in dests)
                     {
                         results.Add(new CompareResult(syncRequest.ChangeType, dest.FullName, syncRequest.IsFolder));
