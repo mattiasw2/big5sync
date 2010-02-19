@@ -40,7 +40,7 @@ namespace Syncless.Core
 
         public void HandleFileChange(FileChangeEvent fe)
         {
-
+            
             Console.WriteLine(fe.OldPath);
             string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
             if(logicalOldPath == null){
@@ -90,17 +90,31 @@ namespace Syncless.Core
 
         public void HandleFolderChange(FolderChangeEvent fe)
         {
-            /*
-            string logicalPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
-            if (logicalPath == null)
+            
+            string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
+            if (logicalOldPath == null)
             {
                 return;
             }
-            List<string> logicalSimilarPaths = TaggingLayer.Instance.FindSimilarPathForFolder(logicalPath);
+            List<string> oldLogicalOrigin = TaggingLayer.Instance.RetrieveParentByPath(logicalOldPath);
+            List<string> oldPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(oldLogicalOrigin);
+            MonitorPathPair oldPair = new MonitorPathPair(oldPhysicalOrigin,fe.OldPath.FullName);
+
+            List<string> logicalSimilarPaths = TaggingLayer.Instance.FindSimilarPathForFolder(logicalOldPath);
+            List<MonitorPathPair> monitorPair = new List<MonitorPathPair>();
+            foreach (string logical in logicalSimilarPaths)
+            {
+                List<string> logicalOrigins = TaggingLayer.Instance.RetrieveParentByPath(logical);
+                string physical = ProfilingLayer.Instance.ConvertLogicalToPhysical(logical);
+                List<string> physicalOrigins = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalOrigins);
+                monitorPair.Add(new MonitorPathPair(physicalOrigins,physical));
+            }
+
             List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
+            
             if (fe.Event == EventChangeType.CREATED)
             {
-                MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Create,true);
+                MonitorSyncRequest syncRequest = new MonitorSyncRequest(oldPair, monitorPair, FileChangeType.Create, true);
                 CompareSyncController.Instance.Sync(syncRequest);
 
             }
@@ -108,11 +122,15 @@ namespace Syncless.Core
             {
                 string physicalNewPath = fe.NewPath.FullName;
                 string logicalNewPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(physicalNewPath, false);
-                MonitorSyncRequest syncRequest = new MonitorSyncRequest(fe.OldPath.FullName, physicalSimilarPaths, FileChangeType.Rename,true);
+                List<string> newLogicalOrigin = TaggingLayer.Instance.RetrieveParentByPath(logicalNewPath);
+                List<string> newPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(newLogicalOrigin);
+                MonitorPathPair newPair = new MonitorPathPair(newPhysicalOrigin, physicalNewPath);
+                Debug.Assert(logicalNewPath != null);
+                MonitorSyncRequest syncRequest = new MonitorSyncRequest(oldPair, monitorPair, FileChangeType.Create, true);
                 CompareSyncController.Instance.Sync(syncRequest);
-                TaggingLayer.Instance.RenameFolder(logicalPath, logicalNewPath);
+                TaggingLayer.Instance.RenameFolder(logicalOldPath, logicalNewPath);
             }
-         */   
+            
         }
 
         public void HandleDriveChange(DriveChangeEvent dce)
