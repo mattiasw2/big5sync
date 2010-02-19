@@ -344,7 +344,7 @@ namespace Syncless
                     MessageBox.Show(messageBoxText, caption, button, icon);
 			    }
                 }
-            catch (Syncless.Tagging.Exceptions.TagAlreadyExistsException e)
+            catch (Syncless.Tagging.Exceptions.TagAlreadyExistsException )
             {
                 string messageBoxText = "Please specify another tagname.";
                 string caption = "Tag Already Exist";
@@ -374,7 +374,7 @@ namespace Syncless
                     MessageBox.Show(messageBoxText, caption, button, icon);
                 }
             }
-            catch (Syncless.Tagging.Exceptions.TagAlreadyExistsException e)
+            catch (Syncless.Tagging.Exceptions.TagAlreadyExistsException )
             {
                 string messageBoxText = "Please specify another tagname.";
                 string caption = "Tag Already Exist";
