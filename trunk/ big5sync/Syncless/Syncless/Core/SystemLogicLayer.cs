@@ -241,10 +241,7 @@ namespace Syncless.Core
             return ConvertToFolderTagView(TaggingLayer.Instance.CreateFolderTag(tagname));
         }
 
-        public FileTagView TagFile(string tagname, FileInfo file)
-        {
-            return TagFile(tagname, file);
-        }
+        
         private FolderTagView ConvertToFolderTagView(FolderTag t)
         {
             FolderTagView view = new FolderTagView(t.TagName, t.LastUpdated);
@@ -263,11 +260,20 @@ namespace Syncless.Core
             view.IsSeamless = t.IsSeamless;
             return view;
         }
+        public FileTagView TagFile(string tagname, FileInfo file)
+        {
+            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(file.FullName, true);
+            FileTag tag = TaggingLayer.Instance.TagFile(path, tagname);
+            StartManualSync(tag.TagName);
+            MonitorTag(tag.TagName, true);
+            return ConvertToFileTagView(tag);
+        }
         public FolderTagView TagFolder(string tagname, DirectoryInfo folder)
         {
             string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
             FolderTag tag = TaggingLayer.Instance.TagFolder(path, tagname);
             StartManualSync(tag.TagName);
+            MonitorTag(tag.TagName, true);
             return ConvertToFolderTagView(tag);
         }
         public int UntagFile(string tagname, FileInfo file)
