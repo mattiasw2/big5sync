@@ -811,7 +811,17 @@ namespace Syncless.CompareAndSync
             Debug.Assert(fileInput.Exists);
             Debug.Assert(fileInput.Name != "syncless.xml");
             Debug.Assert(fileInput.Directory.Name != "_syncless");
-            FileStream fileStream = fileInput.OpenRead();
+            FileStream fileStream = null;
+            try
+            {
+                fileStream = fileInput.OpenRead();
+            }
+            catch (IOException)
+            {
+                fileInput.Refresh();
+                fileStream = fileInput.OpenRead();
+            }
+
             byte[] fileHash = MD5.Create().ComputeHash(fileStream);
             fileStream.Close();
             StringBuilder sb = new StringBuilder();
