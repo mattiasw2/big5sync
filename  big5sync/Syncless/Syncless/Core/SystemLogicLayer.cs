@@ -229,7 +229,8 @@ namespace Syncless.Core
 
         public bool DeleteTag(string tagname)
         {
-            throw new NotImplementedException();
+            Tag t = TaggingLayer.Instance.RemoveTag(tagname);
+            return t != null;
         }
 
         public FileTagView CreateFileTag(string tagname)
