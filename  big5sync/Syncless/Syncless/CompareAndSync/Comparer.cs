@@ -256,6 +256,7 @@ namespace Syncless.CompareAndSync
             {
                 actualFile = (CompareInfoObject)actualIntersectMeta[i];
                 metaFile = (CompareInfoObject)metaIntersectActual[i];
+                Debug.Assert(actualFile.RelativePathToOrigin == metaFile.RelativePathToOrigin);
                 compareResult = new FileContentCompare().Compare(actualFile, metaFile);
 
                 if (actualFile.Length != metaFile.Length)
@@ -338,6 +339,7 @@ namespace Syncless.CompareAndSync
             {
                 srcFile = (CompareInfoObject)querySrcIntersectTgt[i];
                 tgtFile = (CompareInfoObject)queryTgtIntersectSrc[i];
+                Debug.Assert(srcFile.RelativePathToOrigin == tgtFile.RelativePathToOrigin);
                 compareResult = new FileContentCompare().Compare(srcFile, tgtFile);
 
                 if (compareResult > 0)
