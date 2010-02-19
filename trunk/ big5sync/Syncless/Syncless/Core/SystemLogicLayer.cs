@@ -126,7 +126,8 @@ namespace Syncless.Core
                 List<string> newPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(newLogicalOrigin);
                 MonitorPathPair newPair = new MonitorPathPair(newPhysicalOrigin, physicalNewPath);
                 Debug.Assert(logicalNewPath != null);
-                MonitorSyncRequest syncRequest = new MonitorSyncRequest(oldPair, monitorPair, FileChangeType.Create, true);
+                
+                MonitorSyncRequest syncRequest = new MonitorSyncRequest(oldPair,newPair, monitorPair, FileChangeType.Rename, true);
                 CompareSyncController.Instance.Sync(syncRequest);
                 TaggingLayer.Instance.RenameFolder(logicalOldPath, logicalNewPath);
             }

@@ -463,7 +463,7 @@ namespace Syncless.Monitor
             else
             {
                 Console.WriteLine("Folder Created: " + e.FullPath);
-                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.FullPath), EventChangeType.CREATED);
+                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.FullPath + @"\\"), EventChangeType.CREATED);
                 monitor.HandleFolderChange(folderEvent);
             }
         }
@@ -485,7 +485,7 @@ namespace Syncless.Monitor
             else if (watcher.Path.ToLower().Equals(e.FullPath)) // Strangely this will never happen as watcher cannot detect any event from the root folder
             {
                 Console.WriteLine("Folder Deleted: " + e.FullPath);
-                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.FullPath), EventChangeType.DELETED);
+                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.FullPath + @"\\"), EventChangeType.DELETED);
                 monitor.HandleFolderChange(folderEvent);
             }
             else
@@ -512,7 +512,7 @@ namespace Syncless.Monitor
             else
             {
                 Console.WriteLine("Folder Renamed: " + e.OldFullPath + " " + e.FullPath);
-                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.OldFullPath), new DirectoryInfo(e.FullPath));
+                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.OldFullPath + @"\\"), new DirectoryInfo(e.FullPath));
                 monitor.HandleFolderChange(folderEvent);
             }
         }
