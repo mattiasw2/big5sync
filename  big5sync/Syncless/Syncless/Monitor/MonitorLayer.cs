@@ -25,16 +25,16 @@ namespace Syncless.Monitor
         private List<FileSystemWatcher> watchers;
         private List<string> monitoredPaths;
         // new code
-        //private List<FileSystemWatcher> rootWatcher;
-        //private Hashtable rootAndParentPair; 
+        private List<FileSystemWatcher> rootWatchers;
+        private Hashtable rootsAndParent; 
 
         private MonitorLayer()
         {
             watchers = new List<FileSystemWatcher>();
             monitoredPaths = new List<string>();
             // new code
-            //rootWatcher = new List<FileSystemWatcher>();
-            //rootAndParentPair = new Hashtable();
+            rootWatchers = new List<FileSystemWatcher>();
+            rootsAndParent = new Hashtable();
         }
 
         /// <summary>
@@ -103,6 +103,7 @@ namespace Syncless.Monitor
             {
                 FileSystemWatcher watcher = CreateWatcher(path, "*.*");
                 watchers.Add(watcher);
+                AddRootWatcher(path);
             }
             foreach (string mPath in monitoredPaths)
             {
@@ -155,6 +156,85 @@ namespace Syncless.Monitor
             }
             monitoredPaths.Add(path);
             return true;
+        }
+
+        private void AddRootWatcher(string path)
+        {
+            DirectoryInfo directory = new DirectoryInfo(path);
+            if(directory.Root.FullName.ToLower().Equals(path.ToLower())) // Root is excluded
+            {
+                for (int i = 0; i < rootWatchers.Count; i++)
+                {
+                    FileSystemWatcher rootWatcher = rootWatchers[i];
+                    string rootWatchPath = rootWatcher.Path.ToLower();
+                    if (rootWatchPath.StartsWith(path.ToLower()))
+                    {
+                        rootWatcher.Dispose();
+                        rootWatchers.RemoveAt(i);
+                    }
+                }
+                rootsAndParent.Remove(path);
+                return ;
+            }
+            string parent = directory.Parent.FullName;
+            FileSystemWatcher newRootWatcher;
+            List<string> folders;
+            bool related = false;
+            for (int i = 0; i < rootWatchers.Count; i++)
+            {
+                FileSystemWatcher rootWatcher = rootWatchers[i];
+                string rootWatchPath = rootWatcher.Path.ToLower();
+                if (rootWatchPath.Equals(path.ToLower())) // A parent directory is now being watched
+                {
+                    rootWatcher.Dispose();
+                    rootWatchers.RemoveAt(i);
+                    rootsAndParent.Remove(rootWatcher.Path);
+                    
+                    newRootWatcher = CreateRootWatcher(parent, "*.*");
+                    rootWatchers.Add(newRootWatcher);
+                    folders = new List<string>();
+                    folders.Add(path);
+                    rootsAndParent.Add(parent, folders);
+                    related = true;
+                }
+                else if (rootWatchPath.Equals(parent.ToLower())) // Same root
+                {
+                    foreach (DictionaryEntry de in rootsAndParent)
+                    {
+                        if (((string)de.Key).ToLower().Equals(parent))
+                        {
+                            ((List<string>)de.Value).Add(path);
+                        }
+                    }
+                    related = true;
+                }
+                else if (rootWatchPath.StartsWith(parent.ToLower())) // Remove all child root watcher
+                {
+                    DirectoryInfo newDirectory = new DirectoryInfo(parent);
+                    DirectoryInfo existingDirectory = new DirectoryInfo(rootWatchPath);
+                    if (!newDirectory.Parent.FullName.ToLower().Equals(existingDirectory.Parent.FullName.ToLower())) // Adding a child directory
+                    {
+                        rootWatcher.Dispose();
+                        rootWatchers.RemoveAt(i);
+                        rootsAndParent.Remove(rootWatcher.Path);
+
+                        newRootWatcher = CreateRootWatcher(parent, "*.*");
+                        rootWatchers.Add(newRootWatcher);
+                        folders = new List<string>();
+                        folders.Add(path);
+                        rootsAndParent.Add(parent, folders);
+                        related = true;
+                    }
+                }
+            }
+            if (!related)
+            {
+                newRootWatcher = CreateRootWatcher(parent, "*.*");
+                rootWatchers.Add(newRootWatcher);
+                folders = new List<string>();
+                folders.Add(path);
+                rootsAndParent.Add(parent, folders);
+            }
         }
 
         /// <summary>
@@ -211,6 +291,7 @@ namespace Syncless.Monitor
                 {
                     watcher.Dispose();
                     watchers.RemoveAt(i);
+                    RemoveRootWatcher(path);
                     unMonitored = true;
                     break;
                 }
@@ -261,6 +342,44 @@ namespace Syncless.Monitor
                 }
             }
             return true;
+        }
+
+        private void RemoveRootWatcher(string path)
+        {
+            DirectoryInfo directory = new DirectoryInfo(path);
+            string parent = directory.Parent.FullName;
+            bool remove = false;
+            foreach (DictionaryEntry de in rootsAndParent)
+            {
+                if (((string)de.Key).ToLower().Equals(parent))
+                {
+                    List<string> folders = (List<string>)de.Value;
+                    if (folders.Count == 1)
+                    {
+                        remove = true;
+                    }
+                    else
+                    {
+                        folders.Remove(path);
+                        return;
+                    }
+                }
+            }
+            if (remove)
+            {
+                rootsAndParent.Remove(parent);
+                for (int i = 0; i < rootWatchers.Count; i++)
+                {
+                    FileSystemWatcher rootWatcher = rootWatchers[i];
+                    string rootWatchPath = rootWatcher.Path.ToLower();
+                    if (rootWatchPath.Equals(parent))
+                    {
+                        rootWatcher.Dispose();
+                        rootWatchers.RemoveAt(i);
+                        return;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -381,5 +500,48 @@ namespace Syncless.Monitor
             }
         }
 
+        private FileSystemWatcher CreateRootWatcher(string path, string filter)
+        {
+            FileSystemWatcher watcher = new FileSystemWatcher(path, filter);
+            watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.DirectoryName;
+            watcher.IncludeSubdirectories = false;
+            watcher.Deleted += new FileSystemEventHandler(OnRootDeleted);
+            watcher.Renamed += new RenamedEventHandler(OnRootRenamed);
+            watcher.EnableRaisingEvents = true;
+            return watcher;
+        }
+
+        private void OnRootDeleted(object source, FileSystemEventArgs e)
+        {
+            FileSystemWatcher watcher = (FileSystemWatcher) source;
+            List<string> folders = (List<string>)rootsAndParent[watcher.Path];
+            foreach(string folder in folders) {
+                if (e.FullPath.Equals(folder))
+                {
+                    Console.WriteLine("Folder Deleted: " + e.FullPath);
+                    FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.FullPath), EventChangeType.DELETED);
+                    IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
+                    monitor.HandleFolderChange(folderEvent);
+                    return;
+                }
+            }
+        }
+
+        private void OnRootRenamed(object source, RenamedEventArgs e)
+        {
+            FileSystemWatcher watcher = (FileSystemWatcher)source;
+            List<string> folders = (List<string>)rootsAndParent[watcher.Path];
+            foreach (string folder in folders)
+            {
+                if (e.OldFullPath.Equals(folder))
+                {
+                    Console.WriteLine("Folder Renamed: " + e.OldFullPath + " " + e.FullPath);
+                    FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.OldFullPath), new DirectoryInfo(e.FullPath));
+                    IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
+                    monitor.HandleFolderChange(folderEvent);
+                    return;
+                }
+            }
+        }
     }
 }

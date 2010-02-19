@@ -9,7 +9,6 @@ namespace Syncless.Core
     public class DeviceWatcher
     {
         private static DeviceWatcher _instance;
-
         /// <summary>
         /// The singleton instance of DeviceWatcher object.
         /// </summary>
@@ -27,6 +26,7 @@ namespace Syncless.Core
         private List<DriveInfo> connectedDrives;
         private ManagementEventWatcher insertUSBWatcher;
         private ManagementEventWatcher removeUSBWatcher;
+        private const int DELAY_TIME = 10000;
 
         private DeviceWatcher()
         {
@@ -80,7 +80,7 @@ namespace Syncless.Core
 
         private void USBInserted(object sender, EventArrivedEventArgs e)
         {
-            Thread.Sleep(10000);
+            Thread.Sleep(DELAY_TIME);
             IMonitorControllerInterface control = ServiceLocator.MonitorI;
             List<DriveInfo> newConnectedDrives = RetrieveAllDrives();
             int i = 0;
@@ -91,11 +91,7 @@ namespace Syncless.Core
                 {
                     inserted = true;
                 }
-                else if (drive.Name.Equals(connectedDrives[i].Name))
-                {
-                    
-                }
-                else
+                else if (!drive.Name.Equals(connectedDrives[i].Name))
                 {
                     inserted = true;
                     i--;
@@ -149,11 +145,7 @@ namespace Syncless.Core
                 {
                     removed = true;
                 }
-                else if (drive.Name.Equals(newConnectedDrives[i].Name))
-                {
-                    
-                }
-                else
+                else if (!drive.Name.Equals(newConnectedDrives[i].Name))
                 {
                     removed = true;
                     i--;
