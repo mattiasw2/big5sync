@@ -243,6 +243,9 @@ namespace Syncless.CompareAndSync
 
             List<CompareInfoObject> actualIntersectMeta = actual.Intersect<CompareInfoObject>(meta, new FileNameCompare()).ToList<CompareInfoObject>();
             List<CompareInfoObject> metaIntersectActual = meta.Intersect<CompareInfoObject>(actual, new FileNameCompare()).ToList<CompareInfoObject>();
+            actualIntersectMeta.Sort();
+            metaIntersectActual.Sort();
+            
             Debug.Assert(actualIntersectMeta.Count == metaIntersectActual.Count);
             int numOfCommonItems = actualIntersectMeta.Count;
             CompareInfoObject actualFile = null;
@@ -277,8 +280,11 @@ namespace Syncless.CompareAndSync
             List<CompareInfoObject> querySrcExceptTgt = source.Except(target, new FileNameCompare()).ToList<CompareInfoObject>();
             List<CompareInfoObject> querySrcIntersectTgt = source.Intersect(target, new FileNameCompare()).ToList<CompareInfoObject>();
             List<CompareInfoObject> queryTgtIntersectSrc = target.Intersect(source, new FileNameCompare()).ToList<CompareInfoObject>();
-            int exceptItemsCount = querySrcExceptTgt.Count;
+            querySrcIntersectTgt.Sort();
+            queryTgtIntersectSrc.Sort();
+
             Debug.Assert(querySrcIntersectTgt.Count == queryTgtIntersectSrc.Count);
+            int exceptItemsCount = querySrcExceptTgt.Count;            
             int commonItemsCount = queryTgtIntersectSrc.Count;
             List<string> createList, updateList;
 
@@ -405,6 +411,9 @@ namespace Syncless.CompareAndSync
             List<CompareInfoObject> querySrcExceptTgt = source.Except(target, new FileNameCompare()).ToList<CompareInfoObject>();
             List<CompareInfoObject> querySrcIntersectTgt = source.Intersect(target, new FileNameCompare()).ToList<CompareInfoObject>();
             List<CompareInfoObject> queryTgtIntersectSrc = target.Intersect(source, new FileNameCompare()).ToList<CompareInfoObject>();
+            querySrcIntersectTgt.Sort();
+            queryTgtIntersectSrc.Sort();
+
             int exceptItemsCount = querySrcExceptTgt.Count;
             Debug.Assert(querySrcIntersectTgt.Count == queryTgtIntersectSrc.Count);
             int commonItemsCount = queryTgtIntersectSrc.Count;
@@ -463,6 +472,7 @@ namespace Syncless.CompareAndSync
             {
                 srcFile = (CompareInfoObject)querySrcIntersectTgt[i];
                 tgtFile = (CompareInfoObject)queryTgtIntersectSrc[i];
+                Debug.Assert(srcFile.RelativePathToOrigin == tgtFile.RelativePathToOrigin);
                 compareResult = new FileContentCompare().Compare(srcFile, tgtFile);
 
                 if (compareResult > 0)
