@@ -4,14 +4,13 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:dropShadow="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Class="Syncless.MainWindow"
-    Title="Syncless" Height="600" Width="800" Background="Transparent" Icon="Icons/logo.ico" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" WindowStyle="None" Foreground="Transparent" mc:Ignorable="d" AllowsTransparency="True">
-    <Grid x:Name="LayoutRoot" Width="700" Height="550">
+    Title="Syncless" Height="400" Width="700" Background="Transparent" Icon="Icons/logo.ico" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" WindowStyle="None" Foreground="Transparent" mc:Ignorable="d" AllowsTransparency="True">
+    <Grid x:Name="LayoutRoot" Width="700">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="20"/>
 			<RowDefinition Height="50"/>
 			<RowDefinition Height="60"/>
 			<RowDefinition Height="*"/>
-			<RowDefinition Height="150"/>
 			<RowDefinition Height="20"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
@@ -23,7 +22,7 @@
 		</Grid.ColumnDefinitions>
     	
 		<!-- Overall Canvas -->
-		<Rectangle Grid.Row="0" Grid.RowSpan="7" x:Name="Canvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.ColumnSpan="5">
+		<Rectangle Grid.Row="0" Grid.RowSpan="5" x:Name="Canvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.ColumnSpan="5">
     		<Rectangle.Fill>
     			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
     				<GradientStop Color="#FF707271" Offset="0"/>
@@ -195,33 +194,5 @@
 		</Grid>
 		
 		<!-- Log Panel -->
-		<Grid x:Name="LogPanelLayoutRoot" Grid.Row="4" Grid.Column="1" Grid.RowSpan="1" Grid.ColumnSpan="3">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="20"/>
-				<RowDefinition Height="25"/>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="15"/>
-			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="10"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="10"/>
-			</Grid.ColumnDefinitions>
-
-			<dropShadow:SystemDropShadowChrome Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="3">	
-				<Rectangle x:Name="LogPanelCanvas" RadiusX="10" RadiusY="10" Stroke="Black">
-					<Rectangle.Fill>
-						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-							<GradientStop Color="#FF626262" Offset="0"/>
-							<GradientStop Color="#FF20262b" Offset="1"/>
-						</LinearGradientBrush>
-					</Rectangle.Fill>
-				</Rectangle>
-			</dropShadow:SystemDropShadowChrome>
-			<Label x:Name="LogTitle" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Foreground="#FFEEEEEE" Content="Logs Panel" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,4,0,4" Margin="2,0" FontSize="13.333" VerticalAlignment="Top"/>
-			<Image x:Name="LogIcon" Margin="0,-20,0,0" Grid.Column="1" Grid.RowSpan="3" Source="Icons/log.ico" Stretch="Fill" Height="80" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top"/>
-			<ListBox Background="#FF666666" Margin="3,10,3,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" Grid.Column="1" Grid.Row="2">
-			</ListBox>
-		</Grid>
     </Grid>	
 </Window>
