@@ -1035,13 +1035,6 @@ namespace Syncless.Tagging
                     return true;
                 }
             }
-            foreach (FileTag fileTag in _taggingProfile.FileTagList)
-            {
-                if (fileTag.TagName.Equals(tagname))
-                {
-                    return true;
-                }
-            }
             return false;
         }
 
@@ -1052,13 +1045,6 @@ namespace Syncless.Tagging
                 if (fileTag.TagName.Equals(tagname))
                 {
                     return true;
-                }
-            }
-            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
-            {
-                if (folderTag.TagName.Equals(tagname))
-                {
-                    return false;
                 }
             }
             return false;
