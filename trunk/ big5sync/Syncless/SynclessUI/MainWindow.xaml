@@ -221,18 +221,6 @@
 			<Label x:Name="LogTitle" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Foreground="#FFEEEEEE" Content="Logs Panel" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,4,0,4" Margin="2,0" FontSize="13.333" VerticalAlignment="Top"/>
 			<Image x:Name="LogIcon" Margin="0,-20,0,0" Grid.Column="1" Grid.RowSpan="3" Source="Icons/log.ico" Stretch="Fill" Height="80" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top"/>
 			<ListBox Background="#FF666666" Margin="3,10,3,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" Grid.Column="1" Grid.Row="2">
-				<ListBoxItem Content="Test"/>
-				<ListBoxItem Content="Test"/>
-				<ListBoxItem Content="Test"/>
-				<ListBoxItem Content="Test"/>
-				<ListBoxItem Content="Test"/>
-				<ListBoxItem Content="Test"/>
-				<ListBoxItem Content="Test"/>
-				<ListBoxItem Content="Test"/>
-				<ListBoxItem Content="Test"/>
-				<ListBoxItem Content="Test"/>
-				<ListBoxItem Content="Test"/>
-				<ListBoxItem Content="Test"/>
 			</ListBox>
 		</Grid>
     </Grid>	

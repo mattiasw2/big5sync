@@ -128,6 +128,7 @@ namespace Syncless
             {
                 int index = taglist.IndexOf(tagToSelect);
                 ListBoxTag.SelectedIndex = index;
+                ViewTagInfo((string)ListBoxTag.SelectedValue);
             }
         }
 		
@@ -315,6 +316,7 @@ namespace Syncless
                         bool success = _Igui.DeleteTag(_selectedTagName);
                         if(success)
                         {
+                            _selectedTagName = string.Empty;
                             InitializeTagList(string.Empty);
                             ResetTagInfoPanel();
                         }
