@@ -94,10 +94,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainScreen.xaml.cs">
-      <DependentUpon>MainScreen.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -135,10 +131,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainScreen.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -157,14 +149,12 @@
     <Resource Include="Icons\createtag.ico" />
     <Resource Include="Icons\file.ico" />
     <Resource Include="Icons\folder.ico" />
-    <Resource Include="Icons\log.ico" />
     <Resource Include="Icons\logo.ico" />
     <Resource Include="Icons\max.ico" />
     <Resource Include="Icons\min.ico" />
     <Resource Include="Icons\placetag.ico" />
     <Resource Include="Icons\properties.ico" />
     <Resource Include="Icons\removetag.ico" />
-    <Resource Include="Icons\small-down-arrow.ico" />
     <Resource Include="Icons\tag.ico" />
     <Resource Include="Icons\taglist.ico" />
   </ItemGroup>
