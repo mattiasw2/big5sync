@@ -31,14 +31,17 @@ namespace Syncless
         private string _selectedTag {
             get { if (ListBoxTag.SelectedItem == null) return null; else return ListBoxTag.SelectedItem.ToString(); }
         }
+        private string _filter {
+            get { return TxtBoxFilterTag.Text.Trim(); }
+        }
         
         public MainWindow() {
-            
             MinimizeToTray.Enable(this);
-
+            
             InitializeComponent();
 
             InitializeSyncless();
+
         }
 		
         /// <summary>
@@ -122,7 +125,7 @@ namespace Syncless
 
             ListBoxTag.ItemsSource = taglist;
 
-            LblTagCount.Content = "[" + taglist.Count + "]";
+            LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
 
             if (taglist.Count != 0)
             {
@@ -219,16 +222,6 @@ namespace Syncless
         private void BtnMin_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
 			this.WindowState = WindowState.Minimized;
-        }
-
-        private void TxtBoxFilterTag_GotFocus(object sender, System.Windows.RoutedEventArgs e)
-        {
-        	TxtBoxFilterTag.Text = "";
-        }
-
-        private void TxtBoxFilterTag_LostFocus(object sender, System.Windows.RoutedEventArgs e)
-        {
-        	TxtBoxFilterTag.Text = "Filter";
         }
 
         private void BtnDirection_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -466,5 +459,28 @@ namespace Syncless
                 MessageBox.Show(messageBoxText, caption, button, icon);
             }
         }
+
+		private void TxtBoxFilterTag_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+		{
+            if (_Igui != null)
+            {
+                List<string> taglist = _Igui.GetAllTags();
+                List<string> filteredtaglist = new List<string>();
+
+                int initial = taglist.Count;
+
+                foreach (string x in taglist)
+                {
+                    if (x.Contains(_filter))
+                        filteredtaglist.Add(x);
+                }
+
+                int after = filteredtaglist.Count;
+
+                LblTagCount.Content = "[" + after + "/" + initial + "]";
+
+                ListBoxTag.ItemsSource = filteredtaglist;
+            }
+		}
     }
 }
