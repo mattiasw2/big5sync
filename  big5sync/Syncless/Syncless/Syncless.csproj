@@ -84,11 +84,11 @@
     <Compile Include="Monitor\FolderChangeEvent.cs" />
     <Compile Include="Monitor\MonitorLayer.cs" />
     <Compile Include="Profiling\Profile.cs" />
-    <Compile Include="Profiling\ProfileConflictException.cs" />
-    <Compile Include="Profiling\ProfileGuidConflictException.cs" />
+    <Compile Include="Profiling\Exceptions\ProfileConflictException.cs" />
+    <Compile Include="Profiling\Exceptions\ProfileGuidConflictException.cs" />
     <Compile Include="Profiling\ProfileMapping.cs" />
-    <Compile Include="Profiling\ProfileMappingConflictException.cs" />
-    <Compile Include="Profiling\ProfileMappingExistException.cs" />
+    <Compile Include="Profiling\Exceptions\ProfileMappingConflictException.cs" />
+    <Compile Include="Profiling\Exceptions\ProfileMappingExistException.cs" />
     <Compile Include="Profiling\ProfilingGUIDHelper.cs" />
     <Compile Include="Profiling\ProfilingHelper.cs" />
     <Compile Include="Profiling\ProfilingLayer.cs" />

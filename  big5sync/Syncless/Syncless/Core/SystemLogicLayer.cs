@@ -32,10 +32,6 @@ namespace Syncless.Core
             
         }
 
-
-
-
-
         #region IMonitorControllerInterface Members
 
         public void HandleFileChange(FileChangeEvent fe)
@@ -180,12 +176,12 @@ namespace Syncless.Core
         #endregion
 
         #region Logging
-        /*
+        
         public Logger GetLogger(string type)
         {
             return LoggingLayer.Instance.GetLogger(type);
         }
-        */
+        
         #endregion
 
         #region IUIControllerInterface Members
@@ -220,6 +216,10 @@ namespace Syncless.Core
         public bool StartManualSync(string tagname)
         {
             Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            return StartManualSync(tag);
+        }
+        private bool StartManualSync(Tag tag)
+        {
             List<string> paths = tag.PathStringList;
             List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
             SyncRequest syncRequest = new SyncRequest(convertedPath, (tag is FolderTag));
@@ -242,26 +242,7 @@ namespace Syncless.Core
         {
             return ConvertToFolderTagView(TaggingLayer.Instance.CreateFolderTag(tagname));
         }
-
-        
-        private FolderTagView ConvertToFolderTagView(FolderTag t)
-        {
-            FolderTagView view = new FolderTagView(t.TagName, t.LastUpdated);
-            List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.PathStringList);
-            view.PathStringList = pathList;
-            view.Created = t.Created;
-            view.IsSeamless = t.IsSeamless;
-            return view;
-        }
-        private FileTagView ConvertToFileTagView(FileTag t)
-        {
-            FileTagView view = new FileTagView(t.TagName, t.LastUpdated);
-            List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.PathStringList);
-            view.PathStringList = pathList;
-            view.Created = t.Created;
-            view.IsSeamless = t.IsSeamless;
-            return view;
-        }
+               
         public FileTagView TagFile(string tagname, FileInfo file)
         {
             string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(file.FullName, true);
@@ -284,7 +265,6 @@ namespace Syncless.Core
             string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(file.FullName, true);
             return TaggingLayer.Instance.UntagFile(path, tag.TagName);
         }
-
         public int UntagFolder(string tagname, DirectoryInfo folder)
         {
             Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
@@ -340,6 +320,8 @@ namespace Syncless.Core
 
         public bool PrepareForTermination()
         {
+            TaggingLayer.Instance.SaveTo(TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH);
+            ProfilingLayer.Instance.SaveToAllUsedDrive();
             return true;
         }
 
@@ -353,6 +335,12 @@ namespace Syncless.Core
         {
             ProfilingLayer.Instance.Init(ProfilingLayer.RELATIVE_PROFILING_ROOT_SAVE_PATH);
             TaggingLayer.Instance.Init(TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH);
+            List<Tag> tagList = TaggingLayer.Instance.AllTagList;
+            foreach (Tag t in tagList)
+            {
+                StartManualSync(t);
+            }
+
             DeviceWatcher.Instance.ToString();
             return true;
         }
@@ -376,5 +364,24 @@ namespace Syncless.Core
         }
 
         #endregion
+
+        private FolderTagView ConvertToFolderTagView(FolderTag t)
+        {
+            FolderTagView view = new FolderTagView(t.TagName, t.LastUpdated);
+            List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.PathStringList);
+            view.PathStringList = pathList;
+            view.Created = t.Created;
+            view.IsSeamless = t.IsSeamless;
+            return view;
+        }
+        private FileTagView ConvertToFileTagView(FileTag t)
+        {
+            FileTagView view = new FileTagView(t.TagName, t.LastUpdated);
+            List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.PathStringList);
+            view.PathStringList = pathList;
+            view.Created = t.Created;
+            view.IsSeamless = t.IsSeamless;
+            return view;
+        }
     }
 }

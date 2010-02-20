@@ -104,16 +104,7 @@ namespace Syncless.Profiling
             }
             return returnPathList;
         }
-        /// <summary>
-        /// Get the relative path of a path.
-        ///    001:/Lectures will return /Lectures
-        ///    C:/Lectures will return /Lectures
-        ///    C:/ will return /
-        ///    path assert not null.
-        /// </summary>
-        /// <param name="path">The path to process</param>
-        /// <returns>The Relative path</returns>
-        
+               
         /// <summary>
         /// Get the Logical Id for a Drive.
         /// </summary>
@@ -125,11 +116,21 @@ namespace Syncless.Profiling
             String name = info.Name.Substring(0, info.Name.IndexOf(":"));
             return GetLogicalIdFromDrive(name);
         }
+        /// <summary>
+        /// Get the Logical Id for a Drive.
+        /// </summary>
+        /// <param name="name">The name of the drive</param>
+        /// <returns></returns>
         public string GetLogicalIdFromDrive(string name)
         {            
             Debug.Assert(_profile != null);
             return _profile.FindLogicalFromPhysical(name);
         }
+        /// <summary>
+        /// get the Drive from Logical Id
+        /// </summary>
+        /// <param name="id">The Logical Id</param>
+        /// <returns>The Name of the Drive (i.e 'C')</returns>
         public String GetDriveFromLogicalId(string id)
         {
             Debug.Assert(id != null);
@@ -138,11 +139,20 @@ namespace Syncless.Profiling
         }
         #endregion        
 
+
+        /// <summary>
+        /// Save all the profiling xml to all the various Location.
+        /// </summary>
+        /// <returns>true if the save is complete.</returns>
         public bool SaveToAllUsedDrive()
         {
             return ProfilingXMLHelper.SaveToAllDrive(_profile);
         }
-        
+        /// <summary>
+        /// Initialize the Profiling Layer.
+        /// </summary>
+        /// <param name="path">The root path for the profiling configuration file.</param>
+        /// <returns>true if the profile is load.</returns>
         public bool Init(string path)
         {
             try
@@ -159,7 +169,7 @@ namespace Syncless.Profiling
                 return true;
             }
             DriveInfo[] driveList = DriveInfo.GetDrives();
-
+            /* Load from each drive Disabled for 0.0
             foreach (DriveInfo driveinfo in driveList)
             {
                 #region Get Profiling XML
@@ -193,7 +203,7 @@ namespace Syncless.Profiling
                 }
                 #endregion
             }
-            
+            */
             foreach (DriveInfo driveinfo in driveList)
             {
                 UpdateDrive(driveinfo);
@@ -201,7 +211,12 @@ namespace Syncless.Profiling
             SaveToAllUsedDrive();
             return true;
         }
-
+        /// <summary>
+        /// Update a Drive with it guid and create a mapping in the profile.
+        ///   used when a device is plugin or when startup.
+        /// </summary>
+        /// <param name="driveinfo">The drive to update</param>
+        /// <returns>true if drive has a guid. False if it does not.</returns>
         public bool UpdateDrive(DriveInfo driveinfo)
         {
             FileInfo info = new FileInfo(driveinfo.RootDirectory.Name + RELATIVE_GUID_SAVE_PATH);
@@ -214,6 +229,11 @@ namespace Syncless.Profiling
             }
             return false;
         }
+        /// <summary>
+        /// Remove a drive from a mapping. Used when a device is pluged out.
+        /// </summary>
+        /// <param name="driveinfo">The Drive that was plug out</param>
+        /// <returns>true if the drive is being removed.</returns>
         public bool RemoveDrive(DriveInfo driveinfo)
         {
             return _profile.RemoveDrive(ProfilingHelper.ExtractDriveName(driveinfo.Name));

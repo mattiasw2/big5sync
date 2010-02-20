@@ -52,6 +52,7 @@ namespace Syncless.Profiling
             //Save to Root Directory
             FileInfo profileInfo = new FileInfo(ProfilingLayer.RELATIVE_PROFILING_ROOT_SAVE_PATH);
             SaveProfile(xml, profileInfo.FullName);
+            /* Save to all drive commented temporary
             foreach (DriveInfo driveInfo in drives)
             {
                 FileInfo fileInfo = new FileInfo(ProfilingHelper.ExtractDriveName(driveInfo) + ":" + ProfilingLayer.RELATIVE_GUID_SAVE_PATH);
@@ -62,6 +63,7 @@ namespace Syncless.Profiling
                     SaveProfile(xml, profileInfo.FullName);
                 }
             }
+            */ 
             return true;
         }
 

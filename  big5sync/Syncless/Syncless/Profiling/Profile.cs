@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Syncless.Profiling.Exceptions;
 namespace Syncless.Profiling
 {
     public class Profile
@@ -37,7 +38,7 @@ namespace Syncless.Profiling
         /// <summary>
         /// Check if a Profilemapping is Contain in this profile.
         ///   throw ProfileMappingConflictException if Profile Mapping has Conflict.
-        ///   conflict is identified as there is a similar in 1 or 2 field.
+        ///   conflict is identified as there is a similar only 1 or 2 field.
         /// </summary>
         /// <param name="mapping">The Mapping to Check</param>
         /// <returns>true if there is a mapping that is equals to the mapping. Else return false</returns>
