@@ -457,22 +457,38 @@ namespace Syncless.Tagging
 
         public Tag RemoveTag(string tagname)
         {
+            //Tag toRemove = null;
+            //if (CheckFolderTagExists(tagname))
+            //{
+            //    toRemove = GetFolderTag(tagname);
+            //    _taggingProfile.FolderTagList.Remove((FolderTag)toRemove);
+            //}
+            //else if (CheckFileTagExists(tagname))
+            //{
+            //    toRemove = GetFileTag(tagname);
+            //    _taggingProfile.FileTagList.Remove((FileTag)toRemove);
+            //}
+            //else
+            //{
+            //    throw new TagNotFoundException(ErrorMessage.TAG_NOT_FOUND_EXCEPTION, tagname);
+            //}
+            //return toRemove;
             Tag toRemove = null;
-            if (CheckFolderTagExists(tagname))
+            toRemove = GetFolderTag(tagname);
+            if (toRemove != null)
             {
-                toRemove = GetFolderTag(tagname);
                 _taggingProfile.FolderTagList.Remove((FolderTag)toRemove);
+                return toRemove;
             }
-            else if (CheckFileTagExists(tagname))
+            toRemove = GetFileTag(tagname);
+            if (toRemove !=null)
             {
-                toRemove = GetFileTag(tagname);
                 _taggingProfile.FileTagList.Remove((FileTag)toRemove);
+                return toRemove;
             }
-            else
-            {
-                throw new TagNotFoundException(ErrorMessage.TAG_NOT_FOUND_EXCEPTION, tagname);
-            }
-            return toRemove;
+
+            throw new TagNotFoundException(ErrorMessage.TAG_NOT_FOUND_EXCEPTION, tagname);
+
         }
 
         public int Untag(string path, string tagname)
