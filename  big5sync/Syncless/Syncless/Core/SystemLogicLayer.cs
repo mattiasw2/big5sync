@@ -222,8 +222,11 @@ namespace Syncless.Core
         {
             List<string> paths = tag.PathStringList;
             List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            SyncRequest syncRequest = new SyncRequest(convertedPath, (tag is FolderTag));
-            CompareSyncController.Instance.Sync(syncRequest);
+            if (convertedPath.Count != 0)
+            {
+                SyncRequest syncRequest = new SyncRequest(convertedPath, (tag is FolderTag));
+                CompareSyncController.Instance.Sync(syncRequest);
+            }
             return true;
         }
 
