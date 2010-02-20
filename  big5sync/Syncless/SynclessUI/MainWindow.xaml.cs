@@ -482,5 +482,39 @@ namespace Syncless
                 ListBoxTag.ItemsSource = filteredtaglist;
             }
 		}
+
+		private void btnUntag_Click(object sender, System.Windows.RoutedEventArgs e)
+		{
+			if(!ListTaggedPath.HasItems) {
+                string messageBoxText = "There is nothing to untag.";
+                string caption = "Nothing to Untag";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Error;
+
+                MessageBox.Show(messageBoxText, caption, button, icon);
+			} else {
+				if(ListTaggedPath.SelectedIndex == -1) {
+					string messageBoxText = "Please select a path to untag.";
+					string caption = "No Path Selected";
+					MessageBoxButton button = MessageBoxButton.OK;
+					MessageBoxImage icon = MessageBoxImage.Error;
+
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+				} else {
+                    TagView tv = _Igui.GetTag((string)TagTitle.Content);
+
+                    if (tv is FileTagView)
+                    {
+                        _Igui.UntagFile(tv.TagName, new FileInfo((string)ListTaggedPath.SelectedValue));
+                    }
+                    else if (tv is FolderTagView)
+                    {
+                        _Igui.UntagFolder(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
+                    }
+
+                    SelectTag(tv.TagName);
+				}
+			}
+		}
     }
 }
