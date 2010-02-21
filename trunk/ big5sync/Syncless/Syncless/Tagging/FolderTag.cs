@@ -13,27 +13,21 @@ namespace Syncless.Tagging
 
         }
 
-        public string FindMatchedParentDirectory(string path)
+        public string FindMatchedParentDirectory(string path, bool isFolder)
         {
-            string[] pathTokens = TrimEnd(path.Split('\\'));
-            string logicalid = pathTokens[0].TrimEnd(':');
-            string trailingPath = "";
+            string[] pathTokens = TaggingHelper.TrimEnd(path.Split('\\'));
+            string logicalid = TaggingHelper.GetLogicalID(path);
             foreach (TaggedPath p in _pathList)
             {
                 if (path.StartsWith(p.Path))
                 {
                     if (!path.Equals(p.Path))
                     {
-                        string[] pTokens = TrimEnd(p.Path.Split('\\'));
-                        int trailingIndex = Match(pathTokens, pTokens);
+                        string[] pTokens = TaggingHelper.TrimEnd(p.Path.Split('\\'));
+                        int trailingIndex = TaggingHelper.Match(pathTokens, pTokens);
                         if (trailingIndex > 0)
                         {
-                            for (int i = trailingIndex; i < pathTokens.Length - 1; i++)
-                            {
-                                trailingPath += (pathTokens[i] + "\\");
-                            }
-                            trailingPath += pathTokens[pathTokens.Length - 1];
-                            return trailingPath;
+                            return TaggingHelper.CreatePath(trailingIndex, pathTokens, isFolder);
                         }
                     }
                 }
