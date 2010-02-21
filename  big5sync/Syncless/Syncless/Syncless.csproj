@@ -104,8 +104,10 @@
     <Compile Include="Tagging\FolderTag.cs" />
     <Compile Include="Tagging\Tag.cs" />
     <Compile Include="Tagging\TaggedPath.cs" />
+    <Compile Include="Tagging\TaggingHelper.cs" />
     <Compile Include="Tagging\TaggingLayer.cs" />
     <Compile Include="Tagging\TaggingProfile.cs" />
+    <Compile Include="Tagging\TaggingXMLHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CompareAndSync\ClassDiagramCompareAndSync.cd" />

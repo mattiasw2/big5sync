@@ -74,7 +74,7 @@ namespace Syncless.Tagging
             {
                 TaggedPath taggedPath = new TaggedPath();
                 taggedPath.Path = path;
-                taggedPath.LogicalDriveId = GetLogicalID(path);
+                taggedPath.LogicalDriveId = TaggingHelper.GetLogicalID(path);
                 taggedPath.Created = created;
                 taggedPath.LastUpdated = created;
                 _lastupdated = created;
@@ -126,12 +126,6 @@ namespace Syncless.Tagging
         }
 
         #region private implementations
-        protected string GetLogicalID(string path)
-        {
-            string[] tokens = path.Split('\\');
-             return (tokens[0].TrimEnd(':'));
-        }
-
         protected TaggedPath RetrieveTaggedPath(string path)
         {
             foreach (TaggedPath p in _pathList)
@@ -143,64 +137,27 @@ namespace Syncless.Tagging
             }
             return null;
         }
-
+        
+        #region Deprecated
+        /// <summary>
+        /// Deprecated - Find if pathTokens starts with pTokens (replaced by StartsWith method of String class)
+        /// </summary>
+        /// <param name="pathTokens"></param>
+        /// <param name="pTokens"></param>
+        /// <returns></returns>
         protected bool CheckMatch(string[] pathTokens, string[] pTokens)
         {
-            bool allMatched = true;
             for (int i = 0; i < pTokens.Length; i++)
             {
                 if (!pTokens[i].Equals(pathTokens[i]))
                 {
-                    allMatched = false;
-                    break;
+                    return false;
                 }
             }
-            return allMatched;
+            return true;
         }
+        #endregion
 
-        protected string[] TrimEnd(string[] tempPathTokens)
-        {
-            string[] pathTokens = new string[tempPathTokens.Length - 1];
-            if (tempPathTokens[tempPathTokens.Length - 1].Equals(""))
-            {
-                for (int i = 0; i < pathTokens.Length; i++)
-                {
-                    pathTokens[i] = tempPathTokens[i];
-                }
-                return pathTokens;
-            }
-            return tempPathTokens;
-        }
-
-        protected int Match(string[] pathTokens, string[] pTokens)
-        {
-            int trailingIndex = 0;
-            for (int i = 0; i < pTokens.Length; i++)
-            {
-                if (pTokens[i].Equals(pathTokens[i]))
-                {
-                    trailingIndex++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            return trailingIndex;
-        }
-
-        private string GetCurrentTime()
-        {
-            DateTime current = DateTime.Now;
-            string day = current.Day.ToString();
-            string month = current.Month.ToString();
-            string year = current.Year.ToString();
-            string hour = current.Hour.ToString();
-            string minute = current.Minute.ToString();
-            string second = current.Second.ToString();
-            string currenttime = string.Format("{0}{1}{2}{3}{4}{5}", day, month, year, hour, minute, second);
-            return currenttime;
-        }
         #endregion
     }
 }
