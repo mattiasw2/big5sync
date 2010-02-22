@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Syncless.Tagging.Exceptions;
 
 namespace Syncless.Tagging
 {
@@ -137,7 +138,7 @@ namespace Syncless.Tagging
             }
             return null;
         }
-        
+
         #region Deprecated
         /// <summary>
         /// Deprecated - Find if pathTokens starts with pTokens (replaced by StartsWith method of String class)

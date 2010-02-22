@@ -94,6 +94,7 @@
     <Compile Include="Profiling\ProfilingLayer.cs" />
     <Compile Include="Profiling\ProfilingXMLHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tagging\CurrentTime.cs" />
     <Compile Include="Tagging\Exceptions\PathAlreadyExistsException.cs" />
     <Compile Include="Tagging\Exceptions\PathNotFoundException.cs" />
     <Compile Include="Tagging\Exceptions\RecursiveDirectoryException.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Tagging\Exceptions\TagTypeConflictException.cs" />
     <Compile Include="Tagging\FileTag.cs" />
     <Compile Include="Tagging\FolderTag.cs" />
+    <Compile Include="Tagging\LogMessage.cs" />
     <Compile Include="Tagging\Tag.cs" />
     <Compile Include="Tagging\TaggedPath.cs" />
     <Compile Include="Tagging\TaggingHelper.cs" />

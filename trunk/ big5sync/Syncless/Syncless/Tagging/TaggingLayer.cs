@@ -113,14 +113,16 @@ namespace Syncless.Tagging
         {
             if (!CheckFolderTagExists(tagname) && !CheckFileTagExists(tagname))
             {
-                long created = TaggingHelper.GetCurrentTime();
-                FolderTag tag = new FolderTag(tagname, created);
+                CurrentTime created = new CurrentTime();
+                FolderTag tag = new FolderTag(tagname, created.CurrentTimeLong);
                 _taggingProfile.FolderTagList.Add(tag);
-                UpdateTaggingProfileDate(created);
+                UpdateTaggingProfileDate(created.CurrentTimeLong);
+                TaggingHelper.Logging(LogMessage.FOLDER_TAG_CREATED, tagname);
                 return tag;
             }
             else
             {
+                TaggingHelper.Logging(LogMessage.FOLDER_TAG_ALREADY_EXISTS, tagname);
                 throw new TagAlreadyExistsException(tagname);
             }
         }
@@ -140,14 +142,17 @@ namespace Syncless.Tagging
                 {
                     Debug.Assert(GetFolderTag(oldname) != null);
                     GetFolderTag(oldname).TagName = newname;
+                    TaggingHelper.Logging(LogMessage.FOLDER_TAG_RENAMED, oldname, newname);
                 }
                 else
                 {
+                    TaggingHelper.Logging(LogMessage.FOLDER_TAG_ALREADY_EXISTS, newname);
                     throw new TagAlreadyExistsException(newname);
                 }
             }
             else
             {
+                TaggingHelper.Logging(LogMessage.FOLDER_TAG_NOT_FOUND, oldname);
                 throw new TagNotFoundException(oldname);
             }
         }
@@ -162,14 +167,16 @@ namespace Syncless.Tagging
             FolderTag toRemove;
             if (CheckFolderTagExists(tagname))
             {
-                long updated = TaggingHelper.GetCurrentTime();
+                CurrentTime updated = new CurrentTime();
                 toRemove = GetFolderTag(tagname);
                 _taggingProfile.FolderTagList.Remove(toRemove);
-                UpdateTaggingProfileDate(updated);
+                UpdateTaggingProfileDate(updated.CurrentTimeLong);
+                TaggingHelper.Logging(LogMessage.FOLDER_TAG_REMOVED, tagname);
                 return toRemove;
             }
             else
             {
+                TaggingHelper.Logging(LogMessage.FOLDER_TAG_NOT_FOUND, tagname);
                 throw new TagNotFoundException(tagname);
             }
         }
@@ -184,15 +191,16 @@ namespace Syncless.Tagging
         /// sub-directory or parent directory already tagged raise RecursiveDirectoryException</returns>
         public FolderTag TagFolder(string path, string tagname)
         {
-            long lastupdated = TaggingHelper.GetCurrentTime();
+            CurrentTime lastupdated = new CurrentTime();
             Tag tag = FindTag(tagname);
             if (tag == null)
             {
-                tag = new FolderTag(tagname, lastupdated);
+                tag = new FolderTag(tagname, lastupdated.CurrentTimeLong);
             }
             Debug.Assert(tag != null);
             if (tag is FileTag)
             {
+                TaggingHelper.Logging(LogMessage.FILE_TAG_CONFLICT, path, tagname);
                 throw new TagTypeConflictException(path, tagname, false);
             }
             else
@@ -202,18 +210,21 @@ namespace Syncless.Tagging
                 {
                     if (!TaggingHelper.CheckRecursiveDirectory((FolderTag)tag, path))
                     {
-                        tag.AddPath(path, lastupdated);
+                        tag.AddPath(path, lastupdated.CurrentTimeLong);
                         AddFolderTag((FolderTag)tag);
-                        UpdateTaggingProfileDate(lastupdated);
+                        UpdateTaggingProfileDate(lastupdated.CurrentTimeLong);
+                        TaggingHelper.Logging(LogMessage.FOLDER_TAGGED, path, tagname);
                         return (FolderTag)tag;
                     }
                     else
                     {
+                        TaggingHelper.Logging(LogMessage.RECURSIVE_DIRECTORY, path);
                         throw new RecursiveDirectoryException(path, tagname);
                     }
                 }
                 else
                 {
+                    TaggingHelper.Logging(LogMessage.PATH_ALREADY_EXISTS_IN_FOLDER_TAG, path, tagname);
                     throw new PathAlreadyExistsException(path);
                 }
             }
@@ -228,22 +239,25 @@ namespace Syncless.Tagging
         /// TagNotFoundException</returns>
         public int UntagFolder(string path, string tagname)
         {
-            long lastupdated = TaggingHelper.GetCurrentTime();
+            CurrentTime lastupdated = new CurrentTime();
             FolderTag tag = RetrieveFolderTag(tagname);
             if (tag != null)
             {
-                if (tag.RemovePath(path, lastupdated))
+                if (tag.RemovePath(path, lastupdated.CurrentTimeLong))
                 {
-                    UpdateTaggingProfileDate(lastupdated);
+                    UpdateTaggingProfileDate(lastupdated.CurrentTimeLong);
+                    TaggingHelper.Logging(LogMessage.FOLDER_UNTAGGED, path, tagname);
                     return 1;
                 }
                 else
                 {
+                    TaggingHelper.Logging(LogMessage.FOLDER_NOT_UNTAGGED, path, tagname);
                     return 0;
                 }
             }
             else
             {
+                TaggingHelper.Logging(LogMessage.FOLDER_TAG_NOT_FOUND, tagname);
                 throw new TagNotFoundException(tagname);
             }
         }
@@ -255,9 +269,24 @@ namespace Syncless.Tagging
         /// <param name="newPath">The new path of the folder</param>
         public void RenameFolder(string oldPath, string newPath)
         {
+            bool oldpathfound = false;
             foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
-                folderTag.Rename(oldPath, newPath);
+                if (folderTag.Contain(oldPath))
+                {
+                    oldpathfound = true;
+                    Debug.Assert(!folderTag.Contain(newPath));
+                    if (!folderTag.Contain(newPath))
+                    {
+                        folderTag.Rename(oldPath, newPath);
+                        TaggingHelper.Logging(LogMessage.FOLDER_RENAMED, oldPath, newPath);
+                    }
+                }
+            }
+            if (!oldpathfound)
+            {
+                TaggingHelper.Logging(LogMessage.PATH_NOT_FOUND, oldPath);
+                throw new PathNotFoundException(oldPath);
             }
         }
 
@@ -342,14 +371,16 @@ namespace Syncless.Tagging
         {
             if (!CheckFileTagExists(tagname) && !CheckFolderTagExists(tagname))
             {
-                long created = TaggingHelper.GetCurrentTime();
-                FileTag tag = new FileTag(tagname, created);
+                CurrentTime created = new CurrentTime();
+                FileTag tag = new FileTag(tagname, created.CurrentTimeLong);
                 _taggingProfile.FileTagList.Add(tag);
-                UpdateTaggingProfileDate(created);
+                UpdateTaggingProfileDate(created.CurrentTimeLong);
+                TaggingHelper.Logging(LogMessage.FILE_TAG_CREATED, tagname);
                 return tag;
             }
             else
             {
+                TaggingHelper.Logging(LogMessage.FILE_TAG_ALREADY_EXISTS, tagname);
                 throw new TagAlreadyExistsException(tagname);
             }
         }
@@ -369,14 +400,17 @@ namespace Syncless.Tagging
                 {
                     Debug.Assert(GetFileTag(oldname) != null);
                     GetFileTag(oldname).TagName = newname;
+                    TaggingHelper.Logging(LogMessage.FILE_TAG_RENAMED, oldname, newname);
                 }
                 else
                 {
+                    TaggingHelper.Logging(LogMessage.FILE_TAG_ALREADY_EXISTS, newname);
                     throw new TagAlreadyExistsException(newname);
                 }
             }
             else
             {
+                TaggingHelper.Logging(LogMessage.FILE_TAG_NOT_FOUND, oldname);
                 throw new TagNotFoundException(oldname);
             }
         }
@@ -391,14 +425,16 @@ namespace Syncless.Tagging
             FileTag toRemove;
             if (CheckFileTagExists(tagname))
             {
-                long updated = TaggingHelper.GetCurrentTime();
+                CurrentTime updated = new CurrentTime();
                 toRemove = GetFileTag(tagname);
                 _taggingProfile.FileTagList.Remove(toRemove);
-                UpdateTaggingProfileDate(updated);
+                UpdateTaggingProfileDate(updated.CurrentTimeLong);
+                TaggingHelper.Logging(LogMessage.FILE_TAG_REMOVED, tagname);
                 return toRemove;
             }
             else
             {
+                TaggingHelper.Logging(LogMessage.FILE_TAG_NOT_FOUND, tagname);
                 throw new TagNotFoundException(tagname);
             }
         }
@@ -412,15 +448,16 @@ namespace Syncless.Tagging
         /// if the given tagname belongs to a Folder Tag raise TagTypeConflictException</returns>
         public FileTag TagFile(string path, string tagname)
         {
-            long lastupdated = TaggingHelper.GetCurrentTime();
+            CurrentTime lastupdated = new CurrentTime();
             Tag tag = FindTag(tagname);
             if (tag == null)
             {
-                tag = new FileTag(tagname, lastupdated);
+                tag = new FileTag(tagname, lastupdated.CurrentTimeLong);
             }
             Debug.Assert(tag != null);
             if (tag is FolderTag)
             {
+                TaggingHelper.Logging(LogMessage.FOLDER_TAG_CONFLICT, path, tagname);
                 throw new TagTypeConflictException(path, tagname, true);
             }
             else
@@ -428,13 +465,15 @@ namespace Syncless.Tagging
                 Debug.Assert(tag is FileTag);
                 if (!tag.Contain(path))
                 {
-                    tag.AddPath(path, lastupdated);
+                    tag.AddPath(path, lastupdated.CurrentTimeLong);
                     AddFileTag((FileTag)tag);
-                    UpdateTaggingProfileDate(lastupdated);
+                    UpdateTaggingProfileDate(lastupdated.CurrentTimeLong);
+                    TaggingHelper.Logging(LogMessage.FILE_TAGGED, path, tagname);
                     return (FileTag)tag;
                 }
                 else
                 {
+                    TaggingHelper.Logging(LogMessage.PATH_ALREADY_EXISTS_IN_FILE_TAG, path, tagname);
                     throw new PathAlreadyExistsException(path);
                 }
             }
@@ -449,22 +488,25 @@ namespace Syncless.Tagging
         /// TagNotFoundException</returns>
         public int UntagFile(string path, string tagname)
         {
-            long lastupdated = TaggingHelper.GetCurrentTime();
+            CurrentTime lastupdated = new CurrentTime();
             FileTag tag = RetrieveFileTag(tagname);
             if (tag != null)
             {
-                if (tag.RemovePath(path, lastupdated))
+                if (tag.RemovePath(path, lastupdated.CurrentTimeLong))
                 {
-                    UpdateTaggingProfileDate(lastupdated);
+                    UpdateTaggingProfileDate(lastupdated.CurrentTimeLong);
+                    TaggingHelper.Logging(LogMessage.FILE_UNTAGGED, path, tagname);
                     return 1;
                 }
                 else
                 {
+                    TaggingHelper.Logging(LogMessage.FILE_NOT_UNTAGGED, path, tagname);
                     return 0;
                 }
             }
             else
             {
+                TaggingHelper.Logging(LogMessage.FILE_TAG_NOT_FOUND, tagname);
                 throw new TagNotFoundException(tagname);
             }
         }
@@ -476,9 +518,24 @@ namespace Syncless.Tagging
         /// <param name="newPath">The new path of the file</param>
         public void RenameFile(string oldPath, string newPath)
         {
+            bool oldpathfound = false;
             foreach (FileTag fileTag in _taggingProfile.FileTagList)
             {
-                fileTag.Rename(oldPath, newPath);
+                if (fileTag.Contain(oldPath))
+                {
+                    oldpathfound = true;
+                    Debug.Assert(!fileTag.Contain(newPath));
+                    if (!fileTag.Contain(newPath))
+                    {
+                        fileTag.Rename(oldPath, newPath);
+                        TaggingHelper.Logging(LogMessage.FILE_RENAMED, oldPath, newPath);
+                    }
+                }
+            }
+            if (!oldpathfound)
+            {
+                TaggingHelper.Logging(LogMessage.PATH_NOT_FOUND, oldPath);
+                throw new PathNotFoundException(oldPath);
             }
         }
 
@@ -608,17 +665,20 @@ namespace Syncless.Tagging
         /// <returns>The Tag that is removed, else raise TagNotFoundException</returns>
         public Tag RemoveTag(string tagname)
         {
+            CurrentTime lastupdated = new CurrentTime();
             Tag toRemove = null;
             toRemove = GetFolderTag(tagname);
             if (toRemove != null)
             {
                 _taggingProfile.FolderTagList.Remove((FolderTag)toRemove);
+                UpdateTaggingProfileDate(lastupdated.CurrentTimeLong);
                 return toRemove;
             }
             toRemove = GetFileTag(tagname);
             if (toRemove !=null)
             {
                 _taggingProfile.FileTagList.Remove((FileTag)toRemove);
+                UpdateTaggingProfileDate(lastupdated.CurrentTimeLong);
                 return toRemove;
             }
             throw new TagNotFoundException(tagname);
@@ -633,15 +693,15 @@ namespace Syncless.Tagging
         /// TagNotFoundException</returns>
         public int Untag(string path, string tagname)
         {
+            CurrentTime lastupdated = new CurrentTime();
             Tag tag;
-            long lastupdated = TaggingHelper.GetCurrentTime();
             tag = GetFolderTag(tagname);
             if (tag != null)
             {
                 if (tag.Contain(path))
                 {
-                    tag.RemovePath(path, lastupdated);
-                    UpdateTaggingProfileDate(lastupdated);
+                    tag.RemovePath(path, lastupdated.CurrentTimeLong);
+                    UpdateTaggingProfileDate(lastupdated.CurrentTimeLong);
                     return 1;
                 }
                 else
@@ -654,8 +714,8 @@ namespace Syncless.Tagging
             {
                 if (tag.Contain(path))
                 {
-                    tag.RemovePath(path, lastupdated);
-                    UpdateTaggingProfileDate(lastupdated);
+                    tag.RemovePath(path, lastupdated.CurrentTimeLong);
+                    UpdateTaggingProfileDate(lastupdated.CurrentTimeLong);
                     return 1;
                 }
                 else
@@ -674,14 +734,13 @@ namespace Syncless.Tagging
         public int Untag(string path)
         {
             int noOfPath = 0;
-            long lastupdated = 0;
+            CurrentTime lastupdated = new CurrentTime();
             foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
                 if (folderTag.Contain(path))
                 {
-                    lastupdated = TaggingHelper.GetCurrentTime();
-                    folderTag.RemovePath(path, lastupdated);
-                    UpdateTaggingProfileDate(lastupdated);
+                    folderTag.RemovePath(path, lastupdated.CurrentTimeLong);
+                    UpdateTaggingProfileDate(lastupdated.CurrentTimeLong);
                     noOfPath++;
                 }
             }
@@ -689,9 +748,8 @@ namespace Syncless.Tagging
             {
                 if (fileTag.Contain(path))
                 {
-                    lastupdated = TaggingHelper.GetCurrentTime();
-                    fileTag.RemovePath(path, lastupdated);
-                    UpdateTaggingProfileDate(lastupdated);
+                    fileTag.RemovePath(path, lastupdated.CurrentTimeLong);
+                    UpdateTaggingProfileDate(lastupdated.CurrentTimeLong);
                     noOfPath++;
                 }
             }
