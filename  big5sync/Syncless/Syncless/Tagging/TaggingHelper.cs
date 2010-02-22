@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.IO;
+using Syncless.Logging;
 
 namespace Syncless.Tagging
 {
@@ -36,7 +37,15 @@ namespace Syncless.Tagging
 
         public static string GetCurrentTimeString()
         {
-            return DateTime.Now.Ticks.ToString();
+            DateTime currenttime = DateTime.Now;
+            string day = (currenttime.Day < 10) ? ("0" + currenttime.Day.ToString()) : currenttime.Day.ToString();
+            string month = (currenttime.Month < 10) ? ("0" + currenttime.Month.ToString()) : currenttime.Month.ToString();
+            string year = currenttime.Year.ToString();
+            string hour = (currenttime.Hour < 10) ? ("0" + currenttime.Hour.ToString()) : currenttime.Hour.ToString();
+            string minute = (currenttime.Minute < 10) ? ("0" + currenttime.Minute.ToString()) : currenttime.Minute.ToString();
+            string second = (currenttime.Second < 10) ? ("0" + currenttime.Second.ToString()) : currenttime.Second.ToString();
+            string datestring = string.Format("{0}/{1}/{2} {3}:{4}:{5}", day, month, year, hour, minute, second);
+            return datestring;
         }
 
         public static string CreatePath(int trailingIndex, string[] pathTokens, bool isFolder)
@@ -87,6 +96,11 @@ namespace Syncless.Tagging
                 }
             }
             return trailingIndex;
+        }
+
+        public static void Logging(string message, params object[] list)
+        {
+            //to call ServiceLocator.GetLogger();
         }
     }
 }
