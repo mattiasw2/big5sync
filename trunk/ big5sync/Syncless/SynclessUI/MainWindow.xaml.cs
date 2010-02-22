@@ -180,38 +180,7 @@ namespace Syncless
         /// <param name="e"></param>
         private void BtnClose_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            // Prepares the SLL for termination
-
-            if(_Igui.PrepareForTermination())
-            {
-                string messageBoxText = "Are you sure you want to exit Syncless?" +
-                    "\nExiting Syncless will disable seamless synchronization.";
-                string caption = "Exit";
-                MessageBoxButton button = MessageBoxButton.YesNo;
-                MessageBoxImage icon = MessageBoxImage.Warning;
-
-                MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
-
-                switch (result)
-                {
-                    case MessageBoxResult.Yes:
-                        // Terminates the SLL and closes the UI
-                        _Igui.Terminate();
-                        this.Close();
-                        break;
-                    case MessageBoxResult.No:
-                        break;
-                }
-            }
-            else
-            {
-                string messageBoxText = "Syncless is not ready for termination. Please try again later";
-                string caption = "Syncless Termination Error";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
-
-                MessageBox.Show(messageBoxText, caption, button, icon);
-            }
+            this.Close();
         }
 
         /// <summary>
@@ -515,6 +484,43 @@ namespace Syncless
                     SelectTag(tv.TagName);
 				}
 			}
+		}
+
+		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+            // Prepares the SLL for termination
+
+            if (_Igui.PrepareForTermination())
+            {
+                string messageBoxText = "Are you sure you want to exit Syncless?" +
+                    "\nExiting Syncless will disable seamless synchronization.";
+                string caption = "Exit";
+                MessageBoxButton button = MessageBoxButton.YesNo;
+                MessageBoxImage icon = MessageBoxImage.Warning;
+
+                MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
+
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        // Terminates the SLL and closes the UI
+                        _Igui.Terminate();
+                        break;
+                    case MessageBoxResult.No:
+                        e.Cancel = true;
+                        break;
+                }
+            }
+            else
+            {
+                string messageBoxText = "Syncless is not ready for termination. Please try again later";
+                string caption = "Syncless Termination Error";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Error;
+
+                MessageBox.Show(messageBoxText, caption, button, icon);
+                e.Cancel = true;
+            }
 		}
     }
 }

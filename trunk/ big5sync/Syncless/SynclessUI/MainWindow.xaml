@@ -4,7 +4,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:dropShadow="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Class="Syncless.MainWindow"
-    Title="Syncless" Height="400" Width="700" Background="Transparent" Icon="Icons/logo.ico" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" WindowStyle="None" Foreground="Transparent" mc:Ignorable="d" AllowsTransparency="True">
+    Title="Syncless" Height="400" Width="700" Background="Transparent" Icon="Icons/logo.ico" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" WindowStyle="None" Foreground="Transparent" mc:Ignorable="d" AllowsTransparency="True" Closing="Window_Closing">
     <Grid x:Name="LayoutRoot" Width="700">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="20"/>
