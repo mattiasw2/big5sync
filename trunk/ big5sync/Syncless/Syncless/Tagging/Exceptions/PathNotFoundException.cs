@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Syncless.Helper;
 
 namespace Syncless.Tagging.Exceptions
 {
@@ -19,14 +20,10 @@ namespace Syncless.Tagging.Exceptions
         {
         }
 
-        public PathNotFoundException(string pathname)
-            : base()
-        {
-            this._pathname = pathname;
-        }
+       
 
-        public PathNotFoundException(string message, string pathname)
-            : base(message)
+        public PathNotFoundException(string pathname)
+            : base(ErrorMessage.PATH_NOT_FOUND_EXCEPTION)
         {
             this._pathname = pathname;
         }

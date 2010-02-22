@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Syncless.Helper;
 
 namespace Syncless.Tagging.Exceptions
 {
@@ -19,14 +20,9 @@ namespace Syncless.Tagging.Exceptions
         {
         }
 
-        public TagAlreadyExistsException(string tagname)
-            : base()
-        {
-            this._tagname = tagname;
-        }
 
-        public TagAlreadyExistsException(string message, string tagname)
-            : base(message)
+        public TagAlreadyExistsException(string tagname)
+            : base(ErrorMessage.TAG_ALREADY_EXISTS_EXCEPTION)
         {
             this._tagname = tagname;
         }

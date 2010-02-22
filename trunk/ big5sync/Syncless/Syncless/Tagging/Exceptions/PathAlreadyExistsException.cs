@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Syncless.Helper;
 
 namespace Syncless.Tagging.Exceptions
 {
@@ -19,14 +20,9 @@ namespace Syncless.Tagging.Exceptions
         {
         }
 
-        public PathAlreadyExistsException(string pathname)
-            : base()
-        {
-            this._pathname = pathname;
-        }
 
-        public PathAlreadyExistsException(string message, string pathname)
-            : base(message)
+        public PathAlreadyExistsException(string pathname)
+            : base(ErrorMessage.PATH_ALREADY_EXISTS_EXCEPTION)
         {
             this._pathname = pathname;
         }
