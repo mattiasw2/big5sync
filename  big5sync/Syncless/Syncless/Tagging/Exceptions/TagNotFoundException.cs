@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Syncless.Helper;
 
 namespace Syncless.Tagging.Exceptions
 {
@@ -19,14 +20,10 @@ namespace Syncless.Tagging.Exceptions
         {
         }
 
-        public TagNotFoundException(string tagname)
-            : base()
-        {
-            this._tagname = tagname;
-        }
+        
 
-        public TagNotFoundException(string message, string tagname)
-            : base(message)
+        public TagNotFoundException(string tagname)
+            : base(ErrorMessage.TAG_NOT_FOUND_EXCEPTION)
         {
             this._tagname = tagname;
         }

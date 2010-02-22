@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Syncless.Helper;
 
 namespace Syncless.Tagging.Exceptions
 {
@@ -36,16 +37,10 @@ namespace Syncless.Tagging.Exceptions
         {
         }
 
-        public TagTypeConflictException(string path, string tagname, bool isFolderTag)
-            : base()
-        {
-            this._path = path;
-            this._tagname = tagname;
-            this._isFolderTag = isFolderTag;
-        }
+        
 
-        public TagTypeConflictException(string message, string path, string tagname, bool isFolderTag)
-            : base(message)
+        public TagTypeConflictException(string path, string tagname, bool isFolderTag)
+            : base(ErrorMessage.TAG_TYPE_CONFLICT_EXCEPTION)
         {
             this._path = path;
             this._tagname = tagname;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Syncless.Helper;
 
 namespace Syncless.Tagging.Exceptions
 {
@@ -28,15 +29,10 @@ namespace Syncless.Tagging.Exceptions
         {
         }
 
-        public RecursiveDirectoryException(string path, string tagname)
-            : base()
-        {
-            this._path = path;
-            this._tagname = tagname;
-        }
+       
 
-        public RecursiveDirectoryException(string message, string path, string tagname)
-            : base(message)
+        public RecursiveDirectoryException(string path, string tagname)
+            : base(ErrorMessage.RECURSIVE_DIRECTORY_EXCEPTION)
         {
             this._path = path;
             this._tagname = tagname;

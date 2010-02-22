@@ -121,7 +121,7 @@ namespace Syncless.Tagging
             }
             else
             {
-                throw new TagAlreadyExistsException(ErrorMessage.TAG_ALREADY_EXISTS_EXCEPTION, tagname);
+                throw new TagAlreadyExistsException(tagname);
             }
         }
 
@@ -143,12 +143,12 @@ namespace Syncless.Tagging
                 }
                 else
                 {
-                    throw new TagAlreadyExistsException(ErrorMessage.TAG_ALREADY_EXISTS_EXCEPTION, newname);
+                    throw new TagAlreadyExistsException(newname);
                 }
             }
             else
             {
-                throw new TagNotFoundException(ErrorMessage.TAG_NOT_FOUND_EXCEPTION, oldname);
+                throw new TagNotFoundException(oldname);
             }
         }
 
@@ -170,7 +170,7 @@ namespace Syncless.Tagging
             }
             else
             {
-                throw new TagNotFoundException(ErrorMessage.TAG_NOT_FOUND_EXCEPTION, tagname);
+                throw new TagNotFoundException(tagname);
             }
         }
 
@@ -193,7 +193,7 @@ namespace Syncless.Tagging
             Debug.Assert(tag != null);
             if (tag is FileTag)
             {
-                throw new TagTypeConflictException(ErrorMessage.TAG_TYPE_CONFLICT_EXCEPTION, path, tagname, false);
+                throw new TagTypeConflictException(path, tagname, false);
             }
             else
             {
@@ -209,12 +209,12 @@ namespace Syncless.Tagging
                     }
                     else
                     {
-                        throw new RecursiveDirectoryException(ErrorMessage.RECURSIVE_DIRECTORY_EXCEPTION, path, tagname);
+                        throw new RecursiveDirectoryException(path, tagname);
                     }
                 }
                 else
                 {
-                    throw new PathAlreadyExistsException(ErrorMessage.PATH_ALREADY_EXISTS_EXCEPTION, path);
+                    throw new PathAlreadyExistsException(path);
                 }
             }
         }
@@ -244,7 +244,7 @@ namespace Syncless.Tagging
             }
             else
             {
-                throw new TagNotFoundException(ErrorMessage.TAG_NOT_FOUND_EXCEPTION, tagname);
+                throw new TagNotFoundException(tagname);
             }
         }
 
@@ -350,7 +350,7 @@ namespace Syncless.Tagging
             }
             else
             {
-                throw new TagAlreadyExistsException(ErrorMessage.TAG_ALREADY_EXISTS_EXCEPTION, tagname);
+                throw new TagAlreadyExistsException(tagname);
             }
         }
 
@@ -372,12 +372,12 @@ namespace Syncless.Tagging
                 }
                 else
                 {
-                    throw new TagAlreadyExistsException(ErrorMessage.TAG_ALREADY_EXISTS_EXCEPTION, newname);
+                    throw new TagAlreadyExistsException(newname);
                 }
             }
             else
             {
-                throw new TagNotFoundException(ErrorMessage.TAG_NOT_FOUND_EXCEPTION, oldname);
+                throw new TagNotFoundException(oldname);
             }
         }
 
@@ -399,7 +399,7 @@ namespace Syncless.Tagging
             }
             else
             {
-                throw new TagNotFoundException(ErrorMessage.TAG_NOT_FOUND_EXCEPTION, tagname);
+                throw new TagNotFoundException(tagname);
             }
         }
 
@@ -421,7 +421,7 @@ namespace Syncless.Tagging
             Debug.Assert(tag != null);
             if (tag is FolderTag)
             {
-                throw new TagTypeConflictException(ErrorMessage.TAG_TYPE_CONFLICT_EXCEPTION, path, tagname, true);
+                throw new TagTypeConflictException(path, tagname, true);
             }
             else
             {
@@ -435,7 +435,7 @@ namespace Syncless.Tagging
                 }
                 else
                 {
-                    throw new PathAlreadyExistsException(ErrorMessage.PATH_ALREADY_EXISTS_EXCEPTION, path);
+                    throw new PathAlreadyExistsException(path);
                 }
             }
         }
@@ -465,7 +465,7 @@ namespace Syncless.Tagging
             }
             else
             {
-                throw new TagNotFoundException(ErrorMessage.TAG_NOT_FOUND_EXCEPTION, tagname);
+                throw new TagNotFoundException(tagname);
             }
         }
 
@@ -621,7 +621,7 @@ namespace Syncless.Tagging
                 _taggingProfile.FileTagList.Remove((FileTag)toRemove);
                 return toRemove;
             }
-            throw new TagNotFoundException(ErrorMessage.TAG_NOT_FOUND_EXCEPTION, tagname);
+            throw new TagNotFoundException(tagname);
         }
 
         /// <summary>
@@ -663,7 +663,7 @@ namespace Syncless.Tagging
                     return 0;
                 }
             }
-            throw new TagNotFoundException(ErrorMessage.TAG_NOT_FOUND_EXCEPTION, tagname);
+            throw new TagNotFoundException(tagname);
         }
 
         /// <summary>
