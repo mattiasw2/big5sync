@@ -440,7 +440,6 @@ namespace Syncless.Monitor
             IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
             if (File.Exists(e.FullPath))
             {
-                
                 Console.WriteLine("File Modified: " + e.FullPath);
                 FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), EventChangeType.MODIFIED);
                 monitor.HandleFileChange(fileEvent);

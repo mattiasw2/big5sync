@@ -112,6 +112,7 @@
     <Compile Include="Tagging\TaggingXMLHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="CompareAndSync\ClassDiagramCompareAndSync.cd" />
   </ItemGroup>
   <ItemGroup>
