@@ -12,5 +12,6 @@ namespace Syncless
     /// </summary>
     public partial class App : Application
     {
+
     }
 }

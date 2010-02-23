@@ -387,5 +387,7 @@ namespace Syncless.Core
             view.IsSeamless = t.IsSeamless;
             return view;
         }
+
+        
     }
 }
