@@ -5,21 +5,21 @@ using System.Text;
 
 namespace Syncless.Tagging
 {
-    public class CurrentTime
+    internal class CurrentTime
     {
         private static DateTime _currentDateTime;
 
-        public long CurrentTimeLong
+        internal long CurrentTimeLong
         {
             get { return GetCurrentTime(); }
         }
 
-        public string CurrentTimeString
+        internal string CurrentTimeString
         {
             get { return GetCurrentTimeString(); }
         }
 
-        public CurrentTime()
+        internal CurrentTime()
         {
             _currentDateTime = DateTime.Now;
         }
