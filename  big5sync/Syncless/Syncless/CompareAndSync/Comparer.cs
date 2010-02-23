@@ -310,7 +310,7 @@ namespace Syncless.CompareAndSync
 
             for (int i = 0; i < exceptItemsCount; i++)
             {
-                if (querySrcExceptTgt[i].ChangeType == FileChangeType.Create)
+                if (querySrcExceptTgt[i].ChangeType == FileChangeType.Create || querySrcExceptTgt[i].ChangeType == FileChangeType.None)
                 {
                     if (_changeTable[CREATE_TABLE].TryGetValue(querySrcExceptTgt[i].FullName, out createList))
                     {
@@ -363,7 +363,7 @@ namespace Syncless.CompareAndSync
 
                 if (compareResult > 0)
                 {
-                    Debug.Assert(srcFile.ChangeType == FileChangeType.Update && tgtFile.ChangeType == FileChangeType.Update);
+                    //Debug.Assert(srcFile.ChangeType == FileChangeType.Update && tgtFile.ChangeType == FileChangeType.Update);
                     if (_changeTable[UPDATE_TABLE].TryGetValue(srcFile.FullName, out updateList))
                     {
                         if (!updateList.Contains(tgtFile.FullName))
@@ -595,6 +595,11 @@ namespace Syncless.CompareAndSync
             return results;
         }
 
+        /// <summary>
+        /// Returns a list of files to be checked
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         private List<CompareInfoObject> GetDiffMetaActual(string path)
         {
             //Do some processing between meta and actual files
@@ -708,14 +713,17 @@ namespace Syncless.CompareAndSync
                 {
                     actualFile.ChangeType = FileChangeType.Update;
                     results.Add(actualFile);
-                    continue;
                 }
-                if (actualFile.MD5Hash != metaFile.MD5Hash)
+                else if (actualFile.MD5Hash != metaFile.MD5Hash)
                 {
                     actualFile.ChangeType = FileChangeType.Update;
                     results.Add(actualFile);
-                    continue;
                 }
+                else
+                {
+                    results.Add(actualFile);
+                }
+
             }
             return results;
         }
