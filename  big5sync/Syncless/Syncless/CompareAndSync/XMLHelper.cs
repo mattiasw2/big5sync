@@ -228,5 +228,56 @@ namespace Syncless.CompareAndSync
             }
         }
 
+
+        // STUB
+        // PATHS TO BE CONFIRMED
+        public static void GenerateTodoXml(List<string> paths , string path)
+        {
+            XmlTextWriter writer = new XmlTextWriter(path,null);
+            writer.Formatting = Formatting.Indented;
+            writer.WriteStartDocument();
+            writer.WriteStartElement("todo");
+            writer.WriteStartAttribute("lastUpdated");
+            writer.WriteAttributeString("lastUpdated", DateTime.Now.Ticks.ToString());
+            writer.WriteEndAttribute();
+
+            writer.WriteStartElement("deleted");
+            writer.WriteStartAttribute("lastUpdated");
+            writer.WriteAttributeString("lastUpdated", DateTime.Now.Ticks.ToString());
+            writer.WriteEndAttribute();
+
+            writer.WriteElementString("file", "YOU NEED TO FILL IN HERE");
+            foreach(string logicalDrive in paths)
+            {
+                writer.WriteElementString("paths",logicalDrive);
+            }
+
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("updated");
+            writer.WriteStartAttribute("lastUpdated");
+            writer.WriteAttributeString("lastUpdated", DateTime.Now.Ticks.ToString());
+            writer.WriteEndAttribute();
+
+            foreach (string logicalDrive in paths)
+            {
+                writer.WriteStartElement("files");
+                writer.WriteElementString("to", "YOU NEED TO FILL IN ");
+                writer.WriteElementString("from", "YOU NEED TO FILL IN ");
+                writer.WriteEndElement();
+            }
+
+            foreach (string logicalDrives in paths)
+            {
+                writer.WriteElementString("paths" , "PATHS HERE");
+            }
+
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+            writer.Flush();
+            writer.Close();
+        }
+
     }
 }
