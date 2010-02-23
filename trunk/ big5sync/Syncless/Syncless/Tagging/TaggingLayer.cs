@@ -269,12 +269,10 @@ namespace Syncless.Tagging
         /// <param name="newPath">The new path of the folder</param>
         public void RenameFolder(string oldPath, string newPath)
         {
-            bool oldpathfound = false;
             foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
                 if (folderTag.Contain(oldPath))
                 {
-                    oldpathfound = true;
                     Debug.Assert(!folderTag.Contain(newPath));
                     if (!folderTag.Contain(newPath))
                     {
@@ -282,11 +280,6 @@ namespace Syncless.Tagging
                         TaggingHelper.Logging(LogMessage.FOLDER_RENAMED, oldPath, newPath);
                     }
                 }
-            }
-            if (!oldpathfound)
-            {
-                TaggingHelper.Logging(LogMessage.PATH_NOT_FOUND, oldPath);
-                throw new PathNotFoundException(oldPath);
             }
         }
 
@@ -518,12 +511,10 @@ namespace Syncless.Tagging
         /// <param name="newPath">The new path of the file</param>
         public void RenameFile(string oldPath, string newPath)
         {
-            bool oldpathfound = false;
             foreach (FileTag fileTag in _taggingProfile.FileTagList)
             {
                 if (fileTag.Contain(oldPath))
                 {
-                    oldpathfound = true;
                     Debug.Assert(!fileTag.Contain(newPath));
                     if (!fileTag.Contain(newPath))
                     {
@@ -532,7 +523,6 @@ namespace Syncless.Tagging
                     }
                 }
             }
-            
         }
 
         /// <summary>
@@ -671,7 +661,7 @@ namespace Syncless.Tagging
                 return toRemove;
             }
             toRemove = GetFileTag(tagname);
-            if (toRemove !=null)
+            if (toRemove != null)
             {
                 _taggingProfile.FileTagList.Remove((FileTag)toRemove);
                 UpdateTaggingProfileDate(lastupdated.CurrentTimeLong);
@@ -888,14 +878,14 @@ namespace Syncless.Tagging
         {
             foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
-                if (folderTag.TagName.Equals(tagname))
+                if (folderTag.TagName.ToLower().Equals(tagname.ToLower()))
                 {
                     return folderTag;
                 }
             }
             foreach (FileTag fileTag in _taggingProfile.FileTagList)
             {
-                if (fileTag.TagName.Equals(tagname))
+                if (fileTag.TagName.ToLower().Equals(tagname.ToLower()))
                 {
                     return fileTag;
                 }
@@ -947,14 +937,11 @@ namespace Syncless.Tagging
 
         private FolderTag GetFolderTag(string tagname)
         {
-            if (CheckFolderTagExists(tagname))
+            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
-                foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
+                if (folderTag.TagName.ToLower().Equals(tagname.ToLower()))
                 {
-                    if (folderTag.TagName.Equals(tagname))
-                    {
-                        return folderTag;
-                    }
+                    return folderTag;
                 }
             }
             return null;
@@ -962,14 +949,11 @@ namespace Syncless.Tagging
 
         private FileTag GetFileTag(string tagname)
         {
-            if (CheckFileTagExists(tagname))
+            foreach (FileTag fileTag in _taggingProfile.FileTagList)
             {
-                foreach (FileTag fileTag in _taggingProfile.FileTagList)
+                if (fileTag.TagName.ToLower().Equals(tagname.ToLower()))
                 {
-                    if (fileTag.TagName.Equals(tagname))
-                    {
-                        return fileTag;
-                    }
+                    return fileTag;
                 }
             }
             return null;
@@ -979,7 +963,7 @@ namespace Syncless.Tagging
         {
             foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
             {
-                if (folderTag.TagName.Equals(tagname))
+                if (folderTag.TagName.ToLower().Equals(tagname.ToLower()))
                 {
                     return true;
                 }
@@ -991,7 +975,7 @@ namespace Syncless.Tagging
         {
             foreach (FileTag fileTag in _taggingProfile.FileTagList)
             {
-                if (fileTag.TagName.Equals(tagname))
+                if (fileTag.TagName.ToLower().Equals(tagname.ToLower()))
                 {
                     return true;
                 }
