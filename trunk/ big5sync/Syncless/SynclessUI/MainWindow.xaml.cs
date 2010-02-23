@@ -434,7 +434,7 @@ namespace Syncless
 
                 foreach (string x in taglist)
                 {
-                    if (x.Contains(_filter))
+                    if (x.ToLower().Contains(_filter.ToLower()))
                         filteredtaglist.Add(x);
                 }
 
