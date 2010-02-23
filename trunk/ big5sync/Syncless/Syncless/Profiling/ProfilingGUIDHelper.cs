@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using Syncless.Core;
 namespace Syncless.Profiling
 {
     internal static class ProfilingGUIDHelper
@@ -66,7 +67,7 @@ namespace Syncless.Profiling
             {
 
             }
-
+            ServiceLocator.Getlogger(ServiceLocator.USER_LOG).WriteLine("GUID Created at " + path + " .");
             return guidString;
         }
         #endregion

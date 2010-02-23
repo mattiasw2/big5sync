@@ -193,6 +193,7 @@ namespace Syncless.Core
             foreach(Tag t in tagList){
                 tagNames.Add(t.TagName);
             }
+            tagNames.Sort();
             return tagNames;
         }
         public TagView GetTag(string tagname)
