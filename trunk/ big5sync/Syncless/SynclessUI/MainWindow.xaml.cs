@@ -17,7 +17,7 @@ using Syncless.Tagging;
 using System.Collections;
 using System.IO;
 
-namespace Syncless
+namespace SynclessUI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -44,23 +44,11 @@ namespace Syncless
 
             InitializeSyncless();
 
-
-            if (lststrCommandLineArgs.Count == 1)
-            {
-                
-            }
-            else
+            if (lststrCommandLineArgs.Count != 1)
             {
                 this.WindowState = WindowState.Minimized;
-                CommandLineHelper.ProcessCommandLine(lststrCommandLineArgs);
+                SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(lststrCommandLineArgs, this);
             }
-            
-
-
-            
-
-            
-
         }
         /// <summary>
         ///     Starts up the system logic layer and initializes it
@@ -403,7 +391,21 @@ namespace Syncless
                     string path = ofd.FileName;
 
                     if(path != string.Empty) {
-                        tv = _Igui.TagFile(_selectedTag, new FileInfo(path));
+                        FileInfo fi = new FileInfo(path);
+
+                        if (fi.Exists)
+                        {
+                            tv = _Igui.TagFile(_selectedTag, fi);
+                        }
+                        else
+                        {
+                            string messageBoxText = "Please select another file.";
+                            string caption = "File Does Not Exists";
+                            MessageBoxButton button = MessageBoxButton.OK;
+                            MessageBoxImage icon = MessageBoxImage.Error;
+
+                            MessageBox.Show(messageBoxText, caption, button, icon);
+                        }
                     }
                 } else if(tv is FolderTagView) {
                     System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog();
@@ -413,9 +415,22 @@ namespace Syncless
 
                     if(folderDialog.SelectedPath != string.Empty) {	
                         string path = folderDialog.SelectedPath;
-                        tv = _Igui.TagFolder(_selectedTag, new DirectoryInfo(path));
+                        DirectoryInfo di = new DirectoryInfo(path);
+
+                        if (di.Exists)
+                        {
+                            tv = _Igui.TagFolder(_selectedTag, di);
+                        }
+                        else
+                        {
+                            string messageBoxText = "Please select another folder.";
+                            string caption = "Folder Does Not Exists";
+                            MessageBoxButton button = MessageBoxButton.OK;
+                            MessageBoxImage icon = MessageBoxImage.Error;
+
+                            MessageBox.Show(messageBoxText, caption, button, icon);
+                        }
                     }
-                    
                 }
 
                 if (tv != null)
@@ -439,6 +454,16 @@ namespace Syncless
 
                 MessageBox.Show(messageBoxText, caption, button, icon);
             }
+        }
+
+        public void CLI_CreateTag(string type, string path)
+        {
+
+        }
+
+        public void CLI_Untag(string type, string path)
+        {
+
         }
 
 		private void TxtBoxFilterTag_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)

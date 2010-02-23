@@ -1,7 +1,7 @@
 ﻿<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Class="Syncless.CreateTagWindow"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Class="SynclessUI.CreateTagWindow"
     Title="CreateTagWindow" WindowStyle="None" AllowsTransparency="True" Icon="Icons/logo.ico" Background="{x:Null}" Width="380" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Height="210">
 	<Grid x:Name="LayoutRoot">
 		<Grid.ColumnDefinitions>
