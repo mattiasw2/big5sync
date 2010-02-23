@@ -281,7 +281,7 @@ namespace Syncless
 
                 switch (result)
                 {
-                    case MessageBoxResult.Yes:
+                    case MessageBoxResult.OK:
                         bool success = _Igui.DeleteTag(_selectedTag);
                         if(success)
                         {
