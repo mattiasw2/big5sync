@@ -16,16 +16,7 @@ namespace Syncless.CompareAndSync
         private List<string> deleteList;
         private const string METADATAPATH = "_syncless\\metadata.xml";
 
-        private List<CompareInfoObject> GetMonitorCompareObjects(List<MonitorPathPair> paths)
-        {
-            List<CompareInfoObject> results = new List<CompareInfoObject>();
-            foreach (MonitorPathPair path in paths)
-            {
-                FileInfo f = new FileInfo(path.FullPath);
-                results.Add(new CompareInfoObject(f.FullName, f.Name, f.CreationTime.Ticks, f.LastWriteTime.Ticks, f.Length, CalculateMD5Hash(f)));
-            }
-            return results;
-        }
+        #region Monitor
 
         public void MonitorCompareFolder(MonitorSyncRequest syncRequest, out List<string> paths, out List<CompareResult> results)
         {
@@ -153,7 +144,11 @@ namespace Syncless.CompareAndSync
 
             paths.Distinct<string>();
         }
-        
+
+        #endregion
+
+        #region Manual
+
         // Assumes that all paths taken from the tag exists in the directory
         public List<CompareResult> CompareFile(List<string> paths)
         {
@@ -243,6 +238,10 @@ namespace Syncless.CompareAndSync
             return ProcessRawResults(paths);
         }
 
+        #endregion
+
+        #region Optimized Compare Folder
+
         /// <summary>
         /// Compare folders against their respective metadata first, then proceed
         /// to compare them against one another.
@@ -290,133 +289,9 @@ namespace Syncless.CompareAndSync
                 }
 
                 currSrcFolder = DoRawOneWayCompareFolder(currSrcFolder, GetAllCompareObjects(withMeta[0]), withMeta[0], withMeta);
-            }            
-             
+            }
+
             return currSrcFolder;
-        }
-
-        private List<CompareInfoObject> GetDiffMetaActual(string path)
-        {
-            //Do some processing between meta and actual files
-            List<CompareInfoObject> results = new List<CompareInfoObject>();
-
-            List<CompareInfoObject> actual = GetAllCompareObjects(path);
-            List<CompareInfoObject> meta = GetMetadataCompareObjects(path);
-
-            // YC: This will give us files that exist but are not in the
-            // metadata. Implies either new or renamed files.
-            List<CompareInfoObject> actualExceptMeta = actual.Except<CompareInfoObject>(meta, new FileNameCompare()).ToList<CompareInfoObject>();
-
-            // YC: This will give us files that exist in metadata but in the
-            // actual folder. Implies either deleted or renamed files.
-            List<CompareInfoObject> metaExceptActual = meta.Except<CompareInfoObject>(actual, new FileNameCompare()).ToList<CompareInfoObject>();
-            bool rename = false;
-            List<string> renameList = null;
-            CompareInfoObject tempObject = null;
-
-            foreach (CompareInfoObject a in actualExceptMeta)
-            {
-                rename = false;
-                foreach (CompareInfoObject m in meta)
-                {
-                    if (a.MD5Hash == m.MD5Hash && a.CreationTime == m.CreationTime)
-                    {
-                        rename = true;
-                        tempObject = m;
-                        break;
-                    }
-                }
-                if (rename)
-                {
-                    if (_changeTable[RENAME_TABLE].TryGetValue(tempObject.RelativePathToOrigin, out renameList))
-                    {
-                        if (!renameList.Contains(a.RelativePathToOrigin))
-                        {
-                            renameList.Add(a.RelativePathToOrigin);
-                        }
-                    }
-                    else
-                    {
-                        renameList = new List<string>();
-                        renameList.Add(a.RelativePathToOrigin);
-                        _changeTable[RENAME_TABLE].Add(tempObject.RelativePathToOrigin, renameList);
-                    }
-                }
-                else
-                {
-                    a.ChangeType = FileChangeType.Create;
-                    results.Add(a);
-                }
-            }
-
-            foreach (CompareInfoObject m in metaExceptActual)
-            {
-                rename = false;
-                foreach (CompareInfoObject a in actual)
-                {
-                    if (a.MD5Hash == m.MD5Hash && a.CreationTime == m.CreationTime)
-                    {
-                        rename = true;
-                        tempObject = a;
-                        break;
-                    }
-                }
-                if (rename)
-                {
-                    if (_changeTable[RENAME_TABLE].TryGetValue(m.RelativePathToOrigin, out renameList))
-                    {
-                        if (!renameList.Contains(tempObject.RelativePathToOrigin))
-                        {
-                            renameList.Add(tempObject.RelativePathToOrigin);
-                        }
-                    }
-                    else
-                    {
-                        renameList = new List<string>();
-                        renameList.Add(tempObject.RelativePathToOrigin);
-                        _changeTable[RENAME_TABLE].Add(m.RelativePathToOrigin, renameList);
-                    }
-                }
-                else
-                {
-                    if (!deleteList.Contains(m.RelativePathToOrigin)) {
-                        deleteList.Add(m.RelativePathToOrigin);
-                    }
-                }
-            }
-
-            List<CompareInfoObject> actualIntersectMeta = actual.Intersect<CompareInfoObject>(meta, new FileNameCompare()).ToList<CompareInfoObject>();
-            List<CompareInfoObject> metaIntersectActual = meta.Intersect<CompareInfoObject>(actual, new FileNameCompare()).ToList<CompareInfoObject>();
-            actualIntersectMeta.Sort();
-            metaIntersectActual.Sort();
-            
-            Debug.Assert(actualIntersectMeta.Count == metaIntersectActual.Count);
-            int numOfCommonItems = actualIntersectMeta.Count;
-            CompareInfoObject actualFile = null;
-            CompareInfoObject metaFile = null;
-            int compareResult = 0;
-
-            for (int i = 0; i < numOfCommonItems; i++)
-            {
-                actualFile = (CompareInfoObject)actualIntersectMeta[i];
-                metaFile = (CompareInfoObject)metaIntersectActual[i];
-                Debug.Assert(actualFile.RelativePathToOrigin == metaFile.RelativePathToOrigin);
-                compareResult = new FileContentCompare().Compare(actualFile, metaFile);
-
-                if (actualFile.Length != metaFile.Length)
-                {
-                    actualFile.ChangeType = FileChangeType.Update;
-                    results.Add(actualFile);
-                    continue;
-                }
-                if (actualFile.MD5Hash != metaFile.MD5Hash)
-                {
-                    actualFile.ChangeType = FileChangeType.Update;
-                    results.Add(actualFile);
-                    continue;
-                }
-            }
-            return results;
         }
 
         private List<CompareInfoObject> DoOptimizedOneWayFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath)
@@ -524,6 +399,10 @@ namespace Syncless.CompareAndSync
             return (queryTgtIntersectSrc.Union(querySrcExceptTgt, new FileNameCompare())).Union(target, new FileNameCompare()).ToList<CompareInfoObject>();
         }
 
+        #endregion
+
+        #region Raw Compare Folder
+
         /// <summary>
         /// Compare folders regardless of metadata. It can only handle update and create changes,
         /// not delete and rename since the metadata is not used.
@@ -551,6 +430,15 @@ namespace Syncless.CompareAndSync
             return DoRawOneWayCompareFolder(source, target, targetPath, null);
         }
 
+        /// <summary>
+        /// Compare 2 folders in one direction regardless of metadata. As a result, it can only handle
+        /// creations and modifications, not deletions or renames.
+        /// </summary>
+        /// <param name="source">List of files/folders from source folder</param>
+        /// <param name="target">List of files/folders in target folder</param>
+        /// <param name="targetPath"></param>
+        /// <param name="virtualPaths"></param>
+        /// <returns></returns>
         private List<CompareInfoObject> DoRawOneWayCompareFolder(List<CompareInfoObject> source, List<CompareInfoObject> target, string targetPath, List<string> virtualPaths)
         {
             Debug.Assert(source != null && target != null);
@@ -680,6 +568,21 @@ namespace Syncless.CompareAndSync
             return (queryTgtIntersectSrc.Union(querySrcExceptTgt, new FileNameCompare())).Union(target, new FileNameCompare()).ToList<CompareInfoObject>();
         }
 
+        #endregion
+
+        #region Get CompareInfoObject Methods
+
+        private List<CompareInfoObject> GetMonitorCompareObjects(List<MonitorPathPair> paths)
+        {
+            List<CompareInfoObject> results = new List<CompareInfoObject>();
+            foreach (MonitorPathPair path in paths)
+            {
+                FileInfo f = new FileInfo(path.FullPath);
+                results.Add(new CompareInfoObject(f.FullName, f.Name, f.CreationTime.Ticks, f.LastWriteTime.Ticks, f.Length, CalculateMD5Hash(f)));
+            }
+            return results;
+        }
+
         private List<CompareInfoObject> GetAllCompareObjects(string path)
         {
             FileInfo[] allFiles = new DirectoryInfo(path).GetFiles("*", SearchOption.AllDirectories);
@@ -688,6 +591,131 @@ namespace Syncless.CompareAndSync
             {
                 if (f.Directory.Name != "_syncless")
                     results.Add(new CompareInfoObject(path, f.FullName, f.Name, f.CreationTime.Ticks, f.LastWriteTime.Ticks, f.Length, CalculateMD5Hash(f)));
+            }
+            return results;
+        }
+
+        private List<CompareInfoObject> GetDiffMetaActual(string path)
+        {
+            //Do some processing between meta and actual files
+            List<CompareInfoObject> results = new List<CompareInfoObject>();
+
+            List<CompareInfoObject> actual = GetAllCompareObjects(path);
+            List<CompareInfoObject> meta = GetMetadataCompareObjects(path);
+
+            // YC: This will give us files that exist but are not in the
+            // metadata. Implies either new or renamed files.
+            List<CompareInfoObject> actualExceptMeta = actual.Except<CompareInfoObject>(meta, new FileNameCompare()).ToList<CompareInfoObject>();
+
+            // YC: This will give us files that exist in metadata but in the
+            // actual folder. Implies either deleted or renamed files.
+            List<CompareInfoObject> metaExceptActual = meta.Except<CompareInfoObject>(actual, new FileNameCompare()).ToList<CompareInfoObject>();
+            bool rename = false;
+            List<string> renameList = null;
+            CompareInfoObject tempObject = null;
+
+            foreach (CompareInfoObject a in actualExceptMeta)
+            {
+                rename = false;
+                foreach (CompareInfoObject m in meta)
+                {
+                    if (a.MD5Hash == m.MD5Hash && a.CreationTime == m.CreationTime)
+                    {
+                        rename = true;
+                        tempObject = m;
+                        break;
+                    }
+                }
+                if (rename)
+                {
+                    if (_changeTable[RENAME_TABLE].TryGetValue(tempObject.RelativePathToOrigin, out renameList))
+                    {
+                        if (!renameList.Contains(a.RelativePathToOrigin))
+                        {
+                            renameList.Add(a.RelativePathToOrigin);
+                        }
+                    }
+                    else
+                    {
+                        renameList = new List<string>();
+                        renameList.Add(a.RelativePathToOrigin);
+                        _changeTable[RENAME_TABLE].Add(tempObject.RelativePathToOrigin, renameList);
+                    }
+                }
+                else
+                {
+                    a.ChangeType = FileChangeType.Create;
+                    results.Add(a);
+                }
+            }
+
+            foreach (CompareInfoObject m in metaExceptActual)
+            {
+                rename = false;
+                foreach (CompareInfoObject a in actual)
+                {
+                    if (a.MD5Hash == m.MD5Hash && a.CreationTime == m.CreationTime)
+                    {
+                        rename = true;
+                        tempObject = a;
+                        break;
+                    }
+                }
+                if (rename)
+                {
+                    if (_changeTable[RENAME_TABLE].TryGetValue(m.RelativePathToOrigin, out renameList))
+                    {
+                        if (!renameList.Contains(tempObject.RelativePathToOrigin))
+                        {
+                            renameList.Add(tempObject.RelativePathToOrigin);
+                        }
+                    }
+                    else
+                    {
+                        renameList = new List<string>();
+                        renameList.Add(tempObject.RelativePathToOrigin);
+                        _changeTable[RENAME_TABLE].Add(m.RelativePathToOrigin, renameList);
+                    }
+                }
+                else
+                {
+                    if (!deleteList.Contains(m.RelativePathToOrigin))
+                    {
+                        deleteList.Add(m.RelativePathToOrigin);
+                    }
+                }
+            }
+
+            List<CompareInfoObject> actualIntersectMeta = actual.Intersect<CompareInfoObject>(meta, new FileNameCompare()).ToList<CompareInfoObject>();
+            List<CompareInfoObject> metaIntersectActual = meta.Intersect<CompareInfoObject>(actual, new FileNameCompare()).ToList<CompareInfoObject>();
+            actualIntersectMeta.Sort();
+            metaIntersectActual.Sort();
+
+            Debug.Assert(actualIntersectMeta.Count == metaIntersectActual.Count);
+            int numOfCommonItems = actualIntersectMeta.Count;
+            CompareInfoObject actualFile = null;
+            CompareInfoObject metaFile = null;
+            int compareResult = 0;
+
+            for (int i = 0; i < numOfCommonItems; i++)
+            {
+                actualFile = (CompareInfoObject)actualIntersectMeta[i];
+                metaFile = (CompareInfoObject)metaIntersectActual[i];
+                Debug.Assert(actualFile.RelativePathToOrigin == metaFile.RelativePathToOrigin);
+                compareResult = new FileContentCompare().Compare(actualFile, metaFile);
+
+                if (actualFile.Length != metaFile.Length)
+                {
+                    actualFile.ChangeType = FileChangeType.Update;
+                    results.Add(actualFile);
+                    continue;
+                }
+                if (actualFile.MD5Hash != metaFile.MD5Hash)
+                {
+                    actualFile.ChangeType = FileChangeType.Update;
+                    results.Add(actualFile);
+                    continue;
+                }
             }
             return results;
         }
@@ -702,10 +730,64 @@ namespace Syncless.CompareAndSync
             return XMLHelper.GetCompareInfoObjects(path);
         }
 
+        #endregion
+
+        #region Helper Methods
+
+        /// <summary>
+        /// Calculates the MD5 hash from a FileInfo object
+        /// </summary>
+        /// <param name="fileInput">FileInfo object to be hashed</param>
+        /// <returns>MD5 hash formatted in hexadecimal</returns>
+        public static string CalculateMD5Hash(FileInfo fileInput)
+        {
+            Debug.Assert(fileInput.Exists);
+            Debug.Assert(fileInput.Name != "syncless.xml");
+            Debug.Assert(fileInput.Directory.Name != "_syncless");
+            FileStream fileStream = null;
+            try
+            {
+                fileStream = fileInput.OpenRead();
+            }
+            catch (IOException)
+            {
+                fileInput.Refresh();
+                fileStream = fileInput.OpenRead();
+            }
+
+            byte[] fileHash = MD5.Create().ComputeHash(fileStream);
+            fileStream.Close();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < fileHash.Length; i++)
+            {
+                sb.Append(fileHash[i].ToString("X2"));
+            }
+            return sb.ToString();
+        }
+
         private string CreateNewItemPath(CompareInfoObject source, string targetOrigin)
         {
             Debug.Assert(source != null && targetOrigin != null);            
             return Path.Combine(targetOrigin, source.RelativePathToOrigin);
+        }
+
+        private string GetDirectoryNameChange(CompareInfoObject c1, CompareInfoObject c2)
+        {
+            FileInfo f1 = new FileInfo(c1.FullName);
+            FileInfo f2 = new FileInfo(c2.FullName);
+            DirectoryInfo currDir1 = null, currDir2 = null;
+            
+            currDir1 = f1.Directory;
+            currDir2 = f2.Directory;
+            
+            do
+            {
+                currDir1 = currDir1.Parent;
+                currDir2 = currDir2.Parent;
+            }
+            while (currDir1.Name == currDir2.Name);
+
+            return currDir1.Name;
         }
 
         /// <summary>
@@ -774,13 +856,13 @@ namespace Syncless.CompareAndSync
             {
                 add = true;
                 foreach (string path in paths)
-                {                    
+                {
                     deletePath = Path.Combine(path, deleteItem);
 
                     if (_changeTable[CREATE_TABLE].ContainsKey(deletePath) || _changeTable[UPDATE_TABLE].ContainsKey(deletePath) || _changeTable[RENAME_TABLE].ContainsKey(deleteItem))
                     {
                         add = false;
-                    }                   
+                    }
                 }
                 if (add)
                 {
@@ -788,8 +870,8 @@ namespace Syncless.CompareAndSync
                     {
                         deletePath = Path.Combine(path, deleteItem);
                         results.Add(new CompareResult(FileChangeType.Delete, deletePath, false));
-                    }                    
-                } 
+                    }
+                }
             }
 
             foreach (CompareResult cr in results)
@@ -801,36 +883,9 @@ namespace Syncless.CompareAndSync
             return results;
         }
 
-        /// <summary>
-        /// Calculates the MD5 hash from a FileInfo object
-        /// </summary>
-        /// <param name="fileInput">FileInfo object to be hashed</param>
-        /// <returns>MD5 hash formatted in hexadecimal</returns>
-        public static string CalculateMD5Hash(FileInfo fileInput)
-        {
-            Debug.Assert(fileInput.Exists);
-            Debug.Assert(fileInput.Name != "syncless.xml");
-            Debug.Assert(fileInput.Directory.Name != "_syncless");
-            FileStream fileStream = null;
-            try
-            {
-                fileStream = fileInput.OpenRead();
-            }
-            catch (IOException)
-            {
-                fileInput.Refresh();
-                fileStream = fileInput.OpenRead();
-            }
+        #endregion
 
-            byte[] fileHash = MD5.Create().ComputeHash(fileStream);
-            fileStream.Close();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < fileHash.Length; i++)
-            {
-                sb.Append(fileHash[i].ToString("X2"));
-            }
-            return sb.ToString();
-        }
+        #region Comparer Classes
 
         /// <summary>
         /// Compares the relative path to origin of one folder to another and determine
@@ -889,5 +944,7 @@ namespace Syncless.CompareAndSync
                 }
             }
         }
+
+        #endregion
     }
 }
