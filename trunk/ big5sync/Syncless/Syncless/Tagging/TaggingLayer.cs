@@ -822,6 +822,25 @@ namespace Syncless.Tagging
             }
             return parentPathList;
         }
+
+        public bool CheckIDExists(string logicalid)
+        {
+            foreach (FolderTag folderTag in _taggingProfile.FolderTagList)
+            {
+                if (CheckFolderID(folderTag, logicalid))
+                {
+                    return true;
+                }
+            }
+            foreach (FileTag fileTag in _taggingProfile.FileTagList)
+            {
+                if (CheckFileID(fileTag, logicalid))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         #endregion
         #endregion
 
