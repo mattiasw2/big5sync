@@ -15,7 +15,7 @@ namespace Syncless.Tagging
             FileStream fs = null;
             try
             {
-                fs = new FileStream(path, FileMode.OpenOrCreate);
+                fs = new FileStream(path, FileMode.Create);
                 textWriter = new XmlTextWriter(fs, Encoding.UTF8);
                 textWriter.Formatting = Formatting.Indented;
                 xml.WriteContentTo(textWriter);
