@@ -7,5 +7,6 @@ namespace Syncless.Core
 {
     public interface ICommandLineControllerInterface
     {
+        void ProcessCommandLine(List<string> commands);
     }
 }
