@@ -162,11 +162,6 @@ namespace SynclessUI
                 SyncPanel.Visibility = System.Windows.Visibility.Hidden;
                 BdrTaggedPath.Visibility = System.Windows.Visibility.Hidden;
             }
-            else
-            {
-                // should use select-tag instead
-                // ViewTagInfo(taglist[0]);
-            }
 		}
 
         /// <summary>
@@ -539,11 +534,11 @@ namespace SynclessUI
 
                 switch (result)
                 {
-                    case MessageBoxResult.Yes:
+                    case MessageBoxResult.OK:
                         // Terminates the SLL and closes the UI
                         _Igui.Terminate();
                         break;
-                    case MessageBoxResult.No:
+                    case MessageBoxResult.Cancel:
                         e.Cancel = true;
                         break;
                 }
