@@ -883,6 +883,11 @@ namespace Syncless.CompareAndSync
             return results;
         }
 
+        private void CheckMetadataValidity(List<string> withMeta, List<string> noMeta)
+        {
+            
+        }
+
         #endregion
 
         #region Comparer Classes
