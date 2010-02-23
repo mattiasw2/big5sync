@@ -274,7 +274,7 @@ namespace Syncless
             {
                 string messageBoxText = "Are you sure you want to delete the tag '" + _selectedTag + "'?";
                 string caption = "Delete Tag";
-                MessageBoxButton button = MessageBoxButton.YesNo;
+                MessageBoxButton button = MessageBoxButton.OKCancel;
                 MessageBoxImage icon = MessageBoxImage.Warning;
 
                 MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
@@ -313,8 +313,8 @@ namespace Syncless
             }
         }
 		
-		public void CreateFileTag(string tagName) {
-            try
+		public bool CreateFileTag(string tagName) {
+			try
             {
                 TagView tv = _Igui.CreateFileTag(tagName);
 			    if(tv != null) {
@@ -329,18 +329,15 @@ namespace Syncless
                     MessageBox.Show(messageBoxText, caption, button, icon);
 			    }
             }
-            catch (Syncless.Tagging.Exceptions.TagAlreadyExistsException )
+            catch (Syncless.Tagging.Exceptions.TagAlreadyExistsException)
             {
-                string messageBoxText = "Please specify another tagname.";
-                string caption = "Tag Already Exist";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
-
-                MessageBox.Show(messageBoxText, caption, button, icon);
+				return true;
             }
+			
+			return false;
 		}
 		
-		public void CreateFolderTag(string tagName) {
+		public bool CreateFolderTag(string tagName) {
             try
             {
                 TagView tv = _Igui.CreateFolderTag(tagName);
@@ -351,7 +348,7 @@ namespace Syncless
                 }
                 else
                 {
-                    string messageBoxText = "Please specify another tagname.";
+                    string messageBoxText = "Folder Tag could not be created.";
                     string caption = "Folder Tag Creation Error";
                     MessageBoxButton button = MessageBoxButton.OK;
                     MessageBoxImage icon = MessageBoxImage.Error;
@@ -359,15 +356,12 @@ namespace Syncless
                     MessageBox.Show(messageBoxText, caption, button, icon);
                 }
             }
-            catch (Syncless.Tagging.Exceptions.TagAlreadyExistsException )
+            catch (Syncless.Tagging.Exceptions.TagAlreadyExistsException)
             {
-                string messageBoxText = "Please specify another tagname.";
-                string caption = "Tag Already Exist";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
-
-                MessageBox.Show(messageBoxText, caption, button, icon);
+				return true;
             }
+			
+			return false;
 		}
 
 		private void BtnCreate_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -495,7 +489,7 @@ namespace Syncless
                 string messageBoxText = "Are you sure you want to exit Syncless?" +
                     "\nExiting Syncless will disable seamless synchronization.";
                 string caption = "Exit";
-                MessageBoxButton button = MessageBoxButton.YesNo;
+                MessageBoxButton button = MessageBoxButton.OKCancel;
                 MessageBoxImage icon = MessageBoxImage.Warning;
 
                 MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
