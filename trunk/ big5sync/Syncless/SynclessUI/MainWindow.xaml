@@ -181,7 +181,7 @@
 			</dropShadow:SystemDropShadowChrome>
 			<Label x:Name="LblTagList" Grid.Row="1" Grid.Column="0" Foreground="#FFEEEEEE" Content="Tag List" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,4,0,4" Margin="2,0" FontSize="13.333" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
 			<Image x:Name="TagListIcon" Source="Icons/taglist.ico" HorizontalAlignment="Right" Margin="0,-35,-15,0" Width="120" Height="120" VerticalAlignment="Top" Grid.RowSpan="3" d:LayoutOverrides="GridBox" Grid.ColumnSpan="3" Panel.ZIndex="1"/>
-			<TextBox x:Name="TxtBoxFilterTag" Grid.Row="2" Grid.Column="1" Background="#FF666666" Foreground="#FFAAAAAA" FontFamily="Century Gothic" FontSize="10.667" TextChanged="TxtBoxFilterTag_TextChanged" Margin="18,0,0,0">
+			<TextBox x:Name="TxtBoxFilterTag" Grid.Row="2" Grid.Column="1" Background="#FF666666" Foreground="#FFCCCCCC" FontFamily="Century Gothic" FontSize="10.667" TextChanged="TxtBoxFilterTag_TextChanged" Margin="0" Style="{DynamicResource FilterTextBoxStyle}">
 				<TextBox.BorderBrush>
 					<LinearGradientBrush EndPoint="0,20" StartPoint="0,0" MappingMode="Absolute">
 						<GradientStop Color="#FFABADB3" Offset="0.05"/>
@@ -189,10 +189,10 @@
 						<GradientStop Color="#FF828790" Offset="1"/>
 					</LinearGradientBrush>
 				</TextBox.BorderBrush></TextBox>
-			<ListBox x:Name="ListBoxTag" Margin="0,10,0,0" Grid.Column="1" Grid.Row="3" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White" SelectionChanged="ListBoxTag_SelectionChanged" MaxHeight="155">
+			<ListBox x:Name="ListBoxTag" Margin="0,10,0,0" Grid.Column="1" Grid.Row="3" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White" SelectionChanged="ListBoxTag_SelectionChanged" MaxHeight="155" ItemContainerStyle="{DynamicResource ListBoxItemStyle}">
 			</ListBox>
 			<Label x:Name="LblTagCount" Grid.Row="1" Grid.Column="0" Foreground="#FFEEEEEE" Content="[Count]" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,4,0,4" Margin="50,0,2,0" FontSize="13.333" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
-			<Image x:Name="ImgFilter" HorizontalAlignment="Left" Margin="-2,0,0,-2" Width="16" Grid.Column="1" Source="Icons/filter.ico" Stretch="Fill" Grid.Row="2" Height="16"/>
+			<Image x:Name="ImgFilter" HorizontalAlignment="Left" Margin="2,0,0,-1" Width="16" Grid.Column="1" Source="Icons/filter.ico" Stretch="Fill" Grid.Row="2" Height="16"/>
 		</Grid>
 		
 		<!-- Log Panel -->

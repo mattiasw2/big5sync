@@ -42,7 +42,7 @@
 		<Label x:Name="LblTagType" Content="Type:" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,8,0,0" Grid.Column="1" Grid.Row="3"/>
 		<StackPanel Grid.Column="2" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,10,0,0">
 			<StackPanel Width="48" Orientation="Vertical" VerticalAlignment="Top">
-				<Button x:Name="BtnFile" Click="BtnFile_Click">
+				<Button x:Name="BtnFile" Click="BtnFile_Click" Style="{DynamicResource ButtonStyle}">
 					<Image Source="Icons/file.ico" Stretch="Fill" />
 				</Button>
 				<Label x:Name="LblFile" Margin="0,-3,0,0" Content="File" FontFamily="Century Gothic" Foreground="White" HorizontalAlignment="Center" FontSize="10.667"/>
@@ -59,7 +59,7 @@
 			</StackPanel>
 		</StackPanel>
 		<StackPanel x:Name="CommandPanel" Margin="0" Grid.Column="2" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-			<Button x:Name="BtnOk" Margin="0,0,5,0" Height="28" Click="BtnOk_Click">
+			<Button x:Name="BtnOk" Margin="0,0,5,0" Height="28" Click="BtnOk_Click" IsDefault="True">
 				<Label x:Name="LblOk" FontFamily="Century Gothic" FontSize="9.333" Content="Create"/>
 			</Button>
 			<Button x:Name="BtnCancel" Margin="0" Height="28" Width="50" Click="BtnCancel_Click" IsCancel="True">
