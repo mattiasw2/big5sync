@@ -9,7 +9,7 @@ namespace Syncless.Tagging
 {
     static class TaggingXMLHelper
     {
-        public static bool SaveXml(XmlDocument xml, string path)
+        internal static bool SaveXml(XmlDocument xml, string path)
         {
             XmlTextWriter textWriter = null;
             FileStream fs = null;
@@ -40,7 +40,7 @@ namespace Syncless.Tagging
             return true;
         }
 
-        public static XmlDocument LoadXml(string path)
+        internal static XmlDocument LoadXml(string path)
         {
             FileStream fs = null;
             try
@@ -70,7 +70,7 @@ namespace Syncless.Tagging
         }
 
         #region create tagging profile
-        public static TaggingProfile CreateTaggingProfile(XmlElement profileElement)
+        internal static TaggingProfile CreateTaggingProfile(XmlElement profileElement)
         {
             TaggingProfile taggingProfile = new TaggingProfile();
             string profilename = profileElement.GetAttribute("name");
@@ -82,7 +82,7 @@ namespace Syncless.Tagging
             return taggingProfile;
         }
 
-        public static FolderTag CreateFolderTagFromXml(XmlElement tag)
+        internal static FolderTag CreateFolderTagFromXml(XmlElement tag)
         {
             string tagname = tag.GetAttribute("name");
             long created = long.Parse(tag.GetAttribute("created"));
@@ -98,7 +98,7 @@ namespace Syncless.Tagging
             return folderTag;
         }
 
-        public static FileTag CreateFileTagFromXml(XmlElement tag)
+        internal static FileTag CreateFileTagFromXml(XmlElement tag)
         {
             string tagname = tag.GetAttribute("name");
             long created = long.Parse(tag.GetAttribute("created"));
@@ -138,7 +138,7 @@ namespace Syncless.Tagging
         #endregion
 
         #region create xml document
-        public static XmlElement CreateFolderTagElement(XmlDocument TaggingDataDocument, FolderTag folderTag)
+        internal static XmlElement CreateFolderTagElement(XmlDocument TaggingDataDocument, FolderTag folderTag)
         {
             XmlElement folderTagElement = TaggingDataDocument.CreateElement("folderTag");
             folderTagElement.SetAttribute("name", folderTag.TagName);
@@ -162,7 +162,7 @@ namespace Syncless.Tagging
             return taggedFolderElement;
         }
 
-        public static XmlElement CreateFileTagElement(XmlDocument TaggingDataDocument, FileTag fileTag)
+        internal static XmlElement CreateFileTagElement(XmlDocument TaggingDataDocument, FileTag fileTag)
         {
             XmlElement fileTagElement = TaggingDataDocument.CreateElement("fileTag");
             fileTagElement.SetAttribute("name", fileTag.TagName);

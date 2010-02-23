@@ -10,7 +10,7 @@ namespace Syncless.Tagging
 {
     static class TaggingHelper
     {
-        public static string[] TrimEnd(string[] tempPathTokens)
+        internal static string[] TrimEnd(string[] tempPathTokens)
         {
             string[] pathTokens = new string[tempPathTokens.Length - 1];
             if (tempPathTokens[tempPathTokens.Length - 1].Equals(""))
@@ -24,18 +24,18 @@ namespace Syncless.Tagging
             return tempPathTokens;
         }
 
-        public static string GetLogicalID(string path)
+        internal static string GetLogicalID(string path)
         {
             string[] tokens = path.Split('\\');
             return (tokens[0].TrimEnd(':'));
         }
 
-        public static long GetCurrentTime()
+        internal static long GetCurrentTime()
         {
             return DateTime.Now.Ticks;
         }
 
-        public static string GetCurrentTimeString()
+        internal static string GetCurrentTimeString()
         {
             DateTime currenttime = DateTime.Now;
             string day = (currenttime.Day < 10) ? ("0" + currenttime.Day.ToString()) : currenttime.Day.ToString();
@@ -48,7 +48,7 @@ namespace Syncless.Tagging
             return datestring;
         }
 
-        public static string CreatePath(int trailingIndex, string[] pathTokens, bool isFolder)
+        internal static string CreatePath(int trailingIndex, string[] pathTokens, bool isFolder)
         {
             string trailingPath = null;
             for (int i = trailingIndex; i < pathTokens.Length - 1; i++)
@@ -66,7 +66,7 @@ namespace Syncless.Tagging
             return trailingPath;
         }
 
-        public static bool CheckRecursiveDirectory(FolderTag folderTag, string path)
+        internal static bool CheckRecursiveDirectory(FolderTag folderTag, string path)
         {
             foreach (TaggedPath p in folderTag.PathList)
             {
@@ -81,7 +81,7 @@ namespace Syncless.Tagging
             return false;
         }
 
-        public static int Match(string[] pathTokens, string[] pTokens)
+        internal static int Match(string[] pathTokens, string[] pTokens)
         {
             int trailingIndex = 0;
             for (int i = 0; i < pTokens.Length; i++)
@@ -98,9 +98,10 @@ namespace Syncless.Tagging
             return trailingIndex;
         }
 
-        public static void Logging(string message, params object[] list)
+        internal static void Logging(string message, params object[] list)
         {
             //to call ServiceLocator.GetLogger();
+            Console.WriteLine(string.Format(message, list));
         }
     }
 }
