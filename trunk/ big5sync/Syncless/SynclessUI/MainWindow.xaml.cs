@@ -52,7 +52,7 @@ namespace Syncless
             else
             {
                 this.WindowState = WindowState.Minimized;
-                ProcessCommandLine(lststrCommandLineArgs);
+                CommandLineHelper.ProcessCommandLine(lststrCommandLineArgs);
             }
             
 
@@ -62,34 +62,6 @@ namespace Syncless
             
 
         }
-        #region ProcessCommandLine
-
-        public void ProcessCommandLine(List<string> commands)
-        {
-            string flag = commands[1];
-            if (flag.Equals("-T"))
-            {
-                MessageBox.Show("Tagging " + commands[2]);
-                string path = commands[2];
-                //Change this to prompting the user for the name of the tag 
-            }
-            else if (flag.Equals("-U"))
-            {
-                MessageBox.Show("Untagging " + commands[2]);
-                string path = commands[2];
-
-                //change this to 
-                // 1)find the list of tag associated with this path
-                // 2)prompt which to untag
-
-            }
-            else
-            {
-                throw new Exception("Unknown Command");
-            }
-        }
-
-        #endregion
         /// <summary>
         ///     Starts up the system logic layer and initializes it
         /// </summary>
