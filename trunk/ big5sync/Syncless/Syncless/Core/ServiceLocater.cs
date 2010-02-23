@@ -29,8 +29,8 @@ namespace Syncless.Core
             get { return SystemLogicLayer.Instance; }
         }
         */
-        /*
-        public static Logger GetLogger(string type)
+        
+        public static Logger Getlogger(string type)
         {
             if (type.Equals(USER_LOG))
             {
@@ -47,6 +47,6 @@ namespace Syncless.Core
                 throw new LoggerNotFoundException(ErrorMessage.LOGGER_NOT_FOUND);
             }
         }
-        */
+        
     }
 }
