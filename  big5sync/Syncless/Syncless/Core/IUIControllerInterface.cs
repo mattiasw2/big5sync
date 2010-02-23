@@ -11,6 +11,14 @@ namespace Syncless.Core
     {
         List<string> GetAllTags();
 
+        //List<string> GetAllFileTags();
+
+        //List<string> GetAllFolderTags();
+
+        //List<string> GetTagsByFile(FileInfo file);
+
+        //List<string> GetTagsByFolder(DirectoryInfo folder);
+
         TagView GetTag(String tagname);
 
         bool StartManualSync(String tagname);

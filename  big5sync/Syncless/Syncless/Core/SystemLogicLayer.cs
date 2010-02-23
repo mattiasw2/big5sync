@@ -211,7 +211,6 @@ namespace Syncless.Core
             {
                 return null;
             }
-
         }
 
         public bool StartManualSync(string tagname)
