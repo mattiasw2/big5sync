@@ -73,6 +73,11 @@ namespace Syncless.Profiling
             {
                 if (mapping.LogicalAddress.Equals(logical))
                 {
+                    if (mapping.PhyiscalAddress.Trim().Equals(""))
+                    {
+                        return null;
+                    }
+                    
                     return mapping.PhyiscalAddress;
                 }
             }

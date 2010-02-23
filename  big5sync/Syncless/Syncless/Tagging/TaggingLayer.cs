@@ -532,11 +532,7 @@ namespace Syncless.Tagging
                     }
                 }
             }
-            if (!oldpathfound)
-            {
-                TaggingHelper.Logging(LogMessage.PATH_NOT_FOUND, oldPath);
-                throw new PathNotFoundException(oldPath);
-            }
+            
         }
 
         /// <summary>

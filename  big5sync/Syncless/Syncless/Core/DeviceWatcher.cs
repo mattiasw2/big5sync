@@ -44,7 +44,7 @@ namespace Syncless.Core
             List<DriveInfo> drives = new List<DriveInfo>();
             foreach (DriveInfo driveInfo in DriveInfo.GetDrives())
             {
-                if (driveInfo.DriveType == DriveType.Fixed || driveInfo.DriveType == DriveType.Removable)
+                if (driveInfo.DriveType == DriveType.Fixed || driveInfo.DriveType == DriveType.Removable || driveInfo.DriveType == DriveType.Unknown)
                 {
                     drives.Add(driveInfo);
                 }
