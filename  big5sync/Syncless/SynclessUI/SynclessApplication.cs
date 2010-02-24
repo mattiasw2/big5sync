@@ -8,7 +8,7 @@ namespace SynclessUI
 {
     public class SynclessApplication : Application
     {
-        public Window main { get; private set; }
+        public MainWindow main { get; private set; }
 
         public SynclessApplication(): base()
         { }
@@ -22,13 +22,22 @@ namespace SynclessUI
             Application.LoadComponent(new Uri("SynclessUI;component/AppResourceDictionary.xaml", UriKind.Relative)) as ResourceDictionary);
 
             main = new MainWindow();
-            ProcessArgs(e.Args, true);
 
             main.Show();
+
+            ProcessArgs(e.Args, true);
         }
 
         public void ProcessArgs(string[] args, bool firstInstance)
         {
+            if (firstInstance)
+            {
+                main.ProcessCommandLine(args);
+            }
+            else
+            {
+                main.ProcessCommandLine1(args);
+            }
         }
     }
 }
