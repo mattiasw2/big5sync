@@ -11,8 +11,8 @@ namespace Syncless.CompareAndSync
 {
     public class Comparer
     {
-        private const int CREATE_TABLE = 0, DELETE_TABLE = 1, RENAME_TABLE = 2, UPDATE_TABLE = 3;
-        private Dictionary<int, Dictionary<string, List<string>>> _changeTable;
+        private Dictionary<CompareInfoObject, List<string>> createTable, updateTable;
+        private Dictionary<string, List<string>> renameTable;
         private List<string> deleteList;
         private const string METADATAPATH = "_syncless\\metadata.xml";
 
@@ -200,10 +200,9 @@ namespace Syncless.CompareAndSync
 
         public List<CompareResult> CompareFolder(List<string> paths)
         {
-            _changeTable = new Dictionary<int, Dictionary<string, List<string>>>();
-            _changeTable.Add(CREATE_TABLE, new Dictionary<string, List<string>>());
-            _changeTable.Add(UPDATE_TABLE, new Dictionary<string, List<string>>());
-            _changeTable.Add(RENAME_TABLE, new Dictionary<string, List<string>>());
+            createTable = new Dictionary<CompareInfoObject, List<string>>();
+            updateTable = new Dictionary<CompareInfoObject, List<string>>();
+            renameTable = new Dictionary<string, List<string>>();
             deleteList = new List<string>();
 
             List<string> withMeta = new List<string>();
@@ -312,7 +311,7 @@ namespace Syncless.CompareAndSync
             {
                 if (querySrcExceptTgt[i].ChangeType == FileChangeType.Create || querySrcExceptTgt[i].ChangeType == FileChangeType.None)
                 {
-                    if (_changeTable[CREATE_TABLE].TryGetValue(querySrcExceptTgt[i].FullName, out createList))
+                    if (createTable.TryGetValue(querySrcExceptTgt[i], out createList))
                     {
                         if (!createList.Contains(CreateNewItemPath(querySrcExceptTgt[i], targetPath)))
                         {
@@ -323,12 +322,12 @@ namespace Syncless.CompareAndSync
                     {
                         createList = new List<string>();
                         createList.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
-                        _changeTable[CREATE_TABLE].Add(querySrcExceptTgt[i].FullName, createList);
+                        createTable.Add(querySrcExceptTgt[i], createList);
                     }
                 }
                 else if (querySrcExceptTgt[i].ChangeType == FileChangeType.Update)
                 {
-                    if (_changeTable[UPDATE_TABLE].TryGetValue(querySrcExceptTgt[i].FullName, out updateList))
+                    if (updateTable.TryGetValue(querySrcExceptTgt[i], out updateList))
                     {
                         if (!updateList.Contains(CreateNewItemPath(querySrcExceptTgt[i], targetPath)))
                         {
@@ -339,13 +338,13 @@ namespace Syncless.CompareAndSync
                     {
                         updateList = new List<string>();
                         updateList.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
-                        _changeTable[UPDATE_TABLE].Add(querySrcExceptTgt[i].FullName, updateList);
+                        updateTable.Add(querySrcExceptTgt[i], updateList);
                     }
 
                     //YC: Experimental
-                    if (_changeTable[CREATE_TABLE].ContainsKey(querySrcExceptTgt[i].FullName))
+                    if (createTable.ContainsKey(querySrcExceptTgt[i]))
                     {
-                        _changeTable[CREATE_TABLE].Remove(querySrcExceptTgt[i].FullName);
+                        createTable.Remove(querySrcExceptTgt[i]);
                     }
                 }
             }
@@ -364,7 +363,7 @@ namespace Syncless.CompareAndSync
                 if (compareResult > 0)
                 {
                     //Debug.Assert(srcFile.ChangeType == FileChangeType.Update && tgtFile.ChangeType == FileChangeType.Update);
-                    if (_changeTable[UPDATE_TABLE].TryGetValue(srcFile.FullName, out updateList))
+                    if (updateTable.TryGetValue(srcFile, out updateList))
                     {
                         if (!updateList.Contains(tgtFile.FullName))
                         {
@@ -375,13 +374,13 @@ namespace Syncless.CompareAndSync
                     {
                         updateList = new List<string>();                        
                         updateList.Add(tgtFile.FullName);
-                        _changeTable[UPDATE_TABLE].Add(srcFile.FullName, updateList);
+                        updateTable.Add(srcFile, updateList);
                     }
 
                     //YC: Experimental
-                    if (_changeTable[CREATE_TABLE].ContainsKey(tgtFile.FullName))
+                    if (createTable.ContainsKey(tgtFile))
                     {
-                        _changeTable[CREATE_TABLE].Remove(tgtFile.FullName);
+                        createTable.Remove(tgtFile);
                     }
 
                     queryTgtIntersectSrc.RemoveAt(i);
@@ -389,9 +388,9 @@ namespace Syncless.CompareAndSync
                 }
                 else if (compareResult < 0)
                 {
-                    if (_changeTable[UPDATE_TABLE].ContainsKey(srcFile.FullName))
+                    if (updateTable.ContainsKey(srcFile))
                     {
-                        _changeTable[UPDATE_TABLE].Remove(srcFile.FullName);
+                        updateTable.Remove(srcFile);
                     }
                 }
 
@@ -471,7 +470,7 @@ namespace Syncless.CompareAndSync
                     newFilePaths.Add(CreateNewItemPath(querySrcExceptTgt[i], targetPath));
                 }
 
-                if (_changeTable[CREATE_TABLE].TryGetValue(querySrcExceptTgt[i].FullName, out createList))
+                if (createTable.TryGetValue(querySrcExceptTgt[i], out createList))
                 {
                     foreach (string newFilePath in newFilePaths)
                     {
@@ -493,7 +492,7 @@ namespace Syncless.CompareAndSync
                                 createList.Add(newFilePath);
                             }
                         }
-                        _changeTable[CREATE_TABLE].Add(querySrcExceptTgt[i].FullName, createList);
+                        createTable.Add(querySrcExceptTgt[i], createList);
                     }
                 }
             }
@@ -527,7 +526,7 @@ namespace Syncless.CompareAndSync
                         updatePaths.Add(tgtFile.FullName);
                     }
 
-                    if (_changeTable[UPDATE_TABLE].TryGetValue(srcFile.FullName, out updateList))
+                    if (updateTable.TryGetValue(srcFile, out updateList))
                     {
                         foreach (string updatePath in updatePaths)
                         {
@@ -544,13 +543,13 @@ namespace Syncless.CompareAndSync
                         {
                             updateList.Add(updatePath);
                         }
-                        _changeTable[UPDATE_TABLE].Add(srcFile.FullName, updateList);
+                        updateTable.Add(srcFile, updateList);
                     }
 
                     //YC: Experimental
-                    if (_changeTable[CREATE_TABLE].ContainsKey(tgtFile.FullName))
+                    if (createTable.ContainsKey(tgtFile))
                     {
-                        _changeTable[CREATE_TABLE].Remove(tgtFile.FullName);
+                        createTable.Remove(tgtFile);
                     }
 
                     queryTgtIntersectSrc.RemoveAt(i);
@@ -558,9 +557,9 @@ namespace Syncless.CompareAndSync
                 }
                 else if (compareResult < 0)
                 {
-                    if (_changeTable[UPDATE_TABLE].ContainsKey(srcFile.FullName))
+                    if (updateTable.ContainsKey(srcFile))
                     {
-                        _changeTable[UPDATE_TABLE].Remove(srcFile.FullName);
+                        updateTable.Remove(srcFile);
                     }
                 }
 
@@ -633,7 +632,7 @@ namespace Syncless.CompareAndSync
                 }
                 if (rename)
                 {
-                    if (_changeTable[RENAME_TABLE].TryGetValue(tempObject.RelativePathToOrigin, out renameList))
+                    if (renameTable.TryGetValue(tempObject.RelativePathToOrigin, out renameList))
                     {
                         if (!renameList.Contains(a.RelativePathToOrigin))
                         {
@@ -644,7 +643,7 @@ namespace Syncless.CompareAndSync
                     {
                         renameList = new List<string>();
                         renameList.Add(a.RelativePathToOrigin);
-                        _changeTable[RENAME_TABLE].Add(tempObject.RelativePathToOrigin, renameList);
+                        renameTable.Add(tempObject.RelativePathToOrigin, renameList);
                     }
                 }
                 else
@@ -668,7 +667,7 @@ namespace Syncless.CompareAndSync
                 }
                 if (rename)
                 {
-                    if (_changeTable[RENAME_TABLE].TryGetValue(m.RelativePathToOrigin, out renameList))
+                    if (renameTable.TryGetValue(m.RelativePathToOrigin, out renameList))
                     {
                         if (!renameList.Contains(tempObject.RelativePathToOrigin))
                         {
@@ -679,7 +678,7 @@ namespace Syncless.CompareAndSync
                     {
                         renameList = new List<string>();
                         renameList.Add(tempObject.RelativePathToOrigin);
-                        _changeTable[RENAME_TABLE].Add(m.RelativePathToOrigin, renameList);
+                        renameTable.Add(m.RelativePathToOrigin, renameList);
                     }
                 }
                 else
@@ -805,59 +804,56 @@ namespace Syncless.CompareAndSync
         /// <returns>List of CompareResults</returns>
         private List<CompareResult> ProcessRawResults(List<string> paths)
         {
-            Dictionary<int, Dictionary<string, List<string>>>.KeyCollection keys = _changeTable.Keys;
-            Dictionary<string, List<string>>.KeyCollection currTableKeys = null;
+            Dictionary<CompareInfoObject, List<string>>.KeyCollection createUpdateKeys = null;
+            Dictionary<string, List<string>>.KeyCollection renameKeys = null;
             List<CompareResult> results = new List<CompareResult>();
-            FileChangeType changeType = FileChangeType.Create;
+            renameKeys = renameTable.Keys;
 
-            foreach (int key in keys)
+            // Handle Create Table
+            createUpdateKeys = createTable.Keys;
+            foreach (CompareInfoObject sourceKey in createUpdateKeys)
             {
-                currTableKeys = _changeTable[key].Keys;
-                switch (key)
+                // Ensure that a file is not created cause it was renamed
+                if (!renameKeys.Contains(sourceKey.RelativePathToOrigin))
                 {
-                    case CREATE_TABLE:
-                        changeType = FileChangeType.Create;
-                        break;
-                    case RENAME_TABLE:
-                        changeType = FileChangeType.Rename;
-                        break;
-                    case UPDATE_TABLE:
-                        changeType = FileChangeType.Update;
-                        break;
-                }
-
-                foreach (string sourceKey in currTableKeys)
-                {
-                    if (changeType == FileChangeType.Create || changeType == FileChangeType.Update)
+                    foreach (string dest in createTable[sourceKey])
                     {
-                        foreach (string dest in _changeTable[key][sourceKey])
-                        {
-                            results.Add(new CompareResult(changeType, sourceKey, dest, false));
-                        }
-                    }
-                    else if (changeType == FileChangeType.Rename)
-                    {
-                        List<string> rename = _changeTable[key][sourceKey];
-                        if (rename.Count == 1)
-                        {
-                            foreach (string path in paths)
-                            {
-                                results.Add(new CompareResult(changeType, Path.Combine(path, sourceKey), Path.Combine(path, rename[0]), false));
-                            }
-                        }
-                        // TODO: Handle rename conflicts in future
-                        else if (rename.Count > 1)
-                        {
-                            foreach (string path in paths)
-                            {
-                                results.Add(new CompareResult(changeType, Path.Combine(path, sourceKey), Path.Combine(path, rename[0]), false));
-                            }
-                        }
+                        results.Add(new CompareResult(FileChangeType.Create, sourceKey.FullName, dest, false));
                     }
                 }
             }
 
-            // TODO: Handle delete conflicts. Simple way for now.
+            // Handle Update Table
+            createUpdateKeys = updateTable.Keys;
+            foreach (CompareInfoObject sourceKey in createUpdateKeys)
+            {
+                foreach (string dest in updateTable[sourceKey])
+                {
+                    results.Add(new CompareResult(FileChangeType.Update, sourceKey.FullName, dest, false));
+                }
+            }
+
+            // Handle Rename Table
+            foreach (string sourceKey in renameKeys)
+            {
+                List<string> rename = renameTable[sourceKey];
+                if (rename.Count == 1)
+                {
+                    foreach (string path in paths)
+                    {
+                        results.Add(new CompareResult(FileChangeType.Rename, Path.Combine(path, sourceKey), Path.Combine(path, rename[0]), false));
+                    }
+                }
+                // TODO: Handle rename conflicts in future
+                else if (rename.Count > 1)
+                {
+                    foreach (string path in paths)
+                    {
+                        results.Add(new CompareResult(FileChangeType.Rename, Path.Combine(path, sourceKey), Path.Combine(path, rename[0]), false));
+                    }
+                }
+            }
+
             string deletePath = null;
             bool add = true;
             foreach (string deleteItem in deleteList)
@@ -866,10 +862,13 @@ namespace Syncless.CompareAndSync
                 foreach (string path in paths)
                 {
                     deletePath = Path.Combine(path, deleteItem);
-
-                    if (_changeTable[CREATE_TABLE].ContainsKey(deletePath) || _changeTable[UPDATE_TABLE].ContainsKey(deletePath) || _changeTable[RENAME_TABLE].ContainsKey(deleteItem))
+                    foreach (CompareResult result in results)
                     {
-                        add = false;
+                        if (result.From == deletePath)
+                        {
+                            add = false;
+                            break;
+                        }
                     }
                 }
                 if (add)
@@ -889,11 +888,6 @@ namespace Syncless.CompareAndSync
             }
 
             return results;
-        }
-
-        private void CheckMetadataValidity(List<string> withMeta, List<string> noMeta)
-        {
-            
         }
 
         #endregion
