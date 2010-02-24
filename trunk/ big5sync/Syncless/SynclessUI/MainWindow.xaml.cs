@@ -50,6 +50,7 @@ namespace SynclessUI
                 SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(lststrCommandLineArgs, this);
             }
 
+			RegistryHelper.CreateRegistry(@"C:\SynclessUI");
             CLI_CreateTag("C:\\testfolder");
         }
 
@@ -546,6 +547,7 @@ namespace SynclessUI
                     case MessageBoxResult.OK:
                         // Terminates the SLL and closes the UI
                         gui.Terminate();
+						RegistryHelper.RemoveRegistry();
                         break;
                     case MessageBoxResult.Cancel:
                         e.Cancel = true;

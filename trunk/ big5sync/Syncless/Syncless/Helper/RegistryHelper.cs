@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Win32;
 namespace Syncless.Helper
 {
-    internal static class RegistryHelper
+    public static class RegistryHelper
     {
         /// <summary>
         /// Create the context Menu for Syncless
