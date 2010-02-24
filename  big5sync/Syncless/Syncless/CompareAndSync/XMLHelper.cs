@@ -228,14 +228,6 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        public static bool editXml(string xmlPath, FileChangeType type, string filePath)
-        {
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(xmlPath);
-            return false; //TEMP
-        }
-
-
         // STUB
         // PATHS TO BE CONFIRMED
         public static void GenerateTodoXml(List<string> paths , string path)
