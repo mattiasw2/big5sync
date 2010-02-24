@@ -8,6 +8,7 @@ namespace Syncless.CompareAndSync
     public class FileCompareResult : CompareResult
     {
         private string _newHash = null;
+        private long _creationTime, _lastWriteTime, _length;
 
         //Files: Used for delete        
         private FileCompareResult(FileChangeType changeType, string from) :
@@ -22,10 +23,13 @@ namespace Syncless.CompareAndSync
         }
 
         //Files: Used for create/update
-        private FileCompareResult(FileChangeType changeType, string from, string to, string newHash) :
+        private FileCompareResult(FileChangeType changeType, string from, string to, string newHash, long creationTime, long lastWriteTime, long length) :
             this(changeType, from, to)
         {
             _newHash = newHash;
+            _creationTime = creationTime;
+            _lastWriteTime = lastWriteTime;
+            _length = length;
         }
 
         public string NewHash
@@ -36,14 +40,38 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        public static FileCompareResult CreateFileCompareResult(string from, string to, string newHash)
+        public long CreationTime
         {
-            return new FileCompareResult(FileChangeType.Create, from, to, newHash);
+            get
+            {
+                return _creationTime;
+            }
         }
 
-        public static FileCompareResult UpdateFileCompareResult(string from, string to, string newHash)
+        public long LastWriteTime
         {
-            return new FileCompareResult(FileChangeType.Update, from, to, newHash);
+            get
+            {
+                return _lastWriteTime;
+            }
+        }
+
+        public long Length
+        {
+            get
+            {
+                return _length;
+            }
+        }
+
+        public static FileCompareResult CreateFileCompareResult(string from, string to, string newHash, long creationTime, long lastWriteTime, long length)
+        {
+            return new FileCompareResult(FileChangeType.Create, from, to, newHash, creationTime, lastWriteTime, length);
+        }
+
+        public static FileCompareResult UpdateFileCompareResult(string from, string to, string newHash, long creationTime, long lastWriteTime, long length)
+        {
+            return new FileCompareResult(FileChangeType.Update, from, to, newHash, creationTime, lastWriteTime, length);
         }
 
         public static FileCompareResult RenameFileCompareResult(string from, string to)

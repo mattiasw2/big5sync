@@ -95,7 +95,7 @@ namespace Syncless.CompareAndSync
                     source = new CompareInfoObject(oldPath.FullName, oldPath.Name, oldPath.CreationTime.Ticks, oldPath.LastWriteTime.Ticks, oldPath.Length, CalculateMD5Hash(oldPath));
                     foreach (MonitorPathPair dest in syncRequest.Dest)
                     {
-                        results.Add(FileCompareResult.CreateFileCompareResult(syncRequest.OldPath.FullPath, dest.FullPath, CalculateMD5Hash(new FileInfo(syncRequest.OldPath.FullPath))));
+                        results.Add(FileCompareResult.CreateFileCompareResult(syncRequest.OldPath.FullPath, dest.FullPath, CalculateMD5Hash(new FileInfo(syncRequest.OldPath.FullPath)), 0, 0, 0));
                     }
                     break;
                 case FileChangeType.Update:
@@ -106,7 +106,7 @@ namespace Syncless.CompareAndSync
                         int compareResult = new FileContentCompare().Compare(source, dest);
                         if (compareResult != 0)
                         {
-                            results.Add(FileCompareResult.UpdateFileCompareResult(syncRequest.OldPath.FullPath, dest.FullName, CalculateMD5Hash(new FileInfo(syncRequest.OldPath.FullPath))));
+                            results.Add(FileCompareResult.UpdateFileCompareResult(syncRequest.OldPath.FullPath, dest.FullName, CalculateMD5Hash(new FileInfo(syncRequest.OldPath.FullPath)), 0, 0, 0));
                         }
                     }
                     break;
@@ -175,7 +175,7 @@ namespace Syncless.CompareAndSync
                       && !CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo)))
                     {
                         compareResultList.Add(FileCompareResult.UpdateFileCompareResult(sourceInfo.FullName,
-                            destInfo.FullName, (CalculateMD5Hash(sourceInfo))));
+                            destInfo.FullName, (CalculateMD5Hash(sourceInfo)), sourceInfo.CreationTime.Ticks, sourceInfo.LastWriteTime.Ticks, sourceInfo.Length));
                     }
                     /*
                     else if (!(CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo)) &&
@@ -818,7 +818,7 @@ namespace Syncless.CompareAndSync
                 {
                     foreach (string dest in createTable[sourceKey])
                     {
-                        results.Add(FileCompareResult.CreateFileCompareResult(sourceKey.FullName, dest, sourceKey.MD5Hash));
+                        results.Add(FileCompareResult.CreateFileCompareResult(sourceKey.FullName, dest, sourceKey.MD5Hash, sourceKey.CreationTime, sourceKey.LastWriteTime, sourceKey.Length));
                     }
                 }
             }
@@ -829,7 +829,7 @@ namespace Syncless.CompareAndSync
             {
                 foreach (string dest in updateTable[sourceKey])
                 {
-                    results.Add(FileCompareResult.UpdateFileCompareResult(sourceKey.FullName, dest, sourceKey.MD5Hash));
+                    results.Add(FileCompareResult.UpdateFileCompareResult(sourceKey.FullName, dest, sourceKey.MD5Hash, sourceKey.CreationTime, sourceKey.LastWriteTime, sourceKey.Length));
                 }
             }
 

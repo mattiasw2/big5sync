@@ -24,41 +24,25 @@ namespace Syncless.CompareAndSync
                 switch (result.ChangeType)
                 {
                     case FileChangeType.Create:
-                        currResult = Create(result);
-                        syncResults.Add(currResult);
-
-                        if (currResult.Success)
-                        {
-                            //YC: Write XML
-                        }                           
+                        currResult = Create(result);                                                  
                         break;
                     case FileChangeType.Delete:
-                        currResult = Delete(result);
-                        syncResults.Add(currResult);
-
-                        if (currResult.Success)
-                        {
-                            //YC: Write XML
-                        }                                             
+                        currResult = Delete(result);                    
                         break;
                     case FileChangeType.Rename:
-                        currResult = Move(result);
-                        syncResults.Add(currResult);
-
-                        if (currResult.Success)
-                        {
-                            //YC: Write XML
-                        }                        
+                        currResult = Move(result);                   
                         break;
                     case FileChangeType.Update:
                         currResult = Update(result);
-                        syncResults.Add(currResult);
-
-                        if (currResult.Success)
-                        {
-                            //YC: Write XML
-                        }
                         break;
+                }
+
+                syncResults.Add(currResult);
+                if (currResult.Success)
+                {
+                    //YC: Write XML
+                    //Check if it's folder or file and write accordingly?
+                    //Hash, Filename, Filesize, Creation Time, Last Write Time
                 }
             }
 
