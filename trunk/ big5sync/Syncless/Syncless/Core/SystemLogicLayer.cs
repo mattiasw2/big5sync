@@ -34,7 +34,7 @@ namespace Syncless.Core
         }
 
         #region IMonitorControllerInterface Members
-
+        
         public void HandleFileChange(FileChangeEvent fe)
         {
             
