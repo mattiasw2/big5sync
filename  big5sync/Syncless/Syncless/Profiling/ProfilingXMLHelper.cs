@@ -210,7 +210,7 @@ namespace Syncless.Profiling
                 return profile;
             }
             //TODO need to throw exception here =D
-            return new Profile("Unnamed Profile");
+            throw new FileNotFoundException();
         }
         public static Profile ProcessListing(Profile profile, XmlElement root)
         {
