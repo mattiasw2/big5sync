@@ -16,6 +16,7 @@ using Syncless.Core;
 using Syncless.Tagging;
 using System.Collections;
 using System.IO;
+using WPFAutoCompleteBox;
 
 namespace SynclessUI
 {
@@ -24,7 +25,7 @@ namespace SynclessUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IUIControllerInterface _Igui;
+        public IUIControllerInterface gui;
 
         private const string BI_DIRECTIONAL = "Bi-Dir..";
         private const string UNI_DIRECTIONAL = "Uni-Dir..";
@@ -55,8 +56,8 @@ namespace SynclessUI
         /// </summary>
         private void InitializeSyncless()
         {
-            _Igui = ServiceLocator.GUI;
-            if (_Igui.Initiate()) {
+            gui = ServiceLocator.GUI;
+            if (gui.Initiate()) {
                 InitializeTagInfoPanel();
                 InitializeTagList();
             }
@@ -82,7 +83,7 @@ namespace SynclessUI
 
         public void ViewTagInfo(string tagname)
         {
-            TagView tv = _Igui.GetTag(tagname);
+            TagView tv = gui.GetTag(tagname);
 
             TagTitle.Content = tagname;
 			// tag.direction not implemented yet
@@ -127,7 +128,7 @@ namespace SynclessUI
         /// </summary>
         public void InitializeTagList()
         {
-            List<string> taglist = _Igui.GetAllTags();
+            List<string> taglist = gui.GetAllTags();
 
             ListBoxTag.ItemsSource = taglist;
 
@@ -141,7 +142,7 @@ namespace SynclessUI
 
         public void SelectTag(string tagname)
         {
-            List<string> taglist = _Igui.GetAllTags();
+            List<string> taglist = gui.GetAllTags();
             int index = taglist.IndexOf(tagname);
             ListBoxTag.SelectedIndex = index;
             ViewTagInfo(tagname);
@@ -152,7 +153,7 @@ namespace SynclessUI
         /// </summary>
 		private void InitializeTagInfoPanel()
 		{
-            List<string> taglist = _Igui.GetAllTags();
+            List<string> taglist = gui.GetAllTags();
 
             if (taglist.Count == 0)
             {
@@ -210,7 +211,7 @@ namespace SynclessUI
         {
         	if(string.Compare((string) LblSyncMode.Content, "Manual") == 0)
 			{
-                if (_Igui.MonitorTag(_selectedTag, true))
+                if (gui.MonitorTag(_selectedTag, true))
                 {
                     AutoMode();
                 }
@@ -226,7 +227,7 @@ namespace SynclessUI
 			}
 			else
 			{
-                if (_Igui.MonitorTag(_selectedTag, false))
+                if (gui.MonitorTag(_selectedTag, false))
                 {
                     ManualMode();
                 }
@@ -258,7 +259,7 @@ namespace SynclessUI
 
         private void BtnSyncNow_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (!_Igui.StartManualSync(_selectedTag))
+            if (!gui.StartManualSync(_selectedTag))
             {
                 string messageBoxText = "' " + _selectedTag + " ' could not be synchronized.";
                 string caption = "Synchronization Error";
@@ -283,7 +284,7 @@ namespace SynclessUI
                 switch (result)
                 {
                     case MessageBoxResult.OK:
-                        bool success = _Igui.DeleteTag(_selectedTag);
+                        bool success = gui.DeleteTag(_selectedTag);
                         if(success)
                         {
                             InitializeTagList();
@@ -317,7 +318,7 @@ namespace SynclessUI
 		public bool CreateFileTag(string tagName) {
 			try
             {
-                TagView tv = _Igui.CreateFileTag(tagName);
+                TagView tv = gui.CreateFileTag(tagName);
 			    if(tv != null) {
                     InitializeTagList();
                     SelectTag(tagName);
@@ -341,7 +342,7 @@ namespace SynclessUI
 		public bool CreateFolderTag(string tagName) {
             try
             {
-                TagView tv = _Igui.CreateFolderTag(tagName);
+                TagView tv = gui.CreateFolderTag(tagName);
                 if (tv != null)
                 {
                     InitializeTagList();
@@ -374,8 +375,12 @@ namespace SynclessUI
 
 		private void btnTag_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-            if(_selectedTag != null) {
-                TagView tv = _Igui.GetTag(_selectedTag);
+			
+            TagWindow tw = new TagWindow(this);
+			
+			/*
+			if(_selectedTag != null) {
+                TagView tv = gui.GetTag(_selectedTag);
 
                 if(tv is FileTagView) {	
                     Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
@@ -390,7 +395,7 @@ namespace SynclessUI
 
                         if (fi.Exists)
                         {
-                            tv = _Igui.TagFile(_selectedTag, fi);
+                            tv = gui.TagFile(_selectedTag, fi);
                         }
                         else
                         {
@@ -414,7 +419,7 @@ namespace SynclessUI
 
                         if (di.Exists)
                         {
-                            tv = _Igui.TagFolder(_selectedTag, di);
+                            tv = gui.TagFolder(_selectedTag, di);
                         }
                         else
                         {
@@ -449,6 +454,7 @@ namespace SynclessUI
 
                 MessageBox.Show(messageBoxText, caption, button, icon);
             }
+			*/
         }
 
         public void CLI_CreateTag(string type, string path)
@@ -463,9 +469,9 @@ namespace SynclessUI
 
 		private void TxtBoxFilterTag_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
 		{
-            if (_Igui != null)
+            if (gui != null)
             {
-                List<string> taglist = _Igui.GetAllTags();
+                List<string> taglist = gui.GetAllTags();
                 List<string> filteredtaglist = new List<string>();
 
                 int initial = taglist.Count;
@@ -502,15 +508,15 @@ namespace SynclessUI
 
                     MessageBox.Show(messageBoxText, caption, button, icon);
 				} else {
-                    TagView tv = _Igui.GetTag((string)TagTitle.Content);
+                    TagView tv = gui.GetTag((string)TagTitle.Content);
 
                     if (tv is FileTagView)
                     {
-                        _Igui.UntagFile(tv.TagName, new FileInfo((string)ListTaggedPath.SelectedValue));
+                        gui.UntagFile(tv.TagName, new FileInfo((string)ListTaggedPath.SelectedValue));
                     }
                     else if (tv is FolderTagView)
                     {
-                        _Igui.UntagFolder(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
+                        gui.UntagFolder(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
                     }
 
                     SelectTag(tv.TagName);
@@ -522,7 +528,7 @@ namespace SynclessUI
 		{
             // Prepares the SLL for termination
 
-            if (_Igui.PrepareForTermination())
+            if (gui.PrepareForTermination())
             {
                 string messageBoxText = "Are you sure you want to exit Syncless?" +
                     "\nExiting Syncless will disable seamless synchronization.";
@@ -536,7 +542,7 @@ namespace SynclessUI
                 {
                     case MessageBoxResult.OK:
                         // Terminates the SLL and closes the UI
-                        _Igui.Terminate();
+                        gui.Terminate();
                         break;
                     case MessageBoxResult.Cancel:
                         e.Cancel = true;
