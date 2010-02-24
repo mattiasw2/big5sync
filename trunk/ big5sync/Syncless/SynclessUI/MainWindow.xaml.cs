@@ -50,8 +50,8 @@ namespace SynclessUI
                 this.WindowState = WindowState.Minimized;
                 SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(lststrCommandLineArgs, this);
             }
-
-			RegistryHelper.CreateRegistry(@"C:\testfolder\SynclessUI.exe");
+			
+			RegistryHelper.CreateRegistry(@System.Reflection.Assembly.GetExecutingAssembly().Location);
             //CLI_CreateTag(@"C:\testfolder");
         }
 
