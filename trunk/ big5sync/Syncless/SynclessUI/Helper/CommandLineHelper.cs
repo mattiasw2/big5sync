@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace SynclessUI.Helper
 {
-    public class CommandLineHelper
+    internal class CommandLineHelper
     {
         #region ProcessCommandLine
 

@@ -95,6 +95,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\RegistryHelper.cs" />
     <Compile Include="UntagWindow.xaml.cs">
       <DependentUpon>UntagWindow.xaml</DependentUpon>
     </Compile>

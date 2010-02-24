@@ -17,6 +17,7 @@ using Syncless.Tagging;
 using System.Collections;
 using System.IO;
 using WPFAutoCompleteBox;
+using SynclessUI.Helper;
 
 namespace SynclessUI
 {
@@ -50,8 +51,8 @@ namespace SynclessUI
                 SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(lststrCommandLineArgs, this);
             }
 
-			RegistryHelper.CreateRegistry(@"C:\SynclessUI");
-            CLI_CreateTag("C:\\testfolder");
+			RegistryHelper.CreateRegistry(@"C:\testfolder\SynclessUI.exe");
+            //CLI_CreateTag(@"C:\testfolder");
         }
 
         /// <summary>
@@ -547,7 +548,7 @@ namespace SynclessUI
                     case MessageBoxResult.OK:
                         // Terminates the SLL and closes the UI
                         gui.Terminate();
-						RegistryHelper.RemoveRegistry();
+						//RegistryHelper.RemoveRegistry();
                         break;
                     case MessageBoxResult.Cancel:
                         e.Cancel = true;
