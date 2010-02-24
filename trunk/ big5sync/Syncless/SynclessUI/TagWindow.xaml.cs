@@ -195,6 +195,7 @@ namespace SynclessUI
 						MessageBoxImage icon = MessageBoxImage.Error;
 		
 						MessageBox.Show(messageBoxText, caption, button, icon);
+                        this.Close();
 					}
 				} else {
 					string messageBoxText = "Please select a file/folder to tag.";
