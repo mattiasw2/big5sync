@@ -95,6 +95,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UntagWindow.xaml.cs">
+      <DependentUpon>UntagWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FolderBrowserDialogEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -136,6 +139,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="AppResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UntagWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

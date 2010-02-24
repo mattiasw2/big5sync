@@ -37,7 +37,6 @@ namespace SynclessUI
         }
         
         public MainWindow() {
-            
             List<string> lststrCommandLineArgs = System.Environment.GetCommandLineArgs().ToList();
             MinimizeToTray.Enable(this);
 
@@ -50,7 +49,10 @@ namespace SynclessUI
                 this.WindowState = WindowState.Minimized;
                 SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(lststrCommandLineArgs, this);
             }
+
+            CLI_CreateTag("C:\\testfolder");
         }
+
         /// <summary>
         ///     Starts up the system logic layer and initializes it
         /// </summary>
@@ -376,7 +378,7 @@ namespace SynclessUI
 		private void btnTag_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
 			
-            TagWindow tw = new TagWindow(this);
+            TagWindow tw = new TagWindow(this, "");
 			
 			/*
 			if(_selectedTag != null) {
@@ -457,14 +459,15 @@ namespace SynclessUI
 			*/
         }
 
-        public void CLI_CreateTag(string type, string path)
+        public void CLI_CreateTag(string clipath)
         {
-
+            TagWindow tw = new TagWindow(this, clipath);
+            tw.Focus();
         }
 
-        public void CLI_Untag(string type, string path)
+        public void CLI_Untag(string clipath, string type)
         {
-
+			
         }
 
 		private void TxtBoxFilterTag_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
