@@ -8,8 +8,7 @@ namespace Syncless.CompareAndSync
     public abstract class Result
     {
         private FileChangeType changeType;
-        private string from;
-        private string to = null;
+        private string from, to = null;
         private bool _isFolder;
 
         public FileChangeType ChangeType
