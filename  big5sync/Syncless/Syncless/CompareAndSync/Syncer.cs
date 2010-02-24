@@ -17,6 +17,9 @@ namespace Syncless.CompareAndSync
         public List<SyncResult> SyncFolder(List<string> paths, List<CompareResult> results)
         {
             List<SyncResult> syncResults = new List<SyncResult>();
+            SyncResult currResult = null;
+            List<string> origins = null;
+
             foreach (CompareResult result in results)
             {
                 switch (result.ChangeType)
@@ -24,35 +27,58 @@ namespace Syncless.CompareAndSync
                     case FileChangeType.Create:
                         if (result.IsFolder)
                         {
-                            syncResults.Add(CreateFolder(result.From, result.To));
+                            currResult = CreateFolder(result.From, result.To);
+                            syncResults.Add(currResult);
                         }
                         else
                         {
-                            syncResults.Add(CreateFile(result.From, result.To));
+                            currResult = CreateFile(result.From, result.To);
+                            syncResults.Add(currResult);
+                            if (currResult.Success)
+                            {
+                                //YC: Write XML
+                            }                            
                         }
                         break;
                     case FileChangeType.Delete:
                         if (result.IsFolder)
                         {
-                            syncResults.Add(DeleteFolder(result.From));
+                            currResult = DeleteFolder(result.From);
+                            syncResults.Add(currResult);
                         }
                         else
                         {
-                            syncResults.Add(DeleteFile(result.From));
+                            currResult = DeleteFile(result.From);
+                            syncResults.Add(currResult);
+                            if (currResult.Success)
+                            {
+                                //YC: Write XML
+                            } 
                         }                       
                         break;
                     case FileChangeType.Rename:
                         if (result.IsFolder)
                         {
-                            syncResults.Add(MoveFolder(result.From, result.To));
+                            currResult = MoveFolder(result.From, result.To);
+                            syncResults.Add(currResult);
                         }
                         else
                         {
-                            syncResults.Add(MoveFile(result.From, result.To));
+                            currResult = MoveFile(result.From, result.To);
+                            syncResults.Add(currResult);
+                            if (currResult.Success)
+                            {
+                                //YC: Write XML
+                            }
                         }
                         break;
                     case FileChangeType.Update:
-                        syncResults.Add(UpdateFile(result.From, result.To));
+                        currResult = UpdateFile(result.From, result.To);
+                        syncResults.Add(currResult);
+                        if (currResult.Success)
+                        {
+                            //YC: Write XML
+                        }
                         break;
                 }
             }

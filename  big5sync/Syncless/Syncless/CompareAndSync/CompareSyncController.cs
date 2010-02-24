@@ -75,5 +75,11 @@ namespace Syncless.CompareAndSync
             
         }
 
+        public List<string> GetOrigins(string path)
+        {
+            //TODO: ERIC :P
+            return null;
+        }
+
     }
 }

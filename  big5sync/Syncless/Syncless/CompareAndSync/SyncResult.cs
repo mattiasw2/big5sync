@@ -22,6 +22,14 @@ namespace Syncless.CompareAndSync
             base.To = to;
         }
 
+        public bool Success
+        {
+            get
+            {
+                return _success;
+            }
+        }
+
         //TODO: More constructors/properties/attributes that take in Log, etc.
     }
 }
