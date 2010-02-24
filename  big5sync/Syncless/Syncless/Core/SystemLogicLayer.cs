@@ -323,7 +323,6 @@ namespace Syncless.Core
         public bool Terminate()
         {
             DeviceWatcher.Instance.Terminate();
-            RegistryHelper.RemoveRegistry();
             return false;
         }
 
@@ -338,7 +337,6 @@ namespace Syncless.Core
             }
 
             DeviceWatcher.Instance.ToString();
-            RegistryHelper.CreateRegistry(@"C:\Syncless\SynclessUI");
             return true;
         }
 
