@@ -67,6 +67,12 @@ namespace Syncless.CompareAndSync
             return syncResults;
         }
 
+        public bool ModifyXml(string xmlPath , FileChangeType type , string changedFilePath)
+        {
+            XMLHelper.editXml(xmlPath, type, changedFilePath);
+            return false; //TEMP
+        }
+
         private SyncResult DeleteFolder(string from)
         {
             try
