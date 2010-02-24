@@ -363,7 +363,7 @@ namespace Syncless.CompareAndSync
             {
                 xpathExpr = getFileExpr("folder", filePath);
                 node = xmlDoc.SelectSingleNode(xpathExpr + "/files[" + "hash ='" +
-                    "7815696ECBF1C96E6894B779456D330E" + "' and last_created='" + "634025692898281250" + "']");
+                    "ENTER HASH CODE HERE" + "' and last_created='" + "ENTER LAST CREATED HERE" + "']");
 
                 if (node == null) //Maybe node does not exist in xml at all
                     return;
@@ -378,11 +378,11 @@ namespace Syncless.CompareAndSync
                 if (node != null) // Trying to create a node that existed 
                     return;
 
-                XmlText hashNode = xmlDoc.CreateTextNode("D1234567890");
+                XmlText hashNode = xmlDoc.CreateTextNode("ENTER HASH CODE HERE");
                 XmlText nameNode = xmlDoc.CreateTextNode(getFileString(filePath));
-                XmlText sizeNode = xmlDoc.CreateTextNode("10");
-                XmlText lastModifiedNode = xmlDoc.CreateTextNode("45678900987");
-                XmlText lastCreatedNode = xmlDoc.CreateTextNode("909090909090");
+                XmlText sizeNode = xmlDoc.CreateTextNode("ENTER SIZE HERE");
+                XmlText lastModifiedNode = xmlDoc.CreateTextNode("ENTER LAST MODIFIED HERE");
+                XmlText lastCreatedNode = xmlDoc.CreateTextNode("ENTER LAST CREATED HERE");
                 XmlElement fileElement = xmlDoc.CreateElement("files");
                 XmlElement nameElement = xmlDoc.CreateElement("name");
                 XmlElement sizeElement = xmlDoc.CreateElement("size");
@@ -409,10 +409,10 @@ namespace Syncless.CompareAndSync
             }
             else if (type.Equals(FileChangeType.Update))
             {
-                string hash = "222222222222222222222";
-                string size = "22";
-                string lastModified = "23456789";
-                string lastCreated = "00876542345678";
+                string hash = "ENTER HASH HERE";
+                string size = "ENTER SIZE HERE";
+                string lastModified = "ENTER LAST MODIFIED HERE";
+                string lastCreated = "ENTER LAST CREATED HERE";
 
                 xpathExpr = getFileExpr("files", filePath);
                 node = xmlDoc.SelectSingleNode(xpathExpr);
