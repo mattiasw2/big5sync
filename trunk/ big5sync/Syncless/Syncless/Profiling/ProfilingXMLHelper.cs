@@ -209,7 +209,8 @@ namespace Syncless.Profiling
                 profile = ProcessListing(profile, element);
                 return profile;
             }
-            return null;
+            //TODO need to throw exception here =D
+            return new Profile("Unnamed Profile");
         }
         public static Profile ProcessListing(Profile profile, XmlElement root)
         {
