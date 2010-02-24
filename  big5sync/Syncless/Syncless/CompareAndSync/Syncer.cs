@@ -18,7 +18,7 @@ namespace Syncless.CompareAndSync
         {
             List<SyncResult> syncResults = new List<SyncResult>();
             SyncResult currResult = null;
-            List<string> origins = null;
+            //List<string> origins = null;
 
             foreach (CompareResult result in results)
             {
