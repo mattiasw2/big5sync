@@ -30,15 +30,22 @@ namespace SynclessUI
 		
         private string _path;
         
-		public TagWindow(MainWindow main)
+		public TagWindow(MainWindow main, string clipath)
         {
             InitializeComponent();
 			
 			_main = main;
             _selectedtype = "";
 			ACBTagName.IsEnabled = false;
-            
-            _path = SelectFileFolder(true);
+
+            if (clipath == "")
+            {
+                _path = SelectFileFolder(true);
+            }
+            else
+            {
+                _path = clipath;
+            }
             ProcessPath(_path);
 
             if (cancelstatus)
@@ -66,7 +73,6 @@ namespace SynclessUI
 			dlg1.RootFolder = System.Environment.SpecialFolder.MyComputer;
 		
 			var result = dlg1.ShowDialog();
-		
 		
 			if (result == System.Windows.Forms.DialogResult.OK)
 			{

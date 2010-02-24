@@ -18,12 +18,12 @@ namespace SynclessUI.Helper
             if (flag.Equals("-TFile"))
             {
                 //Shell Context Menu clicked for Files ( Tag )
-                // main.CLI_CreateTag("file", path);
+                main.CLI_CreateTag(path);
             }
             else if (flag.Equals("-TFolder"))
             {
                 //Shell Context Menu clicked for Folders ( Tag )
-                // main.CLI_CreateTag("folder", path);
+                main.CLI_CreateTag(path);
             }
             else if (flag.Equals("-UTFolder"))
             {
