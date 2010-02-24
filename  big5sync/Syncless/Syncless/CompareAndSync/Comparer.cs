@@ -35,7 +35,7 @@ namespace Syncless.CompareAndSync
                 case FileChangeType.Create:
                     foreach (MonitorPathPair dest in syncRequest.Dest)
                     {
-                        results.Add(new CompareResult(syncRequest.ChangeType, syncRequest.OldPath.FullPath, dest.FullPath, syncRequest.IsFolder));
+                        results.Add(FolderCompareResult.NewFolderCompareResult(syncRequest.OldPath.FullPath, dest.FullPath));
                     }
                     break;
                 case FileChangeType.Delete:
@@ -48,7 +48,7 @@ namespace Syncless.CompareAndSync
                     {
                         string newDestPath = new DirectoryInfo(dest.FullPath).Parent.FullName;
                         Console.WriteLine(newDestPath);
-                        results.Add(new CompareResult(syncRequest.ChangeType, dest.FullPath, Path.Combine(newDestPath, folderName), syncRequest.IsFolder));
+                        results.Add(FolderCompareResult.RenameFolderCompareResult(dest.FullPath, Path.Combine(newDestPath, folderName)));
                     }
                     break;
             }
@@ -95,7 +95,7 @@ namespace Syncless.CompareAndSync
                     source = new CompareInfoObject(oldPath.FullName, oldPath.Name, oldPath.CreationTime.Ticks, oldPath.LastWriteTime.Ticks, oldPath.Length, CalculateMD5Hash(oldPath));
                     foreach (MonitorPathPair dest in syncRequest.Dest)
                     {
-                        results.Add(new CompareResult(syncRequest.ChangeType, syncRequest.OldPath.FullPath, dest.FullPath, syncRequest.IsFolder));
+                        results.Add(FileCompareResult.CreateFileCompareResult(syncRequest.OldPath.FullPath, dest.FullPath, CalculateMD5Hash(new FileInfo(syncRequest.OldPath.FullPath))));
                     }
                     break;
                 case FileChangeType.Update:
@@ -106,7 +106,7 @@ namespace Syncless.CompareAndSync
                         int compareResult = new FileContentCompare().Compare(source, dest);
                         if (compareResult != 0)
                         {
-                            results.Add(new CompareResult(syncRequest.ChangeType, syncRequest.OldPath.FullPath, dest.FullName, syncRequest.IsFolder));
+                            results.Add(FileCompareResult.UpdateFileCompareResult(syncRequest.OldPath.FullPath, dest.FullName, CalculateMD5Hash(new FileInfo(syncRequest.OldPath.FullPath))));
                         }
                     }
                     break;
@@ -114,7 +114,7 @@ namespace Syncless.CompareAndSync
                     dests = GetMonitorCompareObjects(syncRequest.Dest);
                     foreach (CompareInfoObject dest in dests)
                     {
-                        results.Add(new CompareResult(syncRequest.ChangeType, dest.FullName, syncRequest.IsFolder));
+                        results.Add(FileCompareResult.DeleteFileCompareResult(dest.FullName));
                     }
                     break;
                 case FileChangeType.Rename:
@@ -124,7 +124,7 @@ namespace Syncless.CompareAndSync
                     {
                         string newDestPath = new FileInfo(dest.FullPath).DirectoryName;
                         Console.WriteLine(newDestPath);
-                        results.Add(new CompareResult(syncRequest.ChangeType, dest.FullPath, Path.Combine(newDestPath, fileName), syncRequest.IsFolder));
+                        results.Add(FileCompareResult.RenameFileCompareResult(dest.FullPath, Path.Combine(newDestPath, fileName)));
                     }
                     break;
             }
@@ -167,30 +167,30 @@ namespace Syncless.CompareAndSync
                     if(CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo))
                         && !sourceInfo.Name.Equals(destInfo.Name)) // same content different name
                     {
-                        compareResultList.Add(new CompareResult(FileChangeType.Rename, sourceInfo.FullName,
-                            destInfo.FullName, false));
+                        compareResultList.Add(FileCompareResult.RenameFileCompareResult(sourceInfo.FullName,
+                            destInfo.FullName));
                     }    
                     //different hash , but same name and creation time
                     else if (sourceInfo.Name.Equals(destInfo.Name) && sourceInfo.CreationTime.Ticks == destInfo.CreationTime.Ticks
                       && !CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo)))
                     {
-
-                        compareResultList.Add(new CompareResult(FileChangeType.Update, sourceInfo.FullName,
-                            destInfo.FullName, false));
+                        compareResultList.Add(FileCompareResult.UpdateFileCompareResult(sourceInfo.FullName,
+                            destInfo.FullName, (CalculateMD5Hash(sourceInfo))));
                     }
+                    /*
                     else if (!(CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo)) &&
                         sourceInfo.CreationTime.Ticks == destInfo.CreationTime.Ticks && sourceInfo.Name.Equals(destInfo.Name)))
                     {
-                        compareResultList.Add(new CompareResult(FileChangeType.Create, sourceInfo.FullName,
-                            destInfo.FullName, false));
+                        compareResultList.Add(FileCompareResult(FileChangeType.Create, sourceInfo.FullName,
+                            destInfo.FullName, false, (CalculateMD5Hash(sourceInfo))));
                     }
-                        // same file with same content  NONE
+                    /*
                     else if (CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo)) &&
                         sourceInfo.Name.Equals(destInfo.Name))
                     {
                         compareResultList.Add(new CompareResult(FileChangeType.None, sourceInfo.FullName,
                             destInfo.FullName, false));
-                    }
+                    }*/
 
                 }
             }
@@ -818,7 +818,7 @@ namespace Syncless.CompareAndSync
                 {
                     foreach (string dest in createTable[sourceKey])
                     {
-                        results.Add(new CompareResult(FileChangeType.Create, sourceKey.FullName, dest, false));
+                        results.Add(FileCompareResult.CreateFileCompareResult(sourceKey.FullName, dest, sourceKey.MD5Hash));
                     }
                 }
             }
@@ -829,7 +829,7 @@ namespace Syncless.CompareAndSync
             {
                 foreach (string dest in updateTable[sourceKey])
                 {
-                    results.Add(new CompareResult(FileChangeType.Update, sourceKey.FullName, dest, false));
+                    results.Add(FileCompareResult.UpdateFileCompareResult(sourceKey.FullName, dest, sourceKey.MD5Hash));
                 }
             }
 
@@ -841,7 +841,7 @@ namespace Syncless.CompareAndSync
                 {
                     foreach (string path in paths)
                     {
-                        results.Add(new CompareResult(FileChangeType.Rename, Path.Combine(path, sourceKey), Path.Combine(path, rename[0]), false));
+                        results.Add(FileCompareResult.RenameFileCompareResult(Path.Combine(path, sourceKey), Path.Combine(path, rename[0])));
                     }
                 }
                 // TODO: Handle rename conflicts in future
@@ -849,7 +849,7 @@ namespace Syncless.CompareAndSync
                 {
                     foreach (string path in paths)
                     {
-                        results.Add(new CompareResult(FileChangeType.Rename, Path.Combine(path, sourceKey), Path.Combine(path, rename[0]), false));
+                        results.Add(FileCompareResult.RenameFileCompareResult(Path.Combine(path, sourceKey), Path.Combine(path, rename[0])));
                     }
                 }
             }
@@ -876,7 +876,7 @@ namespace Syncless.CompareAndSync
                     foreach (string path in paths)
                     {
                         deletePath = Path.Combine(path, deleteItem);
-                        results.Add(new CompareResult(FileChangeType.Delete, deletePath, false));
+                        results.Add(FileCompareResult.DeleteFileCompareResult(deletePath));
                     }
                 }
             }

@@ -5,19 +5,19 @@ using System.Text;
 
 namespace Syncless.CompareAndSync
 {
-    public class CompareResult : Result
+    public abstract class CompareResult : Result
     {
-        public CompareResult(FileChangeType changeType, string from, bool isFolder)
-        {
-            base.ChangeType = changeType;
-            base.From = from;
-            base.IsFolder = isFolder;
-        }
 
-        public CompareResult(FileChangeType changeType, string from, string to, bool isFolder) :
-            this(changeType, from, isFolder)
+        //Files: Used for deletions. Folders: Used for deletio
+        public CompareResult(FileChangeType changeType, string from) :
+            base(changeType, from)
         {
-            base.To = to;
+        }
+        
+        //Files: Used for rename
+        public CompareResult(FileChangeType changeType, string from, string to) :
+            base(changeType, from, to)
+        {
         }
 
         public override string ToString()

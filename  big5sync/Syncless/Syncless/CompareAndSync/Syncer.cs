@@ -18,63 +18,42 @@ namespace Syncless.CompareAndSync
         {
             List<SyncResult> syncResults = new List<SyncResult>();
             SyncResult currResult = null;
-            //List<string> origins = null;
 
             foreach (CompareResult result in results)
             {
                 switch (result.ChangeType)
                 {
                     case FileChangeType.Create:
-                        if (result.IsFolder)
+                        currResult = Create(result);
+                        syncResults.Add(currResult);
+
+                        if (currResult.Success)
                         {
-                            currResult = CreateFolder(result.From, result.To);
-                            syncResults.Add(currResult);
-                        }
-                        else
-                        {
-                            currResult = CreateFile(result.From, result.To);
-                            syncResults.Add(currResult);
-                            if (currResult.Success)
-                            {
-                                //YC: Write XML
-                            }                            
-                        }
+                            //YC: Write XML
+                        }                           
                         break;
                     case FileChangeType.Delete:
-                        if (result.IsFolder)
+                        currResult = Delete(result);
+                        syncResults.Add(currResult);
+
+                        if (currResult.Success)
                         {
-                            currResult = DeleteFolder(result.From);
-                            syncResults.Add(currResult);
-                        }
-                        else
-                        {
-                            currResult = DeleteFile(result.From);
-                            syncResults.Add(currResult);
-                            if (currResult.Success)
-                            {
-                                //YC: Write XML
-                            } 
-                        }                       
+                            //YC: Write XML
+                        }                                             
                         break;
                     case FileChangeType.Rename:
-                        if (result.IsFolder)
+                        currResult = Move(result);
+                        syncResults.Add(currResult);
+
+                        if (currResult.Success)
                         {
-                            currResult = MoveFolder(result.From, result.To);
-                            syncResults.Add(currResult);
-                        }
-                        else
-                        {
-                            currResult = MoveFile(result.From, result.To);
-                            syncResults.Add(currResult);
-                            if (currResult.Success)
-                            {
-                                //YC: Write XML
-                            }
-                        }
+                            //YC: Write XML
+                        }                        
                         break;
                     case FileChangeType.Update:
-                        currResult = UpdateFile(result.From, result.To);
+                        currResult = Update(result);
                         syncResults.Add(currResult);
+
                         if (currResult.Success)
                         {
                             //YC: Write XML
@@ -99,37 +78,23 @@ namespace Syncless.CompareAndSync
             return false; //TEMP
         }
 
-        private SyncResult DeleteFolder(string from)
+        #region Create
+
+        private SyncResult Create(CompareResult result)
         {
-            try
+            if (result is FileCompareResult)
             {
-                Directory.Delete(from);
-                return new SyncResult(FileChangeType.Delete, from, true);
+                return CreateFile(result.From, result.To);
             }
-            catch (Exception)
+            else
             {
-                return new SyncResult(FileChangeType.Delete, from, false);
+                return CreateFolder(result.From, result.To);
             }
         }
 
-        private SyncResult MoveFolder(string from, string to)
+        private SyncResult CreateFile(string from, string to)
         {
-            DirectoryInfo source = new DirectoryInfo(from);
-            DirectoryInfo target = new DirectoryInfo(to);
-
-            try
-            {
-                Directory.Move(from, to);
-                return new SyncResult(FileChangeType.Rename, from, to, true);
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("RENAME FROM: " + from);
-                Console.WriteLine("RENAME TO: " + to);
-                return new SyncResult(FileChangeType.Rename, from, to, false);
-                
-
-            }
+            return CopyFile(from, to, FileChangeType.Create);
         }
 
         private SyncResult CreateFolder(string from, string to)
@@ -142,8 +107,6 @@ namespace Syncless.CompareAndSync
                 Directory.CreateDirectory(target.FullName);
             }
 
-            Console.WriteLine("YCYCYC: CREATE FOLDER");
-
             try
             {
                 CopyDirectory(from, to, true);
@@ -155,16 +118,19 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        private SyncResult DeleteFile(string from)
+        #endregion
+
+        #region Move
+
+        private SyncResult Move(CompareResult result)
         {
-            try
+            if (result is FileCompareResult)
             {
-                File.Delete(from);
-                return new SyncResult(FileChangeType.Delete, from, true);
+                return MoveFile(result.From, result.To);
             }
-            catch (Exception)
+            else
             {
-                return new SyncResult(FileChangeType.Delete, from, false);
+                return MoveFolder(result.From, result.To);
             }
         }
 
@@ -191,6 +157,89 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        private SyncResult MoveFolder(string from, string to)
+        {
+            DirectoryInfo source = new DirectoryInfo(from);
+            DirectoryInfo target = new DirectoryInfo(to);
+
+            try
+            {
+                Directory.Move(from, to);
+                return new SyncResult(FileChangeType.Rename, from, to, true);
+            }
+            catch (Exception)
+            {
+                return new SyncResult(FileChangeType.Rename, from, to, false);
+            }
+        }
+
+        #endregion
+
+        #region Delete
+
+        private SyncResult Delete(CompareResult result)
+        {
+            if (result is FileCompareResult)
+            {
+                return DeleteFile(result.From);
+            }
+            else
+            {
+                return DeleteFolder(result.From);
+            }
+        }
+
+        private SyncResult DeleteFile(string from)
+        {
+            try
+            {
+                File.Delete(from);
+                return new SyncResult(FileChangeType.Delete, from, true);
+            }
+            catch (Exception)
+            {
+                return new SyncResult(FileChangeType.Delete, from, false);
+            }
+        }
+
+        private SyncResult DeleteFolder(string from)
+        {
+            try
+            {
+                Directory.Delete(from);
+                return new SyncResult(FileChangeType.Delete, from, true);
+            }
+            catch (Exception)
+            {
+                return new SyncResult(FileChangeType.Delete, from, false);
+            }
+        }
+        
+        #endregion
+
+        #region Update
+
+        private SyncResult Update(CompareResult result)
+        {
+            if (result is FileCompareResult)
+            {
+                return UpdateFile(result.From, result.To);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private SyncResult UpdateFile(string from, string to)
+        {
+            return CopyFile(from, to, FileChangeType.Update);
+        }
+
+        #endregion
+
+        #region Helper Methods
+
         private SyncResult CopyFile(string from, string to, FileChangeType changeType)
         {
             FileInfo source = new FileInfo(from);
@@ -214,29 +263,6 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        private SyncResult CreateFile(string from, string to)
-        {
-            return CopyFile(from, to, FileChangeType.Create);
-        }
-
-        private SyncResult UpdateFile(string from, string to)
-        {
-            return CopyFile(from, to, FileChangeType.Update);
-        }
-
-        private void RemoveEmptyFolders(string path)
-        {
-            DirectoryInfo[] directories = new DirectoryInfo(path).GetDirectories("*", SearchOption.AllDirectories);
-            foreach (DirectoryInfo dInfo in directories)
-            {
-                FileInfo[] files = dInfo.GetFiles();
-                if (files.Length == 0)
-                {
-                    dInfo.Delete();
-                }
-            }
-        }
-
         public static string CopyDirectory(string source, string destination, bool overwrite)
         {
             DirectoryInfo sourceInfo = new DirectoryInfo(source);
@@ -254,9 +280,25 @@ namespace Syncless.CompareAndSync
             FileInfo[] fileInfos = sourceInfo.GetFiles();
             foreach (FileInfo fileInfo in fileInfos)
             {
-                fileInfo.CopyTo(destination + "\\" + fileInfo.Name, overwrite);                
+                fileInfo.CopyTo(destination + "\\" + fileInfo.Name, overwrite);
             }
             return destinationInfo.FullName;
         }
+
+        private void RemoveEmptyFolders(string path)
+        {
+            DirectoryInfo[] directories = new DirectoryInfo(path).GetDirectories("*", SearchOption.AllDirectories);
+            foreach (DirectoryInfo dInfo in directories)
+            {
+                FileInfo[] files = dInfo.GetFiles();
+                if (files.Length == 0)
+                {
+                    dInfo.Delete();
+                }
+            }
+        }
+
+        #endregion
+
     }
 }

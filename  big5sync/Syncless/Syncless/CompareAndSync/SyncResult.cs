@@ -9,15 +9,14 @@ namespace Syncless.CompareAndSync
     {
         bool _success;
 
-        public SyncResult(FileChangeType changeType, string from, bool success)
+        public SyncResult(FileChangeType changeType, string from, bool success) :
+            base(changeType, from)
         {
-            base.ChangeType = changeType;
-            base.From = from;
             _success = success;
         }
 
         public SyncResult(FileChangeType changeType, string from, string to, bool success) :
-            this (changeType, from, success)
+            base(changeType, from, to)
         {
             base.To = to;
         }
