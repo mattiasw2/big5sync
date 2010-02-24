@@ -30,14 +30,7 @@ namespace SynclessUI
 
         public void ProcessArgs(string[] args, bool firstInstance)
         {
-            if (firstInstance)
-            {
-                main.ProcessCommandLine(args);
-            }
-            else
-            {
-                main.ProcessCommandLine1(args);
-            }
+            main.ProcessCommandLine(args, firstInstance);
         }
     }
 }
