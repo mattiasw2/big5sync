@@ -11,13 +11,13 @@ namespace Syncless.Core
     {
         List<string> GetAllTags();
 
-        //List<string> GetAllFileTags();
+        List<string> GetAllFileTags();
 
-        //List<string> GetAllFolderTags();
+        List<string> GetAllFolderTags();
 
-        //List<string> GetTagsByFile(FileInfo file);
+        List<string> GetTagsByFile(FileInfo file);
 
-        //List<string> GetTagsByFolder(DirectoryInfo folder);
+        List<string> GetTagsByFolder(DirectoryInfo folder);
 
         TagView GetTag(String tagname);
 

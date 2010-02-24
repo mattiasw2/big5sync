@@ -9,9 +9,10 @@ using Syncless.Monitor;
 using Syncless.Profiling;
 using Syncless.Logging;
 using System.Diagnostics;
+using Syncless.Helper;
 namespace Syncless.Core
 {
-    internal class SystemLogicLayer :IUIControllerInterface,IMonitorControllerInterface
+    internal class SystemLogicLayer :IUIControllerInterface,IMonitorControllerInterface,ICommandLineControllerInterface
     {
         private static SystemLogicLayer _instance;
         
@@ -186,16 +187,7 @@ namespace Syncless.Core
 
         #region IUIControllerInterface Members
 
-        public List<string> GetAllTags()
-        {
-            List<Tag> tagList= TaggingLayer.Instance.AllTagList;
-            List<string> tagNames = new List<string>();
-            foreach(Tag t in tagList){
-                tagNames.Add(t.TagName);
-            }
-            tagNames.Sort();
-            return tagNames;
-        }
+        
         public TagView GetTag(string tagname)
         {
             Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
@@ -331,6 +323,7 @@ namespace Syncless.Core
         public bool Terminate()
         {
             DeviceWatcher.Instance.Terminate();
+            RegistryHelper.RemoveRegistry();
             return false;
         }
 
@@ -345,6 +338,7 @@ namespace Syncless.Core
             }
 
             DeviceWatcher.Instance.ToString();
+            RegistryHelper.CreateRegistry(@"C:\Syncless\SynclessUI");
             return true;
         }
 
@@ -368,6 +362,64 @@ namespace Syncless.Core
 
         #endregion
 
+        public List<string> GetAllFileTags()
+        {
+            List<FileTag> fileTagList = TaggingLayer.Instance.FileTagList;
+            List<string> tagNames = new List<string>();
+            foreach (Tag t in fileTagList)
+            {
+                tagNames.Add(t.TagName);
+            }
+            tagNames.Sort();
+            return tagNames;
+        }
+
+        public List<string> GetAllFolderTags()
+        {
+            List<FolderTag> folderTagList = TaggingLayer.Instance.FolderTagList;
+            List<string> tagNames = new List<string>();
+            foreach (Tag t in folderTagList)
+            {
+                tagNames.Add(t.TagName);
+            }
+            tagNames.Sort();
+            return tagNames;
+        }
+
+        public List<string> GetTagsByFile(FileInfo file)
+        {
+            List<FileTag> tagList = TaggingLayer.Instance.RetrieveFileTagByPath(file.FullName);
+            List<string> tagNames = new List<string>();
+            foreach (Tag t in tagList)
+            {
+                tagNames.Add(t.TagName);
+            }
+            tagNames.Sort();
+            return tagNames;
+        }
+
+        public List<string> GetTagsByFolder(DirectoryInfo folder)
+        {
+            List<FolderTag> tagList = TaggingLayer.Instance.RetrieveFolderTagByPath(folder.FullName);
+            List<string> tagNames = new List<string>();
+            foreach (Tag t in tagList)
+            {
+                tagNames.Add(t.TagName);
+            }
+            tagNames.Sort();
+            return tagNames;
+        }
+        public List<string> GetAllTags()
+        {
+            List<Tag> tagList = TaggingLayer.Instance.AllTagList;
+            List<string> tagNames = new List<string>();
+            foreach (Tag t in tagList)
+            {
+                tagNames.Add(t.TagName);
+            }
+            tagNames.Sort();
+            return tagNames;
+        }
         private FolderTagView ConvertToFolderTagView(FolderTag t)
         {
             FolderTagView view = new FolderTagView(t.TagName, t.LastUpdated);
@@ -387,6 +439,13 @@ namespace Syncless.Core
             return view;
         }
 
+
+
+        #region IUIControllerInterface Members
+
+
         
+
+        #endregion
     }
 }
