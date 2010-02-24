@@ -228,6 +228,13 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        public static bool editXml(string xmlPath, FileChangeType type, string filePath)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(xmlPath);
+            return false; //TEMP
+        }
+
 
         // STUB
         // PATHS TO BE CONFIRMED
@@ -278,6 +285,176 @@ namespace Syncless.CompareAndSync
             writer.Flush();
             writer.Close();
         }
+
+        // new methods for edit xml
+        public static string getFileExpr(string type, string filePath)
+        {
+            Debug.Assert(!filePath.Equals(""));
+            string[] splitWords = filePath.Split('\\');
+
+            string finalExpr = "/meta-data";
+
+            if (splitWords.Length <= 1 && type.Equals("files"))
+                return finalExpr + "/files" + "[name='" + filePath + "']";
+            else if (splitWords.Length <= 1 && type.Equals("folder"))
+                return finalExpr;
+
+            for (int i = 0; i < splitWords.Length; i++)
+            {
+                if (splitWords[i].Equals(""))
+                    continue;
+
+                if (type.Equals("files"))
+                {
+                    if (i == splitWords.Length - 1)
+                    {
+                        finalExpr = finalExpr + "/files" + "[name='" + splitWords[i] + "']";
+                    }
+                    else
+                    {
+                        finalExpr = finalExpr + "/folder" + "[name_of_folder='" + splitWords[i] + "']";
+                    }
+                }
+                else
+                {
+                    if (i == splitWords.Length - 1)
+                        break;
+                    finalExpr = finalExpr + "/folder" + "[name_of_folder='" + splitWords[i] + "']";
+                }
+
+            }
+
+            return finalExpr;
+        }
+
+        private static string getFolderString(string filePath)
+        {
+            string[] splitWords = filePath.Split('\\');
+            string folderPath = "";
+            for (int i = 0; i < splitWords.Length; i++)
+            {
+                if (i == splitWords.Length - 1)
+                    break;
+                folderPath = folderPath + splitWords[i];
+            }
+
+            return folderPath;
+        }
+
+        private static string getFileString(string path)
+        {
+            Debug.Assert(!path.Equals(""));
+            string[] splitWords = path.Split('\\');
+            return splitWords[splitWords.Length - 1];
+        }
+
+        public static void EditXml(string xmlpath, FileChangeType type, string filePath)
+        {
+            Debug.Assert(File.Exists(xmlpath));
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(xmlpath);
+            XmlNode node = null;
+            string xpathExpr = "";
+
+            if (type.Equals(FileChangeType.Delete))
+            {
+                xpathExpr = getFileExpr("files", filePath);
+                node = xmlDoc.SelectSingleNode(xpathExpr);
+
+                if (node == null) //Maybe node does not exist in xml at all
+                    return;
+
+                node.ParentNode.RemoveChild(node);
+                xmlDoc.Save(xmlpath);
+            }
+            else if (type.Equals(FileChangeType.Rename))
+            {
+                xpathExpr = getFileExpr("folder", filePath);
+                node = xmlDoc.SelectSingleNode(xpathExpr + "/files[" + "hash ='" +
+                    "7815696ECBF1C96E6894B779456D330E" + "' and last_created='" + "634025692898281250" + "']");
+
+                if (node == null) //Maybe node does not exist in xml at all
+                    return;
+
+                node.FirstChild.InnerText = getFileString(filePath);
+                xmlDoc.Save(xmlpath);
+            }
+            else if (type.Equals(FileChangeType.Create))
+            {
+                xpathExpr = getFileExpr("files", filePath);
+                node = xmlDoc.SelectSingleNode(xpathExpr);
+                if (node != null) // Trying to create a node that existed 
+                    return;
+
+                XmlText hashNode = xmlDoc.CreateTextNode("D1234567890");
+                XmlText nameNode = xmlDoc.CreateTextNode(getFileString(filePath));
+                XmlText sizeNode = xmlDoc.CreateTextNode("10");
+                XmlText lastModifiedNode = xmlDoc.CreateTextNode("45678900987");
+                XmlText lastCreatedNode = xmlDoc.CreateTextNode("909090909090");
+                XmlElement fileElement = xmlDoc.CreateElement("files");
+                XmlElement nameElement = xmlDoc.CreateElement("name");
+                XmlElement sizeElement = xmlDoc.CreateElement("size");
+                XmlElement hashElement = xmlDoc.CreateElement("hash");
+                XmlElement lastModifiedElement = xmlDoc.CreateElement("last_modified");
+                XmlElement lastCreatedElement = xmlDoc.CreateElement("last_created");
+
+                xpathExpr = getFileExpr("folder", filePath);
+                node = xmlDoc.SelectSingleNode(xpathExpr);
+                nameElement.AppendChild(nameNode);
+                sizeElement.AppendChild(sizeNode);
+                hashElement.AppendChild(hashNode);
+                lastModifiedElement.AppendChild(lastModifiedNode);
+                lastCreatedElement.AppendChild(lastCreatedNode);
+
+                fileElement.AppendChild(nameElement);
+                fileElement.AppendChild(sizeElement);
+                fileElement.AppendChild(hashElement);
+                fileElement.AppendChild(lastModifiedElement);
+                fileElement.AppendChild(lastCreatedElement);
+
+                node.AppendChild(fileElement);
+                xmlDoc.Save(xmlpath);
+            }
+            else if (type.Equals(FileChangeType.Update))
+            {
+                string hash = "222222222222222222222";
+                string size = "22";
+                string lastModified = "23456789";
+                string lastCreated = "00876542345678";
+
+                xpathExpr = getFileExpr("files", filePath);
+                node = xmlDoc.SelectSingleNode(xpathExpr);
+
+                if (node == null) //Maybe node does not exist in xml at all
+                    return;
+
+                XmlNodeList childNodeList = node.ChildNodes;
+                for (int i = 0; i < childNodeList.Count; i++)
+                {
+                    XmlNode nodes = childNodeList[i];
+                    if (nodes.Name.Equals("size"))
+                    {
+                        nodes.InnerText = size;
+                    }
+                    else if (nodes.Name.Equals("hash"))
+                    {
+                        nodes.InnerText = hash;
+                    }
+                    else if (nodes.Name.Equals("last_modified"))
+                    {
+                        nodes.InnerText = lastModified;
+                    }
+                    else if (nodes.Name.Equals("last_created"))
+                    {
+                        nodes.InnerText = lastCreated;
+                    }
+                }
+
+                xmlDoc.Save(xmlpath);
+
+            }
+        }
+
 
     }
 }
