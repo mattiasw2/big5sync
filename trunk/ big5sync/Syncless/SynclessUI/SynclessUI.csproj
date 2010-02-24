@@ -15,7 +15,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <ApplicationIcon>Icons\logo.ico</ApplicationIcon>
-    <StartupObject>Syncless.App</StartupObject>
+    <StartupObject>SynclessUI.SingleInstanceManager</StartupObject>
     <ExpressionBlendVersion>3.0.1927.0</ExpressionBlendVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <ManifestCertificateThumbprint>A1F8B7EB84F6843F95713940A756B8627F84BEAD</ManifestCertificateThumbprint>
@@ -55,6 +55,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -85,17 +86,9 @@
     <Reference Include="WPFAutoCompleteBox.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="SynclessApplication.cs" />
     <Compile Include="Helper\RegistryHelper.cs" />
+    <Compile Include="SingleInstanceManager.cs" />
     <Compile Include="UntagWindow.xaml.cs">
       <DependentUpon>UntagWindow.xaml</DependentUpon>
     </Compile>
@@ -206,6 +199,9 @@
       <Project>{79C1CBE7-297A-4820-A2D9-BE3507B8EF19}</Project>
       <Name>Syncless</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

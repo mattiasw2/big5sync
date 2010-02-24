@@ -5,10 +5,15 @@
     <_SolutionProjectCacheVersion>3.5</_SolutionProjectCacheVersion>
   </PropertyGroup>
   <ItemGroup>
+    <_SolutionProjectProjects Include="CleanUrRegistry\CleanUrRegistry.csproj" />
     <_SolutionProjectProjects Include="SynclessUI\SynclessUI.csproj" />
     <_SolutionProjectProjects Include="Syncless\Syncless.csproj" />
   </ItemGroup>
   <ItemGroup Condition=" ('$(Configuration)' == 'Debug') and ('$(Platform)' == 'Any CPU') ">
+    <BuildLevel0 Include="CleanUrRegistry\CleanUrRegistry.csproj">
+      <Configuration>Debug</Configuration>
+      <Platform>AnyCPU</Platform>
+    </BuildLevel0>
     <BuildLevel0 Include="Syncless\Syncless.csproj">
       <Configuration>Debug</Configuration>
       <Platform>AnyCPU</Platform>
@@ -19,6 +24,10 @@
     </BuildLevel1>
   </ItemGroup>
   <ItemGroup Condition=" ('$(Configuration)' == 'Release') and ('$(Platform)' == 'Any CPU') ">
+    <BuildLevel0 Include="CleanUrRegistry\CleanUrRegistry.csproj">
+      <Configuration>Release</Configuration>
+      <Platform>AnyCPU</Platform>
+    </BuildLevel0>
     <BuildLevel0 Include="Syncless\Syncless.csproj">
       <Configuration>Release</Configuration>
       <Platform>AnyCPU</Platform>
@@ -55,6 +64,7 @@
       <SolutionConfiguration xmlns="">
         <ProjectConfiguration Project="{79C1CBE7-297A-4820-A2D9-BE3507B8EF19}">Debug|AnyCPU</ProjectConfiguration>
         <ProjectConfiguration Project="{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}">Debug|AnyCPU</ProjectConfiguration>
+        <ProjectConfiguration Project="{8D3343EE-E901-43BB-A609-BEFF3A236AC4}">Debug|AnyCPU</ProjectConfiguration>
       </SolutionConfiguration>
     </CurrentSolutionConfigurationContents>
   </PropertyGroup>
@@ -63,6 +73,7 @@
       <SolutionConfiguration xmlns="">
         <ProjectConfiguration Project="{79C1CBE7-297A-4820-A2D9-BE3507B8EF19}">Release|AnyCPU</ProjectConfiguration>
         <ProjectConfiguration Project="{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}">Release|AnyCPU</ProjectConfiguration>
+        <ProjectConfiguration Project="{8D3343EE-E901-43BB-A609-BEFF3A236AC4}">Release|AnyCPU</ProjectConfiguration>
       </SolutionConfiguration>
     </CurrentSolutionConfigurationContents>
   </PropertyGroup>
@@ -121,6 +132,30 @@
   <Target Name="SynclessUI:Publish" DependsOnTargets="Syncless:Publish" Condition="'$(CurrentSolutionConfigurationContents)' != ''">
     <MSBuild Projects="SynclessUI\SynclessUI.csproj" Targets="Publish" Properties="Configuration=Debug; Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" ToolsVersion="$(ProjectToolsVersion)" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" UseResultsCache="$(UseResultsCache)" Condition=" ('$(Configuration)' == 'Debug') and ('$(Platform)' == 'Any CPU') " />
     <MSBuild Projects="SynclessUI\SynclessUI.csproj" Targets="Publish" Properties="Configuration=Release; Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" ToolsVersion="$(ProjectToolsVersion)" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" UseResultsCache="$(UseResultsCache)" Condition=" ('$(Configuration)' == 'Release') and ('$(Platform)' == 'Any CPU') " />
+  </Target>
+  <Target Name="CleanUrRegistry" Condition="'$(CurrentSolutionConfigurationContents)' != ''" Outputs="@(CleanUrRegistryBuildOutput)">
+    <MSBuild Projects="CleanUrRegistry\CleanUrRegistry.csproj" Properties="Configuration=Debug; Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" ToolsVersion="$(ProjectToolsVersion)" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" UseResultsCache="$(UseResultsCache)" Condition=" ('$(Configuration)' == 'Debug') and ('$(Platform)' == 'Any CPU') ">
+      <Output TaskParameter="TargetOutputs" ItemName="CleanUrRegistryBuildOutput" />
+    </MSBuild>
+    <MSBuild Projects="CleanUrRegistry\CleanUrRegistry.csproj" Properties="Configuration=Release; Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" ToolsVersion="$(ProjectToolsVersion)" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" UseResultsCache="$(UseResultsCache)" Condition=" ('$(Configuration)' == 'Release') and ('$(Platform)' == 'Any CPU') ">
+      <Output TaskParameter="TargetOutputs" ItemName="CleanUrRegistryBuildOutput" />
+    </MSBuild>
+  </Target>
+  <Target Name="CleanUrRegistry:Clean" Condition="'$(CurrentSolutionConfigurationContents)' != ''">
+    <MSBuild Projects="CleanUrRegistry\CleanUrRegistry.csproj" Targets="Clean" Properties="Configuration=Debug; Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" ToolsVersion="$(ProjectToolsVersion)" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" UseResultsCache="$(UseResultsCache)" Condition=" ('$(Configuration)' == 'Debug') and ('$(Platform)' == 'Any CPU') " />
+    <MSBuild Projects="CleanUrRegistry\CleanUrRegistry.csproj" Targets="Clean" Properties="Configuration=Release; Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" ToolsVersion="$(ProjectToolsVersion)" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" UseResultsCache="$(UseResultsCache)" Condition=" ('$(Configuration)' == 'Release') and ('$(Platform)' == 'Any CPU') " />
+  </Target>
+  <Target Name="CleanUrRegistry:Rebuild" Condition="'$(CurrentSolutionConfigurationContents)' != ''" Outputs="@(CleanUrRegistryBuildOutput)">
+    <MSBuild Projects="CleanUrRegistry\CleanUrRegistry.csproj" Targets="Rebuild" Properties="Configuration=Debug; Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" ToolsVersion="$(ProjectToolsVersion)" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" UseResultsCache="$(UseResultsCache)" Condition=" ('$(Configuration)' == 'Debug') and ('$(Platform)' == 'Any CPU') ">
+      <Output TaskParameter="TargetOutputs" ItemName="CleanUrRegistryBuildOutput" />
+    </MSBuild>
+    <MSBuild Projects="CleanUrRegistry\CleanUrRegistry.csproj" Targets="Rebuild" Properties="Configuration=Release; Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" ToolsVersion="$(ProjectToolsVersion)" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" UseResultsCache="$(UseResultsCache)" Condition=" ('$(Configuration)' == 'Release') and ('$(Platform)' == 'Any CPU') ">
+      <Output TaskParameter="TargetOutputs" ItemName="CleanUrRegistryBuildOutput" />
+    </MSBuild>
+  </Target>
+  <Target Name="CleanUrRegistry:Publish" Condition="'$(CurrentSolutionConfigurationContents)' != ''">
+    <MSBuild Projects="CleanUrRegistry\CleanUrRegistry.csproj" Targets="Publish" Properties="Configuration=Debug; Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" ToolsVersion="$(ProjectToolsVersion)" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" UseResultsCache="$(UseResultsCache)" Condition=" ('$(Configuration)' == 'Debug') and ('$(Platform)' == 'Any CPU') " />
+    <MSBuild Projects="CleanUrRegistry\CleanUrRegistry.csproj" Targets="Publish" Properties="Configuration=Release; Platform=AnyCPU; BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" ToolsVersion="$(ProjectToolsVersion)" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" UseResultsCache="$(UseResultsCache)" Condition=" ('$(Configuration)' == 'Release') and ('$(Platform)' == 'Any CPU') " />
   </Target>
   <Target Name="Build" Condition="'$(CurrentSolutionConfigurationContents)' != ''" Outputs="@(CollectedBuildOutput)">
     <MSBuild Condition="@(BuildLevel0) != ''" Projects="@(BuildLevel0)" Properties="Configuration=%(Configuration); Platform=%(Platform); BuildingSolutionFile=true; CurrentSolutionConfigurationContents=$(CurrentSolutionConfigurationContents); SolutionDir=$(SolutionDir); SolutionExt=$(SolutionExt); SolutionFileName=$(SolutionFileName); SolutionName=$(SolutionName); SolutionPath=$(SolutionPath)" ToolsVersion="$(ProjectToolsVersion)" BuildInParallel="true" UnloadProjectsOnCompletion="$(UnloadProjectsOnCompletion)" UseResultsCache="$(UseResultsCache)">
