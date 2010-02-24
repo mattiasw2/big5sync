@@ -98,7 +98,7 @@ namespace SynclessUI
                     _selectedtype = "File";
                     TxtBoxPath.Text = path;
 					ACBTagName.IsEnabled = true;
-                    ACBTagName.MySourceList = _main.gui.GetAllTags(); // change to file tags
+                    ACBTagName.MySourceList = _main.gui.GetAllFileTags();
                 }
                 else if (di.Exists)
                 {
@@ -108,12 +108,12 @@ namespace SynclessUI
                     _selectedtype = "Folder";
                     TxtBoxPath.Text = path;
 					ACBTagName.IsEnabled = true;
-                    ACBTagName.MySourceList = _main.gui.GetAllTags(); // change to folder tags
+                    ACBTagName.MySourceList = _main.gui.GetAllFolderTags();
                 }
                 else
                 {
                     ACBTagName.IsEnabled = false;
-                    ACBTagName.MySourceList = new List<string>(); ; // change to folder tags
+                    ACBTagName.MySourceList = new List<string>();
                 }
             }
         }
