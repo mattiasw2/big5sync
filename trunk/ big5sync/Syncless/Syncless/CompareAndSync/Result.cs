@@ -7,19 +7,30 @@ namespace Syncless.CompareAndSync
 {
     public abstract class Result
     {
-        private FileChangeType changeType;
-        private string from, to = null;
-        private bool _isFolder;
+        private FileChangeType _changeType;
+        private string _from, _to = null;
+
+        public Result(FileChangeType changeType, string from)
+        {
+            _changeType = changeType;
+            _from = from;
+        }
+
+        public Result(FileChangeType changeType, string from, string to) :
+            this(changeType, from)
+        {            
+            _to = to;
+        }
 
         public FileChangeType ChangeType
         {
             get
             {
-                return changeType;
+                return _changeType;
             }
             set
             {
-                changeType = value;
+                _changeType = value;
             }
         }
 
@@ -27,11 +38,11 @@ namespace Syncless.CompareAndSync
         {
             get
             {
-                return from;
+                return _from;
             }
             set
             {
-                from = value;
+                _from = value;
             }
         }
 
@@ -39,23 +50,11 @@ namespace Syncless.CompareAndSync
         {
             get
             {
-                return to;
+                return _to;
             }
             set
             {
-                to = value;
-            }
-        }
-
-        public bool IsFolder
-        {
-            get
-            {
-                return _isFolder;
-            }
-            set
-            {
-                _isFolder = value;
+                _to = value;
             }
         }
     }
