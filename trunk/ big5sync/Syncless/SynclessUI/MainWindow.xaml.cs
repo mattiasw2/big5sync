@@ -48,18 +48,18 @@ namespace SynclessUI
 			RegistryHelper.CreateRegistry(@System.Reflection.Assembly.GetExecutingAssembly().Location);
         }
 
-        public void ProcessCommandLine(string[] args)
+        public void ProcessCommandLine(string[] args, bool firstInstance)
         {
-            if (args.Length != 0)
+            if (args.Length != 0 && firstInstance)
             {
                 this.WindowState = WindowState.Minimized;
                 SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(args, this);
             }
-        }
+            else if (args.Length != 0 && !firstInstance)
+            {
+                SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(args, this);
+            }
 
-        public void ProcessCommandLine1(string[] args)
-        {
-            SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(args, this);
         }
 
         /// <summary>
