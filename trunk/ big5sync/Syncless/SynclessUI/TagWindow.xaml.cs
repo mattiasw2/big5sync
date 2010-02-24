@@ -135,12 +135,14 @@ namespace SynclessUI
 					if(tv == null) {
 						if(_selectedtype == "File")
 						{
-							proceedtotag = _main.CreateFileTag(_tagname);
+						    bool result = _main.CreateFileTag(_tagname);
+                            proceedtotag = !result;
 							compatibletagtype = true;
 						} else if(_selectedtype == "Folder")
 						{
-							proceedtotag = _main.CreateFolderTag(_tagname);
-							compatibletagtype = true;
+                            bool result = _main.CreateFolderTag(_tagname);
+                            proceedtotag = !result;
+                            compatibletagtype = true;
 						}
 					} else {
 						if(_selectedtype == "Folder") {
