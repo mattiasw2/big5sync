@@ -340,6 +340,18 @@ namespace Syncless.CompareAndSync
             return splitWords[splitWords.Length - 1];
         }
 
+
+        /* YC to Gordon: I need you to write this such that I will pass you the following
+         * Origin path and CompareResult.
+         * 1. Take the origin path, append the metadatapath to it, and check if it exists
+         * 2. If it exists, then just edit, if it doesn't create it using the original method (that scans the entire directory and creates the xml)
+         * 3. If we created a new XML, then we can just end here since the method has already iterated thru everything
+         * 4. If we edit, then based on the type of filechange, the info needed is different
+         * 5. For update and create, you need the filename (full path), hash, length, modified date, creation date (basically all the elements)
+         * 6. For delete, you need the filename (full path), and then remove the element completely
+         * 7. For rename, you need the old path and new path, and simply change the old name to new name
+         */
+        
         public static void EditXml(string xmlpath, FileChangeType type, string filePath)
         {
             Debug.Assert(File.Exists(xmlpath));
