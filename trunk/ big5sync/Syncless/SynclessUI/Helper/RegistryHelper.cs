@@ -19,8 +19,6 @@ namespace SynclessUI.Helper
 
         public static void CreateRegistryForFile(string path)
         {
-
-
             RegistryKey tagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\*\shell\Tag");
             tagKey.SetValue(null, "Tag");
 

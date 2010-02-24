@@ -38,21 +38,28 @@ namespace SynclessUI
         }
         
         public MainWindow() {
-            List<string> lststrCommandLineArgs = System.Environment.GetCommandLineArgs().ToList();
+            // List<string> lststrCommandLineArgs = System.Environment.GetCommandLineArgs().ToList();
             MinimizeToTray.Enable(this);
 
             InitializeComponent();
 
             InitializeSyncless();
-
-            if (lststrCommandLineArgs.Count != 1)
-            {
-                this.WindowState = WindowState.Minimized;
-                SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(lststrCommandLineArgs, this);
-            }
 			
 			RegistryHelper.CreateRegistry(@System.Reflection.Assembly.GetExecutingAssembly().Location);
-            //CLI_CreateTag(@"C:\testfolder");
+        }
+
+        public void ProcessCommandLine(string[] args)
+        {
+            if (args.Length != 0)
+            {
+                this.WindowState = WindowState.Minimized;
+                SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(args, this);
+            }
+        }
+
+        public void ProcessCommandLine1(string[] args)
+        {
+            SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(args, this);
         }
 
         /// <summary>

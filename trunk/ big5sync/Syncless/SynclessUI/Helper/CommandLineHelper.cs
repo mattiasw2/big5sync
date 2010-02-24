@@ -11,10 +11,10 @@ namespace SynclessUI.Helper
     {
         #region ProcessCommandLine
 
-        public static void ProcessCommandLine(List<string> commands, MainWindow main)
+        public static void ProcessCommandLine(string[] commands, MainWindow main)
         {
-            string flag = commands[1];
-            string path = commands[2];
+            string flag = commands[0];
+            string path = commands[1];
             if (flag.Equals("-TFile"))
             {
                 //Shell Context Menu clicked for Files ( Tag )
