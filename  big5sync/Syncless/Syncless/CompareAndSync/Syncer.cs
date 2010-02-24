@@ -69,7 +69,7 @@ namespace Syncless.CompareAndSync
 
         public bool ModifyXml(string xmlPath , FileChangeType type , string changedFilePath)
         {
-            XMLHelper.editXml(xmlPath, type, changedFilePath);
+            XMLHelper.EditXml(xmlPath, type, changedFilePath);
             return false; //TEMP
         }
 
