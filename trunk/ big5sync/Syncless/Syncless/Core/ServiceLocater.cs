@@ -23,12 +23,12 @@ namespace Syncless.Core
                 //return null;
             }
         }
-        /*
+        
         public static ICommandLineControllerInterface CommandLine
         {
             get { return SystemLogicLayer.Instance; }
         }
-        */
+        
         
         public static Logger Getlogger(string type)
         {

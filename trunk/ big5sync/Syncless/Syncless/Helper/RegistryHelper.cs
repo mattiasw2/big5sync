@@ -17,47 +17,45 @@ namespace Syncless.Helper
             CreateRegistryForFolder(path);
         }
 
-        private static void CreateRegistryForFile(string path)
+        public static void CreateRegistryForFile(string path)
         {
 
-            RegistryKey tagKey = Registry.ClassesRoot.CreateSubKey(@"*\shell\Tag");
+
+            RegistryKey tagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\*\shell\Tag");
             tagKey.SetValue(null, "Tag");
 
-            RegistryKey tagKeyCommand = Registry.ClassesRoot.CreateSubKey(@"*\shell\Tag\command");
+            RegistryKey tagKeyCommand = Registry.CurrentUser.CreateSubKey(@"Software\Classes\*\shell\Tag\command");
             tagKeyCommand.SetValue(null, path + " -TFile %1");
 
-            RegistryKey untagKey = Registry.ClassesRoot.CreateSubKey(@"*\shell\Untag");
+            RegistryKey untagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\*\shell\Untag");
             untagKey.SetValue(null, "Untag");
 
-            RegistryKey untagKeyCommand = Registry.ClassesRoot.CreateSubKey(@"*\shell\Untag\command");
+            RegistryKey untagKeyCommand = Registry.CurrentUser.CreateSubKey(@"Software\Classes\*\shell\Untag\command");
             untagKeyCommand.SetValue(null, path + " -UTFile %1");
 
         }
 
-        private static void CreateRegistryForFolder(string path)
+        public static void CreateRegistryForFolder(string path)
         {
-            RegistryKey tagKey = Registry.ClassesRoot.CreateSubKey(@"Folder\shell\Tag");
+            RegistryKey tagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\Tag");
             tagKey.SetValue(null, "Tag");
 
-            RegistryKey tagKeyCommand = Registry.ClassesRoot.CreateSubKey(@"Folder\shell\Tag\command");
+            RegistryKey tagKeyCommand = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\Tag\command");
             tagKeyCommand.SetValue(null, path + " -TFolder %1");
 
-            RegistryKey untagKey = Registry.ClassesRoot.CreateSubKey(@"Folder\shell\Untag");
+            RegistryKey untagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\Untag");
             untagKey.SetValue(null, "Untag");
 
-            RegistryKey untagKeyCommand = Registry.ClassesRoot.CreateSubKey(@"Folder\shell\Untag\command");
+            RegistryKey untagKeyCommand = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\Untag\command");
             untagKeyCommand.SetValue(null, path + " -UTFolder %1");
         }
-        /// <summary>
-        /// Remove all the Registry Entry
-        /// </summary>
         public static void RemoveRegistry()
         {
-           
-            Registry.ClassesRoot.DeleteSubKeyTree(@"*\shell\Tag");
-            Registry.ClassesRoot.DeleteSubKeyTree(@"*\shell\Untag");            
-            Registry.ClassesRoot.DeleteSubKeyTree(@"Folder\shell\Tag");
-            Registry.ClassesRoot.DeleteSubKeyTree(@"Folder\shell\Untag");
+
+            Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\*\shell\Tag");
+            Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\*\shell\Untag");
+            Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\Tag");
+            Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\Untag");
         }
     }
 }
