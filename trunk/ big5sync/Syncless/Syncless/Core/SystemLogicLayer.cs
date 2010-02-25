@@ -15,7 +15,7 @@ namespace Syncless.Core
     internal class SystemLogicLayer :IUIControllerInterface,IMonitorControllerInterface,ICommandLineControllerInterface
     {
         private static SystemLogicLayer _instance;
-        
+        private string appPath = "";
         public static SystemLogicLayer Instance
         {
             get
@@ -328,8 +328,8 @@ namespace Syncless.Core
 
         public bool Initiate()
         {
-            ProfilingLayer.Instance.Init(ProfilingLayer.RELATIVE_PROFILING_ROOT_SAVE_PATH);
-            TaggingLayer.Instance.Init(TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH);
+            ProfilingLayer.Instance.Init(appPath+@"\"+ProfilingLayer.RELATIVE_PROFILING_ROOT_SAVE_PATH);
+            TaggingLayer.Instance.Init(appPath+@"\"+TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH);
             List<Tag> tagList = TaggingLayer.Instance.AllTagList;
             foreach (Tag t in tagList)
             {
@@ -339,6 +339,12 @@ namespace Syncless.Core
             DeviceWatcher.Instance.ToString();
             return true;
         }
+        public bool Initiate(string path)
+        {
+            this.appPath = path;
+            return Initiate();
+        }
+
 
         public List<CompareResult> PreviewSync(FolderTag tag)
         {

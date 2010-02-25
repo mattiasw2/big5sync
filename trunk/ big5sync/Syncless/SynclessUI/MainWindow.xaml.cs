@@ -36,16 +36,14 @@ namespace SynclessUI
         private string _filter {
             get { return TxtBoxFilterTag.Text.Trim(); }
         }
+        private string _app_path;
         
         public MainWindow() {
             // List<string> lststrCommandLineArgs = System.Environment.GetCommandLineArgs().ToList();
             MinimizeToTray.Enable(this);
 
             InitializeComponent();
-
             InitializeSyncless();
-			
-			RegistryHelper.CreateRegistry(@System.Reflection.Assembly.GetExecutingAssembly().Location);
         }
 
         public void ProcessCommandLine(string[] args, bool firstInstance)
@@ -67,8 +65,11 @@ namespace SynclessUI
         /// </summary>
         private void InitializeSyncless()
         {
+            _app_path = @System.Reflection.Assembly.GetExecutingAssembly().Location;
             gui = ServiceLocator.GUI;
-            if (gui.Initiate()) {
+            if (gui.Initiate(System.IO.Path.GetDirectoryName(_app_path)))
+            {
+                RegistryHelper.CreateRegistry(_app_path);
                 InitializeTagInfoPanel();
                 InitializeTagList();
             }
