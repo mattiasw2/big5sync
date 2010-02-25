@@ -42,7 +42,7 @@ namespace Syncless.Core
         bool PrepareForTermination();
         bool Terminate();
 
-        bool Initiate();
+        bool Initiate(string path);
 
 		List<CompareResult> PreviewSync(FolderTag tag);
 		List<CompareResult> PreviewSync(FileTag tag);
