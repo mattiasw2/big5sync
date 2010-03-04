@@ -187,7 +187,6 @@ namespace Syncless.Core
 
         #region IUIControllerInterface Members
 
-        
         public TagView GetTag(string tagname)
         {
             Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
@@ -268,11 +267,33 @@ namespace Syncless.Core
         }
 
         public bool MonitorTag(string tagname, bool mode)
-        {
-            //may need to return a list of error.
-            List<string> pathList = new List<string>();
+        {   
             Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            return MonitorTag(tag, mode);
+        }
+        private void MonitorTag(Tag tag)
+        {
+            List<string> pathList = new List<string>();
+            foreach (TaggedPath path in tag.PathList)
+            {
+                pathList.Add(path.Path);
+            }
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(pathList);
+            foreach (string path in convertedPath)
+            {
+                try
+                {      
+                    MonitorLayer.Instance.MonitorPath(path);
+                }
+                catch (Exception)
+                {
+                }
+            }
+        }
+        private bool MonitorTag(Tag tag, bool mode)
+        {
             tag.IsSeamless = mode;
+            List<string> pathList = new List<string>();
             foreach (TaggedPath path in tag.PathList)
             {
                 pathList.Add(path.Path);
@@ -315,8 +336,7 @@ namespace Syncless.Core
 
         public bool PrepareForTermination()
         {
-            TaggingLayer.Instance.SaveTo(appPath + @"\" + TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH);
-            ProfilingLayer.Instance.SaveTo(appPath + @"\" + ProfilingLayer.RELATIVE_PROFILING_ROOT_SAVE_PATH);
+            SaveLoadHelper.SaveAll(appPath);
             return true;
         }
 
@@ -326,25 +346,26 @@ namespace Syncless.Core
             return false;
         }
 
-        public bool Initiate()
+        private bool Initiate()
         {
-            ProfilingLayer.Instance.Init(appPath+@"\"+ProfilingLayer.RELATIVE_PROFILING_ROOT_SAVE_PATH);
-            TaggingLayer.Instance.Init(appPath+@"\"+TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH);
+            SaveLoadHelper.LoadAll(appPath);
             List<Tag> tagList = TaggingLayer.Instance.AllTagList;
             foreach (Tag t in tagList)
             {
                 StartManualSync(t);
+                MonitorTag(t);
             }
 
-            DeviceWatcher.Instance.ToString();
+            DeviceWatcher.Instance.ToString(); //randomly call a method to start watching folders.
             return true;
         }
         public bool Initiate(string path)
         {
             this.appPath = path;
-            return Initiate();
+            bool init = Initiate();
+            SaveLoadHelper.SaveAll(path);
+            return init;
         }
-
 
         public List<CompareResult> PreviewSync(FolderTag tag)
         {
@@ -354,7 +375,6 @@ namespace Syncless.Core
             CompareRequest compareRequest = new CompareRequest(convertedPath, true);
             return CompareSyncController.Instance.Compare(compareRequest);
         }
-
         public List<CompareResult> PreviewSync(FileTag tag)
         {
             FileTag fileTag = TaggingLayer.Instance.RetrieveFileTag(tag.TagName);
@@ -363,8 +383,6 @@ namespace Syncless.Core
             CompareRequest compareRequest = new CompareRequest(convertedPath, true);
             return CompareSyncController.Instance.Compare(compareRequest);
         }
-
-        #endregion
 
         public List<string> GetAllFileTags()
         {
@@ -424,6 +442,7 @@ namespace Syncless.Core
             tagNames.Sort();
             return tagNames;
         }
+
         private FolderTagView ConvertToFolderTagView(FolderTag t)
         {
             FolderTagView view = new FolderTagView(t.TagName, t.LastUpdated);
@@ -443,13 +462,7 @@ namespace Syncless.Core
             return view;
         }
 
-
-
-        #region IUIControllerInterface Members
-
-
-        
-
         #endregion
+
     }
 }
