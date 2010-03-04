@@ -626,7 +626,7 @@ namespace Syncless.Tagging
         public bool SaveTo(string xmlFilePath)
         {
             XmlDocument xml = ConvertTaggingProfileToXml(_taggingProfile);
-            return TaggingXMLHelper.SaveXml(xml, "tagging.xml");
+            return TaggingXMLHelper.SaveXml(xml, xmlFilePath);
         }
 
         /// <summary>

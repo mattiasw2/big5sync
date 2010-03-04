@@ -315,8 +315,8 @@ namespace Syncless.Core
 
         public bool PrepareForTermination()
         {
-            TaggingLayer.Instance.SaveTo(TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH);
-            ProfilingLayer.Instance.SaveToAllUsedDrive();
+            TaggingLayer.Instance.SaveTo(appPath + @"\" + TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH);
+            ProfilingLayer.Instance.SaveTo(appPath + @"\" + ProfilingLayer.RELATIVE_PROFILING_ROOT_SAVE_PATH);
             return true;
         }
 
