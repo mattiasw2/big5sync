@@ -5,6 +5,7 @@ using System.Text;
 using Syncless.Profiling.Exceptions;
 namespace Syncless.Profiling
 {
+
     public class ProfileMapping
     {
         private string _logicalAddress;

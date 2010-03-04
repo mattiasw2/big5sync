@@ -144,10 +144,43 @@ namespace Syncless.Profiling
         /// Save all the profiling xml to all the various Location.
         /// </summary>
         /// <returns>true if the save is complete.</returns>
-        public bool SaveToAllUsedDrive()
+        public void SaveTo(string appRoot)
         {
-            return ProfilingXMLHelper.SaveToAllDrive(_profile);
+            List<string> savedLocation = new List<string>();
+            savedLocation.Add(appRoot);
+            ProfilingXMLHelper.SaveProfile(_profile,savedLocation);
         }
+
+        /*
+       public static bool SaveToAllDrive(Profile profile)
+       {
+           DriveInfo[] drives = DriveInfo.GetDrives();
+           XmlDocument xml = ConvertToXMLDocument(profile);
+           UpdateLastUpdateTime(xml, DateTime.Now.Ticks);
+           //Save to Root Directory
+           FileInfo profileInfo = new FileInfo(ProfilingLayer.RELATIVE_PROFILING_ROOT_SAVE_PATH);
+           SaveProfile(xml, profileInfo.FullName);
+            
+           /* Save to all Drive Commented for v0.0
+           foreach (DriveInfo driveInfo in drives)
+           {
+               if (driveInfo.DriveType == DriveType.Removable)
+               {
+                   FileInfo fileInfo = new FileInfo(ProfilingHelper.ExtractDriveName(driveInfo) + ":" + ProfilingLayer.RELATIVE_GUID_SAVE_PATH);
+                   if (fileInfo.Exists)
+                   {
+                       //GUID Exist
+                       profileInfo = new FileInfo(ProfilingHelper.ExtractDriveName(driveInfo) + ":" + ProfilingLayer.RELATIVE_PROFILING_SAVE_PATH);
+                       SaveProfile(xml, profileInfo.FullName);
+                   }
+               }
+           }
+            
+           return true;
+       }
+       */
+
+
         /// <summary>
         /// Initialize the Profiling Layer.
         /// </summary>
@@ -168,8 +201,9 @@ namespace Syncless.Profiling
                 //Since the profile is newly created , no need to traverse all the drive
                 return true;
             }
+            
             DriveInfo[] driveList = DriveInfo.GetDrives();
-            /* Load from each drive Disabled for 0.0
+            /*
             foreach (DriveInfo driveinfo in driveList)
             {
                 #region Get Profiling XML
@@ -208,7 +242,7 @@ namespace Syncless.Profiling
             {
                 UpdateDrive(driveinfo);
             }
-            SaveToAllUsedDrive();
+            SaveTo(path);
             return true;
         }
         /// <summary>

@@ -10,6 +10,7 @@ namespace Syncless.Profiling
     internal static class ProfilingGUIDHelper
     {
         #region GUID Generation
+
         internal static string GetGUID(string driveid)
         {
             FileInfo fileInfo = new FileInfo(driveid + ":" + ProfilingLayer.RELATIVE_GUID_SAVE_PATH);
@@ -70,6 +71,7 @@ namespace Syncless.Profiling
             ServiceLocator.Getlogger(ServiceLocator.USER_LOG).WriteLine("GUID Created at " + path + " .");
             return guidString;
         }
+        
         #endregion
     }
 }

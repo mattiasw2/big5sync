@@ -41,6 +41,7 @@ namespace Syncless.Profiling
         ///   conflict is identified as there is a similar only 1 or 2 field.
         /// </summary>
         /// <param name="mapping">The Mapping to Check</param>
+        /// <exception cref="ProfileMappingConflictException">Thrown when there is conflict in the Profile Mapping</exception>
         /// <returns>true if there is a mapping that is equals to the mapping. Else return false</returns>
         public bool Contains(ProfileMapping mapping)
         {
@@ -67,6 +68,12 @@ namespace Syncless.Profiling
         {
             this.CreateMapping(mapping.LogicalAddress, mapping.PhyiscalAddress, mapping.GUID);
         }
+
+        /// <summary>
+        /// Find a Physical Address from a Logical Address
+        /// </summary>
+        /// <param name="logical">logical address</param>
+        /// <returns>physical address . return null if the logical address is not found or the physical drive is not in.</returns>
         public string FindPhysicalFromLogical(string logical)
         {
             foreach (ProfileMapping mapping in _mappingList)

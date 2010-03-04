@@ -9,7 +9,17 @@ namespace Syncless.Profiling
 {
     internal class ProfilingXMLHelper
     {
-        public static bool SaveProfile(XmlDocument xml, string path)
+        #region Save Profile
+        public static void SaveProfile(Profile profile, List<string> paths)
+        {
+            XmlDocument xml = ConvertToXMLDocument(profile);
+            UpdateLastUpdateTime(xml, DateTime.Now.Ticks);
+            foreach (string path in paths)
+            {
+                SaveProfile(xml, path);
+            }
+        }
+        private static void SaveProfile(XmlDocument xml, string path)
         {
 
             XmlTextWriter textWriter = null;
@@ -24,8 +34,7 @@ namespace Syncless.Profiling
             catch (IOException io)
             {
                 //TODO : Error Log
-                Console.WriteLine(io.StackTrace);
-                return false;
+                Console.WriteLine(io.StackTrace);                
             }
             finally
             {
@@ -41,31 +50,9 @@ namespace Syncless.Profiling
                 }
 
             }
-            return true;
-        }
 
-        public static bool SaveToAllDrive(Profile profile)
-        {
-            DriveInfo[] drives = DriveInfo.GetDrives();
-            XmlDocument xml = ConvertToXMLDocument(profile);
-            UpdateLastUpdateTime(xml, DateTime.Now.Ticks);
-            //Save to Root Directory
-            FileInfo profileInfo = new FileInfo(ProfilingLayer.RELATIVE_PROFILING_ROOT_SAVE_PATH);
-            SaveProfile(xml, profileInfo.FullName);
-            /* Save to all drive commented temporary
-            foreach (DriveInfo driveInfo in drives)
-            {
-                FileInfo fileInfo = new FileInfo(ProfilingHelper.ExtractDriveName(driveInfo) + ":" + ProfilingLayer.RELATIVE_GUID_SAVE_PATH);
-                if (fileInfo.Exists)
-                {
-                    //GUID Exist
-                    profileInfo = new FileInfo(ProfilingHelper.ExtractDriveName(driveInfo) + ":" + ProfilingLayer.RELATIVE_PROFILING_SAVE_PATH);
-                    SaveProfile(xml, profileInfo.FullName);
-                }
-            }
-            */ 
-            return true;
         }
+        #endregion      
 
         public static Profile CreateDefaultProfile(string path)
         {
@@ -87,10 +74,8 @@ namespace Syncless.Profiling
                 }
                 finally
                 {
-
                     if (fs != null)
                     {
-
                         try
                         {
                             fs.Close();
@@ -106,56 +91,7 @@ namespace Syncless.Profiling
             SaveProfile(xml, fileInfo.FullName);
             return profile;
         }
-
-        #region convert xmldocument public method
-        
-        public static XmlDocument ConvertToXMLDocument(Profile profile)
-        {
-            XmlDocument profilexml = new XmlDocument();
-            XmlElement root = CreateRoot(profilexml, profile);
-            foreach (ProfileMapping mapping in profile.Mappings)
-            {
-                XmlElement map = CreateElementForMapping(profilexml, mapping);
-                root.AppendChild(map);
-            }
-            profilexml.AppendChild(root);
-            return profilexml;
-        }
-        public static XmlElement CreateRoot(XmlDocument profilexml, Profile profile)
-        {
-            XmlElement root = profilexml.CreateElement("profile");
-            XmlAttribute nameAttr = profilexml.CreateAttribute("name");
-            XmlAttribute timeAttr = profilexml.CreateAttribute("lastupdated");
-            nameAttr.Value = profile.ProfileName;
-            timeAttr.Value = profile.LastUpdatedTime+"";
-            root.SetAttributeNode(nameAttr);
-            root.SetAttributeNode(timeAttr);
-            return root;
-        }
-        public static XmlElement CreateElementForMapping(XmlDocument profilexml, ProfileMapping mapping)
-        {
-            XmlElement map = profilexml.CreateElement("drive");
-            XmlElement logical = profilexml.CreateElement("logical");
-
-            XmlElement guid = profilexml.CreateElement("guid");
-            Debug.Assert(mapping.GUID != null);
-            Debug.Assert(mapping.LogicalAddress != null);
-            logical.InnerText = mapping.LogicalAddress;
-            guid.InnerText = mapping.GUID;
-
-            map.AppendChild(logical);
-
-            map.AppendChild(guid);
-            return map;
-        }
-        private static void UpdateLastUpdateTime(XmlDocument doc, long date)
-        {
-            XmlNode node = doc.SelectSingleNode("//profile//@lastupdated");
-            node.Value = date+"";
-        }
-        #endregion
-
-        
+       
         public static XmlDocument LoadFile(string path)
         {
             FileStream fs = null;
@@ -187,7 +123,6 @@ namespace Syncless.Profiling
 
         }
         
-
         #region convert to profile public methods
         public static Profile ConvertToProfile(string path)
         {
@@ -199,7 +134,7 @@ namespace Syncless.Profiling
             }
             return ConvertToProfile(profilexml);
         }
-        public static Profile ConvertToProfile(XmlDocument profilexml)
+        private static Profile ConvertToProfile(XmlDocument profilexml)
         {
             XmlNodeList list = profilexml.GetElementsByTagName("profile");
             if (list.Count != 0)
@@ -216,7 +151,7 @@ namespace Syncless.Profiling
             //TODO need to throw exception here =D
             throw new FileNotFoundException();
         }
-        public static Profile ProcessListing(Profile profile, XmlElement root)
+        private static Profile ProcessListing(Profile profile, XmlElement root)
         {
             XmlNodeList nodeList = root.GetElementsByTagName("drive");
             foreach (XmlNode node in nodeList)
@@ -228,6 +163,54 @@ namespace Syncless.Profiling
                 profile.CreateMapping(logical.InnerText, "", guid.InnerText);
             }
             return profile;
+        }
+        #endregion
+
+        #region convert xmldocument private method
+
+        private static XmlDocument ConvertToXMLDocument(Profile profile)
+        {
+            XmlDocument profilexml = new XmlDocument();
+            XmlElement root = CreateRoot(profilexml, profile);
+            foreach (ProfileMapping mapping in profile.Mappings)
+            {
+                XmlElement map = CreateElementForMapping(profilexml, mapping);
+                root.AppendChild(map);
+            }
+            profilexml.AppendChild(root);
+            return profilexml;
+        }
+        private static XmlElement CreateRoot(XmlDocument profilexml, Profile profile)
+        {
+            XmlElement root = profilexml.CreateElement("profile");
+            XmlAttribute nameAttr = profilexml.CreateAttribute("name");
+            XmlAttribute timeAttr = profilexml.CreateAttribute("lastupdated");
+            nameAttr.Value = profile.ProfileName;
+            timeAttr.Value = profile.LastUpdatedTime + "";
+            root.SetAttributeNode(nameAttr);
+            root.SetAttributeNode(timeAttr);
+            return root;
+        }
+        private static XmlElement CreateElementForMapping(XmlDocument profilexml, ProfileMapping mapping)
+        {
+            XmlElement map = profilexml.CreateElement("drive");
+            XmlElement logical = profilexml.CreateElement("logical");
+
+            XmlElement guid = profilexml.CreateElement("guid");
+            Debug.Assert(mapping.GUID != null);
+            Debug.Assert(mapping.LogicalAddress != null);
+            logical.InnerText = mapping.LogicalAddress;
+            guid.InnerText = mapping.GUID;
+
+            map.AppendChild(logical);
+
+            map.AppendChild(guid);
+            return map;
+        }
+        private static void UpdateLastUpdateTime(XmlDocument doc, long date)
+        {
+            XmlNode node = doc.SelectSingleNode("//profile//@lastupdated");
+            node.Value = date + "";
         }
         #endregion
     }
