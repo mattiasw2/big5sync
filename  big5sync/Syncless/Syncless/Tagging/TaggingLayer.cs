@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using System.Xml;
 using Syncless.Helper;
 using Syncless.Tagging.Exceptions;
 using System.Diagnostics;
@@ -89,17 +88,19 @@ namespace Syncless.Tagging
         /// Initialize _taggingProfile object. If a tagging.xml file has already been created, load the information
         /// from the file, else, instantiate a new _taggingProfile object.
         /// </summary>
-        /// <param name="profileFilePath">The path of the tagging.xml file to be loaded.</param>
-        public void Init(string profileFilePath)
+        /// <param name="paths">The paths of the tagging.xml files to be loaded.</param>
+        public void Init(List<string> paths)
         {
+            string profileFilePath = paths[0]; //paths[0] is always the root.
             if (!File.Exists(profileFilePath))
             {
                 _taggingProfile = new TaggingProfile();
             }
             else
             {
-                Debug.Assert(LoadFrom(profileFilePath) != null);
-                _taggingProfile = LoadFrom(profileFilePath);
+                
+                _taggingProfile = TaggingXMLHelper.LoadFrom(profileFilePath);
+                Debug.Assert(_taggingProfile != null);
             }
         }
 
@@ -603,30 +604,16 @@ namespace Syncless.Tagging
         /// </summary>
         /// <param name="xmlFilePath">The path of the tagging.xml file to be lodaed</param>
         /// <returns>The tagging profile that is loaded from the given xml data, else null</returns>
-        public TaggingProfile LoadFrom(string xmlFilePath)
-        {
-            TaggingProfile taggingProfile = new TaggingProfile();
-            XmlDocument xml = TaggingXMLHelper.LoadXml(xmlFilePath);
-            if (xml != null)
-            {
-                taggingProfile = ConvertXmlToTaggingProfile(xml);
-                return taggingProfile;
-            }
-            else
-            {
-                return null;
-            }
-        }
+        
 
         /// <summary>
         /// Save information of a profile to a xml file
         /// </summary>
         /// <param name="xmlFilePath">The path of the tagging.xml file to be saved to</param>
-        /// <returns>True if the save is successful, else false</returns>
-        public bool SaveTo(string xmlFilePath)
+        
+        public void SaveTo(List<string> savedLocation)
         {
-            XmlDocument xml = ConvertTaggingProfileToXml(_taggingProfile);
-            return TaggingXMLHelper.SaveXml(xml, xmlFilePath);
+            TaggingXMLHelper.SaveTo(_taggingProfile, savedLocation);
         }
 
         /// <summary>
@@ -846,47 +833,7 @@ namespace Syncless.Tagging
 
         #region private methods implementations
         #region completed
-        private static XmlDocument ConvertTaggingProfileToXml(TaggingProfile taggingProfile)
-        {
-            XmlDocument TaggingDataDocument = new XmlDocument();
-            XmlElement taggingElement = TaggingDataDocument.CreateElement("tagging");
-            XmlElement profileElement = TaggingDataDocument.CreateElement("profile");
-            profileElement.SetAttribute("name", taggingProfile.ProfileName);
-            profileElement.SetAttribute("createdDate", taggingProfile.Created.ToString());
-            profileElement.SetAttribute("lastUpdated", taggingProfile.LastUpdated.ToString());
-            foreach (FolderTag folderTag in taggingProfile.FolderTagList)
-            {
-                profileElement.AppendChild(TaggingXMLHelper.CreateFolderTagElement(TaggingDataDocument, folderTag));
-            }
-            foreach (FileTag fileTag in taggingProfile.FileTagList)
-            {
-                profileElement.AppendChild(TaggingXMLHelper.CreateFileTagElement(TaggingDataDocument, fileTag));
-            }
-            taggingElement.AppendChild(profileElement);
-            TaggingDataDocument.AppendChild(taggingElement);
-            return TaggingDataDocument;
-        }
-
-        private static TaggingProfile ConvertXmlToTaggingProfile(XmlDocument xml)
-        {
-            XmlElement profileElement = (XmlElement)xml.GetElementsByTagName("profile").Item(0);
-            TaggingProfile taggingProfile = TaggingXMLHelper.CreateTaggingProfile(profileElement);
-            XmlNodeList tagList = profileElement.ChildNodes;
-            foreach (XmlElement tag in tagList)
-            {
-                if (tag.Name.Equals("folderTag"))
-                {
-                    FolderTag folderTag = TaggingXMLHelper.CreateFolderTagFromXml(tag);
-                    taggingProfile.FolderTagList.Add(folderTag);
-                }
-                else
-                {
-                    FileTag fileTag = TaggingXMLHelper.CreateFileTagFromXml(tag);
-                    taggingProfile.FileTagList.Add(fileTag);
-                }
-            }
-            return taggingProfile;
-        }
+        
 
         private void UpdateTaggingProfileDate(long created)
         {

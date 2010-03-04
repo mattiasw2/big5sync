@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
-using System.Xml;
 namespace Syncless.Profiling
 {
     public class ProfilingLayer
@@ -144,10 +143,8 @@ namespace Syncless.Profiling
         /// Save all the profiling xml to all the various Location.
         /// </summary>
         /// <returns>true if the save is complete.</returns>
-        public void SaveTo(string appRoot)
-        {
-            List<string> savedLocation = new List<string>();
-            savedLocation.Add(appRoot);
+        public void SaveTo(List<string> savedLocation)
+        {   
             ProfilingXMLHelper.SaveProfile(_profile,savedLocation);
         }
 
@@ -186,8 +183,9 @@ namespace Syncless.Profiling
         /// </summary>
         /// <param name="path">The root path for the profiling configuration file.</param>
         /// <returns>true if the profile is load.</returns>
-        public bool Init(string path)
+        public bool Init(List<string> paths)
         {
+            string path = paths[0];//path 0 is the root.
             try
             {
                 Profile p = ProfilingXMLHelper.ConvertToProfile(path);
@@ -203,46 +201,11 @@ namespace Syncless.Profiling
             }
             
             DriveInfo[] driveList = DriveInfo.GetDrives();
-            /*
-            foreach (DriveInfo driveinfo in driveList)
-            {
-                #region Get Profiling XML
-                FileInfo info = new FileInfo(driveinfo.RootDirectory.Name + RELATIVE_PROFILING_SAVE_PATH);
-                if (info.Exists)
-                {
-                    Profile profile = null;
-                    try
-                    {
-                        profile = ProfilingXMLHelper.ConvertToProfile(info.FullName);
-                    }
-                    catch (FileNotFoundException)
-                    {
-
-                    }
-                    if (profile == null)
-                    {
-                        //TODO throw EXCEPTION
-                    }
-                    else
-                    {
-                        try
-                        {
-                            _profile.Merge(profile);
-                        }
-                        catch (ProfileConflictException)
-                        {
-                            //Log ?
-                        }
-                    }
-                }
-                #endregion
-            }
-            */
+            
             foreach (DriveInfo driveinfo in driveList)
             {
                 UpdateDrive(driveinfo);
-            }
-            SaveTo(path);
+            }            
             return true;
         }
         /// <summary>

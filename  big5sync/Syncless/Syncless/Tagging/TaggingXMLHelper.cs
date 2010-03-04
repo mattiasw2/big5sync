@@ -9,6 +9,70 @@ namespace Syncless.Tagging
 {
     static class TaggingXMLHelper
     {
+        private static XmlDocument ConvertTaggingProfileToXml(TaggingProfile taggingProfile)
+        {
+            XmlDocument TaggingDataDocument = new XmlDocument();
+            XmlElement taggingElement = TaggingDataDocument.CreateElement("tagging");
+            XmlElement profileElement = TaggingDataDocument.CreateElement("profile");
+            profileElement.SetAttribute("name", taggingProfile.ProfileName);
+            profileElement.SetAttribute("createdDate", taggingProfile.Created.ToString());
+            profileElement.SetAttribute("lastUpdated", taggingProfile.LastUpdated.ToString());
+            foreach (FolderTag folderTag in taggingProfile.FolderTagList)
+            {
+                profileElement.AppendChild(TaggingXMLHelper.CreateFolderTagElement(TaggingDataDocument, folderTag));
+            }
+            foreach (FileTag fileTag in taggingProfile.FileTagList)
+            {
+                profileElement.AppendChild(TaggingXMLHelper.CreateFileTagElement(TaggingDataDocument, fileTag));
+            }
+            taggingElement.AppendChild(profileElement);
+            TaggingDataDocument.AppendChild(taggingElement);
+            return TaggingDataDocument;
+        }
+
+        private static TaggingProfile ConvertXmlToTaggingProfile(XmlDocument xml)
+        {
+            XmlElement profileElement = (XmlElement)xml.GetElementsByTagName("profile").Item(0);
+            TaggingProfile taggingProfile = TaggingXMLHelper.CreateTaggingProfile(profileElement);
+            XmlNodeList tagList = profileElement.ChildNodes;
+            foreach (XmlElement tag in tagList)
+            {
+                if (tag.Name.Equals("folderTag"))
+                {
+                    FolderTag folderTag = TaggingXMLHelper.CreateFolderTagFromXml(tag);
+                    taggingProfile.FolderTagList.Add(folderTag);
+                }
+                else
+                {
+                    FileTag fileTag = TaggingXMLHelper.CreateFileTagFromXml(tag);
+                    taggingProfile.FileTagList.Add(fileTag);
+                }
+            }
+            return taggingProfile;
+        }
+        public static void SaveTo(TaggingProfile taggingProfile , List<string> xmlFilePaths)
+        {
+            XmlDocument xml = ConvertTaggingProfileToXml(taggingProfile);
+
+            foreach (string path in xmlFilePaths)
+            {
+                TaggingXMLHelper.SaveXml(xml, path);
+            }
+        }
+        public static TaggingProfile LoadFrom(string xmlFilePath)
+        {
+            TaggingProfile taggingProfile = new TaggingProfile();
+            XmlDocument xml = TaggingXMLHelper.LoadXml(xmlFilePath);
+            if (xml != null)
+            {
+                taggingProfile = ConvertXmlToTaggingProfile(xml);
+                return taggingProfile;
+            }
+            else
+            {
+                return null;
+            }
+        }
         internal static bool SaveXml(XmlDocument xml, string path)
         {
             XmlTextWriter textWriter = null;
