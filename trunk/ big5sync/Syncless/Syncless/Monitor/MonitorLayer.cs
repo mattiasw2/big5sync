@@ -440,9 +440,9 @@ namespace Syncless.Monitor
             }
             if (File.Exists(e.FullPath))
             {
+                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.MODIFIED, FileSystemType.FILE);
                 FileSystemEventDispatcher.Instance.AddToQueue(fse);
-                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
             }
         }
         
@@ -454,12 +454,13 @@ namespace Syncless.Monitor
             }
             if (File.Exists(e.FullPath))
             {
+                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATING, FileSystemType.FILE);
                 FileSystemEventDispatcher.Instance.AddToQueue(fse);
-                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
             }
             else
             {
+                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.FOLDER);
                 FileSystemEventDispatcher.Instance.AddToQueue(fse);
             }
@@ -474,12 +475,14 @@ namespace Syncless.Monitor
             ExtendedFileSystemWatcher watcher = (ExtendedFileSystemWatcher)source;
             if (!watcher.Filter.Equals("*.*"))
             {
+                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.DELETED, FileSystemType.FILE);
                 FileSystemEventDispatcher.Instance.AddToQueue(fse);
             }
             else
             {
-                FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.DELETED, FileSystemType.UNKNOWN);
+                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
+                FileSystemEvent fse = new FileSystemEvent(e.FullPath, watcher.Path);
                 FileSystemEventDispatcher.Instance.AddToQueue(fse);
             }
         }
@@ -492,11 +495,13 @@ namespace Syncless.Monitor
             }
             if (File.Exists(e.FullPath))
             {
+                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FILE);
                 FileSystemEventDispatcher.Instance.AddToQueue(fse);
             }
             else
             {
+                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FOLDER);
                 FileSystemEventDispatcher.Instance.AddToQueue(fse);
             }
@@ -508,6 +513,7 @@ namespace Syncless.Monitor
             {
                 return;
             }
+            Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
             FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.FILE);
             FileSystemEventDispatcher.Instance.AddToQueue(fse);
         }
@@ -536,6 +542,7 @@ namespace Syncless.Monitor
             foreach(string folder in folders) {
                 if (e.FullPath.Equals(folder))
                 {
+                    Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                     FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.DELETED, FileSystemType.FOLDER);
                     FileSystemEventDispatcher.Instance.AddToQueue(fse);
                     return;
@@ -551,9 +558,9 @@ namespace Syncless.Monitor
             {
                 if (e.OldFullPath.Equals(folder))
                 {
+                    Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                     FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FOLDER);
                     FileSystemEventDispatcher.Instance.AddToQueue(fse);
-                    Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                     return;
                 }
             }

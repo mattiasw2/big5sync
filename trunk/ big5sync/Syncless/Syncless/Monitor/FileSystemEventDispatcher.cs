@@ -36,10 +36,11 @@ namespace Syncless.Monitor
 
         public void AddToQueue(FileSystemEvent e)
         {
+            queue.Add(e);
             if (dispatcherThread == null)
             {
                 dispatcherThread = new Thread(DispatchEvent);
-                dispatcherThread.IsBackground = true;
+                //dispatcherThread.IsBackground = true;
                 dispatcherThread.Start();
             }
             else if (dispatcherThread.ThreadState == ThreadState.WaitSleepJoin)
@@ -69,6 +70,7 @@ namespace Syncless.Monitor
                         default:
                             break;
                     }
+                    queue.RemoveAt(0);
                 }
                 else
                 {
@@ -134,6 +136,7 @@ namespace Syncless.Monitor
                     ServiceLocator.MonitorI.HandleFileChange(fileEvent);
                     break;
                 case EventChangeType.RENAMED:
+                    
                     Console.WriteLine("File Renamed: " + fse.OldPath + " " + fse.Path);
                     fileEvent = new FileChangeEvent(new FileInfo(fse.OldPath), new FileInfo(fse.Path));
                     ServiceLocator.MonitorI.HandleFileChange(fileEvent);
