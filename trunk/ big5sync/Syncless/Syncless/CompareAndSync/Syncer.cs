@@ -13,6 +13,7 @@ namespace Syncless.CompareAndSync
         public List<SyncResult> SyncFolder(List<string> paths, List<CompareResult> results, IOriginsFinder originsFinder)
         {
             List<SyncResult> syncResults = new List<SyncResult>();
+            List<XMLWriteObject> xmlWriteObjects = new List<XMLWriteObject>();
             SyncResult currResult = null;
             List<string> origins = null;
 
@@ -35,24 +36,37 @@ namespace Syncless.CompareAndSync
                 }
 
                 syncResults.Add(currResult);
+
+                FileCompareResult fileResult = null;
+
                 if (currResult.Success)
                 {
-                    origins = originsFinder.GetOrigins(currResult.ChangeType == FileChangeType.Delete ? currResult.From : currResult.To);
+                    origins = originsFinder.GetOrigins(result.ChangeType == FileChangeType.Delete ? result.From : result.To);
 
-
-                    //YC: Write XML
-                    //Check if it's folder or file and write accordingly?
-                    //Hash, Filename, Filesize, Creation Time, Last Write Time
+                    foreach (string origin in origins)
+                    {
+                        switch (result.ChangeType)
+                        {
+                            case FileChangeType.Create:
+                                fileResult = (FileCompareResult)result;
+                                xmlWriteObjects.Add(XMLWriteObject.CreateXMLWriteObject(origin, fileResult.From, fileResult.To,
+                                    fileResult.NewHash, fileResult.CreationTime, fileResult.LastWriteTime, fileResult.Length));
+                                break;
+                            case FileChangeType.Delete:
+                                xmlWriteObjects.Add(XMLWriteObject.DeleteXMLWriteObject(origin, result.From));
+                                break;
+                            case FileChangeType.Rename:
+                                xmlWriteObjects.Add(XMLWriteObject.RenameXMLWriteObject(origin, result.From, result.To));
+                                break;
+                            case FileChangeType.Update:
+                                fileResult = (FileCompareResult)result;
+                                xmlWriteObjects.Add(XMLWriteObject.CreateXMLWriteObject(origin, fileResult.From, fileResult.To,
+                                    fileResult.NewHash, fileResult.CreationTime, fileResult.LastWriteTime, fileResult.Length));
+                                break;
+                        }
+                    }                    
                 }
             }
-
-            //TODO: Will handle each change separately in future
-            /*
-            foreach (string path in paths)
-            {
-                XMLHelper.GenerateXMLFile(path);
-                //RemoveEmptyFolders(path);
-            }*/
 
             return syncResults;
         }
