@@ -63,11 +63,5 @@ namespace Syncless.CompareAndSync
             return new Comparer().CompareFolder(compareRequest.Paths);            
         }
 
-        public List<string> GetOrigins(string path)
-        {
-            //TODO: ERIC :P
-            return null;
-        }
-
     }
 }
