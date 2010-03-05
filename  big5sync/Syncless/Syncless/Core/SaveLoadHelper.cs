@@ -28,7 +28,6 @@ namespace Syncless.Core
 
             locations.Add(rootLocation);
             TaggingLayer.Instance.Init(locations);
-
         }
 
         private static void LoadProfiling(string appPath)
@@ -40,7 +39,7 @@ namespace Syncless.Core
             ProfilingLayer.Instance.Init(locations);
         }
         #endregion
-
+        
         #region private methods for Saving of Tagging and Profiling.
         private static void SaveTagging(string appPath)
         {
