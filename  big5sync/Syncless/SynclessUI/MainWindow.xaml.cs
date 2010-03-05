@@ -37,6 +37,7 @@ namespace SynclessUI
             get { return TxtBoxFilterTag.Text.Trim(); }
         }
         private string _app_path;
+        private bool _firstopen = true;
         
         public MainWindow() {
             // List<string> lststrCommandLineArgs = System.Environment.GetCommandLineArgs().ToList();
@@ -56,7 +57,6 @@ namespace SynclessUI
             {
                 SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(args, this);
             }
-
         }
 
         /// <summary>
@@ -470,12 +470,11 @@ namespace SynclessUI
 
         public void CLI_CreateTag(string clipath)
         {
-            WindowState windowStateBefore = this.WindowState;
-
             TagWindow tw = new TagWindow(this, clipath);
-            if (windowStateBefore == WindowState.Minimized)
+            if (_firstopen == true)
             {
                 this.WindowState = WindowState.Minimized;
+                _firstopen = false;
             }
         }
 
