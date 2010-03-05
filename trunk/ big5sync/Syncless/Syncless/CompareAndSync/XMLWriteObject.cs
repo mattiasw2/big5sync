@@ -11,6 +11,41 @@ namespace Syncless.CompareAndSync
         private string _from, _to, _newHash;
         private long _creationTime, _lastWriteTime, _length;
 
+        public FileChangeType ChangeType
+        {
+            get { return _changeType; }
+        }
+
+        public string From
+        {
+            get { return _from; }
+        }
+
+        public string To
+        {
+            get { return _to; }
+        }
+
+        public string NewHash
+        {
+            get { return _newHash; }
+        }
+
+        public long CreationTime
+        {
+            get { return _creationTime; }
+        }
+
+        public long LastWriteTime
+        {
+            get { return _lastWriteTime; }
+        }
+
+        public long Length
+        {
+            get { return _length; }
+        }
+
         //Files: Used for delete        
         private XMLWriteObject(FileChangeType changeType, string from)
         {
