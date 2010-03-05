@@ -4,15 +4,17 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using Syncless.Core;
 
 namespace Syncless.CompareAndSync
 {
     public class Syncer
     {
-        public List<SyncResult> SyncFolder(List<string> paths, List<CompareResult> results)
+        public List<SyncResult> SyncFolder(List<string> paths, List<CompareResult> results, IOriginsFinder originsFinder)
         {
             List<SyncResult> syncResults = new List<SyncResult>();
             SyncResult currResult = null;
+            List<string> origins = null;
 
             foreach (CompareResult result in results)
             {
@@ -35,6 +37,9 @@ namespace Syncless.CompareAndSync
                 syncResults.Add(currResult);
                 if (currResult.Success)
                 {
+                    origins = originsFinder.GetOrigins(currResult.ChangeType == FileChangeType.Delete ? currResult.From : currResult.To);
+
+
                     //YC: Write XML
                     //Check if it's folder or file and write accordingly?
                     //Hash, Filename, Filesize, Creation Time, Last Write Time
