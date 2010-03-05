@@ -5,6 +5,9 @@ namespace Syncless.Monitor
     public enum EventChangeType
     {
         /// <summary>
+        /// Creating a file.
+        /// </summary>
+        CREATING,/// <summary>
         /// A File or folder is created.
         /// </summary>
         CREATED,
