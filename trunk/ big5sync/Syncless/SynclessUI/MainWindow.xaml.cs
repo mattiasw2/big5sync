@@ -50,7 +50,6 @@ namespace SynclessUI
         {
             if (args.Length != 0 && firstInstance)
             {
-                this.WindowState = WindowState.Minimized;
                 SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(args, this);
             }
             else if (args.Length != 0 && !firstInstance)
@@ -472,7 +471,7 @@ namespace SynclessUI
         public void CLI_CreateTag(string clipath)
         {
             TagWindow tw = new TagWindow(this, clipath);
-            tw.Focus();
+            this.WindowState = WindowState.Minimized;
         }
 
         public void CLI_Untag(string clipath, string type)
