@@ -49,7 +49,7 @@
 			</TextBox.BorderBrush>
 		</TextBox>
 		<Label x:Name="LblPath" Content="Path:" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0" Grid.Column="1" Grid.Row="2" />
-		<Image x:Name="TagIcon" HorizontalAlignment="Right" Grid.Column="2" Width="80" Height="80" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,-25,-25,0" Grid.ColumnSpan="2"/>
+		<Image x:Name="TagIcon" HorizontalAlignment="Right" Grid.Column="2" Width="80" Height="80" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,-25,-25,0" Grid.ColumnSpan="2" Source="Icons/folder.ico"/>
 		<Button x:Name="BtnBrowse" Click="BtnBrowse_Click" Grid.Row="2" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right">
 			<Label x:Name="LblBrowse" FontFamily="Century Gothic" FontSize="9.333" Content="Browse"/>
 		</Button>

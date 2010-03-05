@@ -25,12 +25,12 @@ namespace SynclessUI
 
             main.Show();
 
-            ProcessArgs(e.Args, true);
+            ProcessArgs(e.Args);
         }
 
-        public void ProcessArgs(string[] args, bool firstInstance)
+        public void ProcessArgs(string[] args)
         {
-            main.ProcessCommandLine(args, firstInstance);
+            main.ProcessCommandLine(args);
         }
     }
 }

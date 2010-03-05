@@ -22,7 +22,6 @@ namespace SynclessUI
     public partial class TagWindow : Window
     {		
 		private MainWindow _main;
-        private string _selectedtype;
 		private bool cancelstatus = false;
         private string _tagname {
             get { return ACBTagName.GetText.Trim(); }
@@ -35,12 +34,11 @@ namespace SynclessUI
             InitializeComponent();
 			
 			_main = main;
-            _selectedtype = "";
 			ACBTagName.IsEnabled = false;
 
             if (clipath == "")
             {
-                _path = SelectFileFolder(true);
+                _path = SelectPath(true);
             }
             else
             {
@@ -58,7 +56,7 @@ namespace SynclessUI
             }
         }
 		
-		private string SelectFileFolder(bool cancelStatus) {
+		private string SelectPath(bool cancelStatus) {
 			string path = "";
 			// _folderName = (System.IO.Directory.Exists(_folderName)) ? _folderName : "";
 			var dlg1 = new Ionic.Utils.FolderBrowserDialogEx
@@ -88,30 +86,11 @@ namespace SynclessUI
 
         private void ProcessPath(string path)
         {
-            if (path == "")
+            if (path != "")
             {
-                _selectedtype = "";
-            }
-            else
-            {
-                FileInfo fi = new FileInfo(path);
                 DirectoryInfo di = new DirectoryInfo(path);
-                if (fi.Exists)
+				if (di.Exists)
                 {
-					var uriSource = new Uri(@"/SynclessUI;component/Icons/file.ico", UriKind.Relative);
-					TagIcon.Source = new BitmapImage(uriSource);
-					
-                    _selectedtype = "File";
-                    TxtBoxPath.Text = path;
-					ACBTagName.IsEnabled = true;
-                    ACBTagName.MySourceList = _main.gui.GetAllFileTags();
-                }
-                else if (di.Exists)
-                {
-					var uriSource = new Uri(@"/SynclessUI;component/Icons/folder.ico", UriKind.Relative);
-					TagIcon.Source = new BitmapImage(uriSource);
-					
-                    _selectedtype = "Folder";
                     TxtBoxPath.Text = path;
 					ACBTagName.IsEnabled = true;
                     ACBTagName.MySourceList = _main.gui.GetAllFolderTags();
@@ -132,52 +111,26 @@ namespace SynclessUI
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if(_tagname != "") {
-				if(_selectedtype != "") {
+				if(_path != "") {
 					bool proceedtotag = false;
-					bool compatibletagtype = false;
 					
 					TagView tv = _main.gui.GetTag(_tagname);
 					
 					if(tv == null) {
-						if(_selectedtype == "File")
-						{
-						    bool result = _main.CreateFileTag(_tagname);
-                            proceedtotag = !result;
-							compatibletagtype = true;
-						} else if(_selectedtype == "Folder")
-						{
-                            bool result = _main.CreateFolderTag(_tagname);
-                            proceedtotag = !result;
-                            compatibletagtype = true;
-						}
+                        bool result = _main.CreateTag(_tagname);
+                        proceedtotag = !result;
 					} else {
-						if(_selectedtype == "Folder") {
-							if(tv is FolderTagView) {
-								compatibletagtype = true;
-								proceedtotag = true;
-							}
-						} else if(_selectedtype == "File") {
-							if(tv is FileTagView) {
-								compatibletagtype = true;
-								proceedtotag = true;
-							}
-						} 
+						proceedtotag = true;
 					}
 					
-					if(proceedtotag && compatibletagtype) {
-						TagView tv1 = null;
-						
-						if(_selectedtype == "File") {
-							tv1 = _main.gui.TagFile(_tagname, new FileInfo(_path));
-						} else if(_selectedtype == "Folder") {
-							tv1 = _main.gui.TagFolder(_tagname, new DirectoryInfo(_path));
-						}
+					if(proceedtotag) {
+						TagView tv1 = _main.gui.TagFolder(_tagname, new DirectoryInfo(_path));
 						
 						if(tv1 != null) {
 							_main.InitializeTagList();
 							_main.SelectTag(_tagname);
 						} else {
-							string messageBoxText = "Tag Error Occcured. Please Try Again.";
+							string messageBoxText = "Tag Error Occured. Please Try Again.";
 							string caption = "Tag Error";
 							MessageBoxButton button = MessageBoxButton.OK;
 							MessageBoxImage icon = MessageBoxImage.Error;
@@ -187,16 +140,9 @@ namespace SynclessUI
 						this.Close();
 					}
 					
-					if(!compatibletagtype) {
-						string messageBoxText = "Please select an approriate tag type";
-						string caption = "Tag Type Incompatible";
-						MessageBoxButton button = MessageBoxButton.OK;
-						MessageBoxImage icon = MessageBoxImage.Error;
-		
-						MessageBox.Show(messageBoxText, caption, button, icon);
-					} else if(!proceedtotag) {
-						string messageBoxText = "File/Folder Tag Error";
-						string caption = "File/Folder Not Tagged";
+					if(!proceedtotag) {
+						string messageBoxText = "Folder Tag Error";
+						string caption = "Folder Not Tagged";
 						MessageBoxButton button = MessageBoxButton.OK;
 						MessageBoxImage icon = MessageBoxImage.Error;
 		
@@ -204,8 +150,8 @@ namespace SynclessUI
                         this.Close();
 					}
 				} else {
-					string messageBoxText = "Please select a file/folder to tag.";
-					string caption = "File/Folder Not Selected";
+					string messageBoxText = "Please select a folder to tag.";
+					string caption = "Folder Not Selected";
 					MessageBoxButton button = MessageBoxButton.OK;
 					MessageBoxImage icon = MessageBoxImage.Error;
 	
@@ -233,7 +179,7 @@ namespace SynclessUI
 
 		private void BtnBrowse_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-            string path = SelectFileFolder(false);
+            string path = SelectPath(false);
             ProcessPath(path);
 		}
     }

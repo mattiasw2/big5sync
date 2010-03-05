@@ -29,7 +29,7 @@ namespace SynclessUI
     {
         base.OnStartupNextInstance(eventArgs);
         App.main.Activate();
-        App.ProcessArgs(eventArgs.CommandLine.ToArray(), false);
+        App.ProcessArgs(eventArgs.CommandLine.ToArray());
     }
 }
 }
