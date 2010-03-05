@@ -147,37 +147,6 @@ namespace Syncless.Profiling
         {   
             ProfilingXMLHelper.SaveProfile(_profile,savedLocation);
         }
-
-        /*
-       public static bool SaveToAllDrive(Profile profile)
-       {
-           DriveInfo[] drives = DriveInfo.GetDrives();
-           XmlDocument xml = ConvertToXMLDocument(profile);
-           UpdateLastUpdateTime(xml, DateTime.Now.Ticks);
-           //Save to Root Directory
-           FileInfo profileInfo = new FileInfo(ProfilingLayer.RELATIVE_PROFILING_ROOT_SAVE_PATH);
-           SaveProfile(xml, profileInfo.FullName);
-            
-           /* Save to all Drive Commented for v0.0
-           foreach (DriveInfo driveInfo in drives)
-           {
-               if (driveInfo.DriveType == DriveType.Removable)
-               {
-                   FileInfo fileInfo = new FileInfo(ProfilingHelper.ExtractDriveName(driveInfo) + ":" + ProfilingLayer.RELATIVE_GUID_SAVE_PATH);
-                   if (fileInfo.Exists)
-                   {
-                       //GUID Exist
-                       profileInfo = new FileInfo(ProfilingHelper.ExtractDriveName(driveInfo) + ":" + ProfilingLayer.RELATIVE_PROFILING_SAVE_PATH);
-                       SaveProfile(xml, profileInfo.FullName);
-                   }
-               }
-           }
-            
-           return true;
-       }
-       */
-
-
         /// <summary>
         /// Initialize the Profiling Layer.
         /// </summary>
@@ -235,9 +204,5 @@ namespace Syncless.Profiling
         {
             return _profile.RemoveDrive(ProfilingHelper.ExtractDriveName(driveinfo.Name));
         }
-
-        
-
-
     }
 }

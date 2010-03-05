@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Syncless.CompareAndSync.Result
+namespace Syncless.CompareAndSync
 {
     class XMLWriteRequest
     {
