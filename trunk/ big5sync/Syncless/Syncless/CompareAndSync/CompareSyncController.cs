@@ -5,11 +5,14 @@ using System.Text;
 using Syncless.Tagging;
 using System.IO;
 using System.Diagnostics;
+using Syncless.Core;
 
 namespace Syncless.CompareAndSync
 {
     public class CompareSyncController
     {
+        private IOriginsFinder _originsFinder;
+
         private static CompareSyncController _instance;
         public static CompareSyncController Instance
         {
@@ -28,6 +31,12 @@ namespace Syncless.CompareAndSync
 
         }
 
+        public bool Init(IOriginsFinder originsFinder)
+        {
+            _originsFinder = originsFinder;
+            return true;
+        }
+
         public void Sync(MonitorSyncRequest syncRequest)
         {
             List<string> paths = null;
@@ -44,13 +53,13 @@ namespace Syncless.CompareAndSync
                     break;
             }
 
-            new Syncer().SyncFolder(paths, results);
+            new Syncer().SyncFolder(paths, results, _originsFinder);
         }
 
         public List<SyncResult> Sync(SyncRequest syncRequest)
         {
             syncRequest.Results = new Comparer().CompareFolder(syncRequest.Paths);
-            return new Syncer().SyncFolder(syncRequest.Paths, syncRequest.Results);
+            return new Syncer().SyncFolder(syncRequest.Paths, syncRequest.Results, _originsFinder);
         }
 
         /// <summary>
