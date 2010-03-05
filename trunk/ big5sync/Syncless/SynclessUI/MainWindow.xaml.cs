@@ -470,8 +470,13 @@ namespace SynclessUI
 
         public void CLI_CreateTag(string clipath)
         {
+            WindowState windowStateBefore = this.WindowState;
+
             TagWindow tw = new TagWindow(this, clipath);
-            this.WindowState = WindowState.Minimized;
+            if (windowStateBefore == WindowState.Minimized)
+            {
+                this.WindowState = WindowState.Minimized;
+            }
         }
 
         public void CLI_Untag(string clipath, string type)
