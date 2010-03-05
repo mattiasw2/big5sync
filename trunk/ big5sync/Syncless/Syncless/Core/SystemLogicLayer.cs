@@ -464,7 +464,6 @@ namespace Syncless.Core
 
         #endregion
 
-
         #region IOriginsFinder Members
 
         public List<string> GetOrigins(string path)

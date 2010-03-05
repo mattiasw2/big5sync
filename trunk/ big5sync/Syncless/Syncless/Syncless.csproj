@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{79C1CBE7-297A-4820-A2D9-BE3507B8EF19}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -76,6 +76,15 @@
     <Compile Include="Core\ServiceLocater.cs" />
     <Compile Include="Core\SystemLogicLayer.cs" />
     <Compile Include="Core\TagView.cs" />
+    <Compile Include="Filters\AbstractFileFilter.cs" />
+    <Compile Include="Filters\AbstractFilter.cs" />
+    <Compile Include="Filters\AbstractFolderFilter.cs" />
+    <Compile Include="Filters\Exceptions\FilterChainException.cs" />
+    <Compile Include="Filters\ExtensionFilter.cs" />
+    <Compile Include="Filters\FileSizeFilter.cs" />
+    <Compile Include="Filters\FilterChain.cs" />
+    <Compile Include="Filters\FilterNonExist.cs" />
+    <Compile Include="Filters\FolderNameFilter.cs" />
     <Compile Include="Helper\ErrorMessage.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LoggingLayer.cs" />
@@ -109,6 +118,8 @@
     <Compile Include="Tagging\FileTag.cs" />
     <Compile Include="Tagging\FolderTag.cs" />
     <Compile Include="Tagging\LogMessage.cs" />
+    <Compile Include="Tagging\RecursionGraph\GraphNode.cs" />
+    <Compile Include="Tagging\RecursionGraph\TagGraph.cs" />
     <Compile Include="Tagging\Tag.cs" />
     <Compile Include="Tagging\TaggedPath.cs" />
     <Compile Include="Tagging\TaggingHelper.cs" />
