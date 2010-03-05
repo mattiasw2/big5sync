@@ -17,7 +17,10 @@ namespace Syncless.CompareAndSync
         private const string NODE_HASH = "hash";
         private const string NODE_LAST_MODIFIED = "last_modified";
         private const string NODE_LAST_CREATED = "last_created";
-        public const string METADATAPATH = "_syncless\\syncless.xml";
+        public const string METADATADIR = "_syncless";
+        public const string METADATAPATH = METADATADIR + "\\syncless.xml";
+        public const string METADATATODO = METADATADIR + "\\todo.xml";
+        
         private static readonly object syncLock = new object(); 
         /// <summary>
         /// Given a dirpath , breaks it up into a folder and returns an Xpath Expression
@@ -350,8 +353,38 @@ namespace Syncless.CompareAndSync
          * 5. For update and create, you need the filename (full path), hash, length, modified date, creation date (basically all the elements)
          * 6. For delete, you need the filename (full path), and then remove the element completely
          * 7. For rename, you need the old path and new path, and simply change the old name to new name
+         *  Load into dom object then process the thing from there.
+         *  Downcast compare result into FileCompareResult
          */
-        
+        public static void EditXml(string path, List<CompareResult> compareResultList)
+        {
+            string xmlPath = Path.Combine(path, METADATAPATH);
+             
+            if (File.Exists(xmlPath))    // If file exist , modify , else create a new xml with CompareResult
+            {
+                modifyXmlWithCompareResult(xmlPath,compareResultList);
+            }
+            else
+            {
+                GenerateXMLFile(path);
+            }
+        }
+
+        private static void modifyXmlWithCompareResult(string xmlPath, List<CompareResult> compareResultList)
+        { 
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(xmlPath);
+            for (int i = 0; i < compareResultList.Count; i++)
+            {
+                FileCompareResult fileResult = (FileCompareResult)compareResultList[i];
+
+            }
+
+
+        }
+
+
+        /*
         public static void EditXml(string xmlpath, FileChangeType type, string filePath)
         {
             Debug.Assert(File.Exists(xmlpath));
@@ -457,7 +490,7 @@ namespace Syncless.CompareAndSync
                 xmlDoc.Save(xmlpath);
 
             }
-        }
+        }*/
 
 
     }
