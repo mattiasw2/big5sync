@@ -22,7 +22,35 @@ namespace Syncless.Filters
             {
                 return false;
             }
-            
+            if (!File.Exists(path))
+            {
+                return false;
+            }
+            FileInfo file = new FileInfo(path);
+            if (_sizeMode == SizeMode.MORE_THAN_EQUAL)
+            {
+                if (file.Length >= _size)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (file.Length <= _size)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+
             return false;
         }
         public enum SizeMode {
