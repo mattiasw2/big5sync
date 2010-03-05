@@ -10,9 +10,9 @@ namespace Syncless.CompareAndSync
         private MonitorPathPair _oldPath, _newPath = null;
         private List<MonitorPathPair> _dest;
         private FileChangeType _changeType;
-        private bool _isFolder;
+        private IsFolder _isFolder;
 
-        public MonitorSyncRequest(MonitorPathPair oldPath, List<MonitorPathPair> dest, FileChangeType changeType, bool isFolder)
+        public MonitorSyncRequest(MonitorPathPair oldPath, List<MonitorPathPair> dest, FileChangeType changeType, IsFolder isFolder)
         {
             _oldPath = oldPath;
             _dest = dest;
@@ -20,7 +20,7 @@ namespace Syncless.CompareAndSync
             _isFolder = isFolder;
         }
 
-        public MonitorSyncRequest(MonitorPathPair oldPath, MonitorPathPair newPath, List<MonitorPathPair> dest, FileChangeType changeType, bool isFolder) :
+        public MonitorSyncRequest(MonitorPathPair oldPath, MonitorPathPair newPath, List<MonitorPathPair> dest, FileChangeType changeType, IsFolder isFolder) :
             this(oldPath, dest, changeType,isFolder)
         {
             _newPath = newPath;
@@ -46,10 +46,16 @@ namespace Syncless.CompareAndSync
             get { return _changeType; }
         }
 
-        public bool IsFolder
+        public IsFolder IsFolder
         {
             get { return _isFolder; }
         }
+    }
 
+    public enum IsFolder
+    {
+        Yes,
+        No,
+        Unknown
     }
 }

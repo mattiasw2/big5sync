@@ -7,10 +7,9 @@ namespace Syncless.CompareAndSync
 {
     public class CompareRequest : Request
     {
-        public CompareRequest(List<string> paths, bool isFolder)
+        public CompareRequest(List<string> paths)
         {
             base._paths = paths;
-            base._isFolder = isFolder;
         }
     }
 }

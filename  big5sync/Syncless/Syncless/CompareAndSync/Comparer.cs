@@ -14,7 +14,6 @@ namespace Syncless.CompareAndSync
         private Dictionary<CompareInfoObject, List<string>> createTable, updateTable;
         private Dictionary<string, List<string>> renameTable;
         private List<string> deleteList;
-        private const string METADATAPATH = "_syncless\\metadata.xml";
 
         #region Monitor
 
@@ -81,7 +80,7 @@ namespace Syncless.CompareAndSync
             paths = new List<string>();
             results = new List<CompareResult>();
 
-            if (syncRequest.OldPath.FullPath.EndsWith(METADATAPATH) || (syncRequest.NewPath != null && syncRequest.NewPath.FullPath.EndsWith(METADATAPATH)))
+            if (syncRequest.OldPath.FullPath.EndsWith(XMLHelper.METADATAPATH) || (syncRequest.NewPath != null && syncRequest.NewPath.FullPath.EndsWith(XMLHelper.METADATAPATH)))
             {
                 return;
             }
@@ -148,55 +147,6 @@ namespace Syncless.CompareAndSync
         #endregion
 
         #region Manual
-
-        // Assumes that all paths taken from the tag exists in the directory
-        public List<CompareResult> CompareFile(List<string> paths)
-        {
-            List<CompareResult> compareResultList = new List<CompareResult>();
-            FileInfo sourceInfo = null;
-            FileInfo destInfo = null;
-
-            for (int i = 0; i < paths.Count - 1; i++)
-            {
-                for (int j = 1; j <= paths.Count - 1; j++)
-                {
-                    sourceInfo = new FileInfo(paths[i]);
-                    destInfo = new FileInfo(paths[j]);
-
-                    //same content but different name (RENAME)
-                    if(CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo))
-                        && !sourceInfo.Name.Equals(destInfo.Name)) // same content different name
-                    {
-                        compareResultList.Add(FileCompareResult.RenameFileCompareResult(sourceInfo.FullName,
-                            destInfo.FullName));
-                    }    
-                    //different hash , but same name and creation time
-                    else if (sourceInfo.Name.Equals(destInfo.Name) && sourceInfo.CreationTime.Ticks == destInfo.CreationTime.Ticks
-                      && !CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo)))
-                    {
-                        compareResultList.Add(FileCompareResult.UpdateFileCompareResult(sourceInfo.FullName,
-                            destInfo.FullName, (CalculateMD5Hash(sourceInfo)), sourceInfo.CreationTime.Ticks, sourceInfo.LastWriteTime.Ticks, sourceInfo.Length));
-                    }
-                    /*
-                    else if (!(CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo)) &&
-                        sourceInfo.CreationTime.Ticks == destInfo.CreationTime.Ticks && sourceInfo.Name.Equals(destInfo.Name)))
-                    {
-                        compareResultList.Add(FileCompareResult(FileChangeType.Create, sourceInfo.FullName,
-                            destInfo.FullName, false, (CalculateMD5Hash(sourceInfo))));
-                    }
-                    /*
-                    else if (CalculateMD5Hash(sourceInfo).Equals(CalculateMD5Hash(destInfo)) &&
-                        sourceInfo.Name.Equals(destInfo.Name))
-                    {
-                        compareResultList.Add(new CompareResult(FileChangeType.None, sourceInfo.FullName,
-                            destInfo.FullName, false));
-                    }*/
-
-                }
-            }
-
-            return compareResultList;
-        }
 
         public List<CompareResult> CompareFolder(List<string> paths)
         {
