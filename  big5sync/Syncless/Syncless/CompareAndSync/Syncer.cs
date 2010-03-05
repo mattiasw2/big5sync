@@ -68,13 +68,9 @@ namespace Syncless.CompareAndSync
                 }
             }
 
-            return syncResults;
-        }
+            XMLHelper.EditXML(xmlWriteObjects);
 
-        public bool ModifyXml(string xmlPath , FileChangeType type , string changedFilePath)
-        {
-            //XMLHelper.EditXml(xmlPath, type, changedFilePath);
-            return false; //TEMP
+            return syncResults;
         }
 
         #region Create
