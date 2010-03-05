@@ -32,29 +32,25 @@ namespace Syncless.CompareAndSync
         {
             List<string> paths = null;
             List<CompareResult> results = null;
-            if (syncRequest.IsFolder)
+            switch (syncRequest.IsFolder)
             {
-                new Comparer().MonitorCompareFolder(syncRequest, out paths, out results);
+                case IsFolder.Yes:
+                    new Comparer().MonitorCompareFolder(syncRequest, out paths, out results);
+                    break;
+                case IsFolder.No:
+                    new Comparer().MonitorCompareFile(syncRequest, out paths, out results);
+                    break;
+                case IsFolder.Unknown:
+                    break;
             }
-            else
-            {
-                new Comparer().MonitorCompareFile(syncRequest, out paths, out results);
-            }
+
             new Syncer().SyncFolder(paths, results);
         }
 
         public List<SyncResult> Sync(SyncRequest syncRequest)
-        {            
-            if (syncRequest.IsFolder)
-            {
-                syncRequest.Results = new Comparer().CompareFolder(syncRequest.Paths);
-                return new Syncer().SyncFolder(syncRequest.Paths, syncRequest.Results);
-            }
-            else
-            {
-                syncRequest.Results = new Comparer().CompareFolder(syncRequest.Paths);
-                return new Syncer().SyncFile(syncRequest.Paths, syncRequest.Results);
-            }
+        {
+            syncRequest.Results = new Comparer().CompareFolder(syncRequest.Paths);
+            return new Syncer().SyncFolder(syncRequest.Paths, syncRequest.Results);
         }
 
         /// <summary>
@@ -64,15 +60,7 @@ namespace Syncless.CompareAndSync
         /// <returns>The list of Compare Result</returns>
         public List<CompareResult> Compare(CompareRequest compareRequest)
         {
-            if (compareRequest.IsFolder)
-            {
-                return new Comparer().CompareFolder(compareRequest.Paths);
-            }
-            else
-            {
-                return new Comparer().CompareFile(compareRequest.Paths);
-            }
-            
+            return new Comparer().CompareFolder(compareRequest.Paths);            
         }
 
         public List<string> GetOrigins(string path)

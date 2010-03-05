@@ -8,7 +8,7 @@ namespace Syncless.CompareAndSync
     public abstract class CompareResult : Result
     {
 
-        //Files: Used for deletions. Folders: Used for deletio
+        //Files: Used for deletions. Folders: Used for deletion
         public CompareResult(FileChangeType changeType, string from) :
             base(changeType, from)
         {
@@ -42,7 +42,6 @@ namespace Syncless.CompareAndSync
             sb.AppendLine(s);
             sb.AppendLine("Source: " + base.From);
             sb.AppendLine("Destination: " + base.To);
-            //sb.Append(s + " Source: " + base.From + " Destination: " + base.To);
             return sb.ToString();
         }
     }

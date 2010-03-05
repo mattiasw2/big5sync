@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Syncless.CompareAndSync
 {
+    /// <summary>
+    /// Abstract class for Result object.
+    /// </summary>
     public abstract class Result
     {
         private FileChangeType _changeType;

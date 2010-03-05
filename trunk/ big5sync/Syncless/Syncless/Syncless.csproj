@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{79C1CBE7-297A-4820-A2D9-BE3507B8EF19}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -49,19 +49,19 @@
   <ItemGroup>
     <Compile Include="CompareAndSync\CompareInfoObject.cs" />
     <Compile Include="CompareAndSync\Comparer.cs" />
-    <Compile Include="CompareAndSync\CompareRequest.cs" />
-    <Compile Include="CompareAndSync\CompareResult.cs" />
+    <Compile Include="CompareAndSync\Request\CompareRequest.cs" />
+    <Compile Include="CompareAndSync\Result\CompareResult.cs" />
     <Compile Include="CompareAndSync\CompareSyncController.cs" />
     <Compile Include="CompareAndSync\CompareAndSyncEnum.cs" />
-    <Compile Include="CompareAndSync\FileCompareResult.cs" />
-    <Compile Include="CompareAndSync\FolderCompareResult.cs" />
+    <Compile Include="CompareAndSync\Result\FileCompareResult.cs" />
+    <Compile Include="CompareAndSync\Result\FolderCompareResult.cs" />
     <Compile Include="CompareAndSync\MonitorPathPair.cs" />
-    <Compile Include="CompareAndSync\MonitorSyncRequest.cs" />
-    <Compile Include="CompareAndSync\Request.cs" />
-    <Compile Include="CompareAndSync\Result.cs" />
+    <Compile Include="CompareAndSync\Request\MonitorSyncRequest.cs" />
+    <Compile Include="CompareAndSync\Request\Request.cs" />
+    <Compile Include="CompareAndSync\Result\Result.cs" />
     <Compile Include="CompareAndSync\Syncer.cs" />
-    <Compile Include="CompareAndSync\SyncRequest.cs" />
-    <Compile Include="CompareAndSync\SyncResult.cs" />
+    <Compile Include="CompareAndSync\Request\SyncRequest.cs" />
+    <Compile Include="CompareAndSync\Result\SyncResult.cs" />
     <Compile Include="CompareAndSync\XMLHelper.cs" />
     <Compile Include="Core\DeviceWatcher.cs" />
     <Compile Include="Core\Exceptions\LoggerNotFoundException.cs" />
@@ -113,9 +113,6 @@
     <Compile Include="Tagging\TaggingLayer.cs" />
     <Compile Include="Tagging\TaggingProfile.cs" />
     <Compile Include="Tagging\TaggingXMLHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="CompareAndSync\ClassDiagramCompareAndSync.cd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\log4net.dll" />
