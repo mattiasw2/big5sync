@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using Syncless.Core;
 using Syncless.Helper;
+using Syncless.Monitor.DTO;
 using Syncless.Monitor.Exceptions;
 namespace Syncless.Monitor
 {
@@ -22,17 +23,15 @@ namespace Syncless.Monitor
             }
         }
 
-        private List<FileSystemWatcher> watchers;
+        private List<ExtendedFileSystemWatcher> watchers;
         private List<string> monitoredPaths;
-        // new code
         private List<FileSystemWatcher> rootWatchers;
-        private Hashtable rootsAndParent; 
-
+        private Hashtable rootsAndParent;
+        
         private MonitorLayer()
         {
-            watchers = new List<FileSystemWatcher>();
+            watchers = new List<ExtendedFileSystemWatcher>();
             monitoredPaths = new List<string>();
-            // new code
             rootWatchers = new List<FileSystemWatcher>();
             rootsAndParent = new Hashtable();
         }
@@ -68,7 +67,7 @@ namespace Syncless.Monitor
             bool addToWatcher = true;
             for (int i = 0; i < watchers.Count; i++)
             {
-                FileSystemWatcher watcher = watchers[i];
+                ExtendedFileSystemWatcher watcher = watchers[i];
                 string watchPath = watcher.Path.ToLower();
                 if (!watcher.Filter.Equals("*.*"))
                 {
@@ -101,7 +100,7 @@ namespace Syncless.Monitor
             }
             if (addToWatcher)
             {
-                FileSystemWatcher watcher = CreateWatcher(path, "*.*");
+                ExtendedFileSystemWatcher watcher = CreateWatcher(path, "*.*");
                 watchers.Add(watcher);
                 AddRootWatcher(path);
             }
@@ -123,7 +122,7 @@ namespace Syncless.Monitor
             bool addToWatcher = true;
             for (int i = 0; i < watchers.Count; i++)
             {
-                FileSystemWatcher watcher = watchers[i];
+                ExtendedFileSystemWatcher watcher = watchers[i];
                 string watchPath = watcher.Path.ToLower();
                 if (!watcher.Filter.Equals("*.*"))
                 {
@@ -144,7 +143,7 @@ namespace Syncless.Monitor
             }
             if (addToWatcher)
             {
-                FileSystemWatcher watcher = CreateWatcher(file.DirectoryName, file.Name);
+                ExtendedFileSystemWatcher watcher = CreateWatcher(file.DirectoryName, file.Name);
                 watchers.Add(watcher);
             }
             foreach (string mPath in monitoredPaths)
@@ -281,7 +280,7 @@ namespace Syncless.Monitor
             bool unMonitored = false;
             for (int i = 0; i < watchers.Count; i++)
             {
-                FileSystemWatcher watcher = watchers[i];
+                ExtendedFileSystemWatcher watcher = watchers[i];
                 string watchPath = watcher.Path.ToLower();
                 if (!watcher.Filter.Equals("*.*"))
                 {
@@ -328,7 +327,7 @@ namespace Syncless.Monitor
             }
             for (int i = 0; i < watchers.Count; i++)
             {
-                FileSystemWatcher watcher = watchers[i];
+                ExtendedFileSystemWatcher watcher = watchers[i];
                 string watchPath = watcher.Path.ToLower();
                 if (!watcher.Filter.Equals("*.*"))
                 {
@@ -397,7 +396,7 @@ namespace Syncless.Monitor
             }
             for (int i = 0; i < watchers.Count; i++)
             {
-                FileSystemWatcher watcher = watchers[i];
+                ExtendedFileSystemWatcher watcher = watchers[i];
                 if (watcher.Path.ToLower().StartsWith(driveLetter.ToLower()))
                 {
                     watcher.Dispose();
@@ -418,80 +417,70 @@ namespace Syncless.Monitor
             return count;
         }
 
-        private FileSystemWatcher CreateWatcher(string path, string filter)
+        private ExtendedFileSystemWatcher CreateWatcher(string path, string filter)
         {
-            FileSystemWatcher watcher = new FileSystemWatcher(path, filter);
+            ExtendedFileSystemWatcher watcher = new ExtendedFileSystemWatcher(path, filter);
             watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
             watcher.IncludeSubdirectories = true;
             watcher.Changed += new FileSystemEventHandler(OnModified);
             watcher.Created += new FileSystemEventHandler(OnCreated);
             watcher.Deleted += new FileSystemEventHandler(OnDeleted);
             watcher.Renamed += new RenamedEventHandler(OnRenamed);
+            watcher.CreateComplete += new FileSystemEventHandler(OnCreateComplete);
+            watcher.Error += new ErrorEventHandler(OnError);
             watcher.EnableRaisingEvents = true;
             return watcher;
         }
 
-        private static void OnModified(object source, FileSystemEventArgs e)
+        private void OnModified(object source, FileSystemEventArgs e)
         {
             if (e.FullPath.ToLower().EndsWith(@"syncless.xml"))
             {
                 return;
             }
-            IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
             if (File.Exists(e.FullPath))
             {
-                Console.WriteLine("File Modified: " + e.FullPath);
-                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), EventChangeType.MODIFIED);
-                monitor.HandleFileChange(fileEvent);
+                FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.MODIFIED, FileSystemType.FILE);
+                FileSystemEventDispatcher.Instance.AddToQueue(fse);
+                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
             }
         }
-
-        private static void OnCreated(object source, FileSystemEventArgs e)
+        
+        private void OnCreated(object source, FileSystemEventArgs e)
         {
             if (e.FullPath.ToLower().EndsWith(@"syncless.xml"))
             {
                 return;
             }
-            IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
             if (File.Exists(e.FullPath))
             {
-                Console.WriteLine("File Created: " + e.FullPath);
-                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), EventChangeType.CREATED);
-                monitor.HandleFileChange(fileEvent);
+                FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATING, FileSystemType.FILE);
+                FileSystemEventDispatcher.Instance.AddToQueue(fse);
+                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
             }
             else
             {
-                Console.WriteLine("Folder Created: " + e.FullPath);
-                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.FullPath + @"\\"), EventChangeType.CREATED);
-                monitor.HandleFolderChange(folderEvent);
+                FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.FOLDER);
+                FileSystemEventDispatcher.Instance.AddToQueue(fse);
             }
         }
 
-        private static void OnDeleted(object source, FileSystemEventArgs e)
+        private void OnDeleted(object source, FileSystemEventArgs e)
         {
             if (e.FullPath.ToLower().EndsWith(@"syncless.xml"))
             {
                 return;
             }
-            IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
-            FileSystemWatcher watcher = (FileSystemWatcher)source;
+            ExtendedFileSystemWatcher watcher = (ExtendedFileSystemWatcher)source;
             if (!watcher.Filter.Equals("*.*"))
             {
-                Console.WriteLine("File Deleted: " + e.FullPath);
-                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.FullPath), EventChangeType.DELETED);
-                monitor.HandleFileChange(fileEvent);
-            }
-            else if (watcher.Path.ToLower().Equals(e.FullPath)) // Strangely this will never happen as watcher cannot detect any event from the root folder
-            {
-                Console.WriteLine("Folder Deleted: " + e.FullPath);
-                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.FullPath + @"\\"), EventChangeType.DELETED);
-                monitor.HandleFolderChange(folderEvent);
+                FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.DELETED, FileSystemType.FILE);
+                FileSystemEventDispatcher.Instance.AddToQueue(fse);
             }
             else
             {
-                Console.WriteLine("File/Folder Deleted: " + e.FullPath);
-                DeleteChangeEvent deleteEvent = new DeleteChangeEvent(new DirectoryInfo(e.FullPath), new DirectoryInfo(watcher.Path));
-                monitor.HandleDeleteChange(deleteEvent);
+                FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.DELETED, FileSystemType.UNKNOWN);
+                FileSystemEventDispatcher.Instance.AddToQueue(fse);
             }
         }
 
@@ -501,21 +490,33 @@ namespace Syncless.Monitor
             {
                 return;
             }
-            IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
             if (File.Exists(e.FullPath))
             {
-                Console.WriteLine("File Renamed: " + e.OldFullPath + " " + e.FullPath);
-                FileChangeEvent fileEvent = new FileChangeEvent(new FileInfo(e.OldFullPath), new FileInfo(e.FullPath));
-                monitor.HandleFileChange(fileEvent);
+                FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FILE);
+                FileSystemEventDispatcher.Instance.AddToQueue(fse);
             }
             else
             {
-                Console.WriteLine("Folder Renamed: " + e.OldFullPath + " " + e.FullPath);
-                FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.OldFullPath + @"\\"), new DirectoryInfo(e.FullPath));
-                monitor.HandleFolderChange(folderEvent);
+                FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FOLDER);
+                FileSystemEventDispatcher.Instance.AddToQueue(fse);
             }
         }
 
+        private void OnCreateComplete(object source, FileSystemEventArgs e)
+        {
+            if (e.FullPath.ToLower().EndsWith(@"syncless.xml"))
+            {
+                return;
+            }
+            FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.FILE);
+            FileSystemEventDispatcher.Instance.AddToQueue(fse);
+        }
+
+        private void OnError(object source, ErrorEventArgs e)
+        {
+            Console.WriteLine(e.GetException().ToString());
+        }
+        
         private FileSystemWatcher CreateRootWatcher(string path, string filter)
         {
             FileSystemWatcher watcher = new FileSystemWatcher(path, filter);
@@ -523,6 +524,7 @@ namespace Syncless.Monitor
             watcher.IncludeSubdirectories = false;
             watcher.Deleted += new FileSystemEventHandler(OnRootDeleted);
             watcher.Renamed += new RenamedEventHandler(OnRootRenamed);
+            watcher.Error += new ErrorEventHandler(OnRootError);
             watcher.EnableRaisingEvents = true;
             return watcher;
         }
@@ -534,10 +536,8 @@ namespace Syncless.Monitor
             foreach(string folder in folders) {
                 if (e.FullPath.Equals(folder))
                 {
-                    Console.WriteLine("Folder Deleted: " + e.FullPath);
-                    FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.FullPath), EventChangeType.DELETED);
-                    IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
-                    monitor.HandleFolderChange(folderEvent);
+                    FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.DELETED, FileSystemType.FOLDER);
+                    FileSystemEventDispatcher.Instance.AddToQueue(fse);
                     return;
                 }
             }
@@ -551,13 +551,17 @@ namespace Syncless.Monitor
             {
                 if (e.OldFullPath.Equals(folder))
                 {
-                    Console.WriteLine("Folder Renamed: " + e.OldFullPath + " " + e.FullPath);
-                    FolderChangeEvent folderEvent = new FolderChangeEvent(new DirectoryInfo(e.OldFullPath), new DirectoryInfo(e.FullPath));
-                    IMonitorControllerInterface monitor = ServiceLocator.MonitorI;
-                    monitor.HandleFolderChange(folderEvent);
+                    FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FOLDER);
+                    FileSystemEventDispatcher.Instance.AddToQueue(fse);
+                    Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                     return;
                 }
             }
+        }
+
+        private void OnRootError(object source, ErrorEventArgs e)
+        {
+            Console.WriteLine(e.GetException().ToString());
         }
     }
 }

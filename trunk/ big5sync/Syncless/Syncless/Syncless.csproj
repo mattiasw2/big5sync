@@ -88,14 +88,20 @@
     <Compile Include="Helper\ErrorMessage.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LoggingLayer.cs" />
-    <Compile Include="Monitor\DeleteChangeEvent.cs" />
-    <Compile Include="Monitor\DriveChangeEvent.cs" />
-    <Compile Include="Monitor\DriveChangeType.cs" />
-    <Compile Include="Monitor\EventChangeType.cs" />
+    <Compile Include="Monitor\DTO\FileSystemEvent.cs" />
+    <Compile Include="Monitor\DTO\FileSystemType.cs" />
+    <Compile Include="Monitor\FileSystemEventDispatcher.cs" />
+    <Compile Include="Monitor\ExtendedFileSystemWatcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Monitor\DTO\DeleteChangeEvent.cs" />
+    <Compile Include="Monitor\DTO\DriveChangeEvent.cs" />
+    <Compile Include="Monitor\DTO\DriveChangeType.cs" />
+    <Compile Include="Monitor\DTO\EventChangeType.cs" />
     <Compile Include="Monitor\Exceptions\MonitorDriveNotFoundException.cs" />
     <Compile Include="Monitor\Exceptions\MonitorPathNotFoundException.cs" />
-    <Compile Include="Monitor\FileChangeEvent.cs" />
-    <Compile Include="Monitor\FolderChangeEvent.cs" />
+    <Compile Include="Monitor\DTO\FileChangeEvent.cs" />
+    <Compile Include="Monitor\DTO\FolderChangeEvent.cs" />
     <Compile Include="Monitor\MonitorLayer.cs" />
     <Compile Include="Profiling\Profile.cs" />
     <Compile Include="Profiling\Exceptions\ProfileConflictException.cs" />
