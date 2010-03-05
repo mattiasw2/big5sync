@@ -17,10 +17,14 @@ namespace Syncless.CompareAndSync
         private const string NODE_HASH = "hash";
         private const string NODE_LAST_MODIFIED = "last_modified";
         private const string NODE_LAST_CREATED = "last_created";
+        private const string FILES = "files";
+        private const string FOLDER = "folder";
+        private const string NAME_OF_FOLDER = "name_of_folder";
         public const string METADATADIR = "_syncless";
         public const string METADATAPATH = METADATADIR + "\\syncless.xml";
         public const string METADATATODO = METADATADIR + "\\todo.xml";
-        
+            
+
         private static readonly object syncLock = new object(); 
         /// <summary>
         /// Given a dirpath , breaks it up into a folder and returns an Xpath Expression
@@ -322,6 +326,20 @@ namespace Syncless.CompareAndSync
             return finalExpr;
         }
 
+        private static string getEntireFolder(string filePath) // FOR FOLDER AS XMLWRITEOBJ
+        {
+            string[] splitWords = filePath.Split('\\');
+            string finalExpr = "/meta-data"; ;
+            for (int i = 0; i < splitWords.Length; i++)
+            {
+                if (splitWords[i].Equals(""))
+                    continue;
+                finalExpr = finalExpr + "/folder" + "[name_of_folder='" + splitWords[i] + "']";
+            }
+            return finalExpr;
+        }
+
+        //get C:/asd/asd e.g
         private static string getFolderString(string filePath)
         {
             string[] splitWords = filePath.Split('\\');
@@ -336,6 +354,7 @@ namespace Syncless.CompareAndSync
             return folderPath;
         }
 
+        //get 1.txt
         private static string getFileString(string path)
         {
             Debug.Assert(!path.Equals(""));
@@ -343,7 +362,7 @@ namespace Syncless.CompareAndSync
             return splitWords[splitWords.Length - 1];
         }
 
-        private string getRelativePath(string fullPath, string truncatedPath)
+        private static string getRelativePath(string fullPath, string truncatedPath)
         {
             return fullPath.Replace(truncatedPath, "");
         }
@@ -362,50 +381,243 @@ namespace Syncless.CompareAndSync
          */
         public static void EditXML(string origin, List<XMLWriteObject> xmlObjList)
         {
+            string xmlPath = Path.Combine(origin, METADATAPATH);
+            if (File.Exists(xmlPath))
+                ModifyExistingXML(origin , xmlPath, xmlObjList);
+            else
+                CreateNewXML(origin,xmlPath, xmlObjList);
+        }
+
+        private static void CreateNewXML(string origin , string xmlPath, List<XMLWriteObject> xmlObjList)
+        {
+            lock (syncLock) // create a new file 
+            {
+                Debug.Assert(!xmlPath.Equals(""));
+                XmlTextWriter writer = new XmlTextWriter(xmlPath, null);
+                writer.Formatting = Formatting.Indented;
+                writer.WriteStartDocument();
+                writer.WriteStartElement("meta-data");
+                writer.WriteElementString("last_modified", (DateTime.Now.Ticks).ToString());
+                writer.WriteEndElement();
+                writer.WriteEndDocument();
+                writer.Flush();
+                writer.Close();
+            }
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(xmlPath);
             foreach (XMLWriteObject xmlWriteObj in xmlObjList)
             {
+                if (xmlWriteObj.ChangeType == FileChangeType.Delete)
+                    continue;
+                string relativePath = xmlWriteObj.To.Replace(origin,"");
+                string xpathExpr = getFileExpr(FOLDER, relativePath);
+                XmlNode node = xmlDoc.SelectSingleNode(xpathExpr);
                 
             }
         }
 
-        public static void processPath(string path, List<XMLWriteObject> xmlWriteObj)
+        
+
+        private static void ModifyExistingXML(string origin , string xmlPath, List<XMLWriteObject> xmlObjList)
         {
-            string xmlPath = Path.Combine(path,METADATAPATH);
-            if (File.Exists(xmlPath))
-                modifyExistingXML(xmlWriteObj);
-            else
-            {
-                createNewXML();
-            }
-        }
-
-
-        /*
-        private static void modifyXmlWithCompareResult(string xmlPath, List<CompareResult> compareResultList, string path)
-        { 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(xmlPath);
-            for (int i = 0; i < compareResultList.Count; i++)
+
+            foreach(XMLWriteObject xmlWriteObj in xmlObjList)
             {
-                FileCompareResult fileResult = (FileCompareResult)compareResultList[i];
-                switch (fileResult.ChangeType)
+                if (Directory.Exists(xmlWriteObj.To))
+                {
+                    HandleFolderChangeType(origin, xmlDoc, xmlWriteObj);
+                    continue;
+                }
+
+                switch (xmlWriteObj.ChangeType)
                 {
                     case FileChangeType.Create:
-                        createInExistingXml(xmlDoc, fileResult);
+                        CreateFileInExistingXML(origin , xmlDoc , xmlWriteObj);
                         break;
                     case FileChangeType.Rename:
-                        renameInExistingXml(xmlDoc, fileResult);
+                        RenameFileInExistingXML(origin , xmlDoc , xmlWriteObj);
                         break;
                     case FileChangeType.Update:
-                        updateInExistingXml(xmlDoc, fileResult);
+                        UpdateFileInExistingXML(origin , xmlDoc , xmlWriteObj);
                         break;
                     case FileChangeType.Delete:
-                        deleteInExistingXml(xmlDoc, fileResult);
+                        DeleteFileInExistingXML(origin , xmlDoc , xmlWriteObj);
                         break;
                 }
             }
             xmlDoc.Save(xmlPath);
-        }*/
+        }
+        // FOR CREATE CASE IF PARENT NODE DOES NOT EXIST
+        private static XmlNode CreationOfNode(string relativePath ,  XmlDocument xmlDoc)
+        {
+            string finalExpr = "/meta-data";
+            string[] splitWords = relativePath.Split('\\');
+            XmlNode currentNode = null;
+            for (int i = 0; i < splitWords.Length - 1 ; i++)
+            {
+                if (splitWords[i].Equals(""))
+                    continue;
+
+                finalExpr = finalExpr + "/folder" + "[name_of_folder='" + splitWords[i] + "']";
+
+                if (xmlDoc.SelectSingleNode(finalExpr) == null) // expression is invalid because no path exists
+                {
+                    XmlElement folder = xmlDoc.CreateElement(FOLDER);
+                    XmlText nameOfFolderText = xmlDoc.CreateTextNode(NAME_OF_FOLDER);
+                    folder.AppendChild(nameOfFolderText);
+
+                    if (currentNode == null) // then get the root
+                        currentNode = xmlDoc.SelectSingleNode("/meta-data");
+
+                    currentNode.AppendChild(folder);
+                }
+                else
+                {
+                    currentNode = xmlDoc.SelectSingleNode(finalExpr);
+                }
+
+            }
+
+            return currentNode;
+
+        }
+
+        private static void CreateFileInExistingXML(string origin , XmlDocument xmlDoc , XMLWriteObject xmlWriteObj)
+        {
+            string relativePath = xmlWriteObj.To.Replace(origin, "");
+            string xPath = getFileExpr(FILES, relativePath);
+            XmlNode existingNode = xmlDoc.SelectSingleNode(xPath);
+            if (existingNode != null)    // TRYING TO CREATE A NEW NODE THAT ALREADY EXISTED
+                return;
+
+            XmlText hashNode = xmlDoc.CreateTextNode(xmlWriteObj.NewHash);
+            XmlText nameNode = xmlDoc.CreateTextNode(getFileString(xmlWriteObj.To));
+            XmlText sizeNode = xmlDoc.CreateTextNode(xmlWriteObj.Length.ToString());
+            XmlText lastModifiedNode = xmlDoc.CreateTextNode(xmlWriteObj.LastWriteTime.ToString());
+            XmlText lastCreatedNode = xmlDoc.CreateTextNode(xmlWriteObj.CreationTime.ToString());
+            XmlElement fileElement = xmlDoc.CreateElement(FILES);
+            XmlElement nameElement = xmlDoc.CreateElement(NODE_NAME);
+            XmlElement sizeElement = xmlDoc.CreateElement(NODE_SIZE);
+            XmlElement hashElement = xmlDoc.CreateElement(NODE_HASH);
+            XmlElement lastModifiedElement = xmlDoc.CreateElement(NODE_LAST_MODIFIED);
+            XmlElement lastCreatedElement = xmlDoc.CreateElement(NODE_LAST_CREATED);
+
+            string xpathExpr = getFileExpr(FOLDER,relativePath);
+            XmlNode node = xmlDoc.SelectSingleNode(xpathExpr);
+
+            if (node == null)
+                node = CreationOfNode(relativePath,xmlDoc);
+
+            nameElement.AppendChild(nameNode);
+            sizeElement.AppendChild(sizeNode);
+            hashElement.AppendChild(hashNode);
+            lastModifiedElement.AppendChild(lastModifiedNode);
+            lastCreatedElement.AppendChild(lastCreatedNode);
+
+            fileElement.AppendChild(nameElement);
+            fileElement.AppendChild(sizeElement);
+            fileElement.AppendChild(hashElement);
+            fileElement.AppendChild(lastModifiedElement);
+            fileElement.AppendChild(lastCreatedElement);
+
+            node.AppendChild(fileElement);
+        }
+
+        private static void RenameFileInExistingXML(string origin , XmlDocument xmlDoc , XMLWriteObject xmlWriteObj)
+        {
+            string relativePath = xmlWriteObj.To.Replace(origin, "");
+            string xpathExpr = getFileExpr(FOLDER,relativePath);
+            XmlNode node = xmlDoc.SelectSingleNode(xpathExpr + "/files[" + "hash ='" +
+                xmlWriteObj.NewHash + "' and last_created='" + xmlWriteObj.LastWriteTime + "']");
+
+            if (node == null) //Maybe node does not exist in xml at all
+                return;
+
+            node.FirstChild.InnerText = getFileString(relativePath);
+        }
+
+        private static void UpdateFileInExistingXML(string origin, XmlDocument xmlDoc, XMLWriteObject xmlWriteObj)
+        {
+            string relativePath = xmlWriteObj.To.Replace(origin, "");
+            string hash = xmlWriteObj.NewHash;
+            string size = xmlWriteObj.Length.ToString();
+            string lastModified = xmlWriteObj.LastWriteTime.ToString();
+            string lastCreated = xmlWriteObj.CreationTime.ToString();
+
+            string xpathExpr = getFileExpr(FILES, relativePath);
+            XmlNode node = xmlDoc.SelectSingleNode(xpathExpr);
+
+            if (node == null) //Maybe node does not exist in xml at all
+                return;
+
+            XmlNodeList childNodeList = node.ChildNodes;
+            for (int i = 0; i < childNodeList.Count; i++)
+            {
+                XmlNode nodes = childNodeList[i];
+                if (nodes.Name.Equals(NODE_SIZE))
+                {
+                    nodes.InnerText = size;
+                }
+                else if (nodes.Name.Equals(NODE_HASH))
+                {
+                    nodes.InnerText = hash;
+                }
+                else if (nodes.Name.Equals(NODE_LAST_MODIFIED))
+                {
+                    nodes.InnerText = lastModified;
+                }
+                else if (nodes.Name.Equals(NODE_LAST_CREATED))
+                {
+                    nodes.InnerText = lastCreated;
+                }
+            }
+        }
+
+        private static void DeleteFileInExistingXML(string origin, XmlDocument xmlDoc, XMLWriteObject xmlWriteObj)
+        {
+            string relativePath = xmlWriteObj.To.Replace(origin, "");
+            string xpathExpr = getFileExpr(FILES, relativePath);
+            XmlNode node = xmlDoc.SelectSingleNode(xpathExpr);
+
+            if (node == null) //Maybe node does not exist in xml at all
+                return;
+
+            node.ParentNode.RemoveChild(node);
+        }
+
+        // ASSUME THAT FOLDER HAS NO UPDATE
+        private static void HandleFolderChangeType(string origin, XmlDocument xmlDoc, XMLWriteObject xmlWriteObj)
+        {
+            string relativePath = xmlWriteObj.From.Replace(origin, "");
+            string xpathExpr = getEntireFolder(relativePath);
+            XmlNode node = null;
+            switch (xmlWriteObj.ChangeType)
+            {
+                case FileChangeType.Create:
+                    relativePath = xmlWriteObj.To.Replace(origin,"");
+                    xpathExpr = getEntireFolder(relativePath);
+                    node = xmlDoc.SelectSingleNode(xpathExpr);
+
+                    if(node == null)
+                        node = CreationOfNode(relativePath,xmlDoc);
+                    XmlElement childFolderElement = xmlDoc.CreateElement(FOLDER); // PLS RMB TO CHANGE
+                    XmlText textChild = xmlDoc.CreateTextNode(getFileString(relativePath));
+                    childFolderElement.AppendChild(textChild);
+                    node.AppendChild(childFolderElement);
+                    break;
+                case FileChangeType.Rename:
+                    node = xmlDoc.SelectSingleNode(xpathExpr);
+                    node.FirstChild.InnerText = getFileString(xmlWriteObj.To);
+                    break;
+                case FileChangeType.Delete:
+                    node = xmlDoc.SelectSingleNode(xpathExpr);
+                    node.ParentNode.RemoveChild(node);
+                    break;
+            }
+        }
 
         /*
         public static void EditXml(string xmlpath, FileChangeType type, string filePath)
