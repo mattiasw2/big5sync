@@ -413,8 +413,12 @@ namespace Syncless.CompareAndSync
                 string relativePath = xmlWriteObj.To.Replace(origin,"");
                 string xpathExpr = getFileExpr(FOLDER, relativePath);
                 XmlNode node = xmlDoc.SelectSingleNode(xpathExpr);
-                
+                if (node == null)
+                    node = CreationOfNode(relativePath, xmlDoc);
+                XmlNode fileElement = AddNode(relativePath , xmlDoc, xmlWriteObj);
+                node.AppendChild(fileElement);
             }
+            xmlDoc.Save(xmlPath);
         }
 
         
@@ -488,40 +492,13 @@ namespace Syncless.CompareAndSync
         private static void CreateFileInExistingXML(string origin , XmlDocument xmlDoc , XMLWriteObject xmlWriteObj)
         {
             string relativePath = xmlWriteObj.To.Replace(origin, "");
-            string xPath = getFileExpr(FILES, relativePath);
-            XmlNode existingNode = xmlDoc.SelectSingleNode(xPath);
-            if (existingNode != null)    // TRYING TO CREATE A NEW NODE THAT ALREADY EXISTED
-                return;
-
-            XmlText hashNode = xmlDoc.CreateTextNode(xmlWriteObj.NewHash);
-            XmlText nameNode = xmlDoc.CreateTextNode(getFileString(xmlWriteObj.To));
-            XmlText sizeNode = xmlDoc.CreateTextNode(xmlWriteObj.Length.ToString());
-            XmlText lastModifiedNode = xmlDoc.CreateTextNode(xmlWriteObj.LastWriteTime.ToString());
-            XmlText lastCreatedNode = xmlDoc.CreateTextNode(xmlWriteObj.CreationTime.ToString());
-            XmlElement fileElement = xmlDoc.CreateElement(FILES);
-            XmlElement nameElement = xmlDoc.CreateElement(NODE_NAME);
-            XmlElement sizeElement = xmlDoc.CreateElement(NODE_SIZE);
-            XmlElement hashElement = xmlDoc.CreateElement(NODE_HASH);
-            XmlElement lastModifiedElement = xmlDoc.CreateElement(NODE_LAST_MODIFIED);
-            XmlElement lastCreatedElement = xmlDoc.CreateElement(NODE_LAST_CREATED);
-
-            string xpathExpr = getFileExpr(FOLDER,relativePath);
+            string xpathExpr = getFileExpr(FOLDER, relativePath);
             XmlNode node = xmlDoc.SelectSingleNode(xpathExpr);
 
             if (node == null)
                 node = CreationOfNode(relativePath,xmlDoc);
 
-            nameElement.AppendChild(nameNode);
-            sizeElement.AppendChild(sizeNode);
-            hashElement.AppendChild(hashNode);
-            lastModifiedElement.AppendChild(lastModifiedNode);
-            lastCreatedElement.AppendChild(lastCreatedNode);
-
-            fileElement.AppendChild(nameElement);
-            fileElement.AppendChild(sizeElement);
-            fileElement.AppendChild(hashElement);
-            fileElement.AppendChild(lastModifiedElement);
-            fileElement.AppendChild(lastCreatedElement);
+            XmlNode fileElement = AddNode(relativePath , xmlDoc, xmlWriteObj);
 
             node.AppendChild(fileElement);
         }
@@ -618,6 +595,43 @@ namespace Syncless.CompareAndSync
                     break;
             }
         }
+
+        private static XmlNode AddNode(string relativePath , XmlDocument xmlDoc, XMLWriteObject xmlWriteObj)
+        {
+            XmlText hashNode = xmlDoc.CreateTextNode(xmlWriteObj.NewHash);
+            XmlText nameNode = xmlDoc.CreateTextNode(getFileString(xmlWriteObj.To));
+            XmlText sizeNode = xmlDoc.CreateTextNode(xmlWriteObj.Length.ToString());
+            XmlText lastModifiedNode = xmlDoc.CreateTextNode(xmlWriteObj.LastWriteTime.ToString());
+            XmlText lastCreatedNode = xmlDoc.CreateTextNode(xmlWriteObj.CreationTime.ToString());
+            XmlElement fileElement = xmlDoc.CreateElement(FILES);
+            XmlElement nameElement = xmlDoc.CreateElement(NODE_NAME);
+            XmlElement sizeElement = xmlDoc.CreateElement(NODE_SIZE);
+            XmlElement hashElement = xmlDoc.CreateElement(NODE_HASH);
+            XmlElement lastModifiedElement = xmlDoc.CreateElement(NODE_LAST_MODIFIED);
+            XmlElement lastCreatedElement = xmlDoc.CreateElement(NODE_LAST_CREATED);
+
+            string xpathExpr = getFileExpr(FOLDER, relativePath);
+            XmlNode node = xmlDoc.SelectSingleNode(xpathExpr);
+
+            if (node == null)
+                node = CreationOfNode(relativePath, xmlDoc);
+
+            nameElement.AppendChild(nameNode);
+            sizeElement.AppendChild(sizeNode);
+            hashElement.AppendChild(hashNode);
+            lastModifiedElement.AppendChild(lastModifiedNode);
+            lastCreatedElement.AppendChild(lastCreatedNode);
+
+            fileElement.AppendChild(nameElement);
+            fileElement.AppendChild(sizeElement);
+            fileElement.AppendChild(hashElement);
+            fileElement.AppendChild(lastModifiedElement);
+            fileElement.AppendChild(lastCreatedElement);
+            return fileElement;
+        }
+
+
+
 
         /*
         public static void EditXml(string xmlpath, FileChangeType type, string filePath)
