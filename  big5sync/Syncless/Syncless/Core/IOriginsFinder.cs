@@ -7,6 +7,6 @@ namespace Syncless.Core
 {
     public interface IOriginsFinder
     {
-        public List<string> GetOrigins(string path);
+        List<string> GetOrigins(string path);
     }
 }
