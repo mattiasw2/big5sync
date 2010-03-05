@@ -47,11 +47,12 @@ namespace Syncless.CompareAndSync
             }
 
             //TODO: Will handle each change separately in future
+            /*
             foreach (string path in paths)
             {
                 XMLHelper.GenerateXMLFile(path);
                 //RemoveEmptyFolders(path);
-            }
+            }*/
 
             return syncResults;
         }

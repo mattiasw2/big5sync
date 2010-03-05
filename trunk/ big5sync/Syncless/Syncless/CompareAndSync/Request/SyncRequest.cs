@@ -9,9 +9,15 @@ namespace Syncless.CompareAndSync
     {
         List<CompareResult> _results = null;
 
-        public SyncRequest(List<string> paths, List<CompareResult> results)
+        public SyncRequest(List<string> paths)
         {
             base._paths = paths;
+
+        }
+
+        public SyncRequest(List<string> paths, List<CompareResult> results)
+            : this(paths)
+        {
             _results = results;
         }
 
