@@ -12,7 +12,7 @@ using System.Diagnostics;
 using Syncless.Helper;
 namespace Syncless.Core
 {
-    internal class SystemLogicLayer :IUIControllerInterface,IMonitorControllerInterface,ICommandLineControllerInterface
+    internal class SystemLogicLayer :IUIControllerInterface,IMonitorControllerInterface,ICommandLineControllerInterface,IOriginsFinder
     {
         private static SystemLogicLayer _instance;
         private string appPath = "";
@@ -339,7 +339,7 @@ namespace Syncless.Core
                 StartManualSync(t);
                 MonitorTag(t);
             }
-
+            CompareSyncController.Instance.Init(this);
             DeviceWatcher.Instance.ToString(); //randomly call a method to start watching folders.
             return true;
         }
@@ -464,5 +464,21 @@ namespace Syncless.Core
 
         #endregion
 
+
+        #region IOriginsFinder Members
+
+        public List<string> GetOrigins(string path)
+        {
+            string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(path,false);
+            if (path == null)
+            {
+                return null;
+            }
+            List<string> oldLogicalOrigin = TaggingLayer.Instance.RetrieveParentByPath(logicalOldPath);
+            List<string> oldPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(oldLogicalOrigin);
+            return oldPhysicalOrigin;
+        }
+
+        #endregion
     }
 }
