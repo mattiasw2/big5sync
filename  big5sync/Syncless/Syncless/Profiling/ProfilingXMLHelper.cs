@@ -137,6 +137,7 @@ namespace Syncless.Profiling
         private static Profile ConvertToProfile(XmlDocument profilexml)
         {
             XmlNodeList list = profilexml.GetElementsByTagName("profile");
+            Syncless.Core.ServiceLocator.Getlogger(Syncless.Core.ServiceLocator.DEBUG_LOG).WriteLine("" + list.Count);
             if (list.Count != 0)
             {
                 XmlElement element = (XmlElement)list.Item(0);
