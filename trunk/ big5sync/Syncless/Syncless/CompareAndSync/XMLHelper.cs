@@ -343,6 +343,10 @@ namespace Syncless.CompareAndSync
             return splitWords[splitWords.Length - 1];
         }
 
+        private string getRelativePath(string fullPath, string truncatedPath)
+        {
+            return fullPath.Replace(truncatedPath, "");
+        }
 
         /* YC to Gordon: I need you to write this such that I will pass you the following
          * Origin path and CompareResult.
@@ -356,10 +360,25 @@ namespace Syncless.CompareAndSync
          *  Load into dom object then process the thing from there.
          *  Downcast compare result into FileCompareResult
          */
-        public static void EditXML(List<XMLWriteObject> xmlObjList)
+        public static void EditXML(string origin, List<XMLWriteObject> xmlObjList)
         {
-            
+            foreach (XMLWriteObject xmlWriteObj in xmlObjList)
+            {
+                
+            }
         }
+
+        public static void processPath(string path, List<XMLWriteObject> xmlWriteObj)
+        {
+            string xmlPath = Path.Combine(path,METADATAPATH);
+            if (File.Exists(xmlPath))
+                modifyExistingXML(xmlWriteObj);
+            else
+            {
+                createNewXML();
+            }
+        }
+
 
         /*
         private static void modifyXmlWithCompareResult(string xmlPath, List<CompareResult> compareResultList, string path)
@@ -387,12 +406,6 @@ namespace Syncless.CompareAndSync
             }
             xmlDoc.Save(xmlPath);
         }*/
-
-        private string getRelativePath(string fullPath, string truncatedPath)
-        {
-            return fullPath.Replace(truncatedPath,"");
-        }
-
 
         /*
         public static void EditXml(string xmlpath, FileChangeType type, string filePath)
