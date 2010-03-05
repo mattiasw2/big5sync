@@ -49,7 +49,7 @@
   <ItemGroup>
     <Compile Include="CompareAndSync\CompareInfoObject.cs" />
     <Compile Include="CompareAndSync\Comparer.cs" />
-    <Compile Include="CompareAndSync\Result\XMLWriteRequest.cs" />
+    <Compile Include="CompareAndSync\XMLWriteObject.cs" />
     <Compile Include="Core\IOriginsFinder.cs" />
     <Compile Include="CompareAndSync\Request\CompareRequest.cs" />
     <Compile Include="CompareAndSync\Result\CompareResult.cs" />
