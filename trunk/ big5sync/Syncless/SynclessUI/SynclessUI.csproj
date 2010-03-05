@@ -163,7 +163,6 @@
     </Resource>
     <Resource Include="Icons\close.ico" />
     <Resource Include="Icons\createtag.ico" />
-    <Resource Include="Icons\file.ico" />
     <Resource Include="Icons\filter.ico" />
     <Resource Include="Icons\folder.ico" />
     <Resource Include="Icons\logo.ico" />

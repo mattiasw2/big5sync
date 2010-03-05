@@ -40,20 +40,15 @@ namespace SynclessUI
         private bool _firstopen = true;
         
         public MainWindow() {
-            // List<string> lststrCommandLineArgs = System.Environment.GetCommandLineArgs().ToList();
             MinimizeToTray.Enable(this);
 
             InitializeComponent();
             InitializeSyncless();
         }
 
-        public void ProcessCommandLine(string[] args, bool firstInstance)
+        public void ProcessCommandLine(string[] args)
         {
-            if (args.Length != 0 && firstInstance)
-            {
-                SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(args, this);
-            }
-            else if (args.Length != 0 && !firstInstance)
+            if (args.Length != 0)
             {
                 SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(args, this);
             }
@@ -110,16 +105,6 @@ namespace SynclessUI
 
             LblStatusText.Content = "";
             ListTaggedPath.ItemsSource = tv.PathStringList;
-			
-			if(tv is FileTagView) {
-				var uriSource = new Uri(@"/SynclessUI;component/Icons/file.ico", UriKind.Relative);
-				TagIcon.Source = new BitmapImage(uriSource);
-            }
-            else if (tv is FolderTagView)
-            {
-				var uriSource = new Uri(@"/SynclessUI;component/Icons/folder.ico", UriKind.Relative);
-				TagIcon.Source = new BitmapImage(uriSource);
-			}
 			
 			TagIcon.Visibility = System.Windows.Visibility.Visible;
 			TagStatusPanel.Visibility = System.Windows.Visibility.Visible;
@@ -326,31 +311,7 @@ namespace SynclessUI
             }
         }
 		
-		public bool CreateFileTag(string tagName) {
-			try
-            {
-                TagView tv = gui.CreateFileTag(tagName);
-			    if(tv != null) {
-                    InitializeTagList();
-                    SelectTag(tagName);
-			    } else {
-                    string messageBoxText = "File Tag could not be created.";
-                    string caption = "File Tag Creation Error";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Error;
-
-                    MessageBox.Show(messageBoxText, caption, button, icon);
-			    }
-            }
-            catch (Syncless.Tagging.Exceptions.TagAlreadyExistsException)
-            {
-				return true;
-            }
-			
-			return false;
-		}
-		
-		public bool CreateFolderTag(string tagName) {
+		public bool CreateTag(string tagName) {
             try
             {
                 TagView tv = gui.CreateFolderTag(tagName);
@@ -361,8 +322,8 @@ namespace SynclessUI
                 }
                 else
                 {
-                    string messageBoxText = "Folder Tag could not be created.";
-                    string caption = "Folder Tag Creation Error";
+                    string messageBoxText = "Tag could not be created.";
+                    string caption = "Tag Creation Error";
                     MessageBoxButton button = MessageBoxButton.OK;
                     MessageBoxImage icon = MessageBoxImage.Error;
 
@@ -386,86 +347,7 @@ namespace SynclessUI
 
 		private void btnTag_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-			
             TagWindow tw = new TagWindow(this, "");
-			
-			/*
-			if(_selectedTag != null) {
-                TagView tv = gui.GetTag(_selectedTag);
-
-                if(tv is FileTagView) {	
-                    Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog();
-					
-                    ofd.Filter = "All Files(*.*)|*.*";
-					
-                    ofd.ShowDialog();
-                    string path = ofd.FileName;
-
-                    if(path != string.Empty) {
-                        FileInfo fi = new FileInfo(path);
-
-                        if (fi.Exists)
-                        {
-                            tv = gui.TagFile(_selectedTag, fi);
-                        }
-                        else
-                        {
-                            string messageBoxText = "Please select another file.";
-                            string caption = "File Does Not Exists";
-                            MessageBoxButton button = MessageBoxButton.OK;
-                            MessageBoxImage icon = MessageBoxImage.Error;
-
-                            MessageBox.Show(messageBoxText, caption, button, icon);
-                        }
-                    }
-                } else if(tv is FolderTagView) {
-                    System.Windows.Forms.FolderBrowserDialog folderDialog = new System.Windows.Forms.FolderBrowserDialog();
-                    folderDialog.Description = "Select Folder to Tag";
-
-                    folderDialog.ShowDialog();
-
-                    if(folderDialog.SelectedPath != string.Empty) {	
-                        string path = folderDialog.SelectedPath;
-                        DirectoryInfo di = new DirectoryInfo(path);
-
-                        if (di.Exists)
-                        {
-                            tv = gui.TagFolder(_selectedTag, di);
-                        }
-                        else
-                        {
-                            string messageBoxText = "Please select another folder.";
-                            string caption = "Folder Does Not Exists";
-                            MessageBoxButton button = MessageBoxButton.OK;
-                            MessageBoxImage icon = MessageBoxImage.Error;
-
-                            MessageBox.Show(messageBoxText, caption, button, icon);
-                        }
-                    }
-                }
-
-                if (tv != null)
-                {
-                    SelectTag(_selectedTag);
-                }
-                else
-                {
-                    string messageBoxText = "Tagging has failed.";
-                    string caption = "Tagging Unsuccessful";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Error;
-
-                    MessageBox.Show(messageBoxText, caption, button, icon);
-                }
-            } else {
-                string messageBoxText = "Please select a file/folder tag.";
-                string caption = "No Tag Selected";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
-
-                MessageBox.Show(messageBoxText, caption, button, icon);
-            }
-			*/
         }
 
         public void CLI_CreateTag(string clipath)
@@ -526,14 +408,7 @@ namespace SynclessUI
 				} else {
                     TagView tv = gui.GetTag((string)TagTitle.Content);
 
-                    if (tv is FileTagView)
-                    {
-                        gui.UntagFile(tv.TagName, new FileInfo((string)ListTaggedPath.SelectedValue));
-                    }
-                    else if (tv is FolderTagView)
-                    {
-                        gui.UntagFolder(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
-                    }
+                    gui.UntagFolder(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
 
                     SelectTag(tv.TagName);
 				}

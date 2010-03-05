@@ -20,14 +20,12 @@ namespace SynclessUI
     public partial class CreateTagWindow : Window
     {		
 		private MainWindow _main;
-        private string _selectedtype;
         
 		public CreateTagWindow(MainWindow main)
         {
             InitializeComponent();
 			
 			_main = main;
-			_selectedtype = "";
         }
 
         private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -40,35 +38,19 @@ namespace SynclessUI
 			string tagName = TxtBoxTagName.Text.Trim();
 			
             if(tagName != "") {
-                if(_selectedtype != "") {
-					bool tagexists = false;
-					
-					if (_selectedtype == "File")
-					{
-						tagexists = _main.CreateFileTag(tagName);
-					}
-					else if (_selectedtype == "Folder")
-					{
-						tagexists = _main.CreateFolderTag(tagName);
-					}
-					
-					if(tagexists) {
-						string messageBoxText = "Please specify another tagname.";
-						string caption = "Tag Already Exist";
-						MessageBoxButton button = MessageBoxButton.OK;
-						MessageBoxImage icon = MessageBoxImage.Error;
-		
-						MessageBox.Show(messageBoxText, caption, button, icon);
-					} else {
-						this.Close();
-					}
-				} else {
-					string messageBoxText = "Please select a type.";
-					string caption = "Tag Type Not Selected";
+				bool tagexists = false;
+				
+				tagexists = _main.CreateTag(tagName);
+				
+				if(tagexists) {
+					string messageBoxText = "Please specify another tagname.";
+					string caption = "Tag Already Exist";
 					MessageBoxButton button = MessageBoxButton.OK;
 					MessageBoxImage icon = MessageBoxImage.Error;
 	
 					MessageBox.Show(messageBoxText, caption, button, icon);
+				} else {
+					this.Close();
 				}
 			} else {
                 string messageBoxText = "Please specify a tagname.";
@@ -88,16 +70,6 @@ namespace SynclessUI
 		private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
 		{
 			Keyboard.Focus(TxtBoxTagName);
-		}
-
-		private void BtnFile_Click(object sender, System.Windows.RoutedEventArgs e)
-		{
-			_selectedtype = "File";
-		}
-
-		private void BtnFolder_Click(object sender, System.Windows.RoutedEventArgs e)
-		{
-			_selectedtype = "Folder";
 		}
     }
 }
