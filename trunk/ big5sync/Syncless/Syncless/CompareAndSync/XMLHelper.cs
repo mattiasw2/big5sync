@@ -356,31 +356,41 @@ namespace Syncless.CompareAndSync
          *  Load into dom object then process the thing from there.
          *  Downcast compare result into FileCompareResult
          */
-        public static void EditXml(string path, List<CompareResult> compareResultList)
+        public static void EditXML(List<XMLWriteObject> xmlObjList)
         {
-            string xmlPath = Path.Combine(path, METADATAPATH);
-             
-            if (File.Exists(xmlPath))    // If file exist , modify , else create a new xml with CompareResult
-            {
-                modifyXmlWithCompareResult(xmlPath,compareResultList);
-            }
-            else
-            {
-                GenerateXMLFile(path);
-            }
+            
         }
 
-        private static void modifyXmlWithCompareResult(string xmlPath, List<CompareResult> compareResultList)
+        /*
+        private static void modifyXmlWithCompareResult(string xmlPath, List<CompareResult> compareResultList, string path)
         { 
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(xmlPath);
             for (int i = 0; i < compareResultList.Count; i++)
             {
                 FileCompareResult fileResult = (FileCompareResult)compareResultList[i];
-
+                switch (fileResult.ChangeType)
+                {
+                    case FileChangeType.Create:
+                        createInExistingXml(xmlDoc, fileResult);
+                        break;
+                    case FileChangeType.Rename:
+                        renameInExistingXml(xmlDoc, fileResult);
+                        break;
+                    case FileChangeType.Update:
+                        updateInExistingXml(xmlDoc, fileResult);
+                        break;
+                    case FileChangeType.Delete:
+                        deleteInExistingXml(xmlDoc, fileResult);
+                        break;
+                }
             }
+            xmlDoc.Save(xmlPath);
+        }*/
 
-
+        private string getRelativePath(string fullPath, string truncatedPath)
+        {
+            return fullPath.Replace(truncatedPath,"");
         }
 
 
