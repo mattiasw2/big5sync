@@ -12,10 +12,12 @@ namespace Syncless.CompareAndSync
     {
         public List<SyncResult> SyncFolder(List<string> paths, List<CompareResult> results, IOriginsFinder originsFinder)
         {
-            List<SyncResult> syncResults = new List<SyncResult>();
-            List<XMLWriteObject> xmlWriteObjects = new List<XMLWriteObject>();
-            SyncResult currResult = null;
+            Dictionary<string, List<XMLWriteObject>> originTable = new Dictionary<string, List<XMLWriteObject>>();
+            Dictionary<string, List<XMLWriteObject>>.KeyCollection originKeys;
             List<string> origins = null;
+            List<SyncResult> syncResults = new List<SyncResult>();
+            List<XMLWriteObject> xmlWriteObjects = null;
+            SyncResult currResult = null;
 
             foreach (CompareResult result in results)
             {
@@ -45,22 +47,27 @@ namespace Syncless.CompareAndSync
 
                     foreach (string origin in origins)
                     {
+                        if (!originTable.TryGetValue(origin, out xmlWriteObjects))
+                        {
+                            xmlWriteObjects = new List<XMLWriteObject>();
+                            originTable.Add(origin, xmlWriteObjects);
+                        }
                         switch (result.ChangeType)
                         {
                             case FileChangeType.Create:
                                 fileResult = (FileCompareResult)result;
-                                xmlWriteObjects.Add(XMLWriteObject.CreateXMLWriteObject(origin, fileResult.From, fileResult.To,
+                                xmlWriteObjects.Add(XMLWriteObject.CreateXMLWriteObject(fileResult.From, fileResult.To,
                                     fileResult.NewHash, fileResult.CreationTime, fileResult.LastWriteTime, fileResult.Length));
                                 break;
                             case FileChangeType.Delete:
-                                xmlWriteObjects.Add(XMLWriteObject.DeleteXMLWriteObject(origin, result.From));
+                                xmlWriteObjects.Add(XMLWriteObject.DeleteXMLWriteObject(result.From));
                                 break;
                             case FileChangeType.Rename:
-                                xmlWriteObjects.Add(XMLWriteObject.RenameXMLWriteObject(origin, result.From, result.To));
+                                xmlWriteObjects.Add(XMLWriteObject.RenameXMLWriteObject(result.From, result.To));
                                 break;
                             case FileChangeType.Update:
                                 fileResult = (FileCompareResult)result;
-                                xmlWriteObjects.Add(XMLWriteObject.CreateXMLWriteObject(origin, fileResult.From, fileResult.To,
+                                xmlWriteObjects.Add(XMLWriteObject.CreateXMLWriteObject(fileResult.From, fileResult.To,
                                     fileResult.NewHash, fileResult.CreationTime, fileResult.LastWriteTime, fileResult.Length));
                                 break;
                         }
@@ -68,7 +75,11 @@ namespace Syncless.CompareAndSync
                 }
             }
 
-            XMLHelper.EditXML(xmlWriteObjects);
+            originKeys = originTable.Keys;
+            foreach (string origin in originKeys)
+            {
+                XMLHelper.EditXML(origin, xmlWriteObjects);
+            }            
 
             return syncResults;
         }
