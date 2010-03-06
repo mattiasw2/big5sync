@@ -53,13 +53,13 @@ namespace Syncless.CompareAndSync
                     break;
             }
 
-            new Syncer().SyncFolder(paths, results, _originsFinder);
+            new Syncer().SyncFolder(results, _originsFinder);
         }
 
         public List<SyncResult> Sync(SyncRequest syncRequest)
         {
             syncRequest.Results = new Comparer().CompareFolder(syncRequest.Paths);
-            return new Syncer().SyncFolder(syncRequest.Paths, syncRequest.Results, _originsFinder);
+            return new Syncer().SyncFolder(syncRequest.Results, _originsFinder);
         }
 
         /// <summary>
