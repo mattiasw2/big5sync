@@ -4,36 +4,49 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Runtime.InteropServices;
 
 namespace SynclessUI.Helper
 {
     internal class CommandLineHelper
     {
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        private static extern int GetLongPathName(
+            [MarshalAs(UnmanagedType.LPTStr)]
+            StringBuilder path,
+            [MarshalAs(UnmanagedType.LPTStr)]
+        StringBuilder longPath,
+            int longPathLength
+        );
+
         #region ProcessCommandLine
 
         public static void ProcessCommandLine(string[] commands, MainWindow main)
         {
             string flag = commands[0];
-            string path = commands[1];
-            if (flag.Equals("-TFile"))
-            {
-                //Shell Context Menu clicked for Files ( Tag )
-                main.CLI_CreateTag(path);
-            }
-            else if (flag.Equals("-TFolder"))
+			
+			// Get full path from array
+			StringBuilder path = new StringBuilder(255);
+			
+			for(int i = 1; i < commands.Length; i++) {
+				 path.Append(commands[i] + " ");
+			}
+			
+            if (flag.Equals("-TFolder"))
             {
                 //Shell Context Menu clicked for Folders ( Tag )
-                main.CLI_CreateTag(path);
+                StringBuilder longPath = new StringBuilder(255);
+                GetLongPathName(path, longPath, longPath.Capacity);
+				
+                main.CLI_CreateTag(longPath.ToString());
             }
             else if (flag.Equals("-UTFolder"))
             {
                 //Shell Context Menu clicked for Folders ( Untag )
-                // main.CLI_Untag("file", path);
-            }
-            else if (flag.Equals("-UTFile"))
-            {
-                //Shell Context Menu clicked for Files ( Untag )
-                // main.CLI_Untag("folder", path);
+                StringBuilder longPath = new StringBuilder(255);
+                GetLongPathName(path, longPath, longPath.Capacity);
+
+                main.CLI_Untag(longPath.ToString());
             }
             else
             {

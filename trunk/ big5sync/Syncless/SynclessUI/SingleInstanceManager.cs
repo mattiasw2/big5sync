@@ -6,30 +6,30 @@ using Microsoft.VisualBasic.ApplicationServices;
 
 namespace SynclessUI
 {
-  public sealed class SingleInstanceManager : WindowsFormsApplicationBase
-  {
-    [STAThread]
-    public static void Main(string[] args)
-    { (new SingleInstanceManager()).Run(args); }
-
-    public SingleInstanceManager()
-    { IsSingleInstance = true; }
-
-    public SynclessApplication App { get; private set; }
-
-    protected override bool OnStartup(StartupEventArgs e)
+    public sealed class SingleInstanceManager : WindowsFormsApplicationBase
     {
-        App = new SynclessApplication();
-        App.Run();
-        return false;
-    }
+        [STAThread]
+        public static void Main(string[] args)
+        { (new SingleInstanceManager()).Run(args); }
 
-    protected override void OnStartupNextInstance(
-      StartupNextInstanceEventArgs eventArgs)
-    {
-        base.OnStartupNextInstance(eventArgs);
-        App.main.Activate();
-        App.ProcessArgs(eventArgs.CommandLine.ToArray());
+        public SingleInstanceManager()
+        { IsSingleInstance = true; }
+
+        public SynclessApplication App { get; private set; }
+
+        protected override bool OnStartup(StartupEventArgs e)
+        {
+            App = new SynclessApplication();
+            App.Run();
+            return false;
+        }
+
+        protected override void OnStartupNextInstance(
+          StartupNextInstanceEventArgs eventArgs)
+        {
+            base.OnStartupNextInstance(eventArgs);
+            App.main.Activate();
+            App.ProcessArgs(eventArgs.CommandLine.ToArray());
+        }
     }
-}
 }

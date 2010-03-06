@@ -44,6 +44,9 @@ namespace SynclessUI
 
             InitializeComponent();
             InitializeSyncless();
+
+            // test
+            // CLI_Untag(@"C:\testfolder\A");
         }
 
         public void ProcessCommandLine(string[] args)
@@ -360,9 +363,14 @@ namespace SynclessUI
             }
         }
 
-        public void CLI_Untag(string clipath, string type)
+        public void CLI_Untag(string clipath)
         {
-			
+            UntagWindow tw = new UntagWindow(this, clipath);
+            if (_firstopen == true)
+            {
+                this.WindowState = WindowState.Minimized;
+                _firstopen = false;
+            }
         }
 
 		private void TxtBoxFilterTag_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
