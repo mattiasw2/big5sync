@@ -10,7 +10,7 @@ namespace Syncless.CompareAndSync
 {
     public class Syncer
     {
-        public List<SyncResult> SyncFolder(List<string> paths, List<CompareResult> results, IOriginsFinder originsFinder)
+        public List<SyncResult> SyncFolder(List<CompareResult> results, IOriginsFinder originsFinder)
         {
             Dictionary<string, List<XMLWriteObject>> originTable = new Dictionary<string, List<XMLWriteObject>>();
             Dictionary<string, List<XMLWriteObject>>.KeyCollection originKeys;
@@ -79,7 +79,7 @@ namespace Syncless.CompareAndSync
             foreach (string origin in originKeys)
             {
                 XMLHelper.EditXML(origin, xmlWriteObjects);
-            }            
+            }
 
             return syncResults;
         }

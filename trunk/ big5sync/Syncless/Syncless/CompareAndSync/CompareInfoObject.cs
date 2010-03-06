@@ -14,7 +14,6 @@ namespace Syncless.CompareAndSync
         private string _origin = null, _fullName, _name, _hash;
         private long _creationTime, _lastWriteTime, _length;
         private FileChangeType _changeType = FileChangeType.None;
-        private bool _isFolder;
 
         public CompareInfoObject(string fullName, string name, long creationTime, long lastWriteTime, long length, string hash)
         {
@@ -111,18 +110,6 @@ namespace Syncless.CompareAndSync
             set
             {
                 _changeType = value;
-            }
-        }
-
-        public bool IsFolder
-        {
-            get
-            {
-                return _isFolder;
-            }
-            set
-            {
-                _isFolder = value;
             }
         }
 

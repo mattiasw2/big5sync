@@ -538,7 +538,7 @@ namespace Syncless.CompareAndSync
             List<CompareInfoObject> results = new List<CompareInfoObject>();
             foreach (FileInfo f in allFiles)
             {
-                if (f.Directory.Name != "_syncless")
+                if (f.Directory.Name != XMLHelper.METADATADIR)
                     results.Add(new CompareInfoObject(path, f.FullName, f.Name, f.CreationTime.Ticks, f.LastWriteTime.Ticks, f.Length, CalculateMD5Hash(f)));
             }
             return results;
@@ -699,8 +699,7 @@ namespace Syncless.CompareAndSync
         public static string CalculateMD5Hash(FileInfo fileInput)
         {
             Debug.Assert(fileInput.Exists);
-            Debug.Assert(fileInput.Name != "syncless.xml");
-            Debug.Assert(fileInput.Directory.Name != "_syncless");
+            Debug.Assert(fileInput.Directory.Name != XMLHelper.METADATADIR);
             FileStream fileStream = null;
             try
             {
@@ -841,6 +840,35 @@ namespace Syncless.CompareAndSync
         }
 
         #endregion
+
+        private void ProcessFolderRename(string fromPath, string toPath, out bool isFolderRename, out string[] fromFolderName, out string[] toFolderName)
+        {
+            string[] fromArr = fromPath.Split(new Char[] { '\\' });
+            string[] toArr = toPath.Split(new Char[] { '\\' });
+            Debug.Assert(fromArr.Count() == toArr.Count());
+            int size = fromArr.Count();
+            List<string> frmFldrName = new List<string>();
+            List<string> toFldrName = new List<string>();
+
+            for (int i = size - 1; i >= 0; i--)
+            {
+                if (fromArr[i] != toArr[i])
+                {
+                    if (i == size - 1)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                }
+            }
+
+            isFolderRename = false;
+            fromFolderName = null;
+            toFolderName = null;
+        }
 
         #region Comparer Classes
 
