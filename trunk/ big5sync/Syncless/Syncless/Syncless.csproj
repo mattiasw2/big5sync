@@ -76,15 +76,10 @@
     <Compile Include="Core\ServiceLocater.cs" />
     <Compile Include="Core\SystemLogicLayer.cs" />
     <Compile Include="Core\TagView.cs" />
-    <Compile Include="Filters\AbstractFileFilter.cs" />
-    <Compile Include="Filters\AbstractFilter.cs" />
-    <Compile Include="Filters\AbstractFolderFilter.cs" />
-    <Compile Include="Filters\Exceptions\FilterChainException.cs" />
     <Compile Include="Filters\ExtensionFilter.cs" />
-    <Compile Include="Filters\FileSizeFilter.cs" />
+    <Compile Include="Filters\FileFilter.cs" />
+    <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\FilterChain.cs" />
-    <Compile Include="Filters\FilterNonExist.cs" />
-    <Compile Include="Filters\FolderNameFilter.cs" />
     <Compile Include="Helper\ErrorMessage.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LoggingLayer.cs" />
