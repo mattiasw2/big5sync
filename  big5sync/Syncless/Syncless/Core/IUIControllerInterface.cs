@@ -41,8 +41,6 @@ namespace Syncless.Core
         bool RenameTag(String oldtagname, String newtagname);
 
         // To be Implemented
-        
-
 
         // bool DeleteAllTags(); // Delete all existing tags (This one is like a general reset, might not need)
         // bool DeleteAllTags(FileInfo file); // delete all tags associated with a file

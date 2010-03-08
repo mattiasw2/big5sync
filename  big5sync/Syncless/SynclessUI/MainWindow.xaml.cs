@@ -469,9 +469,8 @@ namespace SynclessUI
 
 		private void TagTitle_LostFocus(object sender, System.Windows.RoutedEventArgs e)
 		{
-			if(!RenameTag(_selectedTag, TagTitle.Text)) {
-				TagTitle.Text = _selectedTag;
-			};
+            if (_selectedTag == TagTitle.Text) return;
+            if (!RenameTag(_selectedTag, TagTitle.Text)) TagTitle.Text = _selectedTag;
 		}
 		
 		private void TagTitleOnKeyDownHandler(object sender, KeyEventArgs e)
@@ -484,14 +483,13 @@ namespace SynclessUI
 		
 		private bool RenameTag(String oldtagname, String newtagname)
 		{
-			/*
             if (gui.RenameTag(oldtagname, newtagname))
             {
                 InitializeTagList();
                 SelectTag(newtagname);
                 return true;
             } else {
-				string messageBoxText = "Tag could not be renamed.";
+				string messageBoxText = "Tag could not be renamed. There might be another tag with the same name.";
 				string caption = "Rename Tag Error";
 				MessageBoxButton button = MessageBoxButton.OK;
 				MessageBoxImage icon = MessageBoxImage.Error;
@@ -500,9 +498,6 @@ namespace SynclessUI
 				
 				return false;
 			}
-			*/
-			
-			return false;
 		}
     }
 }
