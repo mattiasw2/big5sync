@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Syncless.Tagging;
+using Syncless.Tagging.Exceptions;
 using Syncless.CompareAndSync;
 using Syncless.Monitor;
 using Syncless.Profiling;
@@ -353,17 +354,7 @@ namespace Syncless.Core
             tagNames.Sort();
             return tagNames;
         }
-        public List<string> GetTagsByFile(FileInfo file)
-        {
-            List<FileTag> tagList = TaggingLayer.Instance.RetrieveFileTagByPath(file.FullName);
-            List<string> tagNames = new List<string>();
-            foreach (Tag t in tagList)
-            {
-                tagNames.Add(t.TagName);
-            }
-            tagNames.Sort();
-            return tagNames;
-        }
+        
         public List<string> GetTagsByFolder(DirectoryInfo folder)
         {
             string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName,false);
@@ -445,8 +436,30 @@ namespace Syncless.Core
 
         #endregion
 
-        
 
-        
+
+
+
+        #region IUIControllerInterface Members
+
+
+        public bool RenameTag(string oldtagname, string newtagname)
+        {
+            try
+            {
+                TaggingLayer.Instance.RenameFolderTag(oldtagname, newtagname);
+            }
+            catch (TagNotFoundException)
+            {
+                return false;
+            }
+            catch (TagAlreadyExistsException)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        #endregion
     }
 }

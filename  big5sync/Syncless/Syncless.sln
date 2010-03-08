@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynclessUI", "SynclessUI\Sy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanUrRegistry", "CleanUrRegistry\CleanUrRegistry.csproj", "{8D3343EE-E901-43BB-A609-BEFF3A236AC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNewComparer", "TestNewComparer\TestNewComparer.csproj", "{478908EB-A667-4341-B9D5-84EDB618CF3D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,10 +25,6 @@ Global
 		{8D3343EE-E901-43BB-A609-BEFF3A236AC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D3343EE-E901-43BB-A609-BEFF3A236AC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D3343EE-E901-43BB-A609-BEFF3A236AC4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{478908EB-A667-4341-B9D5-84EDB618CF3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{478908EB-A667-4341-B9D5-84EDB618CF3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{478908EB-A667-4341-B9D5-84EDB618CF3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{478908EB-A667-4341-B9D5-84EDB618CF3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
