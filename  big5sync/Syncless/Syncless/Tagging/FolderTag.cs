@@ -2,15 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Syncless.Filters;
 
 namespace Syncless.Tagging
 {
     public class FolderTag : Tag
     {
+        private List<Filter> _filters;
+
+        public List<Filter> Filters
+        {
+            get { return _filters; }
+        }
+        
         public FolderTag(string tagname, long lastupdated)
             : base(tagname, lastupdated)
         {
-
+            _filters = new List<Filter>();
         }
 
         public string FindMatchedParentDirectory(string path, bool isFolder)
@@ -33,6 +41,27 @@ namespace Syncless.Tagging
                 }
             }
             return null;
+        }
+
+        public void AddFilter(Filter filter)
+        {
+            if (!_filters.Contains(filter))
+            {
+                _filters.Add(filter);
+            }
+        }
+
+        public Filter RemoveFilter(Filter filter)
+        {
+            if (_filters.Contains(filter))
+            {
+                _filters.Remove(filter);
+                return filter;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
