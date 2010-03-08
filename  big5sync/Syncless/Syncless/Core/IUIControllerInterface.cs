@@ -11,11 +11,7 @@ namespace Syncless.Core
     {
         List<string> GetAllTags();
 
-        List<string> GetAllFileTags();
-
         List<string> GetAllFolderTags();
-
-        List<string> GetTagsByFile(FileInfo file);
 
         List<string> GetTagsByFolder(DirectoryInfo folder);
 
@@ -25,11 +21,8 @@ namespace Syncless.Core
 
         bool DeleteTag(String tagname);
 
-        FileTagView CreateFileTag(String tagname);
-
         FolderTagView CreateFolderTag(String tagname);
 
-        FileTagView TagFile(string tagname, FileInfo file);
         FolderTagView TagFolder(string tagname, DirectoryInfo folder);
 
         int UntagFile(string tagname, FileInfo file);
@@ -53,7 +46,9 @@ namespace Syncless.Core
 		List<CompareResult> PreviewSync(FolderTag tag);
 		List<CompareResult> PreviewSync(FileTag tag);
 
-        
+        // To be Implemented
+        // bool RenameTag(String oldtagname, String newtagname);
+
 
         // bool DeleteAllTags(); // Delete all existing tags (This one is like a general reset, might not need)
         // bool DeleteAllTags(FileInfo file); // delete all tags associated with a file

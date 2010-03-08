@@ -94,7 +94,7 @@ namespace SynclessUI
         {
             TagView tv = gui.GetTag(tagname);
 
-            TagTitle.Content = tagname;
+            TagTitle.Text = tagname;
 			// tag.direction not implemented yet
 			
             if (tv.IsSeamless)
@@ -156,7 +156,7 @@ namespace SynclessUI
 
             if (taglist.Count == 0)
             {
-                TagTitle.Content = "Select a Tag";
+                TagTitle.Text = "Select a Tag";
                 TagIcon.Visibility = System.Windows.Visibility.Hidden;
                 TagStatusPanel.Visibility = System.Windows.Visibility.Hidden;
                 SyncPanel.Visibility = System.Windows.Visibility.Hidden;
@@ -172,8 +172,8 @@ namespace SynclessUI
         private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
         	this.DragMove();
-        }
-
+        }		
+		
         /// <summary>
         ///     Sets the behavior of the close button
         /// </summary>
@@ -414,7 +414,7 @@ namespace SynclessUI
 
                     MessageBox.Show(messageBoxText, caption, button, icon);
 				} else {
-                    TagView tv = gui.GetTag((string)TagTitle.Content);
+                    TagView tv = gui.GetTag((string)TagTitle.Text);
 
                     gui.UntagFolder(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
 
@@ -459,6 +459,44 @@ namespace SynclessUI
                 MessageBox.Show(messageBoxText, caption, button, icon);
                 e.Cancel = true;
             }
+		}
+
+		private void TagTitle_LostFocus(object sender, System.Windows.RoutedEventArgs e)
+		{
+			if(!RenameTag(_selectedTag, TagTitle.Text)) {
+				TagTitle.Text = _selectedTag;
+			};
+		}
+		
+		private void TagTitleOnKeyDownHandler(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Return)
+			{
+				TagTitle.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+			}
+		}
+		
+		private bool RenameTag(String oldtagname, String newtagname)
+		{
+			/*
+            if (gui.RenameTag(oldtagname, newtagname))
+            {
+                InitializeTagList();
+                SelectTag(newtagname);
+                return true;
+            } else {
+				string messageBoxText = "Tag could not be renamed.";
+				string caption = "Rename Tag Error";
+				MessageBoxButton button = MessageBoxButton.OK;
+				MessageBoxImage icon = MessageBoxImage.Error;
+	
+				MessageBox.Show(messageBoxText, caption, button, icon);
+				
+				return false;
+			}
+			*/
+			
+			return false;
 		}
     }
 }
