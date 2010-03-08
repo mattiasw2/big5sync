@@ -16,7 +16,7 @@ namespace TestNewComparer.CompareAndSync
                 string[] newCurrentPath = new string[currentPath.Length];
                 for (int i = 0; i < currentPath.Length; i++)
                 {
-                    newCurrentPath[i] = currentPath[i] + o.Name;
+                    newCurrentPath[i] = currentPath[i] +@"\" +  folder.Name;
                 }
                 if(o is FolderCompareObject){
                     
