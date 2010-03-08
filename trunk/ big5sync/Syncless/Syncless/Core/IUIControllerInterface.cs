@@ -24,8 +24,7 @@ namespace Syncless.Core
         FolderTagView CreateFolderTag(String tagname);
 
         FolderTagView TagFolder(string tagname, DirectoryInfo folder);
-
-        int UntagFile(string tagname, FileInfo file);
+                
         int UntagFolder(string tagname, DirectoryInfo folder);
 
         bool MonitorTag(string tagname, bool mode);
@@ -38,7 +37,7 @@ namespace Syncless.Core
         bool Initiate(UIInterface inf);
 
 		List<CompareResult> PreviewSync(FolderTag tag);
-		List<CompareResult> PreviewSync(FileTag tag);
+		
 
         // To be Implemented
         // bool RenameTag(String oldtagname, String newtagname);
