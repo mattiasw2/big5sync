@@ -24,7 +24,7 @@ namespace SynclessUI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, UIInterface
     {
         public IUIControllerInterface gui;
 
@@ -49,6 +49,11 @@ namespace SynclessUI
             // CLI_Untag(@"C:\testfolder\A");
         }
 
+        public string getAppPath()
+        {
+            return System.IO.Path.GetDirectoryName(_app_path);
+        }
+
         public void ProcessCommandLine(string[] args)
         {
             if (args.Length != 0)
@@ -64,7 +69,8 @@ namespace SynclessUI
         {
             _app_path = @System.Reflection.Assembly.GetExecutingAssembly().Location;
             gui = ServiceLocator.GUI;
-            if (gui.Initiate(System.IO.Path.GetDirectoryName(_app_path)))
+
+            if (gui.Initiate(this))
             {
                 RegistryHelper.CreateRegistry(_app_path);
                 InitializeTagInfoPanel();

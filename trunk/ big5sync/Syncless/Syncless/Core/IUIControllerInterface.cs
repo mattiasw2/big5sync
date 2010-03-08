@@ -36,12 +36,6 @@ namespace Syncless.Core
         bool Terminate();
 
         bool Initiate(UIInterface inf);
-        /// <summary>
-        /// Deprecated please change.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        bool Initiate(string path);
 
 		List<CompareResult> PreviewSync(FolderTag tag);
 		List<CompareResult> PreviewSync(FileTag tag);
