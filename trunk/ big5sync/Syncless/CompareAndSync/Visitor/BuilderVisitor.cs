@@ -31,37 +31,39 @@ namespace CompareAndSync.Visitor
                     foreach (DirectoryInfo info in infos)
                     {
                         BaseCompareObject o = folder.GetChild(info.Name);
+                        FolderCompareObject fco = null;
+
                         if (o == null)
-                        {
-                            FolderCompareObject fco = new FolderCompareObject(info.Name, currentPaths.Length);
-                            fco.CreationTime[index] = info.CreationTime.Ticks;
-                            fco.ExistsArray[index] = true;
-                            folder.AddChild(fco);
-                        }
+                            fco = new FolderCompareObject(info.Name, currentPaths.Length);
                         else
-                        {
-                            o.ExistsArray[index] = true;
-                        }
+                            fco = (FolderCompareObject)o;
+
+                        fco.CreationTime[index] = info.CreationTime.Ticks;
+                        fco.ExistsArray[index] = true;
+
+                        if (o == null)
+                            folder.AddChild(fco);
                     }
 
                     FileInfo[] fileInfos = f.GetFiles();
                     foreach (FileInfo info in fileInfos)
                     {
                         BaseCompareObject o = folder.GetChild(info.Name);
+                        FileCompareObject fco = null;
+
                         if (o == null)
-                        {
-                            FileCompareObject fco = new FileCompareObject(info.Name, currentPaths.Length);
-                            fco.CreationTime[index] = info.CreationTime.Ticks;
-                            fco.Hash[index] = CalculateMD5Hash(info);
-                            fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
-                            fco.Length[index] = info.Length;
-                            fco.ExistsArray[index] = true;
-                            folder.AddChild(fco);
-                        }
+                            fco = new FileCompareObject(info.Name, currentPaths.Length);
                         else
-                        {
-                            o.ExistsArray[index] = true;
-                        }
+                            fco = (FileCompareObject)o;
+
+                        fco.CreationTime[index] = info.CreationTime.Ticks;
+                        fco.Hash[index] = CalculateMD5Hash(info);
+                        fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
+                        fco.Length[index] = info.Length;
+                        fco.ExistsArray[index] = true;
+
+                        if (o == null)
+                            folder.AddChild(fco);
                     }
                 }
                 else
@@ -85,37 +87,39 @@ namespace CompareAndSync.Visitor
                     foreach (DirectoryInfo info in infos)
                     {
                         BaseCompareObject o = root.GetChild(info.Name);
+                        FolderCompareObject fco = null;
+
                         if (o == null)
-                        {
-                            FolderCompareObject fco = new FolderCompareObject(info.Name, rootPaths.Length);
-                            fco.CreationTime[index] = info.CreationTime.Ticks;
-                            fco.ExistsArray[index] = true;
-                            root.AddChild(fco);
-                        }
+                            fco = new FolderCompareObject(info.Name, rootPaths.Length);
                         else
-                        {
-                            o.ExistsArray[index] = true;
-                        }
+                            fco = (FolderCompareObject)o;
+
+                        fco.CreationTime[index] = info.CreationTime.Ticks;
+                        fco.ExistsArray[index] = true;
+
+                        if (o == null)
+                            root.AddChild(fco);
                     }
 
                     FileInfo[] fileInfos = folder.GetFiles();
                     foreach (FileInfo info in fileInfos)
                     {
                         BaseCompareObject o = root.GetChild(info.Name);
+                        FileCompareObject fco = null;
+
                         if (o == null)
-                        {
-                            FileCompareObject fco = new FileCompareObject(info.Name, rootPaths.Length);
-                            fco.CreationTime[index] = info.CreationTime.Ticks;
-                            fco.Hash[index] = CalculateMD5Hash(info);
-                            fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
-                            fco.Length[index] = info.Length;
-                            fco.ExistsArray[index] = true;
-                            root.AddChild(fco);
-                        }
+                            fco = new FileCompareObject(info.Name, rootPaths.Length);
                         else
-                        {
-                            o.ExistsArray[index] = true;
-                        }
+                            fco = (FileCompareObject)o;
+
+                        fco.CreationTime[index] = info.CreationTime.Ticks;
+                        fco.Hash[index] = CalculateMD5Hash(info);
+                        fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
+                        fco.Length[index] = info.Length;
+                        fco.ExistsArray[index] = true;
+
+                        if (o == null)
+                            root.AddChild(fco);
                     }
                 }
                 else
