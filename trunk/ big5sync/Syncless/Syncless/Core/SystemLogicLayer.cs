@@ -351,6 +351,12 @@ namespace Syncless.Core
             return init;
         }
 
+
+        public bool Initiate(UIInterface inf)
+        {
+            return Initiate(inf.getAppPath());
+        }
+
         public List<CompareResult> PreviewSync(FolderTag tag)
         {
             FolderTag folderTag = TaggingLayer.Instance.RetrieveFolderTag(tag.TagName);
@@ -479,5 +485,9 @@ namespace Syncless.Core
         }
 
         #endregion
+
+        
+
+        
     }
 }
