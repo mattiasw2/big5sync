@@ -37,10 +37,11 @@ namespace Syncless.Core
         bool Initiate(UIInterface inf);
 
 		List<CompareResult> PreviewSync(FolderTag tag);
-		
+
+        bool RenameTag(String oldtagname, String newtagname);
 
         // To be Implemented
-        // bool RenameTag(String oldtagname, String newtagname);
+        
 
 
         // bool DeleteAllTags(); // Delete all existing tags (This one is like a general reset, might not need)
