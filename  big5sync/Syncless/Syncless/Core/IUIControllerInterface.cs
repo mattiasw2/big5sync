@@ -42,10 +42,18 @@ namespace Syncless.Core
         bool PrepareForTermination();
         bool Terminate();
 
+        bool Initiate(UIInterface inf);
+        /// <summary>
+        /// Deprecated please change.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         bool Initiate(string path);
 
 		List<CompareResult> PreviewSync(FolderTag tag);
 		List<CompareResult> PreviewSync(FileTag tag);
+
+        
 
         // bool DeleteAllTags(); // Delete all existing tags (This one is like a general reset, might not need)
         // bool DeleteAllTags(FileInfo file); // delete all tags associated with a file
