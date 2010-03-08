@@ -51,6 +51,7 @@
     <Compile Include="CompareObject\FolderCompareObject.cs" />
     <Compile Include="CompareObject\RootCompareObject.cs" />
     <Compile Include="Visitor\BuilderVisitor.cs" />
+    <Compile Include="Visitor\CompareResultVisitor.cs" />
     <Compile Include="Visitor\ComparerVisitor.cs" />
     <Compile Include="Visitor\IVisitor.cs" />
     <Compile Include="MetaChangeType.cs" />
