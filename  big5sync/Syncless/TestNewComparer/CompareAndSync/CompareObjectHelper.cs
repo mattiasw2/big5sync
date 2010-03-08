@@ -22,7 +22,7 @@ namespace TestNewComparer.CompareAndSync
                     
                     PreTraverseFolder((FolderCompareObject)o,level+1,newCurrentPath,visitor);
                 }else{
-                    visitor.Visit((FileCompareObject)o,level, newCurrentPath);
+                    visitor.Visit((FileCompareObject)o,level+1, newCurrentPath);
 
                 }
             }

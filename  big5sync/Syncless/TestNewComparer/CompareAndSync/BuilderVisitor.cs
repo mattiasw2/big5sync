@@ -8,7 +8,7 @@ namespace TestNewComparer.CompareAndSync
 {
     public class BuilderVisitor : IVisitor
     {
-        XmlDocument
+        
         #region IVisitor Members
 
         public void Visit(FileCompareObject file, int level, string[] currentPath)
