@@ -55,12 +55,12 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            List<string> selectedTags = (List<string>) taglist.SelectedItems;
+            if (taglist.SelectedIndex == -1) return;
 
-            foreach (string t in selectedTags)
+            foreach (string t in taglist.SelectedItems)
             {
                 int result = _main.gui.UntagFolder(t, new DirectoryInfo(TxtBoxPath.Text));
-                if (result == 1)
+                if (result != 1)
                 {
                     string messageBoxText = t + " could not be untagged from " + TxtBoxPath.Text;
                     string caption = "Untagging Error";
@@ -70,6 +70,8 @@ namespace SynclessUI
                     MessageBox.Show(messageBoxText, caption, button, icon);
                 }
             }
+            _main.InitializeTagList();
+            this.Close();
         }
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)

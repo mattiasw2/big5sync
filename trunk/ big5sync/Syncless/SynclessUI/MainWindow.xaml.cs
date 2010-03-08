@@ -44,9 +44,6 @@ namespace SynclessUI
 
             InitializeComponent();
             InitializeSyncless();
-
-            // test
-            // CLI_Untag(@"C:\testfolder\A");
         }
 
         public string getAppPath()
