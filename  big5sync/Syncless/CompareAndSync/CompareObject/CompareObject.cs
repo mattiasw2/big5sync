@@ -8,15 +8,15 @@ namespace CompareAndSync.CompareObject
     public abstract class BaseCompareObject
     {
         protected string _name;
-        protected long _creationTime;
+        protected long[] _creationTime;
         protected bool[] _exists;
         protected MetaChangeType?[] _changeType;
         protected int[] _priority;
 
-        protected BaseCompareObject(string name, long creationTime, int numOfPaths)
+        protected BaseCompareObject(string name, int numOfPaths)
         {
             _name = name;
-            _creationTime = creationTime;
+            _creationTime = new long[numOfPaths];
             _exists = new bool[numOfPaths];
             _changeType = new MetaChangeType?[numOfPaths];
             _priority = new int[numOfPaths];
@@ -27,29 +27,22 @@ namespace CompareAndSync.CompareObject
             get { return _name; }
         }
 
-        public long CreationTime
+        public long[] CreationTime
         {
             get { return _creationTime; }
+            set { _creationTime = value; }
         }
 
         public bool[] ExistsArray
         {
             get { return _exists; }
+            set { _exists = value; }
         }
 
         public MetaChangeType?[] ChangeTypeArray
         {
             get { return _changeType; }
-        }
-
-        public bool Exists(int fileIndex)
-        {
-            return _exists[fileIndex];
-        }
-
-        public MetaChangeType? GetChangeType(int fileIndex)
-        {
-            return _changeType[fileIndex];
+            set { _changeType = value; }
         }
 
     }
