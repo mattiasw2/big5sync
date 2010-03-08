@@ -10,7 +10,7 @@ namespace CompareAndSync.CompareObject
         private string[] _paths;
 
         public RootCompareObject(string[] paths)
-            : base(null, -1, paths.Length)
+            : base(null, paths.Length)
         {
             _paths = paths;
         }

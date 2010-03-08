@@ -8,8 +8,8 @@ namespace CompareAndSync.Visitor
 {
     public interface IVisitor
     {
-        void Visit(FileCompareObject file, int level, string[] currentPath);
-        void Visit(FolderCompareObject folder, int level, string[] currentPath);
+        void Visit(FileCompareObject file, int level, string[] currentPaths);
+        void Visit(FolderCompareObject folder, int level, string[] currentPaths);
         void Visit(RootCompareObject root);
     }
 }

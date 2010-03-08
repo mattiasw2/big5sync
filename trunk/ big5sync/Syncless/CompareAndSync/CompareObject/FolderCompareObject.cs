@@ -9,8 +9,8 @@ namespace CompareAndSync.CompareObject
     {
         private List<BaseCompareObject> _contents;
 
-        public FolderCompareObject(string name, long creationTime, int numOfPaths)
-            : base(name, creationTime, numOfPaths)
+        public FolderCompareObject(string name, int numOfPaths)
+            : base(name, numOfPaths)
         {
             _contents = new List<BaseCompareObject>();
         }
