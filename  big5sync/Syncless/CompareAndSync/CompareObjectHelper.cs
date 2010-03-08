@@ -12,8 +12,8 @@ namespace CompareAndSync
         public static void PreTraverseFolder(RootCompareObject root, IVisitor visitor)
         {
             visitor.Visit(root);
-            List<BaseCompareObject> objectList = root.Contents;
-            foreach (BaseCompareObject o in objectList)
+            Dictionary<string, BaseCompareObject>.ValueCollection values = root.Contents.Values;
+            foreach (BaseCompareObject o in values)
             {
                 string[] newCurrentPath = root.Paths;
                 if (o is FolderCompareObject)
@@ -30,8 +30,8 @@ namespace CompareAndSync
         public static void PreTraverseFolder(FolderCompareObject folder, int level, string[] currentPath, IVisitor visitor)
         {
             visitor.Visit(folder, level, currentPath);
-            List<BaseCompareObject> objectList = folder.Contents;
-            foreach (BaseCompareObject o in objectList)
+            Dictionary<string, BaseCompareObject>.ValueCollection values = root.Contents.Values;
+            foreach (BaseCompareObject o in values)
             {
                 string[] newCurrentPath = new string[currentPath.Length];
                 for (int i = 0; i < currentPath.Length; i++)
