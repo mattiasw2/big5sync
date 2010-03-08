@@ -45,5 +45,11 @@ namespace CompareAndSync.CompareObject
             set { _changeType = value; }
         }
 
+        public int[] Priority
+        {
+            get { return _priority; }
+            set { _priority = value; }
+        }
+
     }
 }
