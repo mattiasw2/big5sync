@@ -343,7 +343,7 @@ namespace Syncless.Core
             DeviceWatcher.Instance.ToString(); //randomly call a method to start watching folders.
             return true;
         }
-        public bool Initiate(string path)
+        private bool Initiate(string path)
         {
             this.appPath = path;
             bool init = Initiate();
