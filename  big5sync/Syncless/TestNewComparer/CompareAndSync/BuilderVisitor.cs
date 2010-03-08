@@ -11,7 +11,7 @@ namespace TestNewComparer.CompareAndSync
         
         #region IVisitor Members
 
-        public void Visit(FileCompareObject file, int level, string[] currentPath)
+        public void Visit(FileCompareObject file, int level, string[] currentPaths)
         {
             //do nothing
         }

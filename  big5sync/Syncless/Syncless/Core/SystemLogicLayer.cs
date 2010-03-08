@@ -186,8 +186,7 @@ namespace Syncless.Core
         #endregion
 
         #region IUIControllerInterface Members
-
-        
+          
 
         public bool StartManualSync(string tagname)
         {
@@ -212,23 +211,11 @@ namespace Syncless.Core
             return t != null;
         }
 
-        public FileTagView CreateFileTag(string tagname)
-        {
-            return ConvertToFileTagView(TaggingLayer.Instance.CreateFileTag(tagname));
-        }
         public FolderTagView CreateFolderTag(string tagname)
         {
             return ConvertToFolderTagView(TaggingLayer.Instance.CreateFolderTag(tagname));
         }
-               
-        public FileTagView TagFile(string tagname, FileInfo file)
-        {
-            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(file.FullName, true);
-            FileTag tag = TaggingLayer.Instance.TagFile(path, tagname);
-            StartManualSync(tag.TagName);
-            MonitorTag(tag.TagName, true);
-            return ConvertToFileTagView(tag);
-        }
+          
         public FolderTagView TagFolder(string tagname, DirectoryInfo folder)
         {
             string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
@@ -238,12 +225,6 @@ namespace Syncless.Core
             return ConvertToFolderTagView(tag);
         }
 
-        public int UntagFile(string tagname, FileInfo file)
-        {
-            Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
-            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(file.FullName, true);
-            return TaggingLayer.Instance.UntagFile(path, tag.TagName);
-        }
         public int UntagFolder(string tagname, DirectoryInfo folder)
         {
             Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
@@ -343,18 +324,13 @@ namespace Syncless.Core
             DeviceWatcher.Instance.ToString(); //randomly call a method to start watching folders.
             return true;
         }
-        private bool Initiate(string path)
-        {
-            this.appPath = path;
-            bool init = Initiate();
-            SaveLoadHelper.SaveAll(path);
-            return init;
-        }
-
 
         public bool Initiate(UIInterface inf)
         {
-            return Initiate(inf.getAppPath());
+            this.appPath = inf.getAppPath();
+            bool init = Initiate();
+            SaveLoadHelper.SaveAll(appPath);
+            return init;
         }
 
         public List<CompareResult> PreviewSync(FolderTag tag)
@@ -365,29 +341,7 @@ namespace Syncless.Core
             CompareRequest compareRequest = new CompareRequest(convertedPath);
             return CompareSyncController.Instance.Compare(compareRequest);
         }
-        public List<CompareResult> PreviewSync(FileTag tag)
-        {
-            /*
-            FileTag fileTag = TaggingLayer.Instance.RetrieveFileTag(tag.TagName);
-            List<string> paths = fileTag.PathStringList;
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            CompareRequest compareRequest = new CompareRequest(convertedPath, true);
-            return CompareSyncController.Instance.Compare(compareRequest);
-             * */
-            return null;
-        }
 
-        public List<string> GetAllFileTags()
-        {
-            List<FileTag> fileTagList = TaggingLayer.Instance.FileTagList;
-            List<string> tagNames = new List<string>();
-            foreach (Tag t in fileTagList)
-            {
-                tagNames.Add(t.TagName);
-            }
-            tagNames.Sort();
-            return tagNames;
-        }
         public List<string> GetAllFolderTags()
         {
             List<FolderTag> folderTagList = TaggingLayer.Instance.FolderTagList;
@@ -412,7 +366,12 @@ namespace Syncless.Core
         }
         public List<string> GetTagsByFolder(DirectoryInfo folder)
         {
-            List<FolderTag> tagList = TaggingLayer.Instance.RetrieveFolderTagByPath(folder.FullName);
+            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName,false);
+            if (path == null)
+            {
+                return null;
+            }
+            List<FolderTag> tagList = TaggingLayer.Instance.RetrieveFolderTagByPath(path);
             List<string> tagNames = new List<string>();
             foreach (Tag t in tagList)
             {
