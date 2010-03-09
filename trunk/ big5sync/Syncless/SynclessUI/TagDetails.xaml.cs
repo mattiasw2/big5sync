@@ -93,7 +93,7 @@ namespace SynclessUI
                 {
                     TxtBoxPath.Text = path;
 					ACBTagName.IsEnabled = true;
-                    ACBTagName.MySourceList = _main.gui.GetAllFolderTags();
+                    ACBTagName.MySourceList = _main.gui.GetAllTags();
                 }
                 else
                 {
@@ -124,7 +124,7 @@ namespace SynclessUI
 					}
 					
 					if(proceedtotag) {
-						TagView tv1 = _main.gui.TagFolder(_tagname, new DirectoryInfo(_path));
+						TagView tv1 = _main.gui.Tag(_tagname, new DirectoryInfo(_path));
 						
 						if(tv1 != null) {
 							_main.InitializeTagList();

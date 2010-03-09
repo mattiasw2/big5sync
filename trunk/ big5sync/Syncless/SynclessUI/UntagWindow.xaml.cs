@@ -29,7 +29,7 @@ namespace SynclessUI
 			
 			_main = main;
 			
-            List<string> tagListByFolder = _main.gui.GetTagsByFolder(new DirectoryInfo(clipath));
+            List<string> tagListByFolder = _main.gui.GetTags(new DirectoryInfo(clipath));
             if (tagListByFolder.Count != 0)
             {
                 TxtBoxPath.Text = clipath;
@@ -59,7 +59,7 @@ namespace SynclessUI
 
             foreach (string t in taglist.SelectedItems)
             {
-                int result = _main.gui.UntagFolder(t, new DirectoryInfo(TxtBoxPath.Text));
+                int result = _main.gui.Untag(t, new DirectoryInfo(TxtBoxPath.Text));
                 if (result != 1)
                 {
                     string messageBoxText = t + " could not be untagged from " + TxtBoxPath.Text;
