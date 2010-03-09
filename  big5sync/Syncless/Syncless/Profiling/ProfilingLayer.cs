@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using Syncless.Profiling.Exceptions;
 namespace Syncless.Profiling
 {
     public class ProfilingLayer
@@ -138,7 +139,18 @@ namespace Syncless.Profiling
         }
         #endregion        
 
+        public void Merge(string path)
+        {
+            Profile p = ProfilingXMLHelper.LoadProfile(path);
+            try
+            {
+                _profile.Merge(p);
+            }
+            catch (ProfileConflictException)
+            {
 
+            }
+        }
         /// <summary>
         /// Save all the profiling xml to all the various Location.
         /// </summary>
@@ -157,7 +169,7 @@ namespace Syncless.Profiling
             string path = paths[0];//path 0 is the root.
             try
             {
-                Profile p = ProfilingXMLHelper.ConvertToProfile(path);
+                Profile p = ProfilingXMLHelper.LoadProfile(path);
                 Debug.Assert(p != null);
                 _profile = p;
             }
@@ -167,6 +179,24 @@ namespace Syncless.Profiling
                 _profile = profile;
                 //Since the profile is newly created , no need to traverse all the drive
                 return true;
+            }
+            for (int i = 1; i < paths.Count; i++)
+            {
+                try
+                {
+                    if (File.Exists(path))
+                    {
+                        Profile p = ProfilingXMLHelper.LoadProfile(paths[i]);
+                        _profile.Merge(p);
+                    }
+                }
+                catch (ProfileConflictException)
+                {
+                    //Conflict
+                }
+                catch (ProfileNameDifferentException)
+                {
+                }
             }
             
             DriveInfo[] driveList = DriveInfo.GetDrives();

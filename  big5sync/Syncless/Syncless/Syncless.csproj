@@ -99,6 +99,7 @@
     <Compile Include="Monitor\DTO\FileChangeEvent.cs" />
     <Compile Include="Monitor\DTO\FolderChangeEvent.cs" />
     <Compile Include="Monitor\MonitorLayer.cs" />
+    <Compile Include="Profiling\Exceptions\ProfileNameDifferentException.cs" />
     <Compile Include="Profiling\Profile.cs" />
     <Compile Include="Profiling\Exceptions\ProfileConflictException.cs" />
     <Compile Include="Profiling\Exceptions\ProfileGuidConflictException.cs" />

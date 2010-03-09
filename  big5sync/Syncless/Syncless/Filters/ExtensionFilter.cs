@@ -30,10 +30,7 @@ namespace Syncless.Filters
         }
         public override bool Match(string path)
         {
-            
-            return _regex.Match(path).Success;
-            
-                
+            return _regex.Match(path).Success;    
         }
     }
 }

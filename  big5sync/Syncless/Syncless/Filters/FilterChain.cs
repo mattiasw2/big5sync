@@ -21,6 +21,8 @@ namespace Syncless.Filters
 
             return outputList;
         }
+
+        #region private methods
         private List<Filter>[] Split(List<Filter> filters)
         {
             List<Filter>[] filterList = new List<Filter>[2];
@@ -58,8 +60,7 @@ namespace Syncless.Filters
                 }
             }
             return outputList;
-        }
-       
+        } 
         private List<string> ApplyExclude(List<Filter> filters, List<string> patterns)
         {
             // All files that pass the criteria must be excluded
@@ -89,5 +90,6 @@ namespace Syncless.Filters
             }
             return returnedList;
         }
+        #endregion
     }
 }
