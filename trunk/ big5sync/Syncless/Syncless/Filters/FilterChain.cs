@@ -13,7 +13,9 @@ namespace Syncless.Filters
         /// <param name="filters"></param>
         /// <param name="?"></param>
         public virtual List<string> ApplyFilter(List<Filter> filters , List<string> patterns){
-            List<string> outputList = patterns;
+
+
+            List<string> outputList = new SynclessConfigFilter().ApplyFilter(patterns);
             List<Filter>[] filtersList = Split(filters);
             outputList = ApplyInclude(filtersList[0], outputList);
             outputList = ApplyExclude(filtersList[1], outputList);
