@@ -51,6 +51,10 @@
     <Compile Include="CompareObject\FolderCompareObject.cs" />
     <Compile Include="CompareObject\RootCompareObject.cs" />
     <Compile Include="CurrentState.cs" />
+    <Compile Include="Result\CompareConflictResult.cs" />
+    <Compile Include="Result\ConflictResult.cs" />
+    <Compile Include="Result\Result.cs" />
+    <Compile Include="Result\SyncConflictResult.cs" />
     <Compile Include="Visitor\BuilderVisitor.cs" />
     <Compile Include="Visitor\ComparerVisitor.cs" />
     <Compile Include="Visitor\IVisitor.cs" />

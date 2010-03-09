@@ -71,14 +71,14 @@ namespace CompareAndSync.Visitor
             if (deletePos.Count > 0)
             {
                 foreach (int i in deletePos)
-                    file.Priority[i] = 1;
+                    file.Priority[i]++;
                 return;
             }
-
 
             //Update and create handled in the same way
             //Rename is handled in a weird way, think about it later
             int mostUpdatedPos = 0;
+            bool diff = false;
 
             for (int i = 0; i < currentPaths.Length; i++)
             {
@@ -89,25 +89,26 @@ namespace CompareAndSync.Visitor
                 }
             }
 
-            for (int i = mostUpdatedPos + 1; i < currentPaths.Length - 1; i++)
+            for (int i = mostUpdatedPos + 1; i < currentPaths.Length; i++)
             {
                 if (!file.Exists[i])
                     continue;
 
                 if (file.Length[mostUpdatedPos] != file.Length[i] || file.Hash[mostUpdatedPos] != file.Hash[i])
                 {
+                    diff = true;
                     if (file.LastWriteTime[i] > file.LastWriteTime[mostUpdatedPos])
                     {
                         mostUpdatedPos = i;
                     }
-                    else if (file.LastWriteTime[i] == file.Length[mostUpdatedPos])
+                    else if (file.LastWriteTime[i] == file.LastWriteTime[mostUpdatedPos])
                     {
                         //Handle conflicts here?
                     }
                 }
             }
-
-            file.Priority[mostUpdatedPos] = 1;
+            if (diff)
+                file.Priority[mostUpdatedPos]++;
         }
 
         #endregion
