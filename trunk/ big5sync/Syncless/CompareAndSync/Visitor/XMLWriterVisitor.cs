@@ -29,14 +29,14 @@ namespace CompareAndSync.Visitor
 
         public void Visit(FileCompareObject file, int level, string[] currentPath)
         {
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < currentPath.Length; i++)
             {
-                if (!File.Exists(Path.Combine(currentPaths[i], file.Name)))
+                if (!File.Exists(Path.Combine(currentPath[i], file.Name)))
                     continue;
-                if (Path.Combine(currentPaths[i], file.Name).Contains(".syncless"))
+                if (Path.Combine(currentPath[i], file.Name).Contains(".syncless"))
                     continue;
-                file.
-                Console.WriteLine(Path.Combine(currentPaths[i], file.Name));
+                
+                Console.WriteLine(Path.Combine(currentPath[i], file.Name));
             }
             
         }
