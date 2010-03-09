@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Syncless.Monitor;
+using Syncless.Monitor.DTO;
 using Syncless.CompareAndSync;
 namespace Syncless.Core
 {

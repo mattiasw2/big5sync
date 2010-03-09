@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-namespace Syncless.Monitor
+namespace Syncless.Monitor.DTO
 {
     public class DriveChangeEvent
     {

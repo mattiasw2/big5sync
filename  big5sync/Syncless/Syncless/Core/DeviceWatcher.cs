@@ -4,6 +4,7 @@ using System.IO;
 using System.Management;
 using System.Threading;
 using Syncless.Monitor;
+using Syncless.Monitor.DTO;
 namespace Syncless.Core
 {
     public class DeviceWatcher
@@ -98,7 +99,7 @@ namespace Syncless.Core
                 }
                 if (inserted)
                 {
-                    DriveChangeEvent dce = new DriveChangeEvent(Syncless.Monitor.DriveChangeType.DRIVE_IN, drive);
+                    DriveChangeEvent dce = new DriveChangeEvent(DriveChangeType.DRIVE_IN, drive);
                     control.HandleDriveChange(dce);
                     Console.WriteLine(drive.Name + " inserted.");
                 }
@@ -152,7 +153,7 @@ namespace Syncless.Core
                 }
                 if (removed)
                 {
-                    DriveChangeEvent dce = new DriveChangeEvent(Syncless.Monitor.DriveChangeType.DRIVE_OUT, drive);
+                    DriveChangeEvent dce = new DriveChangeEvent(DriveChangeType.DRIVE_OUT, drive);
                     control.HandleDriveChange(dce);
                     Console.WriteLine(drive.Name + " removed.");
                 }
