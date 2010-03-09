@@ -13,6 +13,7 @@ namespace CompareAndSync.Visitor
         public void Visit(FileCompareObject file, string[] currentPaths)
         {
             ProcessFileMetaData(file, currentPaths);
+            DetectFileRename(file, currentPaths);
             CompareFiles(file, currentPaths);
         }
 
@@ -52,6 +53,38 @@ namespace CompareAndSync.Visitor
             }
         }
 
+        private void DetectFileRename(FileCompareObject file, string[] currentPaths)
+        {
+            FileCompareObject f = null;
+
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                if (file.ChangeType[i] == MetaChangeType.Delete)
+                {
+                    f = file.Parent.GetIdenticalFile(file.MetaHash[i], file.MetaCreationTime[i]);
+
+                    //Check that f is New for EXACTLY one i and that they have the same filecreation date
+                    if (f != null)
+                    {
+                        int counter = 0;
+
+                        for (int j = 0; j < f.ChangeType.Length; j++)
+                        {
+                            if (f.ChangeType[i] == MetaChangeType.New)
+                                counter++;
+                        }
+
+                        if (counter != 1)
+                            return;
+
+                        file.NewName = f.Name;
+                        file.ChangeType[i] = MetaChangeType.Rename;
+                        file.Parent.Contents.Remove(f.Name);                        
+                    }
+                }
+            }
+        }
+
         private void CompareFiles(FileCompareObject file, string[] currentPaths)
         {
             //Delete will only occur if all other changes are NoChange
@@ -72,6 +105,26 @@ namespace CompareAndSync.Visitor
             {
                 foreach (int i in deletePos)
                     file.Priority[i] = 1;
+                return;
+            }
+
+            //Rename will only occur if all other changes are NoChange
+            int renamePos = -1;
+
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                if (file.ChangeType[i] == MetaChangeType.Rename)
+                    renamePos = i;
+                else if (file.ChangeType[i] != MetaChangeType.NoChange || file.ChangeType[i] != null)
+                {
+                    renamePos = -1;
+                    break;
+                }
+            }
+
+            if (renamePos > 0)
+            {
+                file.Priority[renamePos] = 1;
                 return;
             }
 
