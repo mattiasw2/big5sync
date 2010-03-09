@@ -79,7 +79,7 @@ namespace CompareAndSync.Visitor
             //Rename is handled in a weird way, think about it later
             int mostUpdatedPos = 0;
             bool diff = false;
-            file.Priority[mostUpdatedPos] = 1;
+            file.Priority[0] = 1;
 
             for (int i = 1; i < currentPaths.Length; i++)
             {
