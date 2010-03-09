@@ -21,6 +21,7 @@ namespace CompareAndSync.Visitor
         private const string NODE_HASH = "hash";
         private const string NODE_LAST_MODIFIED = "last_modified";
         private const string NODE_LAST_CREATED = "last_created";
+        private const string NODE_NAME_OF_FOLDER = "name_of_folder";
 
         public void Visit(FileCompareObject file, string[] currentPath)
         {
@@ -40,7 +41,18 @@ namespace CompareAndSync.Visitor
 
         public void Visit(FolderCompareObject folder, string[] currentPath)
         {
-            //
+            XmlDocument xmlDoc = new XmlDocument();
+            for (int i = 0; i < currentPath.Length; i++)
+            {
+                if (currentPath[i].Contains(META_DIR))
+                    continue;
+                string path = Path.Combine(currentPath[i], METADATAPATH);
+                if (!File.Exists(path))
+                    continue;
+                xmlDoc.Load(path);
+                folder = PopulateFolderWithMetaData(xmlDoc, folder, i);
+                xmlDoc.Save(path);
+            }
         }
 
         public void Visit(RootCompareObject root)
@@ -79,6 +91,16 @@ namespace CompareAndSync.Visitor
             file.MetaExists[counter] = true;
             return file;
 
+        }
+
+        private FolderCompareObject PopulateFolderWithMetaData(XmlDocument xmlDoc, FolderCompareObject folder, int counter)
+        {
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name_of_folder='" + folder.Name + "']");
+            if (node == null)
+                return folder;
+
+            folder.MetaExists[counter] = true;
+            return folder;
         }
 
         #endregion
