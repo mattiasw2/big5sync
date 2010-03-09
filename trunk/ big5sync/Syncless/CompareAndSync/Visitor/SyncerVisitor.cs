@@ -29,11 +29,12 @@ namespace CompareAndSync.Visitor
                         break;
                     case MetaChangeType.New:
                     case MetaChangeType.Update:
+                    case MetaChangeType.NoChange:
                         CopyFile(file, currentPaths, maxPriorityPos);
                         break;
 
                     case MetaChangeType.Rename:
-
+                        MoveFile(file, currentPaths, maxPriorityPos);
                         break;
                 }
             }
@@ -82,7 +83,7 @@ namespace CompareAndSync.Visitor
             for (int i = 0; i < currentPaths.Length; i++)
             {
                 if (i != srcFilePos)
-                {                    
+                {
                     try
                     {
                         if (fco.Priority[i] != fco.Priority[srcFilePos])
@@ -138,7 +139,34 @@ namespace CompareAndSync.Visitor
                     }
                 }
             }
-            fco.FinalState[srcFilePos] = FinalState.Propagated | FinalState.Deleted;
+            fco.FinalState[srcFilePos] = FinalState.Propagated;
+        }
+
+        private void MoveFile(FileCompareObject fco, string[] currentPaths, int srcFilePos)
+        {
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                if (i != srcFilePos)
+                {
+                    if (fco.Priority[i] != fco.Priority[srcFilePos])
+                    {
+                        try
+                        {
+                            File.Move(Path.Combine(currentPaths[i], fco.Name), Path.Combine(currentPaths[i], fco.NewName));
+                            fco.FinalState[i] = FinalState.Renamed;
+                        }
+                        catch (Exception)
+                        {
+                            //Throw to conflict queue
+                        }
+                    }
+                    else
+                    {
+                        fco.FinalState[i] = FinalState.Unchanged;
+                    }
+                }
+            }
+            fco.FinalState[srcFilePos] = FinalState.Propagated;
         }
 
         #endregion
@@ -172,7 +200,7 @@ namespace CompareAndSync.Visitor
                     }
                 }
             }
-            folder.FinalState[srcFilePos] = FinalState.Propagated ;
+            folder.FinalState[srcFilePos] = FinalState.Propagated;
 
         }
 

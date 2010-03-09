@@ -20,7 +20,8 @@ namespace CompareAndSync.CompareObject
         private MetaChangeType?[] _changeType;
         private FinalState?[] _finalState;
         private int[] _priority;
-        private List<string> _newNames;
+        //private List<string> _newNames;
+        private string _newName;
         private FolderCompareObject _parent;
 
         protected BaseCompareObject(string name, int numOfPaths, FolderCompareObject parent)
@@ -33,7 +34,7 @@ namespace CompareAndSync.CompareObject
             _metaExists = new bool[numOfPaths];
             _changeType = new MetaChangeType?[numOfPaths];
             _priority = new int[numOfPaths];
-            _newNames = new List<string>();
+            //_newNames = new List<string>();
             _parent = parent;
         }
 
@@ -84,15 +85,23 @@ namespace CompareAndSync.CompareObject
             set { _priority = value; }
         }
 
+        /*
         public List<string> NewNames
         {
             get { return _newNames; }
             set { _newNames = value; }
+        }*/
+
+        public string NewName
+        {
+            get { return _newName; }
+            set { _newName = value; }
         }
 
-        public BaseCompareObject Parent
+        public FolderCompareObject Parent
         {
             get { return _parent; }
+            set { _parent = value; }
         }
 
     }
