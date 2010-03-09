@@ -103,6 +103,7 @@ namespace CompareAndSync.Visitor
                     }
                 }
             }
+            fco.FinalState[srcFilePos] = FinalState.Propagated;
         }
 
         private void DeleteFile(FileCompareObject fco, string[] currentPaths, int srcFilePos)

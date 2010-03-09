@@ -10,6 +10,7 @@ namespace CompareAndSync
         Deleted,
         Updated,
         Created,
-        Renamed
+        Renamed,
+        Propagated
     }
 }
