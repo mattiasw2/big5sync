@@ -45,7 +45,7 @@ namespace CompareAndSync.Visitor
                         FolderCompareObject fco = null;
 
                         if (o == null)
-                            fco = new FolderCompareObject(info.Name, currentPaths.Length);
+                            fco = new FolderCompareObject(info.Name, currentPaths.Length, folder);
                         else
                             fco = (FolderCompareObject)o;
 
@@ -63,7 +63,7 @@ namespace CompareAndSync.Visitor
                         FileCompareObject fco = null;
 
                         if (o == null)
-                            fco = new FileCompareObject(info.Name, currentPaths.Length);
+                            fco = new FileCompareObject(info.Name, currentPaths.Length, folder);
                         else
                             fco = (FileCompareObject)o;
 

@@ -15,8 +15,8 @@ namespace CompareAndSync.CompareObject
         private string[] _metaHash;
         private long[] _metaLength, _metaLastWriteTime;
 
-        public FileCompareObject(string name, int numOfPaths)
-            : base (name, numOfPaths)
+        public FileCompareObject(string name, int numOfPaths, BaseCompareObject parent)
+            : base (name, numOfPaths, parent)
         {
             _hash = new string[numOfPaths];
             _length = new long[numOfPaths];

@@ -9,8 +9,8 @@ namespace CompareAndSync.CompareObject
     {
         private Dictionary<string, BaseCompareObject> _contents;
 
-        public FolderCompareObject(string name, int numOfPaths)
-            : base(name, numOfPaths)
+        public FolderCompareObject(string name, int numOfPaths, BaseCompareObject parent)
+            : base(name, numOfPaths, parent)
         {
             _contents = new Dictionary<string, BaseCompareObject>(StringComparer.OrdinalIgnoreCase);
         }
