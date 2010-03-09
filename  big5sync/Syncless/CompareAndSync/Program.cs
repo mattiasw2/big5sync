@@ -15,6 +15,7 @@ namespace CompareAndSync
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor());
             CompareObjectHelper.PreTraverseFolder(rco, new ComparerVisitor());
             CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor());
+            CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor());
             CompareObjectHelper.PreTraverseFolder(rco, new PrinterVisitor());
             Console.Read();
         }
