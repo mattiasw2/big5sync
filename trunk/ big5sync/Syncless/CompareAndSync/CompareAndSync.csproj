@@ -46,12 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompareObjectHelper.cs" />
-    <Compile Include="CompareObject\CompareObject.cs" />
+    <Compile Include="CompareObject\BaseCompareObject.cs" />
     <Compile Include="CompareObject\FileCompareObject.cs" />
     <Compile Include="CompareObject\FolderCompareObject.cs" />
     <Compile Include="CompareObject\RootCompareObject.cs" />
+    <Compile Include="CurrentState.cs" />
     <Compile Include="Visitor\BuilderVisitor.cs" />
-    <Compile Include="Visitor\CompareResultVisitor.cs" />
     <Compile Include="Visitor\ComparerVisitor.cs" />
     <Compile Include="Visitor\IVisitor.cs" />
     <Compile Include="MetaChangeType.cs" />

@@ -39,7 +39,7 @@ namespace CompareAndSync.Visitor
                             fco = (FolderCompareObject)o;
 
                         fco.CreationTime[index] = info.CreationTime.Ticks;
-                        fco.ExistsArray[index] = true;
+                        fco.Exists[index] = true;
 
                         if (o == null)
                             folder.AddChild(fco);
@@ -60,7 +60,7 @@ namespace CompareAndSync.Visitor
                         fco.Hash[index] = CalculateMD5Hash(info);
                         fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
                         fco.Length[index] = info.Length;
-                        fco.ExistsArray[index] = true;
+                        fco.Exists[index] = true;
 
                         if (o == null)
                             folder.AddChild(fco);
@@ -95,7 +95,7 @@ namespace CompareAndSync.Visitor
                             fco = (FolderCompareObject)o;
 
                         fco.CreationTime[index] = info.CreationTime.Ticks;
-                        fco.ExistsArray[index] = true;
+                        fco.Exists[index] = true;
 
                         if (o == null)
                             root.AddChild(fco);
@@ -116,7 +116,7 @@ namespace CompareAndSync.Visitor
                         fco.Hash[index] = CalculateMD5Hash(info);
                         fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
                         fco.Length[index] = info.Length;
-                        fco.ExistsArray[index] = true;
+                        fco.Exists[index] = true;
 
                         if (o == null)
                             root.AddChild(fco);
@@ -134,7 +134,6 @@ namespace CompareAndSync.Visitor
         private static string CalculateMD5Hash(FileInfo fileInput)
         {
             Debug.Assert(fileInput.Exists);
-            //Debug.Assert(fileInput.Directory.Name != XMLHelper.METADATADIR);
             FileStream fileStream = null;
             try
             {
