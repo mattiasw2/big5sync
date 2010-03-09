@@ -10,24 +10,27 @@ namespace CompareAndSync.CompareObject
         //Actual file
         private string _name;
         private long[] _creationTime;
+        private bool[] _exists;
 
        //Meta file
         private long[] _metaCreationTime;
+        private bool[] _metaExists;
 
-        //All
-        private bool[] _exists;
+        //All       
         private MetaChangeType?[] _changeType;
         private int[] _priority;
+        private List<string> _newNames;
 
         protected BaseCompareObject(string name, int numOfPaths)
         {
             _name = name;
             _creationTime = new long[numOfPaths];
             _exists = new bool[numOfPaths];
+            _metaCreationTime = new long[numOfPaths];
+            _metaExists = new bool[numOfPaths];
             _changeType = new MetaChangeType?[numOfPaths];
             _priority = new int[numOfPaths];
-
-            _metaCreationTime = new long[numOfPaths];
+            _newNames = new List<string>();            
         }
 
         public string Name
@@ -47,13 +50,19 @@ namespace CompareAndSync.CompareObject
             set { _metaCreationTime = value; }
         }
 
-        public bool[] ExistsArray
+        public bool[] Exists
         {
             get { return _exists; }
             set { _exists = value; }
         }
 
-        public MetaChangeType?[] ChangeTypeArray
+        public bool[] MetaExists
+        {
+            get { return _metaExists; }
+            set { _metaExists = value; }
+        }
+
+        public MetaChangeType?[] ChangeType
         {
             get { return _changeType; }
             set { _changeType = value; }
@@ -63,6 +72,12 @@ namespace CompareAndSync.CompareObject
         {
             get { return _priority; }
             set { _priority = value; }
+        }
+
+        public List<string> NewNames
+        {
+            get { return _newNames; }
+            set { _newNames = value; }
         }
 
     }
