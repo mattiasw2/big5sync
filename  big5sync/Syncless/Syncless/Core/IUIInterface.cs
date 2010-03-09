@@ -6,7 +6,7 @@ using System.Text;
 namespace Syncless.Core
 {
     //Implemented by Any UI.
-    public interface UIInterface
+    public interface IUIInterface
     {
         string getAppPath();
     }

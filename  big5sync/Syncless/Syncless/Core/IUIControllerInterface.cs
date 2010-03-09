@@ -10,22 +10,16 @@ namespace Syncless.Core
     public interface IUIControllerInterface
     {
         List<string> GetAllTags();
+        List<string> GetTags(DirectoryInfo folder);
 
-        List<string> GetAllFolderTags();
-
-        List<string> GetTagsByFolder(DirectoryInfo folder);
-
-        TagView GetTag(String tagname);
-
-        bool StartManualSync(String tagname);
+        TagView GetTag(String tagname);       
 
         bool DeleteTag(String tagname);
 
-        FolderTagView CreateFolderTag(String tagname);
-
-        FolderTagView TagFolder(string tagname, DirectoryInfo folder);
+        TagView CreateTag(String tagname);
+        TagView Tag(string tagname, DirectoryInfo folder);
                 
-        int UntagFolder(string tagname, DirectoryInfo folder);
+        int Untag(string tagname, DirectoryInfo folder);
 
         bool MonitorTag(string tagname, bool mode);
 
@@ -34,12 +28,13 @@ namespace Syncless.Core
         bool PrepareForTermination();
         bool Terminate();
 
-        bool Initiate(UIInterface inf);
+        bool Initiate(IUIInterface inf);
 
-		List<CompareResult> PreviewSync(FolderTag tag);
+		List<CompareResult> PreviewSync(string tagname);
 
         bool RenameTag(String oldtagname, String newtagname);
 
+        bool StartManualSync(String tagname);
         // To be Implemented
 
         // bool DeleteAllTags(); // Delete all existing tags (This one is like a general reset, might not need)
