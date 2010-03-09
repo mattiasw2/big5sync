@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Syncless.Core.Conflict
 {
-    public class ConflictQueue : Queue<Conflict>
+    public class ConflictQueue
     {
     }
 }
