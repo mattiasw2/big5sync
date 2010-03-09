@@ -71,37 +71,53 @@ namespace CompareAndSync.Visitor
             if (deletePos.Count > 0)
             {
                 foreach (int i in deletePos)
-                    file.Priority[i]++;
+                    file.Priority[i] = 1;
                 return;
             }
 
             //Update and create handled in the same way
             //Rename is handled in a weird way, think about it later
-            int mostUpdatedPos = 0;
-            bool diff = false;
-            file.Priority[0] = 1;
+            int mostUpdatedPos = 0, initialPos = 0;
+            //bool diff = false;            
 
-            for (int i = 1; i < currentPaths.Length; i++)
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                if (file.Exists[i])
+                {
+                    mostUpdatedPos = i;
+                    initialPos = i;
+                    break;
+                }
+            }
+
+            file.Priority[mostUpdatedPos] = 1;
+
+            for (int i = mostUpdatedPos + 1; i < currentPaths.Length; i++)
             {
                 if (!file.Exists[i])
                 {
-                    diff = true;
+                    file.Priority[i] = -1;
+                    //diff = true;
                     continue;
                 }
 
                 if (file.Length[mostUpdatedPos] != file.Length[i] || file.Hash[mostUpdatedPos] != file.Hash[i])
                 {
-                    diff = true;
+                    //diff = true;
                     if (file.LastWriteTime[i] > file.LastWriteTime[mostUpdatedPos])
                     {
                         file.Priority[i] = file.Priority[mostUpdatedPos] + 1;
                         mostUpdatedPos = i;
                     }
                 }
+                else
+                {
+                    file.Priority[i] = file.Priority[mostUpdatedPos];
+                }
             }
 
-            if (!diff)
-                file.Priority[0] = 0;
+            //if (!diff)
+            //    file.Priority[initialPos] = 0;
         }
 
         #endregion
@@ -138,6 +154,42 @@ namespace CompareAndSync.Visitor
                     break;
                 }
             }
+
+            if (deletePos.Count > 0)
+            {
+                foreach (int i in deletePos)
+                    folder.Priority[i] = 1;
+                return;
+            }
+
+            //Update and create handled in the same way
+            //Rename is handled in a weird way, think about it later
+            int mostUpdatedPos = 0, initialPos = 0;
+            bool diff = false;
+
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                if (folder.Exists[i])
+                {
+                    mostUpdatedPos = i;
+                    initialPos = i;
+                    break;
+                }
+            }
+
+            folder.Priority[mostUpdatedPos] = 1;
+
+            for (int i = mostUpdatedPos + 1; i < currentPaths.Length; i++)
+            {
+                if (!folder.Exists[i])
+                {
+                    diff = true;
+                    continue;
+                }
+            }
+
+            if (!diff)
+                folder.Priority[initialPos] = 0;
 
         }
 
