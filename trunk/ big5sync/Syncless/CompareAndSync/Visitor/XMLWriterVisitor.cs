@@ -37,48 +37,16 @@ namespace CompareAndSync.Visitor
                     continue;
                 ProcessMetaChangeType(currentPath[i], file, i);
             }
-
-            int position = GetPropagated(file);
-            if (position == -1)
-                return;
-
-            string name = Path.Combine(currentPath[position], file.Name);
-            if(File.Exists(name)) //CREATE OR UPDATED
-            {
-                bool metaExist = file.MetaExists[position];
-                bool fileExist = file.Exists[position];
-                if(metaExist == true && fileExist == true) //UPDATE
-                {
-                    string xmlPath = Path.Combine(currentPath[position], METADATAPATH);
-                    XmlDocument xmlDoc = new XmlDocument();
-                    xmlDoc.Load(xmlPath);
-                    UpdateFile(xmlDoc, file);
-                    xmlDoc.Save(xmlPath);
-                }
-                else  //NEW
-                {
-                    string xmlPath = Path.Combine(currentPath[position], METADATAPATH);
-                    XmlDocument xmlDoc = new XmlDocument();
-                    xmlDoc.Load(xmlPath);
-                    CreateFileObject(xmlDoc, file);
-                    xmlDoc.Save(xmlPath);
-                }
-            }
-            else                 //DELETE OR RENAME
-            {
-                string xmlPath = Path.Combine(currentPath[position], METADATAPATH);
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(xmlPath);
-                DeleteFile(xmlDoc, file);
-                xmlDoc.Save(xmlPath);
-            }
-    
         }
 
         public void Visit(FolderCompareObject folder, string[] currentPath)
         {
-            /**/
-            
+            for (int i = 0; i < currentPath.Length; i++)
+            {
+                if (currentPath[i].Contains(META_DIR))
+                    continue;
+                ProcessFolderFinalState(currentPath[i], folder, i);
+            }
         }
 
         public void Visit(RootCompareObject root)
@@ -122,10 +90,16 @@ namespace CompareAndSync.Visitor
                     CreateFileObject(xmlDoc, file);
                     break;
                 case FinalState.Updated:
-                    UpdateFile(xmlDoc, file);
+                    UpdateFileObject(xmlDoc, file);
                     break;
                 case FinalState.Deleted:
-                    DeleteFile(xmlDoc, file );
+                    DeleteFileObject(xmlDoc, file );
+                    break;
+                case FinalState.Unchanged:
+                    HandleUnchangedOrPropagatedFile(xmlDoc, file , counter , currentPath);
+                    break;
+                case FinalState.Propagated:
+                    HandleUnchangedOrPropagatedFile(xmlDoc, file , counter , currentPath);
                     break;
             }
 
@@ -155,21 +129,11 @@ namespace CompareAndSync.Visitor
             return folderPath;
         }
 
-        private void CreateFolderObject(XmlDocument xmlDoc, FolderCompareObject folder, int position)
-        {
-            XmlText nameText = xmlDoc.CreateTextNode(folder.Name);
-            XmlElement nameOfFolder = xmlDoc.CreateElement(NAME_OF_FOLDER);
-            XmlElement nameElement = xmlDoc.CreateElement(FOLDER);
-            nameOfFolder.AppendChild(nameText);
-            nameElement.AppendChild(nameOfFolder);
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR);
-            node.AppendChild(nameElement);
-        }
 
         private void CreateFileObject(XmlDocument xmlDoc , FileCompareObject file)
         {
             int position = GetPropagated(file);
-            DoCleanUp(xmlDoc, file.Name);
+            DoFileCleanUp(xmlDoc, file.Name);
             XmlText hashText = xmlDoc.CreateTextNode(file.Hash[position]);
             XmlText nameText = xmlDoc.CreateTextNode(file.Name);
             XmlText sizeText = xmlDoc.CreateTextNode(file.Length[position].ToString());
@@ -200,7 +164,7 @@ namespace CompareAndSync.Visitor
             node.AppendChild(fileElement);
         }
 
-        private void UpdateFile(XmlDocument xmlDoc, FileCompareObject file)
+        private void UpdateFileObject(XmlDocument xmlDoc, FileCompareObject file)
         {
             int position = GetPropagated(file);
 
@@ -239,7 +203,7 @@ namespace CompareAndSync.Visitor
             }
         }
 
-        private void DeleteFile(XmlDocument xmlDoc, FileCompareObject file )
+        private void DeleteFileObject(XmlDocument xmlDoc, FileCompareObject file )
         {
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
             if (node == null)
@@ -259,12 +223,118 @@ namespace CompareAndSync.Visitor
             return -1; // never happen
         }
 
-        private void DoCleanUp(XmlDocument xmlDoc , string name)
+        private int GetPropagated(FolderCompareObject folder)
+        {
+            FinalState?[] states = folder.FinalState;
+            for (int i = 0; i < states.Length; i++)
+            {
+                if (FinalState.Propagated == states[i])
+                    return i;
+            }
+
+            return -1; // never happen
+        }
+
+
+        private void DoFileCleanUp(XmlDocument xmlDoc , string name)
         {
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + name + "']");
             if (node == null)
                 return;
             node.ParentNode.RemoveChild(node);
+        }
+
+        private void DoFolderCleanUp(XmlDocument xmlDoc, string name)
+        {
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name_of_folder='" + name + "']");
+            if (node == null)
+                return;
+            node.ParentNode.RemoveChild(node);
+        }
+
+        private void HandleUnchangedOrPropagatedFile(XmlDocument xmlDoc , FileCompareObject file, int position,string filePath)
+        {
+            string name = Path.Combine(filePath, file.Name);
+            if (File.Exists(name)) //CREATE OR UPDATED
+            {
+                bool metaExist = file.MetaExists[position];
+                bool fileExist = file.Exists[position];
+                if (metaExist == true && fileExist == true) //UPDATE
+                {       
+                    UpdateFileObject(xmlDoc, file);  
+                }
+                else  //NEW
+                {         
+                    CreateFileObject(xmlDoc, file); 
+                }
+            }
+            else                 //DELETE OR RENAME
+            {             
+                DeleteFileObject(xmlDoc, file);
+            }
+        }
+
+        private void ProcessFolderFinalState(string currentPath , FolderCompareObject folder , int counter)
+        {
+            string xmlPath = Path.Combine(currentPath,METADATAPATH);
+            CreateFileIfNotExist(currentPath);
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(xmlPath);
+            FinalState?[] finalStateList = folder.FinalState;
+            FinalState? changeType = finalStateList[counter];
+            switch (changeType)
+            {
+                case FinalState.Created:
+                    CreateFolderObject(xmlDoc, folder);
+                    break;
+                case FinalState.Deleted:
+                    DeleteFolderObject(xmlDoc, folder);
+                    break;
+                case FinalState.Propagated:
+                    HandleUnchangedOrPropagatedFolder(xmlDoc , folder , counter , currentPath );
+                    break;
+            }
+            xmlDoc.Save(xmlPath);
+        }
+
+
+        private void CreateFolderObject(XmlDocument xmlDoc, FolderCompareObject folder)
+        {
+            DoFolderCleanUp(xmlDoc, folder.Name);
+            XmlText nameText = xmlDoc.CreateTextNode(folder.Name);
+            XmlElement nameOfFolder = xmlDoc.CreateElement(NAME_OF_FOLDER);
+            XmlElement nameElement = xmlDoc.CreateElement(FOLDER);
+            nameOfFolder.AppendChild(nameText);
+            nameElement.AppendChild(nameOfFolder);
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR);
+            node.AppendChild(nameElement);
+        }
+
+        private void DeleteFolderObject(XmlDocument xmlDoc, FolderCompareObject folder)
+        {
+           XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name_of_folder='" + folder.Name + "']");
+           if (node == null)
+               return;
+           node.ParentNode.RemoveChild(node);
+        }
+
+        private void HandleUnchangedOrPropagatedFolder(XmlDocument xmlDoc, FolderCompareObject folder,
+            int position , string folderPath)
+        {
+            string name = Path.Combine(folderPath, folder.Name);
+            if (Directory.Exists(name)) //CREATE OR UPDATED
+            {
+                bool metaExist = folder.MetaExists[position];
+                bool folderExist = folder.Exists[position];
+                if (folderExist == true) //UPDATE
+                {             
+                    CreateFolderObject(xmlDoc, folder);
+                }
+            }
+            else                 //DELETE OR RENAME
+            {
+                DeleteFolderObject(xmlDoc, folder);
+            }
         }
 
         #endregion
