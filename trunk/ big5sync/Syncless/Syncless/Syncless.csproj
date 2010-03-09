@@ -82,6 +82,7 @@
     <Compile Include="Filters\FileFilter.cs" />
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\FilterChain.cs" />
+    <Compile Include="Filters\SynclessConfigFilter.cs" />
     <Compile Include="Helper\ErrorMessage.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LoggingLayer.cs" />
