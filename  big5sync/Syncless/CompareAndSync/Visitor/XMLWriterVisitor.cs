@@ -13,6 +13,7 @@ namespace CompareAndSync.Visitor
         #region IVisitor Members
 
         private const string META_DIR = ".syncless";
+        private const string XML_NAME = @"\syncless.xml";
         private const string METADATAPATH = META_DIR + @"\syncless.xml";
         private const string FOLDER = "folder";
         private const string FILES = "files";
@@ -24,30 +25,53 @@ namespace CompareAndSync.Visitor
         private const string NODE_LAST_CREATED = "last_created";
         private const string XPATH_EXPR = "/meta-data";
         private const string LAST_MODIFIED = "/last_modified";
+        private const int FIRST_POSITION = 0;
         private static readonly object syncLock = new object(); 
         private string[] pathList = null;
 
         public void Visit(FileCompareObject file, int level, string[] currentPath)
         {
            
-            int counter = 0;
 
-    /*      int [] priorityList = file.Priority;
-            for (int i = 0; i < priorityList.Length; i++)
-            {
-                if (highestPriority > priorityList[i])
-                {
-                    counter = i;
-                }
-            }*/
-
-            for (int i = 0; i < currentPath.Length; i++)
+            for (int i = 0; i < currentPath.Length; i++) // HANDLE ALL EXCEPT PROPAGATED
             {
                 if (currentPath[i].Contains(META_DIR))
                     continue;
-                ProcessMetaChangeType(currentPath[i], file, counter);
-
+                ProcessMetaChangeType(currentPath[i], file, i);
             }
+
+            int position = GetPropagated(file);
+            string name = Path.Combine(currentPath[position], file.Name);
+            if(File.Exists(name)) //CREATE OR UPDATED
+            {
+                bool metaExist = file.MetaExists[position];
+                bool fileExist = file.Exists[position];
+                if(metaExist == true && fileExist == true) //UPDATE
+                {
+                    string xmlPath = Path.Combine(currentPath[position], METADATAPATH);
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.Load(xmlPath);
+                    UpdateFile(xmlDoc, file);
+                    xmlDoc.Save(xmlPath);
+                }
+                else  //NEW
+                {
+                    string xmlPath = Path.Combine(currentPath[position], METADATAPATH);
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.Load(xmlPath);
+                    CreateFileObject(xmlDoc, file);
+                    xmlDoc.Save(xmlPath);
+                }
+            }
+            else                 //DELETE OR RENAME
+            {
+                string xmlPath = Path.Combine(currentPath[position], XML_NAME);
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(xmlPath);
+                DeleteFile(xmlDoc, file);
+                xmlDoc.Save(xmlPath);
+            }
+    
         }
 
         public void Visit(FolderCompareObject folder, int level, string[] currentPath)
@@ -90,20 +114,20 @@ namespace CompareAndSync.Visitor
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(xmlPath);
             FinalState? changeType = file.FinalState[counter];
-           
+            
             string hash = "";
             string size = "";
             
             switch (changeType)
             {
                 case FinalState.Created:
-                    CreateFileObject(xmlDoc, file, counter);
+                    CreateFileObject(xmlDoc, file);
                     break;
                 case FinalState.Updated:
-                    UpdateFile(xmlDoc, file, counter);
+                    UpdateFile(xmlDoc, file);
                     break;
                 case FinalState.Deleted:
-                    DeleteFile(xmlDoc, file, counter);
+                    DeleteFile(xmlDoc, file );
                     break;
             }
 
@@ -144,8 +168,10 @@ namespace CompareAndSync.Visitor
             node.AppendChild(nameElement);
         }
 
-        private void CreateFileObject(XmlDocument xmlDoc , FileCompareObject file, int position)
+        private void CreateFileObject(XmlDocument xmlDoc , FileCompareObject file)
         {
+            int position = GetPropagated(file);
+
             XmlText hashText = xmlDoc.CreateTextNode(file.Hash[position]);
             XmlText nameText = xmlDoc.CreateTextNode(file.Name);
             XmlText sizeText = xmlDoc.CreateTextNode(file.Length[position].ToString());
@@ -176,12 +202,14 @@ namespace CompareAndSync.Visitor
             node.AppendChild(fileElement);
         }
 
-        private void UpdateFile(XmlDocument xmlDoc, FileCompareObject file, int position)
+        private void UpdateFile(XmlDocument xmlDoc, FileCompareObject file)
         {
+            int position = GetPropagated(file);
+
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
             if (node == null)
             {
-                CreateFileObject(xmlDoc, file, position);
+                CreateFileObject(xmlDoc, file);
                 return;
             }
 
@@ -213,12 +241,25 @@ namespace CompareAndSync.Visitor
             }
         }
 
-        private void DeleteFile(XmlDocument xmlDoc, FileCompareObject file, int position)
+        private void DeleteFile(XmlDocument xmlDoc, FileCompareObject file )
         {
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
+            if (node == null)
+                return;
             node.ParentNode.RemoveChild(node);
         }
 
+        private int GetPropagated(FileCompareObject file)
+        {
+            FinalState? [] states = file.FinalState;
+            for (int i = 0; i < states.Length; i++)
+            {
+                if (FinalState.Propagated == states[i])
+                    return i;
+            }
+
+            return -1; // never happen
+        }
         #endregion
     }
 }
