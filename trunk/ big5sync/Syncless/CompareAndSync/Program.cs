@@ -13,6 +13,7 @@ namespace CompareAndSync
         {
             RootCompareObject rco = new RootCompareObject(new string[] { @"C:\Documents and Settings\Nil\Desktop\Test45", @"C:\Documents and Settings\Nil\Desktop\Test46", @"C:\Documents and Settings\Nil\Desktop\Test47" });
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor());
+            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
             CompareObjectHelper.PreTraverseFolder(rco, new ComparerVisitor());
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
             CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor());
