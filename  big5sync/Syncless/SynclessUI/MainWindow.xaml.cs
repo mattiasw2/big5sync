@@ -24,7 +24,7 @@ namespace SynclessUI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, UIInterface
+    public partial class MainWindow : Window, IUIInterface
     {
         public IUIControllerInterface gui;
 
@@ -320,7 +320,7 @@ namespace SynclessUI
 		public bool CreateTag(string tagName) {
             try
             {
-                TagView tv = gui.CreateFolderTag(tagName);
+                TagView tv = gui.CreateTag(tagName);
                 if (tv != null)
                 {
                     InitializeTagList();
@@ -419,7 +419,7 @@ namespace SynclessUI
 				} else {
                     TagView tv = gui.GetTag((string)TagTitle.Text);
 
-                    gui.UntagFolder(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
+                    gui.Untag(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
 
                     SelectTag(tv.TagName);
 				}
