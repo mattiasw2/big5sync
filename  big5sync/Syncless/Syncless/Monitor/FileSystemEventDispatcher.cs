@@ -9,6 +9,8 @@ namespace Syncless.Monitor
 {
     public class FileSystemEventDispatcher
     {
+        private const int SLEEP_TIME = 1000;
+
         private static FileSystemEventDispatcher _instance;
         public static FileSystemEventDispatcher Instance
         {
@@ -136,7 +138,7 @@ namespace Syncless.Monitor
                     ServiceLocator.MonitorI.HandleFileChange(fileEvent);
                     break;
                 case EventChangeType.RENAMED:
-                    
+                    ProcessCreated(fse);
                     Console.WriteLine("File Renamed: " + fse.OldPath + " " + fse.Path);
                     fileEvent = new FileChangeEvent(new FileInfo(fse.OldPath), new FileInfo(fse.Path));
                     ServiceLocator.MonitorI.HandleFileChange(fileEvent);
@@ -194,11 +196,41 @@ namespace Syncless.Monitor
                     ServiceLocator.MonitorI.HandleDeleteChange(deleteEvent);
                     break;
                 case EventChangeType.RENAMED:
+                    ProcessCreated(fse);
                     Console.WriteLine("Renamed File not exist! " + fse.OldPath + " " + fse.Path);
                     break;
                 default:
                     break;
             }
         }
+
+        private void ProcessCreated(FileSystemEvent fse)
+        {
+            for (int i = 0; i < createList.Count; i++)
+            {
+                string path = createList[i];
+                if (path.ToLower().Equals(fse.OldPath.ToLower())) // Still Creating
+                {
+                    int j = 1;
+                    bool found = false;
+                    while (!found)
+                    {
+                        while (j < queue.Count)
+                        {
+                            FileSystemEvent e = queue[j];
+                            if (e.EventType == EventChangeType.CREATED && e.FileSystemType == FileSystemType.FILE && e.Path.ToLower().Equals(fse.OldPath.ToLower()))
+                            {
+                                DispatchFile(e);
+                                queue.RemoveAt(j);
+                                found = true;
+                            }
+                            j++;
+                        }
+                        Thread.Sleep(SLEEP_TIME);
+                    }
+                }
+            }
+        }
+
     }
 }
