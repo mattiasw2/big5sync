@@ -21,9 +21,9 @@ namespace CompareAndSync.CompareObject
         private FinalState?[] _finalState;
         private int[] _priority;
         private List<string> _newNames;
-        private BaseCompareObject _parent;
+        private FolderCompareObject _parent;
 
-        protected BaseCompareObject(string name, int numOfPaths, BaseCompareObject parent)
+        protected BaseCompareObject(string name, int numOfPaths, FolderCompareObject parent)
         {
             _name = name;
             _creationTime = new long[numOfPaths];
@@ -88,6 +88,11 @@ namespace CompareAndSync.CompareObject
         {
             get { return _newNames; }
             set { _newNames = value; }
+        }
+
+        public BaseCompareObject Parent
+        {
+            get { return _parent; }
         }
 
     }

@@ -116,9 +116,6 @@ namespace CompareAndSync.Visitor
             xmlDoc.Load(xmlPath);
             FinalState? changeType = file.FinalState[counter];
             
-            string hash = "";
-            string size = "";
-            
             switch (changeType)
             {
                 case FinalState.Created:
