@@ -46,11 +46,6 @@ namespace SynclessUI
             InitializeSyncless();
         }
 
-        public string getAppPath()
-        {
-            return System.IO.Path.GetDirectoryName(_app_path);
-        }
-
         public void ProcessCommandLine(string[] args)
         {
             if (args.Length != 0)
@@ -475,50 +470,46 @@ namespace SynclessUI
             }
 		}
 
-		private void TagTitle_LostFocus(object sender, System.Windows.RoutedEventArgs e)
-		{
-            if (_selectedTag == TagTitle.Text) return;
-            if (!RenameTag(_selectedTag, TagTitle.Text)) TagTitle.Text = _selectedTag;
-		}
-		
-		private void TagTitleOnKeyDownHandler(object sender, KeyEventArgs e)
-		{
-			if (e.Key == Key.Return)
-			{
-				TagTitle.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-			}
-		}
-		
-		private bool RenameTag(String oldtagname, String newtagname)
-		{
+        #region TagTitle Functionality: Renaming
+
+        private bool RenameTag(String oldtagname, String newtagname)
+        {
             if (gui.RenameTag(oldtagname, newtagname))
             {
                 InitializeTagList();
                 SelectTag(newtagname);
                 return true;
-            } else {
-				string messageBoxText = "Tag could not be renamed. There might be another tag with the same name.";
-				string caption = "Rename Tag Error";
-				MessageBoxButton button = MessageBoxButton.OK;
-				MessageBoxImage icon = MessageBoxImage.Error;
-	
-				MessageBox.Show(messageBoxText, caption, button, icon);
-				
-				return false;
-			}
-		}
-
-        private void OpenFolderInWindowsExplorer()
-        {
-            String path = (string) ListTaggedPath.SelectedItem;
-            if (path != "")
+            }
+            else
             {
-				var runExplorer = new System.Diagnostics.ProcessStartInfo();
-				runExplorer.FileName = "explorer.exe";
-				runExplorer.Arguments = path;
-				System.Diagnostics.Process.Start(runExplorer); 
+                string messageBoxText = "Tag could not be renamed. There might be another tag with the same name.";
+                string caption = "Rename Tag Error";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Error;
+
+                MessageBox.Show(messageBoxText, caption, button, icon);
+
+                return false;
             }
         }
+
+        private void TagTitle_LostFocus(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (_selectedTag == TagTitle.Text) return;
+            if (!RenameTag(_selectedTag, TagTitle.Text)) TagTitle.Text = _selectedTag;
+        }
+
+        private void TagTitleOnKeyDownHandler(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                TagTitle.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            }
+        }
+        
+        #endregion 
+
+        #region Tag Info Panel Context Menu
 
         private void OpenInExplorerRightClick_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -529,5 +520,45 @@ namespace SynclessUI
         {
         	OpenFolderInWindowsExplorer();
         }
+
+        private void OpenFolderInWindowsExplorer()
+        {
+            String path = (string)ListTaggedPath.SelectedItem;
+            if (path != "")
+            {
+                var runExplorer = new System.Diagnostics.ProcessStartInfo();
+                runExplorer.FileName = "explorer.exe";
+                runExplorer.Arguments = path;
+                System.Diagnostics.Process.Start(runExplorer);
+            }
+        }
+
+        #endregion
+
+        #region Implements Methods & Supporting Methods in IUIInterface
+
+        public string getAppPath()
+        {
+            return System.IO.Path.GetDirectoryName(_app_path);
+        }
+
+        public void DriveChanged()
+        {
+            RepopulateTagList();
+        }
+
+        public void TagChanged()
+        {
+            RepopulateTagList();
+        }
+
+        private void RepopulateTagList()
+        {
+            String current = _selectedTag; // current tag selected
+            InitializeTagList();
+            SelectTag(current);
+        }
+
+        #endregion
     }
 }

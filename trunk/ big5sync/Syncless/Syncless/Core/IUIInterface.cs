@@ -9,11 +9,9 @@ namespace Syncless.Core
     public interface IUIInterface
     {
         string getAppPath();
-        //I need this method if you can
+        
+        void DriveChanged(); // <--- inform you of a drive that is changed
 
-        //void DriveChanged(); <--- inform you of a drive that is changed
-        //void TagChanged(); <--- inform you of a change in one of the tag
-
-
+        void TagChanged(); // <--- inform you of a change in one of the tag
     }
 }
