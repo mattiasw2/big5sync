@@ -209,12 +209,12 @@ namespace Syncless.Core
             return t != null;
         }
 
-        public FolderTagView CreateFolderTag(string tagname)
+        public TagView CreateTag(string tagname)
         {
-            return ConvertToFolderTagView(TaggingLayer.Instance.CreateFolderTag(tagname));
+            return ConvertToTagView(TaggingLayer.Instance.CreateFolderTag(tagname));
         }
           
-        public FolderTagView TagFolder(string tagname, DirectoryInfo folder)
+        public TagView Tag(string tagname, DirectoryInfo folder)
         {
             string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
             FolderTag tag = TaggingLayer.Instance.TagFolder(path, tagname);
@@ -323,7 +323,7 @@ namespace Syncless.Core
             return true;
         }
 
-        public bool Initiate(UIInterface inf)
+        public bool Initiate(IUIInterface inf)
         {
             this.appPath = inf.getAppPath();
             bool init = Initiate();
