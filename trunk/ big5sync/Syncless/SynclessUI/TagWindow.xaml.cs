@@ -29,7 +29,7 @@ namespace SynclessUI
 		
         private string _path;
         
-		public TagWindow(MainWindow main, string clipath)
+		public TagWindow(MainWindow main, string clipath, string _selectedtag)
         {
             InitializeComponent();
 			
@@ -44,7 +44,7 @@ namespace SynclessUI
             {
                 _path = clipath;
             }
-            ProcessPath(_path);
+            ProcessPath(_path, _selectedtag);
 
             if (cancelstatus)
             {
@@ -84,7 +84,7 @@ namespace SynclessUI
 			return "";
 		}
 
-        private void ProcessPath(string path)
+        private void ProcessPath(string path, string _selectedtag)
         {
             if (path != "")
             {
@@ -94,6 +94,7 @@ namespace SynclessUI
                     TxtBoxPath.Text = path;
 					ACBTagName.IsEnabled = true;
                     ACBTagName.MySourceList = _main.gui.GetAllTags();
+					// ACBTagName.Content = _selectedtag;
                 }
                 else
                 {
@@ -180,7 +181,7 @@ namespace SynclessUI
 		private void BtnBrowse_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
             string path = SelectPath(false);
-            ProcessPath(path);
+            ProcessPath(path, "");
 		}
     }
 }

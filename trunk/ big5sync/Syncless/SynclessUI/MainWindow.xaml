@@ -144,7 +144,7 @@
 					<ListBox x:Name="ListTaggedPath" MaxHeight="130" MinHeight="20" Width="300" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Style="{DynamicResource ListTaggedPathStyle}">
 						<ListBox.ContextMenu>
 							<ContextMenu>
-								<MenuItem x:Name="Untag" Header="Untag" />
+								<MenuItem x:Name="OpenInExplorer" Header="Open In Windows Explorer" Click="OpenInExplorer_Click"/>
 							</ContextMenu>
 						</ListBox.ContextMenu>
 					</ListBox>
