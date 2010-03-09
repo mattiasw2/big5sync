@@ -175,6 +175,9 @@ namespace Syncless.Monitor
         {
             switch (fse.EventType)
             {
+                case EventChangeType.CREATED:
+                    Console.WriteLine("Created File not exist! " + fse.Path);
+                    break;
                 case EventChangeType.DELETED:
                     for (int i = 0; i < createList.Count; i++)
                     {
@@ -189,6 +192,9 @@ namespace Syncless.Monitor
                     Console.WriteLine("File/Folder Deleted: " + fse.Path);
                     DeleteChangeEvent deleteEvent = new DeleteChangeEvent(new DirectoryInfo(fse.Path), new DirectoryInfo(fse.WatchPath));
                     ServiceLocator.MonitorI.HandleDeleteChange(deleteEvent);
+                    break;
+                case EventChangeType.RENAMED:
+                    Console.WriteLine("Renamed File not exist! " + fse.OldPath + " " + fse.Path);
                     break;
                 default:
                     break;
