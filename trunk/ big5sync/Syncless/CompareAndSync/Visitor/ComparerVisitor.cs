@@ -46,10 +46,12 @@ namespace CompareAndSync.Visitor
 
         private void ProcessMetaData(FileCompareObject file, int level, string[] currentPaths)
         {
+
         }
 
         private void CompareFiles(FileCompareObject file, int level, string[] currentPaths)
         {
+
         }
 
         public void Visit(FolderCompareObject folder, int level, string[] currentPaths)
