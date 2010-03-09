@@ -53,6 +53,7 @@
     <Compile Include="CompareAndSync\XMLWriteObject.cs" />
     <Compile Include="Core\Conflict\Conflict.cs" />
     <Compile Include="Core\Conflict\ConflictQueue.cs" />
+    <Compile Include="Core\Exceptions\InvalidPathException.cs" />
     <Compile Include="Core\IUIInterface.cs" />
     <Compile Include="Core\IOriginsFinder.cs" />
     <Compile Include="CompareAndSync\Request\CompareRequest.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Filters\FileFilter.cs" />
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\FilterChain.cs" />
+    <Compile Include="Filters\FilterFactory.cs" />
     <Compile Include="Filters\SynclessConfigFilter.cs" />
     <Compile Include="Helper\ErrorMessage.cs" />
     <Compile Include="Logging\Logger.cs" />

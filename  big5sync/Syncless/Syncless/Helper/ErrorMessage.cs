@@ -9,6 +9,7 @@ namespace Syncless.Helper
     {
         #region Core Error Messages (Error Code : 000~099)
         public const string LOGGER_NOT_FOUND = "000";
+        public const string INVALID_PATH = "001";
         #endregion
         #region Tagging Error Messages (Error Code : 100~199)
         public const string PATH_NOT_FOUND_EXCEPTION = "100";

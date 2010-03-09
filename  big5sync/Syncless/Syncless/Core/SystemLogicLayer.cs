@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
+
 using Syncless.Tagging;
 using Syncless.Tagging.Exceptions;
 using Syncless.CompareAndSync;
@@ -10,12 +12,13 @@ using Syncless.Monitor;
 using Syncless.Monitor.DTO;
 using Syncless.Profiling;
 using Syncless.Logging;
-using System.Diagnostics;
+using Syncless.Core.Exceptions;
 using Syncless.Helper;
 namespace Syncless.Core
 {
     internal class SystemLogicLayer :IUIControllerInterface,IMonitorControllerInterface,ICommandLineControllerInterface,IOriginsFinder
     {
+        #region Singleton
         private static SystemLogicLayer _instance;
         private string appPath = "";
         public static SystemLogicLayer Instance
@@ -32,11 +35,13 @@ namespace Syncless.Core
         }
         private SystemLogicLayer()
         {
-            
+
         }
 
+        #endregion
+
         #region IMonitorControllerInterface Members
-        
+
         public void HandleFileChange(FileChangeEvent fe)
         {
             string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
@@ -190,52 +195,244 @@ namespace Syncless.Core
         public bool StartManualSync(string tagname)
         {
             Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
-            return StartManualSync(tag);
-        }
-        private bool StartManualSync(Tag tag)
-        {
-            List<string> paths = tag.PathStringList;
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            if (convertedPath.Count != 0)
+            if (tag == null)
             {
-                SyncRequest syncRequest = new SyncRequest(convertedPath);
-                CompareSyncController.Instance.Sync(syncRequest);
+                return false;
             }
-            return true;
+            bool result = StartManualSync(tag);
+            return result;
         }
-
+        /// <summary>
+        /// Delete a tag
+        /// </summary>
+        /// <param name="tagname">Name of the tag to delete</param>
+        /// <returns>true if a tag is removed. false if the tag cannot be removed</returns>
         public bool DeleteTag(string tagname)
         {
-            Tag t = TaggingLayer.Instance.RemoveTag(tagname);
-            return t != null;
+            try
+            {
+                Tag t = TaggingLayer.Instance.RemoveTag(tagname);
+                return t != null;
+            }
+            catch (TagNotFoundException te)
+            {
+                throw te;
+            }            
         }
-
+        /// <summary>
+        /// Create a Tag.
+        /// </summary>
+        /// <param name="tagname">name of the tag.</param>
+        /// <returns>The Detail of the Tag.</returns>
         public TagView CreateTag(string tagname)
         {
-            return ConvertToTagView(TaggingLayer.Instance.CreateTag(tagname));
+            try
+            {
+                Tag t = TaggingLayer.Instance.CreateTag(tagname);
+                return ConvertToTagView(t);
+            }
+            catch (TagAlreadyExistsException te)
+            {
+                throw te;
+            }
+            
         }
-          
+        /// <summary>
+        /// Tag a Folder to a name
+        /// </summary>
+        /// <param name="tagname">name of the tag</param>
+        /// <param name="folder">the folder to tag</param>
+        /// <exception cref="InvalidPathException">The Path is invalid</exception>
+        /// <exception cref="RecursiveDirectoryException">Tagging the folder will cause a recursive during Synchronization.</exception>
+        /// <exception cref="PathAlreadyExistsException">The Path already exist in the Tag.</exception>
+        /// <returns>the Tag view</returns>
         public TagView Tag(string tagname, DirectoryInfo folder)
         {
             string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
-            Tag tag = TaggingLayer.Instance.TagFolder(path, tagname);
+            if (path == null)
+            {
+                throw new InvalidPathException(folder.FullName);
+            }
+
+            Tag tag = null;
+            try
+            {
+                tag = TaggingLayer.Instance.TagFolder(path, tagname);
+            }
+            catch (RecursiveDirectoryException re)
+            {
+                throw re;
+            }
+            catch (PathAlreadyExistsException pae)
+            {
+                throw pae;
+            }
+            if (tag == null)
+            {
+                return null;
+            }
             StartManualSync(tag.TagName);
             MonitorTag(tag.TagName, true);
             return ConvertToTagView(tag);
         }
-
+        /// <summary>
+        /// Untag the folder from a tag. 
+        /// </summary>
+        /// <param name="tagname">The name of the tag</param>
+        /// <param name="folder">The folder to untag</param>
+        /// <exception cref="TagNotFoundException">The tag is not found.</exception>
+        /// <returns>The number of path untag</returns>
         public int Untag(string tagname, DirectoryInfo folder)
         {
-            Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            
             string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
-            return TaggingLayer.Instance.UntagFolder(path, tag.TagName);
+            try
+            {
+                int count = TaggingLayer.Instance.UntagFolder(path, tagname);
+                return count;
+            }
+            catch (TagNotFoundException tnfe)
+            {
+                throw tnfe;
+            }
+            
         }
-
+        /// <summary>
+        /// Set the monitor mode for a tag
+        /// </summary>
+        /// <param name="tagname">tagname to set</param>
+        /// <param name="mode">true - set tag to seamless. , false - set tag to manual</param>
+        /// <exception cref="TagNotFoundException">If the Tag is not found</exception>
+        /// <returns>whether the tag can be changed.</returns>
         public bool MonitorTag(string tagname, bool mode)
         {   
             Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            if (tag == null)
+            {
+                throw new TagNotFoundException(tagname);
+            }
             return MonitorTag(tag, mode);
         }
+        
+
+
+
+        public bool PrepareForTermination()
+        {
+            SaveLoadHelper.SaveAll(appPath);
+            return true;
+        }
+        public bool Terminate()
+        {
+            DeviceWatcher.Instance.Terminate();
+            return false;
+        }
+
+        
+
+        public bool Initiate(IUIInterface inf)
+        {
+            this.appPath = inf.getAppPath();
+            bool init = Initiate();
+            SaveLoadHelper.SaveAll(appPath);
+            return init;
+        }
+
+        public List<CompareResult> PreviewSync(string tagname)
+        {
+            Tag Tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            List<string> paths = Tag.PathStringList;
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
+            CompareRequest compareRequest = new CompareRequest(convertedPath);
+            return CompareSyncController.Instance.Compare(compareRequest);
+        }
+        /// <summary>
+        /// Return a list of tag name.
+        /// </summary>
+        /// <returns>the List containing the name of the tags</returns>
+        public List<string> GetAllTags()
+        {
+            List<Tag> TagList = TaggingLayer.Instance.TagList;
+            List<string> tagNames = new List<string>();
+            foreach (Tag t in TagList)
+            {
+                tagNames.Add(t.TagName);
+            }
+            tagNames.Sort();
+            return tagNames;
+        }
+        /// <summary>
+        /// Return a list of tag name that a folder belongs to.
+        /// </summary>
+        /// <param name="folder">the folder to find.</param>
+        /// <returns>the List containing the name of the tags</returns>
+        public List<string> GetTags(DirectoryInfo folder)
+        {
+            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName,false);
+            if (path == null)
+            {
+                return null;
+            }
+            List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(path);
+            List<string> tagNames = new List<string>();
+            foreach (Tag t in tagList)
+            {
+                tagNames.Add(t.TagName);
+            }
+            tagNames.Sort();
+            return tagNames;
+        }
+        /// <summary>
+        /// Get The detailed Tag Info of a tag.
+        /// </summary>
+        /// <param name="tagname"></param>
+        /// <returns></returns>
+        public TagView GetTag(string tagname)
+        {
+            Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
+            if (t == null)
+            {
+                return null;
+            }
+            return ConvertToTagView(t);
+            
+        }
+
+        public bool RenameTag(string oldtagname, string newtagname)
+        {
+            try
+            {
+                TaggingLayer.Instance.RenameTag(oldtagname, newtagname);
+            }
+            catch (TagNotFoundException)
+            {
+                return false;
+            }
+            catch (TagAlreadyExistsException)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        #endregion
+        #region IOriginsFinder Members
+
+        public List<string> GetOrigins(string path)
+        {
+            string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(path,false);
+            if (path == null)
+            {
+                return null;
+            }
+            List<string> oldLogicalOrigin = TaggingLayer.Instance.RetrieveParentByPath(logicalOldPath);
+            List<string> oldPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(oldLogicalOrigin);
+            return oldPhysicalOrigin;
+        }
+
+        #endregion
+        #region private methods
+
         private void MonitorTag(Tag tag)
         {
             List<string> pathList = new List<string>();
@@ -247,7 +444,7 @@ namespace Syncless.Core
             foreach (string path in convertedPath)
             {
                 try
-                {      
+                {
                     MonitorLayer.Instance.MonitorPath(path);
                 }
                 catch (Exception)
@@ -293,25 +490,9 @@ namespace Syncless.Core
             }
             return true;
         }
-
-        public bool SetTagMultiDirectional(string tagname)
-        {
-            return false;
-        }
-
-        public bool PrepareForTermination()
-        {
-            SaveLoadHelper.SaveAll(appPath);
-            return true;
-        }
-        public bool Terminate()
-        {
-            DeviceWatcher.Instance.Terminate();
-            return false;
-        }
-
         private bool Initiate()
         {
+            
             SaveLoadHelper.LoadAll(appPath);
             List<Tag> tagList = TaggingLayer.Instance.AllTagList;
             foreach (Tag t in tagList)
@@ -320,56 +501,10 @@ namespace Syncless.Core
                 MonitorTag(t);
             }
             CompareSyncController.Instance.Init(this);
-            DeviceWatcher.Instance.ToString(); //randomly call a method to start watching folders.
+            DeviceWatcher.Instance.ToString(); //Starts watching for Drive Change
             return true;
-        }
 
-        public bool Initiate(IUIInterface inf)
-        {
-            this.appPath = inf.getAppPath();
-            bool init = Initiate();
-            SaveLoadHelper.SaveAll(appPath);
-            return init;
         }
-
-        public List<CompareResult> PreviewSync(string tagname)
-        {
-            Tag Tag = TaggingLayer.Instance.RetrieveTag(tagname);
-            List<string> paths = Tag.PathStringList;
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            CompareRequest compareRequest = new CompareRequest(convertedPath);
-            return CompareSyncController.Instance.Compare(compareRequest);
-        }
-
-        public List<string> GetAllTags()
-        {
-            List<Tag> TagList = TaggingLayer.Instance.TagList;
-            List<string> tagNames = new List<string>();
-            foreach (Tag t in TagList)
-            {
-                tagNames.Add(t.TagName);
-            }
-            tagNames.Sort();
-            return tagNames;
-        }
-        
-        public List<string> GetTags(DirectoryInfo folder)
-        {
-            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName,false);
-            if (path == null)
-            {
-                return null;
-            }
-            List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(path);
-            List<string> tagNames = new List<string>();
-            foreach (Tag t in tagList)
-            {
-                tagNames.Add(t.TagName);
-            }
-            tagNames.Sort();
-            return tagNames;
-        }
-
         private TagView ConvertToTagView(Tag t)
         {
             TagView view = new TagView(t.TagName, t.LastUpdated);
@@ -379,51 +514,17 @@ namespace Syncless.Core
             view.IsSeamless = t.IsSeamless;
             return view;
         }
-        public TagView GetTag(string tagname)
+        private bool StartManualSync(Tag tag)
         {
-            Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
-            if (t == null)
+            List<string> paths = tag.PathStringList;
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
+            if (convertedPath.Count != 0)
             {
-                return null;
-            }
-            return ConvertToTagView(t);
-            
-        }
-
-        public bool RenameTag(string oldtagname, string newtagname)
-        {
-            try
-            {
-                TaggingLayer.Instance.RenameTag(oldtagname, newtagname);
-            }
-            catch (TagNotFoundException)
-            {
-                return false;
-            }
-            catch (TagAlreadyExistsException)
-            {
-                return false;
+                SyncRequest syncRequest = new SyncRequest(convertedPath);
+                CompareSyncController.Instance.Sync(syncRequest);
             }
             return true;
         }
-
         #endregion
-
-        #region IOriginsFinder Members
-
-        public List<string> GetOrigins(string path)
-        {
-            string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(path,false);
-            if (path == null)
-            {
-                return null;
-            }
-            List<string> oldLogicalOrigin = TaggingLayer.Instance.RetrieveParentByPath(logicalOldPath);
-            List<string> oldPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(oldLogicalOrigin);
-            return oldPhysicalOrigin;
-        }
-
-        #endregion
-
     }
 }
