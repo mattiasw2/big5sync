@@ -91,21 +91,20 @@ namespace CompareAndSync.Visitor
             CreateFileIfNotExist(currentPath);
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(xmlPath);
-            MetaChangeType? [] changeType = file.ChangeType;
-            MetaChangeType? type = changeType[counter];
-
+            FinalState? changeType = file.FinalState[counter];
+           
             string hash = "";
             string size = "";
             
-            switch (type)
+            switch (changeType)
             {
-                case MetaChangeType.New:
+                case FinalState.Created:
                     CreateFileObject(xmlDoc, file, counter);
                     break;
-                case MetaChangeType.Update:
+                case FinalState.Updated:
                     UpdateFile(xmlDoc, file, counter);
                     break;
-                case MetaChangeType.Delete:
+                case FinalState.Deleted:
                     DeleteFile(xmlDoc, file, counter);
                     break;
             }
