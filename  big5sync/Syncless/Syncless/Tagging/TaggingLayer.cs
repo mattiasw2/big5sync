@@ -11,6 +11,7 @@ namespace Syncless.Tagging
 {
     public class TaggingLayer
     {
+        public const string RELATIVE_PROFILING_SAVE_PATH = "\\.syncless\\tagging.xml";
         public const string RELATIVE_TAGGING_ROOT_SAVE_PATH = "tagging.xml";
         #region attributes
         private static TaggingLayer _instance;
