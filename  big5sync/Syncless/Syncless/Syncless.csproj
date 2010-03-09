@@ -115,8 +115,6 @@
     <Compile Include="Tagging\Exceptions\RecursiveDirectoryException.cs" />
     <Compile Include="Tagging\Exceptions\TagAlreadyExistsException.cs" />
     <Compile Include="Tagging\Exceptions\TagNotFoundException.cs" />
-    <Compile Include="Tagging\Exceptions\TagTypeConflictException.cs" />
-    <Compile Include="Tagging\FolderTag.cs" />
     <Compile Include="Tagging\LogMessage.cs" />
     <Compile Include="Tagging\RecursionGraph\GraphNode.cs" />
     <Compile Include="Tagging\RecursionGraph\TagGraph.cs" />
