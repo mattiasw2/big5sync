@@ -51,7 +51,7 @@
     <Compile Include="CompareObject\FileCompareObject.cs" />
     <Compile Include="CompareObject\FolderCompareObject.cs" />
     <Compile Include="CompareObject\RootCompareObject.cs" />
-    <Compile Include="CurrentState.cs" />
+    <Compile Include="FinalState.cs" />
     <Compile Include="Result\CompareConflictResult.cs" />
     <Compile Include="Result\ConflictResult.cs" />
     <Compile Include="Result\Result.cs" />

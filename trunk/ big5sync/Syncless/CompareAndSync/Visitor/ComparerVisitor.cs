@@ -79,36 +79,29 @@ namespace CompareAndSync.Visitor
             //Rename is handled in a weird way, think about it later
             int mostUpdatedPos = 0;
             bool diff = false;
+            file.Priority[mostUpdatedPos] = 1;
 
-            for (int i = 0; i < currentPaths.Length; i++)
-            {
-                if (file.Exists[i])
-                {
-                    mostUpdatedPos = i;
-                    break;
-                }
-            }
-
-            for (int i = mostUpdatedPos + 1; i < currentPaths.Length; i++)
+            for (int i = 1; i < currentPaths.Length; i++)
             {
                 if (!file.Exists[i])
+                {
+                    diff = true;
                     continue;
+                }
 
                 if (file.Length[mostUpdatedPos] != file.Length[i] || file.Hash[mostUpdatedPos] != file.Hash[i])
                 {
                     diff = true;
                     if (file.LastWriteTime[i] > file.LastWriteTime[mostUpdatedPos])
                     {
+                        file.Priority[i] = file.Priority[mostUpdatedPos] + 1;
                         mostUpdatedPos = i;
-                    }
-                    else if (file.LastWriteTime[i] == file.LastWriteTime[mostUpdatedPos])
-                    {
-                        //Handle conflicts here?
                     }
                 }
             }
-            if (diff)
-                file.Priority[mostUpdatedPos]++;
+
+            if (!diff)
+                file.Priority[0] = 0;
         }
 
         #endregion
