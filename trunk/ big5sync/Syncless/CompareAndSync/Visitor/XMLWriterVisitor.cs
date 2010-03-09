@@ -13,8 +13,8 @@ namespace CompareAndSync.Visitor
         #region IVisitor Members
 
         private const string META_DIR = ".syncless";
-        private const string XML_NAME = @"\syncless.xml";
-        private const string METADATAPATH = META_DIR + @"\syncless.xml";
+        private const string XML_NAME = "syncless.xml";
+        private const string METADATAPATH = META_DIR + "\\" + XML_NAME;
         private const string FOLDER = "folder";
         private const string FILES = "files";
         private const string NAME_OF_FOLDER = "name_of_folder";
@@ -31,8 +31,6 @@ namespace CompareAndSync.Visitor
 
         public void Visit(FileCompareObject file, int level, string[] currentPath)
         {
-           
-
             for (int i = 0; i < currentPath.Length; i++) // HANDLE ALL EXCEPT PROPAGATED
             {
                 if (currentPath[i].Contains(META_DIR))
@@ -59,7 +57,7 @@ namespace CompareAndSync.Visitor
                 }
                 else  //NEW
                 {
-                    string xmlPath = Path.Combine(currentPath[position], XML_NAME);
+                    string xmlPath = Path.Combine(currentPath[position], METADATAPATH);
                     XmlDocument xmlDoc = new XmlDocument();
                     xmlDoc.Load(xmlPath);
                     CreateFileObject(xmlDoc, file);
@@ -68,7 +66,7 @@ namespace CompareAndSync.Visitor
             }
             else                 //DELETE OR RENAME
             {
-                string xmlPath = Path.Combine(currentPath[position], XML_NAME);
+                string xmlPath = Path.Combine(currentPath[position], METADATAPATH);
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(xmlPath);
                 DeleteFile(xmlDoc, file);
