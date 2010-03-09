@@ -68,7 +68,6 @@ namespace Syncless.Profiling
         {
             this.CreateMapping(mapping.LogicalAddress, mapping.PhyiscalAddress, mapping.GUID);
         }
-
         /// <summary>
         /// Find a Physical Address from a Logical Address
         /// </summary>
@@ -180,6 +179,10 @@ namespace Syncless.Profiling
         }
         public Profile Merge(Profile profile)
         {
+            if (!_profilename.Equals(profile.ProfileName))
+            {
+                throw new ProfileNameDifferentException();
+            }
             if (CanMerge(profile))
             {
                 foreach (ProfileMapping mapping in profile.Mappings)

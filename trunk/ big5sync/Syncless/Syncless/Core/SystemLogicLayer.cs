@@ -38,8 +38,6 @@ namespace Syncless.Core
         
         public void HandleFileChange(FileChangeEvent fe)
         {
-            
-            Console.WriteLine(fe.OldPath);
             string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
             if(logicalOldPath == null){
                 return;
@@ -187,7 +185,6 @@ namespace Syncless.Core
         #endregion
 
         #region IUIControllerInterface Members
-          
 
         public bool StartManualSync(string tagname)
         {
@@ -418,31 +415,6 @@ namespace Syncless.Core
             }
         }
 
-        #endregion
-
-        #region IOriginsFinder Members
-
-        public List<string> GetOrigins(string path)
-        {
-            string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(path,false);
-            if (path == null)
-            {
-                return null;
-            }
-            List<string> oldLogicalOrigin = TaggingLayer.Instance.RetrieveParentByPath(logicalOldPath);
-            List<string> oldPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(oldLogicalOrigin);
-            return oldPhysicalOrigin;
-        }
-
-        #endregion
-
-
-
-
-
-        #region IUIControllerInterface Members
-
-
         public bool RenameTag(string oldtagname, string newtagname)
         {
             try
@@ -461,5 +433,22 @@ namespace Syncless.Core
         }
 
         #endregion
+
+        #region IOriginsFinder Members
+
+        public List<string> GetOrigins(string path)
+        {
+            string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(path,false);
+            if (path == null)
+            {
+                return null;
+            }
+            List<string> oldLogicalOrigin = TaggingLayer.Instance.RetrieveParentByPath(logicalOldPath);
+            List<string> oldPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(oldLogicalOrigin);
+            return oldPhysicalOrigin;
+        }
+
+        #endregion
+
     }
 }

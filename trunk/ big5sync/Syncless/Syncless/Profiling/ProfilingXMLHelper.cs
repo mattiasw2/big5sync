@@ -53,7 +53,6 @@ namespace Syncless.Profiling
 
         }
         #endregion      
-
         public static Profile CreateDefaultProfile(string path)
         {
             Profile profile = new Profile("Unnamed Profile");
@@ -92,7 +91,7 @@ namespace Syncless.Profiling
             return profile;
         }
        
-        public static XmlDocument LoadFile(string path)
+        private static XmlDocument LoadFile(string path)
         {
             FileStream fs = null;
             try
@@ -124,7 +123,7 @@ namespace Syncless.Profiling
         }
         
         #region convert to profile public methods
-        public static Profile ConvertToProfile(string path)
+        public static Profile LoadProfile(string path)
         {
             XmlDocument profilexml = ProfilingXMLHelper.LoadFile(path);
             if (profilexml == null)
@@ -168,7 +167,6 @@ namespace Syncless.Profiling
         #endregion
 
         #region convert xmldocument private method
-
         private static XmlDocument ConvertToXMLDocument(Profile profile)
         {
             XmlDocument profilexml = new XmlDocument();
