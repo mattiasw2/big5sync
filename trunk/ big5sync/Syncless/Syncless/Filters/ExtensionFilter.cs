@@ -6,7 +6,7 @@ namespace Syncless.Filters
         private string _pattern;
         private Regex _regex;
                 
-        public ExtensionFilter(string pattern,FilterMode mode):base(mode)
+        internal ExtensionFilter(string pattern,FilterMode mode):base(mode)
         {
             if(pattern == null){
                 pattern = "";

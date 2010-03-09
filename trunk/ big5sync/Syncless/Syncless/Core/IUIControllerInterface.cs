@@ -23,7 +23,7 @@ namespace Syncless.Core
 
         bool MonitorTag(string tagname, bool mode);
 
-        bool SetTagMultiDirectional(string tagname);
+        //bool SetTagMultiDirectional(string tagname);
 
         bool PrepareForTermination();
         bool Terminate();
