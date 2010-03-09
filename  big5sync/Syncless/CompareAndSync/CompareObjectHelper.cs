@@ -18,7 +18,9 @@ namespace CompareAndSync
                 string[] newCurrentPath = root.Paths;
                 if (o is FolderCompareObject)
                 {
-                    PreTraverseFolder((FolderCompareObject)o, 1, newCurrentPath, visitor);
+                    //TO BE REMOVED
+                    if (o.Name != ".syncless")
+                        PreTraverseFolder((FolderCompareObject)o, 1, newCurrentPath, visitor);
                 }
                 else
                 {
@@ -40,7 +42,9 @@ namespace CompareAndSync
                 }
                 if (o is FolderCompareObject)
                 {
-                    PreTraverseFolder((FolderCompareObject)o, level + 1, newCurrentPath, visitor);
+                    //TO BE REMOVED (HANDLE USING FILTERS)
+                    if (o.Name != ".syncless")
+                        PreTraverseFolder((FolderCompareObject)o, level + 1, newCurrentPath, visitor);
                 }
                 else
                 {
