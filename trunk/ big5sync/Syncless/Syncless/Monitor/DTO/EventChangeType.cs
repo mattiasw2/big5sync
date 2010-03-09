@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Syncless.Monitor
+namespace Syncless.Monitor.DTO
 {
     public enum EventChangeType
     {

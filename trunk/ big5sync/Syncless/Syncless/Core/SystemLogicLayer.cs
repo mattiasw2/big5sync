@@ -7,6 +7,7 @@ using Syncless.Tagging;
 using Syncless.Tagging.Exceptions;
 using Syncless.CompareAndSync;
 using Syncless.Monitor;
+using Syncless.Monitor.DTO;
 using Syncless.Profiling;
 using Syncless.Logging;
 using System.Diagnostics;
@@ -78,7 +79,7 @@ namespace Syncless.Core
                 Debug.Assert(logicalNewPath != null);
                 MonitorSyncRequest syncRequest = new MonitorSyncRequest(oldPair, newPair, monitorPair, FileChangeType.Rename, IsFolder.No);
                 
-                TaggingLayer.Instance.RenameFile(logicalOldPath, logicalNewPath);
+                
                 CompareSyncController.Instance.Sync(syncRequest);
             }
             
@@ -211,19 +212,19 @@ namespace Syncless.Core
 
         public TagView CreateTag(string tagname)
         {
-            return ConvertToTagView(TaggingLayer.Instance.CreateFolderTag(tagname));
+            return ConvertToTagView(TaggingLayer.Instance.CreateTag(tagname));
         }
           
         public TagView Tag(string tagname, DirectoryInfo folder)
         {
             string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
-            FolderTag tag = TaggingLayer.Instance.TagFolder(path, tagname);
+            Tag tag = TaggingLayer.Instance.TagFolder(path, tagname);
             StartManualSync(tag.TagName);
             MonitorTag(tag.TagName, true);
-            return ConvertToFolderTagView(tag);
+            return ConvertToTagView(tag);
         }
 
-        public int UntagFolder(string tagname, DirectoryInfo folder)
+        public int Untag(string tagname, DirectoryInfo folder)
         {
             Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
             string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
@@ -331,20 +332,20 @@ namespace Syncless.Core
             return init;
         }
 
-        public List<CompareResult> PreviewSync(FolderTag tag)
+        public List<CompareResult> PreviewSync(string tagname)
         {
-            FolderTag folderTag = TaggingLayer.Instance.RetrieveFolderTag(tag.TagName);
-            List<string> paths = folderTag.PathStringList;
+            Tag Tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            List<string> paths = Tag.PathStringList;
             List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
             CompareRequest compareRequest = new CompareRequest(convertedPath);
             return CompareSyncController.Instance.Compare(compareRequest);
         }
 
-        public List<string> GetAllFolderTags()
+        public List<string> GetAllTags()
         {
-            List<FolderTag> folderTagList = TaggingLayer.Instance.FolderTagList;
+            List<Tag> TagList = TaggingLayer.Instance.TagList;
             List<string> tagNames = new List<string>();
-            foreach (Tag t in folderTagList)
+            foreach (Tag t in TagList)
             {
                 tagNames.Add(t.TagName);
             }
@@ -352,25 +353,14 @@ namespace Syncless.Core
             return tagNames;
         }
         
-        public List<string> GetTagsByFolder(DirectoryInfo folder)
+        public List<string> GetTags(DirectoryInfo folder)
         {
             string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName,false);
             if (path == null)
             {
                 return null;
             }
-            List<FolderTag> tagList = TaggingLayer.Instance.RetrieveFolderTagByPath(path);
-            List<string> tagNames = new List<string>();
-            foreach (Tag t in tagList)
-            {
-                tagNames.Add(t.TagName);
-            }
-            tagNames.Sort();
-            return tagNames;
-        }
-        public List<string> GetAllTags()
-        {
-            List<Tag> tagList = TaggingLayer.Instance.AllTagList;
+            List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(path);
             List<string> tagNames = new List<string>();
             foreach (Tag t in tagList)
             {
@@ -380,7 +370,7 @@ namespace Syncless.Core
             return tagNames;
         }
 
-        private TagView ConvertToFolderTagView(Tag t)
+        private TagView ConvertToTagView(Tag t)
         {
             TagView view = new TagView(t.TagName, t.LastUpdated);
             List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.PathStringList);
@@ -396,11 +386,7 @@ namespace Syncless.Core
             {
                 return null;
             }
-
-            if (t is FolderTag)
-            {
-                return ConvertToTagView(t);
-            }
+            return ConvertToTagView(t);
             
         }
 
@@ -408,7 +394,7 @@ namespace Syncless.Core
         {
             try
             {
-                TaggingLayer.Instance.RenameFolderTag(oldtagname, newtagname);
+                TaggingLayer.Instance.RenameTag(oldtagname, newtagname);
             }
             catch (TagNotFoundException)
             {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Syncless.Core
 {
-    public abstract class TagView
+    public class TagView
     {
         protected string _tagName;
 

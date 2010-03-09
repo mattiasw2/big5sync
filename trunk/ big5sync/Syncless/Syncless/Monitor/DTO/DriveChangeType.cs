@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Syncless.Monitor
+namespace Syncless.Monitor.DTO
 {
     public enum DriveChangeType
     {
