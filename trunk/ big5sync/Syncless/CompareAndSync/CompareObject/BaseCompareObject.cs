@@ -21,8 +21,9 @@ namespace CompareAndSync.CompareObject
         private FinalState?[] _finalState;
         private int[] _priority;
         private List<string> _newNames;
+        private BaseCompareObject _parent;
 
-        protected BaseCompareObject(string name, int numOfPaths)
+        protected BaseCompareObject(string name, int numOfPaths, BaseCompareObject parent)
         {
             _name = name;
             _creationTime = new long[numOfPaths];
@@ -32,7 +33,8 @@ namespace CompareAndSync.CompareObject
             _metaExists = new bool[numOfPaths];
             _changeType = new MetaChangeType?[numOfPaths];
             _priority = new int[numOfPaths];
-            _newNames = new List<string>();            
+            _newNames = new List<string>();
+            _parent = parent;
         }
 
         public string Name
