@@ -88,6 +88,9 @@
     <Reference Include="WPFAutoCompleteBox.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TagDetails.xaml.cs">
+      <DependentUpon>TagDetails.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SynclessApplication.cs" />
     <Compile Include="Helper\RegistryHelper.cs" />
     <Compile Include="SingleInstanceManager.cs" />
@@ -136,6 +139,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="AppResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TagDetails.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
