@@ -39,14 +39,6 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Contains a list of FileTag object
-        /// </summary>
-        public List<FileTag> FileTagList
-        {
-            get { return _taggingProfile.FileTagList; }
-        }
-
-        /// <summary>
         /// Contains a list of all Tag objects
         /// </summary>
         public List<Tag> AllTagList
@@ -356,29 +348,7 @@ namespace Syncless.Tagging
         #endregion
 
         #region FileTag public implementations
-        /// <summary>
-        /// Create a File Tag of tagname
-        /// </summary>
-        /// <param name="tagname">The name of the Tag to be created</param>
-        /// <returns>The created Tag, else raise TagAlreadyExistsException</returns>
-        public FileTag CreateFileTag(string tagname)
-        {
-            if (!CheckFileTagExists(tagname) && !CheckFolderTagExists(tagname))
-            {
-                CurrentTime created = new CurrentTime();
-                FileTag tag = new FileTag(tagname, created.CurrentTimeLong);
-                _taggingProfile.FileTagList.Add(tag);
-                UpdateTaggingProfileDate(created.CurrentTimeLong);
-                TaggingHelper.Logging(LogMessage.FILE_TAG_CREATED, tagname);
-                return tag;
-            }
-            else
-            {
-                TaggingHelper.Logging(LogMessage.FILE_TAG_ALREADY_EXISTS, tagname);
-                throw new TagAlreadyExistsException(tagname);
-            }
-        }
-
+        
         /// <summary>
         /// Rename a File Tag of oldname to newname
         /// </summary>

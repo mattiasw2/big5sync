@@ -68,8 +68,6 @@
     <Compile Include="CompareAndSync\XMLHelper.cs" />
     <Compile Include="Core\DeviceWatcher.cs" />
     <Compile Include="Core\Exceptions\LoggerNotFoundException.cs" />
-    <Compile Include="Core\FileTagView.cs" />
-    <Compile Include="Core\FolderTagView.cs" />
     <Compile Include="Core\ICommandLineControllerInterface.cs" />
     <Compile Include="Core\IMonitorControllerInterface.cs" />
     <Compile Include="Core\IUIControllerInterface.cs" />
@@ -118,7 +116,6 @@
     <Compile Include="Tagging\Exceptions\TagAlreadyExistsException.cs" />
     <Compile Include="Tagging\Exceptions\TagNotFoundException.cs" />
     <Compile Include="Tagging\Exceptions\TagTypeConflictException.cs" />
-    <Compile Include="Tagging\FileTag.cs" />
     <Compile Include="Tagging\FolderTag.cs" />
     <Compile Include="Tagging\LogMessage.cs" />
     <Compile Include="Tagging\RecursionGraph\GraphNode.cs" />

@@ -380,18 +380,9 @@ namespace Syncless.Core
             return tagNames;
         }
 
-        private FolderTagView ConvertToFolderTagView(FolderTag t)
+        private TagView ConvertToFolderTagView(Tag t)
         {
-            FolderTagView view = new FolderTagView(t.TagName, t.LastUpdated);
-            List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.PathStringList);
-            view.PathStringList = pathList;
-            view.Created = t.Created;
-            view.IsSeamless = t.IsSeamless;
-            return view;
-        }
-        private FileTagView ConvertToFileTagView(FileTag t)
-        {
-            FileTagView view = new FileTagView(t.TagName, t.LastUpdated);
+            TagView view = new TagView(t.TagName, t.LastUpdated);
             List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.PathStringList);
             view.PathStringList = pathList;
             view.Created = t.Created;
@@ -401,18 +392,16 @@ namespace Syncless.Core
         public TagView GetTag(string tagname)
         {
             Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
-            if (t is FolderTag)
-            {
-                return ConvertToFolderTagView((FolderTag)t);
-            }
-            else if (t is FileTag)
-            {
-                return ConvertToFileTagView((FileTag)t);
-            }
-            else
+            if (t == null)
             {
                 return null;
             }
+
+            if (t is FolderTag)
+            {
+                return ConvertToTagView(t);
+            }
+            
         }
 
         public bool RenameTag(string oldtagname, string newtagname)

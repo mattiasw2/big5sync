@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Syncless.Tagging.Exceptions;
-
+using Syncless.Filters;
 namespace Syncless.Tagging
 {
     public abstract class Tag
@@ -14,6 +14,13 @@ namespace Syncless.Tagging
         {
             get { return _tagName; }
             set { this._tagName = value; }
+        }
+
+        private List<Filter> _filters;
+
+        public List<Filter> Filters
+        {
+            get { return _filters; }
         }
 
         protected List<TaggedPath> _pathList;
@@ -67,6 +74,7 @@ namespace Syncless.Tagging
             this._lastupdated = created;
             this._isSeamless = true;
             this._pathList = new List<TaggedPath>();
+            this._filters = new List<Filter>();
         }
 
         public bool AddPath(string path, long created)

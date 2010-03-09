@@ -8,12 +8,7 @@ namespace Syncless.Tagging
 {
     public class FolderTag : Tag
     {
-        private List<Filter> _filters;
-
-        public List<Filter> Filters
-        {
-            get { return _filters; }
-        }
+        
         
         public FolderTag(string tagname, long lastupdated)
             : base(tagname, lastupdated)
