@@ -85,7 +85,11 @@ namespace CompareAndSync.Visitor
                     try
                     {
                         File.Copy(src, Path.Combine(currentPaths[i], fco.Name), true);
+                        fco.CreationTime[i] = fco.CreationTime[srcFilePos];
                         fco.Exists[i] = true;
+                        fco.Hash[i] = fco.Hash[srcFilePos];                        
+                        fco.LastWriteTime[i] = fco.LastWriteTime[srcFilePos];
+                        fco.Length[i] = fco.LastWriteTime[srcFilePos];
                     }
                     catch (Exception)
                     {

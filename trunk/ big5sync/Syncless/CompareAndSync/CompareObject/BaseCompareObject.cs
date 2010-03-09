@@ -18,6 +18,7 @@ namespace CompareAndSync.CompareObject
 
         //All       
         private MetaChangeType?[] _changeType;
+        private FinalState?[] _finalState;
         private int[] _priority;
         private List<string> _newNames;
 
@@ -66,6 +67,12 @@ namespace CompareAndSync.CompareObject
         {
             get { return _changeType; }
             set { _changeType = value; }
+        }
+
+        public FinalState?[] FinalState
+        {
+            get { return _finalState; }
+            set { _finalState = value; }
         }
 
         public int[] Priority

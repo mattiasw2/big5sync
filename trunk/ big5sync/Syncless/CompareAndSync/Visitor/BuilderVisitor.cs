@@ -13,6 +13,17 @@ namespace CompareAndSync.Visitor
     {
         #region IVisitor Members
 
+        List<string> _filter;
+
+        public BuilderVisitor()
+        {
+        }
+
+        public BuilderVisitor(List<string> filter)
+        {
+            _filter = filter;
+        }
+
         public void Visit(FileCompareObject file, int level, string[] currentPaths)
         {
             //Do nothing
