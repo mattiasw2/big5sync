@@ -44,9 +44,17 @@ namespace CompareAndSync.Visitor
             file.Priority[mostUpdatedPos]++;
         }
 
+        private void ProcessMetaData(FileCompareObject file, int level, string[] currentPaths)
+        {
+        }
+
+        private void CompareFiles(FileCompareObject file, int level, string[] currentPaths)
+        {
+        }
+
         public void Visit(FolderCompareObject folder, int level, string[] currentPaths)
         {
-            throw new NotImplementedException();
+            //Do nothing
         }
 
         public void Visit(RootCompareObject root)
