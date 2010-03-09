@@ -11,7 +11,7 @@ namespace CompareAndSync.Visitor
     {
         #region IVisitor Members
 
-        public void Visit(FileCompareObject file, int level, string[] currentPaths)
+        public void Visit(FileCompareObject file, string[] currentPaths)
         {
             int maxPriorityPos = 0;
             for (int i = 0; i < currentPaths.Length; i++)
@@ -42,7 +42,7 @@ namespace CompareAndSync.Visitor
 
         }
 
-        public void Visit(FolderCompareObject folder, int level, string[] currentPaths)
+        public void Visit(FolderCompareObject folder, string[] currentPaths)
         {
             int maxPriorityPos = 0;
             for (int i = 0; i < currentPaths.Length; i++)
@@ -138,7 +138,7 @@ namespace CompareAndSync.Visitor
                     }
                 }
             }
-            fco.FinalState[srcFilePos] = FinalState.Propagated;
+            fco.FinalState[srcFilePos] = FinalState.Propagated | FinalState.Deleted;
         }
 
         #endregion
@@ -159,6 +159,7 @@ namespace CompareAndSync.Visitor
                             {
                                 Directory.CreateDirectory(Path.Combine(currentPaths[i], folder.Name));
                                 folder.Exists[i] = true;
+                                folder.FinalState[i] = FinalState.Created;
                             }
                             catch (Exception)
                             {
@@ -171,7 +172,7 @@ namespace CompareAndSync.Visitor
                     }
                 }
             }
-            folder.FinalState[srcFilePos] = FinalState.Propagated;
+            folder.FinalState[srcFilePos] = FinalState.Propagated ;
 
         }
 

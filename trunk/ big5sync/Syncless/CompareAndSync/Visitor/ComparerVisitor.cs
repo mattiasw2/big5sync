@@ -10,17 +10,17 @@ namespace CompareAndSync.Visitor
     {
         #region IVisitor Members
 
-        public void Visit(FileCompareObject file, int level, string[] currentPaths)
+        public void Visit(FileCompareObject file, string[] currentPaths)
         {
-            ProcessFileMetaData(file, level, currentPaths);
-            CompareFiles(file, level, currentPaths);
+            ProcessFileMetaData(file, currentPaths);
+            CompareFiles(file, currentPaths);
         }
 
-        public void Visit(FolderCompareObject folder, int level, string[] currentPaths)
+        public void Visit(FolderCompareObject folder, string[] currentPaths)
         {
             //Delete, New, Copy, Rename
-            ProcessFolderMetaData(folder, level, currentPaths);
-            CompareFolders(folder, level, currentPaths);
+            ProcessFolderMetaData(folder, currentPaths);
+            CompareFolders(folder, currentPaths);
         }
 
         public void Visit(RootCompareObject root)
@@ -32,7 +32,7 @@ namespace CompareAndSync.Visitor
 
         #region Files
 
-        private void ProcessFileMetaData(FileCompareObject file, int level, string[] currentPaths)
+        private void ProcessFileMetaData(FileCompareObject file, string[] currentPaths)
         {
             for (int i = 0; i < currentPaths.Length; i++)
             {
@@ -52,7 +52,7 @@ namespace CompareAndSync.Visitor
             }
         }
 
-        private void CompareFiles(FileCompareObject file, int level, string[] currentPaths)
+        private void CompareFiles(FileCompareObject file, string[] currentPaths)
         {
             //Delete will only occur if all other changes are NoChange
             List<int> deletePos = new List<int>();
@@ -119,7 +119,7 @@ namespace CompareAndSync.Visitor
 
         #region Folders
 
-        private void ProcessFolderMetaData(FolderCompareObject folder, int level, string[] currentPaths)
+        private void ProcessFolderMetaData(FolderCompareObject folder, string[] currentPaths)
         {
             for (int i = 0; i < currentPaths.Length; i++)
             {
@@ -134,7 +134,7 @@ namespace CompareAndSync.Visitor
             }
         }
 
-        private void CompareFolders(FolderCompareObject folder, int level, string[] currentPaths)
+        private void CompareFolders(FolderCompareObject folder, string[] currentPaths)
         {
             //Delete will only occur if all other changes are NoChange
             List<int> deletePos = new List<int>();
