@@ -11,6 +11,7 @@ namespace CompareAndSync
         Updated,
         Created,
         Renamed,
-        Propagated
+        Propagated,
+        Unchanged
     }
 }

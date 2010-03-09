@@ -82,20 +82,27 @@ namespace CompareAndSync.Visitor
             for (int i = 0; i < currentPaths.Length; i++)
             {
                 if (i != srcFilePos)
-                {
+                {                    
                     try
                     {
-                        fileExists = File.Exists(Path.Combine(currentPaths[i], fco.Name));
-                        File.Copy(src, Path.Combine(currentPaths[i], fco.Name), true);
-                        fco.CreationTime[i] = fco.CreationTime[srcFilePos];
-                        fco.Exists[i] = true;
-                        if (fileExists)
-                            fco.FinalState[i] = FinalState.Updated;
+                        if (fco.Priority[i] != fco.Priority[srcFilePos])
+                        {
+                            fileExists = File.Exists(Path.Combine(currentPaths[i], fco.Name));
+                            File.Copy(src, Path.Combine(currentPaths[i], fco.Name), true);
+                            fco.CreationTime[i] = fco.CreationTime[srcFilePos];
+                            fco.Exists[i] = true;
+                            if (fileExists)
+                                fco.FinalState[i] = FinalState.Updated;
+                            else
+                                fco.FinalState[i] = FinalState.Created;
+                            fco.Hash[i] = fco.Hash[srcFilePos];
+                            fco.LastWriteTime[i] = fco.LastWriteTime[srcFilePos];
+                            fco.Length[i] = fco.LastWriteTime[srcFilePos];
+                        }
                         else
-                            fco.FinalState[i] = FinalState.Created;
-                        fco.Hash[i] = fco.Hash[srcFilePos];                        
-                        fco.LastWriteTime[i] = fco.LastWriteTime[srcFilePos];
-                        fco.Length[i] = fco.LastWriteTime[srcFilePos];                        
+                        {
+                            fco.FinalState[i] = FinalState.Unchanged;
+                        }
                     }
                     catch (Exception)
                     {
@@ -112,18 +119,26 @@ namespace CompareAndSync.Visitor
             {
                 if (i != srcFilePos)
                 {
-                    try
+                    if (fco.Priority[i] != fco.Priority[srcFilePos])
                     {
-                        File.Delete(Path.Combine(currentPaths[i], fco.Name));
-                        fco.Exists[i] = false;
-                        fco.FinalState[i] = FinalState.Deleted;
+                        try
+                        {
+                            File.Delete(Path.Combine(currentPaths[i], fco.Name));
+                            fco.Exists[i] = false;
+                            fco.FinalState[i] = FinalState.Deleted;
+                        }
+                        catch (Exception)
+                        {
+                            //Throw to conflict queue
+                        }
                     }
-                    catch (Exception)
+                    else
                     {
-                        //Throw to conflict queue
+                        fco.FinalState[i] = FinalState.Unchanged;
                     }
                 }
             }
+            fco.FinalState[srcFilePos] = FinalState.Propagated;
         }
 
         #endregion
