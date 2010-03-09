@@ -38,7 +38,7 @@ namespace SynclessUI.Helper
                 StringBuilder longPath = new StringBuilder(255);
                 GetLongPathName(path, longPath, longPath.Capacity);
 				
-                main.CLI_CreateTag(longPath.ToString());
+                main.CLI_Tag(longPath.ToString());
             }
             else if (flag.Equals("-UTFolder"))
             {

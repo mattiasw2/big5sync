@@ -353,12 +353,12 @@ namespace SynclessUI
 
 		private void btnTag_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-            TagWindow tw = new TagWindow(this, "");
+            TagWindow tw = new TagWindow(this, "", _selectedTag);
         }
 
-        public void CLI_CreateTag(string clipath)
+        public void CLI_Tag(string clipath)
         {
-            TagWindow tw = new TagWindow(this, clipath);
+            TagWindow tw = new TagWindow(this, clipath, "");
             if (_firstopen == true)
             {
                 this.WindowState = WindowState.Minimized;
@@ -496,5 +496,22 @@ namespace SynclessUI
 				return false;
 			}
 		}
+
+        private void OpenFolderInWindowsExplorer(string path)
+        {
+            var runExplorer = new System.Diagnostics.ProcessStartInfo();
+            runExplorer.FileName = "explorer.exe";
+            runExplorer.Arguments = path;
+            System.Diagnostics.Process.Start(runExplorer); 
+        }
+
+        private void OpenInExplorer_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            String path = (string) ListTaggedPath.SelectedItem;
+            if (path != "")
+            {
+                OpenFolderInWindowsExplorer(path);
+            }
+        }
     }
 }
