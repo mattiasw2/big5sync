@@ -45,20 +45,20 @@ namespace Syncless.Monitor
         /// </summary>
         /// <param name="path">The Path to be monitored</param>
         /// <returns>Boolean stating if the monitor can be started</returns>
-        /// <exception cref="Syncless.Monitor.MonitorPathNotFoundException">Throw when the path is not found.</exception>
+        /// <exception cref="Syncless.Monitor.Exception.MonitorPathNotFoundException">Throw when the path is not found.</exception>
         public bool MonitorPath(string path)
         {
-            if (!File.Exists(path) && !Directory.Exists(path))
-            {
-                throw new MonitorPathNotFoundException(ErrorMessage.PATH_NOT_FOUND, path);
-            }
             if (File.Exists(path))
             {
                 return MonitorFile(path);
             }
-            else
+            else if (Directory.Exists(path))
             {
                 return MonitorDirectory(path);
+            }
+            else
+            {
+                throw new MonitorPathNotFoundException(ErrorMessage.PATH_NOT_FOUND, path);
             }
         }
 
@@ -244,20 +244,20 @@ namespace Syncless.Monitor
         /// </summary>
         /// <param name="path">The Path to be monitored</param>
         /// <returns>Boolean stating if the monitor can be stopped</returns>
-        /// <exception cref="Syncless.Monitor.MonitorPathNotFoundException">Throw when the path is not found.</exception>
+        /// <exception cref="Syncless.Monitor.Exception.MonitorPathNotFoundException">Throw when the path is not found.</exception>
         public bool UnMonitorPath(string path)
         {
-            if (!File.Exists(path) && !Directory.Exists(path))
-            {
-                throw new MonitorPathNotFoundException(ErrorMessage.PATH_NOT_FOUND, path);
-            }
             if (File.Exists(path))
             {
                 return UnMonitorFile(path);
             }
-            else
+            else if (Directory.Exists(path))
             {
                 return UnMonitorDirectory(path);
+            }
+            else
+            {
+                throw new MonitorPathNotFoundException(ErrorMessage.PATH_NOT_FOUND, path);
             }
         }
 
@@ -386,7 +386,7 @@ namespace Syncless.Monitor
         /// </summary>
         /// <param name="driveLetter">The drive letter (i.e 'C') </param>
         /// <returns>The number of paths unmonitored</returns>
-        /// <exception cref="Syncless.Monitor.MonitorDriveNotFoundException">Throw when the drive is not found.</exception>
+        /// <exception cref="Syncless.Monitor.Exception.MonitorDriveNotFoundException">Throw when the drive is not found.</exception>
         public int UnMonitorDrive(string driveLetter)
         {
             DriveInfo drive = new DriveInfo(driveLetter);
@@ -458,10 +458,16 @@ namespace Syncless.Monitor
                 FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATING, FileSystemType.FILE);
                 FileSystemEventDispatcher.Instance.AddToQueue(fse);
             }
-            else
+            else if (Directory.Exists(e.FullPath))
             {
                 Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.FOLDER);
+                FileSystemEventDispatcher.Instance.AddToQueue(fse);
+            }
+            else
+            {
+                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
+                FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.UNKNOWN);
                 FileSystemEventDispatcher.Instance.AddToQueue(fse);
             }
         }
@@ -499,10 +505,16 @@ namespace Syncless.Monitor
                 FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FILE);
                 FileSystemEventDispatcher.Instance.AddToQueue(fse);
             }
-            else
+            else if (Directory.Exists(e.FullPath))
             {
                 Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FOLDER);
+                FileSystemEventDispatcher.Instance.AddToQueue(fse);
+            }
+            else
+            {
+                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
+                FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.UNKNOWN);
                 FileSystemEventDispatcher.Instance.AddToQueue(fse);
             }
         }
