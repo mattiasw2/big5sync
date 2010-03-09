@@ -24,7 +24,7 @@ namespace CompareAndSync
 
             #region IVisitor Members
 
-            public void Visit(FileCompareObject file, int level, string[] currentPaths)
+            public void Visit(FileCompareObject file, string[] currentPaths)
             {
                 for (int i = 0; i < currentPaths.Length; i++)
                 {
@@ -34,7 +34,7 @@ namespace CompareAndSync
                 }
             }
 
-            public void Visit(FolderCompareObject folder, int level, string[] currentPaths)
+            public void Visit(FolderCompareObject folder, string[] currentPaths)
             {
                 for (int i = 0; i < currentPaths.Length; i++)
                 {

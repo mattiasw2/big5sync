@@ -20,18 +20,18 @@ namespace CompareAndSync
                 {
                     //TO BE REMOVED
                     if (o.Name != ".syncless")
-                        PreTraverseFolder((FolderCompareObject)o, 1, newCurrentPath, visitor);
+                        PreTraverseFolder((FolderCompareObject)o, newCurrentPath, visitor);
                 }
                 else
                 {
-                    visitor.Visit((FileCompareObject)o, 1, newCurrentPath);
+                    visitor.Visit((FileCompareObject)o, newCurrentPath);
                 }
             }
         }
 
-        public static void PreTraverseFolder(FolderCompareObject folder, int level, string[] currentPath, IVisitor visitor)
+        public static void PreTraverseFolder(FolderCompareObject folder, string[] currentPath, IVisitor visitor)
         {
-            visitor.Visit(folder, level, currentPath);
+            visitor.Visit(folder, currentPath);
             Dictionary<string, BaseCompareObject>.ValueCollection values = folder.Contents.Values;
             foreach (BaseCompareObject o in values)
             {
@@ -44,11 +44,11 @@ namespace CompareAndSync
                 {
                     //TO BE REMOVED (HANDLE USING FILTERS)
                     if (o.Name != ".syncless")
-                        PreTraverseFolder((FolderCompareObject)o, level + 1, newCurrentPath, visitor);
+                        PreTraverseFolder((FolderCompareObject)o, newCurrentPath, visitor);
                 }
                 else
                 {
-                    visitor.Visit((FileCompareObject)o, level + 1, newCurrentPath);
+                    visitor.Visit((FileCompareObject)o, newCurrentPath);
                 }
             }
         }

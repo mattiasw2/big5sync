@@ -24,12 +24,12 @@ namespace CompareAndSync.Visitor
             _filter = filter;
         }
 
-        public void Visit(FileCompareObject file, int level, string[] currentPaths)
+        public void Visit(FileCompareObject file, string[] currentPaths)
         {
             //Do nothing
         }
 
-        public void Visit(FolderCompareObject folder, int level, string[] currentPaths)
+        public void Visit(FolderCompareObject folder, string[] currentPaths)
         {
             for (int index = 0; index < currentPaths.Length; index++)
             {
@@ -86,58 +86,7 @@ namespace CompareAndSync.Visitor
 
         public void Visit(RootCompareObject root)
         {
-            string[] rootPaths = root.Paths;
-            for (int index = 0; index < rootPaths.Length; index++)
-            {
-                string path = rootPaths[index];
-                DirectoryInfo folder = new DirectoryInfo(path);
-
-                if (folder.Exists)
-                {
-                    DirectoryInfo[] infos = folder.GetDirectories();
-                    foreach (DirectoryInfo info in infos)
-                    {
-                        BaseCompareObject o = root.GetChild(info.Name);
-                        FolderCompareObject fco = null;
-
-                        if (o == null)
-                            fco = new FolderCompareObject(info.Name, rootPaths.Length);
-                        else
-                            fco = (FolderCompareObject)o;
-
-                        fco.CreationTime[index] = info.CreationTime.Ticks;
-                        fco.Exists[index] = true;
-
-                        if (o == null)
-                            root.AddChild(fco);
-                    }
-
-                    FileInfo[] fileInfos = folder.GetFiles();
-                    foreach (FileInfo info in fileInfos)
-                    {
-                        BaseCompareObject o = root.GetChild(info.Name);
-                        FileCompareObject fco = null;
-
-                        if (o == null)
-                            fco = new FileCompareObject(info.Name, rootPaths.Length);
-                        else
-                            fco = (FileCompareObject)o;
-
-                        fco.CreationTime[index] = info.CreationTime.Ticks;
-                        fco.Hash[index] = CalculateMD5Hash(info);
-                        fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
-                        fco.Length[index] = info.Length;
-                        fco.Exists[index] = true;
-
-                        if (o == null)
-                            root.AddChild(fco);
-                    }
-                }
-                else
-                {
-                    //Do nothing
-                }
-            }
+            Visit(root, root.Paths);
         }
 
         #endregion
