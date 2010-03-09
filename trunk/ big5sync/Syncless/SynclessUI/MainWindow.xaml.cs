@@ -401,30 +401,41 @@ namespace SynclessUI
 
 		private void btnUntag_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-			if(!ListTaggedPath.HasItems) {
+            Untag();
+		}
+
+        private void Untag()
+        {
+            if (!ListTaggedPath.HasItems)
+            {
                 string messageBoxText = "There is nothing to untag.";
                 string caption = "Nothing to Untag";
                 MessageBoxButton button = MessageBoxButton.OK;
                 MessageBoxImage icon = MessageBoxImage.Error;
 
                 MessageBox.Show(messageBoxText, caption, button, icon);
-			} else {
-				if(ListTaggedPath.SelectedIndex == -1) {
-					string messageBoxText = "Please select a path to untag.";
-					string caption = "No Path Selected";
-					MessageBoxButton button = MessageBoxButton.OK;
-					MessageBoxImage icon = MessageBoxImage.Error;
+            }
+            else
+            {
+                if (ListTaggedPath.SelectedIndex == -1)
+                {
+                    string messageBoxText = "Please select a path to untag.";
+                    string caption = "No Path Selected";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Error;
 
                     MessageBox.Show(messageBoxText, caption, button, icon);
-				} else {
+                }
+                else
+                {
                     TagView tv = gui.GetTag((string)TagTitle.Text);
 
                     gui.Untag(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
 
                     SelectTag(tv.TagName);
-				}
-			}
-		}
+                }
+            }
+        }
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
@@ -497,21 +508,26 @@ namespace SynclessUI
 			}
 		}
 
-        private void OpenFolderInWindowsExplorer(string path)
-        {
-            var runExplorer = new System.Diagnostics.ProcessStartInfo();
-            runExplorer.FileName = "explorer.exe";
-            runExplorer.Arguments = path;
-            System.Diagnostics.Process.Start(runExplorer); 
-        }
-
-        private void OpenInExplorer_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void OpenFolderInWindowsExplorer()
         {
             String path = (string) ListTaggedPath.SelectedItem;
             if (path != "")
             {
-                OpenFolderInWindowsExplorer(path);
+				var runExplorer = new System.Diagnostics.ProcessStartInfo();
+				runExplorer.FileName = "explorer.exe";
+				runExplorer.Arguments = path;
+				System.Diagnostics.Process.Start(runExplorer); 
             }
+        }
+
+        private void OpenInExplorerRightClick_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+			OpenFolderInWindowsExplorer();
+        }
+
+        private void ListTaggedPath_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+        	OpenFolderInWindowsExplorer();
         }
     }
 }

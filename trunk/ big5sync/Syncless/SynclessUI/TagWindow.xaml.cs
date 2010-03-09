@@ -57,24 +57,25 @@ namespace SynclessUI
         }
 		
 		private string SelectPath(bool cancelStatus) {
-			string path = "";
-			// _folderName = (System.IO.Directory.Exists(_folderName)) ? _folderName : "";
+            string path = (string) Application.Current.Properties["folderlastselected"];
+            path = (System.IO.Directory.Exists(path)) ? path : "";
 			var dlg1 = new Ionic.Utils.FolderBrowserDialogEx
 			{
 				Description = "Select the file/folder to tag",
 				ShowNewFolderButton = true,
 				ShowEditBox = true,
 			    NewStyle = true,
-				SelectedPath = path,
+                SelectedPath = path,
 				ShowFullPathInEditBox= true,
 			};
-			dlg1.RootFolder = System.Environment.SpecialFolder.MyComputer;
+			// dlg1.RootFolder = System.Environment.SpecialFolder.MyComputer;
 		
 			var result = dlg1.ShowDialog();
 		
 			if (result == System.Windows.Forms.DialogResult.OK)
 			{
-				path = dlg1.SelectedPath;
+                path = dlg1.SelectedPath;
+                Application.Current.Properties["folderlastselected"] = path;
                 return path;
 			} else if(result == System.Windows.Forms.DialogResult.Cancel)
 			{
