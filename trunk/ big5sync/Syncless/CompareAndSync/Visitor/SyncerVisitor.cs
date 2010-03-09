@@ -47,7 +47,7 @@ namespace CompareAndSync.Visitor
             int maxPriorityPos = 0;
             for (int i = 0; i < currentPaths.Length; i++)
             {
-                if (folder.Priority[maxPriorityPos] > folder.Priority[i])
+                if (folder.Priority[i] > folder.Priority[maxPriorityPos])
                     maxPriorityPos = i;
             }
 
@@ -151,18 +151,28 @@ namespace CompareAndSync.Visitor
             {
                 if (i != srcFilePos)
                 {
-                    if (!Directory.Exists(Path.Combine(currentPaths[i], folder.Name)))
+                    if (folder.Priority[i] != folder.Priority[srcFilePos])
                     {
-                        try
+                        if (!Directory.Exists(Path.Combine(currentPaths[i], folder.Name)))
                         {
-                            Directory.CreateDirectory(Path.Combine(currentPaths[i], folder.Name));
+                            try
+                            {
+                                Directory.CreateDirectory(Path.Combine(currentPaths[i], folder.Name));
+                                folder.Exists[i] = true;
+                            }
+                            catch (Exception)
+                            {
+                            }
                         }
-                        catch (Exception)
-                        {
-                        }
+                    }
+                    else
+                    {
+                        folder.FinalState[i] = FinalState.Unchanged;
                     }
                 }
             }
+            folder.FinalState[srcFilePos] = FinalState.Propagated;
+
         }
 
         private void DeleteFolder(FolderCompareObject folder, string[] currentPaths, int srcFilePos)

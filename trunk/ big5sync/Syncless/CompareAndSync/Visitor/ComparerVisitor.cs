@@ -97,13 +97,11 @@ namespace CompareAndSync.Visitor
                 if (!file.Exists[i])
                 {
                     file.Priority[i] = -1;
-                    //diff = true;
                     continue;
                 }
 
                 if (file.Length[mostUpdatedPos] != file.Length[i] || file.Hash[mostUpdatedPos] != file.Hash[i])
                 {
-                    //diff = true;
                     if (file.LastWriteTime[i] > file.LastWriteTime[mostUpdatedPos])
                     {
                         file.Priority[i] = file.Priority[mostUpdatedPos] + 1;
@@ -115,9 +113,6 @@ namespace CompareAndSync.Visitor
                     file.Priority[i] = file.Priority[mostUpdatedPos];
                 }
             }
-
-            //if (!diff)
-            //    file.Priority[initialPos] = 0;
         }
 
         #endregion
@@ -165,7 +160,7 @@ namespace CompareAndSync.Visitor
             //Update and create handled in the same way
             //Rename is handled in a weird way, think about it later
             int mostUpdatedPos = 0, initialPos = 0;
-            bool diff = false;
+            //bool diff = false;
 
             for (int i = 0; i < currentPaths.Length; i++)
             {
@@ -183,13 +178,14 @@ namespace CompareAndSync.Visitor
             {
                 if (!folder.Exists[i])
                 {
-                    diff = true;
+                    folder.Priority[i] = -1;
                     continue;
                 }
+                else
+                {
+                    folder.Priority[i] = folder.Priority[mostUpdatedPos];
+                }
             }
-
-            if (!diff)
-                folder.Priority[initialPos] = 0;
 
         }
 
