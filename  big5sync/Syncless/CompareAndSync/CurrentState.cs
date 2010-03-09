@@ -5,12 +5,11 @@ using System.Text;
 
 namespace CompareAndSync
 {
-    public enum CurrentState
+    public enum FinalState
     {
-        PopulatedWithoutMeta = 0,
-        PopulatedWithMeta = 1,
-        Compared = 2,
-        Synced = 3,
-        SavedToMeta = 4
+        Deleted,
+        Updated,
+        Created,
+        Renamed
     }
 }

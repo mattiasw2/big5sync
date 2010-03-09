@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompareAndSyncController.cs" />
     <Compile Include="CompareObjectHelper.cs" />
     <Compile Include="CompareObject\BaseCompareObject.cs" />
     <Compile Include="CompareObject\FileCompareObject.cs" />
