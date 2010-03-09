@@ -172,7 +172,7 @@ namespace CompareAndSync.Visitor
         private void CreateFileObject(XmlDocument xmlDoc , FileCompareObject file)
         {
             int position = GetPropagated(file);
-
+            DoCleanUp(xmlDoc, file.Name);
             XmlText hashText = xmlDoc.CreateTextNode(file.Hash[position]);
             XmlText nameText = xmlDoc.CreateTextNode(file.Name);
             XmlText sizeText = xmlDoc.CreateTextNode(file.Length[position].ToString());
@@ -261,6 +261,15 @@ namespace CompareAndSync.Visitor
 
             return -1; // never happen
         }
+
+        private void DoCleanUp(XmlDocument xmlDoc , string name)
+        {
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + name + "']");
+            if (node == null)
+                return;
+            node.ParentNode.RemoveChild(node);
+        }
+
         #endregion
     }
 }
