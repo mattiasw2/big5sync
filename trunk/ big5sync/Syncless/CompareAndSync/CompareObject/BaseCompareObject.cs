@@ -27,6 +27,7 @@ namespace CompareAndSync.CompareObject
             _name = name;
             _creationTime = new long[numOfPaths];
             _exists = new bool[numOfPaths];
+            _finalState = new FinalState?[numOfPaths];
             _metaCreationTime = new long[numOfPaths];
             _metaExists = new bool[numOfPaths];
             _changeType = new MetaChangeType?[numOfPaths];
