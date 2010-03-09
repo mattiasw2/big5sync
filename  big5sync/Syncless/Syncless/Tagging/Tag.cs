@@ -6,24 +6,25 @@ using Syncless.Tagging.Exceptions;
 using Syncless.Filters;
 namespace Syncless.Tagging
 {
-    public abstract class Tag
+    public class Tag
     {
-        protected string _tagName;
-
+        private string _tagName;
+        private long _lastupdated;
+        private long _created;
+        private bool _isSeamless;
+        private List<TaggedPath> _pathList;
+        private List<Filter> _filters;
+        
         public string TagName
         {
             get { return _tagName; }
             set { this._tagName = value; }
         }
 
-        private List<Filter> _filters;
-
         public List<Filter> Filters
         {
             get { return _filters; }
         }
-
-        protected List<TaggedPath> _pathList;
 
         public List<TaggedPath> PathList
         {
@@ -43,23 +44,17 @@ namespace Syncless.Tagging
             }
         }
 
-        protected long _lastupdated;
-
         public long LastUpdated
         {
             get { return _lastupdated; }
             set { _lastupdated = value; }
         }
 
-        protected long _created;
-
         public long Created
         {
             get { return _created; }
             set { _created = value; }
         }
-
-        protected bool _isSeamless;
 
         public bool IsSeamless
         {
@@ -79,7 +74,7 @@ namespace Syncless.Tagging
 
         public bool AddPath(string path, long created)
         {
-            if (!Contain(path))
+            if (!Contains(path))
             {
                 TaggedPath taggedPath = new TaggedPath();
                 taggedPath.Path = path;
@@ -107,7 +102,7 @@ namespace Syncless.Tagging
             return false;
         }
 
-        public bool Contain(string path)
+        public bool Contains(string path)
         {
             foreach (TaggedPath p in _pathList)
             {
@@ -131,6 +126,49 @@ namespace Syncless.Tagging
                 {
                     p.Path = newPath;
                 }
+            }
+        }
+
+        public string FindMatchedParentDirectory(string path, bool isFolder)
+        {
+            string[] pathTokens = TaggingHelper.TrimEnd(path.Split('\\'));
+            string logicalid = TaggingHelper.GetLogicalID(path);
+            foreach (TaggedPath p in _pathList)
+            {
+                if (path.StartsWith(p.Path))
+                {
+                    if (!path.Equals(p.Path))
+                    {
+                        string[] pTokens = TaggingHelper.TrimEnd(p.Path.Split('\\'));
+                        int trailingIndex = TaggingHelper.Match(pathTokens, pTokens);
+                        if (trailingIndex > 0)
+                        {
+                            return TaggingHelper.CreatePath(trailingIndex, pathTokens, isFolder);
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public void AddFilter(Filter filter)
+        {
+            if (!_filters.Contains(filter))
+            {
+                _filters.Add(filter);
+            }
+        }
+
+        public Filter RemoveFilter(Filter filter)
+        {
+            if (_filters.Contains(filter))
+            {
+                _filters.Remove(filter);
+                return filter;
+            }
+            else
+            {
+                return null;
             }
         }
 
