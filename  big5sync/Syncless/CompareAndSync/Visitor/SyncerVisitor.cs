@@ -206,7 +206,30 @@ namespace CompareAndSync.Visitor
 
         private void DeleteFolder(FolderCompareObject folder, string[] currentPaths, int srcFilePos)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                if (i != srcFilePos)
+                {
+                    if (folder.Priority[i] != folder.Priority[srcFilePos])
+                    {
+                        try
+                        {
+                            Directory.Delete(Path.Combine(currentPaths[i], folder.Name), true);
+                            folder.Exists[i] = false;
+                            folder.FinalState[i] = FinalState.Deleted;
+                        }
+                        catch (Exception)
+                        {
+                            //Throw to conflict queue
+                        }
+                    }
+                    else
+                    {
+                        folder.FinalState[i] = FinalState.Unchanged;
+                    }
+                }
+            }
+            folder.FinalState[srcFilePos] = FinalState.Propagated;
         }
 
         #endregion

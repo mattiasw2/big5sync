@@ -18,19 +18,6 @@ namespace CompareAndSync.CompareObject
         public void AddChild(BaseCompareObject child)
         {
             _contents.Add(child.Name, child);
-
-            /*
-            if (child is FileCompareObject)
-            {
-                FileCompareObject c = (FileCompareObject)child;
-                List<string> listOfNames = null;
-
-                if (_fileHashToName.TryGetValue(c.Hash, out listOfNames))
-                {
-
-                }
-            }*/
-
         }
 
         public FileCompareObject GetIdenticalFile(string hash, long creationTime)
