@@ -77,6 +77,7 @@ namespace CompareAndSync.Visitor
         private void CopyFile(FileCompareObject fco, string[] currentPaths, int srcFilePos)
         {
             string src = Path.Combine(currentPaths[srcFilePos], fco.Name);
+            bool fileExists = false;
 
             for (int i = 0; i < currentPaths.Length; i++)
             {
@@ -84,12 +85,17 @@ namespace CompareAndSync.Visitor
                 {
                     try
                     {
+                        fileExists = File.Exists(Path.Combine(currentPaths[i], fco.Name));
                         File.Copy(src, Path.Combine(currentPaths[i], fco.Name), true);
                         fco.CreationTime[i] = fco.CreationTime[srcFilePos];
                         fco.Exists[i] = true;
+                        if (fileExists)
+                            fco.FinalState[i] = FinalState.Updated;
+                        else
+                            fco.FinalState[i] = FinalState.Created;
                         fco.Hash[i] = fco.Hash[srcFilePos];                        
                         fco.LastWriteTime[i] = fco.LastWriteTime[srcFilePos];
-                        fco.Length[i] = fco.LastWriteTime[srcFilePos];
+                        fco.Length[i] = fco.LastWriteTime[srcFilePos];                        
                     }
                     catch (Exception)
                     {
@@ -109,6 +115,7 @@ namespace CompareAndSync.Visitor
                     {
                         File.Delete(Path.Combine(currentPaths[i], fco.Name));
                         fco.Exists[i] = false;
+                        fco.FinalState[i] = FinalState.Deleted;
                     }
                     catch (Exception)
                     {
