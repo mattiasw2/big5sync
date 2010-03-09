@@ -29,7 +29,7 @@ namespace CompareAndSync.Visitor
         private static readonly object syncLock = new object(); 
         private string[] pathList = null;
 
-        public void Visit(FileCompareObject file, int level, string[] currentPath)
+        public void Visit(FileCompareObject file, string[] currentPath)
         {
             for (int i = 0; i < currentPath.Length; i++) // HANDLE ALL EXCEPT PROPAGATED
             {
@@ -75,7 +75,7 @@ namespace CompareAndSync.Visitor
     
         }
 
-        public void Visit(FolderCompareObject folder, int level, string[] currentPath)
+        public void Visit(FolderCompareObject folder, string[] currentPath)
         {
             /**/
             
