@@ -41,6 +41,9 @@ namespace CompareAndSync.Visitor
             }
 
             int position = GetPropagated(file);
+            if (position == -1)
+                return;
+
             string name = Path.Combine(currentPath[position], file.Name);
             if(File.Exists(name)) //CREATE OR UPDATED
             {
@@ -56,7 +59,7 @@ namespace CompareAndSync.Visitor
                 }
                 else  //NEW
                 {
-                    string xmlPath = Path.Combine(currentPath[position], METADATAPATH);
+                    string xmlPath = Path.Combine(currentPath[position], XML_NAME);
                     XmlDocument xmlDoc = new XmlDocument();
                     xmlDoc.Load(xmlPath);
                     CreateFileObject(xmlDoc, file);
