@@ -46,13 +46,14 @@ namespace SynclessUI
             InitializeSyncless();
         }
 
-        public void ProcessCommandLine(string[] args)
+        #region Application Settings
+
+        private void SaveApplicationSettings()
         {
-            if (args.Length != 0)
-            {
-                SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(args, this);
-            }
+            Properties.Settings.Default.Save();
         }
+
+        #endregion
 
         /// <summary>
         ///     Starts up the system logic layer and initializes it
@@ -351,26 +352,6 @@ namespace SynclessUI
             TagWindow tw = new TagWindow(this, "", _selectedTag);
         }
 
-        public void CLI_Tag(string clipath)
-        {
-            TagWindow tw = new TagWindow(this, clipath, "");
-            if (_firstopen == true)
-            {
-                this.WindowState = WindowState.Minimized;
-                _firstopen = false;
-            }
-        }
-
-        public void CLI_Untag(string clipath)
-        {
-            UntagWindow tw = new UntagWindow(this, clipath);
-            if (_firstopen == true)
-            {
-                this.WindowState = WindowState.Minimized;
-                _firstopen = false;
-            }
-        }
-
 		private void TxtBoxFilterTag_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
 		{
             if (gui != null)
@@ -451,6 +432,7 @@ namespace SynclessUI
                     case MessageBoxResult.OK:
                         // Terminates the SLL and closes the UI
                         gui.Terminate();
+                        SaveApplicationSettings();
 						//RegistryHelper.RemoveRegistry();
                         break;
                     case MessageBoxResult.Cancel:
@@ -468,7 +450,39 @@ namespace SynclessUI
                 MessageBox.Show(messageBoxText, caption, button, icon);
                 e.Cancel = true;
             }
-		}
+        }
+
+        #region Commandline Interface: Tag/Untag
+
+        public void ProcessCommandLine(string[] args)
+        {
+            if (args.Length != 0)
+            {
+                SynclessUI.Helper.CommandLineHelper.ProcessCommandLine(args, this);
+            }
+        }
+
+        public void CLI_Tag(string clipath)
+        {
+            TagWindow tw = new TagWindow(this, clipath, "");
+            if (_firstopen == true)
+            {
+                this.WindowState = WindowState.Minimized;
+                _firstopen = false;
+            }
+        }
+
+        public void CLI_Untag(string clipath)
+        {
+            UntagWindow tw = new UntagWindow(this, clipath);
+            if (_firstopen == true)
+            {
+                this.WindowState = WindowState.Minimized;
+                _firstopen = false;
+            }
+        }
+
+        #endregion
 
         #region TagTitle Functionality: Renaming
 

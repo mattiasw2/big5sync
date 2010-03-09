@@ -22,5 +22,14 @@ namespace SynclessUI.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplaySplashScreen {
+            get {
+                return ((bool)(this["DisplaySplashScreen"]));
+            }
+        }
     }
 }
