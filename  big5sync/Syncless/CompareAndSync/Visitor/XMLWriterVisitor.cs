@@ -30,18 +30,16 @@ namespace CompareAndSync.Visitor
         public void Visit(FileCompareObject file, int level, string[] currentPath)
         {
            
-            int highestPriority = -1;
             int counter = 0;
 
-            int [] priorityList = file.Priority;
+    /*      int [] priorityList = file.Priority;
             for (int i = 0; i < priorityList.Length; i++)
             {
                 if (highestPriority > priorityList[i])
                 {
-                    highestPriority = priorityList[i];
                     counter = i;
                 }
-            }
+            }*/
 
             for (int i = 0; i < currentPath.Length; i++)
             {
@@ -181,6 +179,13 @@ namespace CompareAndSync.Visitor
         private void UpdateFile(XmlDocument xmlDoc, FileCompareObject file, int position)
         {
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
+            if (node == null)
+            {
+                CreateFileObject(xmlDoc, file, position);
+                return;
+            }
+
+            
             XmlNodeList childNodeList = node.ChildNodes;
             for (int i = 0; i < childNodeList.Count; i++)
             {
