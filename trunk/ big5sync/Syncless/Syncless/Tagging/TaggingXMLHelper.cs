@@ -17,13 +17,9 @@ namespace Syncless.Tagging
             profileElement.SetAttribute("name", taggingProfile.ProfileName);
             profileElement.SetAttribute("createdDate", taggingProfile.Created.ToString());
             profileElement.SetAttribute("lastUpdated", taggingProfile.LastUpdated.ToString());
-            foreach (FolderTag folderTag in taggingProfile.FolderTagList)
+            foreach (Tag tag in taggingProfile.TagList)
             {
-                profileElement.AppendChild(TaggingXMLHelper.CreateFolderTagElement(TaggingDataDocument, folderTag));
-            }
-            foreach (FileTag fileTag in taggingProfile.FileTagList)
-            {
-                profileElement.AppendChild(TaggingXMLHelper.CreateFileTagElement(TaggingDataDocument, fileTag));
+                profileElement.AppendChild(TaggingXMLHelper.CreateTagElement(TaggingDataDocument, tag));
             }
             taggingElement.AppendChild(profileElement);
             TaggingDataDocument.AppendChild(taggingElement);
@@ -35,21 +31,17 @@ namespace Syncless.Tagging
             XmlElement profileElement = (XmlElement)xml.GetElementsByTagName("profile").Item(0);
             TaggingProfile taggingProfile = TaggingXMLHelper.CreateTaggingProfile(profileElement);
             XmlNodeList tagList = profileElement.ChildNodes;
-            foreach (XmlElement tag in tagList)
+            foreach (XmlElement tagElement in tagList)
             {
-                if (tag.Name.Equals("folderTag"))
+                if (tagElement.Name.Equals("folderTag"))
                 {
-                    FolderTag folderTag = TaggingXMLHelper.CreateFolderTagFromXml(tag);
-                    taggingProfile.FolderTagList.Add(folderTag);
-                }
-                else
-                {
-                    FileTag fileTag = TaggingXMLHelper.CreateFileTagFromXml(tag);
-                    taggingProfile.FileTagList.Add(fileTag);
+                    Tag tag = TaggingXMLHelper.CreateTagFromXml(tagElement);
+                    taggingProfile.TagList.Add(tag);
                 }
             }
             return taggingProfile;
         }
+
         public static void SaveTo(TaggingProfile taggingProfile , List<string> xmlFilePaths)
         {
             XmlDocument xml = ConvertTaggingProfileToXml(taggingProfile);
@@ -59,6 +51,7 @@ namespace Syncless.Tagging
                 TaggingXMLHelper.SaveXml(xml, path);
             }
         }
+
         public static TaggingProfile LoadFrom(string xmlFilePath)
         {
             TaggingProfile taggingProfile = new TaggingProfile();
@@ -73,6 +66,7 @@ namespace Syncless.Tagging
                 return null;
             }
         }
+
         internal static bool SaveXml(XmlDocument xml, string path)
         {
             XmlTextWriter textWriter = null;
@@ -146,36 +140,20 @@ namespace Syncless.Tagging
             return taggingProfile;
         }
 
-        internal static FolderTag CreateFolderTagFromXml(XmlElement tag)
+        internal static Tag CreateTagFromXml(XmlElement tagElement)
         {
-            string tagname = tag.GetAttribute("name");
-            long created = long.Parse(tag.GetAttribute("created"));
-            long lastupdated = long.Parse(tag.GetAttribute("lastUpdated"));
-            FolderTag folderTag = new FolderTag(tagname, created);
-            folderTag.LastUpdated = lastupdated;
-            XmlNodeList pathList = tag.ChildNodes;
+            string tagname = tagElement.GetAttribute("name");
+            long created = long.Parse(tagElement.GetAttribute("created"));
+            long lastupdated = long.Parse(tagElement.GetAttribute("lastUpdated"));
+            Tag tag = new Tag(tagname, created);
+            tag.LastUpdated = lastupdated;
+            XmlNodeList pathList = tagElement.ChildNodes;
             foreach (XmlElement path in pathList)
             {
                 TaggedPath taggedPath = CreatePath(path);
-                folderTag.PathList.Add(taggedPath);
+                tag.PathList.Add(taggedPath);
             }
-            return folderTag;
-        }
-
-        internal static FileTag CreateFileTagFromXml(XmlElement tag)
-        {
-            string tagname = tag.GetAttribute("name");
-            long created = long.Parse(tag.GetAttribute("created"));
-            long lastupdated = long.Parse(tag.GetAttribute("lastUpdated"));
-            FileTag fileTag = new FileTag(tagname, created);
-            fileTag.LastUpdated = lastupdated;
-            XmlNodeList pathList = tag.ChildNodes;
-            foreach (XmlElement path in pathList)
-            {
-                TaggedPath taggedPath = CreatePath(path);
-                fileTag.PathList.Add(taggedPath);
-            }
-            return fileTag;
+            return tag;
         }
 
         private static TaggedPath CreatePath(XmlElement path)
@@ -202,17 +180,17 @@ namespace Syncless.Tagging
         #endregion
 
         #region create xml document
-        internal static XmlElement CreateFolderTagElement(XmlDocument TaggingDataDocument, FolderTag folderTag)
+        internal static XmlElement CreateTagElement(XmlDocument TaggingDataDocument, Tag tag)
         {
-            XmlElement folderTagElement = TaggingDataDocument.CreateElement("folderTag");
-            folderTagElement.SetAttribute("name", folderTag.TagName);
-            folderTagElement.SetAttribute("created", folderTag.Created.ToString());
-            folderTagElement.SetAttribute("lastUpdated", folderTag.LastUpdated.ToString());
-            foreach (TaggedPath path in folderTag.PathList)
+            XmlElement tagElement = TaggingDataDocument.CreateElement("folderTag");
+            tagElement.SetAttribute("name", tag.TagName);
+            tagElement.SetAttribute("created", tag.Created.ToString());
+            tagElement.SetAttribute("lastUpdated", tag.LastUpdated.ToString());
+            foreach (TaggedPath path in tag.PathList)
             {
-                folderTagElement.AppendChild(CreateTaggedFolderElement(TaggingDataDocument, path));
+                tagElement.AppendChild(CreateTaggedFolderElement(TaggingDataDocument, path));
             }
-            return folderTagElement;
+            return tagElement;
         }
 
         private static XmlElement CreateTaggedFolderElement(XmlDocument TaggingDataDocument, TaggedPath path)
@@ -224,30 +202,6 @@ namespace Syncless.Tagging
             folderPathElement.InnerText = path.Path;
             taggedFolderElement.AppendChild(folderPathElement);
             return taggedFolderElement;
-        }
-
-        internal static XmlElement CreateFileTagElement(XmlDocument TaggingDataDocument, FileTag fileTag)
-        {
-            XmlElement fileTagElement = TaggingDataDocument.CreateElement("fileTag");
-            fileTagElement.SetAttribute("name", fileTag.TagName);
-            fileTagElement.SetAttribute("created", fileTag.Created.ToString());
-            fileTagElement.SetAttribute("lastUpdated", fileTag.LastUpdated.ToString());
-            foreach (TaggedPath path in fileTag.PathList)
-            {
-                fileTagElement.AppendChild(CreatedTaggedFileElement(TaggingDataDocument, path));
-            }
-            return fileTagElement;
-        }
-
-        private static XmlElement CreatedTaggedFileElement(XmlDocument TaggingDataDocument, TaggedPath path)
-        {
-            XmlElement taggedFileElement = TaggingDataDocument.CreateElement("taggedFile");
-            taggedFileElement.SetAttribute("created", path.Created.ToString());
-            taggedFileElement.SetAttribute("lastUpdated", path.LastUpdated.ToString());
-            XmlElement filePathElement = TaggingDataDocument.CreateElement("path");
-            filePathElement.InnerText = path.Path;
-            taggedFileElement.AppendChild(filePathElement);
-            return taggedFileElement;
         }
         #endregion
     }

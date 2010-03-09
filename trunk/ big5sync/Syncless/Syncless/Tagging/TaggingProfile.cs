@@ -31,18 +31,18 @@ namespace Syncless.Tagging
             set { _created = value; }
         }
 
-        private List<FolderTag> _folderTagList;
+        private List<Tag> _tagList;
 
-        public List<FolderTag> FolderTagList
+        public List<Tag> TagList
         {
-            get { return _folderTagList; }
-            set { _folderTagList = value; }
+            get { return _tagList; }
+            set { _tagList = value; }
         }
 
 
         public TaggingProfile()
         {
-            _folderTagList = new List<FolderTag>();
+            _tagList = new List<Tag>();
            
         }
     }
