@@ -15,16 +15,14 @@ namespace Syncless.Filters
             List<string> outputList = new List<string>();
             foreach (string pattern in patterns)
             {
-                FileInfo file = new FileInfo(pattern);
-                if (!file.Exists)
+                if (Directory.Exists(pattern))
                 {
-                    if (Directory.Exists(pattern))
-                    {
-                        //is directory
-                        outputList.Add(pattern);
-                    }
+                    //is directory
+                    outputList.Add(pattern);
                     continue;
                 }
+                FileInfo file = new FileInfo(pattern);
+                
                 if (!Match(file.Name))
                 {
                     outputList.Add(pattern);
@@ -38,16 +36,14 @@ namespace Syncless.Filters
             List<string> outputList = new List<string>();
             foreach (string pattern in patterns)
             {
-                FileInfo file = new FileInfo(pattern);
-                if (!file.Exists)
+                if (Directory.Exists(pattern))
                 {
-                    if (Directory.Exists(pattern))
-                    {
-                        //is directory
-                        outputList.Add(pattern);
-                    }
+                    //is directory
+                    outputList.Add(pattern);
                     continue;
                 }
+                FileInfo file = new FileInfo(pattern);
+                
                 if (!Match(file.Name))
                 {
                     outputList.Add(pattern);

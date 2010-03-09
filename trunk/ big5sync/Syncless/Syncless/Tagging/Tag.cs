@@ -20,17 +20,14 @@ namespace Syncless.Tagging
             get { return _tagName; }
             set { this._tagName = value; }
         }
-
         public List<Filter> Filters
         {
             get { return _filters; }
         }
-
         public List<TaggedPath> PathList
         {
             get { return _pathList; }
         }
-
         public List<string> PathStringList
         {
             get
@@ -43,19 +40,16 @@ namespace Syncless.Tagging
                 return pathList;
             }
         }
-
         public long LastUpdated
         {
             get { return _lastupdated; }
             set { _lastupdated = value; }
         }
-
         public long Created
         {
             get { return _created; }
             set { _created = value; }
         }
-
         public bool IsSeamless
         {
             get { return _isSeamless; }
