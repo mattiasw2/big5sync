@@ -61,7 +61,7 @@ namespace SynclessUI
             path = (System.IO.Directory.Exists(path)) ? path : "";
 			var dlg1 = new Ionic.Utils.FolderBrowserDialogEx
 			{
-				Description = "Select the file/folder to tag",
+				Description = "Select the folder to tag",
 				ShowNewFolderButton = true,
 				ShowEditBox = true,
 			    NewStyle = true,

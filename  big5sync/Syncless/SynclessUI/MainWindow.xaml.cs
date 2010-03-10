@@ -488,6 +488,7 @@ namespace SynclessUI
 
         private bool RenameTag(String oldtagname, String newtagname)
         {
+            /*
             if (gui.RenameTag(oldtagname, newtagname))
             {
                 InitializeTagList();
@@ -505,6 +506,8 @@ namespace SynclessUI
 
                 return false;
             }
+            */
+            return true;
         }
 
         private void TagTitle_LostFocus(object sender, System.Windows.RoutedEventArgs e)
@@ -586,8 +589,10 @@ namespace SynclessUI
 		}
 		
 		private void ViewTagDetails() {
-        	TagDetailsWindow tdw = new TagDetailsWindow(_selectedTag, this);
-			tdw.ShowDialog();
+			if(_selectedTag != null) {
+				TagDetailsWindow tdw = new TagDetailsWindow(_selectedTag, this);
+				tdw.ShowDialog();
+			}
 		}
 		
     }

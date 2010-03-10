@@ -24,8 +24,7 @@ namespace SynclessUI
     {		
 		private MainWindow _main;
 		private string _tagname;
-        private List<Filter> currentfilters;
-        private List<string> filterlist;
+        private List<Filter> filters;
         
 		public TagDetailsWindow(string tagname, MainWindow main)
         {
@@ -33,32 +32,35 @@ namespace SynclessUI
 			_main = main;
 			_tagname = tagname;
 			LblTag_Details.Content = "Tag Details for " + _tagname;
-            //PopulateFilters();
+			filters = _main.gui.GetAllFilters(_tagname);
+			PopulateFilterStringList();
+			TxtBoxPattern.IsEnabled = false;
+			CmbBoxMode.IsEnabled = false;
+        }
+		
+        private void PopulateFilterStringList()
+        {
+            List<string> generatedFilterStringList = new List<string>();
+			
+			int i = 1;
+			
+            foreach (Filter f in filters)
+            {
+                if (f is ExtensionFilter)
+                {
+                    ExtensionFilter ef = (ExtensionFilter)f;
+                    generatedFilterStringList.Add(i + ". " + "[Ext.]" + ef.Pattern);
+                }
+				i++;
+            }
+
+            ListFilters.ItemsSource = null;
+			ListFilters.ItemsSource = generatedFilterStringList;
         }
 
-        private void PopulateFilters()
-        {
-            currentfilters = _main.gui.GetAllFilters(_tagname);
-            filterlist = new List<string>();
-            foreach (Filter f in currentfilters)
-            {
-                if(f is ExtensionFilter) {
-                    ExtensionFilter ef = (ExtensionFilter) f;
-                    filterlist.Add("[Extension] " + ef.Pattern);
-                }
-            }
-
-            ListFilters.ItemsSource = filterlist;
-
-            if (currentfilters.Count != 0)
-            {
-                ExtensionFilter ef = (ExtensionFilter) currentfilters[0];
-                TxtBoxPattern.Text = ef.Pattern;
-                if (ef.Mode == Syncless.Filters.FilterMode.INCLUDE)
-                    CmbBoxMode.SelectedIndex = 0;
-                else if (ef.Mode == Syncless.Filters.FilterMode.EXCLUDE)
-                    CmbBoxMode.SelectedItem = 1;
-            }
+        private void SelectFilter(Filter f) {
+            int index = filters.IndexOf(f);
+            ListFilters.SelectedIndex = index;
         }
 		
         private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -68,6 +70,7 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            bool result = _main.gui.UpdateFilterList(_tagname, filters);
 			this.Close();
         }
 		
@@ -78,14 +81,19 @@ namespace SynclessUI
 
 		private void BtnAddFilter_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-            ExtensionFilter ef = (ExtensionFilter) FilterFactory.CreateExtensionFilter("", Syncless.Filters.FilterMode.INCLUDE);
+            ExtensionFilter ef = (ExtensionFilter) FilterFactory.CreateExtensionFilter("*.*", Syncless.Filters.FilterMode.INCLUDE);
+            filters.Add(ef);
 
-            filterlist.Add("[Extension] " + ef.Pattern);
+            PopulateFilterStringList();
+            SelectFilter(ef);
 		}
 
 		private void BtnRemoveFilter_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-			// TODO: Add event handler implementation here.
+			int index = ListFilters.SelectedIndex;
+			filters.RemoveAt(index);
+			
+            PopulateFilterStringList();
 		}
 
 		private void TabItemFiltering_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -101,6 +109,50 @@ namespace SynclessUI
 		private void TabItemProperties_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 			SpecificFilterGrid.Visibility = System.Windows.Visibility.Hidden;
+		}
+
+		private void ListFilters_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+		{
+            int index = ListFilters.SelectedIndex;
+
+            if (index != -1)
+            {
+				TxtBoxPattern.IsEnabled = true;
+				CmbBoxMode.IsEnabled = true;
+				
+                Filter f = filters[index];
+                if (f is ExtensionFilter)
+                {
+                    ExtensionFilter ef = (ExtensionFilter) f;
+                    TxtBoxPattern.Text = ef.Pattern;
+                    if (ef.Mode == Syncless.Filters.FilterMode.INCLUDE)
+                        CmbBoxMode.SelectedIndex = 0;
+                    else if (ef.Mode == Syncless.Filters.FilterMode.EXCLUDE)
+                        CmbBoxMode.SelectedIndex = 1;
+                }
+            }
+		}
+
+		private void TxtBoxPattern_LostFocus(object sender, System.Windows.RoutedEventArgs e)
+		{
+			Filter f = filters[ListFilters.SelectedIndex];
+            if(f is ExtensionFilter) {
+				ExtensionFilter ef = (ExtensionFilter) f;
+				ef.Pattern = TxtBoxPattern.Text;
+			}
+		}
+
+		private void CmbBoxMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+		{
+            if (ListFilters.SelectedIndex != -1)
+            {
+                Filter f = filters[ListFilters.SelectedIndex];
+
+                if (CmbBoxMode.SelectedIndex == 0)
+                    f.Mode = Syncless.Filters.FilterMode.INCLUDE;
+                else if (CmbBoxMode.SelectedIndex == 1)
+                    f.Mode = Syncless.Filters.FilterMode.EXCLUDE;
+            }
 		}
     }
 }
