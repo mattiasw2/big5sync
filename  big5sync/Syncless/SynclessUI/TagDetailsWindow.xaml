@@ -151,7 +151,6 @@
 	<Grid x:Name="LayoutRoot" HorizontalAlignment="Center" VerticalAlignment="Center">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="20"/>
-			<ColumnDefinition Width="0"/>
 			<ColumnDefinition Width="600"/>
 			<ColumnDefinition Width="20"/>
 		</Grid.ColumnDefinitions>
@@ -173,7 +172,7 @@
 		</Rectangle>
 		<TextBlock Grid.Row="0" Margin="0" Padding="5" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Cursor="Hand" Grid.ColumnSpan="3"/>
 		<Label x:Name="LblTag_Details" Content="Tag Details" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Height="30" Grid.Row="1" Grid.Column="2" Margin="0"/>
-		<StackPanel x:Name="CommandPanel" Margin="0" Grid.Column="2" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+		<StackPanel x:Name="CommandPanel" Margin="0" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
 			<Button x:Name="BtnOk" IsDefault="True" Margin="0,0,5,0" Height="28" Click="BtnOk_Click">
 				<Label x:Name="LblOk" FontFamily="Century Gothic" FontSize="9.333" Content="Ok"/>
 			</Button>
@@ -183,7 +182,7 @@
 		</StackPanel>
 		
 		<!-- Set up the Central Pane -->
-		<Grid Grid.Column="2" Grid.Row="2" Margin="0,10" Background="Gray">
+		<Grid Grid.Column="1" Grid.Row="2" Margin="0,10" Background="Gray">
 		    <Grid.ColumnDefinitions>
 			    <ColumnDefinition Width="200"/>
 			    <ColumnDefinition Width="*"/>
@@ -209,7 +208,7 @@
 	                		<RowDefinition Height="*"/>
 	                	</Grid.RowDefinitions>
 	                    <Label Content="List of Filters" FontFamily="Century Gothic" FontSize="13.333" Foreground="#FFEEEEEE" Grid.RowSpan="3" Grid.ColumnSpan="2"/>
-	                    <ListBox x:Name="ListFilters" Margin="5" Grid.Row="1" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White" MaxHeight="155" Grid.ColumnSpan="2" SelectionChanged="ListFilters_SelectionChanged" ItemContainerStyle="{DynamicResource ListBoxItemStyle}"/>
+	                    <ListBox x:Name="ListFilters" Margin="5" Grid.Row="1" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White" MaxHeight="155" Grid.ColumnSpan="2" SelectionChanged="ListFilters_SelectionChanged" Style="{DynamicResource ListTaggedPathStyle}"/>
 	                	<StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="-2,0,5,0">
 	                		<Button x:Name="BtnAddFilter" Width="16" Height="16" Margin="0,0,2,0" Click="BtnAddFilter_Click">
 	                			<Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="Icons/plus-8.png" Stretch="None"/>
@@ -227,11 +226,11 @@
 	                <Grid/>
 	            </TabItem>
         	</TabControl>
-			<ScrollViewer Margin="0" Grid.Column="1" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+			<ScrollViewer Margin="0" Grid.Column="1" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Width="400" Height="280">
 				<Grid x:Name="SpecificFilterGrid">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="50"/>
-						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="60"/>
+						<ColumnDefinition/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="0.123*"/>
@@ -245,7 +244,7 @@
 					    <ComboBoxItem>Inclusion</ComboBoxItem>
 					    <ComboBoxItem>Exclusion</ComboBoxItem>
 					</ComboBox>
-					<TextBox x:Name="TxtBoxPattern" Margin="0,0,7.01666666666665,0" MaxLines="1" MaxWidth="330" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" FontSize="10.667" FontFamily="Century Gothic" LostFocus="TxtBoxPattern_LostFocus"/>
+					<TextBox x:Name="TxtBoxPattern" Margin="0" MaxLines="1" MaxWidth="330" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" FontSize="10.667" FontFamily="Century Gothic" LostFocus="TxtBoxPattern_LostFocus" HorizontalAlignment="Left" Width="300"/>
 				</Grid>
 			</ScrollViewer>
 		</Grid>
