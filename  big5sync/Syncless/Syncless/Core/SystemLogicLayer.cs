@@ -416,12 +416,12 @@ namespace Syncless.Core
 
         public bool AddFilter(String tagname, Filter filter)
         {
-            return null;
+            return true;
         }
 
         public bool RemoveFilter(String tagname, Filter filer)
         {
-            return null;
+            return true;
         }
 
         public List<Filter> GetAllFilters(String tagname)
