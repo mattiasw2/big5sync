@@ -60,6 +60,7 @@ namespace CompareAndSync.Visitor
                         DeleteFolder(folder, currentPaths, maxPriorityPos);
                         break;
                     case MetaChangeType.New:
+                    //case MetaChangeType.NoChange:
                         CreateFolder(folder, currentPaths, maxPriorityPos);
                         break;
                 }

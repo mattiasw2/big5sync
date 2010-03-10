@@ -143,7 +143,7 @@ namespace CompareAndSync.Visitor
 
             for (int i = 0; i < currentPaths.Length; i++)
             {
-                if (file.Priority[i] != file.Priority[mostUpdatedPos])
+                if (file.Exists[i] && file.Priority[i] != file.Priority[mostUpdatedPos])
                 {
                     file.Parent.Dirty = true;
                     break;
