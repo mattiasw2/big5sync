@@ -58,7 +58,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="PresentationFramework.Aero">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework.Classic">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -88,8 +93,8 @@
     <Reference Include="WPFAutoCompleteBox.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TagDetails.xaml.cs">
-      <DependentUpon>TagDetails.xaml</DependentUpon>
+    <Compile Include="TagDetailsWindow.xaml.cs">
+      <DependentUpon>TagDetailsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SynclessApplication.cs" />
     <Compile Include="Helper\RegistryHelper.cs" />
@@ -142,7 +147,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="TagDetails.xaml">
+    <Page Include="TagDetailsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -173,6 +178,10 @@
     <Resource Include="Icons\explorer.ico" />
     <Resource Include="Icons\filter.ico" />
     <Resource Include="Icons\folder.ico" />
+    <Resource Include="Icons\minus-8.png" />
+    <Resource Include="Icons\plus-8.png" />
+    <Resource Include="Icons\plus.gif" />
+    <Resource Include="Icons\minus.gif" />
     <Resource Include="Icons\logo.ico" />
     <Resource Include="Icons\max.ico" />
     <Resource Include="Icons\min.ico" />

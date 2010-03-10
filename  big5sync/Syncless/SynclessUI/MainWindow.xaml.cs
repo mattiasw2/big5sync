@@ -574,5 +574,11 @@ namespace SynclessUI
         }
 
         #endregion
+		
+		private void BtnDetails_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+        	TagDetailsWindow tdw = new TagDetailsWindow(this);
+			tdw.ShowDialog();
+        }
     }
 }
