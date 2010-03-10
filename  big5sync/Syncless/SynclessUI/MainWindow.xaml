@@ -101,7 +101,7 @@
 			<TextBox IsReadOnly="True" x:Name="TagTitle" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Foreground="#FFEEEEEE" FontSize="16" Text="Select a Tag" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Margin="1,0,20.4,0" Padding="10,5,0,0" Background="{x:Null}" Width="331" KeyDown="TagTitleOnKeyDownHandler" LostFocus="TagTitle_LostFocus"/>
 			
 			<!-- Tag General Details -->
-			<Image x:Name="TagIcon" Source="Icons\folder.ico" HorizontalAlignment="Right" Margin="0,0,-5,0" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="3" VerticalAlignment="Top" d:LayoutOverrides="HorizontalMargin" Grid.ColumnSpan="2"/>
+			<Image x:Name="TagIcon" Source="Icons\folder.ico" HorizontalAlignment="Right" Margin="0,0,-5,0" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="3" VerticalAlignment="Top" d:LayoutOverrides="HorizontalMargin" Grid.ColumnSpan="2" Cursor="Hand" MouseDown="TagIcon_MouseDown"/>
 			
 			<!-- Tag Status Panel -->
 			<StackPanel x:Name="TagStatusPanel" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Bottom" Grid.ColumnSpan="2">

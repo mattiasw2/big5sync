@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using Ionic.Utils;
 using System.IO;
 using Syncless.Core;
+using Syncless.Filters;
 
 namespace SynclessUI
 {
@@ -22,11 +23,42 @@ namespace SynclessUI
     public partial class TagDetailsWindow : Window
     {		
 		private MainWindow _main;
+		private string _tagname;
+        private List<Filter> currentfilters;
+        private List<string> filterlist;
         
-		public TagDetailsWindow(MainWindow main)
+		public TagDetailsWindow(string tagname, MainWindow main)
         {
             InitializeComponent();
 			_main = main;
+			_tagname = tagname;
+			LblTag_Details.Content = "Tag Details for " + _tagname;
+            //PopulateFilters();
+        }
+
+        private void PopulateFilters()
+        {
+            currentfilters = _main.gui.GetAllFilters(_tagname);
+            filterlist = new List<string>();
+            foreach (Filter f in currentfilters)
+            {
+                if(f is ExtensionFilter) {
+                    ExtensionFilter ef = (ExtensionFilter) f;
+                    filterlist.Add("[Extension] " + ef.Pattern);
+                }
+            }
+
+            ListFilters.ItemsSource = filterlist;
+
+            if (currentfilters.Count != 0)
+            {
+                ExtensionFilter ef = (ExtensionFilter) currentfilters[0];
+                TxtBoxPattern.Text = ef.Pattern;
+                if (ef.Mode == Syncless.Filters.FilterMode.INCLUDE)
+                    CmbBoxMode.SelectedIndex = 0;
+                else if (ef.Mode == Syncless.Filters.FilterMode.EXCLUDE)
+                    CmbBoxMode.SelectedItem = 1;
+            }
         }
 		
         private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -46,9 +78,9 @@ namespace SynclessUI
 
 		private void BtnAddFilter_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-			List<string> source = new List<string>();
-			source.Add("Test");
-			ListFilters.ItemsSource = source;
+            ExtensionFilter ef = (ExtensionFilter) FilterFactory.CreateExtensionFilter("", Syncless.Filters.FilterMode.INCLUDE);
+
+            filterlist.Add("[Extension] " + ef.Pattern);
 		}
 
 		private void BtnRemoveFilter_Click(object sender, System.Windows.RoutedEventArgs e)

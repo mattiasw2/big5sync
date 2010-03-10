@@ -513,55 +513,11 @@ namespace Syncless.Core
             throw new NotImplementedException();
         }
 
-        public bool AddFilter(String tagname, Filter filter)
+        public bool UpdateFilterList(string tagname, List<Filter> filterlist)
         {
-            try
-            {
-                try
-                {
-                    TaggingLayer.Instance.AddFilter(tagname, filter);
-                }
-                catch (TagAlreadyExistsException taee)
-                {
-                    throw taee;
-                }
-                catch (TagNotFoundException tnfe)
-                {
-                    throw tnfe;
-                }
-            }
-            catch (Exception e)
-            {
-                ExceptionHandler.Handle(e);
-                throw new UnhandledException(e);
-            }
             return true;
         }
 
-        public bool RemoveFilter(String tagname, Filter filter)
-        {
-            try
-            {
-                try
-                {
-                    TaggingLayer.Instance.RemoveFilter(tagname, filter);
-                }
-                catch (TagNotFoundException tnfe)
-                {
-                    throw tnfe;
-                }
-                catch (FilterAlreadyExistException faee)
-                {
-                    throw faee;
-                }
-            }
-            catch (Exception e)
-            {
-                ExceptionHandler.Handle(e);
-                throw new UnhandledException(e);
-            }
-            return true;
-        }
 
         public List<Filter> GetAllFilters(String tagname)
         {
