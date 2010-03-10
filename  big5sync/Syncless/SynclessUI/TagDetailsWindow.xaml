@@ -171,7 +171,7 @@
 			</Rectangle.Fill>
 		</Rectangle>
 		<TextBlock Grid.Row="0" Margin="0" Padding="5" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Cursor="Hand" Grid.ColumnSpan="3"/>
-		<Label x:Name="LblTag_Details" Content="Tag Details" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Height="30" Grid.Row="1" Grid.Column="2" Margin="0"/>
+		<Label x:Name="LblTag_Details" Content="Tag Details" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Height="30" Grid.Row="1" Grid.Column="1" Margin="0"/>
 		<StackPanel x:Name="CommandPanel" Margin="0" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
 			<Button x:Name="BtnOk" IsDefault="True" Margin="0,0,5,0" Height="28" Click="BtnOk_Click">
 				<Label x:Name="LblOk" FontFamily="Century Gothic" FontSize="9.333" Content="Ok"/>
@@ -244,7 +244,7 @@
 					    <ComboBoxItem>Inclusion</ComboBoxItem>
 					    <ComboBoxItem>Exclusion</ComboBoxItem>
 					</ComboBox>
-					<TextBox x:Name="TxtBoxPattern" Margin="0" MaxLines="1" MaxWidth="330" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" FontSize="10.667" FontFamily="Century Gothic" LostFocus="TxtBoxPattern_LostFocus" HorizontalAlignment="Left" Width="300"/>
+					<TextBox x:Name="TxtBoxPattern" Margin="0" MaxLines="1" MaxWidth="330" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" FontSize="10.667" FontFamily="Century Gothic" LostFocus="TxtBoxPattern_LostFocus" HorizontalAlignment="Left" Width="320"/>
 				</Grid>
 			</ScrollViewer>
 		</Grid>
