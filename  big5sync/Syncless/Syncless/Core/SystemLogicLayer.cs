@@ -293,7 +293,10 @@ namespace Syncless.Core
                 List<string> tagNames = new List<string>();
                 foreach (Tag t in TagList)
                 {
-                    tagNames.Add(t.TagName);
+                    if (!t.IsDeleted)
+                    {
+                        tagNames.Add(t.TagName);
+                    }
                 }
                 tagNames.Sort();
                 return tagNames;
