@@ -415,7 +415,20 @@ namespace Syncless.Core
 
         public bool UpdateFilterList(string tagname, List<Filter> filterlist)
         {
-            return true;
+            try
+            {
+                TaggingLayer.Instance.UpdateFilter(tagname, filterlist);
+                return true;
+            }
+            catch (TagNotFoundException tnfe)
+            {
+                throw tnfe;
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
+            }
         }
 
 

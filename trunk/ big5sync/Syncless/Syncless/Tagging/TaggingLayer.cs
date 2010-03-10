@@ -265,69 +265,16 @@ namespace Syncless.Tagging
             }
             return noOfPath;
         }
-
-        /// <summary>
-        /// Add in a Filter object to the Tag of tagname
-        /// </summary>
-        /// <param name="tagname">The name of the Tag where the Filter object is to be added</param>
-        /// <param name="filter">The Filter object to be added</param>
-        /// <returns>The Tag object where the Filter object is added to</returns>
-        public Tag AddFilter(string tagname, Filter filter)
+        public void UpdateFilter(string tagname, List<Filter> newFilterList)
         {
-            CurrentTime updated = new CurrentTime();
             Tag tag = GetTag(tagname);
-            if (tag != null)
+            if (tag == null)
             {
-                if (!tag.Filters.Contains(filter))
-                {
-                    tag.AddFilter(filter, updated.CurrentTimeLong);
-                    UpdateTaggingProfileDate(updated.CurrentTimeLong);
-                }
-                else
-                {
-                    throw new FilterAlreadyExistException(filter);
-                }
-                TaggingHelper.Logging(LogMessage.FILTER_ADDED, tagname);
-                return tag;
-            }
-            else
-            {
-                TaggingHelper.Logging(LogMessage.FILTER_NOT_ADDED, tagname);
                 throw new TagNotFoundException(tagname);
             }
-        }
+            tag.Filters = newFilterList;
 
-        /// <summary>
-        /// Remove the Filter object from the Tag of tagname
-        /// </summary>
-        /// <param name="tagname">The name of the Tag where the Filter object is to be removed from</param>
-        /// <param name="filter">The Filter object to be removed</param>
-        /// <returns>The Tag object where the Filter object is removed from</returns>
-        public Tag RemoveFilter(string tagname, Filter filter)
-        {
-            CurrentTime updated = new CurrentTime();
-            Tag tag = GetTag(tagname);
-            if (tag != null)
-            {
-                if (tag.Filters.Contains(filter))
-                {
-                    tag.RemoveFilter(filter, updated.CurrentTimeLong);
-                    UpdateTaggingProfileDate(updated.CurrentTimeLong);
-                }
-                else
-                {
-                    throw new FilterNotExistException(filter);
-                }
-                TaggingHelper.Logging(LogMessage.FILTER_REMOVED, tagname);
-                return tag;
-            }
-            else
-            {
-                TaggingHelper.Logging(LogMessage.FILTER_NOT_REMOVED, tagname);
-                throw new TagNotFoundException(tagname);
-            }
         }
-
         /// <summary>
         /// Rename a path in all the Tags it is tagged to
         /// </summary>
