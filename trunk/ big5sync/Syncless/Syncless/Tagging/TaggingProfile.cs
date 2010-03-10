@@ -46,6 +46,15 @@ namespace Syncless.Tagging
             _lastUpdated = created;
         }
 
+        public void AddTag(Tag tag)
+        {
+            if (!Contains(tag.TagName))
+            {
+                _tagList.Add(tag);
+                _lastUpdated = TaggingHelper.GetCurrentTime();
+            }
+        }
+
         public Tag FindTag(string tagname)
         {
             foreach (Tag tag in _tagList)
