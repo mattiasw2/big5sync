@@ -36,8 +36,24 @@ namespace Syncless.CompareAndSync
 
         private static bool IsFolder(string sourceName, string sourceParent, List<string> destinations)
         {
-
             bool result = false;
+            string destTest;
+
+            for (int i = 0; i < destinations.Count; i++)
+            {
+                destTest = Path.Combine(destinations[0], sourceName);
+                if (Directory.Exists(destTest))
+                {
+                    result = true;
+                    break;
+                }
+                else if (File.Exists(destTest))
+                {
+                    result = false;
+                    break;
+                }
+            }
+
             return result;
         }
     }
