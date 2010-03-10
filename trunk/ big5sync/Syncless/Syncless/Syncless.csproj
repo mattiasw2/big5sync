@@ -53,6 +53,7 @@
     <Compile Include="CompareAndSync\XMLWriteObject.cs" />
     <Compile Include="Core\Conflict\Conflict.cs" />
     <Compile Include="Core\Conflict\ConflictQueue.cs" />
+    <Compile Include="Core\ExceptionHandler.cs" />
     <Compile Include="Core\Exceptions\InvalidPathException.cs" />
     <Compile Include="Core\Exceptions\UnhandledException.cs" />
     <Compile Include="Core\IUIInterface.cs" />
