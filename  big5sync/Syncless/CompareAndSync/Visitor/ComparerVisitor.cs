@@ -140,6 +140,15 @@ namespace CompareAndSync.Visitor
                     file.Priority[i] = file.Priority[mostUpdatedPos];
                 }
             }
+
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                if (file.Priority[i] != file.Priority[mostUpdatedPos])
+                {
+                    file.Parent.Dirty = true;
+                    break;
+                }
+            }
         }
 
         #endregion
@@ -156,14 +165,12 @@ namespace CompareAndSync.Visitor
             //Delete will only occur if none of the folders are marked as dirty
             List<int> deletePos = new List<int>();
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            if (!folder.Dirty)
             {
-                if (folder.ChangeType[i] == MetaChangeType.Delete)
-                    deletePos.Add(i);
-                else if (folder.Dirty) //Old code: folder.ChangeType[i] != MetaChangeType.NoChange
+                for (int i = 0; i < currentPaths.Length; i++)
                 {
-                    deletePos.Clear();
-                    break;
+                    if (folder.ChangeType[i] == MetaChangeType.Delete)
+                        deletePos.Add(i);
                 }
             }
 

@@ -48,7 +48,7 @@ namespace CompareAndSync
                 {
                     //TO BE REMOVED
                     if (o.Name != ".syncless")
-                        PreTraverseFolder((FolderCompareObject)o, newCurrentPath, visitor);
+                        TraverseFolderHelper((FolderCompareObject)o, newCurrentPath, visitor, type);
                 }
                 else
                 {
@@ -77,7 +77,7 @@ namespace CompareAndSync
                 {
                     //TO BE REMOVED (HANDLE USING FILTERS)
                     if (o.Name != ".syncless")
-                        PreTraverseFolder((FolderCompareObject)o, newCurrentPath, visitor);
+                        TraverseFolderHelper((FolderCompareObject)o, newCurrentPath, visitor, type);
                 }
                 else
                 {
