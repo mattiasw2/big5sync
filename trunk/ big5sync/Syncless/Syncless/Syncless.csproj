@@ -54,6 +54,7 @@
     <Compile Include="CompareAndSync\CompareObject\FileCompareObject.cs" />
     <Compile Include="CompareAndSync\CompareObject\FolderCompareObject.cs" />
     <Compile Include="CompareAndSync\CompareObject\RootCompareObject.cs" />
+    <Compile Include="CompareAndSync\Enum\AutoSyncRequestType.cs" />
     <Compile Include="CompareAndSync\Enum\FinalState.cs" />
     <Compile Include="CompareAndSync\Enum\MetaChangeType.cs" />
     <Compile Include="CompareAndSync\Enum\ToDo.cs" />
@@ -71,6 +72,8 @@
     <Compile Include="CompareAndSync\Visitor\ComparerVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\IVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\SyncerVisitor.cs" />
+    <Compile Include="CompareAndSync\Visitor\TodoXMLReader.cs" />
+    <Compile Include="CompareAndSync\Visitor\TodoXMLWriterVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\XMLMetadataVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\XMLWriterVisitor.cs" />
     <Compile Include="Core\Conflict\Conflict.cs" />
