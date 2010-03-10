@@ -111,7 +111,7 @@ namespace Syncless.CompareAndSync.Visitor
         private void UpdateLastModifiedTime(XmlDocument xmlDoc)
         {
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + LAST_MODIFIED);
-            node.InnerText = "3333333333333333333";
+            node.InnerText = DateTime.Now.Ticks.ToString();
         }
 
         private string getFolderString(string filePath)
