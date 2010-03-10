@@ -38,18 +38,27 @@ namespace CompareAndSync.Visitor
             for (int i = 0; i < currentPaths.Length; i++)
             {
                 if (file.Exists[i] && !file.MetaExists[i])
-                    file.ChangeType[i] = MetaChangeType.New; //Possible rename
+                {
+                    file.ChangeType[i] = MetaChangeType.New; //Possible rename/move
+                    file.Parent.ChangeType[i] = MetaChangeType.Dirty; //Experimental
+                }
                 else if (!file.Exists[i] && file.MetaExists[i])
-                    file.ChangeType[i] = MetaChangeType.Delete; //Possible rename
+                    file.ChangeType[i] = MetaChangeType.Delete; //Possible rename/move
                 else if (file.Exists[i] && file.MetaExists[i])
                 {
                     if (file.Length[i] != file.MetaLength[i] || file.Hash[i] != file.MetaHash[i])
+                    {
                         file.ChangeType[i] = MetaChangeType.Update;
+                        file.Parent.ChangeType[i] = MetaChangeType.Dirty; //Experimental
+                    }
                     else
                         file.ChangeType[i] = MetaChangeType.NoChange;
                 }
                 else
+                {
                     file.ChangeType[i] = null;
+                    file.Parent.ChangeType[i] = MetaChangeType.Dirty; //Experimental
+                }
             }
         }
 
@@ -62,12 +71,12 @@ namespace CompareAndSync.Visitor
                 if (file.ChangeType[i] == MetaChangeType.Delete)
                 {
                     f = file.Parent.GetIdenticalFile(file.MetaHash[i], file.MetaCreationTime[i]);
-
-                    //Check that f is New for EXACTLY one i and that they have the same filecreation date
+                    
                     if (f != null)
                     {
                         int counter = 0;
 
+                        //Check that f is MetaChangeType.New for exactly one i
                         for (int j = 0; j < f.ChangeType.Length; j++)
                         {
                             if (f.ChangeType[i] == MetaChangeType.New)
@@ -87,7 +96,7 @@ namespace CompareAndSync.Visitor
 
         private void CompareFiles(FileCompareObject file, string[] currentPaths)
         {
-            //Delete will only occur if all other changes are NoChange
+            //Delete will only occur if all other changes are MetaChangeType.NoChange
             List<int> deletePos = new List<int>();
 
             for (int i = 0; i < currentPaths.Length; i++)
@@ -108,7 +117,7 @@ namespace CompareAndSync.Visitor
                 return;
             }
 
-            //Rename will only occur if all other changes are NoChange
+            //Rename will only occur if all other changes are MetaChangeType.NoChange
             int renamePos = -1;
 
             for (int i = 0; i < currentPaths.Length; i++)
@@ -128,17 +137,14 @@ namespace CompareAndSync.Visitor
                 return;
             }
 
-            //Update and create handled in the same way
-            //Rename is handled in a weird way, think about it later
-            int mostUpdatedPos = 0, initialPos = 0;
-            //bool diff = false;            
+            //Update/Create handled in a similar way
+            int mostUpdatedPos = 0;           
 
             for (int i = 0; i < currentPaths.Length; i++)
             {
                 if (file.Exists[i])
                 {
                     mostUpdatedPos = i;
-                    initialPos = i;
                     break;
                 }
             }
@@ -177,9 +183,9 @@ namespace CompareAndSync.Visitor
             for (int i = 0; i < currentPaths.Length; i++)
             {
                 if (folder.Exists[i] && !folder.MetaExists[i])
-                    folder.ChangeType[i] = MetaChangeType.New; //Possible rename
+                    folder.ChangeType[i] = MetaChangeType.New; //Possible rename/move
                 else if (!folder.Exists[i] && folder.MetaExists[i])
-                    folder.ChangeType[i] = MetaChangeType.Delete; //Possible rename
+                    folder.ChangeType[i] = MetaChangeType.Delete; //Possible rename/move
                 else if (folder.Exists[i] && folder.MetaExists[i])
                     folder.ChangeType[i] = MetaChangeType.NoChange;
                 else
@@ -189,14 +195,14 @@ namespace CompareAndSync.Visitor
 
         private void CompareFolders(FolderCompareObject folder, string[] currentPaths)
         {
-            //Delete will only occur if all other changes are NoChange
+            //Delete will only occur if none of the folders are marked as dirty
             List<int> deletePos = new List<int>();
 
             for (int i = 0; i < currentPaths.Length; i++)
             {
                 if (folder.ChangeType[i] == MetaChangeType.Delete)
                     deletePos.Add(i);
-                else if (folder.ChangeType[i] != MetaChangeType.NoChange)
+                else if (folder.ChangeType[i] == MetaChangeType.Dirty) //Old code: != MetaChangeType.NoChange
                 {
                     deletePos.Clear();
                     break;
@@ -210,17 +216,13 @@ namespace CompareAndSync.Visitor
                 return;
             }
 
-            //Update and create handled in the same way
-            //Rename is handled in a weird way, think about it later
-            int mostUpdatedPos = 0, initialPos = 0;
-            //bool diff = false;
+            int mostUpdatedPos = 0;
 
             for (int i = 0; i < currentPaths.Length; i++)
             {
                 if (folder.Exists[i])
                 {
                     mostUpdatedPos = i;
-                    initialPos = i;
                     break;
                 }
             }
