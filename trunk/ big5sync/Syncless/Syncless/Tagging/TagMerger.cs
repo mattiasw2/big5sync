@@ -10,6 +10,11 @@ namespace Syncless.Tagging
         public static int MergeProfile(TaggingProfile currentProfile, TaggingProfile newProfile)
         {
             int updateCount = 0;
+            if (currentProfile == null || newProfile == null)
+            {
+                
+                return 0;
+            }
             if (!currentProfile.ProfileName.Equals(newProfile.ProfileName))
             {
                 return -1;
