@@ -314,7 +314,7 @@ namespace Syncless.Tagging
             foreach (TaggedPath path in pathList)
             {
                 XmlElement taggedFolderElement = CreateTaggedFolderElement(xmlDoc, path);
-                taggedFolderElement.AppendChild(taggedFolderElement);
+                foldersElement.AppendChild(taggedFolderElement);
             }
             return foldersElement;
         }
