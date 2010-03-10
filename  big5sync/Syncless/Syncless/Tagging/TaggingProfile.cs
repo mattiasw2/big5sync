@@ -40,10 +40,11 @@ namespace Syncless.Tagging
         }
 
 
-        public TaggingProfile()
+        public TaggingProfile(long created)
         {
             _tagList = new List<Tag>();
-           
+            _created = created;
+            _lastUpdated = created;
         }
     }
 }

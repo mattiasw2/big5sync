@@ -19,7 +19,10 @@ namespace Syncless.Tagging
         internal static string PATH_NOT_FOUND_IN_TAG = "Path \'{0}\' not found in tag \'{1}\'.";
         internal static string PATH_ALREADY_EXISTS_IN_TAG = "Path \'{0}\' already exists in tag \'{1}\'.";
         internal static string RECURSIVE_DIRECTORY = "Attempt to tag parent/sub directory \'{0}\' of existing directory.";
-
+        internal static string FILTER_ADDED = "Filter added to tag \'{0}\'.";
+        internal static string FILTER_REMOVED = "Filter removed from tag \'{0}\'.";
+        internal static string FILTER_NOT_ADDED = "Filter cannot be added to tag \'{0}\'.";
+        internal static string FILTER_NOT_REMOVED = "Filter cannot be removed from tag \'{0}\'.";
         internal static string PATH_NOT_FOUND = "Path \'{0}\' does not exist.";
         internal static string PATH_ALREADY_EXISTS = "Path \'{0}\' already exists.";
     }
