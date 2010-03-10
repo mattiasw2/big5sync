@@ -14,6 +14,7 @@ namespace Syncless.CompareAndSync.Request
         public ManualRequest(string[] paths, string[] unavailablePaths, List<Filter> filters)
         {
             _paths = paths;
+            _unavailablePaths = unavailablePaths;
             _filters = filters;
         }
 
