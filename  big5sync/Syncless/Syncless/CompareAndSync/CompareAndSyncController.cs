@@ -51,7 +51,7 @@ namespace Syncless.CompareAndSync
 
         public void Sync(AutoSyncRequest request)
         {
-            SeamlessSyncer.Sync(request.Source, request.DestinationFolders, request.IsFolder, request.ChangeType);
+            SeamlessSyncer.Sync(request.SourceName, request.SourceParent, request.DestinationFolders, request.IsFolder, request.ChangeType);
         }
 
     }

@@ -9,27 +9,33 @@ namespace Syncless.CompareAndSync.Request
     public class AutoSyncRequest : Request
     {
 
-        private string _source;
+        private string _sourceName, _sourceParent;
         private List<string> _destinations;
         private AutoSyncRequestType? _requestType;
         private bool? _isFolder;
 
-        public AutoSyncRequest(string source, List<string> destinations, AutoSyncRequestType requestType)
+        public AutoSyncRequest(string sourceName, string sourceParent, List<string> destinations, AutoSyncRequestType requestType)
         {
-            _source = source;
+            _sourceName = sourceName;
+            _sourceParent = sourceParent;
             _destinations = destinations;
             _requestType = requestType;
         }
 
-        public AutoSyncRequest(string sourceFile, List<string> destinations, bool? isFolder, AutoSyncRequestType requestType)
-            : this(sourceFile, destinations, requestType)
+        public AutoSyncRequest(string sourceName, string sourceParent, List<string> destinations, bool? isFolder, AutoSyncRequestType requestType)
+            : this(sourceName, sourceFullPath, destinations, requestType)
         {
             _isFolder = isFolder;
         }
 
-        public string Source
+        public string SourceName
         {
-            get { return _source; }
+            get { return _sourceName; }
+        }
+
+        public string SourceParent
+        {
+            get { return _sourceParent; }
         }
 
         public List<string> DestinationFolders
