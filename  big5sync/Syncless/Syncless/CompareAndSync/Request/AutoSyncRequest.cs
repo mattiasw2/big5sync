@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Syncless.CompareAndSync.Result
+namespace Syncless.CompareAndSync.Request
 {
-    class Result
+    public class AutoSyncRequest
     {
     }
 }
