@@ -209,7 +209,7 @@
 	                		<RowDefinition Height="*"/>
 	                	</Grid.RowDefinitions>
 	                    <Label Content="List of Filters" FontFamily="Century Gothic" FontSize="13.333" Foreground="#FFEEEEEE" Grid.RowSpan="3" Grid.ColumnSpan="2"/>
-	                    <ListBox x:Name="ListFilters" Margin="5" Grid.Row="1" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White" MaxHeight="155" Grid.ColumnSpan="2" SelectionChanged="ListFilters_SelectionChanged" IsSynchronizedWithCurrentItem="False"/>
+	                    <ListBox x:Name="ListFilters" Margin="5" Grid.Row="1" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White" MaxHeight="155" Grid.ColumnSpan="2" SelectionChanged="ListFilters_SelectionChanged" ItemContainerStyle="{DynamicResource ListBoxItemStyle}"/>
 	                	<StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="-2,0,5,0">
 	                		<Button x:Name="BtnAddFilter" Width="16" Height="16" Margin="0,0,2,0" Click="BtnAddFilter_Click">
 	                			<Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="Icons/plus-8.png" Stretch="None"/>
@@ -227,7 +227,7 @@
 	                <Grid/>
 	            </TabItem>
         	</TabControl>
-			<ScrollViewer Margin="5,3,5,10" Grid.Column="1" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+			<ScrollViewer Margin="0" Grid.Column="1" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
 				<Grid x:Name="SpecificFilterGrid">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="50"/>
@@ -241,11 +241,11 @@
 					<Label Grid.Row="0" Foreground="#FFEEEEEE" FontFamily="Century Gothic" FontSize="18.667" Content="Filter Properties" Grid.ColumnSpan="2"/>
 					<Label Content="Ext Mask:" Width="60" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"/>
 					<Label Content="Mode:" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE" Grid.Row="2" Grid.Column="0" Margin="0,5,0,0" HorizontalAlignment="Right"/>
-					<ComboBox x:Name="CmbBoxMode" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedIndex="0" FontFamily="Century Gothic" FontSize="10.667" Margin="0,7,0,0" Grid.Column="1" SelectionChanged="CmbBoxMode_SelectionChanged">
+					<ComboBox x:Name="CmbBoxMode" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Century Gothic" FontSize="10.667" Margin="0,7,0,0" Grid.Column="1" SelectionChanged="CmbBoxMode_SelectionChanged" Width="75" MaxWidth="75">
 					    <ComboBoxItem>Inclusion</ComboBoxItem>
 					    <ComboBoxItem>Exclusion</ComboBoxItem>
 					</ComboBox>
-					<TextBox x:Name="TxtBoxPattern" Margin="0" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" FontSize="10.667" FontFamily="Century Gothic" LostFocus="TxtBoxPattern_LostFocus"/>
+					<TextBox x:Name="TxtBoxPattern" Margin="0,0,7.01666666666665,0" MaxLines="1" MaxWidth="330" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" FontSize="10.667" FontFamily="Century Gothic" LostFocus="TxtBoxPattern_LostFocus"/>
 				</Grid>
 			</ScrollViewer>
 		</Grid>
