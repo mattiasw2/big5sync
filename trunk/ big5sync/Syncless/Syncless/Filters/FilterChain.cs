@@ -21,6 +21,19 @@ namespace Syncless.Filters
 
             return outputList;
         }
+        /// <summary>
+        /// Check if a Path pass thru the filter
+        /// </summary>
+        /// <param name="filters">the list of filters</param>
+        /// <param name="path">the path to filter</param>
+        /// <returns></returns>
+        public virtual bool ApplyFilter(List<Filter> filters, string path)
+        {
+            List<string> temp = new List<string>();
+            temp.Add(path);
+            List<string> outputList = ApplyFilter(filters, temp);
+            return outputList.Count>0;
+        }
 
         #region private methods
         private List<Filter>[] Split(List<Filter> filters)
