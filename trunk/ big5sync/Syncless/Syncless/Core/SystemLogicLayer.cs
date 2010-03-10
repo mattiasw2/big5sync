@@ -414,12 +414,12 @@ namespace Syncless.Core
             throw new NotImplementedException();
         }
 
-        public Filter AddFilter(String tagname)
+        public bool AddFilter(String tagname, Filter filter)
         {
             return null;
         }
 
-        public Filter RemoveFilter(String tagname)
+        public bool RemoveFilter(String tagname, Filter filer)
         {
             return null;
         }
