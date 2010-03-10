@@ -68,6 +68,7 @@ namespace CompareAndSync.Visitor
                 writer.WriteStartDocument();
                 writer.WriteStartElement("meta-data");
                 writer.WriteElementString("last_modified", (DateTime.Now.Ticks).ToString());
+                writer.WriteElementString(NODE_NAME,GetLastFileIndex(path));
                 writer.WriteEndElement();
                 writer.WriteEndDocument();
                 writer.Flush();
@@ -124,6 +125,19 @@ namespace CompareAndSync.Visitor
                     folderPath = splitWords[i];
                 else
                     folderPath = folderPath + "\\" + splitWords[i];
+            }
+
+            return folderPath;
+        }
+
+        private string GetLastFileIndex(string filePath)
+        {
+            string[] splitWords = filePath.Split('\\');
+            string folderPath = "";
+            for (int i = 0; i < splitWords.Length; i++)
+            {
+                if (i == splitWords.Length - 1)
+                    return splitWords[i];
             }
 
             return folderPath;
@@ -246,7 +260,7 @@ namespace CompareAndSync.Visitor
 
         private void DoFolderCleanUp(XmlDocument xmlDoc, string name)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name_of_folder='" + name + "']");
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + name + "']");
             if (node == null)
                 return;
             node.ParentNode.RemoveChild(node);
@@ -302,7 +316,7 @@ namespace CompareAndSync.Visitor
         {
             DoFolderCleanUp(xmlDoc, folder.Name);
             XmlText nameText = xmlDoc.CreateTextNode(folder.Name);
-            XmlElement nameOfFolder = xmlDoc.CreateElement(NAME_OF_FOLDER);
+            XmlElement nameOfFolder = xmlDoc.CreateElement(NODE_NAME);
             XmlElement nameElement = xmlDoc.CreateElement(FOLDER);
             nameOfFolder.AppendChild(nameText);
             nameElement.AppendChild(nameOfFolder);
@@ -312,7 +326,7 @@ namespace CompareAndSync.Visitor
 
         private void DeleteFolderObject(XmlDocument xmlDoc, FolderCompareObject folder)
         {
-           XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name_of_folder='" + folder.Name + "']");
+           XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
            if (node == null)
                return;
            node.ParentNode.RemoveChild(node);
