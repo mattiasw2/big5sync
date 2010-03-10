@@ -90,6 +90,13 @@ namespace Syncless.Tagging
                 _taggingProfile = TaggingXMLHelper.LoadFrom(profileFilePath);
                 Debug.Assert(_taggingProfile != null);
             }
+            for (int i = 1; i < paths.Count; i++)
+            {
+                if(File.Exists(paths[i])){
+                    TaggingProfile profile = TaggingXMLHelper.LoadFrom(paths[i]);
+                    int updateCount = TagMerger.MergeProfile(_taggingProfile, profile);
+                }
+            }
         }
 
         #region Tag public implementations

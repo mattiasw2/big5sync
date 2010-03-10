@@ -143,7 +143,7 @@ namespace Syncless.Core
             {
                 try
                 {
-                    Tag t = TaggingLayer.Instance.RemoveTag(tagname);
+                    Tag t = TaggingLayer.Instance.DeleteTag(tagname);
                     return t != null;
                 }
                 catch (TagNotFoundException te)
@@ -480,7 +480,7 @@ namespace Syncless.Core
         #endregion
         #region private methods
 
-        private bool MonitorTag(Tag tag, bool mode)
+        public bool MonitorTag(Tag tag, bool mode)
         {
             tag.IsSeamless = mode;
             List<string> pathList = new List<string>();
@@ -555,5 +555,17 @@ namespace Syncless.Core
 
         #endregion
 
+
+        #region For TargerMerger
+        public void AddTagPath(Tag tag, TaggedPath path)
+        {
+
+        }
+        public void RemoveTagPath(Tag tag, TaggedPath path)
+        {
+
+        }
+
+        #endregion
     }
 }
