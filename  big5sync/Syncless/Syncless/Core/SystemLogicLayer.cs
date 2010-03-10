@@ -15,6 +15,7 @@ using Syncless.Profiling;
 using Syncless.Logging;
 using Syncless.Core.Exceptions;
 using Syncless.Helper;
+using Syncless.Filters;
 namespace Syncless.Core
 {
     internal class SystemLogicLayer :IUIControllerInterface,IMonitorControllerInterface,ICommandLineControllerInterface,IOriginsFinder
@@ -412,7 +413,22 @@ namespace Syncless.Core
             */
             throw new NotImplementedException();
         }
-        
+
+        public Filter AddFilter(String tagname)
+        {
+            return null;
+        }
+
+        public Filter RemoveFilter(String tagname)
+        {
+            return null;
+        }
+
+        public List<Filter> GetAllFilters(String tagname)
+        {
+            return null;
+        }
+
         #endregion
         #region IOriginsFinder Members
 
