@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Syncless.CompareAndSync.Result
 {
-    class Result
+    class ConflictResult : Result
     {
     }
 }
