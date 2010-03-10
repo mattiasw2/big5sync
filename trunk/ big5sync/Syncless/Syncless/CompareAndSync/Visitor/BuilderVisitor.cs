@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
-using System.Security.Cryptography;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.Filters;
 
@@ -66,7 +65,7 @@ namespace Syncless.CompareAndSync.Visitor
                             fco = (FileCompareObject)o;
 
                         fco.CreationTime[index] = info.CreationTime.Ticks;
-                        fco.Hash[index] = CalculateMD5Hash(info);
+                        fco.Hash[index] = CommonMethods.CalculateMD5Hash(info);
                         fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
                         fco.Length[index] = info.Length;
                         fco.Exists[index] = true;
@@ -88,29 +87,5 @@ namespace Syncless.CompareAndSync.Visitor
         }
 
         #endregion
-
-        private static string CalculateMD5Hash(FileInfo fileInput)
-        {
-            Debug.Assert(fileInput.Exists);
-            FileStream fileStream = null;
-            try
-            {
-                fileStream = fileInput.OpenRead();
-            }
-            catch (IOException)
-            {
-                fileInput.Refresh();
-                fileStream = fileInput.OpenRead();
-            }
-
-            byte[] fileHash = MD5.Create().ComputeHash(fileStream);
-            fileStream.Close();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < fileHash.Length; i++)
-            {
-                sb.Append(fileHash[i].ToString("X2"));
-            }
-            return sb.ToString();
-        }
     }
 }

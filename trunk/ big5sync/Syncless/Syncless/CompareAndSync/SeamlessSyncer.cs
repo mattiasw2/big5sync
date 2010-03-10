@@ -4,32 +4,93 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Syncless.CompareAndSync.Enum;
+using Syncless.CompareAndSync.Request;
 
 namespace Syncless.CompareAndSync
 {
     public class SeamlessSyncer
     {
-        public static void Sync(string sourceName, string sourceParent, List<string> destinations, bool? isFolder, AutoSyncRequestType? requestType)
+        public static void Sync(AutoSyncRequest request)
         {
+            bool? isFolder = request.IsFolder;
             bool isFldr;
 
             if (isFolder.HasValue)
                 isFldr = (bool)isFolder;
             else
-                isFldr = IsFolder(sourceName, sourceParent, destinations);
+                isFldr = IsFolder(request.SourceName, request.SourceParent, request.DestinationFolders);
 
             if (isFldr)
-                SyncFolder(sourceName, sourceParent, destinations, requestType);
+                SyncFolder(request);
             else
-                SyncFile(sourceName, sourceParent, destinations, requestType);
+                SyncFile(request);
         }
 
-        private static void SyncFile(string sourceName, string sourceParent, List<string> destinations, AutoSyncRequestType? requestType)
+        private static void SyncFile(AutoSyncRequest request)
         {
+            string sourceFullPath = Path.Combine(request.SourceParent, request.ChangeType == AutoSyncRequestType.Rename ? request.NewName : request.SourceName);
+            
+            if (File.Exists(sourceFullPath))
+            {
+                string destFullPath = null;
 
+                foreach (string dest in request.DestinationFolders)
+                {
+                    destFullPath = Path.Combine(dest, request.SourceName);
+                    if (DoSync(sourceFullPath, destFullPath))
+                    {
+                        switch (request.ChangeType)
+                        {
+                            case AutoSyncRequestType.Update:
+                            case AutoSyncRequestType.New:
+                                CopyFile(sourceFullPath, destFullPath);
+                                break;
+                            case AutoSyncRequestType.Rename:
+                                string oldFullPath = Path.Combine(dest, request.OldName);
+                                string newFullPath = Path.Combine(dest, request.NewName);
+                                MoveFile(oldFullPath, newFullPath);
+                                break;
+                        }
+                    }
+                }
+            }
+            else if (request.ChangeType == AutoSyncRequestType.Delete)
+            {
+                string destFullPath = null;
+
+                foreach (string dest in request.DestinationFolders)
+                {
+                    destFullPath = Path.Combine(dest, request.SourceName);
+                    if (File.Exists(destFullPath))
+                    {
+                        DeleteFile(destFullPath);
+                    }
+                }
+            }
         }
 
-        private static void SyncFolder(string sourceName, string sourceParent, List<string> destinations, AutoSyncRequestType? requestType)
+        private static bool DoSync(string sourceFullPath, string destFullPath)
+        {
+            FileInfo sourceFile = new FileInfo(sourceFullPath);
+            FileInfo destFile = new FileInfo(destFullPath);
+
+            return (CommonMethods.CalculateMD5Hash(sourceFile) != CommonMethods.CalculateMD5Hash(destFile));
+        }
+
+        private static void DeleteFile(string destFullPath)
+        {
+            File.Delete(destFullPath);
+        }
+
+        private static void CopyFile(string sourceFullPath, string destFullPath)
+        {
+        }
+
+        private static void MoveFile(string sourceFullPath, string destFullPath)
+        {
+        }
+
+        private static void SyncFolder(AutoSyncRequest request)
         {
 
         }

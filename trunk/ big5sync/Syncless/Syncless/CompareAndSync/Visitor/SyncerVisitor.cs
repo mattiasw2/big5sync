@@ -179,43 +179,6 @@ namespace Syncless.CompareAndSync.Visitor
             fco.FinalState[srcFilePos] = FinalState.Propagated;
         }
 
-        public void DeleteFileToRecycleBin(string path)
-        {
-            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
-        }
-
-        public void ArchiveFile(string path)
-        {
-            FileInfo f = new FileInfo(path);
-            string parent = f.DirectoryName;
-            string archiveDir = Path.Combine(parent, ARCHIVENAME);
-            if (!Directory.Exists(archiveDir))
-                Directory.CreateDirectory(archiveDir);
-            string currTime = String.Format("{0:yyyyMMddHHmmss}", DateTime.Now) + "_";
-
-            File.Copy(path, Path.Combine(archiveDir, currTime + f.Name), true); //Very rare to have same time
-
-            DirectoryInfo d = new DirectoryInfo(archiveDir);
-            FileInfo[] files = d.GetFiles();
-            List<string> archivedFiles = new List<string>();
-
-            for (int i = 0; i < files.Length; i++)
-            {
-                if (files[i].Name.EndsWith(f.Name))
-                {
-                    archivedFiles.Add(files[i].Name);
-                }
-            }
-
-            var sorted = (from element in archivedFiles orderby element descending select element).Skip(ARCHIVELIMIT);
-
-            foreach (string s in sorted)
-            {
-                File.Delete(Path.Combine(archiveDir, s));
-            }
-
-        }
-
         #endregion
 
         #region Folder Methods

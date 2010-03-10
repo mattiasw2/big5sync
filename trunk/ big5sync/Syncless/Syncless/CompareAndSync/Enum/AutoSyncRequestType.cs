@@ -8,7 +8,6 @@ namespace Syncless.CompareAndSync.Enum
     public enum AutoSyncRequestType
     {
         New,
-        Create,
         Update,
         Delete,
         Rename
