@@ -9,7 +9,7 @@ namespace Syncless.CompareAndSync.Request
     public class AutoSyncRequest : Request
     {
 
-        private string _sourceName, _sourceParent;
+        private string _sourceName, _sourceParent, _oldName;
         private List<string> _destinations;
         private AutoSyncRequestType? _requestType;
         private bool? _isFolder;
@@ -28,9 +28,31 @@ namespace Syncless.CompareAndSync.Request
             _isFolder = isFolder;
         }
 
+        public AutoSyncRequest(string oldName, string newName, string sourceParent, List<string> destinations, bool? isFolder, AutoSyncRequestType requestType)
+            : this(oldName, sourceParent, destinations, isFolder, requestType)
+        {
+            _oldName = oldName;
+        }
+
         public string SourceName
         {
             get { return _sourceName; }
+        }
+
+        public string NewName
+        {
+            get
+            {
+                if (_requestType == AutoSyncRequestType.Rename)
+                    return _sourceName;
+                else
+                    return null;
+            }
+        }
+
+        public string OldName
+        {
+            get { return _oldName; }
         }
 
         public string SourceParent
