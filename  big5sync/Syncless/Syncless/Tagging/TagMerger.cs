@@ -33,7 +33,7 @@ namespace Syncless.Tagging
             }
             foreach (Tag tag in newTagList)//handles the new tag from new profile
             {
-                Tag oldTag = newProfile.FindTag(tag.TagName);
+                Tag oldTag = currentProfile.FindTag(tag.TagName);
                 if (oldTag != null)
                 {
                     continue;
