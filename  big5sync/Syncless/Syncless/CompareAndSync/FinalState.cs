@@ -5,12 +5,13 @@ using System.Text;
 
 namespace Syncless.CompareAndSync
 {
-    public enum FileChangeType
+    public enum FinalState
     {
-        Create,
-        Delete,
-        Update,
-        Rename,
-        None
+        Deleted,
+        Updated,
+        Created,
+        Renamed,
+        Propagated,
+        Unchanged
     }
 }
