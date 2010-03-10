@@ -9,24 +9,17 @@ namespace Syncless.Tagging
     public class Tag
     {
         private string _tagName;
-        private long _lastupdated;
+        private long _lastUpdated;
         private long _created;
         private bool _isSeamless;
         private List<TaggedPath> _pathList;
         private List<Filter> _filters;
-        
+        private long _filtersUpdated;
+
         public string TagName
         {
             get { return _tagName; }
             set { this._tagName = value; }
-        }
-        public List<Filter> Filters
-        {
-            get { return _filters; }
-        }
-        public List<TaggedPath> PathList
-        {
-            get { return _pathList; }
         }
         public List<string> PathStringList
         {
@@ -42,8 +35,8 @@ namespace Syncless.Tagging
         }
         public long LastUpdated
         {
-            get { return _lastupdated; }
-            set { _lastupdated = value; }
+            get { return _lastUpdated; }
+            set { _lastUpdated = value; }
         }
         public long Created
         {
@@ -55,16 +48,36 @@ namespace Syncless.Tagging
             get { return _isSeamless; }
             set { _isSeamless = value; }
         }
+        public List<TaggedPath> PathList
+        {
+            get { return _pathList; }
+        }
+        public List<Filter> Filters
+        {
+            get { return _filters; }
+            set { _filters = value; }
+        }
+        public long FiltersUpdated
+        {
+            get { return _filtersUpdated; }
+            set { _filtersUpdated = value; }
+        }
 
         public Tag(string tagname, long created)
         {
             this._tagName = tagname;
             this._created = created;
-            this._lastupdated = created;
+            this._lastUpdated = created;
             this._isSeamless = true;
             this._pathList = new List<TaggedPath>();
             this._filters = new List<Filter>();
-            AddFilter(FilterFactory.CreateExtensionFilter(@"*.cs",FilterMode.INCLUDE));
+            this._filtersUpdated = created;
+        }
+
+        public void RenameTag(string newname, long updated)
+        {
+            _tagName = newname;
+            _lastUpdated = updated;
         }
 
         public bool AddPath(string path, long created)
@@ -76,7 +89,7 @@ namespace Syncless.Tagging
                 taggedPath.LogicalDriveId = TaggingHelper.GetLogicalID(path);
                 taggedPath.Created = created;
                 taggedPath.LastUpdated = created;
-                _lastupdated = created;
+                _lastUpdated = created;
                 _pathList.Add(taggedPath);
                 return true;
             }
@@ -90,7 +103,7 @@ namespace Syncless.Tagging
                 if (p.Path.Equals(path))
                 {
                     _pathList.Remove(p);
-                    _lastupdated = lastupdated;
+                    _lastUpdated = lastupdated;
                     return true;
                 }
             }
@@ -109,7 +122,7 @@ namespace Syncless.Tagging
             return false;
         }
 
-        public void Rename(string oldPath, string newPath)
+        public void RenamePath(string oldPath, string newPath, long updated)
         {
             foreach (TaggedPath p in _pathList)
             {
@@ -121,6 +134,7 @@ namespace Syncless.Tagging
                 {
                     p.Path = newPath;
                 }
+                _lastUpdated = updated;
             }
         }
 
@@ -146,19 +160,23 @@ namespace Syncless.Tagging
             return null;
         }
 
-        public void AddFilter(Filter filter)
+        public void AddFilter(Filter filter, long updated)
         {
             if (!_filters.Contains(filter))
             {
                 _filters.Add(filter);
+                _filtersUpdated = updated;
+                _lastUpdated = updated;
             }
         }
 
-        public Filter RemoveFilter(Filter filter)
+        public Filter RemoveFilter(Filter filter, long updated)
         {
             if (_filters.Contains(filter))
             {
                 _filters.Remove(filter);
+                _filtersUpdated = updated;
+                _lastUpdated = updated;
                 return filter;
             }
             else

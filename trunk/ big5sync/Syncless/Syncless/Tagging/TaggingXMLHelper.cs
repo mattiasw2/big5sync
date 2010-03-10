@@ -9,7 +9,7 @@ namespace Syncless.Tagging
 {
     static class TaggingXMLHelper
     {
-
+        #region element name
         private const string ELE_PROFILE_ROOT = "tagging";
         private const string ELE_PROFILE = "profile";
         private const string ELE_PROFILE_NAME = "name";
@@ -31,8 +31,7 @@ namespace Syncless.Tagging
 
         private const string ELE_FILTER_TYPE = "type";
         private const string ELE_FILTER_MODE = "mode";
-
-
+        private const string ELE_FILTER_UPDATED = "updated";
         //Type of Mode
         private const string ELE_FILTER_MODE_INCLUDE = "Include";
         private const string ELE_FILTER_MODE_EXCLUDE = "Exclude";
@@ -42,48 +41,14 @@ namespace Syncless.Tagging
         private const string ELE_FILTER_TYPE_EXT = "Extension";
         private const string ELE_FILTER_TYPE_EXT_PATTERN = "pattern";
         #endregion
+        #endregion
 
         public static void SaveTo(TaggingProfile taggingProfile, List<string> xmlFilePaths)
         {
             XmlDocument xml = ConvertTaggingProfileToXml(taggingProfile);
-
             foreach (string path in xmlFilePaths)
             {
-                TaggingXMLHelper.SaveXml(xml, path);
-            }
-        }
-
-
-        private static TaggingProfile ConvertXmlToTaggingProfile(XmlDocument xml)
-        {
-            XmlElement profileElement = (XmlElement)xml.GetElementsByTagName(ELE_PROFILE).Item(0);
-            TaggingProfile taggingProfile = TaggingXMLHelper.CreateTaggingProfile(profileElement);
-            XmlNodeList tagList = profileElement.ChildNodes;
-            foreach (XmlElement tagElement in tagList)
-            {
-                if (tagElement.Name.Equals(ELE_TAG))
-                {
-                    Tag tag = TaggingXMLHelper.CreateTagFromXml(tagElement);
-                    taggingProfile.TagList.Add(tag);
-                }
-            }
-            return taggingProfile;
-        }
-
-        
-
-        public static TaggingProfile LoadFrom(string xmlFilePath)
-        {
-            TaggingProfile taggingProfile = new TaggingProfile();
-            XmlDocument xml = TaggingXMLHelper.LoadXml(xmlFilePath);
-            if (xml != null)
-            {
-                taggingProfile = ConvertXmlToTaggingProfile(xml);
-                return taggingProfile;
-            }
-            else
-            {
-                return null;
+                SaveXml(xml, path);
             }
         }
 
@@ -116,6 +81,54 @@ namespace Syncless.Tagging
                 }
             }
             return true;
+        }
+        
+        private static XmlDocument ConvertTaggingProfileToXml(TaggingProfile taggingProfile)
+        {
+            XmlDocument TaggingDataDocument = new XmlDocument();
+            XmlElement taggingElement = TaggingDataDocument.CreateElement(ELE_PROFILE_ROOT);
+            XmlElement profileElement = TaggingDataDocument.CreateElement(ELE_PROFILE);
+            profileElement.SetAttribute(ELE_PROFILE_NAME, taggingProfile.ProfileName);
+            profileElement.SetAttribute(ELE_PROFILE_CREATEDDATE, taggingProfile.Created.ToString());
+            profileElement.SetAttribute(ELE_PROFILE_LASTUPDATEDDATE, taggingProfile.LastUpdated.ToString());
+            foreach (Tag tag in taggingProfile.TagList)
+            {
+                profileElement.AppendChild(CreateTagElement(TaggingDataDocument, tag));
+            }
+            taggingElement.AppendChild(profileElement);
+            TaggingDataDocument.AppendChild(taggingElement);
+            return TaggingDataDocument;
+        }
+
+        public static TaggingProfile LoadFrom(string xmlFilePath)
+        {
+            TaggingProfile taggingProfile = null;
+            XmlDocument xml = LoadXml(xmlFilePath);
+            if (xml != null)
+            {
+                taggingProfile = ConvertXmlToTaggingProfile(xml);
+                return taggingProfile;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        
+        private static TaggingProfile ConvertXmlToTaggingProfile(XmlDocument xml)
+        {
+            XmlElement profileElement = (XmlElement)xml.GetElementsByTagName(ELE_PROFILE).Item(0);
+            TaggingProfile taggingProfile = CreateTaggingProfile(profileElement);
+            XmlNodeList tagList = profileElement.ChildNodes;
+            foreach (XmlElement tagElement in tagList)
+            {
+                if (tagElement.Name.Equals(ELE_TAG))
+                {
+                    Tag tag = CreateTagFromXml(tagElement);
+                    taggingProfile.TagList.Add(tag);
+                }
+            }
+            return taggingProfile;
         }
 
         private static XmlDocument LoadXml(string path)
@@ -150,10 +163,10 @@ namespace Syncless.Tagging
         #region create tagging profile
         private static TaggingProfile CreateTaggingProfile(XmlElement profileElement)
         {
-            TaggingProfile taggingProfile = new TaggingProfile();
             string profilename = profileElement.GetAttribute(ELE_PROFILE_NAME);
             long profilecreated = long.Parse(profileElement.GetAttribute(ELE_PROFILE_CREATEDDATE));
             long profilelastupdated = long.Parse(profileElement.GetAttribute(ELE_PROFILE_LASTUPDATEDDATE));
+            TaggingProfile taggingProfile = new TaggingProfile(profilecreated);
             taggingProfile.ProfileName = profilename;
             taggingProfile.Created = profilecreated;
             taggingProfile.LastUpdated = profilelastupdated;
@@ -168,11 +181,14 @@ namespace Syncless.Tagging
             Tag tag = new Tag(tagname, created);
             tag.LastUpdated = lastupdated;
             XmlNodeList pathList = tagElement.GetElementsByTagName(ELE_TAGGED_FOLDER);
+            XmlElement filters = (XmlElement)tagElement.GetElementsByTagName(ELE_FILTER_ROOT).Item(0);
             foreach (XmlElement path in pathList)
             {
                 TaggedPath taggedPath = CreatePath(path);
                 tag.PathList.Add(taggedPath);
             }
+            tag.Filters = LoadFilterList(filters);
+            tag.FiltersUpdated = long.Parse(filters.GetAttribute(ELE_FILTER_UPDATED));
             return tag;
         }
 
@@ -212,7 +228,6 @@ namespace Syncless.Tagging
 
         private static Filter LoadFilter(XmlElement filterNode)
         {
-            
             string type = filterNode.GetAttribute(ELE_FILTER_TYPE);
             string mode = filterNode.GetAttribute(ELE_FILTER_MODE);
             FilterMode fMode = FilterMode.INCLUDE;
@@ -226,7 +241,7 @@ namespace Syncless.Tagging
             }
             else
             {
-                //CNANOT HAPPEN!!!!!
+                //CANNOT HAPPEN!!!!!
             }
             if (type.Equals(ELE_FILTER_TYPE_EXT))
             {
@@ -245,23 +260,6 @@ namespace Syncless.Tagging
         #endregion
 
         #region create xml document
-        private static XmlDocument ConvertTaggingProfileToXml(TaggingProfile taggingProfile)
-        {
-            XmlDocument TaggingDataDocument = new XmlDocument();
-            XmlElement taggingElement = TaggingDataDocument.CreateElement(ELE_PROFILE_ROOT);
-            XmlElement profileElement = TaggingDataDocument.CreateElement(ELE_PROFILE);
-            profileElement.SetAttribute(ELE_PROFILE_NAME, taggingProfile.ProfileName);
-            profileElement.SetAttribute(ELE_PROFILE_CREATEDDATE, taggingProfile.Created.ToString());
-            profileElement.SetAttribute(ELE_PROFILE_LASTUPDATEDDATE, taggingProfile.LastUpdated.ToString());
-            foreach (Tag tag in taggingProfile.TagList)
-            {
-                profileElement.AppendChild(TaggingXMLHelper.CreateTagElement(TaggingDataDocument, tag));
-            }
-            taggingElement.AppendChild(profileElement);
-            TaggingDataDocument.AppendChild(taggingElement);
-            return TaggingDataDocument;
-        }
-
         private static XmlElement CreateTagElement(XmlDocument TaggingDataDocument, Tag tag)
         {
             XmlElement tagElement = TaggingDataDocument.CreateElement(ELE_TAG);
@@ -272,7 +270,7 @@ namespace Syncless.Tagging
             {
                 tagElement.AppendChild(CreateTaggedFolderElement(TaggingDataDocument, path));
             }
-            tagElement.AppendChild(CreateFilterElementList(TaggingDataDocument, tag.Filters));
+            tagElement.AppendChild(CreateFilterElementList(TaggingDataDocument, tag));
             return tagElement;
         }
 
@@ -287,8 +285,10 @@ namespace Syncless.Tagging
             return taggedFolderElement;
         }
 
-        private static XmlElement CreateFilterElementList(XmlDocument xmlDoc , List<Filter> filters){
+        private static XmlElement CreateFilterElementList(XmlDocument xmlDoc , Tag tag){
+            List<Filter> filters = tag.Filters;
             XmlElement filterRoot = xmlDoc.CreateElement(ELE_FILTER_ROOT);
+            filterRoot.SetAttribute(ELE_FILTER_UPDATED, tag.FiltersUpdated.ToString());
             foreach (Filter f in filters)
             {
                 XmlElement filterEle = CreateFilterElement(xmlDoc, f);
@@ -312,12 +312,5 @@ namespace Syncless.Tagging
             return filterElement;
         }
         #endregion
-
-
-
-
-
-
-        
     }
 }
