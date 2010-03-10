@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Request;
+using Syncless.CompareAndSync.Visitor;
 
 namespace Syncless.CompareAndSync
 {
@@ -30,12 +31,22 @@ namespace Syncless.CompareAndSync
 
         public RootCompareObject Sync(ManualSyncRequest request)
         {
-            return null;
+            RootCompareObject rco = new RootCompareObject(request.Paths);
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters));
+            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
+            CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor());
+            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor());
+            CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor());
+            return rco;
         }
 
         public RootCompareObject Compare(ManualCompareRequest request)
         {
-            return null;
+            RootCompareObject rco = new RootCompareObject(request.Paths);
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters));
+            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
+            CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor());
+            return rco;
         }
 
         public RootCompareObject Sync(AutoSyncRequest request)

@@ -5,6 +5,7 @@ using System.Text;
 using Syncless.CompareAndSync.CompareObject;
 using System.IO;
 using System.Xml;
+using Syncless.CompareAndSync.Enum;
 
 namespace Syncless.CompareAndSync.Visitor
 {

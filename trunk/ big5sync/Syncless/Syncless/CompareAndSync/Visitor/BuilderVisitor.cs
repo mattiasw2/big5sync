@@ -6,6 +6,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using Syncless.CompareAndSync.CompareObject;
+using Syncless.Filters;
 
 namespace Syncless.CompareAndSync.Visitor
 {
@@ -13,13 +14,13 @@ namespace Syncless.CompareAndSync.Visitor
     {
         #region IVisitor Members
 
-        List<string> _filter;
+        List<Filter> _filter;
 
         public BuilderVisitor()
         {
         }
 
-        public BuilderVisitor(List<string> filter)
+        public BuilderVisitor(List<Filter> filter)
         {
             _filter = filter;
         }
@@ -39,6 +40,7 @@ namespace Syncless.CompareAndSync.Visitor
                 if (f.Exists)
                 {
                     DirectoryInfo[] infos = f.GetDirectories();
+                    
                     foreach (DirectoryInfo info in infos)
                     {
                         BaseCompareObject o = folder.GetChild(info.Name);
