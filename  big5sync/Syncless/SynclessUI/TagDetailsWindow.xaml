@@ -197,7 +197,7 @@
         				<GradientStop Color="#FF20262B" Offset="1"/>
         			</LinearGradientBrush>
         		</TabControl.Background>
-	            <TabItem x:Name="TabItemFiltering" Header="Filtering" Height="30" Style="{DynamicResource TabItemStyle}" Background="{DynamicResource TabButtonBackground}" Foreground="{DynamicResource TabButtonForeground}" MouseDown="TabItemFiltering_MouseDown">
+	            <TabItem x:Name="TabItemFiltering" Header="Filtering" Height="30" Style="{DynamicResource TabItemStyle}" Background="{DynamicResource TabButtonBackground}" Foreground="{DynamicResource TabButtonForeground}" GotFocus="TabItemFiltering_GotFocus">
 	                <Grid>
 	                	<Grid.ColumnDefinitions>
 	                		<ColumnDefinition Width="150"/>
@@ -219,10 +219,10 @@
 	                	</StackPanel>
 	                </Grid>
 	            </TabItem>
-	            <TabItem x:Name="TabItemProperties" Header="Properties" Height="30" Style="{DynamicResource TabItemStyle}" Background="{DynamicResource TabButtonBackground}" Foreground="{DynamicResource TabButtonForeground}" MouseDown="TabItemProperties_MouseDown">
+	            <TabItem x:Name="TabItemProperties" Header="Properties" Height="30" Style="{DynamicResource TabItemStyle}" Background="{DynamicResource TabButtonBackground}" Foreground="{DynamicResource TabButtonForeground}" GotFocus="TabItemProperties_GotFocus">
 	            	<Grid/>
 	            </TabItem>
-	            <TabItem x:Name="TabItemVersioning" Header="Versioning" Height="30" Style="{DynamicResource TabItemStyle}" Background="{DynamicResource TabButtonBackground}" Foreground="{DynamicResource TabButtonForeground}" MouseDown="TabItemVersioning_MouseDown">
+	            <TabItem x:Name="TabItemVersioning" Header="Versioning" Height="30" Style="{DynamicResource TabItemStyle}" Background="{DynamicResource TabButtonBackground}" Foreground="{DynamicResource TabButtonForeground}" GotFocus="TabItemVersioning_GotFocus">
 	                <Grid/>
 	            </TabItem>
         	</TabControl>
@@ -244,7 +244,7 @@
 					    <ComboBoxItem>Inclusion</ComboBoxItem>
 					    <ComboBoxItem>Exclusion</ComboBoxItem>
 					</ComboBox>
-					<TextBox x:Name="TxtBoxPattern" Margin="0" MaxLines="1" MaxWidth="330" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" FontSize="10.667" FontFamily="Century Gothic" LostFocus="TxtBoxPattern_LostFocus" HorizontalAlignment="Left" Width="320"/>
+					<TextBox x:Name="TxtBoxPattern" Margin="0" MaxLines="1" MaxWidth="330" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" FontSize="10.667" FontFamily="Century Gothic"  HorizontalAlignment="Left" Width="320" LostFocus="TxtBoxPattern_LostFocus"/>
 				</Grid>
 			</ScrollViewer>
 		</Grid>
