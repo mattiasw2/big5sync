@@ -577,8 +577,18 @@ namespace SynclessUI
 		
 		private void BtnDetails_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-        	TagDetailsWindow tdw = new TagDetailsWindow(this);
-			tdw.ShowDialog();
+			ViewTagDetails();
         }
+
+		private void TagIcon_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			ViewTagDetails();
+		}
+		
+		private void ViewTagDetails() {
+        	TagDetailsWindow tdw = new TagDetailsWindow(_selectedTag, this);
+			tdw.ShowDialog();
+		}
+		
     }
 }

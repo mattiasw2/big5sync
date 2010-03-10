@@ -38,9 +38,7 @@ namespace Syncless.Core
 
         bool StartManualSync(String tagname);
 
-        bool AddFilter(String tagname, Filter filter);
-
-        bool RemoveFilter(String tagname, Filter filter);
+        bool UpdateFilterList(String tagname, List<Filter> filterlist);
 
         List<Filter> GetAllFilters(String tagname);
 
