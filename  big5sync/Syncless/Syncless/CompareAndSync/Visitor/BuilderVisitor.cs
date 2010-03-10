@@ -14,11 +14,7 @@ namespace Syncless.CompareAndSync.Visitor
     {
         #region IVisitor Members
 
-        List<Filter> _filter;
-
-        public BuilderVisitor()
-        {
-        }
+        private static List<Filter> _filter;
 
         public BuilderVisitor(List<Filter> filter)
         {

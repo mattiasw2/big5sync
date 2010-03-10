@@ -11,6 +11,14 @@ namespace Syncless.CompareAndSync.Visitor
     public class SyncerVisitor : IVisitor
     {
         #region IVisitor Members
+        private readonly string ARCHIVENAME;
+        private readonly int ARCHIVELIMIT;
+
+        public SyncerVisitor(string archiveName, int archiveLimit)
+        {
+            ARCHIVENAME = archiveName;
+            ARCHIVELIMIT = archiveLimit;
+        }
 
         public void Visit(FileCompareObject file, string[] currentPaths)
         {
@@ -61,7 +69,7 @@ namespace Syncless.CompareAndSync.Visitor
                         DeleteFolder(folder, currentPaths, maxPriorityPos);
                         break;
                     case MetaChangeType.New:
-                    //case MetaChangeType.NoChange:
+                        //case MetaChangeType.NoChange:
                         CreateFolder(folder, currentPaths, maxPriorityPos);
                         break;
                 }
@@ -171,6 +179,43 @@ namespace Syncless.CompareAndSync.Visitor
             fco.FinalState[srcFilePos] = FinalState.Propagated;
         }
 
+        public void DeleteFileToRecycleBin(string path)
+        {
+            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+        }
+
+        public void ArchiveFile(string path)
+        {
+            FileInfo f = new FileInfo(path);
+            string parent = f.DirectoryName;
+            string archiveDir = Path.Combine(parent, ARCHIVENAME);
+            if (!Directory.Exists(archiveDir))
+                Directory.CreateDirectory(archiveDir);
+            string currTime = String.Format("{0:yyyyMMddHHmmss}", DateTime.Now) + "_";
+
+            File.Copy(path, Path.Combine(archiveDir, currTime + f.Name), true); //Very rare to have same time
+
+            DirectoryInfo d = new DirectoryInfo(archiveDir);
+            FileInfo[] files = d.GetFiles();
+            List<string> archivedFiles = new List<string>();
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (files[i].Name.EndsWith(f.Name))
+                {
+                    archivedFiles.Add(files[i].Name);
+                }
+            }
+
+            var sorted = (from element in archivedFiles orderby element descending select element).Skip(ARCHIVELIMIT);
+
+            foreach (string s in sorted)
+            {
+                File.Delete(Path.Combine(archiveDir, s));
+            }
+
+        }
+
         #endregion
 
         #region Folder Methods
@@ -235,7 +280,76 @@ namespace Syncless.CompareAndSync.Visitor
             folder.FinalState[srcFilePos] = FinalState.Propagated;
         }
 
+        public void DeleteFolderToRecycleBin(string path)
+        {
+            Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+        }
+
+        public void ArchiveFolder(string path)
+        {
+            FileInfo f = new FileInfo(path);
+            string parent = f.DirectoryName;
+            string archiveDir = Path.Combine(parent, ARCHIVENAME);
+            if (!Directory.Exists(archiveDir))
+                Directory.CreateDirectory(archiveDir);
+            string currTime = String.Format("{0:yyyyMMddHHmmss}", DateTime.Now) + "_";
+
+            CopyDirectory(path, Path.Combine(archiveDir, currTime + f.Name));
+
+            DirectoryInfo d = new DirectoryInfo(archiveDir);
+            DirectoryInfo[] files = d.GetDirectories();
+            List<string> archivedFiles = new List<string>();
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (files[i].Name.EndsWith(f.Name))
+                {
+                    archivedFiles.Add(files[i].Name);
+                }
+            }
+
+            var sorted = (from element in archivedFiles orderby element descending select element).Skip(ARCHIVELIMIT);
+
+            foreach (string s in sorted)
+            {
+                Directory.Delete(Path.Combine(archiveDir, s), true);
+            }
+
+        }
+
+        public static string CopyDirectory(string source, string destination)
+        {
+
+            DirectoryInfo sourceInfo = new DirectoryInfo(source);
+            DirectoryInfo[] directoryInfos = sourceInfo.GetDirectories();
+            DirectoryInfo destinationInfo = new DirectoryInfo(destination);
+            if (!destinationInfo.Exists)
+            {
+                Directory.CreateDirectory(destination);
+            }
+            foreach (DirectoryInfo tempInfo in directoryInfos)
+            {
+                DirectoryInfo newDirectory = destinationInfo.CreateSubdirectory(tempInfo.Name);
+                CopyDirectory(tempInfo.FullName, newDirectory.FullName);
+            }
+            FileInfo[] fileInfos = sourceInfo.GetFiles();
+            foreach (FileInfo fileInfo in fileInfos)
+            {
+                try
+                {
+                    fileInfo.CopyTo(destination + "\\" + fileInfo.Name, true);
+                }
+                catch (IOException)
+                {
+                    //File Exist?
+                }
+            }
+            return destinationInfo.FullName;
+        }
+
         #endregion
 
     }
+
+
 }
