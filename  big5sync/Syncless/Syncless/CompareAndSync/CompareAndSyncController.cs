@@ -49,11 +49,10 @@ namespace Syncless.CompareAndSync
             return rco;
         }
 
-        public RootCompareObject Sync(AutoSyncRequest request)
+        public void Sync(AutoSyncRequest request)
         {
-            return null;
+            SeamlessSyncer.Sync(request.Source, request.DestinationFolders, request.IsFolder, request.ChangeType);
         }
-
 
     }
 }
