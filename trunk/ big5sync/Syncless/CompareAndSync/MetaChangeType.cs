@@ -8,10 +8,11 @@ namespace CompareAndSync
     public enum MetaChangeType
     {
         //NoMeta,
-        Delete,
-        New,
-        NoChange,
-        Rename,
-        Update
+        Delete, //File, Folder
+        New, //File, Folder
+        NoChange, //File, Folder
+        Rename, //File, Folder
+        Update, //File
+        Dirty //Folder
     }
 }
