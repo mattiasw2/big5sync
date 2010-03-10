@@ -82,7 +82,7 @@ namespace CompareAndSync.Visitor
 
             for (int i = 0; i < currentPaths.Length; i++)
             {
-                if (i != srcFilePos)
+                if (i != srcFilePos && fco.Parent.FinalState[i] != FinalState.Deleted)
                 {
                     try
                     {
@@ -217,6 +217,7 @@ namespace CompareAndSync.Visitor
                             Directory.Delete(Path.Combine(currentPaths[i], folder.Name), true);
                             folder.Exists[i] = false;
                             folder.FinalState[i] = FinalState.Deleted;
+                            folder.Contents.Clear(); //Experimental
                         }
                         catch (Exception)
                         {
