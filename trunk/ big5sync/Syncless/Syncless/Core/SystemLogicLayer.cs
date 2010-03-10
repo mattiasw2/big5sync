@@ -10,6 +10,7 @@ using Syncless.Tagging.Exceptions;
 using Syncless.CompareAndSync;
 using Syncless.Monitor;
 using Syncless.Monitor.DTO;
+using Syncless.Monitor.Exceptions;
 using Syncless.Profiling;
 using Syncless.Logging;
 using Syncless.Core.Exceptions;
@@ -430,25 +431,6 @@ namespace Syncless.Core
         #endregion
         #region private methods
 
-        private void MonitorTag(Tag tag)
-        {
-            List<string> pathList = new List<string>();
-            foreach (TaggedPath path in tag.PathList)
-            {
-                pathList.Add(path.Path);
-            }
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(pathList);
-            foreach (string path in convertedPath)
-            {
-                try
-                {
-                    MonitorLayer.Instance.MonitorPath(path);
-                }
-                catch (Exception)
-                {
-                }
-            }
-        }
         private bool MonitorTag(Tag tag, bool mode)
         {
             tag.IsSeamless = mode;
@@ -467,7 +449,7 @@ namespace Syncless.Core
                         StartManualSync(tag.TagName);
                         MonitorLayer.Instance.MonitorPath(path);
                     }
-                    catch (Exception)
+                    catch (MonitorPathNotFoundException)
                     {
                     }
                 }
@@ -480,7 +462,7 @@ namespace Syncless.Core
                     {
                         MonitorLayer.Instance.UnMonitorPath(path);
                     }
-                    catch (Exception)
+                    catch (MonitorPathNotFoundException)
                     {
                     }
                 }
@@ -495,7 +477,8 @@ namespace Syncless.Core
             foreach (Tag t in tagList)
             {
                 StartManualSync(t);
-                MonitorTag(t);
+                
+                MonitorTag(t,t.IsSeamless);
             }
             CompareSyncController.Instance.Init(this);
             DeviceWatcher.Instance.ToString(); //Starts watching for Drive Change
