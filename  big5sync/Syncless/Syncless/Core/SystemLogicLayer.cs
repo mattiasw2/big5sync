@@ -16,6 +16,7 @@ using Syncless.Logging;
 using Syncless.Core.Exceptions;
 using Syncless.Helper;
 using Syncless.Filters;
+using Syncless.CompareAndSync.Request;
 namespace Syncless.Core
 {
     internal class SystemLogicLayer : IUIControllerInterface, IMonitorControllerInterface, ICommandLineControllerInterface, IOriginsFinder
@@ -530,14 +531,14 @@ namespace Syncless.Core
         }
         private bool StartManualSync(Tag tag)
         {
-
-            //List<string> paths = tag.PathStringList;
-            //List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            //if (convertedPath.Count != 0)
-            //{
-            //    SyncRequest syncRequest = new SyncRequest(convertedPath);
-            //    CompareSyncController.Instance.Sync(syncRequest);
-            //}
+            
+            List<string> paths = tag.PathStringList;
+            List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
+            if (filterPaths[0].Count != 0)
+            {
+                ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), filterPaths[1].ToArray(), tag.Filters);
+                CompareAndSyncController.Instance.Sync(syncRequest);
+            }
             return true;
 
         }

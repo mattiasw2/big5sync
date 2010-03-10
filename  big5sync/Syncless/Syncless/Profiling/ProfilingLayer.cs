@@ -86,23 +86,48 @@ namespace Syncless.Profiling
             string relativepath = ProfilingHelper.ExtractRelativePath(path);
             return logicalid + ":" + relativepath; 
         }
-        /// <summary>
-        /// Take in a list of logical address , convert them to physical and return only those that are currently available.
-        /// </summary>
-        /// <param name="pathList">The list of logical address to convert</param>
-        /// <returns>The list of available Physical Address.</returns>
         public List<string> ConvertAndFilterToPhysical(List<string> pathList)
         {
-            List<string> returnPathList = new List<string>();
+            List<string> convertedPathList = new List<string>();
+            
             foreach (string path in pathList)
             {
                 string convertedPath = ConvertLogicalToPhysical(path);
                 if (convertedPath != null)
                 {
-                    returnPathList.Add(convertedPath);
+                    convertedPathList.Add(convertedPath);
                 }
+
             }
-            return returnPathList;
+
+
+            return convertedPathList;
+
+        }
+        /// <summary>
+        /// Take in a list of logical address , convert them to physical and return only those that are currently available.
+        /// </summary>
+        /// <param name="pathList">The list of logical address to convert</param>
+        /// <returns>two array of path. string[0] -> converted path , string[1] -> unconverted path.</returns>
+        public List<string>[] ConvertAndFilter(List<string> pathList)
+        {
+            List<string> convertedPathList = new List<string>();
+            List<string> unconvertedPathList = new List<string>();
+            foreach (string path in pathList)
+            {
+                string convertedPath = ConvertLogicalToPhysical(path);
+                if (convertedPath != null)
+                {
+                    convertedPathList.Add(convertedPath);
+                }
+                else
+                {
+                    unconvertedPathList.Add(path);
+                }
+
+            }
+
+            return new List<string>[2] { convertedPathList, unconvertedPathList }; 
         }
                
         /// <summary>
