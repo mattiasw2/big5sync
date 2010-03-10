@@ -8,10 +8,10 @@ namespace Syncless.CompareAndSync.Request
 {
     public abstract class ManualRequest
     {
-        private string[] _paths;
+        private string[] _paths, _unavailablePaths;
         private List<Filter> _filters;
 
-        public ManualRequest(string[] paths, List<Filter> filters)
+        public ManualRequest(string[] paths, string[] unavailablePaths, List<Filter> filters)
         {
             _paths = paths;
             _filters = filters;
@@ -20,6 +20,11 @@ namespace Syncless.CompareAndSync.Request
         public string[] Paths
         {
             get { return _paths; }
+        }
+
+        public string[] UnavailablePaths
+        {
+            get { return _unavailablePaths; }
         }
 
         public List<Filter> Filters
