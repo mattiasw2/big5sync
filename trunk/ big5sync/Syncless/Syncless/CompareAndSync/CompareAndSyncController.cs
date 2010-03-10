@@ -10,9 +10,9 @@ namespace Syncless.CompareAndSync
 {
     public class CompareAndSyncController
     {
-        private CompareAndSyncController _instance;
+        private static CompareAndSyncController _instance;
 
-        public CompareAndSyncController Instance
+        public static CompareAndSyncController Instance
         {
             get
             {
