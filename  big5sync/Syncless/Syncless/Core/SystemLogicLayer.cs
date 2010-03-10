@@ -196,13 +196,21 @@ namespace Syncless.Core
 
         public bool StartManualSync(string tagname)
         {
-            Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
-            if (tag == null)
+            try
             {
-                return false;
+                Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+                if (tag == null)
+                {
+                    return false;
+                }
+                bool result = StartManualSync(tag);
+                return result;
             }
-            bool result = StartManualSync(tag);
-            return result;
+            catch (Exception e) // Handle Unexpected Exception
+            {
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
+            }
         }
         /// <summary>
         /// Delete a tag
@@ -213,13 +221,21 @@ namespace Syncless.Core
         {
             try
             {
-                Tag t = TaggingLayer.Instance.RemoveTag(tagname);
-                return t != null;
-            }
-            catch (TagNotFoundException te)
+                try
+                {
+                    Tag t = TaggingLayer.Instance.RemoveTag(tagname);
+                    return t != null;
+                }
+                catch (TagNotFoundException te)
+                {
+                    throw te;
+                }
+            }catch(Exception e)// Handle Unexpected Exception
             {
-                throw te;
-            }            
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
+            }
+
         }
         /// <summary>
         /// Create a Tag.
@@ -230,14 +246,21 @@ namespace Syncless.Core
         {
             try
             {
-                Tag t = TaggingLayer.Instance.CreateTag(tagname);
-                return ConvertToTagView(t);
+                try
+                {
+                    Tag t = TaggingLayer.Instance.CreateTag(tagname);
+                    return ConvertToTagView(t);
+                }
+                catch (TagAlreadyExistsException te)
+                {
+                    throw te;
+                }
             }
-            catch (TagAlreadyExistsException te)
+            catch (Exception e) //Handle Unexpected Exception
             {
-                throw te;
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
             }
-            
         }
         /// <summary>
         /// Tag a Folder to a name
@@ -250,32 +273,40 @@ namespace Syncless.Core
         /// <returns>the Tag view</returns>
         public TagView Tag(string tagname, DirectoryInfo folder)
         {
-            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
-            if (path == null)
-            {
-                throw new InvalidPathException(folder.FullName);
-            }
-
-            Tag tag = null;
             try
             {
-                tag = TaggingLayer.Instance.TagFolder(path, tagname);
+                string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
+                if (path == null)
+                {
+                    throw new InvalidPathException(folder.FullName);
+                }
+
+                Tag tag = null;
+                try
+                {
+                    tag = TaggingLayer.Instance.TagFolder(path, tagname);
+                }
+                catch (RecursiveDirectoryException re)
+                {
+                    throw re;
+                }
+                catch (PathAlreadyExistsException pae)
+                {
+                    throw pae;
+                }
+                if (tag == null)
+                {
+                    return null;
+                }
+                StartManualSync(tag.TagName);
+                MonitorTag(tag.TagName, true);
+                return ConvertToTagView(tag);
             }
-            catch (RecursiveDirectoryException re)
+            catch (Exception e) // Handle Unexpected Exception
             {
-                throw re;
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
             }
-            catch (PathAlreadyExistsException pae)
-            {
-                throw pae;
-            }
-            if (tag == null)
-            {
-                return null;
-            }
-            StartManualSync(tag.TagName);
-            MonitorTag(tag.TagName, true);
-            return ConvertToTagView(tag);
         }
         /// <summary>
         /// Untag the folder from a tag. 
@@ -286,18 +317,24 @@ namespace Syncless.Core
         /// <returns>The number of path untag</returns>
         public int Untag(string tagname, DirectoryInfo folder)
         {
-            
-            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
             try
             {
-                int count = TaggingLayer.Instance.UntagFolder(path, tagname);
-                return count;
+                string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
+                try
+                {
+                    int count = TaggingLayer.Instance.UntagFolder(path, tagname);
+                    return count;
+                }
+                catch (TagNotFoundException tnfe)
+                {
+                    throw tnfe;
+                }
             }
-            catch (TagNotFoundException tnfe)
+            catch (Exception e)
             {
-                throw tnfe;
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
             }
-            
         }
         /// <summary>
         /// Set the monitor mode for a tag
@@ -307,13 +344,21 @@ namespace Syncless.Core
         /// <exception cref="TagNotFoundException">If the Tag is not found</exception>
         /// <returns>whether the tag can be changed.</returns>
         public bool MonitorTag(string tagname, bool mode)
-        {   
-            Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
-            if (tag == null)
+        {
+            try
             {
-                throw new TagNotFoundException(tagname);
+                Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+                if (tag == null)
+                {
+                    throw new TagNotFoundException(tagname);
+                }
+                return MonitorTag(tag, mode);
             }
-            return MonitorTag(tag, mode);
+            catch (Exception e)
+            {
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
+            }
         }
         /// <summary>
         /// Return a list of tag name.
@@ -321,14 +366,21 @@ namespace Syncless.Core
         /// <returns>the List containing the name of the tags</returns>
         public List<string> GetAllTags()
         {
-            List<Tag> TagList = TaggingLayer.Instance.TagList;
-            List<string> tagNames = new List<string>();
-            foreach (Tag t in TagList)
+            try
             {
-                tagNames.Add(t.TagName);
+                List<Tag> TagList = TaggingLayer.Instance.TagList;
+                List<string> tagNames = new List<string>();
+                foreach (Tag t in TagList)
+                {
+                    tagNames.Add(t.TagName);
+                }
+                tagNames.Sort();
+                return tagNames;
+            }catch(Exception e)// Handle Unexpected Exception
+            {
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
             }
-            tagNames.Sort();
-            return tagNames;
         }
         /// <summary>
         /// Return a list of tag name that a folder belongs to.
@@ -337,19 +389,27 @@ namespace Syncless.Core
         /// <returns>the List containing the name of the tags</returns>
         public List<string> GetTags(DirectoryInfo folder)
         {
-            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, false);
-            if (path == null)
+            try
             {
-                return null;
+                string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, false);
+                if (path == null)
+                {
+                    return null;
+                }
+                List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(path);
+                List<string> tagNames = new List<string>();
+                foreach (Tag t in tagList)
+                {
+                    tagNames.Add(t.TagName);
+                }
+                tagNames.Sort();
+                return tagNames;
             }
-            List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(path);
-            List<string> tagNames = new List<string>();
-            foreach (Tag t in tagList)
+            catch (Exception e)//Handle Unexpected Exception
             {
-                tagNames.Add(t.TagName);
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
             }
-            tagNames.Sort();
-            return tagNames;
         }
         /// <summary>
         /// Get The detailed Tag Info of a tag.
@@ -358,39 +418,78 @@ namespace Syncless.Core
         /// <returns></returns>
         public TagView GetTag(string tagname)
         {
-            Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
-            if (t == null)
+            try
             {
-                return null;
+                Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
+                if (t == null)
+                {
+                    return null;
+                }
+                return ConvertToTagView(t);
             }
-            return ConvertToTagView(t);
-
+            catch (Exception e)
+            {
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
+            }
         }
        
         public bool PrepareForTermination()
         {
-            SaveLoadHelper.SaveAll(appPath);
-            return true;
+            try
+            {
+                SaveLoadHelper.SaveAll(appPath);
+                return true;
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
+            }
         }
         public bool Terminate()
         {
-            DeviceWatcher.Instance.Terminate();
-            return false;
+            try
+            {
+                DeviceWatcher.Instance.Terminate();
+                return false;
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
+            }
         }
         public bool Initiate(IUIInterface inf)
         {
-            this.appPath = inf.getAppPath();
-            bool init = Initiate();
-            SaveLoadHelper.SaveAll(appPath);
-            return init;
+            try
+            {
+                this.appPath = inf.getAppPath();
+                bool init = Initiate();
+                SaveLoadHelper.SaveAll(appPath);
+                return init;
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
+            }
         }
         public List<CompareResult> PreviewSync(string tagname)
         {
-            Tag Tag = TaggingLayer.Instance.RetrieveTag(tagname);
-            List<string> paths = Tag.PathStringList;
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            CompareRequest compareRequest = new CompareRequest(convertedPath);
-            return CompareSyncController.Instance.Compare(compareRequest);
+            try
+            {
+                Tag Tag = TaggingLayer.Instance.RetrieveTag(tagname);
+                List<string> paths = Tag.PathStringList;
+                List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
+                CompareRequest compareRequest = new CompareRequest(convertedPath);
+                return CompareSyncController.Instance.Compare(compareRequest);
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
+            }
         }
         
         
@@ -418,15 +517,18 @@ namespace Syncless.Core
         {
             try
             {
-                TaggingLayer.Instance.AddFilter(tagname, filter);
-            }
-            catch (TagAlreadyExistsException taee)
-            {
-                throw taee;
-            }
-            catch (TagNotFoundException tnfe)
-            {
-                throw tnfe;
+                try
+                {
+                    TaggingLayer.Instance.AddFilter(tagname, filter);
+                }
+                catch (TagAlreadyExistsException taee)
+                {
+                    throw taee;
+                }
+                catch (TagNotFoundException tnfe)
+                {
+                    throw tnfe;
+                }
             }
             catch (Exception e)
             {
@@ -440,15 +542,18 @@ namespace Syncless.Core
         {
             try
             {
-                TaggingLayer.Instance.RemoveFilter(tagname, filter);
-            }
-            catch (TagNotFoundException tnfe)
-            {
-                throw tnfe;
-            }
-            catch (FilterAlreadyExistException faee)
-            {
-                throw faee;
+                try
+                {
+                    TaggingLayer.Instance.RemoveFilter(tagname, filter);
+                }
+                catch (TagNotFoundException tnfe)
+                {
+                    throw tnfe;
+                }
+                catch (FilterAlreadyExistException faee)
+                {
+                    throw faee;
+                }
             }
             catch (Exception e)
             {
@@ -460,7 +565,17 @@ namespace Syncless.Core
 
         public List<Filter> GetAllFilters(String tagname)
         {
-            return null;
+            try
+            {
+                Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
+                return t.Filters;
+
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
+            }
         }
 
         #endregion
