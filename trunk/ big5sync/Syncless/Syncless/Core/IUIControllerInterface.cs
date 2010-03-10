@@ -5,6 +5,8 @@ using System.Text;
 using Syncless.Tagging;
 using Syncless.CompareAndSync;
 using System.IO;
+using Syncless.Filters;
+
 namespace Syncless.Core
 {
     public interface IUIControllerInterface
@@ -35,6 +37,13 @@ namespace Syncless.Core
         bool RenameTag(String oldtagname, String newtagname);
 
         bool StartManualSync(String tagname);
+
+        Filter AddFilter(String tagname);
+
+        Filter RemoveFilter(String tagname);
+
+        List<Filter> GetAllFilters(String tagname);
+
         // To be Implemented
 
         // bool DeleteAllTags(); // Delete all existing tags (This one is like a general reset, might not need)
