@@ -95,7 +95,7 @@ namespace CompareAndSync.Visitor
 
         private FolderCompareObject PopulateFolderWithMetaData(XmlDocument xmlDoc, FolderCompareObject folder, int counter)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name_of_folder='" + folder.Name + "']");
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
             if (node == null)
                 return folder;
 
