@@ -206,7 +206,7 @@ namespace Syncless.Tagging
         //    }
         //}
         #endregion
-        public Tag RemoveTag(string tagname)
+        public Tag DeleteTag(string tagname)
         {
             CurrentTime updated = new CurrentTime();
             Tag toRemove = GetTag(tagname);

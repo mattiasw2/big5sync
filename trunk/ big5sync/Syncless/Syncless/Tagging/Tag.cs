@@ -73,6 +73,7 @@ namespace Syncless.Tagging
         public List<TaggedPath> PathList
         {
             get { return _pathList; }
+            set { _pathList = value; }
         }
         public List<Filter> Filters
         {
@@ -143,11 +144,21 @@ namespace Syncless.Tagging
                 if (p.Path.Equals(path))
                 {
                     _pathList.Remove(p);
-                    _lastUpdated = lastupdated;
+                    _lastUpdated = TaggingHelper.GetCurrentTime();
                     return true;
                 }
             }
             return false;
+        }
+
+        public bool RemovePath(TaggedPath path)
+        {
+            bool removed = _pathList.Remove(path);
+            if (removed)
+            {
+                _lastUpdated = TaggingHelper.GetCurrentTime();
+            }
+            return removed;
         }
 
         public void RemoveAllPaths()
