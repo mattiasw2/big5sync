@@ -23,7 +23,7 @@ namespace Syncless.CompareAndSync.Request
         }
 
         public AutoSyncRequest(string sourceName, string sourceParent, List<string> destinations, bool? isFolder, AutoSyncRequestType requestType)
-            : this(sourceName, sourceFullPath, destinations, requestType)
+            : this(sourceName, sourceParent, destinations, requestType)
         {
             _isFolder = isFolder;
         }
