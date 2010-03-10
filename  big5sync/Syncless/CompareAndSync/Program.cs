@@ -11,14 +11,18 @@ namespace CompareAndSync
     {
         static void Main(string[] args)
         {
-            RootCompareObject rco = new RootCompareObject(new string[] { @"C:\Users\Wysie\Desktop\SyncTest\A", @"C:\Users\Wysie\Desktop\SyncTest\B", @"C:\Users\Wysie\Desktop\SyncTest\C" });
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor());
-            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
-            CompareObjectHelper.PreTraverseFolder(rco, new ComparerVisitor());
-            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor());
-            CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor());
-            CompareObjectHelper.PreTraverseFolder(rco, new PrinterVisitor());
-            Console.Read();
+            while (true)
+            {
+                RootCompareObject rco = new RootCompareObject(new string[] { @"C:\Users\Wysie\Desktop\SyncTest\A", @"C:\Users\Wysie\Desktop\SyncTest\B" /*, @"C:\Users\Wysie\Desktop\SyncTest\C" */});
+                CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor());
+                CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
+                CompareObjectHelper.PreTraverseFolder(rco, new ComparerVisitor());
+                CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor());
+                CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor());
+                CompareObjectHelper.PreTraverseFolder(rco, new PrinterVisitor());
+                if (Console.Read() == 'q')
+                    break;
+            }
         }
         class PrinterVisitor : IVisitor
         {
