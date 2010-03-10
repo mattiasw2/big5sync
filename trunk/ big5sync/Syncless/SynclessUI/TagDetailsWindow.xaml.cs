@@ -100,6 +100,11 @@ namespace SynclessUI
 			if(ListFilters.SelectedIndex != -1) {
 				int index = ListFilters.SelectedIndex;
 				filters.RemoveAt(index);
+
+                TxtBoxPattern.IsEnabled = false;
+                TxtBoxPattern.Text = "";
+                CmbBoxMode.IsEnabled = false;
+                CmbBoxMode.SelectedIndex = -1;
 				
 				PopulateFilterStringList();
 			}
@@ -144,17 +149,21 @@ namespace SynclessUI
 
 		private void TxtBoxPattern_LostFocus(object sender, System.Windows.RoutedEventArgs e)
 		{
-			Filter f = filters[ListFilters.SelectedIndex];
-            if(f is ExtensionFilter) {
-				ExtensionFilter ef = (ExtensionFilter) f;
-				ef.Pattern = TxtBoxPattern.Text;
-			}
-			PopulateFilterStringList();
+            if (ListFilters.SelectedIndex != -1)
+            {
+                Filter f = filters[ListFilters.SelectedIndex];
+                if (f is ExtensionFilter)
+                {
+                    ExtensionFilter ef = (ExtensionFilter)f;
+                    ef.Pattern = TxtBoxPattern.Text;
+                }
+            }
+            PopulateFilterStringList();
 		}
 
 		private void CmbBoxMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
-            if (ListFilters.SelectedIndex != -1)
+            if (ListFilters.SelectedIndex != -1 && ListFilters.SelectedIndex <= ListFilters.Items.Count)
             {
                 Filter f = filters[ListFilters.SelectedIndex];
 
