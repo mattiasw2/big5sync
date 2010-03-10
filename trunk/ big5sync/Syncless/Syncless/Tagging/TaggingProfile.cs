@@ -39,12 +39,35 @@ namespace Syncless.Tagging
             set { _tagList = value; }
         }
 
-
         public TaggingProfile(long created)
         {
             _tagList = new List<Tag>();
             _created = created;
             _lastUpdated = created;
+        }
+
+        public Tag FindTag(string tagname)
+        {
+            foreach (Tag tag in _tagList)
+            {
+                if (tag.TagName.ToLower().Equals(tagname.ToLower()))
+                {
+                    return tag;
+                }
+            }
+            return null;
+        }
+
+        public bool Contains(string tagname)
+        {
+            foreach (Tag tag in _tagList)
+            {
+                if (tag.TagName.ToLower().Equals(tagname.ToLower()))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
