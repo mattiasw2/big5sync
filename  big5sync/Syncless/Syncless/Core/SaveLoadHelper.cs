@@ -29,6 +29,23 @@ namespace Syncless.Core
             string rootLocation = appPath + @"\" + TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH;
 
             locations.Add(rootLocation);
+            DriveInfo[] drives = DriveInfo.GetDrives();
+            foreach (DriveInfo d in drives)
+            {
+                if (d.DriveType == DriveType.Removable)
+                {
+                    string guid = d.Name + @"\" + @".syncless\guid.id";
+                    if (File.Exists(guid))
+                    {
+                        //if drive contain guid.
+                        string profilingxml = d.Name + @"\" + @".syncless\tagging.xml";
+                        if (File.Exists(profilingxml))
+                        {
+                            locations.Add(profilingxml);
+                        }
+                    }
+                }
+            }
             TaggingLayer.Instance.Init(locations);
         }
 
@@ -43,11 +60,11 @@ namespace Syncless.Core
             {
                 if (d.DriveType == DriveType.Removable)
                 {
-                    string guid = d.Name + @"\" + @"_syncless\guid.id";
+                    string guid = d.Name + @"\" + @".syncless\guid.id";
                     if (File.Exists(guid))
                     {
                         //if drive contain guid.
-                        string profilingxml = d.Name + @"\" + @"_syncless\profiling.xml";
+                        string profilingxml = d.Name + @"\" + @".syncless\profiling.xml";
                         if (File.Exists(profilingxml))
                         {
                             locations.Add(profilingxml);
@@ -66,6 +83,22 @@ namespace Syncless.Core
             string rootPath = appPath + @"\" + TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH;
 
             savedLocation.Add(rootPath);
+            
+            DriveInfo[] drives = DriveInfo.GetDrives();
+            foreach (DriveInfo d in drives)
+            {
+                if (d.DriveType == DriveType.Removable)
+                {
+                    string guid = d.Name + @"\" + @".syncless\guid.id";
+                    if (File.Exists(guid))
+                    {
+
+                        string profilingxml = d.Name + @"\" + @".syncless\tagging.xml";
+                        savedLocation.Add(profilingxml);
+                    }
+                }
+            }
+
             TaggingLayer.Instance.SaveTo(savedLocation);
 
         }
@@ -81,11 +114,11 @@ namespace Syncless.Core
             {
                 if (d.DriveType == DriveType.Removable)
                 {
-                    string guid = d.Name + @"\" + @"_syncless\guid.id";
+                    string guid = d.Name + @"\" + @".syncless\guid.id";
                     if (File.Exists(guid))
                     {
                         
-                        string profilingxml = d.Name + @"\" + @"_syncless\profiling.xml";
+                        string profilingxml = d.Name + @"\" + @".syncless\profiling.xml";
                         savedLocation.Add(profilingxml);
                     }
                 }
