@@ -34,11 +34,11 @@ namespace CompareAndSync.Visitor
                 if (!File.Exists(path))
                     continue;
                 xmlDoc.Load(path);
-                file = PopulateFileWithMetaData(xmlDoc, file, i);
-                xmlDoc = null;
-                //xmlDoc.Save(path);
-                ProcessFileMetaData(file, currentPaths);
+                file = PopulateFileWithMetaData(xmlDoc, file, i);                
+                //xmlDoc.Save(path);                
             }
+            xmlDoc = null;
+            ProcessFileMetaData(file, currentPaths);
         }
 
         public void Visit(FolderCompareObject folder, string[] currentPaths)
@@ -52,11 +52,11 @@ namespace CompareAndSync.Visitor
                 if (!File.Exists(path))
                     continue;
                 xmlDoc.Load(path);
-                folder = PopulateFolderWithMetaData(xmlDoc, folder, i);
-                xmlDoc = null;
-                //xmlDoc.Save(path);
-                ProcessFolderMetaData(folder, currentPaths);
+                folder = PopulateFolderWithMetaData(xmlDoc, folder, i);                
+                //xmlDoc.Save(path);               
             }
+            xmlDoc = null;
+            ProcessFolderMetaData(folder, currentPaths);
         }
 
         public void Visit(RootCompareObject root)

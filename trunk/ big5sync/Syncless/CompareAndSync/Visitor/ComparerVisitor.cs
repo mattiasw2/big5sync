@@ -59,30 +59,6 @@ namespace CompareAndSync.Visitor
                         file.Parent.Contents.Remove(f.Name);                        
                     }
                 }
-                /*
-                else if (file.ChangeType[i] == MetaChangeType.New)
-                {
-                    f = file.Parent.GetIdenticalFile(file.MetaHash[i], file.MetaCreationTime[i]);
-
-                    if (f != null && f.Name != file.Name)
-                    {
-                        int counter = 0;
-
-                        //Check that f is MetaChangeType.Delete for exactly one i
-                        for (int j = 0; j < f.ChangeType.Length; j++)
-                        {
-                            if (f.ChangeType[i] == MetaChangeType.Delete)
-                                counter++;
-                        }
-
-                        if (counter != 1)
-                            return;
-
-                        f.NewName = file.Name;
-                        f.ChangeType[i] = MetaChangeType.Rename;
-                        file.Parent.Contents.Remove(f.Name);
-                    }
-                }*/
             }
         }
 
