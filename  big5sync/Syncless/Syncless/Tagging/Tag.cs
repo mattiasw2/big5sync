@@ -11,7 +11,12 @@ namespace Syncless.Tagging
         private string _tagName;
         private long _lastUpdated;
         private long _created;
+
+
+        
         private bool _isSeamless;
+
+
         private List<TaggedPath> _pathList;
         private List<Filter> _filters;
         private long _filtersUpdated;

@@ -7,7 +7,7 @@ namespace Syncless.Core.Exceptions
 {
     public class UnhandledException :Exception
     {
-        public UnhandledException()
+        public UnhandledException(Exception inner):base("UnhandledException",inner)
         {
 
         }
