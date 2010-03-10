@@ -20,6 +20,8 @@ namespace Syncless.Tagging
         private const string ELE_TAG_NAME = "name";
         private const string ELE_TAG_CREATEDDATE = "created";
         private const string ELE_TAG_UPDATEDDATE = "updated";
+        private const string ELE_TAG_ISDELETED = "isDeleted";
+        private const string ELE_TAG_DELETEDDATE = "deletedDate";
 
         private const string ELE_TAGGED_FOLDER = "taggedFolder";
         private const string ELE_TAGGED_FOLDER_CREATED = "created";
@@ -178,8 +180,12 @@ namespace Syncless.Tagging
             string tagname = tagElement.GetAttribute(ELE_TAG_NAME);
             long created = long.Parse(tagElement.GetAttribute(ELE_TAG_CREATEDDATE));
             long lastupdated = long.Parse(tagElement.GetAttribute(ELE_TAG_UPDATEDDATE));
+            bool isdeleted = bool.Parse(tagElement.GetAttribute(ELE_TAG_ISDELETED));
+            long deleteddate = long.Parse(tagElement.GetAttribute(ELE_TAG_DELETEDDATE));
             Tag tag = new Tag(tagname, created);
             tag.LastUpdated = lastupdated;
+            tag.IsDeleted = isdeleted;
+            tag.DeletedDate = deleteddate;
             XmlNodeList pathList = tagElement.GetElementsByTagName(ELE_TAGGED_FOLDER);
             XmlElement filters = (XmlElement)tagElement.GetElementsByTagName(ELE_FILTER_ROOT).Item(0);
             foreach (XmlElement path in pathList)
@@ -266,6 +272,8 @@ namespace Syncless.Tagging
             tagElement.SetAttribute(ELE_TAG_NAME, tag.TagName);
             tagElement.SetAttribute(ELE_TAG_CREATEDDATE, tag.Created.ToString());
             tagElement.SetAttribute(ELE_TAG_UPDATEDDATE, tag.LastUpdated.ToString());
+            tagElement.SetAttribute(ELE_TAG_ISDELETED, tag.IsDeleted.ToString());
+            tagElement.SetAttribute(ELE_TAG_DELETEDDATE, tag.DeletedDate.ToString());
             foreach (TaggedPath path in tag.PathList)
             {
                 tagElement.AppendChild(CreateTaggedFolderElement(TaggingDataDocument, path));

@@ -98,21 +98,53 @@ namespace Syncless.Tagging
         /// </summary>
         /// <param name="tagname">The name of the Tag to be created</param>
         /// <returns>The created Tag, else raise TagAlreadyExistsException</returns>
+        #region deprecated
+        //public Tag CreateTag(string tagname)
+        //{
+        //    CurrentTime created = new CurrentTime();
+        //    if (!CheckTagExists(tagname))
+        //    {
+        //        Tag tag = new Tag(tagname, created.CurrentTimeLong);
+        //        _taggingProfile.TagList.Add(tag);
+        //        UpdateTaggingProfileDate(created.CurrentTimeLong);
+        //        TaggingHelper.Logging(LogMessage.TAG_CREATED, tagname);
+        //        return tag;
+        //    }
+        //    else
+        //    {
+        //        TaggingHelper.Logging(LogMessage.TAG_ALREADY_EXISTS, tagname);
+        //        throw new TagAlreadyExistsException(tagname);
+        //    }
+        //}
+        #endregion
         public Tag CreateTag(string tagname)
         {
             CurrentTime created = new CurrentTime();
-            if (!CheckTagExists(tagname))
+            Tag toremove = GetTag(tagname);
+            if (toremove != null)
             {
-                Tag tag = new Tag(tagname, created.CurrentTimeLong);
-                _taggingProfile.TagList.Add(tag);
-                UpdateTaggingProfileDate(created.CurrentTimeLong);
-                TaggingHelper.Logging(LogMessage.TAG_CREATED, tagname);
-                return tag;
+                if (toremove.IsDeleted)
+                {
+                    _taggingProfile.TagList.Remove(toremove);
+                    Tag toadd = new Tag(tagname, created.CurrentTimeLong);
+                    _taggingProfile.TagList.Add(toadd);
+                    UpdateTaggingProfileDate(created.CurrentTimeLong);
+                    TaggingHelper.Logging(LogMessage.TAG_CREATED, tagname);
+                    return toadd;
+                }
+                else
+                {
+                    TaggingHelper.Logging(LogMessage.TAG_ALREADY_EXISTS, tagname);
+                    throw new TagAlreadyExistsException(tagname);
+                }
             }
             else
             {
-                TaggingHelper.Logging(LogMessage.TAG_ALREADY_EXISTS, tagname);
-                throw new TagAlreadyExistsException(tagname);
+                Tag toadd = new Tag(tagname, created.CurrentTimeLong);
+                _taggingProfile.TagList.Add(toadd);
+                UpdateTaggingProfileDate(created.CurrentTimeLong);
+                TaggingHelper.Logging(LogMessage.TAG_CREATED, tagname);
+                return toadd;
             }
         }
 
@@ -154,17 +186,47 @@ namespace Syncless.Tagging
         /// </summary>
         /// <param name="tagname">The name of the Tag to be removed</param>
         /// <returns>The Tag that is removed successfully, else raise TagNotFoundException</returns>
+        #region deprecated
+        //public Tag RemoveTag(string tagname)
+        //{
+        //    CurrentTime updated = new CurrentTime();
+        //    Tag toRemove;
+        //    if (CheckTagExists(tagname))
+        //    {
+        //        toRemove = GetTag(tagname);
+        //        _taggingProfile.TagList.Remove(toRemove);
+        //        UpdateTaggingProfileDate(updated.CurrentTimeLong);
+        //        TaggingHelper.Logging(LogMessage.TAG_REMOVED, tagname);
+        //        return toRemove;
+        //    }
+        //    else
+        //    {
+        //        TaggingHelper.Logging(LogMessage.TAG_NOT_FOUND, tagname);
+        //        throw new TagNotFoundException(tagname);
+        //    }
+        //}
+        #endregion
         public Tag RemoveTag(string tagname)
         {
             CurrentTime updated = new CurrentTime();
-            Tag toRemove;
-            if (CheckTagExists(tagname))
+            Tag toRemove = GetTag(tagname);
+            if (toRemove != null)
             {
-                toRemove = GetTag(tagname);
-                _taggingProfile.TagList.Remove(toRemove);
-                UpdateTaggingProfileDate(updated.CurrentTimeLong);
-                TaggingHelper.Logging(LogMessage.TAG_REMOVED, tagname);
-                return toRemove;
+                if (toRemove.IsDeleted)
+                {
+                    TaggingHelper.Logging(LogMessage.TAG_NOT_FOUND, tagname);
+                    throw new TagNotFoundException(tagname);
+                }
+                else
+                {
+                    toRemove.IsDeleted = true;
+                    toRemove.DeletedDate = updated.CurrentTimeLong;
+                    toRemove.LastUpdated = updated.CurrentTimeLong;
+                    toRemove.RemoveAllPaths();
+                    UpdateTaggingProfileDate(updated.CurrentTimeLong);
+                    TaggingHelper.Logging(LogMessage.TAG_REMOVED, tagname);
+                    return toRemove;
+                }
             }
             else
             {
@@ -189,7 +251,7 @@ namespace Syncless.Tagging
             {
                 tag = new Tag(tagname, updated.CurrentTimeLong);
             }
-            Debug.Assert(tag != null); 
+            Debug.Assert(tag != null);
             if (!tag.Contains(path))
             {
                 if (!TaggingHelper.CheckRecursiveDirectory(tag, path))
@@ -309,6 +371,42 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
+        /// Retrieve the Tag with the particular tag name
+        /// </summary>
+        /// <param name="tagname">The name of the Tag</param>
+        /// <param name="getdeleted">Indicate whether to return the Tag if its IsDeleted property is true</param>
+        /// <returns>The Tag that is to be found, else null</returns>
+        public Tag RetrieveTag(string tagname, bool getdeleted)
+        {
+            return RetrieveTag(tagname, false, getdeleted, 0);
+        }
+
+        /// <summary>
+        /// Retrieve all Tags
+        /// </summary>
+        /// <param name="getdeleted">Indicate whether to return a Tag which has been deleted</param>
+        /// <returns>A list of Tags</returns>
+        public List<Tag> RetrieveAllTags(bool getdeleted)
+        {
+            if (getdeleted)
+            {
+                return _taggingProfile.TagList;
+            }
+            else
+            {
+                List<Tag> pathList = new List<Tag>();
+                foreach (Tag tag in _taggingProfile.TagList)
+                {
+                    if (!tag.IsDeleted)
+                    {
+                        pathList.Add(tag);
+                    }
+                }
+                return pathList;
+            }
+        }
+        
+        /// <summary>
         /// Retrieve a list of Tags where a given path is tagged to
         /// </summary>
         /// <param name="path">The path to find the Tags it is tagged to</param>
@@ -370,7 +468,7 @@ namespace Syncless.Tagging
             }
             return tagList;
         }
-        
+
         /// <summary>
         /// Find a list of paths of folders or sub-folders which share the same Tag as folderPath
         /// </summary>
@@ -412,7 +510,7 @@ namespace Syncless.Tagging
             }
             return pathList;
         }
-        
+
         /// <summary>
         /// Find a list of paths of files which share the same parent directories as filePath
         /// </summary>
@@ -469,7 +567,7 @@ namespace Syncless.Tagging
             }
             return parentPathList;
         }
-        
+
         /// <summary>
         /// Check if a logicalid exists
         /// </summary>
@@ -486,9 +584,7 @@ namespace Syncless.Tagging
             }
             return false;
         }
-        #endregion
-
-        #region miscellaneous public implementations
+        
         /// <summary>
         /// Save information of a profile to a xml file
         /// </summary>
@@ -505,6 +601,37 @@ namespace Syncless.Tagging
         private void UpdateTaggingProfileDate(long created)
         {
             _taggingProfile.LastUpdated = created;
+        }
+
+        private Tag RetrieveTag(string tagname, bool create, bool getdeleted, long lastupdated)
+        {
+            Tag tag = GetTag(tagname);
+            if (tag != null)
+            {
+                if (tag.IsDeleted == true)
+                {
+                    if (getdeleted)
+                    {
+                        return tag;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    return tag;
+                }
+            }
+            else
+            {
+                if (create)
+                {
+                    tag = new Tag(tagname, lastupdated);
+                }
+                return tag;
+            }
         }
 
         private Tag RetrieveTag(string tagname, bool create, long lastupdated)
@@ -578,7 +705,6 @@ namespace Syncless.Tagging
             }
             return false;
         }
-
         #endregion
         #endregion
     }
