@@ -8,11 +8,14 @@ namespace CompareAndSync.CompareObject
     public class FolderCompareObject : BaseCompareObject
     {
         private Dictionary<string, BaseCompareObject> _contents;
+        private List<string> _possibleNewNames;
+        private bool _dirty;
 
         public FolderCompareObject(string name, int numOfPaths, FolderCompareObject parent)
             : base(name, numOfPaths, parent)
         {
             _contents = new Dictionary<string, BaseCompareObject>(StringComparer.OrdinalIgnoreCase);
+            _possibleNewNames = new List<string>();
         }
 
         public void AddChild(BaseCompareObject child)
@@ -59,6 +62,12 @@ namespace CompareAndSync.CompareObject
         public bool ContainsChild(string name)
         {
             return _contents.ContainsKey(name);
+        }
+
+        public bool Dirty
+        {
+            get { return _dirty; }
+            set { _dirty = value; }
         }
 
         public Dictionary<string, BaseCompareObject> Contents

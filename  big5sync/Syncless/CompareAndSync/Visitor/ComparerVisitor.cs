@@ -19,7 +19,6 @@ namespace CompareAndSync.Visitor
 
         public void Visit(FolderCompareObject folder, string[] currentPaths)
         {
-            //Delete, New, Copy, Rename
             ProcessFolderMetaData(folder, currentPaths);
             CompareFolders(folder, currentPaths);
         }
@@ -40,7 +39,7 @@ namespace CompareAndSync.Visitor
                 if (file.Exists[i] && !file.MetaExists[i])
                 {
                     file.ChangeType[i] = MetaChangeType.New; //Possible rename/move
-                    file.Parent.ChangeType[i] = MetaChangeType.Dirty; //Experimental
+                    file.Parent.Dirty = true;
                 }
                 else if (!file.Exists[i] && file.MetaExists[i])
                     file.ChangeType[i] = MetaChangeType.Delete; //Possible rename/move
@@ -49,7 +48,7 @@ namespace CompareAndSync.Visitor
                     if (file.Length[i] != file.MetaLength[i] || file.Hash[i] != file.MetaHash[i])
                     {
                         file.ChangeType[i] = MetaChangeType.Update;
-                        file.Parent.ChangeType[i] = MetaChangeType.Dirty; //Experimental
+                        file.Parent.Dirty = true;
                     }
                     else
                         file.ChangeType[i] = MetaChangeType.NoChange;
@@ -57,7 +56,7 @@ namespace CompareAndSync.Visitor
                 else
                 {
                     file.ChangeType[i] = null;
-                    file.Parent.ChangeType[i] = MetaChangeType.Dirty; //Experimental
+                    file.Parent.Dirty = true; ; //Experimental
                 }
             }
         }
@@ -193,6 +192,11 @@ namespace CompareAndSync.Visitor
             }
         }
 
+        private void DetectFolderRename(FolderCompareObject folder, string[] currentPaths)
+        {
+
+        }
+
         private void CompareFolders(FolderCompareObject folder, string[] currentPaths)
         {
             //Delete will only occur if none of the folders are marked as dirty
@@ -202,7 +206,7 @@ namespace CompareAndSync.Visitor
             {
                 if (folder.ChangeType[i] == MetaChangeType.Delete)
                     deletePos.Add(i);
-                else if (folder.ChangeType[i] == MetaChangeType.Dirty) //Old code: != MetaChangeType.NoChange
+                else if (folder.Dirty) //Old code: folder.ChangeType[i] != MetaChangeType.NoChange
                 {
                     deletePos.Clear();
                     break;

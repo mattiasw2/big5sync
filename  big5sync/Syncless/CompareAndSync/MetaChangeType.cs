@@ -13,6 +13,5 @@ namespace CompareAndSync
         NoChange, //File, Folder
         Rename, //File, Folder
         Update, //File
-        Dirty //Folder
     }
 }
