@@ -11,12 +11,9 @@ namespace Syncless.Tagging
         private string _tagName;
         private long _lastUpdated;
         private long _created;
-
-
-        
         private bool _isSeamless;
-
-
+        private bool _isDeleted;
+        private long _deletedDate;
         private List<TaggedPath> _pathList;
         private List<Filter> _filters;
         private long _filtersUpdated;
@@ -53,6 +50,16 @@ namespace Syncless.Tagging
             get { return _isSeamless; }
             set { _isSeamless = value; }
         }
+        public bool IsDeleted
+        {
+            get { return _isDeleted; }
+            set { _isDeleted = value; }
+        }
+        public long DeletedDate
+        {
+            get { return _deletedDate; }
+            set { _deletedDate = value; }
+        }
         public List<TaggedPath> PathList
         {
             get { return _pathList; }
@@ -74,6 +81,8 @@ namespace Syncless.Tagging
             this._created = created;
             this._lastUpdated = created;
             this._isSeamless = true;
+            this._isDeleted = false;
+            this._deletedDate = 0;
             this._pathList = new List<TaggedPath>();
             this._filters = new List<Filter>();
             this._filtersUpdated = created;
@@ -113,6 +122,14 @@ namespace Syncless.Tagging
                 }
             }
             return false;
+        }
+
+        public void RemoveAllPaths()
+        {
+            while (_pathList.Count > 0)
+            {
+                _pathList.RemoveAt(0);
+            }
         }
 
         public bool Contains(string path)
