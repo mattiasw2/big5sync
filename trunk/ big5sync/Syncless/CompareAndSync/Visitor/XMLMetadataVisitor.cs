@@ -10,8 +10,6 @@ namespace CompareAndSync.Visitor
 {
     public class XMLMetadataVisitor : IVisitor
     {
-        #region IVisitor Members
-
         private const string META_DIR = ".syncless";
         private const string XML_NAME = @"\syncless.xml";
         private const string METADATAPATH = META_DIR + @"\syncless.xml";
@@ -23,42 +21,52 @@ namespace CompareAndSync.Visitor
         private const string NODE_LAST_CREATED = "last_created";
         private const string NODE_NAME_OF_FOLDER = "name_of_folder";
 
-        public void Visit(FileCompareObject file, string[] currentPath)
+        #region IVisitor Members
+
+        public void Visit(FileCompareObject file, string[] currentPaths)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            for (int i = 0; i < currentPath.Length; i++)
+            for (int i = 0; i < currentPaths.Length; i++)
             {
-                if (currentPath[i].Contains(META_DIR))
+                if (currentPaths[i].Contains(META_DIR))
                     continue;
-                string path = Path.Combine(currentPath[i], METADATAPATH);
+                string path = Path.Combine(currentPaths[i], METADATAPATH);
                 if (!File.Exists(path))
                     continue;
                 xmlDoc.Load(path);
-                file = PopulateFileWithMetaData(xmlDoc, file,i);
-                xmlDoc.Save(path);
+                file = PopulateFileWithMetaData(xmlDoc, file, i);
+                xmlDoc = null;
+                //xmlDoc.Save(path);
+                ProcessFileMetaData(file, currentPaths);
             }
         }
 
-        public void Visit(FolderCompareObject folder, string[] currentPath)
+        public void Visit(FolderCompareObject folder, string[] currentPaths)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            for (int i = 0; i < currentPath.Length; i++)
+            for (int i = 0; i < currentPaths.Length; i++)
             {
-                if (currentPath[i].Contains(META_DIR))
+                if (currentPaths[i].Contains(META_DIR))
                     continue;
-                string path = Path.Combine(currentPath[i], METADATAPATH);
+                string path = Path.Combine(currentPaths[i], METADATAPATH);
                 if (!File.Exists(path))
                     continue;
                 xmlDoc.Load(path);
                 folder = PopulateFolderWithMetaData(xmlDoc, folder, i);
-                xmlDoc.Save(path);
+                xmlDoc = null;
+                //xmlDoc.Save(path);
+                ProcessFolderMetaData(folder, currentPaths);
             }
         }
 
         public void Visit(RootCompareObject root)
         {
-           //
+            //
         }
+
+        #endregion
+
+        #region Files
 
         private FileCompareObject PopulateFileWithMetaData(XmlDocument xmlDoc, FileCompareObject file, int counter)
         {
@@ -93,6 +101,30 @@ namespace CompareAndSync.Visitor
 
         }
 
+        private void ProcessFileMetaData(FileCompareObject file, string[] currentPaths)
+        {
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                if (file.Exists[i] && !file.MetaExists[i])
+                    file.ChangeType[i] = MetaChangeType.New; //Possible rename/move
+                else if (!file.Exists[i] && file.MetaExists[i])
+                    file.ChangeType[i] = MetaChangeType.Delete; //Possible rename/move
+                else if (file.Exists[i] && file.MetaExists[i])
+                {
+                    if (file.Length[i] != file.MetaLength[i] || file.Hash[i] != file.MetaHash[i])
+                        file.ChangeType[i] = MetaChangeType.Update;
+                    else
+                        file.ChangeType[i] = MetaChangeType.NoChange;
+                }
+                else
+                    file.ChangeType[i] = null;
+            }
+        }
+
+        #endregion
+
+        #region Folders
+
         private FolderCompareObject PopulateFolderWithMetaData(XmlDocument xmlDoc, FolderCompareObject folder, int counter)
         {
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
@@ -103,6 +135,22 @@ namespace CompareAndSync.Visitor
             return folder;
         }
 
+        private void ProcessFolderMetaData(FolderCompareObject folder, string[] currentPaths)
+        {
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                if (folder.Exists[i] && !folder.MetaExists[i])
+                    folder.ChangeType[i] = MetaChangeType.New; //Possible rename/move
+                else if (!folder.Exists[i] && folder.MetaExists[i])
+                    folder.ChangeType[i] = MetaChangeType.Delete; //Possible rename/move
+                else if (folder.Exists[i] && folder.MetaExists[i])
+                    folder.ChangeType[i] = MetaChangeType.NoChange;
+                else
+                    folder.ChangeType[i] = null;
+            }
+        }
+
         #endregion
+
     }
 }

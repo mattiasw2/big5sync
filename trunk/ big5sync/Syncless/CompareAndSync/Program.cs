@@ -13,7 +13,7 @@ namespace CompareAndSync
         {
             while (true)
             {
-                RootCompareObject rco = new RootCompareObject(new string[] { @"C:\Users\Wysie\Desktop\SyncTest\A", @"C:\Users\Wysie\Desktop\SyncTest\B", @"C:\Users\Wysie\Desktop\SyncTest\C", @"C:\Users\Wysie\Desktop\SyncTest\D" });
+                RootCompareObject rco = new RootCompareObject(new string[] { @"C:\Users\Wysie\Desktop\SyncTest\A", @"C:\Users\Wysie\Desktop\SyncTest\B" /*, @"C:\Users\Wysie\Desktop\SyncTest\C", @"C:\Users\Wysie\Desktop\SyncTest\D" */});
                 CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor());
                 CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
                 CompareObjectHelper.PreTraverseFolder(rco, new ComparerVisitor());

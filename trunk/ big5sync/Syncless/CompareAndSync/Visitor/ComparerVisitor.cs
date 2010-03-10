@@ -12,14 +12,12 @@ namespace CompareAndSync.Visitor
 
         public void Visit(FileCompareObject file, string[] currentPaths)
         {
-            ProcessFileMetaData(file, currentPaths);
             DetectFileRename(file, currentPaths);
             CompareFiles(file, currentPaths);
         }
 
         public void Visit(FolderCompareObject folder, string[] currentPaths)
         {
-            ProcessFolderMetaData(folder, currentPaths);
             CompareFolders(folder, currentPaths);
         }
 
@@ -32,35 +30,6 @@ namespace CompareAndSync.Visitor
 
         #region Files
 
-        private void ProcessFileMetaData(FileCompareObject file, string[] currentPaths)
-        {
-            for (int i = 0; i < currentPaths.Length; i++)
-            {
-                if (file.Exists[i] && !file.MetaExists[i])
-                {
-                    file.ChangeType[i] = MetaChangeType.New; //Possible rename/move
-                    file.Parent.Dirty = true;
-                }
-                else if (!file.Exists[i] && file.MetaExists[i])
-                    file.ChangeType[i] = MetaChangeType.Delete; //Possible rename/move
-                else if (file.Exists[i] && file.MetaExists[i])
-                {
-                    if (file.Length[i] != file.MetaLength[i] || file.Hash[i] != file.MetaHash[i])
-                    {
-                        file.ChangeType[i] = MetaChangeType.Update;
-                        file.Parent.Dirty = true;
-                    }
-                    else
-                        file.ChangeType[i] = MetaChangeType.NoChange;
-                }
-                else
-                {
-                    file.ChangeType[i] = null;
-                    file.Parent.Dirty = true; ; //Experimental
-                }
-            }
-        }
-
         private void DetectFileRename(FileCompareObject file, string[] currentPaths)
         {
             FileCompareObject f = null;
@@ -71,7 +40,7 @@ namespace CompareAndSync.Visitor
                 {
                     f = file.Parent.GetIdenticalFile(file.MetaHash[i], file.MetaCreationTime[i]);
                     
-                    if (f != null)
+                    if (f != null && f.Name != file.Name)
                     {
                         int counter = 0;
 
@@ -90,6 +59,30 @@ namespace CompareAndSync.Visitor
                         file.Parent.Contents.Remove(f.Name);                        
                     }
                 }
+                /*
+                else if (file.ChangeType[i] == MetaChangeType.New)
+                {
+                    f = file.Parent.GetIdenticalFile(file.MetaHash[i], file.MetaCreationTime[i]);
+
+                    if (f != null && f.Name != file.Name)
+                    {
+                        int counter = 0;
+
+                        //Check that f is MetaChangeType.Delete for exactly one i
+                        for (int j = 0; j < f.ChangeType.Length; j++)
+                        {
+                            if (f.ChangeType[i] == MetaChangeType.Delete)
+                                counter++;
+                        }
+
+                        if (counter != 1)
+                            return;
+
+                        f.NewName = file.Name;
+                        f.ChangeType[i] = MetaChangeType.Rename;
+                        file.Parent.Contents.Remove(f.Name);
+                    }
+                }*/
             }
         }
 
@@ -176,21 +169,6 @@ namespace CompareAndSync.Visitor
         #endregion
 
         #region Folders
-
-        private void ProcessFolderMetaData(FolderCompareObject folder, string[] currentPaths)
-        {
-            for (int i = 0; i < currentPaths.Length; i++)
-            {
-                if (folder.Exists[i] && !folder.MetaExists[i])
-                    folder.ChangeType[i] = MetaChangeType.New; //Possible rename/move
-                else if (!folder.Exists[i] && folder.MetaExists[i])
-                    folder.ChangeType[i] = MetaChangeType.Delete; //Possible rename/move
-                else if (folder.Exists[i] && folder.MetaExists[i])
-                    folder.ChangeType[i] = MetaChangeType.NoChange;
-                else
-                    folder.ChangeType[i] = null;
-            }
-        }
 
         private void DetectFolderRename(FolderCompareObject folder, string[] currentPaths)
         {
