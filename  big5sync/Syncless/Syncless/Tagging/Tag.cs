@@ -11,12 +11,20 @@ namespace Syncless.Tagging
         private string _tagName;
         private long _lastUpdated;
         private long _created;
-        private bool _isSeamless;
+        
         private bool _isDeleted;
         private long _deletedDate;
         private List<TaggedPath> _pathList;
         private List<Filter> _filters;
         private long _filtersUpdated;
+
+        private TagConfig _config;
+
+        internal TagConfig Config
+        {
+            get { return _config; }
+            set { _config = value; }
+        }
 
         public string TagName
         {
@@ -47,8 +55,18 @@ namespace Syncless.Tagging
         }
         public bool IsSeamless
         {
-            get { return _isSeamless; }
-            set { _isSeamless = value; }
+            get { return _config.IsSeamless; }
+            set { _config.IsSeamless = value; }
+        }
+        public string ArchiveName
+        {
+            get { return _config.ArchiveFolderName; }
+            set { _config.ArchiveFolderName = value; }
+        }
+        public int ArchiveCount
+        {
+            get { return _config.ArchiveCount; }
+            set { _config.ArchiveCount = value; }
         }
         public bool IsDeleted
         {
@@ -80,12 +98,12 @@ namespace Syncless.Tagging
             this._tagName = tagname;
             this._created = created;
             this._lastUpdated = created;
-            this._isSeamless = true;
             this._isDeleted = false;
             this._deletedDate = 0;
             this._pathList = new List<TaggedPath>();
             this._filters = new List<Filter>();
             this._filtersUpdated = created;
+            this._config = new TagConfig();
         }
 
         public void RenameTag(string newname, long updated)

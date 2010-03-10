@@ -109,6 +109,11 @@ namespace Syncless.Core
 
         #region IUIControllerInterface Members
 
+        /// <summary>
+        /// Manually Sync a Tag
+        /// </summary>
+        /// <param name="tagname">tagname of the Tag to Sync</param>
+        /// <returns>true if the sync is success.</returns>
         public bool StartManualSync(string tagname)
         {
             try
@@ -413,17 +418,26 @@ namespace Syncless.Core
             */
             throw new NotImplementedException();
         }
-
+        /// <summary>
+        /// Update the filterlist of a tag
+        /// </summary>
+        /// <param name="tagname">tagname of the tag</param>
+        /// <param name="filterlist">filterlist</param>
+        /// <returns>true if succeed</returns>
         public bool UpdateFilterList(string tagname, List<Filter> filterlist)
         {
+
             try
             {
-                TaggingLayer.Instance.UpdateFilter(tagname, filterlist);
-                return true;
-            }
-            catch (TagNotFoundException tnfe)
-            {
-                throw tnfe;
+                try
+                {
+                    TaggingLayer.Instance.UpdateFilter(tagname, filterlist);
+                    return true;
+                }
+                catch (TagNotFoundException tnfe)
+                {
+                    throw tnfe;
+                }
             }
             catch (Exception e)
             {
@@ -506,7 +520,6 @@ namespace Syncless.Core
         }
         private bool Initiate()
         {
-
             SaveLoadHelper.LoadAll(appPath);
             List<Tag> tagList = TaggingLayer.Instance.AllTagList;
             foreach (Tag t in tagList)
@@ -518,7 +531,6 @@ namespace Syncless.Core
 
             DeviceWatcher.Instance.ToString(); //Starts watching for Drive Change
             return true;
-
         }
         private TagView ConvertToTagView(Tag t)
         {
@@ -531,17 +543,16 @@ namespace Syncless.Core
         }
         private bool StartManualSync(Tag tag)
         {
-            
             List<string> paths = tag.PathStringList;
             List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
             if (filterPaths[0].Count != 0)
             {
-                ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), filterPaths[1].ToArray(), tag.Filters);
+                ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), filterPaths[1].ToArray(), tag.Filters,tag.ArchiveName,tag.ArchiveCount);
                 CompareAndSyncController.Instance.Sync(syncRequest);
             }
             return true;
-
         }
+
         #endregion
 
     }

@@ -8,9 +8,13 @@ namespace Syncless.CompareAndSync.Request
 {
     public class ManualSyncRequest : ManualRequest
     {
-        public ManualSyncRequest(string[] paths, string[] unavailablePaths, List<Filter> filters)
+        private string _archiveFolder;
+        private int _archiveLimit;
+        public ManualSyncRequest(string[] paths, string[] unavailablePaths, List<Filter> filters,string archiveFolder,int archiveLimit)
             : base(paths, unavailablePaths, filters)
         {
+            _archiveFolder = archiveFolder;
+            _archiveLimit = archiveLimit;
         }
     }
 }
