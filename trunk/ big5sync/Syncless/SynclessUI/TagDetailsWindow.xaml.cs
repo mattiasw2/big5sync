@@ -56,6 +56,13 @@ namespace SynclessUI
 
             ListFilters.ItemsSource = null;
 			ListFilters.ItemsSource = generatedFilterStringList;
+			
+			if(generatedFilterStringList.Count == 0) {
+				TxtBoxPattern.IsEnabled = false;
+				TxtBoxPattern.Text = "";
+				CmbBoxMode.IsEnabled = false;
+				CmbBoxMode.SelectedIndex = -1;
+			}
         }
 
         private void SelectFilter(Filter f) {
@@ -90,10 +97,12 @@ namespace SynclessUI
 
 		private void BtnRemoveFilter_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-			int index = ListFilters.SelectedIndex;
-			filters.RemoveAt(index);
-			
-            PopulateFilterStringList();
+			if(ListFilters.SelectedIndex != -1) {
+				int index = ListFilters.SelectedIndex;
+				filters.RemoveAt(index);
+				
+				PopulateFilterStringList();
+			}
 		}
 
 		private void TabItemFiltering_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
