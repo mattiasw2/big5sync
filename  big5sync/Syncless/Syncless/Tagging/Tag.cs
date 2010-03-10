@@ -11,20 +11,12 @@ namespace Syncless.Tagging
         private string _tagName;
         private long _lastUpdated;
         private long _created;
-        
         private bool _isDeleted;
         private long _deletedDate;
         private List<TaggedPath> _pathList;
         private List<Filter> _filters;
         private long _filtersUpdated;
-
         private TagConfig _config;
-
-        internal TagConfig Config
-        {
-            get { return _config; }
-            set { _config = value; }
-        }
 
         public string TagName
         {
@@ -92,6 +84,11 @@ namespace Syncless.Tagging
             get { return _filtersUpdated; }
             set { _filtersUpdated = value; }
         }
+        internal TagConfig Config
+        {
+            get { return _config; }
+            set { _config = value; }
+        }
 
         public Tag(string tagname, long created)
         {
@@ -121,8 +118,19 @@ namespace Syncless.Tagging
                 taggedPath.LogicalDriveId = TaggingHelper.GetLogicalID(path);
                 taggedPath.Created = created;
                 taggedPath.LastUpdated = created;
-                _lastUpdated = created;
+                _lastUpdated = TaggingHelper.GetCurrentTime();
                 _pathList.Add(taggedPath);
+                return true;
+            }
+            return false;
+        }
+
+        public bool AddPath(TaggedPath path)
+        {
+            if (!Contains(path.Path))
+            {
+                _lastUpdated = TaggingHelper.GetCurrentTime();
+                _pathList.Add(path);
                 return true;
             }
             return false;
@@ -154,7 +162,7 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.Path.Equals(path))
+                if ((p.Path.ToLower()).Equals(path.ToLower()))
                 {
                     return true;
                 }
@@ -206,7 +214,7 @@ namespace Syncless.Tagging
             {
                 _filters.Add(filter);
                 _filtersUpdated = updated;
-                _lastUpdated = updated;
+                _lastUpdated = TaggingHelper.GetCurrentTime();
             }
         }
 
