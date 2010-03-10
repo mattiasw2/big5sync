@@ -9,6 +9,25 @@ namespace Syncless.CompareAndSync
 {
     public class CompareAndSyncController
     {
+        private CompareAndSyncController _instance;
+
+        public CompareAndSyncController Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new CompareAndSyncController();
+                }
+                return _instance;
+            }
+        }
+
+        private CompareAndSyncController()
+        {
+
+        }
+
         public RootCompareObject Sync(ManualSyncRequest request)
         {
             return null;

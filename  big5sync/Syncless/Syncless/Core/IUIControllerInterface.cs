@@ -32,8 +32,6 @@ namespace Syncless.Core
 
         bool Initiate(IUIInterface inf);
 
-		List<CompareResult> PreviewSync(string tagname);
-
         bool RenameTag(String oldtagname, String newtagname);
 
         bool StartManualSync(String tagname);

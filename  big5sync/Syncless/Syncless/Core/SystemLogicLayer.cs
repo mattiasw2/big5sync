@@ -18,7 +18,7 @@ using Syncless.Helper;
 using Syncless.Filters;
 namespace Syncless.Core
 {
-    internal class SystemLogicLayer :IUIControllerInterface,IMonitorControllerInterface,ICommandLineControllerInterface,IOriginsFinder
+    internal class SystemLogicLayer : IUIControllerInterface, IMonitorControllerInterface, ICommandLineControllerInterface, IOriginsFinder
     {
         #region Singleton
         private static SystemLogicLayer _instance;
@@ -30,7 +30,7 @@ namespace Syncless.Core
                 if (_instance == null)
                 {
                     _instance = new SystemLogicLayer();
-                    
+
                 }
                 return _instance;
             }
@@ -41,139 +41,53 @@ namespace Syncless.Core
         }
 
         #endregion
-
-        #region IMonitorControllerInterface Members
+        #region IMonitorControllerInterface
 
         public void HandleFileChange(FileChangeEvent fe)
         {
-            string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
-            if(logicalOldPath == null){
-                return;
-            }
-            List<string> oldLogicalOrigin = TaggingLayer.Instance.RetrieveParentByPath(logicalOldPath);
-            List<string> oldPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(oldLogicalOrigin);
-            MonitorPathPair oldPair = new MonitorPathPair(oldPhysicalOrigin,fe.OldPath.FullName);
-
-            List<string> logicalSimilarPaths = TaggingLayer.Instance.FindSimilarPathForFile(logicalOldPath);
-            List<MonitorPathPair> monitorPair = new List<MonitorPathPair>();
-            foreach (string logical in logicalSimilarPaths)
-            {
-                List<string> logicalOrigins = TaggingLayer.Instance.RetrieveParentByPath(logical);
-                string physical = ProfilingLayer.Instance.ConvertLogicalToPhysical(logical);
-                List<string> physicalOrigins = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalOrigins);
-                monitorPair.Add(new MonitorPathPair(physicalOrigins,physical));
-            }
-
-            List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
-            
-            if (fe.Event == EventChangeType.CREATED)
-            {                
-                MonitorSyncRequest syncRequest = new MonitorSyncRequest(oldPair,monitorPair,FileChangeType.Create,IsFolder.No);
-                CompareSyncController.Instance.Sync(syncRequest);
-            }
-            else if (fe.Event == EventChangeType.MODIFIED)
-            {
-                MonitorSyncRequest syncRequest = new MonitorSyncRequest(oldPair, monitorPair, FileChangeType.Update, IsFolder.No);
-                CompareSyncController.Instance.Sync(syncRequest);
-            }
-            else if (fe.Event == EventChangeType.RENAMED)
-            {
-                string physicalNewPath = fe.NewPath.FullName;
-                string logicalNewPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(physicalNewPath,false);
-                List<string> newLogicalOrigin = TaggingLayer.Instance.RetrieveParentByPath(logicalNewPath);
-                List<string> newPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(newLogicalOrigin);
-                MonitorPathPair newPair = new MonitorPathPair(newPhysicalOrigin, physicalNewPath);
-                Debug.Assert(logicalNewPath != null);
-                MonitorSyncRequest syncRequest = new MonitorSyncRequest(oldPair, newPair, monitorPair, FileChangeType.Rename, IsFolder.No);
-                
-                
-                CompareSyncController.Instance.Sync(syncRequest);
-            }
-            
+            throw new NotImplementedException();
         }
 
         public void HandleFolderChange(FolderChangeEvent fe)
         {
-            
-            string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
-            if (logicalOldPath == null)
-            {
-                return;
-            }
-            List<string> oldLogicalOrigin = TaggingLayer.Instance.RetrieveParentByPath(logicalOldPath);
-            List<string> oldPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(oldLogicalOrigin);
-            MonitorPathPair oldPair = new MonitorPathPair(oldPhysicalOrigin,fe.OldPath.FullName);
-
-            List<string> logicalSimilarPaths = TaggingLayer.Instance.FindSimilarPathForFolder(logicalOldPath);
-            List<MonitorPathPair> monitorPair = new List<MonitorPathPair>();
-            foreach (string logical in logicalSimilarPaths)
-            {
-                List<string> logicalOrigins = TaggingLayer.Instance.RetrieveParentByPath(logical);
-                string physical = ProfilingLayer.Instance.ConvertLogicalToPhysical(logical);
-                List<string> physicalOrigins = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalOrigins);
-                monitorPair.Add(new MonitorPathPair(physicalOrigins,physical));
-            }
-
-            List<string> physicalSimilarPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(logicalSimilarPaths);
-            
-            if (fe.Event == EventChangeType.CREATED)
-            {
-                MonitorSyncRequest syncRequest = new MonitorSyncRequest(oldPair, monitorPair, FileChangeType.Create, IsFolder.Yes);
-                CompareSyncController.Instance.Sync(syncRequest);
-
-            }
-            else if (fe.Event == EventChangeType.RENAMED)
-            {
-                string physicalNewPath = fe.NewPath.FullName;
-                string logicalNewPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(physicalNewPath, false);
-                List<string> newLogicalOrigin = TaggingLayer.Instance.RetrieveParentByPath(logicalNewPath);
-                List<string> newPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(newLogicalOrigin);
-                MonitorPathPair newPair = new MonitorPathPair(newPhysicalOrigin, physicalNewPath);
-                Debug.Assert(logicalNewPath != null);
-                
-                MonitorSyncRequest syncRequest = new MonitorSyncRequest(oldPair,newPair, monitorPair, FileChangeType.Rename, IsFolder.Yes);
-                CompareSyncController.Instance.Sync(syncRequest);
-                TaggingLayer.Instance.RenameFolder(logicalOldPath, logicalNewPath);
-            }
-            
+            throw new NotImplementedException();
         }
-
         public void HandleDriveChange(DriveChangeEvent dce)
         {
-            
-            if (dce.Type == DriveChangeType.DRIVE_IN)
-            {
-                ProfilingLayer.Instance.UpdateDrive(dce.Info);
-                string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
-                List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logical);
-                
-                foreach (Tag t in tagList)
-                {
-                    List<string> rawPaths = t.PathStringList;
-                    List<string> paths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(rawPaths);
-                    SyncRequest syncRequest = new SyncRequest(paths);
-                    CompareSyncController.Instance.Sync(syncRequest);
-                }
-                List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
 
-                foreach (string path in pathList)
-                {
-                    MonitorLayer.Instance.MonitorPath(path);
-                }
-            }
-            else
-            {
-                
-                string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
-                List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
+            //if (dce.Type == DriveChangeType.DRIVE_IN)
+            //{
+            //    ProfilingLayer.Instance.UpdateDrive(dce.Info);
+            //    string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
+            //    List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logical);
 
-                foreach (string path in pathList)
-                {
-                    MonitorLayer.Instance.MonitorPath(path);
-                }
-                ProfilingLayer.Instance.RemoveDrive(dce.Info);
-            }
-             
+            //    foreach (Tag t in tagList)
+            //    {
+            //        List<string> rawPaths = t.PathStringList;
+            //        List<string> paths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(rawPaths);
+            //        SyncRequest syncRequest = new SyncRequest(paths);
+            //        CompareSyncController.Instance.Sync(syncRequest);
+            //    }
+            //    List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
+
+            //    foreach (string path in pathList)
+            //    {
+            //        MonitorLayer.Instance.MonitorPath(path);
+            //    }
+            //}
+            //else
+            //{
+
+            //    string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
+            //    List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
+
+            //    foreach (string path in pathList)
+            //    {
+            //        MonitorLayer.Instance.MonitorPath(path);
+            //    }
+            //    ProfilingLayer.Instance.RemoveDrive(dce.Info);
+            //}
+
         }
 
         public void HandleDeleteChange(DeleteChangeEvent dce)
@@ -184,12 +98,12 @@ namespace Syncless.Core
         #endregion
 
         #region Logging
-        
+
         public Logger GetLogger(string type)
         {
             return LoggingLayer.Instance.GetLogger(type);
         }
-        
+
         #endregion
 
         #region IUIControllerInterface Members
@@ -230,7 +144,8 @@ namespace Syncless.Core
                 {
                     throw te;
                 }
-            }catch(Exception e)// Handle Unexpected Exception
+            }
+            catch (Exception e)// Handle Unexpected Exception
             {
                 ExceptionHandler.Handle(e);
                 throw new UnhandledException(e);
@@ -376,7 +291,8 @@ namespace Syncless.Core
                 }
                 tagNames.Sort();
                 return tagNames;
-            }catch(Exception e)// Handle Unexpected Exception
+            }
+            catch (Exception e)// Handle Unexpected Exception
             {
                 ExceptionHandler.Handle(e);
                 throw new UnhandledException(e);
@@ -433,7 +349,7 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
-       
+
         public bool PrepareForTermination()
         {
             try
@@ -475,24 +391,8 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
-        public List<CompareResult> PreviewSync(string tagname)
-        {
-            try
-            {
-                Tag Tag = TaggingLayer.Instance.RetrieveTag(tagname);
-                List<string> paths = Tag.PathStringList;
-                List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-                CompareRequest compareRequest = new CompareRequest(convertedPath);
-                return CompareSyncController.Instance.Compare(compareRequest);
-            }
-            catch (Exception e)
-            {
-                ExceptionHandler.Handle(e);
-                throw new UnhandledException(e);
-            }
-        }
-        
-        
+
+
         public bool RenameTag(string oldtagname, string newtagname)
         {
             /*
@@ -539,7 +439,7 @@ namespace Syncless.Core
 
         public List<string> GetOrigins(string path)
         {
-            string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(path,false);
+            string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(path, false);
             if (path == null)
             {
                 return null;
@@ -592,16 +492,16 @@ namespace Syncless.Core
         }
         private bool Initiate()
         {
-            
+
             SaveLoadHelper.LoadAll(appPath);
             List<Tag> tagList = TaggingLayer.Instance.AllTagList;
             foreach (Tag t in tagList)
             {
                 StartManualSync(t);
-                
-                MonitorTag(t,t.IsSeamless);
+
+                MonitorTag(t, t.IsSeamless);
             }
-            CompareSyncController.Instance.Init(this);
+
             DeviceWatcher.Instance.ToString(); //Starts watching for Drive Change
             return true;
 
@@ -617,15 +517,18 @@ namespace Syncless.Core
         }
         private bool StartManualSync(Tag tag)
         {
-            List<string> paths = tag.PathStringList;
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            if (convertedPath.Count != 0)
-            {
-                SyncRequest syncRequest = new SyncRequest(convertedPath);
-                CompareSyncController.Instance.Sync(syncRequest);
-            }
+
+            //List<string> paths = tag.PathStringList;
+            //List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
+            //if (convertedPath.Count != 0)
+            //{
+            //    SyncRequest syncRequest = new SyncRequest(convertedPath);
+            //    CompareSyncController.Instance.Sync(syncRequest);
+            //}
             return true;
+
         }
         #endregion
+
     }
 }
