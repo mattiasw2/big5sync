@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Syncless.CompareAndSync.CompareObject;
+using Syncless.CompareAndSync.Enum;
 
 namespace Syncless.CompareAndSync.Visitor
 {

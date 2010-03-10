@@ -5,7 +5,7 @@ using System.Text;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Visitor;
 
-namespace Syncless.CompareAndSync.CompareAndSync
+namespace Syncless.CompareAndSync
 {
     public class CompareObjectHelper
     {

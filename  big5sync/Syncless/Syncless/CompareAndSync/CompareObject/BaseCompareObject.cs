@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Syncless.CompareAndSync.Enum;
 
 namespace Syncless.CompareAndSync.CompareObject
 {
@@ -23,6 +24,7 @@ namespace Syncless.CompareAndSync.CompareObject
         //private List<string> _newNames;
         private string _newName;
         private FolderCompareObject _parent;
+        private ToDo? _todo;
 
         protected BaseCompareObject(string name, int numOfPaths, FolderCompareObject parent)
         {
@@ -102,6 +104,12 @@ namespace Syncless.CompareAndSync.CompareObject
         {
             get { return _parent; }
             set { _parent = value; }
+        }
+
+        public ToDo? ToDoAction
+        {
+            get { return _todo; }
+            set { _todo = value; }
         }
 
     }
