@@ -524,9 +524,10 @@ namespace Syncless.Core
             List<Tag> tagList = TaggingLayer.Instance.AllTagList;
             foreach (Tag t in tagList)
             {
-                StartManualSync(t);
-
-                MonitorTag(t, t.IsSeamless);
+                if (t.IsSeamless)
+                {
+                    MonitorTag(t, t.IsSeamless);
+                }
             }
 
             DeviceWatcher.Instance.ToString(); //Starts watching for Drive Change
