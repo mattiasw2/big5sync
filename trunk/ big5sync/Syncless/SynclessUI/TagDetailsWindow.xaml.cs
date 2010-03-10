@@ -149,6 +149,7 @@ namespace SynclessUI
 				ExtensionFilter ef = (ExtensionFilter) f;
 				ef.Pattern = TxtBoxPattern.Text;
 			}
+			PopulateFilterStringList();
 		}
 
 		private void CmbBoxMode_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
