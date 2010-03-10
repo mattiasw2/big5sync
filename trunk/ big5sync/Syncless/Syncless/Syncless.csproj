@@ -61,10 +61,12 @@
     <Compile Include="CompareAndSync\Request\ManualCompareRequest.cs" />
     <Compile Include="CompareAndSync\Request\ManualRequest.cs" />
     <Compile Include="CompareAndSync\Request\ManualSyncRequest.cs" />
+    <Compile Include="CompareAndSync\Request\Request.cs" />
     <Compile Include="CompareAndSync\Result\CompareConflictResult.cs" />
     <Compile Include="CompareAndSync\Result\ConflictResult.cs" />
     <Compile Include="CompareAndSync\Result\Result.cs" />
     <Compile Include="CompareAndSync\Result\SyncConflictResult.cs" />
+    <Compile Include="CompareAndSync\SeamlessSyncer.cs" />
     <Compile Include="CompareAndSync\Visitor\BuilderVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\ComparerVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\IVisitor.cs" />

@@ -6,7 +6,7 @@ using Syncless.Filters;
 
 namespace Syncless.CompareAndSync.Request
 {
-    public abstract class ManualRequest
+    public abstract class ManualRequest : Request
     {
         private string[] _paths, _unavailablePaths;
         private List<Filter> _filters;

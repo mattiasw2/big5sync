@@ -4,27 +4,22 @@ using System.Linq;
 using System.Text;
 using Syncless.Filters;
 
-namespace Syncless.CompareAndSync.Request
-{
-    public class ManualSyncRequest : ManualRequest
-    {
-        private string _archiveFolder;        
-        private int _archiveLimit;       
+namespace Syncless.CompareAndSync.Request {
+    public class ManualSyncRequest : ManualRequest {
+        private string _archiveFolder;
+        private int _archiveLimit;
 
-        public ManualSyncRequest(string[] paths, string[] unavailablePaths, List<Filter> filters,string archiveFolder,int archiveLimit)
-            : base(paths, unavailablePaths, filters)
-        {
+        public ManualSyncRequest(string[] paths, string[] unavailablePaths, List<Filter> filters, string archiveFolder, int archiveLimit)
+            : base(paths, unavailablePaths, filters) {
             _archiveFolder = archiveFolder;
             _archiveLimit = archiveLimit;
         }
 
-        public string ArchiveFolder
-        {
+        public string ArchiveFolder {
             get { return _archiveFolder; }
         }
 
-        public int ArchiveLimit
-        {
+        public int ArchiveLimit {
             get { return _archiveLimit; }
         }
     }
