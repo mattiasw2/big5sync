@@ -313,39 +313,6 @@ namespace Syncless.Core
             }
             return MonitorTag(tag, mode);
         }
-        
-
-
-
-        public bool PrepareForTermination()
-        {
-            SaveLoadHelper.SaveAll(appPath);
-            return true;
-        }
-        public bool Terminate()
-        {
-            DeviceWatcher.Instance.Terminate();
-            return false;
-        }
-
-        
-
-        public bool Initiate(IUIInterface inf)
-        {
-            this.appPath = inf.getAppPath();
-            bool init = Initiate();
-            SaveLoadHelper.SaveAll(appPath);
-            return init;
-        }
-
-        public List<CompareResult> PreviewSync(string tagname)
-        {
-            Tag Tag = TaggingLayer.Instance.RetrieveTag(tagname);
-            List<string> paths = Tag.PathStringList;
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
-            CompareRequest compareRequest = new CompareRequest(convertedPath);
-            return CompareSyncController.Instance.Compare(compareRequest);
-        }
         /// <summary>
         /// Return a list of tag name.
         /// </summary>
@@ -368,7 +335,7 @@ namespace Syncless.Core
         /// <returns>the List containing the name of the tags</returns>
         public List<string> GetTags(DirectoryInfo folder)
         {
-            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName,false);
+            string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, false);
             if (path == null)
             {
                 return null;
@@ -395,11 +362,39 @@ namespace Syncless.Core
                 return null;
             }
             return ConvertToTagView(t);
-            
-        }
 
+        }
+       
+        public bool PrepareForTermination()
+        {
+            SaveLoadHelper.SaveAll(appPath);
+            return true;
+        }
+        public bool Terminate()
+        {
+            DeviceWatcher.Instance.Terminate();
+            return false;
+        }
+        public bool Initiate(IUIInterface inf)
+        {
+            this.appPath = inf.getAppPath();
+            bool init = Initiate();
+            SaveLoadHelper.SaveAll(appPath);
+            return init;
+        }
+        public List<CompareResult> PreviewSync(string tagname)
+        {
+            Tag Tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            List<string> paths = Tag.PathStringList;
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(paths);
+            CompareRequest compareRequest = new CompareRequest(convertedPath);
+            return CompareSyncController.Instance.Compare(compareRequest);
+        }
+        
+        
         public bool RenameTag(string oldtagname, string newtagname)
         {
+            /*
             try
             {
                 TaggingLayer.Instance.RenameTag(oldtagname, newtagname);
@@ -413,8 +408,10 @@ namespace Syncless.Core
                 return false;
             }
             return true;
+            */
+            throw new NotImplementedException();
         }
-
+        
         #endregion
         #region IOriginsFinder Members
 

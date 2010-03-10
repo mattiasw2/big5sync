@@ -64,6 +64,7 @@ namespace Syncless.Tagging
             this._isSeamless = true;
             this._pathList = new List<TaggedPath>();
             this._filters = new List<Filter>();
+            AddFilter(FilterFactory.CreateExtensionFilter(@"*.cs",FilterMode.INCLUDE));
         }
 
         public bool AddPath(string path, long created)

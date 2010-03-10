@@ -52,5 +52,53 @@ namespace CompareAndSync
                 }
             }
         }
+
+
+
+        public static void PostTraverseFolder(RootCompareObject root, IVisitor visitor)
+        {
+            
+            Dictionary<string, BaseCompareObject>.ValueCollection values = root.Contents.Values;
+            foreach (BaseCompareObject o in values)
+            {
+                string[] newCurrentPath = root.Paths;
+                if (o is FolderCompareObject)
+                {
+                    //TO BE REMOVED
+                    if (o.Name != ".syncless")
+                        PostTraverseFolder((FolderCompareObject)o, newCurrentPath, visitor);
+                }
+                else
+                {
+                    visitor.Visit((FileCompareObject)o, newCurrentPath);
+                }
+            }
+            visitor.Visit(root);
+        }
+
+        public static void PostTraverseFolder(FolderCompareObject folder, string[] currentPath, IVisitor visitor)
+        {
+            
+            Dictionary<string, BaseCompareObject>.ValueCollection values = folder.Contents.Values;
+            foreach (BaseCompareObject o in values)
+            {
+                string[] newCurrentPath = new string[currentPath.Length];
+                for (int i = 0; i < currentPath.Length; i++)
+                {
+                    newCurrentPath[i] = currentPath[i] + @"\" + folder.Name;
+                }
+                if (o is FolderCompareObject)
+                {
+                    //TO BE REMOVED (HANDLE USING FILTERS)
+                    if (o.Name != ".syncless")
+                        PostTraverseFolder((FolderCompareObject)o, newCurrentPath, visitor);
+                }
+                else
+                {
+                    visitor.Visit((FileCompareObject)o, newCurrentPath);
+                }
+            }
+            visitor.Visit(folder, currentPath);
+        }
     }
 }

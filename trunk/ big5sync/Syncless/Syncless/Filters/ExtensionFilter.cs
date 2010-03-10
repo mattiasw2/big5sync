@@ -4,6 +4,12 @@ namespace Syncless.Filters
     public class ExtensionFilter:FileFilter
     {
         private string _pattern;
+
+        public string Pattern
+        {
+            get { return _pattern; }
+            set { _pattern = value; BuildRegex(_pattern); }
+        }
         private Regex _regex;
                 
         internal ExtensionFilter(string pattern,FilterMode mode):base(mode)
