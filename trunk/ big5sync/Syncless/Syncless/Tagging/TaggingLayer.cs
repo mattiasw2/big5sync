@@ -283,6 +283,10 @@ namespace Syncless.Tagging
                     tag.AddFilter(filter, updated.CurrentTimeLong);
                     UpdateTaggingProfileDate(updated.CurrentTimeLong);
                 }
+                else
+                {
+                    throw new FilterAlreadyExistException(filter);
+                }
                 TaggingHelper.Logging(LogMessage.FILTER_ADDED, tagname);
                 return tag;
             }
@@ -309,6 +313,10 @@ namespace Syncless.Tagging
                 {
                     tag.RemoveFilter(filter, updated.CurrentTimeLong);
                     UpdateTaggingProfileDate(updated.CurrentTimeLong);
+                }
+                else
+                {
+                    throw new FilterNotExistException(filter);
                 }
                 TaggingHelper.Logging(LogMessage.FILTER_REMOVED, tagname);
                 return tag;

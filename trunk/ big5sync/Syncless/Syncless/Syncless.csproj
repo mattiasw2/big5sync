@@ -118,6 +118,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tagging\CurrentTime.cs" />
     <Compile Include="Tagging\Exceptions\CorruptedTaggingXMLException.cs" />
+    <Compile Include="Tagging\Exceptions\FilterAlreadyExistException.cs" />
+    <Compile Include="Tagging\Exceptions\FilterNotExistException.cs" />
     <Compile Include="Tagging\Exceptions\PathAlreadyExistsException.cs" />
     <Compile Include="Tagging\Exceptions\PathNotFoundException.cs" />
     <Compile Include="Tagging\Exceptions\RecursiveDirectoryException.cs" />
@@ -127,6 +129,7 @@
     <Compile Include="Tagging\RecursionGraph\GraphNode.cs" />
     <Compile Include="Tagging\RecursionGraph\TagGraph.cs" />
     <Compile Include="Tagging\Tag.cs" />
+    <Compile Include="Tagging\TagConfig.cs" />
     <Compile Include="Tagging\TaggedPath.cs" />
     <Compile Include="Tagging\TaggingHelper.cs" />
     <Compile Include="Tagging\TaggingLayer.cs" />
