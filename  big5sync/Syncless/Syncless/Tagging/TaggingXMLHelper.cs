@@ -16,13 +16,14 @@ namespace Syncless.Tagging
         private const string ELE_PROFILE_CREATEDDATE = "createdDate";
         private const string ELE_PROFILE_LASTUPDATEDDATE = "lastUpdated";
 
-        private const string ELE_TAG = "tag";
+        private const string ELE_TAG_ROOT = "tag";
         private const string ELE_TAG_NAME = "name";
         private const string ELE_TAG_CREATEDDATE = "created";
         private const string ELE_TAG_UPDATEDDATE = "updated";
         private const string ELE_TAG_ISDELETED = "isDeleted";
         private const string ELE_TAG_DELETEDDATE = "deletedDate";
 
+        private const string ELE_FOLDER_ROOT = "folders";
         private const string ELE_TAGGED_FOLDER = "taggedFolder";
         private const string ELE_TAGGED_FOLDER_CREATED = "created";
         private const string ELE_TAGGED_FOLDER_UPDATED = "updated";
@@ -43,6 +44,12 @@ namespace Syncless.Tagging
         private const string ELE_FILTER_TYPE_EXT = "Extension";
         private const string ELE_FILTER_TYPE_EXT_PATTERN = "pattern";
         #endregion
+
+        private const string ELE_CONFIG_ROOT = "config";
+        private const string ELE_CONFIG_SEAMLESS = "seamless";
+        private const string ELE_CONFIG_ARCHIVE_ROOT = "archive";
+        private const string ELE_CONFIG_ARCHIVE_NAME = "name";
+        private const string ELE_CONFIG_ARCHIVE_COUNT = "count";
         #endregion
 
         public static void SaveTo(TaggingProfile taggingProfile, List<string> xmlFilePaths)
@@ -124,7 +131,7 @@ namespace Syncless.Tagging
             XmlNodeList tagList = profileElement.ChildNodes;
             foreach (XmlElement tagElement in tagList)
             {
-                if (tagElement.Name.Equals(ELE_TAG))
+                if (tagElement.Name.Equals(ELE_TAG_ROOT))
                 {
                     Tag tag = CreateTagFromXml(tagElement);
                     taggingProfile.TagList.Add(tag);
@@ -186,16 +193,25 @@ namespace Syncless.Tagging
             tag.LastUpdated = lastupdated;
             tag.IsDeleted = isdeleted;
             tag.DeletedDate = deleteddate;
-            XmlNodeList pathList = tagElement.GetElementsByTagName(ELE_TAGGED_FOLDER);
+            XmlElement foldersElement = (XmlElement)tagElement.GetElementsByTagName(ELE_FOLDER_ROOT).Item(0);
+            tag.PathList = CreateFolders(foldersElement);
             XmlElement filters = (XmlElement)tagElement.GetElementsByTagName(ELE_FILTER_ROOT).Item(0);
-            foreach (XmlElement path in pathList)
-            {
-                TaggedPath taggedPath = CreatePath(path);
-                tag.PathList.Add(taggedPath);
-            }
             tag.Filters = LoadFilterList(filters);
             tag.FiltersUpdated = long.Parse(filters.GetAttribute(ELE_FILTER_UPDATED));
+            XmlElement config = (XmlElement)tagElement.GetElementsByTagName(ELE_CONFIG_ROOT).Item(0);
+            tag.Config = CreateTagConfig(config);
             return tag;
+        }
+
+        private static List<TaggedPath> CreateFolders(XmlElement foldersElement)
+        {
+            List<TaggedPath> pathList = new List<TaggedPath>();
+            foreach (XmlElement path in foldersElement.GetElementsByTagName(ELE_TAGGED_FOLDER))
+            {
+                TaggedPath taggedPath = CreatePath(path);
+                pathList.Add(taggedPath);
+            }
+            return pathList;
         }
 
         private static TaggedPath CreatePath(XmlElement path)
@@ -263,31 +279,52 @@ namespace Syncless.Tagging
             }
             return null;
         }
+
+        private static TagConfig CreateTagConfig(XmlElement configNode)
+        {
+            TagConfig config = new TagConfig();
+            XmlElement seamlessElement = (XmlElement)configNode.GetElementsByTagName(ELE_CONFIG_SEAMLESS).Item(0);
+            XmlElement archiveElement = (XmlElement)configNode.GetElementsByTagName(ELE_CONFIG_ARCHIVE_ROOT).Item(0);
+            config.IsSeamless = bool.Parse(seamlessElement.InnerText);
+            config.ArchiveFolderName = archiveElement.GetAttribute(ELE_CONFIG_ARCHIVE_NAME);
+            config.ArchiveCount = int.Parse(archiveElement.GetAttribute(ELE_CONFIG_ARCHIVE_COUNT));
+            return config;
+        }
         #endregion
 
         #region create xml document
-        private static XmlElement CreateTagElement(XmlDocument TaggingDataDocument, Tag tag)
+        private static XmlElement CreateTagElement(XmlDocument xmlDoc, Tag tag)
         {
-            XmlElement tagElement = TaggingDataDocument.CreateElement(ELE_TAG);
+            XmlElement tagElement = xmlDoc.CreateElement(ELE_TAG_ROOT);
             tagElement.SetAttribute(ELE_TAG_NAME, tag.TagName);
             tagElement.SetAttribute(ELE_TAG_CREATEDDATE, tag.Created.ToString());
             tagElement.SetAttribute(ELE_TAG_UPDATEDDATE, tag.LastUpdated.ToString());
             tagElement.SetAttribute(ELE_TAG_ISDELETED, tag.IsDeleted.ToString());
             tagElement.SetAttribute(ELE_TAG_DELETEDDATE, tag.DeletedDate.ToString());
-            foreach (TaggedPath path in tag.PathList)
-            {
-                tagElement.AppendChild(CreateTaggedFolderElement(TaggingDataDocument, path));
-            }
-            tagElement.AppendChild(CreateFilterElementList(TaggingDataDocument, tag));
+            tagElement.AppendChild(CreateFoldersElement(xmlDoc, tag));
+            tagElement.AppendChild(CreateFilterElementList(xmlDoc, tag));
+            tagElement.AppendChild(CreateConfigElement(xmlDoc, tag));
             return tagElement;
         }
 
-        private static XmlElement CreateTaggedFolderElement(XmlDocument TaggingDataDocument, TaggedPath path)
+        private static XmlElement CreateFoldersElement(XmlDocument xmlDoc, Tag tag)
         {
-            XmlElement taggedFolderElement = TaggingDataDocument.CreateElement(ELE_TAGGED_FOLDER);
+            List<TaggedPath> pathList = tag.PathList;
+            XmlElement foldersElement = xmlDoc.CreateElement(ELE_FOLDER_ROOT);
+            foreach (TaggedPath path in pathList)
+            {
+                XmlElement taggedFolderElement = CreateTaggedFolderElement(xmlDoc, path);
+                taggedFolderElement.AppendChild(taggedFolderElement);
+            }
+            return foldersElement;
+        }
+
+        private static XmlElement CreateTaggedFolderElement(XmlDocument xmlDoc, TaggedPath path)
+        {
+            XmlElement taggedFolderElement = xmlDoc.CreateElement(ELE_TAGGED_FOLDER);
             taggedFolderElement.SetAttribute(ELE_TAGGED_FOLDER_CREATED, path.Created.ToString());
             taggedFolderElement.SetAttribute(ELE_TAGGED_FOLDER_UPDATED, path.LastUpdated.ToString());
-            XmlElement folderPathElement = TaggingDataDocument.CreateElement(ELE_TAGGED_FOLDER_PATH);
+            XmlElement folderPathElement = xmlDoc.CreateElement(ELE_TAGGED_FOLDER_PATH);
             folderPathElement.InnerText = path.Path;
             taggedFolderElement.AppendChild(folderPathElement);
             return taggedFolderElement;
@@ -318,6 +355,20 @@ namespace Syncless.Tagging
                 filterElement.AppendChild(ext);
             }
             return filterElement;
+        }
+
+        private static XmlElement CreateConfigElement(XmlDocument xmlDoc, Tag tag)
+        {
+            TagConfig config = tag.Config;
+            XmlElement configElement = xmlDoc.CreateElement(ELE_CONFIG_ROOT);
+            XmlElement seamlessElement = xmlDoc.CreateElement(ELE_CONFIG_SEAMLESS);
+            seamlessElement.InnerText = tag.IsSeamless.ToString();
+            configElement.AppendChild(seamlessElement);
+            XmlElement archiveElement = xmlDoc.CreateElement(ELE_CONFIG_ARCHIVE_ROOT);
+            archiveElement.SetAttribute(ELE_CONFIG_ARCHIVE_NAME, config.ArchiveFolderName);
+            archiveElement.SetAttribute(ELE_CONFIG_ARCHIVE_COUNT, config.ArchiveCount.ToString());
+            configElement.AppendChild(archiveElement);
+            return configElement;
         }
         #endregion
     }

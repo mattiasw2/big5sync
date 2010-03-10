@@ -55,6 +55,32 @@ namespace Syncless.Tagging
             }
         }
 
+        public bool DeleteTag(Tag tag)
+        {
+            CurrentTime updated = new CurrentTime();
+            Tag toRemove = FindTag(tag.TagName);
+            if (toRemove != null)
+            {
+                if (toRemove.IsDeleted)
+                {
+                    return false;
+                }
+                else
+                {
+                    toRemove.IsDeleted = true;
+                    toRemove.DeletedDate = updated.CurrentTimeLong;
+                    toRemove.LastUpdated = updated.CurrentTimeLong;
+                    toRemove.RemoveAllPaths();
+                    _lastUpdated = updated.CurrentTimeLong;
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
         public Tag FindTag(string tagname)
         {
             foreach (Tag tag in _tagList)
