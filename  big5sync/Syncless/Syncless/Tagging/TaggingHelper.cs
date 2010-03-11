@@ -68,7 +68,7 @@ namespace Syncless.Tagging
 
         internal static bool CheckRecursiveDirectory(Tag tag, string path)
         {
-            foreach (TaggedPath p in tag.PathList)
+            foreach (TaggedPath p in tag.FilteredPathList)
             {
                 if (TrimEnd(path.Split('\\')).Length != TrimEnd(p.Path.Split('\\')).Length)
                 {

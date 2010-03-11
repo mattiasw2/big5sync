@@ -70,7 +70,22 @@ namespace Syncless.Tagging
             get { return _deletedDate; }
             set { _deletedDate = value; }
         }
-        public List<TaggedPath> PathList
+        public List<TaggedPath> FilteredPathList
+        {
+            get {
+                List<TaggedPath> filteredList = new List<TaggedPath>();
+                foreach (TaggedPath p in _pathList)
+                {
+                    if (!p.IsDeleted)
+                    {
+                        filteredList.Add(p);
+                    }
+                }
+                return filteredList;
+            }
+            set { _pathList = value; }
+        }
+        public List<TaggedPath> UnfilteredPathList
         {
             get { return _pathList; }
             set { _pathList = value; }
@@ -112,40 +127,72 @@ namespace Syncless.Tagging
 
         public bool AddPath(string path, long created)
         {
-            if (!Contains(path))
+            TaggedPath p = FindPath(path);
+            if (p != null)
             {
-                TaggedPath taggedPath = new TaggedPath();
-                taggedPath.Path = path;
-                taggedPath.LogicalDriveId = TaggingHelper.GetLogicalID(path);
-                taggedPath.Created = created;
-                taggedPath.LastUpdated = created;
+                if (p.IsDeleted)
+                {
+                    _pathList.Remove(p);
+                    TaggedPath taggedPath = new TaggedPath(path, created);
+                    _lastUpdated = TaggingHelper.GetCurrentTime();
+                    _pathList.Add(taggedPath);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                TaggedPath taggedPath = new TaggedPath(path, created);
                 _lastUpdated = TaggingHelper.GetCurrentTime();
                 _pathList.Add(taggedPath);
                 return true;
             }
-            return false;
         }
 
         public bool AddPath(TaggedPath path)
         {
-            if (!Contains(path.Path))
+            TaggedPath p = FindPath(path.Path);
+            if (p != null)
             {
-                _lastUpdated = TaggingHelper.GetCurrentTime();
+                if (p.IsDeleted)
+                {
+                    _pathList.Remove(p);
+                    _pathList.Add(path);
+                    _lastUpdated = TaggingHelper.GetCurrentTime();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
                 _pathList.Add(path);
+                _lastUpdated = TaggingHelper.GetCurrentTime();
                 return true;
             }
-            return false;
         }
 
         public bool RemovePath(string path, long lastupdated)
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.Path.Equals(path))
+                if (p.Path.ToLower().Equals(path.ToLower()))
                 {
-                    _pathList.Remove(p);
-                    _lastUpdated = TaggingHelper.GetCurrentTime();
-                    return true;
+                    if (p.IsDeleted)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        p.Remove(lastupdated);
+                        _lastUpdated = TaggingHelper.GetCurrentTime();
+                        return true;
+                    }
                 }
             }
             return false;
@@ -153,20 +200,45 @@ namespace Syncless.Tagging
 
         public bool RemovePath(TaggedPath path)
         {
-            bool removed = _pathList.Remove(path);
-            if (removed)
+            foreach (TaggedPath p in _pathList)
             {
-                _lastUpdated = TaggingHelper.GetCurrentTime();
+                if (p.Path.ToLower().Equals(path.Path.ToLower()))
+                {
+                    if (p.IsDeleted)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        long lastupdated = TaggingHelper.GetCurrentTime();
+                        p.Remove(lastupdated);
+                        _lastUpdated = lastupdated;
+                        return true;
+                    }
+                }
             }
-            return removed;
+            return false;
         }
 
         public void RemoveAllPaths()
         {
-            while (_pathList.Count > 0)
+            foreach (TaggedPath p in _pathList)
             {
-                _pathList.RemoveAt(0);
+                p.IsDeleted = true;
+                p.DeletedDate = TaggingHelper.GetCurrentTime();
             }
+        }
+
+        public bool ContainsIgnoreDeleted(string path)
+        {
+            foreach (TaggedPath p in _pathList)
+            {
+                if ((p.Path.ToLower()).Equals(path.ToLower()))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool Contains(string path)
@@ -175,7 +247,14 @@ namespace Syncless.Tagging
             {
                 if ((p.Path.ToLower()).Equals(path.ToLower()))
                 {
-                    return true;
+                    if (p.IsDeleted)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
@@ -245,7 +324,7 @@ namespace Syncless.Tagging
         }
 
         #region private implementations
-        protected TaggedPath RetrieveTaggedPath(string path)
+        private TaggedPath FindPath(string path)
         {
             foreach (TaggedPath p in _pathList)
             {
@@ -280,6 +359,6 @@ namespace Syncless.Tagging
         #endregion
 
 
-       
+
     }
 }

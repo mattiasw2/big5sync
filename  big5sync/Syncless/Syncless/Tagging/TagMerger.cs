@@ -75,7 +75,7 @@ namespace Syncless.Tagging
                     //Tag is Deleted.
                     SystemLogicLayer.Instance.DeleteTag(newTag.TagName);
                 }
-                foreach (TaggedPath path in current.PathList)
+                foreach (TaggedPath path in current.FilteredPathList)
                 {
                     if (!newTag.Contains(path.Path))
                     {
@@ -84,7 +84,7 @@ namespace Syncless.Tagging
                         //current.RemovePath(path.Path, TaggingHelper.GetCurrentTime());
                     }
                 }
-                foreach (TaggedPath path in newTag.PathList)
+                foreach (TaggedPath path in newTag.FilteredPathList)
                 {
                     if (!current.Contains(path.Path))
                     {

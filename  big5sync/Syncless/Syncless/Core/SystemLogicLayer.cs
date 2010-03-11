@@ -487,7 +487,7 @@ namespace Syncless.Core
         {
             tag.IsSeamless = mode;
             List<string> pathList = new List<string>();
-            foreach (TaggedPath path in tag.PathList)
+            foreach (TaggedPath path in tag.FilteredPathList)
             {
                 pathList.Add(path.Path);
             }

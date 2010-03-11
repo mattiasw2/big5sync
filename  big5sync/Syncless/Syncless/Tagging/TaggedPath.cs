@@ -8,35 +8,57 @@ namespace Syncless.Tagging
     public class TaggedPath
     {
         private string _logicalid;
+        private string _path;
+        private long _lastUpdated;
+        private long _created;
+        private bool _isDeleted;
+        private bool _deletedDate;
 
         public string LogicalDriveId
         {
             get { return _logicalid; }
             set { _logicalid = value; }
         }
-
-        private string _path;
-
         public string Path
         {
             get { return _path; }
             set { _path = value; }
         }
-
-        private long _lastUpdated;
-
         public long LastUpdated
         {
             get { return _lastUpdated; }
             set { _lastUpdated = value; }
         }
-
-        private long _created;
-
         public long Created
         {
             get { return _created; }
             set { _created = value; }
+        }
+        public bool IsDeleted
+        {
+            get { return _isDeleted; }
+            set { _isDeleted = value; }
+        }
+        public bool DeletedDate
+        {
+            get { return _deletedDate; }
+            set { _deletedDate = value; }
+        }
+
+        public TaggedPath(string path, long created)
+        {
+            this._logicalid = TaggingHelper.GetLogicalID(path);
+            this._path = path;
+            this._lastUpdated = created;
+            this._created = created;
+            this._isDeleted = false;
+            this._deletedDate = 0;
+        }
+
+        public bool Remove(long deletedDate)
+        {
+            _isDeleted = true;
+            _deletedDate = deletedDate;
         }
 
         public string Append(string trailingPath)

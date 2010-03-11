@@ -442,7 +442,7 @@ namespace Syncless.Tagging
             List<Tag> tagList = RetrieveTagByLogicalId(logicalid);
             foreach (Tag tag in tagList)
             {
-                foreach (TaggedPath path in tag.PathList)
+                foreach (TaggedPath path in tag.FilteredPathList)
                 {
                     if (path.LogicalDriveId.Equals(logicalid))
                     {
@@ -489,7 +489,7 @@ namespace Syncless.Tagging
             {
                 if (tag.Contains(folderPath))
                 {
-                    foreach (TaggedPath p in tag.PathList)
+                    foreach (TaggedPath p in tag.FilteredPathList)
                     {
                         if (!pathList.Contains(p.Path) && !p.Path.Equals(folderPath))
                         {
@@ -505,7 +505,7 @@ namespace Syncless.Tagging
                 string trailingPath = tag.FindMatchedParentDirectory(folderPath, true);
                 if (trailingPath != null)
                 {
-                    foreach (TaggedPath p in tag.PathList)
+                    foreach (TaggedPath p in tag.FilteredPathList)
                     {
                         appendedPath = p.Append(trailingPath);
                         if (!pathList.Contains(appendedPath) && !appendedPath.Equals(folderPath))
@@ -534,7 +534,7 @@ namespace Syncless.Tagging
                 string trailingPath = tag.FindMatchedParentDirectory(filePath, false);
                 if (trailingPath != null)
                 {
-                    foreach (TaggedPath p in tag.PathList)
+                    foreach (TaggedPath p in tag.FilteredPathList)
                     {
                         appendedPath = p.Append(trailingPath);
                         if (!pathList.Contains(appendedPath) && !appendedPath.Equals(filePath))
@@ -557,7 +557,7 @@ namespace Syncless.Tagging
             List<string> parentPathList = new List<string>();
             foreach (Tag tag in _taggingProfile.TagList)
             {
-                foreach (TaggedPath p in tag.PathList)
+                foreach (TaggedPath p in tag.FilteredPathList)
                 {
                     if (path.StartsWith(p.Path))
                     {
@@ -703,7 +703,7 @@ namespace Syncless.Tagging
 
         private bool CheckID(Tag tag, string ID)
         {
-            foreach (TaggedPath path in tag.PathList)
+            foreach (TaggedPath path in tag.FilteredPathList)
             {
                 if (path.LogicalDriveId.Equals(ID))
                 {
