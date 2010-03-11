@@ -49,22 +49,24 @@ namespace Syncless.Core
         public void HandleFileChange(FileChangeEvent fe)
         {
             if (fe.Event == EventChangeType.CREATED)
-            {                
-                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName,false);
+            {
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
                 List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
                 List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
                 List<string> parentList = new List<string>();
-                foreach(string path in convertedList){
+                foreach (string path in convertedList)
+                {
                     FileInfo info = new FileInfo(path);
                     string parent = info.Directory.FullName;
                     parentList.Add(parent);
                 }
                 List<Tag> tag = TaggingLayer.Instance.RetrieveParentTagByPath(logicalAddress);
-                if(tag.Count==0){
+                if (tag.Count == 0)
+                {
                     return;
                 }
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
-                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList,false, AutoSyncRequestType.New, syncConfig);
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.New, syncConfig);
                 CompareAndSyncController.Instance.Sync(request);
             }
             else if (fe.Event == EventChangeType.MODIFIED)
@@ -106,7 +108,8 @@ namespace Syncless.Core
                     return;
                 }
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
-                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, parentList,false, AutoSyncRequestType.Rename, syncConfig);
+
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, fe.OldPath.DirectoryName, parentList, false, AutoSyncRequestType.Rename, syncConfig);
                 CompareAndSyncController.Instance.Sync(request);
             }
         }
@@ -152,7 +155,7 @@ namespace Syncless.Core
                     return;
                 }
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
-                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, parentList,true, AutoSyncRequestType.Rename, syncConfig);
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, parentList, true, AutoSyncRequestType.Rename, syncConfig);
                 CompareAndSyncController.Instance.Sync(request);
             }
         }
@@ -676,16 +679,16 @@ namespace Syncless.Core
             List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
             if (filterPaths[0].Count != 0)
             {
-                SyncConfig syncConfig = new SyncConfig(tag.ArchiveName, tag.ArchiveCount,tag.Recycle);
+                SyncConfig syncConfig = new SyncConfig(tag.ArchiveName, tag.ArchiveCount, tag.Recycle);
                 ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), filterPaths[1].ToArray(), tag.Filters, syncConfig);
-                
+
                 CompareAndSyncController.Instance.Sync(syncRequest);
             }
             return true;
         }
 
         #endregion
-        
+
         #region For TargerMerger
         public void AddTagPath(Tag tag, TaggedPath path)
         {
