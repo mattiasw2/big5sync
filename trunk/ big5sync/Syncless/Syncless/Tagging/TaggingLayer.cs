@@ -523,13 +523,18 @@ namespace Syncless.Tagging
         /// </summary>
         /// <param name="filePath">The path to search</param>
         /// <returns>The list of similar paths</returns>
-        public List<string> FindSimilarPathForFile(string filePath)
+        public List<string> FindSimilarSeamlessPathForFile(string filePath)
         {
             string logicalid = TaggingHelper.GetLogicalID(filePath);
             List<string> pathList = new List<string>();
             List<Tag> matchingTag = RetrieveTagById(logicalid);
             foreach (Tag tag in matchingTag)
             {
+                if (!tag.IsSeamless)
+                {
+                    continue;
+                }
+
                 string appendedPath;
                 string trailingPath = tag.FindMatchedParentDirectory(filePath, false);
                 if (trailingPath != null)

@@ -18,13 +18,11 @@ namespace Syncless.Tagging
             get { return _isSeamless; }
             set { _isSeamless = value; }
         }
-
         public string ArchiveFolderName
         {
             get { return _archiveFolderName; }
             set { _archiveFolderName = value; }
         }
-        
         public int ArchiveCount
         {
             get { return _archiveCount; }
