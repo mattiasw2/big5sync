@@ -72,6 +72,7 @@
     <Compile Include="CompareAndSync\Result\ConflictResult.cs" />
     <Compile Include="CompareAndSync\Result\Result.cs" />
     <Compile Include="CompareAndSync\Result\SyncConflictResult.cs" />
+    <Compile Include="CompareAndSync\SeamlessQueueControl.cs" />
     <Compile Include="CompareAndSync\SeamlessSyncer.cs" />
     <Compile Include="CompareAndSync\SyncConfig.cs" />
     <Compile Include="CompareAndSync\Visitor\BuilderVisitor.cs" />

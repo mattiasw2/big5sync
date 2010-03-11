@@ -12,6 +12,7 @@ namespace Syncless.CompareAndSync
     {
         private static CompareAndSyncController _instance;
 
+
         public static CompareAndSyncController Instance
         {
             get
@@ -51,7 +52,7 @@ namespace Syncless.CompareAndSync
 
         public void Sync(AutoSyncRequest request)
         {
-            SeamlessSyncer.Sync(request);
+            SeamlessQueueControl.Instance.AddSyncJob(request);
         }
 
     }
