@@ -90,18 +90,4 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-	
-	<Style x:Key="ACBStyle" TargetType="{x:Type WPFAutoCompleteBox:ACB}">
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type WPFAutoCompleteBox:ACB}">
-					<Border x:Name="BD" SnapsToDevicePixels="true" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
-						<ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-					</Border>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
-	
-
 </ResourceDictionary>
