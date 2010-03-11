@@ -94,6 +94,9 @@
     <Reference Include="WPFAutoCompleteBox.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OptionsWindow.xaml.cs">
+      <DependentUpon>OptionsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PortableSettingsProvider.cs" />
     <Compile Include="TagDetailsWindow.xaml.cs">
       <DependentUpon>TagDetailsWindow.xaml</DependentUpon>
@@ -149,6 +152,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="OptionsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="TagDetailsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -181,6 +188,7 @@
     <Resource Include="Icons\filter.ico" />
     <Resource Include="Icons\folder.ico" />
     <Resource Include="Icons\minus-8.png" />
+    <Resource Include="Icons\option.ico" />
     <Resource Include="Icons\plus-8.png" />
     <Resource Include="Icons\plus.gif" />
     <Resource Include="Icons\minus.gif" />
