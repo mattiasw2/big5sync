@@ -760,6 +760,11 @@ namespace Syncless.Core
                 }
             }
         }
+        public void AddTag(Tag tag)
+        {
+            TaggingLayer.Instance.AddTag(tag);
+            MonitorTag(tag,tag.IsSeamless);
+        }
         #endregion
     }
 }
