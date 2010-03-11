@@ -622,7 +622,6 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
-
         /// <summary>
         /// Get all the filters for a particular tag.
         /// </summary>

@@ -235,6 +235,8 @@ namespace Syncless.Tagging
             TaggedPath taggedPath = new TaggedPath(pathname, pathcreated);
             taggedPath.LastUpdated = pathlastupdated;
             taggedPath.LogicalDriveId = TaggingHelper.GetLogicalID(pathname);
+            taggedPath.IsDeleted = isDeleted;
+            taggedPath.DeletedDate = deletedDate;
             return taggedPath;
         }
 
