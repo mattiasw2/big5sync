@@ -116,7 +116,8 @@ namespace Syncless.CompareAndSync
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + xmlWriteObj.Name + "']");
             if (node == null)
             {
- 
+                CreateFile(xmlDoc, xmlWriteObj);
+                return;
             }
 
             XmlNodeList childNodeList = node.ChildNodes;
@@ -148,8 +149,10 @@ namespace Syncless.CompareAndSync
 
         private static void RenameFile(XmlDocument xmlDoc, XMLWriteObject xmlWriteObj)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + xmlWriteObj.Name + "']");
-            node.InnerText = xmlWriteObj.Name;
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + xmlWriteObj.RenameFrom + "']");
+            if (node == null)
+                return;
+            node.FirstChild.InnerText = xmlWriteObj.Name;
         }
 
         private static void DeleteFile(XmlDocument xmlDoc, XMLWriteObject xmlWriteObj)
@@ -222,7 +225,7 @@ namespace Syncless.CompareAndSync
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + xmlWriteObj.RenameFrom + "']");
             if (node == null)
                 return;
-            node.InnerText = xmlWriteObj.Name;
+            node.FirstChild.InnerText = xmlWriteObj.Name;
         }
 
         private static void DeleteFolder(XmlDocument xmlDoc, XMLWriteObject xmlWriteObj)

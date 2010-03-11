@@ -80,6 +80,7 @@
     <Compile Include="CompareAndSync\Visitor\TodoXMLWriterVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\XMLMetadataVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\XMLWriterVisitor.cs" />
+    <Compile Include="CompareAndSync\XMLHelper.cs" />
     <Compile Include="CompareAndSync\XMLWriteObject.cs" />
     <Compile Include="Core\Conflict\Conflict.cs" />
     <Compile Include="Core\Conflict\ConflictQueue.cs" />
