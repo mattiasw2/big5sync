@@ -58,6 +58,7 @@ namespace Syncless.Tagging
         public void Remove(long deletedDate)
         {
             _isDeleted = true;
+            _lastUpdated = deletedDate;
             _deletedDate = deletedDate;
         }
 
