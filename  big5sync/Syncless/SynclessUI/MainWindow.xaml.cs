@@ -11,7 +11,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SynclessUI;
-using System.Data;
 using Syncless.Core;
 using Syncless.Tagging;
 using System.Collections;
