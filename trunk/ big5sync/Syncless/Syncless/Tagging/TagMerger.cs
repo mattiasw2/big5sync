@@ -38,24 +38,24 @@ namespace Syncless.Tagging
                 }
                 newTagList.Remove(newTag);
                 //if the tag exist , merge it.
-                bool merge = MergeTag(tag, newTag);
-                if (merge)
-                {
-                    updateCount++;
-                }
-            }
-            foreach (Tag tag in newTagList)//handles the new tag from new profile
-            {
                 
-                Tag oldTag = currentProfile.FindTag(tag.TagName);
+            }
+            foreach (Tag newTag in newTagList)//handles the new tag from new profile
+            {
+                Tag oldTag = currentProfile.FindTag(newTag.TagName);
                 if (oldTag != null)
                 {
-                    //already exist in currentProfile.
-                    //should not happen, but handle it anyway.
-                    continue;                    
+                    bool merge = MergeTag(oldTag, newTag);
+                    if (merge)
+                    {
+                        updateCount++;
+                    }
                 }
-                TaggingLayer.Instance.AddTag(tag);
-                updateCount++;
+                else
+                {
+                    TaggingLayer.Instance.AddTag(newTag);
+                    updateCount++;
+                }
             }
             
             foreach (Tag tag in newTagList)//start monitoring each new tag

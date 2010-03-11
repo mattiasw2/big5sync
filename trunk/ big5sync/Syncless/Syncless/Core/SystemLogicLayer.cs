@@ -514,7 +514,6 @@ namespace Syncless.Core
             }
             
         }
-
         /// <summary>
         /// Check if the Program can Terminate
         /// </summary>
@@ -571,7 +570,6 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
-
         /// <summary>
         /// XXXXXXXXXXXXXXXXXXXX NOT IMPLEMENTED XXXXXXXXXXXXXXXXXXXXXXXX
         /// </summary>
@@ -625,7 +623,11 @@ namespace Syncless.Core
             }
         }
 
-
+        /// <summary>
+        /// Get all the filters for a particular tag.
+        /// </summary>
+        /// <param name="tagname">the name of the tag.</param>
+        /// <returns>the list of filters</returns>
         public List<Filter> GetAllFilters(String tagname)
         {
             try
@@ -739,7 +741,7 @@ namespace Syncless.Core
 
         #endregion
 
-        #region For TargerMerger
+        #region For TagMerger
         public void AddTagPath(Tag tag, TaggedPath path)
         {
             if (tag.IsSeamless)
