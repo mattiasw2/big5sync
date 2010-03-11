@@ -91,6 +91,7 @@ namespace Syncless.CompareAndSync.Visitor
         {
             string src = Path.Combine(currentPaths[srcFilePos], fco.Name);
             bool fileExists = false;
+            string destFile = null;
 
             for (int i = 0; i < currentPaths.Length; i++)
             {
@@ -100,8 +101,15 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         if (fco.Priority[i] != fco.Priority[srcFilePos])
                         {
-                            fileExists = File.Exists(Path.Combine(currentPaths[i], fco.Name));
-                            CommonMethods.CopyFile(src, Path.Combine(currentPaths[i], fco.Name), true);
+                            destFile = Path.Combine(currentPaths[i], fco.Name);
+                            fileExists = File.Exists(destFile);
+
+                            if (_syncConfig.ArchiveLimit >= 0)
+                                CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
+                            if (_syncConfig.Recycle)
+                                CommonMethods.DeleteFileToRecycleBin(destFile);
+
+                            CommonMethods.CopyFile(src, destFile, true);
                             fco.CreationTime[i] = fco.CreationTime[srcFilePos];
                             fco.Exists[i] = true;
                             if (fileExists)
@@ -128,6 +136,8 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void DeleteFile(FileCompareObject fco, string[] currentPaths, int srcFilePos)
         {
+            string destFile = null;
+
             for (int i = 0; i < currentPaths.Length; i++)
             {
                 if (i != srcFilePos)
@@ -136,7 +146,15 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            CommonMethods.DeleteFile(Path.Combine(currentPaths[i], fco.Name));
+                            destFile = Path.Combine(currentPaths[i], fco.Name);
+
+                            if (_syncConfig.ArchiveLimit >= 0)
+                                CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
+                            if (_syncConfig.Recycle)
+                                CommonMethods.DeleteFileToRecycleBin(destFile);
+                            else
+                                CommonMethods.DeleteFile(destFile);
+
                             fco.Exists[i] = false;
                             fco.FinalState[i] = FinalState.Deleted;
                         }
@@ -218,6 +236,8 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void DeleteFolder(FolderCompareObject folder, string[] currentPaths, int srcFilePos)
         {
+            string destFolder = null;
+
             for (int i = 0; i < currentPaths.Length; i++)
             {
                 if (i != srcFilePos)
@@ -226,7 +246,15 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            CommonMethods.DeleteFolder(Path.Combine(currentPaths[i], folder.Name), true);
+                            destFolder = Path.Combine(currentPaths[i], folder.Name);
+
+                            if (_syncConfig.ArchiveLimit >= 0)
+                                CommonMethods.ArchiveFolder(destFolder, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
+                            if (_syncConfig.Recycle)
+                                CommonMethods.DeleteFolderToRecycleBin(destFolder);
+                            else
+                                CommonMethods.DeleteFolder(destFolder, true);
+
                             folder.Exists[i] = false;
                             folder.FinalState[i] = FinalState.Deleted;
                             folder.Contents.Clear(); //Experimental
