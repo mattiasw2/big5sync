@@ -70,8 +70,9 @@ namespace SynclessUI
             {
                 SettingsXML.Save(Path.Combine(GetAppSettingsPath(), GetAppSettingsFilename()));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+
             }
             //Ignore if cant save, device been ejected
         }
@@ -109,7 +110,7 @@ namespace SynclessUI
                     {
                         _settingsXML.Load(Path.Combine(GetAppSettingsPath(), GetAppSettingsFilename()));
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         //Create new document
                         XmlDeclaration dec = _settingsXML.CreateXmlDeclaration("1.0", "utf-8", string.Empty);
@@ -142,7 +143,7 @@ namespace SynclessUI
                 }
             }
 
-            catch (Exception ex)
+            catch (Exception)
             {
                 if ((setting.DefaultValue != null))
                 {
@@ -177,7 +178,7 @@ namespace SynclessUI
                     SettingNode = (XmlElement)SettingsXML.SelectSingleNode(SETTINGSROOT + "/" + Environment.MachineName + "/" + propVal.Name);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 SettingNode = null;
             }
@@ -205,7 +206,7 @@ namespace SynclessUI
 
                         MachineNode = (XmlElement)SettingsXML.SelectSingleNode(SETTINGSROOT + "/" + Environment.MachineName);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         MachineNode = SettingsXML.CreateElement(Environment.MachineName);
                         SettingsXML.SelectSingleNode(SETTINGSROOT).AppendChild(MachineNode);

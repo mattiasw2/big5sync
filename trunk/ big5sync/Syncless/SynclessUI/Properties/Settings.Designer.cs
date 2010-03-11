@@ -36,5 +36,17 @@ namespace SynclessUI.Properties {
                 this["DisplaySplashScreen"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PersistRegistryIntegration {
+            get {
+                return ((bool)(this["PersistRegistryIntegration"]));
+            }
+            set {
+                this["PersistRegistryIntegration"] = value;
+            }
+        }
     }
 }
