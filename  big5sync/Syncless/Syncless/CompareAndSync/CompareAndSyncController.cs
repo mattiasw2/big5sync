@@ -35,7 +35,7 @@ namespace Syncless.CompareAndSync
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters));
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
             CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor());
-            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.ArchiveFolder, request.ArchiveLimit));
+            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config));
             CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor());
             return rco;
         }
