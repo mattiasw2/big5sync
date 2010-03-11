@@ -209,7 +209,7 @@ namespace Syncless.Profiling
             {
                 try
                 {
-                    if (File.Exists(path))
+                    if (File.Exists(paths[i]))
                     {
                         Profile p = ProfilingXMLHelper.LoadProfile(paths[i]);
                         _profile.Merge(p);
