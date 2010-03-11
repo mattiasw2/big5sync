@@ -25,7 +25,7 @@ namespace Syncless.Helper
         public const string PROFILE_MAPPING_EXIST_EXCEPTION = "220";
         #endregion
         #region CompareAndSync Error Messages (Error Code : 300~499)
-
+        public const string CAS_UNABLE_TO_HASH_EXCEPTION = "300";
         #endregion
         #region Monitor Error Messages (Error Code : 500~599)
         public const string PATH_NOT_FOUND = "500";
