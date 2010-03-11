@@ -112,5 +112,6 @@ namespace Syncless.CompareAndSync.CompareObject
             set { _todo = value; }
         }
 
+
     }
 }

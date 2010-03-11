@@ -18,6 +18,7 @@ using Syncless.Helper;
 using Syncless.Filters;
 using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Enum;
+using Syncless.CompareAndSync.CompareObject;
 namespace Syncless.Core
 {
     internal class SystemLogicLayer : IUIControllerInterface, IMonitorControllerInterface, ICommandLineControllerInterface, IOriginsFinder
@@ -484,7 +485,40 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
+        /// <summary>
+        /// Preview a Sync of a Tag
+        /// </summary>
+        /// <param name="tagName">The name of the tag to preview</param>
+        /// <returns>the RootCompareObject</returns>
+        public RootCompareObject PreviewSync(string tagName)
+        {
+            try
+            {
+                Tag tag = TaggingLayer.Instance.RetrieveTag(tagName, false);
+                List<string> paths = tag.FilteredPathListString;
+                List<string>[] filteredPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
+                if (filteredPaths[0].Count != 0)
+                {
+                    ManualCompareRequest request = new ManualCompareRequest(filteredPaths[0].ToArray(), tag.Filters);
+                    return CompareAndSyncController.Instance.Compare(request);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
+            }
+            
+        }
 
+        /// <summary>
+        /// Check if the Program can Terminate
+        /// </summary>
+        /// <returns>true if the program can terminate, false if the program is not ready for termination</returns>
         public bool PrepareForTermination()
         {
             try
@@ -499,6 +533,11 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
+        /// <summary>
+        /// Terminate the program. 
+        /// This is to kill the threads created and release the resources.
+        /// </summary>
+        /// <returns>true if the program successfully terminated , false if it can't be terminated.</returns>
         public bool Terminate()
         {
             try
@@ -512,6 +551,11 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
+        /// <summary>
+        /// Initiate the program. This is the first command that needs to be run.
+        /// </summary>
+        /// <param name="inf"></param>
+        /// <returns></returns>
         public bool Initiate(IUIInterface inf)
         {
             try
@@ -528,7 +572,12 @@ namespace Syncless.Core
             }
         }
 
-
+        /// <summary>
+        /// XXXXXXXXXXXXXXXXXXXX NOT IMPLEMENTED XXXXXXXXXXXXXXXXXXXXXXXX
+        /// </summary>
+        /// <param name="oldtagname"></param>
+        /// <param name="newtagname"></param>
+        /// <returns></returns>
         public bool RenameTag(string oldtagname, string newtagname)
         {
             /*

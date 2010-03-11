@@ -6,7 +6,7 @@ using Syncless.Tagging;
 using Syncless.CompareAndSync;
 using System.IO;
 using Syncless.Filters;
-
+using Syncless.CompareAndSync.CompareObject;
 namespace Syncless.Core
 {
     public interface IUIControllerInterface
@@ -35,10 +35,12 @@ namespace Syncless.Core
         bool RenameTag(String oldtagname, String newtagname);
 
         bool StartManualSync(String tagname);
-
+        
         bool UpdateFilterList(String tagname, List<Filter> filterlist);
 
         List<Filter> GetAllFilters(String tagname);
+
+        RootCompareObject PreviewSync(string tagname);
 
         // To be Implemented
 
