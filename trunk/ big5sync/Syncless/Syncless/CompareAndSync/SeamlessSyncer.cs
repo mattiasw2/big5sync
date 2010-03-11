@@ -45,7 +45,7 @@ namespace Syncless.CompareAndSync
                         {
                             case AutoSyncRequestType.Update:
                             case AutoSyncRequestType.New:
-                                CopyFile(sourceFullPath, destFullPath);
+                                CopyFile(sourceFullPath, destFullPath);                                
                                 break;
                             case AutoSyncRequestType.Rename:
                                 string oldFullPath = Path.Combine(dest, request.OldName);
@@ -64,8 +64,7 @@ namespace Syncless.CompareAndSync
                 {
                     destFullPath = Path.Combine(dest, request.SourceName);
                     if (File.Exists(destFullPath))
-                    {
-                        CommonMethods.ArchiveFile(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
+                    {                        
                         DeleteFile(destFullPath);
                     }
                 }

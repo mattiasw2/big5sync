@@ -11,41 +11,8 @@ namespace Syncless.CompareAndSync
 {
     public static class CommonMethods
     {
-        public static string CalculateMD5Hash(FileInfo fileInput)
-        {
-            if (!fileInput.Exists)
-                throw new FileNotFoundException(fileInput.Name + ": Unable to hash non-existent file.");
 
-            try
-            {
-                FileStream fileStream = fileInput.OpenRead();
-                byte[] fileHash = MD5.Create().ComputeHash(fileStream);
-                fileStream.Close();
-                StringBuilder sb = new StringBuilder();
-
-                for (int i = 0; i < fileHash.Length; i++)
-                    sb.Append(fileHash[i].ToString("X2"));
-
-                return sb.ToString();
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                return string.Empty;
-            }
-            catch (DirectoryNotFoundException e)
-            {
-                return string.Empty;
-            }
-            catch (IOException e)
-            {
-                return string.Empty;
-            }
-        }
-
-        public static void DeleteFileToRecycleBin(string path)
-        {
-            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
-        }
+        #region File Operations
 
         public static void ArchiveFile(string path, string archiveName, int archiveLimit)
         {
@@ -79,10 +46,60 @@ namespace Syncless.CompareAndSync
 
         }
 
-        public static void DeleteFolderToRecycleBin(string path)
+        public static string CalculateMD5Hash(FileInfo fileInput)
         {
-            Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+            if (!fileInput.Exists)
+                throw new FileNotFoundException(fileInput.Name + ": Unable to hash non-existent file.");
+
+            try
+            {
+                FileStream fileStream = fileInput.OpenRead();
+                byte[] fileHash = MD5.Create().ComputeHash(fileStream);
+                fileStream.Close();
+                StringBuilder sb = new StringBuilder();
+
+                for (int i = 0; i < fileHash.Length; i++)
+                    sb.Append(fileHash[i].ToString("X2"));
+
+                return sb.ToString();
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                return string.Empty;
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                return string.Empty;
+            }
+            catch (IOException e)
+            {
+                return string.Empty;
+            }
         }
+
+        public static void CopyFile(string sourceFile, string destFile, bool overwrite)
+        {
+            File.Copy(sourceFile, destFile, overwrite);
+        }
+
+        public static void DeleteFile(string path)
+        {
+            File.Delete(path);
+        }
+
+        public static void DeleteFileToRecycleBin(string path)
+        {
+            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+        }
+
+        public static void MoveFile(string sourceFile, string destFile)
+        {
+            File.Move(sourceFile, destFile);
+        }
+
+        #endregion
+
+        #region Folder Operations
 
         public static void ArchiveFolder(string path, string archiveName, int archiveLimit)
         {
@@ -134,16 +151,28 @@ namespace Syncless.CompareAndSync
             FileInfo[] fileInfos = sourceInfo.GetFiles();
             foreach (FileInfo fileInfo in fileInfos)
             {
-                try
-                {
-                    fileInfo.CopyTo(destination + "\\" + fileInfo.Name, true);
-                }
-                catch (IOException)
-                {
-                    //File Exist?
-                }
+                fileInfo.CopyTo(destination + "\\" + fileInfo.Name, true);
+
             }
             return destinationInfo.FullName;
         }
+
+        public static void CreateFolder(string path)
+        {
+            Directory.CreateDirectory(path);
+        }
+
+        public static void DeleteFolder(string path, bool recursive)
+        {
+            Directory.Delete(path, recursive);
+        }
+
+        public static void DeleteFolderToRecycleBin(string path)
+        {
+            Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+        }
+
+        #endregion
+
     }
 }

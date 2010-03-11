@@ -11,7 +11,7 @@ namespace Syncless.CompareAndSync.Visitor
     public class SyncerVisitor : IVisitor
     {
         #region IVisitor Members
-        private SyncConfig _syncConfig;        
+        private SyncConfig _syncConfig;
         private readonly string ARCHIVENAME;
         private readonly int ARCHIVELIMIT;
 
@@ -101,7 +101,7 @@ namespace Syncless.CompareAndSync.Visitor
                         if (fco.Priority[i] != fco.Priority[srcFilePos])
                         {
                             fileExists = File.Exists(Path.Combine(currentPaths[i], fco.Name));
-                            File.Copy(src, Path.Combine(currentPaths[i], fco.Name), true);
+                            CommonMethods.CopyFile(src, Path.Combine(currentPaths[i], fco.Name), true);
                             fco.CreationTime[i] = fco.CreationTime[srcFilePos];
                             fco.Exists[i] = true;
                             if (fileExists)
@@ -136,7 +136,7 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            File.Delete(Path.Combine(currentPaths[i], fco.Name));
+                            CommonMethods.DeleteFile(Path.Combine(currentPaths[i], fco.Name));
                             fco.Exists[i] = false;
                             fco.FinalState[i] = FinalState.Deleted;
                         }
@@ -164,7 +164,7 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            File.Move(Path.Combine(currentPaths[i], fco.Name), Path.Combine(currentPaths[i], fco.NewName));
+                            CommonMethods.MoveFile(Path.Combine(currentPaths[i], fco.Name), Path.Combine(currentPaths[i], fco.NewName));
                             fco.FinalState[i] = FinalState.Renamed;
                         }
                         catch (Exception)
@@ -197,7 +197,7 @@ namespace Syncless.CompareAndSync.Visitor
                         {
                             try
                             {
-                                Directory.CreateDirectory(Path.Combine(currentPaths[i], folder.Name));
+                                CommonMethods.CreateFolder(Path.Combine(currentPaths[i], folder.Name));
                                 folder.Exists[i] = true;
                                 folder.FinalState[i] = FinalState.Created;
                             }
@@ -226,7 +226,7 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            Directory.Delete(Path.Combine(currentPaths[i], folder.Name), true);
+                            CommonMethods.DeleteFolder(Path.Combine(currentPaths[i], folder.Name), true);
                             folder.Exists[i] = false;
                             folder.FinalState[i] = FinalState.Deleted;
                             folder.Contents.Clear(); //Experimental
@@ -244,8 +244,6 @@ namespace Syncless.CompareAndSync.Visitor
             }
             folder.FinalState[srcFilePos] = FinalState.Propagated;
         }
-
-
 
         #endregion
 
