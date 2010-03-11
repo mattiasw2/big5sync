@@ -433,7 +433,10 @@ namespace SynclessUI
                         // Terminates the SLL and closes the UI
                         gui.Terminate();
                         SaveApplicationSettings();
-						//RegistryHelper.RemoveRegistry();
+                        if (Properties.Settings.Default.PersistRegistryIntegration == false)
+                        {
+                            RegistryHelper.RemoveRegistry();
+                        }
                         break;
                     case MessageBoxResult.Cancel:
                         e.Cancel = true;
@@ -593,6 +596,12 @@ namespace SynclessUI
 				TagDetailsWindow tdw = new TagDetailsWindow(_selectedTag, this);
 				tdw.ShowDialog();
 			}
+		}
+
+		private void BtnOptions_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			OptionsWindow ow = new OptionsWindow();
+			ow.ShowDialog();
 		}
 		
     }
