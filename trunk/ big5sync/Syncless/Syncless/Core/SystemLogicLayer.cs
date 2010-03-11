@@ -64,7 +64,7 @@ namespace Syncless.Core
                     return;
                 }
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
-                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, true, AutoSyncRequestType.New, syncConfig);
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList,false, AutoSyncRequestType.New, syncConfig);
                 CompareAndSyncController.Instance.Sync(request);
             }
             else if (fe.Event == EventChangeType.MODIFIED)
@@ -85,7 +85,7 @@ namespace Syncless.Core
                     return;
                 }
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
-                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, true, AutoSyncRequestType.Update, syncConfig);
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.Update, syncConfig);
                 CompareAndSyncController.Instance.Sync(request);
             }
             else if (fe.Event == EventChangeType.RENAMED)
@@ -106,7 +106,7 @@ namespace Syncless.Core
                     return;
                 }
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
-                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, parentList, AutoSyncRequestType.Rename, syncConfig);
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, parentList,false, AutoSyncRequestType.Rename, syncConfig);
                 CompareAndSyncController.Instance.Sync(request);
             }
         }
@@ -152,7 +152,7 @@ namespace Syncless.Core
                     return;
                 }
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
-                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, parentList, AutoSyncRequestType.Rename, syncConfig);
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, parentList,false, AutoSyncRequestType.Rename, syncConfig);
                 CompareAndSyncController.Instance.Sync(request);
             }
         }
