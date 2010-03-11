@@ -117,6 +117,7 @@
     <Compile Include="Monitor\Exceptions\MonitorPathNotFoundException.cs" />
     <Compile Include="Monitor\DTO\FileChangeEvent.cs" />
     <Compile Include="Monitor\DTO\FolderChangeEvent.cs" />
+    <Compile Include="Monitor\FileSystemEventProcessor.cs" />
     <Compile Include="Monitor\MonitorLayer.cs" />
     <Compile Include="Profiling\Exceptions\ProfileNameDifferentException.cs" />
     <Compile Include="Profiling\Profile.cs" />

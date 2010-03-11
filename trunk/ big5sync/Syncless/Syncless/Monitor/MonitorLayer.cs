@@ -434,100 +434,80 @@ namespace Syncless.Monitor
 
         private void OnModified(object source, FileSystemEventArgs e)
         {
-            if (e.FullPath.ToLower().EndsWith(@"syncless.xml"))
-            {
-                return;
-            }
             if (File.Exists(e.FullPath))
             {
                 Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.MODIFIED, FileSystemType.FILE);
-                FileSystemEventDispatcher.Instance.AddToQueue(fse);
+                FileSystemEventDispatcher.Instance.Enqueue(fse);
             }
         }
         
         private void OnCreated(object source, FileSystemEventArgs e)
         {
-            if (e.FullPath.ToLower().EndsWith(@"syncless.xml"))
-            {
-                return;
-            }
             if (File.Exists(e.FullPath))
             {
                 Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATING, FileSystemType.FILE);
-                FileSystemEventDispatcher.Instance.AddToQueue(fse);
+                FileSystemEventDispatcher.Instance.Enqueue(fse);
             }
             else if (Directory.Exists(e.FullPath))
             {
                 Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.FOLDER);
-                FileSystemEventDispatcher.Instance.AddToQueue(fse);
+                FileSystemEventDispatcher.Instance.Enqueue(fse);
             }
             else
             {
                 Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.UNKNOWN);
-                FileSystemEventDispatcher.Instance.AddToQueue(fse);
+                FileSystemEventDispatcher.Instance.Enqueue(fse);
             }
         }
 
         private void OnDeleted(object source, FileSystemEventArgs e)
         {
-            if (e.FullPath.ToLower().EndsWith(@"syncless.xml"))
-            {
-                return;
-            }
             ExtendedFileSystemWatcher watcher = (ExtendedFileSystemWatcher)source;
             if (!watcher.Filter.Equals("*.*"))
             {
                 Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.DELETED, FileSystemType.FILE);
-                FileSystemEventDispatcher.Instance.AddToQueue(fse);
+                FileSystemEventDispatcher.Instance.Enqueue(fse);
             }
             else
             {
                 Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.FullPath, watcher.Path);
-                FileSystemEventDispatcher.Instance.AddToQueue(fse);
+                FileSystemEventDispatcher.Instance.Enqueue(fse);
             }
         }
 
         private static void OnRenamed(object source, RenamedEventArgs e)
         {
-            if (e.FullPath.ToLower().EndsWith(@"syncless.xml"))
-            {
-                return;
-            }
             if (File.Exists(e.FullPath))
             {
                 Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FILE);
-                FileSystemEventDispatcher.Instance.AddToQueue(fse);
+                FileSystemEventDispatcher.Instance.Enqueue(fse);
             }
             else if (Directory.Exists(e.FullPath))
             {
                 Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FOLDER);
-                FileSystemEventDispatcher.Instance.AddToQueue(fse);
+                FileSystemEventDispatcher.Instance.Enqueue(fse);
             }
             else
             {
                 Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.UNKNOWN);
-                FileSystemEventDispatcher.Instance.AddToQueue(fse);
+                FileSystemEventDispatcher.Instance.Enqueue(fse);
             }
         }
 
         private void OnCreateComplete(object source, FileSystemEventArgs e)
         {
-            if (e.FullPath.ToLower().EndsWith(@"syncless.xml"))
-            {
-                return;
-            }
             Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
             FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.FILE);
-            FileSystemEventDispatcher.Instance.AddToQueue(fse);
+            FileSystemEventDispatcher.Instance.Enqueue(fse);
         }
 
         private void OnError(object source, ErrorEventArgs e)
@@ -556,7 +536,7 @@ namespace Syncless.Monitor
                 {
                     Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                     FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.DELETED, FileSystemType.FOLDER);
-                    FileSystemEventDispatcher.Instance.AddToQueue(fse);
+                    FileSystemEventDispatcher.Instance.Enqueue(fse);
                     return;
                 }
             }
@@ -572,7 +552,7 @@ namespace Syncless.Monitor
                 {
                     Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                     FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FOLDER);
-                    FileSystemEventDispatcher.Instance.AddToQueue(fse);
+                    FileSystemEventDispatcher.Instance.Enqueue(fse);
                     return;
                 }
             }

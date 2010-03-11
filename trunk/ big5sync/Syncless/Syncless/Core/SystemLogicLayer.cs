@@ -47,12 +47,12 @@ namespace Syncless.Core
 
         public void HandleFileChange(FileChangeEvent fe)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void HandleFolderChange(FolderChangeEvent fe)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
         public void HandleDriveChange(DriveChangeEvent dce)
         {
