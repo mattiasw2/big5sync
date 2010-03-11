@@ -96,16 +96,11 @@ namespace Syncless.Tagging
                     if (currentPath == null)
                     {
                         SystemLogicLayer.Instance.AddTagPath(current, newPath);
-                    }
-                    //if updated time is the same, does not merge
-                    if (currentPath.LastUpdated == newPath.LastUpdated)
-                    {
-                        continue;
-                    }                    
+                    }               
                     else
                     {
                         //update only if the new path is more updated than the current path
-                        if (currentPath.LastUpdated < newPath.LastUpdated)
+                        if (currentPath.LastUpdated <= newPath.LastUpdated)
                         {
                             //if the path is delete in the new tag but not in the old tag
                             if (newPath.IsDeleted && !currentPath.IsDeleted)
