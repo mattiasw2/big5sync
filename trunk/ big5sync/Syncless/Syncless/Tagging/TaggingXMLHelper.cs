@@ -194,7 +194,7 @@ namespace Syncless.Tagging
             tag.IsDeleted = isdeleted;
             tag.DeletedDate = deleteddate;
             XmlElement foldersElement = (XmlElement)tagElement.GetElementsByTagName(ELE_FOLDER_ROOT).Item(0);
-            tag.PathList = CreateFolders(foldersElement);
+            tag.FilteredPathList = CreateFolders(foldersElement);
             XmlElement filters = (XmlElement)tagElement.GetElementsByTagName(ELE_FILTER_ROOT).Item(0);
             tag.Filters = LoadFilterList(filters);
             tag.FiltersUpdated = long.Parse(filters.GetAttribute(ELE_FILTER_UPDATED));
@@ -309,7 +309,7 @@ namespace Syncless.Tagging
 
         private static XmlElement CreateFoldersElement(XmlDocument xmlDoc, Tag tag)
         {
-            List<TaggedPath> pathList = tag.PathList;
+            List<TaggedPath> pathList = tag.FilteredPathList;
             XmlElement foldersElement = xmlDoc.CreateElement(ELE_FOLDER_ROOT);
             foreach (TaggedPath path in pathList)
             {
