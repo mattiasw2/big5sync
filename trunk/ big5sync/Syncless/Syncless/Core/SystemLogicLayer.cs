@@ -542,7 +542,7 @@ namespace Syncless.Core
         private TagView ConvertToTagView(Tag t)
         {
             TagView view = new TagView(t.TagName, t.LastUpdated);
-            List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.PathStringList);
+            List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.FilteredPathListString);
             view.PathStringList = pathList;
             view.Created = t.Created;
             view.IsSeamless = t.IsSeamless;
@@ -550,11 +550,13 @@ namespace Syncless.Core
         }
         private bool StartManualSync(Tag tag)
         {
-            List<string> paths = tag.PathStringList;
+            List<string> paths = tag.FilteredPathListString;
             List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
             if (filterPaths[0].Count != 0)
             {
-                ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), filterPaths[1].ToArray(), tag.Filters,tag.ArchiveName,tag.ArchiveCount);
+                SyncConfig syncConfig = new SyncConfig(tag.ArchiveName, tag.ArchiveCount,tag.Recycle);
+                ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), filterPaths[1].ToArray(), tag.Filters, syncConfig);
+                
                 CompareAndSyncController.Instance.Sync(syncRequest);
             }
             return true;

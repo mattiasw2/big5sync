@@ -23,14 +23,17 @@ namespace Syncless.Tagging
             get { return _tagName; }
             set { this._tagName = value; }
         }
-        public List<string> PathStringList
+        public List<string> FilteredPathListString
         {
             get
             {
                 List<string> pathList = new List<string>();
                 foreach (TaggedPath path in _pathList)
                 {
-                    pathList.Add(path.Path);
+                    if (!path.IsDeleted)
+                    {
+                        pathList.Add(path.Path);
+                    }
                 }
                 return pathList;
             }
@@ -45,21 +48,7 @@ namespace Syncless.Tagging
             get { return _created; }
             set { _created = value; }
         }
-        public bool IsSeamless
-        {
-            get { return _config.IsSeamless; }
-            set { _config.IsSeamless = value; }
-        }
-        public string ArchiveName
-        {
-            get { return _config.ArchiveFolderName; }
-            set { _config.ArchiveFolderName = value; }
-        }
-        public int ArchiveCount
-        {
-            get { return _config.ArchiveCount; }
-            set { _config.ArchiveCount = value; }
-        }
+        
         public bool IsDeleted
         {
             get { return _isDeleted; }
@@ -105,6 +94,28 @@ namespace Syncless.Tagging
             get { return _config; }
             set { _config = value; }
         }
+
+        public bool IsSeamless
+        {
+            get { return _config.IsSeamless; }
+            set { _config.IsSeamless = value; }
+        }
+        public string ArchiveName
+        {
+            get { return _config.ArchiveFolderName; }
+            set { _config.ArchiveFolderName = value; }
+        }
+        public int ArchiveCount
+        {
+            get { return _config.ArchiveCount; }
+            set { _config.ArchiveCount = value; }
+        }
+        public bool Recycle
+        {
+            get { return _config.Recycle; }
+            set { _config.Recycle = value; }
+        }
+            
 
         public Tag(string tagname, long created)
         {
