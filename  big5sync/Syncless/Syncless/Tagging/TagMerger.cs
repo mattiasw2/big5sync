@@ -26,20 +26,7 @@ namespace Syncless.Tagging
             }
             //list of tags from the new profile.
             List<Tag> newTagList = new List<Tag>();
-            newTagList.AddRange(newProfile.TagList);
-            //for each tag in the current profile , check for its existence in the new profile.
-            foreach (Tag tag in currentProfile.TagList)
-            {
-                Tag newTag = newProfile.FindTag(tag.TagName);
-                if (newTag == null)
-                {
-                    continue;
-                    // a new tag in current profile that is not in the new profile.
-                }
-                newTagList.Remove(newTag);
-                //if the tag exist , merge it.
-                
-            }
+            newTagList.AddRange(newProfile.TagList);            
             foreach (Tag newTag in newTagList)//handles the new tag from new profile
             {
                 Tag oldTag = currentProfile.FindTag(newTag.TagName);
@@ -89,11 +76,20 @@ namespace Syncless.Tagging
                     if (newTag.Created == current.Created)
                     {
                         SystemLogicLayer.Instance.DeleteTag(newTag.TagName);
+                        return true;
                     }
+                    return false;
                 }
                 //for each taggedPath found in the new Tag.
                 //if the path is not found , just create
                 //if the path is found , attempt to merge.
+                if (current.IsDeleted && !newTag.IsDeleted)
+                {
+                    if (newTag.Created > current.DeletedDate)
+                    {
+                        SystemLogicLayer.Instance.AddTag(newTag);
+                    }
+                }
                 foreach (TaggedPath newPath in newTag.UnfilteredPathList)
                 {
                     TaggedPath currentPath = current.FindPath(newPath.Path, false);

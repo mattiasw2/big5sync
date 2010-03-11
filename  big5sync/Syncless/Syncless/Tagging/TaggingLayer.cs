@@ -685,10 +685,7 @@ namespace Syncless.Tagging
         #region for Merger
         public void AddTag(Tag tag)
         {
-            if (!CheckTagExists(tag.TagName))
-            {
-                _taggingProfile.TagList.Add(tag);
-            }
+            _taggingProfile.AddTag(tag);
         }
         #endregion
         private Tag GetTag(string tagname)

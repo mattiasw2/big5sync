@@ -44,6 +44,7 @@ namespace Syncless.Tagging
             _tagList = new List<Tag>();
             _created = created;
             _lastUpdated = created;
+            _profileName = "";
         }
 
         public void AddTag(Tag tag)
@@ -52,6 +53,17 @@ namespace Syncless.Tagging
             {
                 _tagList.Add(tag);
                 _lastUpdated = TaggingHelper.GetCurrentTime();
+            }
+            else
+            {
+            
+                Tag oldTag = FindTag(tag.TagName);
+                if (oldTag.IsDeleted)
+                {
+                    _tagList.Remove(oldTag);
+                    _tagList.Add(tag);
+                }
+            
             }
         }
 
