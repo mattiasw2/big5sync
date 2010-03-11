@@ -56,6 +56,11 @@ namespace Syncless.Filters
         }
         private List<string> ApplyInclude(List<Filter> filters, List<string> patterns)
         {
+            if (filters.Count == 0)
+            {
+                //if no include filter, default include all
+                return patterns;
+            }
             // all files that pass through the filter should be included.
             // THis is A OR Operation
             List<string> outputList = new List<string>();
