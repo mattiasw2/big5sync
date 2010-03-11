@@ -84,6 +84,7 @@ namespace Syncless.Filters
             // All files that pass the criteria must be excluded
             // THis is a OR also.
             List<string> outputList = new List<string>();
+            outputList.AddRange(patterns);
             foreach (Filter filter in filters)
             {
                 Debug.Assert(filter.Mode == FilterMode.EXCLUDE);
