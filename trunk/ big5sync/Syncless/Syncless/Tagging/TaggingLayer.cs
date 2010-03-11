@@ -92,7 +92,8 @@ namespace Syncless.Tagging
             }
             for (int i = 1; i < paths.Count; i++)
             {
-                if(File.Exists(paths[i])){
+                if (File.Exists(paths[i]))
+                {
                     TaggingProfile profile = TaggingXMLHelper.LoadFrom(paths[i]);
                     int updateCount = TagMerger.MergeProfile(_taggingProfile, profile);
                 }
@@ -412,7 +413,7 @@ namespace Syncless.Tagging
                 return pathList;
             }
         }
-        
+
         /// <summary>
         /// Retrieve a list of Tags where a given path is tagged to
         /// </summary>
@@ -579,6 +580,28 @@ namespace Syncless.Tagging
             }
             return parentPathList;
         }
+        public List<Tag> RetrieveParentTagByPath(string path)
+        {
+            List<Tag> parentPathList = new List<Tag>();
+        
+            foreach (Tag tag in _taggingProfile.TagList)
+            {
+                foreach (TaggedPath p in tag.FilteredPathList)
+                {
+                    if (path.StartsWith(p.Path))
+                    {
+                        if (!path.Equals(p.Path))
+                        {
+
+                            parentPathList.Add(tag);
+                            break;
+
+                        }
+                    }
+                }
+            }
+            return parentPathList;
+        }
 
         /// <summary>
         /// Check if a logicalid exists
@@ -596,7 +619,7 @@ namespace Syncless.Tagging
             }
             return false;
         }
-        
+
         /// <summary>
         /// Save information of a profile to a xml file
         /// </summary>

@@ -59,9 +59,12 @@ namespace Syncless.Core
                     string parent = info.Directory.FullName;
                     parentList.Add(parent);
                 }
-                List<Tag> tag = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
+                List<Tag> tag = TaggingLayer.Instance.RetrieveParentTagByPath(logicalAddress);
+                if(tag.Count==0){
+                    return;
+                }
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
-                AutoSyncRequest request = new AutoSyncRequest(fe.NewPath.Name, fe.NewPath.Directory.FullName, parentList, true ,AutoSyncRequestType.New, syncConfig);
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, true, AutoSyncRequestType.New, syncConfig);
             }
             else if (fe.Event == EventChangeType.MODIFIED)
             {
@@ -75,9 +78,13 @@ namespace Syncless.Core
                     string parent = info.Directory.FullName;
                     parentList.Add(parent);
                 }
-                List<Tag> tag = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
+                List<Tag> tag = TaggingLayer.Instance.RetrieveParentTagByPath(logicalAddress);
+                if (tag.Count == 0)
+                {
+                    return;
+                }
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
-                AutoSyncRequest request = new AutoSyncRequest(fe.NewPath.Name, fe.NewPath.Directory.FullName, parentList,true, AutoSyncRequestType.Update, syncConfig);
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, true, AutoSyncRequestType.Update, syncConfig);
             }
             else if (fe.Event == EventChangeType.RENAMED)
             {
@@ -91,7 +98,11 @@ namespace Syncless.Core
                     string parent = info.Directory.FullName;
                     parentList.Add(parent);
                 }
-                List<Tag> tag = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
+                List<Tag> tag = TaggingLayer.Instance.RetrieveParentTagByPath(logicalAddress);
+                if (tag.Count == 0)
+                {
+                    return;
+                }
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
                 AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, parentList, AutoSyncRequestType.Rename, syncConfig);
             }
@@ -111,9 +122,13 @@ namespace Syncless.Core
                     string parent = info.Directory.FullName;
                     parentList.Add(parent);
                 }
-                List<Tag> tag = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
+                List<Tag> tag = TaggingLayer.Instance.RetrieveParentTagByPath(logicalAddress);
+                if (tag.Count == 0)
+                {
+                    return;
+                }
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
-                AutoSyncRequest request = new AutoSyncRequest(fe.NewPath.Name, fe.NewPath.Parent.FullName,  parentList, true, AutoSyncRequestType.New, syncConfig);
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Parent.FullName, parentList, true, AutoSyncRequestType.New, syncConfig);
             }
             else if (fe.Event == EventChangeType.RENAMED)
             {
@@ -127,7 +142,11 @@ namespace Syncless.Core
                     string parent = info.Directory.FullName;
                     parentList.Add(parent);
                 }
-                List<Tag> tag = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
+                List<Tag> tag = TaggingLayer.Instance.RetrieveParentTagByPath(logicalAddress);
+                if (tag.Count == 0)
+                {
+                    return;
+                }
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
                 AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, parentList, AutoSyncRequestType.Rename, syncConfig);
             }
@@ -184,7 +203,11 @@ namespace Syncless.Core
                     string parent = info.Directory.FullName;
                     parentList.Add(parent);
                 }
-                List<Tag> tag = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
+                List<Tag> tag = TaggingLayer.Instance.RetrieveParentTagByPath(logicalAddress);
+                if (tag.Count == 0)
+                {
+                    return;
+                }
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
                 AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent.FullName, parentList, AutoSyncRequestType.Delete, syncConfig);
             }
