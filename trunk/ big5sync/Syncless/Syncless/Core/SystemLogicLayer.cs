@@ -490,6 +490,7 @@ namespace Syncless.Core
             try
             {
                 SaveLoadHelper.SaveAll(appPath);
+                CompareAndSyncController.Instance.PrepareForTermination();
                 return true;
             }
             catch (Exception e)
