@@ -317,6 +317,9 @@ namespace Syncless.CompareAndSync.Visitor
                 case FinalState.Deleted:
                     DeleteFolderObject(xmlDoc, folder);
                     break;
+                case FinalState.Renamed:
+                    RenameFolderObject(xmlDoc, folder);
+                    break;
                 case FinalState.Propagated:
                     HandleUnchangedOrPropagatedFolder(xmlDoc, folder, counter, currentPath);
                     break;
@@ -335,6 +338,15 @@ namespace Syncless.CompareAndSync.Visitor
             nameElement.AppendChild(nameOfFolder);
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR);
             node.AppendChild(nameElement);
+        }
+
+        private void RenameFolderObject(XmlDocument xmlDoc, FolderCompareObject folder)
+        {
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
+            if (node == null)
+                return;
+
+            node.FirstChild.InnerText = folder.NewName;
         }
 
         private void DeleteFolderObject(XmlDocument xmlDoc, FolderCompareObject folder)
