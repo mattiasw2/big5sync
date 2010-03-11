@@ -76,7 +76,14 @@ namespace Syncless.CompareAndSync
             FileInfo sourceFile = new FileInfo(sourceFullPath);
             FileInfo destFile = new FileInfo(destFullPath);
 
-            return (CommonMethods.CalculateMD5Hash(sourceFile) != CommonMethods.CalculateMD5Hash(destFile));
+            try
+            {
+                return (CommonMethods.CalculateMD5Hash(sourceFile) != CommonMethods.CalculateMD5Hash(destFile));
+            }
+            catch (FileNotFoundException)
+            {
+                return true;
+            }
         }
 
         private static void DeleteFile(string destFullPath)

@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Security.Cryptography;
+using Syncless.Core;
 
 namespace Syncless.CompareAndSync
 {
@@ -12,26 +13,33 @@ namespace Syncless.CompareAndSync
     {
         public static string CalculateMD5Hash(FileInfo fileInput)
         {
-            Debug.Assert(fileInput.Exists);
-            FileStream fileStream = null;
+            if (!fileInput.Exists)
+                throw new FileNotFoundException(fileInput.Name + ": Unable to hash non-existent file.");
+
             try
             {
-                fileStream = fileInput.OpenRead();
-            }
-            catch (IOException)
-            {
-                fileInput.Refresh();
-                fileStream = fileInput.OpenRead();
-            }
+                FileStream fileStream = fileInput.OpenRead();
+                byte[] fileHash = MD5.Create().ComputeHash(fileStream);
+                fileStream.Close();
+                StringBuilder sb = new StringBuilder();
 
-            byte[] fileHash = MD5.Create().ComputeHash(fileStream);
-            fileStream.Close();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < fileHash.Length; i++)
-            {
-                sb.Append(fileHash[i].ToString("X2"));
+                for (int i = 0; i < fileHash.Length; i++)
+                    sb.Append(fileHash[i].ToString("X2"));
+
+                return sb.ToString();
             }
-            return sb.ToString();
+            catch (UnauthorizedAccessException e)
+            {
+                return string.Empty;
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                return string.Empty;
+            }
+            catch (IOException e)
+            {
+                return string.Empty;
+            }
         }
 
         public static void DeleteFileToRecycleBin(string path)

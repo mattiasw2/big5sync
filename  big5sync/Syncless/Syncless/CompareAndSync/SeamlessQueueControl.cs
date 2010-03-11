@@ -10,20 +10,21 @@ namespace Syncless.CompareAndSync
     /// </summary>
     public class SeamlessQueueControl : IDisposable
     {
-        private List<Thread> threads;
-        private int threadsToUse;
-        private object locker;
-        private Queue<AutoSyncRequest> jobs;
-        private EventWaitHandle wh;
+        private List<Thread> threads = new List<Thread>();
+        private int threadsToUse = 1;
+        private object locker = new object();
+        private Queue<AutoSyncRequest> jobs = new Queue<AutoSyncRequest>();
+        private EventWaitHandle wh = new AutoResetEvent(false);
         private static SeamlessQueueControl _instance;
 
         private SeamlessQueueControl()
         {
-            threads = new List<Thread>();
-            threadsToUse = 1;
-            locker = new object();
-            jobs = new Queue<AutoSyncRequest>();
-            wh = new AutoResetEvent(false);
+            for (int i = 0; i < threadsToUse; i++)
+            {
+                Thread t = new Thread(work);
+                threads.Add(t);
+                t.Start();
+            }
         }
 
         public static SeamlessQueueControl Instance
@@ -43,16 +44,6 @@ namespace Syncless.CompareAndSync
         //    set { threadsToUse = value; }
         //    get { return threadsToUse; }
         //}
-
-        private void AutoSyncJobQueue()
-        {
-            for (int i = 0; i < threadsToUse; i++)
-            {
-                Thread t = new Thread(work);
-                threads.Add(t);
-                t.Start();
-            }
-        }
 
         public void AddSyncJob(AutoSyncRequest item)
         {
