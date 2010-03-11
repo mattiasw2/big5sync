@@ -21,11 +21,14 @@ namespace Syncless.Profiling
         }
         private static void SaveProfile(XmlDocument xml, string path)
         {
-
             XmlTextWriter textWriter = null;
             FileStream fs = null;
             try
             {
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
                 fs = new FileStream(path, FileMode.OpenOrCreate);
                 textWriter = new XmlTextWriter(fs, Encoding.UTF8);
                 textWriter.Formatting = Formatting.Indented;

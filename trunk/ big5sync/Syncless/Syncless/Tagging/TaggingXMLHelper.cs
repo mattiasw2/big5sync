@@ -69,6 +69,10 @@ namespace Syncless.Tagging
             FileStream fs = null;
             try
             {
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
                 fs = new FileStream(path, FileMode.Create);
                 textWriter = new XmlTextWriter(fs, Encoding.UTF8);
                 textWriter.Formatting = Formatting.Indented;
