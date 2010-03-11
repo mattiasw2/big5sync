@@ -32,6 +32,15 @@ namespace Syncless.Monitor
             waitHandle = new AutoResetEvent(true);
         }
 
+        private void Terminate()
+        {
+            waitHandle.Close();
+            if (dispatcherThread != null)
+            {
+                dispatcherThread.Abort();
+            }
+        }
+
         public void Enqueue(FileSystemEvent e)
         {
             lock (queue)

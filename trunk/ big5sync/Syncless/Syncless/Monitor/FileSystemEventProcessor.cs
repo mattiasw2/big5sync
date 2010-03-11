@@ -28,7 +28,7 @@ namespace Syncless.Monitor
         private List<string> createList;
         private List<FileSystemEvent> processList;
         private List<FileSystemEvent> waitingList;
-        private Thread dispatcherThread;
+        private Thread processorThread;
         private EventWaitHandle waitHandle;
 
         private FileSystemEventProcessor()
@@ -40,18 +40,27 @@ namespace Syncless.Monitor
             waitHandle = new AutoResetEvent(true);
         }
 
+        private void Terminate()
+        {
+            waitHandle.Close();
+            if (processorThread != null)
+            {
+                processorThread.Abort();
+            }
+        }
+
         public void Enqueue(List<FileSystemEvent> eventList)
         {
             lock (queue)
             {
                 queue.Add(eventList);
             }
-            if (dispatcherThread == null)
+            if (processorThread == null)
             {
-                dispatcherThread = new Thread(ProcessEvent);
-                dispatcherThread.Start();
+                processorThread = new Thread(ProcessEvent);
+                processorThread.Start();
             }
-            else if (dispatcherThread.ThreadState == ThreadState.WaitSleepJoin)
+            else if (processorThread.ThreadState == ThreadState.WaitSleepJoin)
             {
                 waitHandle.Set();
             }
