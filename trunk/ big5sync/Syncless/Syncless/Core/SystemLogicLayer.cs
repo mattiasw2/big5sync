@@ -155,7 +155,7 @@ namespace Syncless.Core
                     return;
                 }
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
-                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, parentList, true, AutoSyncRequestType.Rename, syncConfig);
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, fe.OldPath.Parent.FullName, parentList, true, AutoSyncRequestType.Rename, syncConfig);
                 CompareAndSyncController.Instance.Sync(request);
             }
         }
