@@ -68,7 +68,7 @@ namespace Syncless.Tagging
 
         private static bool MergeTag(Tag current, Tag newTag)
         {
-            if (!newTag.TagName.Equals(current.TagName))
+            if (!newTag.TagName.ToLower().Equals(current.TagName.ToLower()))
             {
                 //Since Tag name is different , do not merge.
                 //Should not Happen.
