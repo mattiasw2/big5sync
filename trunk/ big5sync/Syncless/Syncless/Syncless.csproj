@@ -59,6 +59,7 @@
     <Compile Include="CompareAndSync\Enum\FinalState.cs" />
     <Compile Include="CompareAndSync\Enum\MetaChangeType.cs" />
     <Compile Include="CompareAndSync\Enum\ToDo.cs" />
+    <Compile Include="CompareAndSync\FileChangeType.cs" />
     <Compile Include="CompareAndSync\Request\AutoSyncRequest.cs" />
     <Compile Include="CompareAndSync\Request\ManualCompareRequest.cs" />
     <Compile Include="CompareAndSync\Request\ManualRequest.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="CompareAndSync\Visitor\TodoXMLWriterVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\XMLMetadataVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\XMLWriterVisitor.cs" />
+    <Compile Include="CompareAndSync\XMLWriteObject.cs" />
     <Compile Include="Core\Conflict\Conflict.cs" />
     <Compile Include="Core\Conflict\ConflictQueue.cs" />
     <Compile Include="Core\ExceptionHandler.cs" />
