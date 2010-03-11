@@ -224,7 +224,10 @@ namespace Syncless.CompareAndSync.Visitor
         //TO BE DONE LATER
         private void RenameFileObject(XmlDocument xmlDoc, FileCompareObject file)
         {
- 
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
+            if (node == null)
+                return;
+            node.FirstChild.InnerText = file.NewName;
         }
 
         private void DeleteFileObject(XmlDocument xmlDoc, FileCompareObject file)
