@@ -8,17 +8,17 @@ namespace Syncless.CompareAndSync
     class XMLWriteObject
     {
 
-        private string name ;
-        private long size ;
-        private string hash ;
-        private long lastModified ;
-        private long lastCreated ;
-        private bool isFolder = false ;
-        private string fullPath = "" ;
+        private string name;
+        private long size;
+        private string hash;
+        private long lastModified;
+        private long lastCreated;
+        private bool isFolder = false;
+        private string fullPath = "";
         private string renameFrom = "";
         private FileChangeType type;
 
-        public XMLWriteObject(string name , long size , string hash , long lastModified , long lastCreated)
+        public XMLWriteObject(string name, long size, string hash, long lastModified, long lastCreated)
         {
             this.name = name;
             this.hash = hash;

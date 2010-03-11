@@ -97,37 +97,33 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 if (i != srcFilePos && fco.Parent.FinalState[i] != FinalState.Deleted)
                 {
-                    try
+                    if (fco.Priority[i] != fco.Priority[srcFilePos])
                     {
-                        if (fco.Priority[i] != fco.Priority[srcFilePos])
-                        {
-                            destFile = Path.Combine(currentPaths[i], fco.Name);
-                            fileExists = File.Exists(destFile);
+                        destFile = Path.Combine(currentPaths[i], fco.Name);
+                        fileExists = File.Exists(destFile);
 
+                        if (fileExists)
+                        {
                             if (_syncConfig.ArchiveLimit >= 0)
                                 CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
                             if (_syncConfig.Recycle)
                                 CommonMethods.DeleteFileToRecycleBin(destFile);
+                        }
 
-                            CommonMethods.CopyFile(src, destFile, true);
-                            fco.CreationTime[i] = fco.CreationTime[srcFilePos];
-                            fco.Exists[i] = true;
-                            if (fileExists)
-                                fco.FinalState[i] = FinalState.Updated;
-                            else
-                                fco.FinalState[i] = FinalState.Created;
-                            fco.Hash[i] = fco.Hash[srcFilePos];
-                            fco.LastWriteTime[i] = fco.LastWriteTime[srcFilePos];
-                            fco.Length[i] = fco.LastWriteTime[srcFilePos];
-                        }
+                        CommonMethods.CopyFile(src, destFile, true);
+                        fco.CreationTime[i] = fco.CreationTime[srcFilePos];
+                        fco.Exists[i] = true;
+                        if (fileExists)
+                            fco.FinalState[i] = FinalState.Updated;
                         else
-                        {
-                            fco.FinalState[i] = FinalState.Unchanged;
-                        }
+                            fco.FinalState[i] = FinalState.Created;
+                        fco.Hash[i] = fco.Hash[srcFilePos];
+                        fco.LastWriteTime[i] = fco.LastWriteTime[srcFilePos];
+                        fco.Length[i] = fco.LastWriteTime[srcFilePos];
                     }
-                    catch (Exception)
+                    else
                     {
-                        //Throw to conflict queue
+                        fco.FinalState[i] = FinalState.Unchanged;
                     }
                 }
             }
@@ -144,24 +140,18 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     if (fco.Priority[i] != fco.Priority[srcFilePos])
                     {
-                        try
-                        {
-                            destFile = Path.Combine(currentPaths[i], fco.Name);
+                        destFile = Path.Combine(currentPaths[i], fco.Name);
 
-                            if (_syncConfig.ArchiveLimit >= 0)
-                                CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
-                            if (_syncConfig.Recycle)
-                                CommonMethods.DeleteFileToRecycleBin(destFile);
-                            else
-                                CommonMethods.DeleteFile(destFile);
+                        if (_syncConfig.ArchiveLimit >= 0)
+                            CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
+                        if (_syncConfig.Recycle)
+                            CommonMethods.DeleteFileToRecycleBin(destFile);
+                        else
+                            CommonMethods.DeleteFile(destFile);
 
-                            fco.Exists[i] = false;
-                            fco.FinalState[i] = FinalState.Deleted;
-                        }
-                        catch (Exception)
-                        {
-                            //Throw to conflict queue
-                        }
+                        fco.Exists[i] = false;
+                        fco.FinalState[i] = FinalState.Deleted;
+
                     }
                     else
                     {
@@ -180,15 +170,8 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     if (fco.Priority[i] != fco.Priority[srcFilePos])
                     {
-                        try
-                        {
-                            CommonMethods.MoveFile(Path.Combine(currentPaths[i], fco.Name), Path.Combine(currentPaths[i], fco.NewName));
-                            fco.FinalState[i] = FinalState.Renamed;
-                        }
-                        catch (Exception)
-                        {
-                            //Throw to conflict queue
-                        }
+                        CommonMethods.MoveFile(Path.Combine(currentPaths[i], fco.Name), Path.Combine(currentPaths[i], fco.NewName));
+                        fco.FinalState[i] = FinalState.Renamed;
                     }
                     else
                     {
@@ -213,15 +196,9 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         if (!Directory.Exists(Path.Combine(currentPaths[i], folder.Name)))
                         {
-                            try
-                            {
-                                CommonMethods.CreateFolder(Path.Combine(currentPaths[i], folder.Name));
-                                folder.Exists[i] = true;
-                                folder.FinalState[i] = FinalState.Created;
-                            }
-                            catch (Exception)
-                            {
-                            }
+                            CommonMethods.CreateFolder(Path.Combine(currentPaths[i], folder.Name));
+                            folder.Exists[i] = true;
+                            folder.FinalState[i] = FinalState.Created;
                         }
                     }
                     else
@@ -244,25 +221,18 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     if (folder.Priority[i] != folder.Priority[srcFilePos])
                     {
-                        try
-                        {
-                            destFolder = Path.Combine(currentPaths[i], folder.Name);
+                        destFolder = Path.Combine(currentPaths[i], folder.Name);
 
-                            if (_syncConfig.ArchiveLimit >= 0)
-                                CommonMethods.ArchiveFolder(destFolder, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
-                            if (_syncConfig.Recycle)
-                                CommonMethods.DeleteFolderToRecycleBin(destFolder);
-                            else
-                                CommonMethods.DeleteFolder(destFolder, true);
+                        if (_syncConfig.ArchiveLimit >= 0)
+                            CommonMethods.ArchiveFolder(destFolder, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
+                        if (_syncConfig.Recycle)
+                            CommonMethods.DeleteFolderToRecycleBin(destFolder);
+                        else
+                            CommonMethods.DeleteFolder(destFolder, true);
 
-                            folder.Exists[i] = false;
-                            folder.FinalState[i] = FinalState.Deleted;
-                            folder.Contents.Clear(); //Experimental
-                        }
-                        catch (Exception)
-                        {
-                            //Throw to conflict queue
-                        }
+                        folder.Exists[i] = false;
+                        folder.FinalState[i] = FinalState.Deleted;
+                        folder.Contents.Clear(); //Experimentald
                     }
                     else
                     {
