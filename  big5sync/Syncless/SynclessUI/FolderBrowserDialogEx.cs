@@ -60,7 +60,7 @@ using System.Threading;
         private bool _selectedPathNeedsCheck;
         private bool _showNewFolderButton;
         private bool _showEditBox;
-        private bool _showBothFilesAndFolders = false;
+        private bool _showBothFilesAndFolders;
         private bool _newStyle = true;
         private bool _showFullPathInEditBox = true;
         private bool _dontIncludeNetworkFoldersBelowDomainLevel;

@@ -67,8 +67,8 @@ namespace SynclessUI
 			    NewStyle = true,
                 SelectedPath = path,
 				ShowFullPathInEditBox= true,
+                ShowBothFilesAndFolders = false,
 			};
-			// dlg1.RootFolder = System.Environment.SpecialFolder.MyComputer;
 		
 			var result = dlg1.ShowDialog();
 		
