@@ -17,6 +17,10 @@ namespace Syncless.CompareAndSync
         public static void ArchiveFile(string path, string archiveName, int archiveLimit)
         {
             FileInfo f = new FileInfo(path);
+
+            if (!f.Exists)
+                return;
+
             string parent = f.DirectoryName;
             string archiveDir = Path.Combine(parent, archiveName);
             if (!Directory.Exists(archiveDir))
@@ -103,8 +107,12 @@ namespace Syncless.CompareAndSync
 
         public static void ArchiveFolder(string path, string archiveName, int archiveLimit)
         {
-            FileInfo f = new FileInfo(path);
-            string parent = f.DirectoryName;
+            DirectoryInfo f = new DirectoryInfo(path);
+
+            if (!f.Exists)
+                return;
+
+            string parent = f.Parent.FullName;
             string archiveDir = Path.Combine(parent, archiveName);
             if (!Directory.Exists(archiveDir))
                 Directory.CreateDirectory(archiveDir);
@@ -113,14 +121,14 @@ namespace Syncless.CompareAndSync
             CopyDirectory(path, Path.Combine(archiveDir, currTime + f.Name));
 
             DirectoryInfo d = new DirectoryInfo(archiveDir);
-            DirectoryInfo[] files = d.GetDirectories();
+            DirectoryInfo[] folders = d.GetDirectories();
             List<string> archivedFiles = new List<string>();
 
-            for (int i = 0; i < files.Length; i++)
+            for (int i = 0; i < folders.Length; i++)
             {
-                if (files[i].Name.EndsWith(f.Name))
+                if (folders[i].Name.EndsWith(f.Name))
                 {
-                    archivedFiles.Add(files[i].Name);
+                    archivedFiles.Add(folders[i].Name);
                 }
             }
 
@@ -135,7 +143,6 @@ namespace Syncless.CompareAndSync
 
         public static string CopyDirectory(string source, string destination)
         {
-
             DirectoryInfo sourceInfo = new DirectoryInfo(source);
             DirectoryInfo[] directoryInfos = sourceInfo.GetDirectories();
             DirectoryInfo destinationInfo = new DirectoryInfo(destination);
@@ -170,6 +177,11 @@ namespace Syncless.CompareAndSync
         public static void DeleteFolderToRecycleBin(string path)
         {
             Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+        }
+
+        public static void MoveFolder(string sourceFullPath, string destFullPath)
+        {
+            Directory.Move(sourceFullPath, destFullPath);
         }
 
         #endregion
