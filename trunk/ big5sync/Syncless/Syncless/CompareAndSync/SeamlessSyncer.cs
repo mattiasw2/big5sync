@@ -139,7 +139,7 @@ namespace Syncless.CompareAndSync
                 foreach (string dest in request.DestinationFolders)
                 {
                     destFullPath = Path.Combine(dest, request.SourceName);
-                    if (File.Exists(destFullPath))
+                    if (Directory.Exists(destFullPath))
                     {
                         DeleteFolder(destFullPath);
                     }

@@ -31,7 +31,7 @@ namespace Syncless.CompareAndSync.Request
         }
 
         public AutoSyncRequest(string oldName, string newName, string sourceParent, List<string> destinations, bool? isFolder, AutoSyncRequestType requestType, SyncConfig syncConfig)
-            : this(oldName, sourceParent, destinations, isFolder, requestType, syncConfig)
+            : this(newName, sourceParent, destinations, isFolder, requestType, syncConfig)
         {
             _oldName = oldName;
         }
