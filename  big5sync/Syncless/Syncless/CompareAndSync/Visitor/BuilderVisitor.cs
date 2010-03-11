@@ -14,7 +14,7 @@ namespace Syncless.CompareAndSync.Visitor
         #region IVisitor Members
 
         private List<Filter> _filter;
-        private FilterChain _filterChain; 
+        private FilterChain _filterChain;
 
         public BuilderVisitor(List<Filter> filter)
         {
@@ -37,43 +37,49 @@ namespace Syncless.CompareAndSync.Visitor
                 if (f.Exists && _filterChain.ApplyFilter(_filter, currentPaths[index]))
                 {
                     DirectoryInfo[] infos = f.GetDirectories();
-                    
+
                     foreach (DirectoryInfo info in infos)
                     {
-                        BaseCompareObject o = folder.GetChild(info.Name);
-                        FolderCompareObject fco = null;
+                        if (_filterChain.ApplyFilter(_filter, info.FullName))
+                        {
+                            BaseCompareObject o = folder.GetChild(info.Name);
+                            FolderCompareObject fco = null;
 
-                        if (o == null)
-                            fco = new FolderCompareObject(info.Name, currentPaths.Length, folder);
-                        else
-                            fco = (FolderCompareObject)o;
+                            if (o == null)
+                                fco = new FolderCompareObject(info.Name, currentPaths.Length, folder);
+                            else
+                                fco = (FolderCompareObject)o;
 
-                        fco.CreationTime[index] = info.CreationTime.Ticks;
-                        fco.Exists[index] = true;
+                            fco.CreationTime[index] = info.CreationTime.Ticks;
+                            fco.Exists[index] = true;
 
-                        if (o == null)
-                            folder.AddChild(fco);
+                            if (o == null)
+                                folder.AddChild(fco);
+                        }
                     }
 
                     FileInfo[] fileInfos = f.GetFiles();
                     foreach (FileInfo info in fileInfos)
                     {
-                        BaseCompareObject o = folder.GetChild(info.Name);
-                        FileCompareObject fco = null;
+                        if (_filterChain.ApplyFilter(_filter, info.FullName))
+                        {
+                            BaseCompareObject o = folder.GetChild(info.Name);
+                            FileCompareObject fco = null;
 
-                        if (o == null)
-                            fco = new FileCompareObject(info.Name, currentPaths.Length, folder);
-                        else
-                            fco = (FileCompareObject)o;
+                            if (o == null)
+                                fco = new FileCompareObject(info.Name, currentPaths.Length, folder);
+                            else
+                                fco = (FileCompareObject)o;
 
-                        fco.CreationTime[index] = info.CreationTime.Ticks;
-                        fco.Hash[index] = CommonMethods.CalculateMD5Hash(info);
-                        fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
-                        fco.Length[index] = info.Length;
-                        fco.Exists[index] = true;
+                            fco.CreationTime[index] = info.CreationTime.Ticks;
+                            fco.Hash[index] = CommonMethods.CalculateMD5Hash(info);
+                            fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
+                            fco.Length[index] = info.Length;
+                            fco.Exists[index] = true;
 
-                        if (o == null)
-                            folder.AddChild(fco);
+                            if (o == null)
+                                folder.AddChild(fco);
+                        }
                     }
                 }
                 else
