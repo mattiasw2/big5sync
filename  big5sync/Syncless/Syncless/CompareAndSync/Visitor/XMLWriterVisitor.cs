@@ -97,6 +97,9 @@ namespace Syncless.CompareAndSync.Visitor
                 case FinalState.Deleted:
                     DeleteFileObject(xmlDoc, file);
                     break;
+                case FinalState.Renamed:
+                    RenameFileObject(xmlDoc, file);
+                    break;
                 case FinalState.Unchanged:
                     HandleUnchangedOrPropagatedFile(xmlDoc, file, counter, currentPath);
                     break;
@@ -216,6 +219,12 @@ namespace Syncless.CompareAndSync.Visitor
                     nodes.InnerText = file.CreationTime[position].ToString();
                 }
             }
+        }
+
+        //TO BE DONE LATER
+        private void RenameFileObject(XmlDocument xmlDoc, FileCompareObject file)
+        {
+ 
         }
 
         private void DeleteFileObject(XmlDocument xmlDoc, FileCompareObject file)

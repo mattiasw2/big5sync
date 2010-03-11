@@ -101,7 +101,6 @@ namespace Syncless.CompareAndSync.Visitor
             return folder;
         }
 
-
-
+       
     }
 }
