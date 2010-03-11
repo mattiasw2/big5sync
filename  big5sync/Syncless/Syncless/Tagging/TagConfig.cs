@@ -6,7 +6,13 @@ namespace Syncless.Tagging
         private bool _isSeamless;
         private int _archiveCount;
         private string _archiveFolderName;
+        private bool _recycle;
 
+        public bool Recycle
+        {
+            get { return _recycle; }
+            set { _recycle = value; }
+        }
         public bool IsSeamless
         {
             get { return _isSeamless; }

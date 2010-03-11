@@ -117,7 +117,7 @@ namespace Syncless.Tagging
                                 if (newPath.DeletedDate > currentPath.Created)
                                 {
                                     current.RemovePath(newPath);
-                                    SystemLogicLayer.Instance.RemoveTagPath(current, newPath);                                    
+                                    SystemLogicLayer.Instance.RemoveTagPath(current, newPath);
                                 }
                             }
                             else if (!newPath.IsDeleted && currentPath.IsDeleted)
@@ -126,8 +126,8 @@ namespace Syncless.Tagging
                                 {
                                     //a new path is created in the new tag but is deleted in the old tag.
                                     current.AddPath(newPath);
-                                    SystemLogicLayer.Instance.AddTagPath(current, newPath);                                    
-                                }                               
+                                    SystemLogicLayer.Instance.AddTagPath(current, newPath);
+                                }
                             }
                         }
                     }

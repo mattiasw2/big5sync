@@ -28,6 +28,8 @@ namespace Syncless.Tagging
         private const string ELE_TAGGED_FOLDER_CREATED = "created";
         private const string ELE_TAGGED_FOLDER_UPDATED = "updated";
         private const string ELE_TAGGED_FOLDER_PATH = "path";
+        private const string ELE_TAGGED_FOLDER_ISDELETED = "deleted";
+        private const string ELE_TAGGED_FOLDER_DELETEDDATE = "deletedDate";
 
         private const string ELE_FILTER_ROOT = "filters";
         private const string ELE_FILTER_CHILD_FILTER = "filter";
@@ -222,11 +224,13 @@ namespace Syncless.Tagging
             pathlastupdated = long.Parse(path.GetAttribute(ELE_TAGGED_FOLDER_UPDATED));
             XmlNodeList pathValues = path.ChildNodes;
             pathname = pathValues.Item(0).InnerText;
-            TaggedPath taggedPath = CreateTaggedPath(pathcreated, pathlastupdated, pathname);
+            bool isDeleted = bool.Parse(path.GetAttribute(ELE_TAGGED_FOLDER_ISDELETED));
+            long deletedDate = long.Parse(path.GetAttribute(ELE_TAGGED_FOLDER_DELETEDDATE));
+            TaggedPath taggedPath = CreateTaggedPath(pathcreated, pathlastupdated, pathname,isDeleted,deletedDate);
             return taggedPath;
         }
 
-        private static TaggedPath CreateTaggedPath(long pathcreated, long pathlastupdated, string pathname)
+        private static TaggedPath CreateTaggedPath(long pathcreated, long pathlastupdated, string pathname , bool isDeleted , long deletedDate)
         {
             TaggedPath taggedPath = new TaggedPath(pathname, pathcreated);
             taggedPath.LastUpdated = pathlastupdated;
@@ -307,7 +311,7 @@ namespace Syncless.Tagging
 
         private static XmlElement CreateFoldersElement(XmlDocument xmlDoc, Tag tag)
         {
-            List<TaggedPath> pathList = tag.FilteredPathList;
+            List<TaggedPath> pathList = tag.UnfilteredPathList;
             XmlElement foldersElement = xmlDoc.CreateElement(ELE_FOLDER_ROOT);
             foreach (TaggedPath path in pathList)
             {
@@ -322,6 +326,8 @@ namespace Syncless.Tagging
             XmlElement taggedFolderElement = xmlDoc.CreateElement(ELE_TAGGED_FOLDER);
             taggedFolderElement.SetAttribute(ELE_TAGGED_FOLDER_CREATED, path.Created.ToString());
             taggedFolderElement.SetAttribute(ELE_TAGGED_FOLDER_UPDATED, path.LastUpdated.ToString());
+            taggedFolderElement.SetAttribute(ELE_TAGGED_FOLDER_ISDELETED, path.IsDeleted.ToString());
+            taggedFolderElement.SetAttribute(ELE_TAGGED_FOLDER_DELETEDDATE, path.DeletedDate.ToString());
             XmlElement folderPathElement = xmlDoc.CreateElement(ELE_TAGGED_FOLDER_PATH);
             folderPathElement.InnerText = path.Path;
             taggedFolderElement.AppendChild(folderPathElement);

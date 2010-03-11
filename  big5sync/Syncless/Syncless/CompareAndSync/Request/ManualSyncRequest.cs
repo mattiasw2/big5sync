@@ -12,11 +12,9 @@ namespace Syncless.CompareAndSync.Request
         private int _archiveLimit;
         private SyncConfig _syncConfig;
 
-        public ManualSyncRequest(string[] paths, string[] unavailablePaths, List<Filter> filters, string archiveFolder, int archiveLimit, SyncConfig syncConfig)
+        public ManualSyncRequest(string[] paths, string[] unavailablePaths, List<Filter> filters,  SyncConfig syncConfig)
             : base(paths, unavailablePaths, filters)
         {
-            _archiveFolder = archiveFolder;
-            _archiveLimit = archiveLimit;
             _syncConfig = syncConfig;
         }
 
