@@ -50,7 +50,7 @@ namespace Syncless.Core
         {
             if (fe.Event == EventChangeType.CREATED)
             {                
-                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.NewPath.FullName,false);
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName,false);
                 List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
                 List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
                 List<string> parentList = new List<string>();
@@ -65,7 +65,7 @@ namespace Syncless.Core
             }
             else if (fe.Event == EventChangeType.MODIFIED)
             {
-                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.NewPath.FullName, false);
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
                 List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
                 List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
                 List<string> parentList = new List<string>();
@@ -81,7 +81,7 @@ namespace Syncless.Core
             }
             else if (fe.Event == EventChangeType.RENAMED)
             {
-                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.NewPath.FullName, false);
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
                 List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
                 List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
                 List<string> parentList = new List<string>();
@@ -101,7 +101,7 @@ namespace Syncless.Core
         {
             if (fe.Event == EventChangeType.CREATED)
             {
-                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.NewPath.FullName, false);
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
                 List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
                 List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
                 List<string> parentList = new List<string>();
@@ -117,7 +117,7 @@ namespace Syncless.Core
             }
             else if (fe.Event == EventChangeType.RENAMED)
             {
-                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.NewPath.FullName, false);
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
                 List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
                 List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
                 List<string> parentList = new List<string>();

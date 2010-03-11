@@ -13,11 +13,13 @@ namespace Syncless.CompareAndSync.Visitor
     {
         #region IVisitor Members
 
-        private static List<Filter> _filter;
+        private List<Filter> _filter;
+        private FilterChain _filterChain; 
 
         public BuilderVisitor(List<Filter> filter)
         {
             _filter = filter;
+            _filterChain = new FilterChain();
         }
 
         public void Visit(FileCompareObject file, string[] currentPaths)
@@ -32,7 +34,7 @@ namespace Syncless.CompareAndSync.Visitor
                 string path = currentPaths[index] + @"\" + folder.Name;
                 DirectoryInfo f = new DirectoryInfo(path);
 
-                if (f.Exists)
+                if (f.Exists && _filterChain.ApplyFilter(_filter, currentPaths[index]))
                 {
                     DirectoryInfo[] infos = f.GetDirectories();
                     

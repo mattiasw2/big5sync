@@ -73,7 +73,7 @@ namespace Syncless.Filters
                 }
             }
             return outputList;
-        } 
+        }
         private List<string> ApplyExclude(List<Filter> filters, List<string> patterns)
         {
             // All files that pass the criteria must be excluded
