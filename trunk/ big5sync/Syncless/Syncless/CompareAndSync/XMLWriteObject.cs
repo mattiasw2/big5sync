@@ -15,6 +15,7 @@ namespace Syncless.CompareAndSync
         private long lastCreated ;
         private bool isFolder = false ;
         private string fullPath = "" ;
+        private FileChangeType type;
 
         public XMLWriteObject(string name , long size , string hash , long lastModified , long lastCreated)
         {
@@ -66,5 +67,12 @@ namespace Syncless.CompareAndSync
             get { return fullPath; }
             set { fullPath = value; }
         }
+
+        public FileChangeType ChangeType
+        {
+            get { return type; }
+            set { type = value; }
+        }
+
     }
 }
