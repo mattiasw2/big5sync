@@ -15,6 +15,7 @@ namespace Syncless.CompareAndSync
         private long lastCreated ;
         private bool isFolder = false ;
         private string fullPath = "" ;
+        private string renameFrom = "";
         private FileChangeType type;
 
         public XMLWriteObject(string name , long size , string hash , long lastModified , long lastCreated)
@@ -72,6 +73,12 @@ namespace Syncless.CompareAndSync
         {
             get { return type; }
             set { type = value; }
+        }
+
+        public string RenameFrom
+        {
+            get { return renameFrom; }
+            set { renameFrom = value; }
         }
 
     }
