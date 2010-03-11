@@ -13,5 +13,6 @@ namespace Syncless.CompareAndSync.Enum
         NoChange, //File, Folder
         Rename, //File, Folder
         Update, //File
+        Invalid //File, Folder
     }
 }

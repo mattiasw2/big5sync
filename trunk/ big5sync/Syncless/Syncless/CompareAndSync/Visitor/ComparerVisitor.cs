@@ -41,14 +41,14 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     f = file.Parent.GetIdenticalFile(file.MetaHash[i], file.MetaCreationTime[i]);
                     
-                    if (f != null && f.Name != file.Name)
+                    if (f != null)
                     {
                         int counter = 0;
 
                         //Check that f is MetaChangeType.New for exactly one i
                         for (int j = 0; j < f.ChangeType.Length; j++)
                         {
-                            if (f.ChangeType[i] == MetaChangeType.New)
+                            if (f.ChangeType[j].HasValue && f.ChangeType[j] == MetaChangeType.New)
                                 counter++;
                         }
 
@@ -57,7 +57,8 @@ namespace Syncless.CompareAndSync.Visitor
 
                         file.NewName = f.Name;
                         file.ChangeType[i] = MetaChangeType.Rename;
-                        file.Parent.Contents.Remove(f.Name);                        
+                        //file.Parent.Contents.Remove(f.Name);
+                        f.ChangeType[i] = MetaChangeType.Invalid;
                     }
                 }
             }
@@ -93,14 +94,14 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 if (file.ChangeType[i] == MetaChangeType.Rename)
                     renamePos = i;
-                else if (file.ChangeType[i] != MetaChangeType.NoChange || file.ChangeType[i] != null)
+                else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null)
                 {
                     renamePos = -1;
                     break;
                 }
             }
 
-            if (renamePos > 0)
+            if (renamePos > -1)
             {
                 file.Priority[renamePos] = 1;
                 return;

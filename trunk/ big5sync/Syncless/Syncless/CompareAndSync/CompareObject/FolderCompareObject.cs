@@ -37,7 +37,7 @@ namespace Syncless.CompareAndSync.CompareObject
                         f = (FileCompareObject)objects.ElementAt(i);
                         indexOfHash = Array.IndexOf<string>(f.Hash, hash);
                         indexOfCreationTime = Array.IndexOf<long>(f.CreationTime, creationTime);
-                        if (indexOfHash > -1 && indexOfCreationTime > -1 && indexOfHash == indexOfCreationTime && f.Exists[indexOfHash])
+                        if (indexOfHash > -1 && indexOfCreationTime > -1 && indexOfHash == indexOfCreationTime && f.Exists[indexOfHash] && f.Name != this.Name)
                         {
                             result = (FileCompareObject)objects.ElementAt(i);
                             counter++;
