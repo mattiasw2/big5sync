@@ -54,5 +54,9 @@ namespace Syncless.CompareAndSync
             SeamlessQueueControl.Instance.AddSyncJob(request);
         }
 
+        public void PrepareForTermination()
+        {
+            SeamlessQueueControl.Instance.Dispose();
+        }
     }
 }

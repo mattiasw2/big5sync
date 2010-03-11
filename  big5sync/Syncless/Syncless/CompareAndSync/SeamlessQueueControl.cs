@@ -79,8 +79,14 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        public bool IsEmpty
+        {
+            get { return jobs.Count == 0; }
+        }
+
         public void Dispose()
         {
+            Console.WriteLine("LOL");
             for (int i = 0; i < threads.Count; i++)
             {
                 AddSyncJob(null);
