@@ -34,7 +34,7 @@ namespace Syncless.CompareAndSync.Visitor
                 string path = currentPaths[index] + @"\" + folder.Name;
                 DirectoryInfo f = new DirectoryInfo(path);
 
-                if (f.Exists && _filterChain.ApplyFilter(_filter, currentPaths[index]))
+                if (f.Exists)
                 {
                     DirectoryInfo[] infos = f.GetDirectories();
 
