@@ -186,7 +186,7 @@ namespace Syncless.Core
                 }
                 List<Tag> tag = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
-                AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent, parentList, AutoSyncRequestType.Delete, syncConfig);
+                AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent.FullName, parentList, AutoSyncRequestType.Delete, syncConfig);
             }
         }
 
