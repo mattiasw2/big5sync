@@ -38,11 +38,11 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        public int ThreadsToUse
-        {
-            set { threadsToUse = value; }
-            get { return threadsToUse; }
-        }
+        //public int ThreadsToUse
+        //{
+        //    set { threadsToUse = value; }
+        //    get { return threadsToUse; }
+        //}
 
         private void AutoSyncJobQueue()
         {
