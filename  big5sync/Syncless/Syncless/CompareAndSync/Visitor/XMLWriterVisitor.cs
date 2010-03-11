@@ -297,7 +297,10 @@ namespace Syncless.CompareAndSync.Visitor
             }
             else                 //DELETE OR RENAME
             {
-                DeleteFileObject(xmlDoc, file);
+                if (file.NewName != null)
+                    RenameFileObject(xmlDoc, file);
+                else
+                    DeleteFileObject(xmlDoc, file);
             }
         }
 
@@ -372,7 +375,10 @@ namespace Syncless.CompareAndSync.Visitor
             }
             else                 //DELETE OR RENAME
             {
-                DeleteFolderObject(xmlDoc, folder);
+                if (folder.NewName != null)
+                    RenameFolderObject(xmlDoc, folder);
+                else
+                    DeleteFolderObject(xmlDoc, folder);
             }
         }
 
