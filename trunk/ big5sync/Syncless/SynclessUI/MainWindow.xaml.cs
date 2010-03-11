@@ -15,7 +15,6 @@ using Syncless.Core;
 using Syncless.Tagging;
 using System.Collections;
 using System.IO;
-using WPFAutoCompleteBox;
 using SynclessUI.Helper;
 
 namespace SynclessUI

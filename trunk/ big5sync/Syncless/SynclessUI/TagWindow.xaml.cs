@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using Ionic.Utils;
 using System.IO;
 using Syncless.Core;
+using Microsoft.Windows.Controls;
 
 namespace SynclessUI
 {
@@ -24,7 +25,7 @@ namespace SynclessUI
 		private MainWindow _main;
 		private bool cancelstatus = false;
         private string _tagname {
-            get { return ACBTagName.GetText.Trim(); }
+            get { return ACBName.Text.Trim(); }
         }
 		
         private string _path;
@@ -34,7 +35,7 @@ namespace SynclessUI
             InitializeComponent();
 			
 			_main = main;
-			ACBTagName.IsEnabled = false;
+			ACBName.IsEnabled = false;
 
             if (clipath == "")
             {
@@ -93,14 +94,14 @@ namespace SynclessUI
 				if (di.Exists)
                 {
                     TxtBoxPath.Text = path;
-					ACBTagName.IsEnabled = true;
-                    ACBTagName.MySourceList = _main.gui.GetAllTags();
-					// ACBTagName.Content = _selectedtag;
+                    ACBName.IsEnabled = true;
+                    ACBName.ItemsSource = _main.gui.GetAllTags();
+                    ACBName.Text = _selectedtag;
                 }
                 else
                 {
-                    ACBTagName.IsEnabled = false;
-                    ACBTagName.MySourceList = new List<string>();
+                    ACBName.IsEnabled = false;
+                    ACBName.ItemsSource = new List<string>();
                 }
             }
         }
@@ -176,7 +177,7 @@ namespace SynclessUI
 
 		private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
 		{
-			Keyboard.Focus(ACBTagName);
+			Keyboard.Focus(ACBName);
 		}
 
 		private void BtnBrowse_Click(object sender, System.Windows.RoutedEventArgs e)
