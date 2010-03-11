@@ -17,6 +17,7 @@ using Syncless.Core.Exceptions;
 using Syncless.Helper;
 using Syncless.Filters;
 using Syncless.CompareAndSync.Request;
+using Syncless.CompareAndSync.Enum;
 namespace Syncless.Core
 {
     internal class SystemLogicLayer : IUIControllerInterface, IMonitorControllerInterface, ICommandLineControllerInterface, IOriginsFinder
@@ -47,12 +48,89 @@ namespace Syncless.Core
 
         public void HandleFileChange(FileChangeEvent fe)
         {
-            //throw new NotImplementedException();
+            if (fe.Event == EventChangeType.CREATED)
+            {                
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.NewPath.FullName,false);
+                List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
+                List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
+                List<string> parentList = new List<string>();
+                foreach(string path in convertedList){
+                    FileInfo info = new FileInfo(path);
+                    string parent = info.Directory.FullName;
+                    parentList.Add(parent);
+                }
+                List<Tag> tag = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
+                SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
+                AutoSyncRequest request = new AutoSyncRequest(fe.NewPath.Name, fe.NewPath.Directory.FullName, parentList, true ,AutoSyncRequestType.New, syncConfig);
+            }
+            else if (fe.Event == EventChangeType.MODIFIED)
+            {
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.NewPath.FullName, false);
+                List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
+                List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
+                List<string> parentList = new List<string>();
+                foreach (string path in convertedList)
+                {
+                    FileInfo info = new FileInfo(path);
+                    string parent = info.Directory.FullName;
+                    parentList.Add(parent);
+                }
+                List<Tag> tag = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
+                SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
+                AutoSyncRequest request = new AutoSyncRequest(fe.NewPath.Name, fe.NewPath.Directory.FullName, parentList,true, AutoSyncRequestType.Update, syncConfig);
+            }
+            else if (fe.Event == EventChangeType.RENAMED)
+            {
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.NewPath.FullName, false);
+                List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
+                List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
+                List<string> parentList = new List<string>();
+                foreach (string path in convertedList)
+                {
+                    FileInfo info = new FileInfo(path);
+                    string parent = info.Directory.FullName;
+                    parentList.Add(parent);
+                }
+                List<Tag> tag = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
+                SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, parentList, AutoSyncRequestType.Rename, syncConfig);
+            }
         }
 
         public void HandleFolderChange(FolderChangeEvent fe)
         {
-            //throw new NotImplementedException();
+            if (fe.Event == EventChangeType.CREATED)
+            {
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.NewPath.FullName, false);
+                List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
+                List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
+                List<string> parentList = new List<string>();
+                foreach (string path in convertedList)
+                {
+                    FileInfo info = new FileInfo(path);
+                    string parent = info.Directory.FullName;
+                    parentList.Add(parent);
+                }
+                List<Tag> tag = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
+                SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
+                AutoSyncRequest request = new AutoSyncRequest(fe.NewPath.Name, fe.NewPath.Parent.FullName,  parentList, true, AutoSyncRequestType.New, syncConfig);
+            }
+            else if (fe.Event == EventChangeType.RENAMED)
+            {
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.NewPath.FullName, false);
+                List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
+                List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
+                List<string> parentList = new List<string>();
+                foreach (string path in convertedList)
+                {
+                    FileInfo info = new FileInfo(path);
+                    string parent = info.Directory.FullName;
+                    parentList.Add(parent);
+                }
+                List<Tag> tag = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
+                SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, parentList, AutoSyncRequestType.Rename, syncConfig);
+            }
         }
         public void HandleDriveChange(DriveChangeEvent dce)
         {
@@ -94,7 +172,22 @@ namespace Syncless.Core
 
         public void HandleDeleteChange(DeleteChangeEvent dce)
         {
-
+            if (dce.Event == EventChangeType.DELETED)
+            {
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(dce.Path.FullName, false);
+                List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
+                List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
+                List<string> parentList = new List<string>();
+                foreach (string path in convertedList)
+                {
+                    FileInfo info = new FileInfo(path);
+                    string parent = info.Directory.FullName;
+                    parentList.Add(parent);
+                }
+                List<Tag> tag = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
+                SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
+                AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent, parentList, AutoSyncRequestType.Delete, syncConfig);
+            }
         }
 
         #endregion
