@@ -12,7 +12,7 @@ namespace Syncless.Tagging
         private long _lastUpdated;
         private long _created;
         private bool _isDeleted;
-        private bool _deletedDate;
+        private long _deletedDate;
 
         public string LogicalDriveId
         {
@@ -39,7 +39,7 @@ namespace Syncless.Tagging
             get { return _isDeleted; }
             set { _isDeleted = value; }
         }
-        public bool DeletedDate
+        public long DeletedDate
         {
             get { return _deletedDate; }
             set { _deletedDate = value; }
@@ -55,7 +55,7 @@ namespace Syncless.Tagging
             this._deletedDate = 0;
         }
 
-        public bool Remove(long deletedDate)
+        public void Remove(long deletedDate)
         {
             _isDeleted = true;
             _deletedDate = deletedDate;

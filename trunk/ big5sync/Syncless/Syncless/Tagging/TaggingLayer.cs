@@ -603,6 +603,7 @@ namespace Syncless.Tagging
         }
         #endregion
 
+
         #region private methods implementations
         #region completed
         private void UpdateTaggingProfileDate(long created)
@@ -653,15 +654,15 @@ namespace Syncless.Tagging
             }
             return tag;
         }
-
-        private void AddTag(Tag tag)
+        #region for Merger
+        public void AddTag(Tag tag)
         {
             if (!CheckTagExists(tag.TagName))
             {
                 _taggingProfile.TagList.Add(tag);
             }
         }
-
+        #endregion
         private Tag GetTag(string tagname)
         {
             foreach (Tag tag in _taggingProfile.TagList)
