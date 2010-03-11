@@ -26,6 +26,8 @@ namespace Syncless.CompareAndSync
                 SyncFile(request);
         }
 
+        #region Files
+
         private static void SyncFile(AutoSyncRequest request)
         {
             string sourceFullPath = Path.Combine(request.SourceParent, request.ChangeType == AutoSyncRequestType.Rename ? request.NewName : request.SourceName);
@@ -84,16 +86,78 @@ namespace Syncless.CompareAndSync
 
         private static void CopyFile(string sourceFullPath, string destFullPath)
         {
+            File.Copy(sourceFullPath, destFullPath, true);
         }
 
         private static void MoveFile(string sourceFullPath, string destFullPath)
         {
+            File.Move(sourceFullPath, destFullPath);
         }
+
+        #endregion
+
+        #region Folders
 
         private static void SyncFolder(AutoSyncRequest request)
         {
+            string sourceFullPath = Path.Combine(request.SourceParent, request.ChangeType == AutoSyncRequestType.Rename ? request.NewName : request.SourceName);
+
+            if (Directory.Exists(sourceFullPath))
+            {
+                string destFullPath = null;
+
+                foreach (string dest in request.DestinationFolders)
+                {
+                    destFullPath = Path.Combine(dest, request.SourceName);
+                    if (DoSync(sourceFullPath, destFullPath))
+                    {
+                        switch (request.ChangeType)
+                        {
+                            case AutoSyncRequestType.New:
+                                CreateFolder(destFullPath);
+                                break;
+                            case AutoSyncRequestType.Rename:
+                                string oldFullPath = Path.Combine(dest, request.OldName);
+                                string newFullPath = Path.Combine(dest, request.NewName);
+                                MoveFolder(oldFullPath, newFullPath);
+                                break;
+                        }
+                    }
+                }
+            }
+            else if (request.ChangeType == AutoSyncRequestType.Delete)
+            {
+                string destFullPath = null;
+
+                foreach (string dest in request.DestinationFolders)
+                {
+                    destFullPath = Path.Combine(dest, request.SourceName);
+                    if (File.Exists(destFullPath))
+                    {
+                        DeleteFolder(destFullPath);
+                    }
+                }
+            }
 
         }
+
+        private static void CreateFolder(string destFullPath)
+        {
+            if (!Directory.Exists(destFullPath))
+                Directory.CreateDirectory(destFullPath);
+        }
+
+        private static void MoveFolder(string sourceFullPath, string destFullPath)
+        {
+            Directory.Move(sourceFullPath, destFullPath);
+        }
+
+        private static void DeleteFolder(string destFullPath)
+        {
+            Directory.Delete(destFullPath, true);
+        }
+
+        #endregion
 
         private static bool IsFolder(string sourceName, string sourceParent, List<string> destinations)
         {
