@@ -33,7 +33,10 @@
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.TeamSystem.Data.UnitTesting, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -55,6 +58,7 @@
     <Compile Include="CompareAndSync\CompareObject\FileCompareObject.cs" />
     <Compile Include="CompareAndSync\CompareObject\FolderCompareObject.cs" />
     <Compile Include="CompareAndSync\CompareObject\RootCompareObject.cs" />
+    <Compile Include="CompareAndSync\DatabaseSetup.cs" />
     <Compile Include="CompareAndSync\Enum\AutoSyncRequestType.cs" />
     <Compile Include="CompareAndSync\Enum\FinalState.cs" />
     <Compile Include="CompareAndSync\Enum\MetaChangeType.cs" />
@@ -64,12 +68,12 @@
     <Compile Include="CompareAndSync\Request\ManualRequest.cs" />
     <Compile Include="CompareAndSync\Request\ManualSyncRequest.cs" />
     <Compile Include="CompareAndSync\Request\Request.cs" />
-    <Compile Include="CompareAndSync\Request\RequestConfig.cs" />
     <Compile Include="CompareAndSync\Result\CompareConflictResult.cs" />
     <Compile Include="CompareAndSync\Result\ConflictResult.cs" />
     <Compile Include="CompareAndSync\Result\Result.cs" />
     <Compile Include="CompareAndSync\Result\SyncConflictResult.cs" />
     <Compile Include="CompareAndSync\SeamlessSyncer.cs" />
+    <Compile Include="CompareAndSync\SyncConfig.cs" />
     <Compile Include="CompareAndSync\Visitor\BuilderVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\ComparerVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\IVisitor.cs" />
