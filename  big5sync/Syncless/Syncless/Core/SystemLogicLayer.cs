@@ -42,6 +42,7 @@ namespace Syncless.Core
         }
 
         #endregion
+
         #region IMonitorControllerInterface
 
         public void HandleFileChange(FileChangeEvent fe)
@@ -56,38 +57,38 @@ namespace Syncless.Core
         public void HandleDriveChange(DriveChangeEvent dce)
         {
 
-            //if (dce.Type == DriveChangeType.DRIVE_IN)
-            //{
-            //    ProfilingLayer.Instance.UpdateDrive(dce.Info);
-            //    string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
-            //    List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logical);
+            if (dce.Type == DriveChangeType.DRIVE_IN)
+            {
+                ProfilingLayer.Instance.UpdateDrive(dce.Info);
+                //string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
+                //List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logical);
 
-            //    foreach (Tag t in tagList)
-            //    {
-            //        List<string> rawPaths = t.PathStringList;
-            //        List<string> paths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(rawPaths);
-            //        SyncRequest syncRequest = new SyncRequest(paths);
-            //        CompareSyncController.Instance.Sync(syncRequest);
-            //    }
-            //    List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
+                //foreach (Tag t in tagList)
+                //{
+                //    List<string> rawPaths = t.PathStringList;
+                //    List<string> paths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(rawPaths);
+                //    SyncRequest syncRequest = new SyncRequest(paths);
+                //    CompareSyncController.Instance.Sync(syncRequest);
+                //}
+                //List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
 
-            //    foreach (string path in pathList)
-            //    {
-            //        MonitorLayer.Instance.MonitorPath(path);
-            //    }
-            //}
-            //else
-            //{
+                //foreach (string path in pathList)
+                //{
+                //    MonitorLayer.Instance.MonitorPath(path);
+                //}
+            }
+            else
+            {
 
-            //    string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
-            //    List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
+                //string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
+                //List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
 
-            //    foreach (string path in pathList)
-            //    {
-            //        MonitorLayer.Instance.MonitorPath(path);
-            //    }
-            //    ProfilingLayer.Instance.RemoveDrive(dce.Info);
-            //}
+                //foreach (string path in pathList)
+                //{
+                //    MonitorLayer.Instance.MonitorPath(path);
+                //}
+                ProfilingLayer.Instance.RemoveDrive(dce.Info);
+            }
 
         }
 
@@ -466,6 +467,7 @@ namespace Syncless.Core
         }
 
         #endregion
+
         #region IOriginsFinder Members
 
         public List<string> GetOrigins(string path)
@@ -481,6 +483,7 @@ namespace Syncless.Core
         }
 
         #endregion
+
         #region private methods
 
         public bool MonitorTag(Tag tag, bool mode)
@@ -558,18 +561,26 @@ namespace Syncless.Core
         }
 
         #endregion
-
-
+        
         #region For TargerMerger
         public void AddTagPath(Tag tag, TaggedPath path)
         {
-
+            if (tag.IsSeamless)
+            {
+                MonitorTag(tag, tag.IsSeamless);
+            }
         }
         public void RemoveTagPath(Tag tag, TaggedPath path)
         {
-
+            if (tag.IsSeamless)
+            {
+                string converted = ProfilingLayer.Instance.ConvertLogicalToPhysical(path.Path);
+                if (converted != null)
+                {
+                    MonitorLayer.Instance.UnMonitorPath(converted);
+                }
+            }
         }
-
         #endregion
     }
 }

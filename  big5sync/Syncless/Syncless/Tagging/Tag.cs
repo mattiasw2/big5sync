@@ -227,6 +227,7 @@ namespace Syncless.Tagging
                 p.IsDeleted = true;
                 p.DeletedDate = TaggingHelper.GetCurrentTime();
             }
+            _lastUpdated = TaggingHelper.GetCurrentTime();
         }
 
         public bool ContainsIgnoreDeleted(string path)
@@ -241,6 +242,17 @@ namespace Syncless.Tagging
             return false;
         }
 
+        public bool UnfilteredContain(string path)
+        {
+            foreach (TaggedPath p in _pathList)
+            {
+                if ((p.Path.ToLower()).Equals(path.ToLower()))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public bool Contains(string path)
         {
             foreach (TaggedPath p in _pathList)
@@ -314,7 +326,7 @@ namespace Syncless.Tagging
             {
                 _filters.Remove(filter);
                 _filtersUpdated = updated;
-                _lastUpdated = updated;
+                _lastUpdated = TaggingHelper.GetCurrentTime();
                 return filter;
             }
             else
@@ -324,16 +336,24 @@ namespace Syncless.Tagging
         }
 
         #region private implementations
-        private TaggedPath FindPath(string path)
+        public TaggedPath FindPath(string path,bool filtered)
         {
             foreach (TaggedPath p in _pathList)
             {
                 if (p.Path.Equals(path))
                 {
+                    if (filtered && p.IsDeleted)
+                    {
+                        return null;
+                    }
                     return p;
                 }
             }
             return null;
+        }
+        public TaggedPath FindPath(string path)
+        {
+            return FindPath(path, true);
         }
 
         #region Deprecated

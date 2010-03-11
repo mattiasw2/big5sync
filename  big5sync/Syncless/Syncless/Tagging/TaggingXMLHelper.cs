@@ -228,9 +228,7 @@ namespace Syncless.Tagging
 
         private static TaggedPath CreateTaggedPath(long pathcreated, long pathlastupdated, string pathname)
         {
-            TaggedPath taggedPath = new TaggedPath();
-            taggedPath.Path = pathname;
-            taggedPath.Created = pathcreated;
+            TaggedPath taggedPath = new TaggedPath(pathname, pathcreated);
             taggedPath.LastUpdated = pathlastupdated;
             taggedPath.LogicalDriveId = TaggingHelper.GetLogicalID(pathname);
             return taggedPath;
