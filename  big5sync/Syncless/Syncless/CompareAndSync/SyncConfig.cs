@@ -9,19 +9,19 @@ namespace Syncless.CompareAndSync
     {
         private string _archiveName;
         private int _archiveLimit;
-        private bool _recycled;
+        private bool _recycle;
 
-        public bool Recycled
+        public bool Recycle
         {
-            get { return _recycled; }
-            set { _recycled = value; }
+            get { return _recycle; }
+            set { _recycle = value; }
         }
 
         public SyncConfig(string archiveName, int archiveLimit , bool recycle)
         {
             _archiveName = archiveName;
             _archiveLimit = archiveLimit;
-            _recycled = recycle;
+            _recycle = recycle;
         }
 
         public string ArchiveName
