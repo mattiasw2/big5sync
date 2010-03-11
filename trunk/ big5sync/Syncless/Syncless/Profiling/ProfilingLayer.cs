@@ -203,7 +203,7 @@ namespace Syncless.Profiling
                 Profile profile = ProfilingXMLHelper.CreateDefaultProfile(path);
                 _profile = profile;
                 //Since the profile is newly created , no need to traverse all the drive
-                return true;
+                
             }
             for (int i = 1; i < paths.Count; i++)
             {
