@@ -86,7 +86,6 @@ namespace Syncless.CompareAndSync
 
         public void Dispose()
         {
-            Console.WriteLine("LOL");
             for (int i = 0; i < threads.Count; i++)
             {
                 AddSyncJob(null);
