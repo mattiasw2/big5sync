@@ -5,6 +5,7 @@ using System.Text;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Visitor;
+using Syncless.Filters;
 
 namespace Syncless.CompareAndSync
 {
@@ -30,8 +31,11 @@ namespace Syncless.CompareAndSync
 
         public RootCompareObject Sync(ManualSyncRequest request)
         {
+            List<Filter> filters = request.Filters.ToList<Filter>();
+            filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
+
             RootCompareObject rco = new RootCompareObject(request.Paths);
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters));
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters));
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
             CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor());
             CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config));
