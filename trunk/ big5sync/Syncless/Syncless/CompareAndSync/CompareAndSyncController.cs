@@ -25,8 +25,7 @@ namespace Syncless.CompareAndSync
         }
 
         private CompareAndSyncController()
-        {
-
+        {            
         }
 
         public RootCompareObject Sync(ManualSyncRequest request)
@@ -56,7 +55,7 @@ namespace Syncless.CompareAndSync
 
         public void PrepareForTermination()
         {
-            SeamlessQueueControl.Instance.Dispose();
+            
         }
     }
 }

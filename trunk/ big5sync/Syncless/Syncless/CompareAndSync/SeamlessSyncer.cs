@@ -65,6 +65,7 @@ namespace Syncless.CompareAndSync
                     destFullPath = Path.Combine(dest, request.SourceName);
                     if (File.Exists(destFullPath))
                     {
+                        CommonMethods.ArchiveFile(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
                         DeleteFile(destFullPath);
                     }
                 }

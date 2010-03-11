@@ -8,8 +8,8 @@ namespace Syncless.CompareAndSync.Request
 {
     public class ManualCompareRequest : ManualRequest
     {
-        public ManualCompareRequest(string[] paths, string[] unavailablePaths, List<Filter> filters)
-            : base(paths, unavailablePaths, filters)
+        public ManualCompareRequest(string[] paths, List<Filter> filters)
+            : base(paths, filters)
         {
         }
     }
