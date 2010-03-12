@@ -56,7 +56,11 @@ namespace Syncless.Core
             {
                 string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);                
                 List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
+                if (convertedList.Count == 0)
+                    return;
                 List<string> parentList = new List<string>();
+                
+
                 foreach (string path in convertedList)
                 {
                     FileInfo info = new FileInfo(path);
@@ -76,6 +80,8 @@ namespace Syncless.Core
             {
                 string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
                 List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
+                if (convertedList.Count == 0)
+                    return;
                 List<string> parentList = new List<string>();
                 foreach (string path in convertedList)
                 {
@@ -94,8 +100,10 @@ namespace Syncless.Core
             }
             else if (fe.Event == EventChangeType.RENAMED)
             {
-                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.NewPath.FullName, false);
                 List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
+                if (convertedList.Count == 0)
+                    return;
                 List<string> parentList = new List<string>();
                 foreach (string path in convertedList)
                 {
@@ -121,6 +129,8 @@ namespace Syncless.Core
             {
                 string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
                 List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
+                if (convertedList.Count == 0)
+                    return;
                 List<string> parentList = new List<string>();
                 foreach (string path in convertedList)
                 {
@@ -141,7 +151,9 @@ namespace Syncless.Core
             else if (fe.Event == EventChangeType.RENAMED)
             {
                 string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
-                List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress); 
+                List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
+                if (convertedList.Count == 0)
+                    return;
                 List<string> parentList = new List<string>();
                 foreach (string path in convertedList)
                 {
@@ -159,43 +171,6 @@ namespace Syncless.Core
                 CompareAndSyncController.Instance.Sync(request);
             }
         }
-        public void HandleDriveChange(DriveChangeEvent dce)
-        {
-
-            if (dce.Type == DriveChangeType.DRIVE_IN)
-            {
-                ProfilingLayer.Instance.UpdateDrive(dce.Info);
-                //string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
-                //List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logical);
-
-                //foreach (Tag t in tagList)
-                //{
-                //    List<string> rawPaths = t.PathStringList;
-                //    List<string> paths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(rawPaths);
-                //    SyncRequest syncRequest = new SyncRequest(paths);
-                //    CompareSyncController.Instance.Sync(syncRequest);
-                //}
-                //List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
-
-                //foreach (string path in pathList)
-                //{
-                //    MonitorLayer.Instance.MonitorPath(path);
-                //}
-            }
-            else
-            {
-
-                //string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
-                //List<string> pathList = TaggingLayer.Instance.RetrievePathByLogicalId(logical);
-
-                //foreach (string path in pathList)
-                //{
-                //    MonitorLayer.Instance.MonitorPath(path);
-                //}
-                ProfilingLayer.Instance.RemoveDrive(dce.Info);
-            }
-
-        }
 
         public void HandleDeleteChange(DeleteChangeEvent dce)
         {
@@ -203,6 +178,8 @@ namespace Syncless.Core
             {
                 string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(dce.Path.FullName, false);
                 List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
+                if (convertedList.Count == 0)
+                    return;
                 List<string> parentList = new List<string>();
                 foreach (string path in convertedList)
                 {
@@ -219,6 +196,28 @@ namespace Syncless.Core
                 AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent.FullName, parentList, AutoSyncRequestType.Delete, syncConfig);
                 CompareAndSyncController.Instance.Sync(request);
             }
+        }
+
+        public void HandleDriveChange(DriveChangeEvent dce)
+        {
+
+            if (dce.Type == DriveChangeType.DRIVE_IN)
+            {
+                ProfilingLayer.Instance.UpdateDrive(dce.Info);
+                string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
+                List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logical);
+
+                foreach (Tag t in tagList)
+                {
+                    MonitorTag(t, t.IsSeamless);
+                }
+                Merge(dce.Info);
+            }
+            else
+            {
+                ProfilingLayer.Instance.RemoveDrive(dce.Info);
+            }
+
         }
 
         #endregion
@@ -667,10 +666,10 @@ namespace Syncless.Core
         #endregion
 
         #region private methods
-
         public bool MonitorTag(Tag tag, bool mode)
         {
             tag.IsSeamless = mode;
+            StartManualSync(tag.TagName);
             List<string> pathList = new List<string>();
             foreach (TaggedPath path in tag.FilteredPathList)
             {
@@ -683,7 +682,7 @@ namespace Syncless.Core
                 {
                     try
                     {
-                        StartManualSync(tag.TagName);
+                        
                         MonitorLayer.Instance.MonitorPath(path);
                     }
                     catch (MonitorPathNotFoundException)
@@ -743,36 +742,16 @@ namespace Syncless.Core
             }
             return true;
         }
-
-        #endregion
-
-        #region For TagMerger
-        public void AddTagPath(Tag tag, TaggedPath path)
+        private void Merge(DriveInfo drive)
         {
-            if (tag.IsSeamless)
-            {
-                MonitorTag(tag, tag.IsSeamless);
-            }
-        }
-        public void RemoveTagPath(Tag tag, TaggedPath path)
-        {
-            if (tag.IsSeamless)
-            {
-                string converted = ProfilingLayer.Instance.ConvertLogicalToPhysical(path.Path);
-                if (converted != null)
-                {
-                    MonitorLayer.Instance.UnMonitorPath(converted);
-                }
-            }
-        }
-        public void AddTag(Tag tag)
-        {
-            TaggingLayer.Instance.AddTag(tag);
-            MonitorTag(tag,tag.IsSeamless);
-        }
-        #endregion
+            string profilingPath = drive.RootDirectory.FullName + "\\" + ProfilingLayer.RELATIVE_PROFILING_SAVE_PATH;
+            ProfilingLayer.Instance.Merge(profilingPath);
 
+            string taggingPath = drive.RootDirectory.FullName + "\\" + TaggingLayer.RELATIVE_TAGGING_SAVE_PATH;
+            TaggingLayer.Instance.Merge(taggingPath);
 
+            _userInterface.DriveChanged();
+        }
         /// <summary>
         /// Find a list of paths of files which share the same parent directories as filePath
         /// </summary>
@@ -804,7 +783,7 @@ namespace Syncless.Core
                         if (!pathList.Contains(appendedPath) && !appendedPath.Equals(filePath))
                         {
                             string physicalAddress = ProfilingLayer.Instance.ConvertLogicalToPhysical(appendedPath);
-                            if (physicalAddress!=null && chain.ApplyFilter(tempFilters, physicalAddress))
+                            if (physicalAddress != null && chain.ApplyFilter(tempFilters, physicalAddress))
                                 pathList.Add(physicalAddress);
                         }
                     }
@@ -812,5 +791,36 @@ namespace Syncless.Core
             }
             return pathList;
         }
+        #endregion
+
+        #region For TagMerger
+        public void AddTagPath(Tag tag, TaggedPath path)
+        {
+            if (tag.IsSeamless)
+            {
+                MonitorTag(tag, tag.IsSeamless);
+            }
+        }
+        public void RemoveTagPath(Tag tag, TaggedPath path)
+        {
+            if (tag.IsSeamless)
+            {
+                string converted = ProfilingLayer.Instance.ConvertLogicalToPhysical(path.Path);
+                if (converted != null)
+                {
+                    MonitorLayer.Instance.UnMonitorPath(converted);
+                }
+            }
+        }
+        public void AddTag(Tag tag)
+        {
+            TaggingLayer.Instance.AddTag(tag);
+            MonitorTag(tag,tag.IsSeamless);
+        }
+        #endregion
+
+
+        
+        
     }
 }

@@ -169,11 +169,14 @@ namespace Syncless.Profiling
             Profile p = ProfilingXMLHelper.LoadProfile(path);
             try
             {
-                _profile.Merge(p);
+                if (File.Exists(path))
+                {
+                    _profile.Merge(p);
+                }
             }
-            catch (ProfileConflictException)
+            catch (ProfileConflictException pce)
             {
-
+                throw pce;
             }
         }
         /// <summary>
