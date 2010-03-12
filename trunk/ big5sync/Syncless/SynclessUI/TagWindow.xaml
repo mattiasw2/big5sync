@@ -32,7 +32,7 @@
 		<Label x:Name="LblTag" Content="Tag" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Margin="0"/>
 		<Label x:Name="LblTagNameTitle" Content="Name:" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0" Grid.Column="1" Grid.Row="3"/>
 		<StackPanel x:Name="CommandPanel" Margin="0" Grid.Column="2" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-			<Button x:Name="BtnOk" IsDefault="True" Margin="0,0,5,0" Height="28" Click="BtnOk_Click">
+			<Button x:Name="BtnOk" Margin="0,0,5,0" Height="28" Click="BtnOk_Click">
 				<Label x:Name="LblOk" FontFamily="Century Gothic" FontSize="9.333" Content="Tag"/>
 			</Button>
 			<Button x:Name="BtnCancel" Margin="0" Height="28" Width="50" Click="BtnCancel_Click" IsCancel="True">
@@ -126,7 +126,7 @@
 											</VisualState>
 										</VisualStateGroup>
 									</VisualStateManager.VisualStateGroups>
-									<TextBox x:Name="Text" Margin="0" Style="{TemplateBinding TextBoxStyle}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Foreground="{TemplateBinding Foreground}" IsTabStop="True" Padding="{TemplateBinding Padding}"/>
+									<TextBox x:Name="Text" Margin="0" Style="{TemplateBinding TextBoxStyle}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Foreground="{TemplateBinding Foreground}" IsTabStop="True" Padding="{TemplateBinding Padding}" PreviewKeyDown="Text_PreviewKeyDown"/>
 									<Border x:Name="ValidationErrorElement" Visibility="Collapsed" BorderBrush="#FFDB000C" BorderThickness="1" CornerRadius="1">
 										<Border.ToolTip>
 											<ToolTip x:Name="validationTooltip" Placement="Right">

@@ -113,6 +113,11 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+			ProcessTagging();
+        }
+		
+		private void ProcessTagging() {
+			
             if(_tagname != "") {
 				if(_path != "") {
 					bool proceedtotag = false;
@@ -168,7 +173,7 @@ namespace SynclessUI
 
                 MessageBox.Show(messageBoxText, caption, button, icon);
 			}
-        }
+		}
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -184,6 +189,18 @@ namespace SynclessUI
 		{
             string path = SelectPath(false);
             ProcessPath(path, "");
+		}
+
+		/// <summary>
+		///	Ugly Hack for Overwritting the ACB Enter Behavior because it does not accept the Enter Key
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void Text_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+		{
+			if(e.Key == Key.Enter) {
+				BtnOk.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+			}
 		}
     }
 }

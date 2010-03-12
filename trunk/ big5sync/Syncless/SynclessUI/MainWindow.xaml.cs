@@ -674,6 +674,15 @@ namespace SynclessUI
 
                 MessageBox.Show(messageBoxText, caption, button, icon);
             }
+            else
+            {
+                string messageBoxText = "You may proceed to eject " + driveletter;
+                string caption = "Drive Allowed for Removal";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Error;
+
+                MessageBox.Show(messageBoxText, caption, button, icon);
+            }
 		}
     }
 }
