@@ -43,10 +43,17 @@ namespace Syncless.CompareAndSync.Visitor
 
             for (int i = 0; i < currentPaths.Length; i++)
             {
+                if (file.ChangeType[i] == MetaChangeType.New || file.ChangeType[i] == MetaChangeType.Update)
+                    return;
+            }
+
+
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
                 if (file.ChangeType[i] == MetaChangeType.Delete)
                 {
                     f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);
-                    
+
                     if (f != null)
                     {
                         int counter = 0;
@@ -73,13 +80,6 @@ namespace Syncless.CompareAndSync.Visitor
         {
             //Delete will only occur if all other changes are MetaChangeType.NoChange
             List<int> deletePos = new List<int>();
-
-            /*
-            for (int i = 0; i < currentPaths.Length; i++)
-            {
-                if (file.ChangeType[i] == MetaChangeType.Invalid)
-                    return;
-            }*/
 
             for (int i = 0; i < currentPaths.Length; i++)
             {
@@ -120,7 +120,7 @@ namespace Syncless.CompareAndSync.Visitor
             }
 
             //Update/Create handled in a similar way
-            int mostUpdatedPos = 0;           
+            int mostUpdatedPos = 0;
 
             for (int i = 0; i < currentPaths.Length; i++)
             {

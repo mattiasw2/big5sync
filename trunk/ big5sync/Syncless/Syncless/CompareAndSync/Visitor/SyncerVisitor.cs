@@ -117,7 +117,7 @@ namespace Syncless.CompareAndSync.Visitor
                         }
 
                         CommonMethods.CopyFile(src, destFile, true);
-                        fco.CreationTime[i] = fco.CreationTime[srcFilePos];
+                        fco.CreationTime[i] = new FileInfo(destFile).CreationTime.Ticks;
                         fco.Exists[i] = true;
                         if (fileExists)
                             fco.FinalState[i] = FinalState.Updated;
