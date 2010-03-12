@@ -25,7 +25,7 @@ namespace Syncless.Core
     {
         #region Singleton
         private static SystemLogicLayer _instance;
-        private string appPath = "";
+        private IUIInterface _userInterface;
         public static SystemLogicLayer Instance
         {
             get
@@ -40,10 +40,13 @@ namespace Syncless.Core
         }
         private SystemLogicLayer()
         {
-
+            _userInterface = null;
         }
 
         #endregion
+
+        
+
 
         #region IMonitorControllerInterface
 
@@ -134,6 +137,7 @@ namespace Syncless.Core
                 {
                     return;
                 }
+                
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
                 AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Parent.FullName, parentList, true, AutoSyncRequestType.New, syncConfig);
                 CompareAndSyncController.Instance.Sync(request);
@@ -522,7 +526,7 @@ namespace Syncless.Core
         {
             try
             {
-                SaveLoadHelper.SaveAll(appPath);
+                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 CompareAndSyncController.Instance.PrepareForTermination();
                 return true;
             }
@@ -542,7 +546,8 @@ namespace Syncless.Core
             try
             {
                 DeviceWatcher.Instance.Terminate();
-                return false;
+                MonitorLayer.Instance.Terminate();
+                return true;
             }
             catch (Exception e)
             {
@@ -559,9 +564,10 @@ namespace Syncless.Core
         {
             try
             {
-                this.appPath = inf.getAppPath();
+                this._userInterface = inf;
+                
                 bool init = Initiate();
-                SaveLoadHelper.SaveAll(appPath);
+                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return init;
             }
             catch (Exception e)
@@ -702,7 +708,7 @@ namespace Syncless.Core
         }
         private bool Initiate()
         {
-            SaveLoadHelper.LoadAll(appPath);
+            SaveLoadHelper.LoadAll(_userInterface.getAppPath());
             List<Tag> tagList = TaggingLayer.Instance.AllTagList;
             foreach (Tag t in tagList)
             {
