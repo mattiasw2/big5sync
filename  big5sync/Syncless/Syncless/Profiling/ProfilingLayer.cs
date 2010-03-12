@@ -166,14 +166,18 @@ namespace Syncless.Profiling
         }
         #endregion        
 
+        /// <summary>
+        /// Merge a profiling.xml from a path to the current profile.
+        /// </summary>
+        /// <param name="path"></param>
         public void Merge(string path)
         {
-            Profile p = ProfilingXMLHelper.LoadProfile(path);
+            Profile newProfile = ProfilingXMLHelper.LoadProfile(path);
             try
             {
                 if (File.Exists(path))
                 {
-                    _profile.Merge(p);
+                    ProfileMerger.Merge(_profile, newProfile);                    
                 }
             }
             catch (ProfileConflictException pce)
@@ -217,7 +221,7 @@ namespace Syncless.Profiling
                     if (File.Exists(paths[i]))
                     {
                         Profile p = ProfilingXMLHelper.LoadProfile(paths[i]);
-                        _profile.Merge(p);
+                        ProfileMerger.Merge(_profile,p);
                     }
                 }
                 catch (ProfileConflictException)

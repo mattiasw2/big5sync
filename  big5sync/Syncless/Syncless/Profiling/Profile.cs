@@ -179,44 +179,7 @@ namespace Syncless.Profiling
             return true;
         }
 
-        public bool CanMerge(Profile profile)
-        {
-            try
-            {
-                foreach (ProfileMapping mapping in profile.Mappings)
-                {
-                    Contains(mapping);
-                }
-                foreach (ProfileMapping mapping in Mappings)
-                {
-                    profile.Contains(mapping);
-                }
-            }
-            catch (ProfileMappingConflictException pmce)
-            {
-                throw new ProfileConflictException(pmce);
-            }
-
-            return true;
-        }
-        public Profile Merge(Profile profile)
-        {
-            if (!_profilename.Equals(profile.ProfileName))
-            {
-                throw new ProfileNameDifferentException();
-            }
-            if (CanMerge(profile))
-            {
-                foreach (ProfileMapping mapping in profile.Mappings)
-                {
-                    if(!Contains(mapping))
-                    {
-                        CreateMapping(mapping);
-                    }
-                }
-            }
-            return profile;
-        }
+        
 
 
         #region private method

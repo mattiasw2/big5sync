@@ -258,7 +258,6 @@ namespace Syncless.Core
         #endregion
 
         #region IUIControllerInterface Members
-
         /// <summary>
         /// Manually Sync a Tag
         /// </summary>
@@ -697,9 +696,24 @@ namespace Syncless.Core
         /// <returns>true if succeess , false if fail.</returns>
         public bool AllowForRemoval(DriveInfo drive)
         {
-            MonitorLayer.Instance.UnMonitorDrive(drive.Name);
-            ProfilingLayer.Instance.RemoveDrive(drive);
-            return true;
+            try
+            {
+                try
+                {
+                    MonitorLayer.Instance.UnMonitorDrive(drive.Name);
+                    ProfilingLayer.Instance.RemoveDrive(drive);
+                    return true;
+                }
+                catch (DriveNotFoundException dnfe)
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
+            }
         }
 
         #endregion
@@ -729,7 +743,6 @@ namespace Syncless.Core
                 {
                     try
                     {
-
                         MonitorLayer.Instance.MonitorPath(path);
                     }
                     catch (MonitorPathNotFoundException)
@@ -768,9 +781,7 @@ namespace Syncless.Core
             Console.WriteLine("Bye");
             DeviceWatcher.Instance.ToString(); //Starts watching for Drive Change
             return true;
-        }
-        
-        
+        }       
         private TagView ConvertToTagView(Tag t)
         {
             TagView view = new TagView(t.TagName, t.LastUpdated);
