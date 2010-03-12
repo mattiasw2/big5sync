@@ -305,7 +305,7 @@ namespace Syncless.Tagging
             string logicalid = TaggingHelper.GetLogicalID(path);
             foreach (TaggedPath p in _pathList)
             {
-                if (path.StartsWith(p.Path))
+                if (path.StartsWith(p.Path+"\\"))
                 {
                     if (!path.Equals(p.Path))
                     {

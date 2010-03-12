@@ -127,7 +127,7 @@ namespace Syncless.Profiling
             }
             else
             {
-                if (mapping.PhyiscalAddress.Equals("driveid"))
+                if (mapping.PhyiscalAddress.Equals(driveid))
                 {
                     mapping.PhyiscalAddress = "";
                 }
