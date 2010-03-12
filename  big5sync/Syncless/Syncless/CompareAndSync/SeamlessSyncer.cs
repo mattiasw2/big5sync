@@ -6,6 +6,7 @@ using System.IO;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Exceptions;
+using Syncless.Core;
 
 namespace Syncless.CompareAndSync
 {
@@ -67,6 +68,7 @@ namespace Syncless.CompareAndSync
                         }
                         catch (ArchiveFileException e)
                         {
+                            
                         }
                         catch (DeleteFileException e)
                         {
@@ -184,6 +186,7 @@ namespace Syncless.CompareAndSync
                         }
                         catch (ArchiveFolderException e)
                         {
+                            
                         }
                         catch (DeleteFolderException e)
                         {
