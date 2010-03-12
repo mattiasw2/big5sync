@@ -21,6 +21,7 @@ namespace SynclessUI
         {
             App = new SynclessApplication();
             App.Run();
+
             return false;
         }
 

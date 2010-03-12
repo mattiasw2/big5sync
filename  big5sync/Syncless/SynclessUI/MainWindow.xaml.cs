@@ -18,6 +18,7 @@ using System.IO;
 using SynclessUI.Helper;
 using System.Windows.Navigation;
 using System.Diagnostics;
+using System.Windows.Threading;
 
 namespace SynclessUI
 {
@@ -129,7 +130,6 @@ namespace SynclessUI
             List<string> taglist = gui.GetAllTags();
 
             ListBoxTag.ItemsSource = taglist;
-
             LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
 
             if (taglist.Count != 0)
@@ -371,6 +371,7 @@ namespace SynclessUI
 
                 LblTagCount.Content = "[" + after + "/" + initial + "]";
 
+                ListBoxTag.ItemsSource = null;
                 ListBoxTag.ItemsSource = filteredtaglist;
             }
 		}
@@ -564,7 +565,7 @@ namespace SynclessUI
 
         public void DriveChanged()
         {
-            RepopulateTagList();
+            RepopulateTagList_ThreadSafe(); 
         }
 
         public void TagChanged()
@@ -574,9 +575,23 @@ namespace SynclessUI
 
         private void RepopulateTagList()
         {
-            String current = _selectedTag; // current tag selected
+            string current = _selectedTag;
+
             InitializeTagList();
+
             SelectTag(current);
+        }
+
+        private void RepopulateTagList_ThreadSafe()
+        {
+            List<string> taglist = gui.GetAllTags();
+
+            ListBoxTag.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+            (Action)(() =>
+            {
+                ListBoxTag.ItemsSource = taglist;
+                LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
+            }));
         }
 
         #endregion
