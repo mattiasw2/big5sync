@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Enum;
+using Syncless.CompareAndSync.Exceptions;
 
 namespace Syncless.CompareAndSync.Visitor
 {
@@ -101,27 +102,38 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     if (fco.Priority[i] != fco.Priority[srcFilePos])
                     {
-                        destFile = Path.Combine(currentPaths[i], fco.Name);
-                        fileExists = File.Exists(destFile);
-
-                        if (fileExists)
+                        try
                         {
-                            if (_syncConfig.ArchiveLimit >= 0)
-                                CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
-                            if (_syncConfig.Recycle)
-                                CommonMethods.DeleteFileToRecycleBin(destFile);
-                        }
+                            destFile = Path.Combine(currentPaths[i], fco.Name);
+                            fileExists = File.Exists(destFile);
 
-                        CommonMethods.CopyFile(src, destFile, true);
-                        fco.CreationTime[i] = new FileInfo(destFile).CreationTime.Ticks;
-                        fco.Exists[i] = true;
-                        if (fileExists)
-                            fco.FinalState[i] = FinalState.Updated;
-                        else
-                            fco.FinalState[i] = FinalState.Created;
-                        fco.Hash[i] = fco.Hash[srcFilePos];
-                        fco.LastWriteTime[i] = fco.LastWriteTime[srcFilePos];
-                        fco.Length[i] = fco.LastWriteTime[srcFilePos];
+                            if (fileExists)
+                            {
+                                if (_syncConfig.ArchiveLimit >= 0)
+                                    CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
+                                if (_syncConfig.Recycle)
+                                    CommonMethods.DeleteFileToRecycleBin(destFile);
+                            }
+
+                            CommonMethods.CopyFile(src, destFile, true);
+                            fco.CreationTime[i] = new FileInfo(destFile).CreationTime.Ticks;
+                            fco.Exists[i] = true;
+                            if (fileExists)
+                                fco.FinalState[i] = FinalState.Updated;
+                            else
+                                fco.FinalState[i] = FinalState.Created;
+                            fco.Hash[i] = fco.Hash[srcFilePos];
+                            fco.LastWriteTime[i] = fco.LastWriteTime[srcFilePos];
+                            fco.Length[i] = fco.LastWriteTime[srcFilePos];
+                        }
+                        catch (ArchiveFileException e)
+                        {
+                            fco.FinalState[i] = FinalState.Error;
+                        }
+                        catch (CopyFileException e)
+                        {
+                            fco.FinalState[i] = FinalState.Error;
+                        }
                     }
                     else
                     {
@@ -142,17 +154,28 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     if (fco.Priority[i] != fco.Priority[srcFilePos])
                     {
-                        destFile = Path.Combine(currentPaths[i], fco.Name);
+                        try
+                        {
+                            destFile = Path.Combine(currentPaths[i], fco.Name);
 
-                        if (_syncConfig.ArchiveLimit >= 0)
-                            CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
-                        if (_syncConfig.Recycle)
-                            CommonMethods.DeleteFileToRecycleBin(destFile);
-                        else
-                            CommonMethods.DeleteFile(destFile);
+                            if (_syncConfig.ArchiveLimit >= 0)
+                                CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
+                            if (_syncConfig.Recycle)
+                                CommonMethods.DeleteFileToRecycleBin(destFile);
+                            else
+                                CommonMethods.DeleteFile(destFile);
 
-                        fco.Exists[i] = false;
-                        fco.FinalState[i] = FinalState.Deleted;
+                            fco.Exists[i] = false;
+                            fco.FinalState[i] = FinalState.Deleted;
+                        }
+                        catch (ArchiveFileException e)
+                        {
+                            fco.FinalState[i] = FinalState.Error;
+                        }
+                        catch (DeleteFileException e)
+                        {
+                            fco.FinalState[i] = FinalState.Error;
+                        }
 
                     }
                     else
@@ -172,8 +195,15 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     if (fco.Priority[i] != fco.Priority[srcFilePos])
                     {
-                        CommonMethods.MoveFile(Path.Combine(currentPaths[i], fco.Name), Path.Combine(currentPaths[i], fco.NewName));
-                        fco.FinalState[i] = FinalState.Renamed;
+                        try
+                        {
+                            CommonMethods.MoveFile(Path.Combine(currentPaths[i], fco.Name), Path.Combine(currentPaths[i], fco.NewName));
+                            fco.FinalState[i] = FinalState.Renamed;
+                        }
+                        catch (MoveFileException e)
+                        {
+                            fco.FinalState[i] = FinalState.Error;
+                        }
                     }
                     else
                     {
@@ -198,9 +228,16 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         if (!Directory.Exists(Path.Combine(currentPaths[i], folder.Name)))
                         {
-                            CommonMethods.CreateFolder(Path.Combine(currentPaths[i], folder.Name));
-                            folder.Exists[i] = true;
-                            folder.FinalState[i] = FinalState.Created;
+                            try
+                            {
+                                CommonMethods.CreateFolder(Path.Combine(currentPaths[i], folder.Name));
+                                folder.Exists[i] = true;
+                                folder.FinalState[i] = FinalState.Created;
+                            }
+                            catch (CreateFolderException e)
+                            {
+                                folder.FinalState[i] = FinalState.Error;
+                            }
                         }
                     }
                     else
@@ -223,18 +260,29 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     if (folder.Priority[i] != folder.Priority[srcFilePos])
                     {
-                        destFolder = Path.Combine(currentPaths[i], folder.Name);
+                        try
+                        {
+                            destFolder = Path.Combine(currentPaths[i], folder.Name);
 
-                        if (_syncConfig.ArchiveLimit >= 0)
-                            CommonMethods.ArchiveFolder(destFolder, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
-                        if (_syncConfig.Recycle)
-                            CommonMethods.DeleteFolderToRecycleBin(destFolder);
-                        else
-                            CommonMethods.DeleteFolder(destFolder, true);
+                            if (_syncConfig.ArchiveLimit >= 0)
+                                CommonMethods.ArchiveFolder(destFolder, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
+                            if (_syncConfig.Recycle)
+                                CommonMethods.DeleteFolderToRecycleBin(destFolder);
+                            else
+                                CommonMethods.DeleteFolder(destFolder, true);
 
-                        folder.Exists[i] = false;
-                        folder.FinalState[i] = FinalState.Deleted;
-                        folder.Contents.Clear(); //Experimentald
+                            folder.Exists[i] = false;
+                            folder.FinalState[i] = FinalState.Deleted;
+                            folder.Contents.Clear(); //Experimental
+                        }
+                        catch (ArchiveFolderException e)
+                        {
+                            folder.FinalState[i] = FinalState.Error;
+                        }
+                        catch (DeleteFolderException e)
+                        {
+                            folder.FinalState[i] = FinalState.Error;
+                        }
                     }
                     else
                     {

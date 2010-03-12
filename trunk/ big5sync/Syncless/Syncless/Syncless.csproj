@@ -59,7 +59,7 @@
     <Compile Include="CompareAndSync\Enum\FinalState.cs" />
     <Compile Include="CompareAndSync\Enum\MetaChangeType.cs" />
     <Compile Include="CompareAndSync\Enum\ToDo.cs" />
-    <Compile Include="CompareAndSync\Exceptions\ArchiveException.cs" />
+    <Compile Include="CompareAndSync\Exceptions\ArchiveFileException.cs" />
     <Compile Include="CompareAndSync\Exceptions\ArchiveFolderException.cs" />
     <Compile Include="CompareAndSync\Exceptions\CopyFileException.cs" />
     <Compile Include="CompareAndSync\Exceptions\CopyFolderException.cs" />
