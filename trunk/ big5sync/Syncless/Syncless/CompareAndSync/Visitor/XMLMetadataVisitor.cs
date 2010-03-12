@@ -20,7 +20,7 @@ namespace Syncless.CompareAndSync.Visitor
         private const string NODE_HASH = "hash";
         private const string NODE_LAST_MODIFIED = "last_modified";
         private const string NODE_LAST_CREATED = "last_created";
-        private const string NODE_NAME_OF_FOLDER = "name_of_folder";
+        private const string FILES = "files";
 
         #region IVisitor Members
 
@@ -56,8 +56,43 @@ namespace Syncless.CompareAndSync.Visitor
                 folder = PopulateFolderWithMetaData(xmlDoc, folder, i);                
                 //xmlDoc.Save(path);               
             }
-            xmlDoc = null;
             ProcessFolderMetaData(folder, currentPaths);
+
+            //EXPERIMENTAL
+            
+            DirectoryInfo dirInfo = null;
+            FileInfo [] fileList = null;
+            DirectoryInfo [] dirList = null;
+            List<XMLObject> xmlObjList = new List<XMLObject>();
+            string xmlPath = "";
+
+            for(int i = 0 ; i< currentPaths.Length;i++)
+            {
+                string path = Path.Combine(currentPaths[i],folder.Name);
+                
+
+                if (Directory.Exists(path))
+                {
+                    dirInfo = new DirectoryInfo(path);
+                    fileList = dirInfo.GetFiles();
+                    dirList = dirInfo.GetDirectories();
+                    xmlPath = Path.Combine(path,METADATAPATH);
+                    if (!File.Exists(xmlPath))
+                        continue;
+                    xmlDoc.Load(xmlPath);
+                    xmlObjList = GetAllFilesInXML(xmlDoc);
+                    RemoveSimilarFiles(xmlObjList, fileList);
+                }
+
+                if (xmlObjList.Count == 0)
+                    continue;
+
+                AddToChild(xmlObjList, folder, i , currentPaths.Length);
+                xmlObjList = new List<XMLObject>();
+            }
+
+
+
         }
 
         public void Visit(RootCompareObject root)
@@ -100,6 +135,89 @@ namespace Syncless.CompareAndSync.Visitor
             file.MetaExists[counter] = true;
             return file;
 
+        }
+
+        private List<XMLObject> GetAllFilesInXML(XmlDocument xmlDoc)
+        {
+            string hash = "";
+            string name = "";
+            long size = 0;
+            long createdTime = 0;
+            long modifiedTime = 0;
+
+            List<XMLObject> objectList = new List<XMLObject>();
+            XmlNodeList xmlNodeList = xmlDoc.SelectNodes(XPATH_EXPR + "/files");
+            if (xmlNodeList == null)
+                return objectList;
+
+            foreach (XmlNode nodes in xmlNodeList)
+            {
+                XmlNodeList list = nodes.ChildNodes;
+                foreach (XmlNode node in list)
+                {
+                    switch (node.Name)
+                    {
+                        case NODE_NAME:
+                            name = node.InnerText;
+                            break;
+                        case NODE_SIZE:
+                            size = long.Parse(node.InnerText);
+                            break;
+                        case NODE_HASH:
+                            hash = node.InnerText;
+                            break;
+                        case NODE_LAST_CREATED:
+                            createdTime = long.Parse(node.InnerText);
+                            break;
+                        case NODE_LAST_MODIFIED:
+                            modifiedTime = long.Parse(node.InnerText);
+                            break;
+                    }
+                }
+                objectList.Add(new XMLObject(name, hash, size, createdTime, modifiedTime));
+            }
+
+            return objectList;
+        }
+
+        private void RemoveSimilarFiles(List<XMLObject> xmlObjList, FileInfo[] fileList)
+        {
+            if (xmlObjList.Count == 0)
+                return ;
+
+            for (int i = 0; i < fileList.Length; i++)
+            {
+                for (int j = 0; j < xmlObjList.Count; j++)
+                {
+                    FileInfo fileInfo = fileList[i];
+                    string name = xmlObjList[j].Name;
+                    if (name.Equals(fileInfo.Name))
+                        xmlObjList.RemoveAt(j);
+                }
+            }
+        }
+
+        private void AddToChild(List<XMLObject> xmlFileList , FolderCompareObject folder, int counter ,int length)
+        {
+            for (int i = 0; i < xmlFileList.Count; i++)
+            {
+                BaseCompareObject o = folder.GetChild(xmlFileList[i].Name);
+                FileCompareObject fco = null;
+
+                if (o == null)
+                    fco = new FileCompareObject(xmlFileList[i].Name, length , folder);
+                else
+                    fco = (FileCompareObject)o;
+
+                fco.MetaCreationTime[counter] = xmlFileList[i].CreatedTime;
+                fco.MetaHash[counter] = xmlFileList[i].Hash;
+                fco.MetaLastWriteTime[counter] = xmlFileList[i].LastModifiedTime;
+                fco.MetaLength[counter] = xmlFileList[i].Size;
+                fco.MetaExists[counter] = true;
+
+                if (o == null)
+                    folder.AddChild(fco);
+            }
         }
 
         private void ProcessFileMetaData(FileCompareObject file, string[] currentPaths)

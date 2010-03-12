@@ -66,7 +66,8 @@ namespace Syncless.CompareAndSync
 
             lock (syncLock)
             {
-                Directory.CreateDirectory(Path.Combine(path, META_DIR));
+                DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, META_DIR));
+                di.Attributes = FileAttributes.Directory |FileAttributes.Hidden;
                 XmlTextWriter writer = new XmlTextWriter(xmlPath, null);
                 writer.Formatting = Formatting.Indented;
                 writer.WriteStartDocument();
