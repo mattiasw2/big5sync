@@ -14,8 +14,10 @@ namespace Syncless.Tagging
     {
         public const string RELATIVE_TAGGING_SAVE_PATH = "\\.syncless\\tagging.xml";
         public const string RELATIVE_TAGGING_ROOT_SAVE_PATH = "tagging.xml";
+
         #region attributes
         private static TaggingLayer _instance;
+        private TaggingProfile _taggingProfile;
 
         /// <summary>
         /// Singleton Instance
@@ -33,7 +35,16 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Contains a list of Tag objects
+        /// Contains information about the current profile name and the tag lists
+        /// </summary>
+        public TaggingProfile TaggingProfile
+        {
+            get { return _taggingProfile; }
+            set { _taggingProfile = value; }
+        }
+        
+        /// <summary>
+        /// Contains an immutable list of Tag objects
         /// </summary>
         public List<Tag> TagList
         {
@@ -41,7 +52,7 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Contains a list of all Tag objects
+        /// Contains a copy of the list of all Tag objects
         /// </summary>
         public List<Tag> AllTagList
         {
@@ -54,17 +65,6 @@ namespace Syncless.Tagging
                 }
                 return allTagList;
             }
-        }
-
-        private TaggingProfile _taggingProfile;
-
-        /// <summary>
-        /// Contains information about the current profile name and the tag lists
-        /// </summary>
-        public TaggingProfile TaggingProfile
-        {
-            get { return _taggingProfile; }
-            set { _taggingProfile = value; }
         }
         #endregion
 
@@ -99,6 +99,12 @@ namespace Syncless.Tagging
                 }
             }
         }
+        
+        /// <summary>
+        /// Merge the profile given in the path to the current
+        /// </summary>
+        /// <param name="path">The path of the xml file</param>
+        /// <returns>True if merge is successful, else false</returns>
         public bool Merge(string path)
         {
             if (File.Exists(path))
@@ -137,35 +143,49 @@ namespace Syncless.Tagging
         //        throw new TagAlreadyExistsException(tagname);
         //    }
         //}
+        //public Tag CreateTag(string tagname)
+        //{
+        //    CurrentTime created = new CurrentTime();
+        //    Tag toremove = GetTag(tagname);
+        //    if (toremove != null)
+        //    {
+        //        if (toremove.IsDeleted)
+        //        {
+        //            _taggingProfile.TagList.Remove(toremove);
+        //            Tag toadd = new Tag(tagname, created.CurrentTimeLong);
+        //            _taggingProfile.TagList.Add(toadd);
+        //            UpdateTaggingProfileDate(created.CurrentTimeLong);
+        //            TaggingHelper.Logging(LogMessage.TAG_CREATED, tagname);
+        //            return toadd;
+        //        }
+        //        else
+        //        {
+        //            TaggingHelper.Logging(LogMessage.TAG_ALREADY_EXISTS, tagname);
+        //            throw new TagAlreadyExistsException(tagname);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Tag toadd = new Tag(tagname, created.CurrentTimeLong);
+        //        _taggingProfile.TagList.Add(toadd);
+        //        UpdateTaggingProfileDate(created.CurrentTimeLong);
+        //        TaggingHelper.Logging(LogMessage.TAG_CREATED, tagname);
+        //        return toadd;
+        //    }
+        //}
         #endregion
         public Tag CreateTag(string tagname)
         {
-            CurrentTime created = new CurrentTime();
-            Tag toremove = GetTag(tagname);
-            if (toremove != null)
+            Tag tag = _taggingProfile.AddTag(tagname);
+            if (tag != null)
             {
-                if (toremove.IsDeleted)
-                {
-                    _taggingProfile.TagList.Remove(toremove);
-                    Tag toadd = new Tag(tagname, created.CurrentTimeLong);
-                    _taggingProfile.TagList.Add(toadd);
-                    UpdateTaggingProfileDate(created.CurrentTimeLong);
-                    TaggingHelper.Logging(LogMessage.TAG_CREATED, tagname);
-                    return toadd;
-                }
-                else
-                {
-                    TaggingHelper.Logging(LogMessage.TAG_ALREADY_EXISTS, tagname);
-                    throw new TagAlreadyExistsException(tagname);
-                }
+                TaggingHelper.Logging(LogMessage.TAG_CREATED, tagname);
+                return tag;
             }
             else
             {
-                Tag toadd = new Tag(tagname, created.CurrentTimeLong);
-                _taggingProfile.TagList.Add(toadd);
-                UpdateTaggingProfileDate(created.CurrentTimeLong);
-                TaggingHelper.Logging(LogMessage.TAG_CREATED, tagname);
-                return toadd;
+                TaggingHelper.Logging(LogMessage.TAG_ALREADY_EXISTS, tagname);
+                throw new TagAlreadyExistsException(tagname);
             }
         }
 
@@ -176,29 +196,49 @@ namespace Syncless.Tagging
         /// <param name="newname">The new name to be given to the Tag</param>
         /// <returns>If the oldname does not exist, raise TagNotFoundException, if newname is already used
         /// for another Tag, raise TagAlreadyExistsException</returns>
+        #region deprecated
+        //public void RenameTag(string oldname, string newname)
+        //{
+        //    CurrentTime updated = new CurrentTime();
+        //    if (CheckTagExists(oldname))
+        //    {
+        //        if (!CheckTagExists(newname))
+        //        {
+        //            Debug.Assert(GetTag(oldname) != null);
+        //            Tag tag = GetTag(oldname);
+        //            tag.Rename(newname, updated.CurrentTimeLong);
+        //            UpdateTaggingProfileDate(updated.CurrentTimeLong);
+        //            TaggingHelper.Logging(LogMessage.TAG_RENAMED, oldname, newname);
+        //        }
+        //        else
+        //        {
+        //            TaggingHelper.Logging(LogMessage.TAG_ALREADY_EXISTS, newname);
+        //            throw new TagAlreadyExistsException(newname);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        TaggingHelper.Logging(LogMessage.TAG_NOT_FOUND, oldname);
+        //        throw new TagNotFoundException(oldname);
+        //    }
+        //}
+        #endregion
         public void RenameTag(string oldname, string newname)
         {
-            CurrentTime updated = new CurrentTime();
-            if (CheckTagExists(oldname))
+            int result = _taggingProfile.RenameTag(oldname, newname);
+            switch (result)
             {
-                if (!CheckTagExists(newname))
-                {
-                    Debug.Assert(GetTag(oldname) != null);
-                    Tag tag = GetTag(oldname);
-                    tag.RenameTag(newname, updated.CurrentTimeLong);
-                    UpdateTaggingProfileDate(updated.CurrentTimeLong);
+                case 0:
                     TaggingHelper.Logging(LogMessage.TAG_RENAMED, oldname, newname);
-                }
-                else
-                {
+                    break;
+                case 1:
                     TaggingHelper.Logging(LogMessage.TAG_ALREADY_EXISTS, newname);
                     throw new TagAlreadyExistsException(newname);
-                }
-            }
-            else
-            {
-                TaggingHelper.Logging(LogMessage.TAG_NOT_FOUND, oldname);
-                throw new TagNotFoundException(oldname);
+                case 2:
+                    TaggingHelper.Logging(LogMessage.TAG_NOT_FOUND, oldname);
+                    throw new TagNotFoundException(oldname);
+                default:
+                    break;
             }
         }
 
@@ -229,25 +269,11 @@ namespace Syncless.Tagging
         #endregion
         public Tag DeleteTag(string tagname)
         {
-            CurrentTime updated = new CurrentTime();
-            Tag toRemove = GetTag(tagname);
-            if (toRemove != null)
+            Tag toremove = _taggingProfile.DeleteTag(tagname);
+            if (toremove != null)
             {
-                if (toRemove.IsDeleted)
-                {
-                    TaggingHelper.Logging(LogMessage.TAG_NOT_FOUND, tagname);
-                    throw new TagNotFoundException(tagname);
-                }
-                else
-                {
-                    toRemove.IsDeleted = true;
-                    toRemove.DeletedDate = updated.CurrentTimeLong;
-                    toRemove.LastUpdated = updated.CurrentTimeLong;
-                    toRemove.RemoveAllPaths();
-                    UpdateTaggingProfileDate(updated.CurrentTimeLong);
-                    TaggingHelper.Logging(LogMessage.TAG_REMOVED, tagname);
-                    return toRemove;
-                }
+                TaggingHelper.Logging(LogMessage.TAG_REMOVED, tagname);
+                return toremove;
             }
             else
             {
@@ -264,35 +290,55 @@ namespace Syncless.Tagging
         /// <returns>The Tag that contains the path, if path already exists raise PathAlreadyExistsException
         /// if the given path has sub-directory or parent directory already tagged raise 
         /// RecursiveDirectoryException</returns>
+        #region deprecated
+        //public Tag TagFolder(string path, string tagname)
+        //{
+        //    CurrentTime updated = new CurrentTime();
+        //    Tag tag = GetTag(tagname);
+        //    if (tag == null)
+        //    {
+        //        tag = new Tag(tagname, updated.CurrentTimeLong);
+        //    }
+        //    Debug.Assert(tag != null);
+        //    if (!tag.Contains(path))
+        //    {
+        //        if (!TaggingHelper.CheckRecursiveDirectory(tag, path))
+        //        {
+        //            tag.AddPath(path, updated.CurrentTimeLong);
+        //            AddTag(tag);
+        //            UpdateTaggingProfileDate(updated.CurrentTimeLong);
+        //            TaggingHelper.Logging(LogMessage.FOLDER_TAGGED, path, tagname);
+        //            return tag;
+        //        }
+        //        else
+        //        {
+        //            TaggingHelper.Logging(LogMessage.RECURSIVE_DIRECTORY, path);
+        //            throw new RecursiveDirectoryException(path, tagname);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        TaggingHelper.Logging(LogMessage.PATH_ALREADY_EXISTS_IN_TAG, path, tagname);
+        //        throw new PathAlreadyExistsException(path);
+        //    }
+        //}
+        #endregion
         public Tag TagFolder(string path, string tagname)
         {
-            CurrentTime updated = new CurrentTime();
-            Tag tag = GetTag(tagname);
-            if (tag == null)
+            try
             {
-                tag = new Tag(tagname, updated.CurrentTimeLong);
+                Tag tag = _taggingProfile.TagFolder(path, tagname);
+                return tag;
             }
-            Debug.Assert(tag != null);
-            if (!tag.Contains(path))
-            {
-                if (!TaggingHelper.CheckRecursiveDirectory(tag, path))
-                {
-                    tag.AddPath(path, updated.CurrentTimeLong);
-                    AddTag(tag);
-                    UpdateTaggingProfileDate(updated.CurrentTimeLong);
-                    TaggingHelper.Logging(LogMessage.FOLDER_TAGGED, path, tagname);
-                    return tag;
-                }
-                else
-                {
-                    TaggingHelper.Logging(LogMessage.RECURSIVE_DIRECTORY, path);
-                    throw new RecursiveDirectoryException(path, tagname);
-                }
-            }
-            else
+            catch (PathAlreadyExistsException paee)
             {
                 TaggingHelper.Logging(LogMessage.PATH_ALREADY_EXISTS_IN_TAG, path, tagname);
-                throw new PathAlreadyExistsException(path);
+                throw paee;
+            }
+            catch (RecursiveDirectoryException rde)
+            {
+                TaggingHelper.Logging(LogMessage.RECURSIVE_DIRECTORY, path);
+                throw rde;
             }
         }
 
@@ -303,28 +349,46 @@ namespace Syncless.Tagging
         /// <param name="tagname">The name of the Tag</param>
         /// <returns>1 if the path is removed, 0 if the path is not found in the Tag, else raise 
         /// TagNotFoundException</returns>
+        #region deprecated
+        //public int UntagFolder(string path, string tagname)
+        //{
+        //    CurrentTime updated = new CurrentTime();
+        //    Tag tag = RetrieveTag(tagname);
+        //    if (tag != null)
+        //    {
+        //        if (tag.RemovePath(path, updated.CurrentTimeLong))
+        //        {
+        //            UpdateTaggingProfileDate(updated.CurrentTimeLong);
+        //            TaggingHelper.Logging(LogMessage.FOLDER_UNTAGGED, path, tagname);
+        //            return 1;
+        //        }
+        //        else
+        //        {
+        //            TaggingHelper.Logging(LogMessage.FOLDER_NOT_UNTAGGED, path, tagname);
+        //            return 0;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        TaggingHelper.Logging(LogMessage.TAG_NOT_FOUND, tagname);
+        //        throw new TagNotFoundException(tagname);
+        //    }
+        //}
+        #endregion
         public int UntagFolder(string path, string tagname)
         {
-            CurrentTime updated = new CurrentTime();
-            Tag tag = RetrieveTag(tagname);
-            if (tag != null)
+            int result = _taggingProfile.UntagFolder(path, tagname);
+            switch (result)
             {
-                if (tag.RemovePath(path, updated.CurrentTimeLong))
-                {
-                    UpdateTaggingProfileDate(updated.CurrentTimeLong);
-                    TaggingHelper.Logging(LogMessage.FOLDER_UNTAGGED, path, tagname);
-                    return 1;
-                }
-                else
-                {
+                case 0:
                     TaggingHelper.Logging(LogMessage.FOLDER_NOT_UNTAGGED, path, tagname);
                     return 0;
-                }
-            }
-            else
-            {
-                TaggingHelper.Logging(LogMessage.TAG_NOT_FOUND, tagname);
-                throw new TagNotFoundException(tagname);
+                case 1:
+                    TaggingHelper.Logging(LogMessage.FOLDER_UNTAGGED, path, tagname);
+                    return 1;
+                default: 
+                    TaggingHelper.Logging(LogMessage.TAG_NOT_FOUND, tagname);
+                    throw new TagNotFoundException(tagname);
             }
         }
 
@@ -333,52 +397,81 @@ namespace Syncless.Tagging
         /// </summary>
         /// <param name="path">The name of the path to be untagged</param>
         /// <returns>The number of Tags the path is untagged from</returns>
+        #region deprecated
+        //public int UntagFolder(string path)
+        //{
+        //    int noOfPath = 0;
+        //    CurrentTime updated = new CurrentTime();
+        //    foreach (Tag tag in _taggingProfile.TagList)
+        //    {
+        //        if (tag.Contains(path))
+        //        {
+        //            tag.RemovePath(path, updated.CurrentTimeLong);
+        //            UpdateTaggingProfileDate(updated.CurrentTimeLong);
+        //            noOfPath++;
+        //        }
+        //    }
+        //    return noOfPath;
+        //}
+        #endregion
         public int UntagFolder(string path)
         {
-            int noOfPath = 0;
-            CurrentTime updated = new CurrentTime();
-            foreach (Tag tag in _taggingProfile.TagList)
-            {
-                if (tag.Contains(path))
-                {
-                    tag.RemovePath(path, updated.CurrentTimeLong);
-                    UpdateTaggingProfileDate(updated.CurrentTimeLong);
-                    noOfPath++;
-                }
-            }
-            return noOfPath;
+            return _taggingProfile.UntagFolder(path);
         }
+
+        /// <summary>
+        /// Update the list of Filters for a Tag of tagname
+        /// </summary>
+        /// <param name="tagname">The name of the Tag</param>
+        /// <param name="newFilterList">The list of new Filters</param>
+        #region deprecated
+        //public void UpdateFilter(string tagname, List<Filter> newFilterList)
+        //{
+        //    Tag tag = GetTag(tagname);
+        //    if (tag == null)
+        //    {
+        //        throw new TagNotFoundException(tagname);
+        //    }
+        //    tag.Filters = newFilterList;
+
+        //}
+        #endregion
         public void UpdateFilter(string tagname, List<Filter> newFilterList)
         {
-            Tag tag = GetTag(tagname);
-            if (tag == null)
+            if (!_taggingProfile.UpdateFilter(tagname, newFilterList))
             {
                 throw new TagNotFoundException(tagname);
             }
-            tag.Filters = newFilterList;
-
         }
+
         /// <summary>
         /// Rename a path in all the Tags it is tagged to
         /// </summary>
         /// <param name="oldPath">The original path of the folder</param>
         /// <param name="newPath">The new path of the folder</param>
+        #region deprecated
+        //public void RenameFolder(string oldPath, string newPath)
+        //{
+        //    foreach (Tag tag in _taggingProfile.TagList)
+        //    {
+        //        if (tag.Contains(oldPath))
+        //        {
+        //            Debug.Assert(!tag.Contains(newPath));
+        //            if (!tag.Contains(newPath))
+        //            {
+        //                CurrentTime updated = new CurrentTime();
+        //                tag.RenamePath(oldPath, newPath, updated.CurrentTimeLong);
+        //                UpdateTaggingProfileDate(updated.CurrentTimeLong);
+        //                TaggingHelper.Logging(LogMessage.FOLDER_RENAMED, oldPath, newPath);
+        //            }
+        //        }
+        //    }
+        //}
+        #endregion
         public void RenameFolder(string oldPath, string newPath)
         {
-            foreach (Tag tag in _taggingProfile.TagList)
-            {
-                if (tag.Contains(oldPath))
-                {
-                    Debug.Assert(!tag.Contains(newPath));
-                    if (!tag.Contains(newPath))
-                    {
-                        CurrentTime updated = new CurrentTime();
-                        tag.RenamePath(oldPath, newPath, updated.CurrentTimeLong);
-                        UpdateTaggingProfileDate(updated.CurrentTimeLong);
-                        TaggingHelper.Logging(LogMessage.FOLDER_RENAMED, oldPath, newPath);
-                    }
-                }
-            }
+            _taggingProfile.RenameFolder(oldPath, newPath);
+            TaggingHelper.Logging(LogMessage.FOLDER_RENAMED, oldPath, newPath);
         }
 
         /// <summary>
@@ -407,24 +500,30 @@ namespace Syncless.Tagging
         /// </summary>
         /// <param name="getdeleted">Indicate whether to return a Tag which has been deleted</param>
         /// <returns>A list of Tags</returns>
+        #region deprecated
+        //public List<Tag> RetrieveAllTags(bool getdeleted)
+        //{
+        //    if (getdeleted)
+        //    {
+        //        return _taggingProfile.TagList;
+        //    }
+        //    else
+        //    {
+        //        List<Tag> pathList = new List<Tag>();
+        //        foreach (Tag tag in _taggingProfile.TagList)
+        //        {
+        //            if (!tag.IsDeleted)
+        //            {
+        //                pathList.Add(tag);
+        //            }
+        //        }
+        //        return pathList;
+        //    }
+        //}
+        #endregion
         public List<Tag> RetrieveAllTags(bool getdeleted)
         {
-            if (getdeleted)
-            {
-                return _taggingProfile.TagList;
-            }
-            else
-            {
-                List<Tag> pathList = new List<Tag>();
-                foreach (Tag tag in _taggingProfile.TagList)
-                {
-                    if (!tag.IsDeleted)
-                    {
-                        pathList.Add(tag);
-                    }
-                }
-                return pathList;
-            }
+            return _taggingProfile.RetrieveAllTags(getdeleted);
         }
 
         /// <summary>
@@ -434,15 +533,7 @@ namespace Syncless.Tagging
         /// <returns>The list of Tags containing the given path</returns>
         public List<Tag> RetrieveTagByPath(string path)
         {
-            List<Tag> tagList = new List<Tag>();
-            foreach (Tag tag in _taggingProfile.TagList)
-            {
-                if (tag.Contains(path))
-                {
-                    tagList.Add(tag);
-                }
-            }
-            return tagList;
+            return _taggingProfile.RetrieveTagsByPath(path);
         }
 
         /// <summary>
@@ -460,9 +551,9 @@ namespace Syncless.Tagging
                 {
                     if (path.LogicalDriveId.Equals(logicalid))
                     {
-                        if (!pathList.Contains(path.Path))
+                        if (!pathList.Contains(path.PathName))
                         {
-                            pathList.Add(path.Path);
+                            pathList.Add(path.PathName);
                         }
                     }
                 }
@@ -476,20 +567,6 @@ namespace Syncless.Tagging
         /// <param name="logicalId">The Logical Id</param>
         /// <returns>The list of Tags</returns>
         public List<Tag> RetrieveTagByLogicalId(string logicalid)
-        {
-            bool found;
-            List<Tag> tagList = new List<Tag>();
-            foreach (Tag tag in _taggingProfile.TagList)
-            {
-                found = CheckID(tag, logicalid);
-                if (found)
-                {
-                    tagList.Add(tag);
-                }
-            }
-            return tagList;
-        }
-        private List<Tag> RetrieveTagById(string logicalid)
         {
             bool found;
             List<Tag> tagList = new List<Tag>();
@@ -519,18 +596,18 @@ namespace Syncless.Tagging
                 {
                     foreach (TaggedPath p in tag.FilteredPathList)
                     {
-                        if (!pathList.Contains(p.Path) && !p.Path.Equals(folderPath))
+                        if (!pathList.Contains(p.PathName) && !p.PathName.Equals(folderPath))
                         {
-                            pathList.Add(p.Path);
+                            pathList.Add(p.PathName);
                         }
                     }
                 }
             }
-            List<Tag> matchingTag = RetrieveTagById(logicalid);
+            List<Tag> matchingTag = RetrieveTagByLogicalId(logicalid);
             foreach (Tag tag in matchingTag)
             {
                 string appendedPath;
-                string trailingPath = tag.FindMatchedParentDirectory(folderPath, true);
+                string trailingPath = tag.CreateTrailingPath(folderPath, true);
                 if (trailingPath != null)
                 {
                     foreach (TaggedPath p in tag.FilteredPathList)
@@ -546,8 +623,6 @@ namespace Syncless.Tagging
             return pathList;
         }
 
-        
-
         /// <summary>
         /// Retrieve the list of parent directories of a given path
         /// </summary>
@@ -560,13 +635,13 @@ namespace Syncless.Tagging
             {
                 foreach (TaggedPath p in tag.FilteredPathList)
                 {
-                    if (path.StartsWith(p.Path))
+                    if (path.StartsWith(p.PathName))
                     {
-                        if (!path.Equals(p.Path))
+                        if (!path.Equals(p.PathName))
                         {
-                            if (!parentPathList.Contains(p.Path))
+                            if (!parentPathList.Contains(p.PathName))
                             {
-                                parentPathList.Add(p.Path);
+                                parentPathList.Add(p.PathName);
                                 break;
                             }
                         }
@@ -575,6 +650,7 @@ namespace Syncless.Tagging
             }
             return parentPathList;
         }
+
         public List<Tag> RetrieveParentTagByPath(string path)
         {
             List<Tag> parentPathList = new List<Tag>();
@@ -583,9 +659,9 @@ namespace Syncless.Tagging
             {
                 foreach (TaggedPath p in tag.FilteredPathList)
                 {
-                    if (path.StartsWith(p.Path))
+                    if (path.StartsWith(p.PathName))
                     {
-                        if (!path.Equals(p.Path))
+                        if (!path.Equals(p.PathName))
                         {
 
                             parentPathList.Add(tag);
@@ -626,14 +702,8 @@ namespace Syncless.Tagging
         }
         #endregion
 
-
         #region private methods implementations
         #region completed
-        private void UpdateTaggingProfileDate(long created)
-        {
-            _taggingProfile.LastUpdated = created;
-        }
-
         private Tag RetrieveTag(string tagname, bool create, bool getdeleted, long lastupdated)
         {
             Tag tag = GetTag(tagname);
@@ -677,6 +747,7 @@ namespace Syncless.Tagging
             }
             return tag;
         }
+
         #region for Merger
         public void AddTag(Tag tag)
         {
@@ -684,6 +755,7 @@ namespace Syncless.Tagging
             
         }
         #endregion
+
         private Tag GetTag(string tagname)
         {
             foreach (Tag tag in _taggingProfile.TagList)
@@ -708,7 +780,6 @@ namespace Syncless.Tagging
             return false;
         }
 
-       
         private bool CheckID(Tag tag, string ID)
         {
             foreach (TaggedPath path in tag.FilteredPathList)
