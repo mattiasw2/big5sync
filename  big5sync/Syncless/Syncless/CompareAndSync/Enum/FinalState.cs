@@ -13,6 +13,6 @@ namespace Syncless.CompareAndSync.Enum
         Renamed,
         Propagated,
         Unchanged,
-        Conflict
+        Error
     }
 }

@@ -60,11 +60,11 @@ namespace Syncless.CompareAndSync
             }
             catch (PathTooLongException e)
             {
-                throw new ArchiveException(e);
+                throw new ArchiveFileException(e);
             }
             catch (IOException e)
             {
-                throw new ArchiveException(e);
+                throw new ArchiveFileException(e);
             }
 
         }

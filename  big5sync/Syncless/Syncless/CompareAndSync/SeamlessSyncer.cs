@@ -42,25 +42,40 @@ namespace Syncless.CompareAndSync
                     destFullPath = Path.Combine(dest, request.SourceName);
                     if (DoSync(sourceFullPath, destFullPath))
                     {
-                        switch (request.ChangeType)
+                        try
                         {
-                            case AutoSyncRequestType.Update:
-                            case AutoSyncRequestType.New:
-                                if (request.Config.ArchiveLimit >= 0)
-                                    CommonMethods.ArchiveFile(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
-                                if (request.Config.Recycle)
-                                    CommonMethods.DeleteFileToRecycleBin(destFullPath);
+                            switch (request.ChangeType)
+                            {
+                                case AutoSyncRequestType.Update:
+                                case AutoSyncRequestType.New:
+                                    if (request.Config.ArchiveLimit >= 0)
+                                        CommonMethods.ArchiveFile(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
+                                    if (request.Config.Recycle)
+                                        CommonMethods.DeleteFileToRecycleBin(destFullPath);
 
-                                CommonMethods.CopyFile(sourceFullPath, destFullPath, true);
-                                break;
-                            case AutoSyncRequestType.Rename:
-                                string oldFullPath = Path.Combine(dest, request.OldName);
-                                string newFullPath = Path.Combine(dest, request.NewName);
-                                if (!File.Exists(oldFullPath))
-                                    CommonMethods.CopyFile(sourceFullPath, newFullPath, true);
-                                else
-                                    CommonMethods.MoveFile(oldFullPath, newFullPath);
-                                break;
+                                    CommonMethods.CopyFile(sourceFullPath, destFullPath, true);
+                                    break;
+                                case AutoSyncRequestType.Rename:
+                                    string oldFullPath = Path.Combine(dest, request.OldName);
+                                    string newFullPath = Path.Combine(dest, request.NewName);
+                                    if (!File.Exists(oldFullPath))
+                                        CommonMethods.CopyFile(sourceFullPath, newFullPath, true);
+                                    else
+                                        CommonMethods.MoveFile(oldFullPath, newFullPath);
+                                    break;
+                            }
+                        }
+                        catch (ArchiveFileException e)
+                        {
+                        }
+                        catch (DeleteFileException e)
+                        {
+                        }
+                        catch (CopyFileException e)
+                        {
+                        }
+                        catch (MoveFileException e)
+                        {
                         }
                     }
                 }
@@ -74,12 +89,21 @@ namespace Syncless.CompareAndSync
                     destFullPath = Path.Combine(dest, request.SourceName);
                     if (File.Exists(destFullPath))
                     {
-                        if (request.Config.ArchiveLimit >= 0)
-                            CommonMethods.ArchiveFile(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
-                        if (request.Config.Recycle)
-                            CommonMethods.DeleteFileToRecycleBin(destFullPath);
-                        else
-                            CommonMethods.DeleteFile(destFullPath);
+                        try
+                        {
+                            if (request.Config.ArchiveLimit >= 0)
+                                CommonMethods.ArchiveFile(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
+                            if (request.Config.Recycle)
+                                CommonMethods.DeleteFileToRecycleBin(destFullPath);
+                            else
+                                CommonMethods.DeleteFile(destFullPath);
+                        }
+                        catch (ArchiveFileException e)
+                        {
+                        }
+                        catch (DeleteFileException e)
+                        {
+                        }
                     }
                 }
             }
@@ -117,16 +141,25 @@ namespace Syncless.CompareAndSync
                     destFullPath = Path.Combine(dest, request.SourceName);
                     if (DoSync(sourceFullPath, destFullPath))
                     {
-                        switch (request.ChangeType)
+                        try
                         {
-                            case AutoSyncRequestType.New:
-                                CommonMethods.CreateFolder(destFullPath);
-                                break;
-                            case AutoSyncRequestType.Rename:
-                                string oldFullPath = Path.Combine(dest, request.OldName);
-                                string newFullPath = Path.Combine(dest, request.NewName);
-                                CommonMethods.MoveFolder(oldFullPath, newFullPath);
-                                break;
+                            switch (request.ChangeType)
+                            {
+                                case AutoSyncRequestType.New:
+                                    CommonMethods.CreateFolder(destFullPath);
+                                    break;
+                                case AutoSyncRequestType.Rename:
+                                    string oldFullPath = Path.Combine(dest, request.OldName);
+                                    string newFullPath = Path.Combine(dest, request.NewName);
+                                    CommonMethods.MoveFolder(oldFullPath, newFullPath);
+                                    break;
+                            }
+                        }
+                        catch (CreateFolderException e)
+                        {
+                        }
+                        catch (MoveFolderException e)
+                        {
                         }
                     }
                 }
@@ -140,12 +173,21 @@ namespace Syncless.CompareAndSync
                     destFullPath = Path.Combine(dest, request.SourceName);
                     if (Directory.Exists(destFullPath))
                     {
-                        if (request.Config.ArchiveLimit >= 0)
-                            CommonMethods.ArchiveFolder(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
-                        if (request.Config.Recycle)
-                            CommonMethods.DeleteFolderToRecycleBin(destFullPath);
-                        else
-                            CommonMethods.DeleteFolder(destFullPath, true);
+                        try
+                        {
+                            if (request.Config.ArchiveLimit >= 0)
+                                CommonMethods.ArchiveFolder(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
+                            if (request.Config.Recycle)
+                                CommonMethods.DeleteFolderToRecycleBin(destFullPath);
+                            else
+                                CommonMethods.DeleteFolder(destFullPath, true);
+                        }
+                        catch (ArchiveFolderException e)
+                        {
+                        }
+                        catch (DeleteFolderException e)
+                        {
+                        }
                     }
                 }
             }
