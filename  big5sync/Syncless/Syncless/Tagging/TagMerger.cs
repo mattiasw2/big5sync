@@ -47,7 +47,7 @@ namespace Syncless.Tagging
             
             foreach (Tag tag in newTagList)//start monitoring each new tag
             {
-                SystemLogicLayer.Instance.MonitorTag(tag, tag.IsDeleted);
+                SystemLogicLayer.Instance.StartMonitorTag(tag, tag.IsDeleted);
             }
 
             return updateCount;
