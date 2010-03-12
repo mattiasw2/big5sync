@@ -143,7 +143,7 @@ namespace Syncless.Profiling
             ProfileMapping mapping = FindMappingFromGUID(guid);
             if (mapping == null)
             {
-                // why lol ?
+                CreateMapping(guid, driveid, guid);
                 return;
             }
             if (mapping.PhyiscalAddress.Equals(""))
