@@ -9,19 +9,39 @@ namespace Syncless.Tagging
     public class Tag
     {
         private string _tagName;
-        private long _lastUpdated;
-        private long _created;
+        private long _lastUpdatedDate;
+        private long _createdDate;
         private bool _isDeleted;
         private long _deletedDate;
         private List<TaggedPath> _pathList;
         private List<Filter> _filters;
-        private long _filtersUpdated;
+        private long _filtersUpdatedDate;
         private TagConfig _config;
 
         public string TagName
         {
             get { return _tagName; }
             set { this._tagName = value; }
+        }
+        public long LastUpdatedDate
+        {
+            get { return _lastUpdatedDate; }
+            set { _lastUpdatedDate = value; }
+        }
+        public long CreatedDate
+        {
+            get { return _createdDate; }
+            set { _createdDate = value; }
+        }
+        public bool IsDeleted
+        {
+            get { return _isDeleted; }
+            set { _isDeleted = value; }
+        }
+        public long DeletedDate
+        {
+            get { return _deletedDate; }
+            set { _deletedDate = value; }
         }
         public List<string> FilteredPathListString
         {
@@ -32,32 +52,11 @@ namespace Syncless.Tagging
                 {
                     if (!path.IsDeleted)
                     {
-                        pathList.Add(path.Path);
+                        pathList.Add(path.PathName);
                     }
                 }
                 return pathList;
             }
-        }
-        public long LastUpdated
-        {
-            get { return _lastUpdated; }
-            set { _lastUpdated = value; }
-        }
-        public long Created
-        {
-            get { return _created; }
-            set { _created = value; }
-        }
-        
-        public bool IsDeleted
-        {
-            get { return _isDeleted; }
-            set { _isDeleted = value; }
-        }
-        public long DeletedDate
-        {
-            get { return _deletedDate; }
-            set { _deletedDate = value; }
         }
         public List<TaggedPath> FilteredPathList
         {
@@ -84,10 +83,10 @@ namespace Syncless.Tagging
             get { return _filters; }
             set { _filters = value; }
         }
-        public long FiltersUpdated
+        public long FiltersUpdatedDate
         {
-            get { return _filtersUpdated; }
-            set { _filtersUpdated = value; }
+            get { return _filtersUpdatedDate; }
+            set { _filtersUpdatedDate = value; }
         }
         internal TagConfig Config
         {
@@ -115,37 +114,36 @@ namespace Syncless.Tagging
             get { return _config.Recycle; }
             set { _config.Recycle = value; }
         }
-            
 
         public Tag(string tagname, long created)
         {
             this._tagName = tagname;
-            this._created = created;
-            this._lastUpdated = created;
+            this._createdDate = created;
+            this._lastUpdatedDate = created;
             this._isDeleted = false;
             this._deletedDate = 0;
             this._pathList = new List<TaggedPath>();
             this._filters = new List<Filter>();
-            this._filtersUpdated = created;
+            this._filtersUpdatedDate = created;
             this._config = new TagConfig();
         }
 
-        public void RenameTag(string newname, long updated)
+        public void Rename(string newname, long lastupdated)
         {
             _tagName = newname;
-            _lastUpdated = updated;
+            _lastUpdatedDate = lastupdated;
         }
 
         public bool AddPath(string path, long created)
         {
-            TaggedPath p = FindPath(path);
+            TaggedPath p = FindPath(path, false);
             if (p != null)
             {
                 if (p.IsDeleted)
                 {
                     _pathList.Remove(p);
                     TaggedPath taggedPath = new TaggedPath(path, created);
-                    _lastUpdated = TaggingHelper.GetCurrentTime();
+                    _lastUpdatedDate = TaggingHelper.GetCurrentTime();
                     _pathList.Add(taggedPath);
                     return true;
                 }
@@ -157,7 +155,7 @@ namespace Syncless.Tagging
             else
             {
                 TaggedPath taggedPath = new TaggedPath(path, created);
-                _lastUpdated = TaggingHelper.GetCurrentTime();
+                _lastUpdatedDate = TaggingHelper.GetCurrentTime();
                 _pathList.Add(taggedPath);
                 return true;
             }
@@ -165,14 +163,14 @@ namespace Syncless.Tagging
 
         public bool AddPath(TaggedPath path)
         {
-            TaggedPath p = FindPath(path.Path);
+            TaggedPath p = FindPath(path.PathName, false);
             if (p != null)
             {
                 if (p.IsDeleted)
                 {
                     _pathList.Remove(p);
                     _pathList.Add(path);
-                    _lastUpdated = TaggingHelper.GetCurrentTime();
+                    _lastUpdatedDate = TaggingHelper.GetCurrentTime();
                     return true;
                 }
                 else
@@ -183,16 +181,32 @@ namespace Syncless.Tagging
             else
             {
                 _pathList.Add(path);
-                _lastUpdated = TaggingHelper.GetCurrentTime();
+                _lastUpdatedDate = TaggingHelper.GetCurrentTime();
                 return true;
             }
         }
 
+        public void RenamePath(string oldPath, string newPath, long updated)
+        {
+            foreach (TaggedPath p in _pathList)
+            {
+                if (p.PathName.StartsWith(oldPath))
+                {
+                    p.Replace(oldPath, newPath);
+                }
+                else if (p.PathName.Equals(oldPath))
+                {
+                    p.PathName = newPath;
+                }
+                _lastUpdatedDate = updated;
+            }
+        }
+        
         public bool RemovePath(string path, long lastupdated)
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.Path.ToLower().Equals(path.ToLower()))
+                if (p.PathName.ToLower().Equals(path.ToLower()))
                 {
                     if (p.IsDeleted)
                     {
@@ -201,7 +215,7 @@ namespace Syncless.Tagging
                     else
                     {
                         p.Remove(lastupdated);
-                        _lastUpdated = TaggingHelper.GetCurrentTime();
+                        _lastUpdatedDate = TaggingHelper.GetCurrentTime();
                         return true;
                     }
                 }
@@ -213,7 +227,7 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.Path.ToLower().Equals(path.Path.ToLower()))
+                if (p.PathName.ToLower().Equals(path.PathName.ToLower()))
                 {
                     if (p.IsDeleted)
                     {
@@ -223,7 +237,7 @@ namespace Syncless.Tagging
                     {
                         long lastupdated = TaggingHelper.GetCurrentTime();
                         p.Remove(lastupdated);
-                        _lastUpdated = lastupdated;
+                        _lastUpdatedDate = lastupdated;
                         return true;
                     }
                 }
@@ -238,14 +252,14 @@ namespace Syncless.Tagging
                 p.IsDeleted = true;
                 p.DeletedDate = TaggingHelper.GetCurrentTime();
             }
-            _lastUpdated = TaggingHelper.GetCurrentTime();
+            _lastUpdatedDate = TaggingHelper.GetCurrentTime();
         }
 
         public bool ContainsIgnoreDeleted(string path)
         {
             foreach (TaggedPath p in _pathList)
             {
-                if ((p.Path.ToLower()).Equals(path.ToLower()))
+                if ((p.PathName.ToLower()).Equals(path.ToLower()))
                 {
                     return true;
                 }
@@ -253,22 +267,12 @@ namespace Syncless.Tagging
             return false;
         }
 
-        public bool UnfilteredContain(string path)
-        {
-            foreach (TaggedPath p in _pathList)
-            {
-                if ((p.Path.ToLower()).Equals(path.ToLower()))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        //only return paths which are not set as deleted
         public bool Contains(string path)
         {
             foreach (TaggedPath p in _pathList)
             {
-                if ((p.Path.ToLower()).Equals(path.ToLower()))
+                if ((p.PathName.ToLower()).Equals(path.ToLower()))
                 {
                     if (p.IsDeleted)
                     {
@@ -283,33 +287,17 @@ namespace Syncless.Tagging
             return false;
         }
 
-        public void RenamePath(string oldPath, string newPath, long updated)
-        {
-            foreach (TaggedPath p in _pathList)
-            {
-                if (p.Path.StartsWith(oldPath))
-                {
-                    p.Replace(oldPath, newPath);
-                }
-                else if (p.Path.Equals(oldPath))
-                {
-                    p.Path = newPath;
-                }
-                _lastUpdated = updated;
-            }
-        }
-
-        public string FindMatchedParentDirectory(string path, bool isFolder)
+        public string CreateTrailingPath(string path, bool isFolder)
         {
             string[] pathTokens = TaggingHelper.TrimEnd(path.Split('\\'));
             string logicalid = TaggingHelper.GetLogicalID(path);
             foreach (TaggedPath p in _pathList)
             {
-                if (path.StartsWith(p.Path+"\\"))
+                if (path.StartsWith(p.PathName + "\\"))
                 {
-                    if (!path.Equals(p.Path))
+                    if (!path.Equals(p.PathName))
                     {
-                        string[] pTokens = TaggingHelper.TrimEnd(p.Path.Split('\\'));
+                        string[] pTokens = TaggingHelper.TrimEnd(p.PathName.Split('\\'));
                         int trailingIndex = TaggingHelper.Match(pathTokens, pTokens);
                         if (trailingIndex > 0)
                         {
@@ -326,9 +314,17 @@ namespace Syncless.Tagging
             if (!_filters.Contains(filter))
             {
                 _filters.Add(filter);
-                _filtersUpdated = updated;
-                _lastUpdated = TaggingHelper.GetCurrentTime();
+                _filtersUpdatedDate = updated;
+                _lastUpdatedDate = TaggingHelper.GetCurrentTime();
             }
+        }
+
+        public void UpdateFilter(List<Filter> newFilterList)
+        {
+            CurrentTime current = new CurrentTime();
+            _filters = newFilterList;
+            _filtersUpdatedDate = current.CurrentTimeLong;
+            _lastUpdatedDate = current.CurrentTimeLong;
         }
 
         public Filter RemoveFilter(Filter filter, long updated)
@@ -336,8 +332,8 @@ namespace Syncless.Tagging
             if (_filters.Contains(filter))
             {
                 _filters.Remove(filter);
-                _filtersUpdated = updated;
-                _lastUpdated = TaggingHelper.GetCurrentTime();
+                _filtersUpdatedDate = updated;
+                _lastUpdatedDate = TaggingHelper.GetCurrentTime();
                 return filter;
             }
             else
@@ -346,12 +342,11 @@ namespace Syncless.Tagging
             }
         }
 
-        #region private implementations
-        public TaggedPath FindPath(string path,bool filtered)
+        public TaggedPath FindPath(string path, bool filtered)
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.Path.Equals(path))
+                if (p.PathName.Equals(path))
                 {
                     if (filtered && p.IsDeleted)
                     {
@@ -362,10 +357,13 @@ namespace Syncless.Tagging
             }
             return null;
         }
+        
         public TaggedPath FindPath(string path)
         {
             return FindPath(path, true);
         }
+
+        #region private implementations
 
         #region Deprecated
         /// <summary>

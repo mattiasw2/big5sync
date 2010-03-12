@@ -70,9 +70,9 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in tag.FilteredPathList)
             {
-                if (TrimEnd(path.Split('\\')).Length != TrimEnd(p.Path.Split('\\')).Length)
+                if (TrimEnd(path.Split('\\')).Length != TrimEnd(p.PathName.Split('\\')).Length)
                 {
-                    if (p.Path.StartsWith(path) || path.StartsWith(p.Path))
+                    if (p.PathName.StartsWith(path) || path.StartsWith(p.PathName))
                     {
                         return true;
                     }

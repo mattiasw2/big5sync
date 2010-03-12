@@ -733,7 +733,7 @@ namespace Syncless.Core
             List<string> pathList = new List<string>();
             foreach (TaggedPath path in tag.FilteredPathList)
             {
-                pathList.Add(path.Path);
+                pathList.Add(path.PathName);
             }
             List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(pathList);
             if (mode)
@@ -784,10 +784,10 @@ namespace Syncless.Core
         }       
         private TagView ConvertToTagView(Tag t)
         {
-            TagView view = new TagView(t.TagName, t.LastUpdated);
+            TagView view = new TagView(t.TagName, t.LastUpdatedDate);
             List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.FilteredPathListString);
             view.PathStringList = pathList;
-            view.Created = t.Created;
+            view.Created = t.CreatedDate;
             view.IsSeamless = t.IsSeamless;
             return view;
         }
@@ -836,7 +836,7 @@ namespace Syncless.Core
                 tempFilters.AddRange(tag.Filters);
 
                 string appendedPath;
-                string trailingPath = tag.FindMatchedParentDirectory(filePath, false);
+                string trailingPath = tag.CreateTrailingPath(filePath, false);
                 if (trailingPath != null)
                 {
                     foreach (TaggedPath p in tag.FilteredPathList)
@@ -868,7 +868,7 @@ namespace Syncless.Core
         {
             if (tag.IsSeamless)
             {
-                string converted = ProfilingLayer.Instance.ConvertLogicalToPhysical(path.Path);
+                string converted = ProfilingLayer.Instance.ConvertLogicalToPhysical(path.PathName);
                 if (converted != null)
                 {
                     MonitorLayer.Instance.UnMonitorPath(converted);

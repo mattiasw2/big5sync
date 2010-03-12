@@ -8,9 +8,9 @@ namespace Syncless.Tagging
     public class TaggedPath
     {
         private string _logicalid;
-        private string _path;
-        private long _lastUpdated;
-        private long _created;
+        private string _pathName;
+        private long _lastUpdatedDate;
+        private long _createdDate;
         private bool _isDeleted;
         private long _deletedDate;
 
@@ -19,20 +19,20 @@ namespace Syncless.Tagging
             get { return _logicalid; }
             set { _logicalid = value; }
         }
-        public string Path
+        public string PathName
         {
-            get { return _path; }
-            set { _path = value; }
+            get { return _pathName; }
+            set { _pathName = value; }
         }
-        public long LastUpdated
+        public long LastUpdatedDate
         {
-            get { return _lastUpdated; }
-            set { _lastUpdated = value; }
+            get { return _lastUpdatedDate; }
+            set { _lastUpdatedDate = value; }
         }
-        public long Created
+        public long CreatedDate
         {
-            get { return _created; }
-            set { _created = value; }
+            get { return _createdDate; }
+            set { _createdDate = value; }
         }
         public bool IsDeleted
         {
@@ -48,9 +48,9 @@ namespace Syncless.Tagging
         public TaggedPath(string path, long created)
         {
             this._logicalid = TaggingHelper.GetLogicalID(path);
-            this._path = path;
-            this._lastUpdated = created;
-            this._created = created;
+            this._pathName = path;
+            this._lastUpdatedDate = created;
+            this._createdDate = created;
             this._isDeleted = false;
             this._deletedDate = 0;
         }
@@ -58,25 +58,25 @@ namespace Syncless.Tagging
         public void Remove(long deletedDate)
         {
             _isDeleted = true;
-            _lastUpdated = deletedDate;
+            _lastUpdatedDate = deletedDate;
             _deletedDate = deletedDate;
         }
 
         public string Append(string trailingPath)
         {
-            if (_path.EndsWith("\\"))
+            if (_pathName.EndsWith("\\"))
             {
-                return (_path + trailingPath);
+                return (_pathName + trailingPath);
             }
             else
             {
-                return (_path + "\\" + trailingPath);
+                return (_pathName + "\\" + trailingPath);
             }
         }
 
         public void Replace(string oldPath, string newPath)
         {
-            _path = _path.Replace(oldPath, newPath);
+            _pathName = _pathName.Replace(oldPath, newPath);
         }
     }
 }

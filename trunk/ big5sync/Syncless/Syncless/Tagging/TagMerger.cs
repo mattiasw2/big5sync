@@ -14,7 +14,7 @@ namespace Syncless.Tagging
             int updateCount = 0;
             //if any of the profile is null.
             if (currentProfile == null || newProfile == null)
-            {                
+            {
                 //should not happen. but take care of it anyway.
                 return -1;
             }
@@ -26,7 +26,7 @@ namespace Syncless.Tagging
             }
             //list of tags from the new profile.
             List<Tag> newTagList = new List<Tag>();
-            newTagList.AddRange(newProfile.TagList);            
+            newTagList.AddRange(newProfile.TagList);
             foreach (Tag newTag in newTagList)//handles the new tag from new profile
             {
                 Tag oldTag = currentProfile.FindTag(newTag.TagName);
@@ -44,7 +44,7 @@ namespace Syncless.Tagging
                     updateCount++;
                 }
             }
-            
+
             foreach (Tag tag in newTagList)//start monitoring each new tag
             {
                 SystemLogicLayer.Instance.StartMonitorTag(tag, tag.IsDeleted);
@@ -61,7 +61,7 @@ namespace Syncless.Tagging
                 //Should not Happen.
                 return false;
             }
-            if (newTag.LastUpdated == current.LastUpdated)
+            if (newTag.LastUpdatedDate == current.LastUpdatedDate)
             {
                 //Since Tag updated time is same , shall not do anything
                 return false;
@@ -71,9 +71,9 @@ namespace Syncless.Tagging
                 //if new Tag is deleted and current is not
                 if (newTag.IsDeleted && !current.IsDeleted)
                 {
-                    
+
                     //check the creation date is the same , then delete
-                    if (newTag.Created == current.Created)
+                    if (newTag.CreatedDate == current.CreatedDate)
                     {
                         SystemLogicLayer.Instance.DeleteTag(newTag.TagName);
                         return true;
@@ -85,27 +85,27 @@ namespace Syncless.Tagging
                 //if the path is found , attempt to merge.
                 if (current.IsDeleted && !newTag.IsDeleted)
                 {
-                    if (newTag.Created > current.DeletedDate)
+                    if (newTag.CreatedDate > current.DeletedDate)
                     {
                         SystemLogicLayer.Instance.AddTag(newTag);
                     }
                 }
                 foreach (TaggedPath newPath in newTag.UnfilteredPathList)
                 {
-                    TaggedPath currentPath = current.FindPath(newPath.Path, false);
+                    TaggedPath currentPath = current.FindPath(newPath.PathName, false);
                     if (currentPath == null)
                     {
                         SystemLogicLayer.Instance.AddTagPath(current, newPath);
-                    }               
+                    }
                     else
                     {
                         //update only if the new path is more updated than the current path
-                        if (currentPath.LastUpdated <= newPath.LastUpdated)
+                        if (currentPath.LastUpdatedDate <= newPath.LastUpdatedDate)
                         {
                             //if the path is delete in the new tag but not in the old tag
                             if (newPath.IsDeleted && !currentPath.IsDeleted)
                             {
-                                if (newPath.DeletedDate > currentPath.Created)
+                                if (newPath.DeletedDate > currentPath.CreatedDate)
                                 {
                                     current.RemovePath(newPath);
                                     SystemLogicLayer.Instance.RemoveTagPath(current, newPath);
@@ -113,7 +113,7 @@ namespace Syncless.Tagging
                             }
                             else if (!newPath.IsDeleted && currentPath.IsDeleted)
                             {
-                                if (newPath.Created > currentPath.DeletedDate)
+                                if (newPath.CreatedDate > currentPath.DeletedDate)
                                 {
                                     //a new path is created in the new tag but is deleted in the old tag.
                                     current.AddPath(newPath);
@@ -125,8 +125,6 @@ namespace Syncless.Tagging
                 }
             }
             return true;
-
-
         }
     }
 }
