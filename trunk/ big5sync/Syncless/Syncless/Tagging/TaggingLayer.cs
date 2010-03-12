@@ -681,6 +681,7 @@ namespace Syncless.Tagging
         public void AddTag(Tag tag)
         {
             _taggingProfile.AddTag(tag);
+            
         }
         #endregion
         private Tag GetTag(string tagname)
