@@ -89,13 +89,13 @@ namespace Syncless.CompareAndSync.Visitor
             switch (changeType)
             {
                 case FinalState.Created:
-                    CreateFileObject(xmlDoc, file);
+                    CreateFileObject(xmlDoc, file , counter);
                     break;
                 case FinalState.Updated:
-                    UpdateFileObject(xmlDoc, file);
+                    UpdateFileObject(xmlDoc, file , counter);
                     break;
                 case FinalState.Deleted:
-                    DeleteFileObject(xmlDoc, file);
+                    DeleteFileObject(xmlDoc, file );
                     break;
                 case FinalState.Renamed:
                     RenameFileObject(xmlDoc, file);
@@ -148,15 +148,15 @@ namespace Syncless.CompareAndSync.Visitor
         }
 
 
-        private void CreateFileObject(XmlDocument xmlDoc, FileCompareObject file)
+        private void CreateFileObject(XmlDocument xmlDoc, FileCompareObject file , int counter)
         {
             int position = GetPropagated(file);
             DoFileCleanUp(xmlDoc, file.Name);
             XmlText hashText = xmlDoc.CreateTextNode(file.Hash[position]);
             XmlText nameText = xmlDoc.CreateTextNode(file.Name);
             XmlText sizeText = xmlDoc.CreateTextNode(file.Length[position].ToString());
-            XmlText lastModifiedText = xmlDoc.CreateTextNode(file.LastWriteTime[position].ToString());
-            XmlText lastCreatedText = xmlDoc.CreateTextNode(file.CreationTime[position].ToString());
+            XmlText lastModifiedText = xmlDoc.CreateTextNode(file.LastWriteTime[counter].ToString());
+            XmlText lastCreatedText = xmlDoc.CreateTextNode(file.CreationTime[counter].ToString());
 
 
             XmlElement fileElement = xmlDoc.CreateElement(FILES);
@@ -182,14 +182,14 @@ namespace Syncless.CompareAndSync.Visitor
             node.AppendChild(fileElement);
         }
 
-        private void UpdateFileObject(XmlDocument xmlDoc, FileCompareObject file)
+        private void UpdateFileObject(XmlDocument xmlDoc, FileCompareObject file , int counter)
         {
             int position = GetPropagated(file);
 
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
             if (node == null)
             {
-                CreateFileObject(xmlDoc, file);
+                CreateFileObject(xmlDoc, file , counter);
                 return;
             }
 
@@ -212,11 +212,11 @@ namespace Syncless.CompareAndSync.Visitor
                 }
                 else if (nodes.Name.Equals(NODE_LAST_MODIFIED))
                 {
-                    nodes.InnerText = file.LastWriteTime[position].ToString();
+                    nodes.InnerText = file.LastWriteTime[counter].ToString();
                 }
                 else if (nodes.Name.Equals(NODE_LAST_CREATED))
                 {
-                    nodes.InnerText = file.CreationTime[position].ToString();
+                    nodes.InnerText = file.CreationTime[counter].ToString();
                 }
             }
         }
@@ -288,11 +288,11 @@ namespace Syncless.CompareAndSync.Visitor
                 bool fileExist = file.Exists[position];
                 if (metaExist == true && fileExist == true) //UPDATE
                 {
-                    UpdateFileObject(xmlDoc, file);
+                    UpdateFileObject(xmlDoc, file , position);
                 }
                 else  //NEW
                 {
-                    CreateFileObject(xmlDoc, file);
+                    CreateFileObject(xmlDoc, file , position);
                 }
             }
             else                 //DELETE OR RENAME
