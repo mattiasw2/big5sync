@@ -12,7 +12,7 @@ namespace Syncless.Tagging
 {
     public class TaggingLayer
     {
-        public const string RELATIVE_PROFILING_SAVE_PATH = "\\.syncless\\tagging.xml";
+        public const string RELATIVE_TAGGING_SAVE_PATH = "\\.syncless\\tagging.xml";
         public const string RELATIVE_TAGGING_ROOT_SAVE_PATH = "tagging.xml";
         #region attributes
         private static TaggingLayer _instance;
@@ -97,6 +97,19 @@ namespace Syncless.Tagging
                     TaggingProfile profile = TaggingXMLHelper.LoadFrom(paths[i]);
                     int updateCount = TagMerger.MergeProfile(_taggingProfile, profile);
                 }
+            }
+        }
+        public bool Merge(string path)
+        {
+            if (File.Exists(path))
+            {
+                TaggingProfile profile = TaggingXMLHelper.LoadFrom(path);
+                int updateCount = TagMerger.MergeProfile(_taggingProfile, profile);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
