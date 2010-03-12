@@ -420,6 +420,17 @@ namespace Syncless.Monitor
                     count++;
                 }
             }
+            for (int i = 0; i < rootWatchers.Count; i++)
+            {
+                if (rootWatchers[i].Path.ToLower().StartsWith(driveLetter.ToLower()))
+                {
+                    rootWatchers[i].Dispose();
+                    rootsAndParent.Remove(rootWatchers[i].Path);
+                    rootWatchers.RemoveAt(i);
+                    i--;
+                    
+                }
+            }
             return count;
         }
 
