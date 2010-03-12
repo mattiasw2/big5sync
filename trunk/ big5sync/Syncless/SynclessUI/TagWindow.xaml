@@ -192,7 +192,7 @@
 											<Path Fill="White" Margin="1,3,0,0" Data="M0,0L2,0 8,6 8,8"/>
 										</Grid>
 									</Border>
-									<Popup x:Name="Popup">
+									<Popup x:Name="Popup" Opened="Popup_Opened" Closed="Popup_Closed">
 										<Grid Opacity="{TemplateBinding Opacity}" Background="{TemplateBinding Background}">
 											<Border x:Name="PopupBorder" HorizontalAlignment="Stretch" Opacity="0" Background="#11000000" BorderThickness="0">
 												<Border.RenderTransform>

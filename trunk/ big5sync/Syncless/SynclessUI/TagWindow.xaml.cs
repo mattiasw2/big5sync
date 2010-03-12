@@ -27,6 +27,7 @@ namespace SynclessUI
         private string _tagname {
             get { return ACBName.Text.Trim(); }
         }
+		private bool popupclosed = true;
 		
         private string _path;
         
@@ -198,9 +199,19 @@ namespace SynclessUI
 		/// <param name="e"></param>
 		private void Text_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
 		{
-			if(e.Key == Key.Enter) {
+			if(e.Key == Key.Enter && popupclosed == true) {
 				BtnOk.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 			}
+		}
+
+		private void Popup_Opened(object sender, System.EventArgs e)
+		{
+			popupclosed = false;
+		}
+
+		private void Popup_Closed(object sender, System.EventArgs e)
+		{
+			popupclosed = true;
 		}
     }
 }
