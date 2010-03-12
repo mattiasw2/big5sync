@@ -703,9 +703,9 @@ namespace Syncless.Core
         }
 
         #endregion
+        
+        #region private methods & delegate
         public delegate void MonitorTagDelegate(Tag t, bool isSeamless);
-
-        #region private methods
         public void StartMonitorTag(Tag tag, bool mode)
         {
             MonitorTagDelegate monitordelegate = new MonitorTagDelegate(MonitorTag);
@@ -713,9 +713,9 @@ namespace Syncless.Core
         }
         private void MonitorTag(Tag tag, bool mode)
         {
-            Console.WriteLine("Hi");
+            
             tag.IsSeamless = mode;
-            StartManualSync(tag.TagName);
+            
             List<string> pathList = new List<string>();
             foreach (TaggedPath path in tag.FilteredPathList)
             {
@@ -724,6 +724,7 @@ namespace Syncless.Core
             List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(pathList);
             if (mode)
             {
+                StartManualSync(tag.TagName);
                 foreach (string path in convertedPath)
                 {
                     try
@@ -769,7 +770,7 @@ namespace Syncless.Core
             return true;
         }
         
-
+        
         private TagView ConvertToTagView(Tag t)
         {
             TagView view = new TagView(t.TagName, t.LastUpdated);
