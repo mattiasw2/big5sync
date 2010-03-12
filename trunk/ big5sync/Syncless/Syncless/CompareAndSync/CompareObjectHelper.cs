@@ -15,27 +15,27 @@ namespace Syncless.CompareAndSync
             Pre
         }
 
-        public static void PreTraverseFolder(ref RootCompareObject root, IVisitor visitor)
+        public static void PreTraverseFolder(RootCompareObject root, IVisitor visitor)
         {
-            TraverseFolderHelper(ref root, visitor, TraverseType.Pre);
+            TraverseFolderHelper(root, visitor, TraverseType.Pre);
         }
 
-        public static void PreTraverseFolder(ref FolderCompareObject folder, string[] currentPath, IVisitor visitor)
+        public static void PreTraverseFolder(FolderCompareObject folder, string[] currentPath, IVisitor visitor)
         {
-            TraverseFolderHelper(ref folder, currentPath, visitor, TraverseType.Pre);
+            TraverseFolderHelper(folder, currentPath, visitor, TraverseType.Pre);
         }
 
-        public static void PostTraverseFolder(ref RootCompareObject root, IVisitor visitor)
+        public static void PostTraverseFolder(RootCompareObject root, IVisitor visitor)
         {
-            TraverseFolderHelper(ref root, visitor, TraverseType.Post);
+            TraverseFolderHelper(root, visitor, TraverseType.Post);
         }
 
-        public static void PostTraverseFolder(ref FolderCompareObject folder, string[] currentPath, IVisitor visitor)
+        public static void PostTraverseFolder(FolderCompareObject folder, string[] currentPath, IVisitor visitor)
         {
-            TraverseFolderHelper(ref folder, currentPath, visitor, TraverseType.Post);
+            TraverseFolderHelper(folder, currentPath, visitor, TraverseType.Post);
         }
 
-        private static void TraverseFolderHelper(ref RootCompareObject root, IVisitor visitor, TraverseType type)
+        private static void TraverseFolderHelper(RootCompareObject root, IVisitor visitor, TraverseType type)
         {
             if (type == TraverseType.Pre)
                 visitor.Visit(root);
@@ -47,7 +47,7 @@ namespace Syncless.CompareAndSync
                 if (o is FolderCompareObject)
                 {
                     FolderCompareObject fco = (FolderCompareObject)o;
-                    TraverseFolderHelper(ref fco, newCurrentPath, visitor, type);
+                    TraverseFolderHelper(fco, newCurrentPath, visitor, type);
                 }
                 else
                 {
@@ -59,7 +59,7 @@ namespace Syncless.CompareAndSync
                 visitor.Visit(root);
         }
 
-        private static void TraverseFolderHelper(ref FolderCompareObject folder, string[] currentPath, IVisitor visitor, TraverseType type)
+        private static void TraverseFolderHelper(FolderCompareObject folder, string[] currentPath, IVisitor visitor, TraverseType type)
         {
             if (type == TraverseType.Pre)
                 visitor.Visit(folder, currentPath);
@@ -75,7 +75,7 @@ namespace Syncless.CompareAndSync
                 if (o is FolderCompareObject)
                 {
                     FolderCompareObject fco = (FolderCompareObject)o;
-                    TraverseFolderHelper(ref fco, newCurrentPath, visitor, type);
+                    TraverseFolderHelper(fco, newCurrentPath, visitor, type);
                 }
                 else
                 {
