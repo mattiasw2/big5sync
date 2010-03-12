@@ -21,7 +21,7 @@ using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.CompareObject;
 namespace Syncless.Core
 {
-    internal class SystemLogicLayer : IUIControllerInterface, IMonitorControllerInterface, ICommandLineControllerInterface, IOriginsFinder
+    internal class SystemLogicLayer : IUIControllerInterface, IMonitorControllerInterface, ICommandLineControllerInterface
     {
         #region Singleton
         private static SystemLogicLayer _instance;
@@ -671,10 +671,13 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
-
+        /// <summary>
+        /// Call to release a drive so that it can be safety
+        /// </summary>
+        /// <param name="drive">the Drive to remove</param>
+        /// <returns>true if succeess , false if fail.</returns>
         public bool AllowForRemoval(DriveInfo drive)
         {
-
             MonitorLayer.Instance.UnMonitorDrive(drive.Name);
             ProfilingLayer.Instance.RemoveDrive(drive);
             return true;
@@ -682,21 +685,6 @@ namespace Syncless.Core
 
         #endregion
 
-        #region IOriginsFinder Members
-
-        public List<string> GetOrigins(string path)
-        {
-            string logicalOldPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(path, false);
-            if (path == null)
-            {
-                return null;
-            }
-            List<string> oldLogicalOrigin = TaggingLayer.Instance.RetrieveParentByPath(logicalOldPath);
-            List<string> oldPhysicalOrigin = ProfilingLayer.Instance.ConvertAndFilterToPhysical(oldLogicalOrigin);
-            return oldPhysicalOrigin;
-        }
-
-        #endregion
 
         #region private methods
         public bool MonitorTag(Tag tag, bool mode)

@@ -88,7 +88,6 @@
     <Compile Include="Core\Exceptions\InvalidPathException.cs" />
     <Compile Include="Core\Exceptions\UnhandledException.cs" />
     <Compile Include="Core\IUIInterface.cs" />
-    <Compile Include="Core\IOriginsFinder.cs" />
     <Compile Include="Core\DeviceWatcher.cs" />
     <Compile Include="Core\Exceptions\LoggerNotFoundException.cs" />
     <Compile Include="Core\ICommandLineControllerInterface.cs" />
