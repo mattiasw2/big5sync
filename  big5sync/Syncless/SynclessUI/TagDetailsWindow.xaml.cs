@@ -111,11 +111,15 @@ namespace SynclessUI
 				int index = ListFilters.SelectedIndex;
 				filters.RemoveAt(index);
 
+
+                // Not Needed I think
+                /*
                 TxtBoxPattern.IsEnabled = false;
                 TxtBoxPattern.Text = "";
                 CmbBoxMode.IsEnabled = false;
                 CmbBoxMode.SelectedIndex = -1;
-				
+				*/
+ 
 				PopulateFilterStringList(false);
 			}
 		}
