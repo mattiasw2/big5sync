@@ -12,6 +12,8 @@ namespace Syncless.Profiling
         public const string RELATIVE_PROFILING_SAVE_PATH = "\\.syncless\\profiling.xml";
         public const string RELATIVE_GUID_SAVE_PATH = "\\.syncless\\guid.id";
         public const string RELATIVE_PROFILING_ROOT_SAVE_PATH = "profiling.xml";
+
+
         #region Singleton/Profile 
         private static ProfilingLayer _instance;
         public static ProfilingLayer Instance
