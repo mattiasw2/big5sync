@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Threading;
 
 using Syncless.Tagging;
 using Syncless.Tagging.Exceptions;
@@ -366,8 +367,7 @@ namespace Syncless.Core
                 if (tag == null)
                 {
                     return null;
-                }
-                StartManualSync(tag.TagName);
+                }               
                 MonitorTag(tag.TagName, true);
                 return ConvertToTagView(tag);
             }
@@ -395,7 +395,7 @@ namespace Syncless.Core
                     List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(path);
                     if (tagList.Count == 0)
                     {
-                        MonitorLayer.Instance.UnMonitorPath(path);
+                        MonitorLayer.Instance.UnMonitorPath(folder.FullName);
 
                     }
 
@@ -428,7 +428,11 @@ namespace Syncless.Core
                 {
                     throw new TagNotFoundException(tagname);
                 }
-                return MonitorTag(tag, mode);
+                //MonitorTagDelegate monitordelegate = new MonitorTagDelegate(MonitorTag);
+                //monitordelegate.Invoke(tag, tag.IsSeamless);
+                MonitorTag(tag, tag.IsSeamless);
+                Console.WriteLine("Bye");
+                return true;
             }
             catch (Exception e)
             {
@@ -687,8 +691,9 @@ namespace Syncless.Core
 
 
         #region private methods
-        public bool MonitorTag(Tag tag, bool mode)
+        public void MonitorTag(Tag tag, bool mode)
         {
+            Console.WriteLine("Hi");
             tag.IsSeamless = mode;
             StartManualSync(tag.TagName);
             List<string> pathList = new List<string>();
@@ -724,7 +729,8 @@ namespace Syncless.Core
                     }
                 }
             }
-            return true;
+            
+            
         }
         private bool Initiate()
         {
@@ -734,13 +740,17 @@ namespace Syncless.Core
             {
                 if (t.IsSeamless)
                 {
+                    //MonitorTagDelegate monitordelegate = new MonitorTagDelegate(MonitorTag);
+                    //monitordelegate.Invoke(t, t.IsSeamless);
                     MonitorTag(t, t.IsSeamless);
                 }
             }
-
+            Console.WriteLine("Bye");
             DeviceWatcher.Instance.ToString(); //Starts watching for Drive Change
             return true;
         }
+        public delegate void MonitorTagDelegate(Tag t , bool isSeamless);
+
         private TagView ConvertToTagView(Tag t)
         {
             TagView view = new TagView(t.TagName, t.LastUpdated);
@@ -813,7 +823,7 @@ namespace Syncless.Core
             return pathList;
         }
         #endregion
-
+        
         #region For TagMerger
         public void AddTagPath(Tag tag, TaggedPath path)
         {
