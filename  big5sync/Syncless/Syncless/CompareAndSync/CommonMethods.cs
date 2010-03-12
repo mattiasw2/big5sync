@@ -67,15 +67,15 @@ namespace Syncless.CompareAndSync
 
                 return sb.ToString();
             }
-            catch (UnauthorizedAccessException e)
+            catch (UnauthorizedAccessException)
             {
                 return string.Empty;
             }
-            catch (DirectoryNotFoundException e)
+            catch (DirectoryNotFoundException)
             {
                 return string.Empty;
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 return string.Empty;
             }

@@ -644,6 +644,7 @@ namespace Syncless.Core
 
         public bool AllowForRemoval(DriveInfo drive)
         {
+            MonitorLayer.Instance.UnMonitorDrive(drive.Name);
             return true;
         }
 
@@ -777,7 +778,7 @@ namespace Syncless.Core
         /// </summary>
         /// <param name="filePath">The path to search</param>
         /// <returns>The list of similar paths</returns>
-        public List<string> FindSimilarSeamlessPathForFile(string filePath)
+        private List<string> FindSimilarSeamlessPathForFile(string filePath)
         {
             string logicalid = TaggingHelper.GetLogicalID(filePath);
             List<string> pathList = new List<string>();
