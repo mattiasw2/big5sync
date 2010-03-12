@@ -26,7 +26,8 @@ namespace Syncless.CompareAndSync
         }
 
         private CompareAndSyncController()
-        {            
+        {
+            
         }
 
         public RootCompareObject Sync(ManualSyncRequest request)

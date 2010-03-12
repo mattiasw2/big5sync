@@ -58,12 +58,11 @@ namespace Syncless.CompareAndSync.Visitor
             }
             ProcessFolderMetaData(folder, currentPaths);
 
-            //EXPERIMENTAL
-            
             DirectoryInfo dirInfo = null;
             FileInfo [] fileList = null;
-            DirectoryInfo [] dirList = null;
+            DirectoryInfo [] dirInfoList = null;
             List<XMLObject> xmlObjList = new List<XMLObject>();
+            List<string> xmlFolderList = null;
             string xmlPath = "";
 
             for(int i = 0 ; i< currentPaths.Length;i++)
@@ -75,29 +74,60 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     dirInfo = new DirectoryInfo(path);
                     fileList = dirInfo.GetFiles();
-                    dirList = dirInfo.GetDirectories();
+                    dirInfoList = dirInfo.GetDirectories();
                     xmlPath = Path.Combine(path,METADATAPATH);
                     if (!File.Exists(xmlPath))
                         continue;
+
                     xmlDoc.Load(xmlPath);
                     xmlObjList = GetAllFilesInXML(xmlDoc);
+                    xmlFolderList = GetAllFoldersInXML(xmlDoc);
                     RemoveSimilarFiles(xmlObjList, fileList);
+                    RemoveSimilarFolders(xmlFolderList, dirInfoList);
                 }
 
-                if (xmlObjList.Count == 0)
-                    continue;
 
-                AddToChild(xmlObjList, folder, i , currentPaths.Length);
-                xmlObjList = new List<XMLObject>();
+                AddFileToChild(xmlObjList, folder, i , currentPaths.Length);
+                
+                xmlObjList.Clear();
             }
-
-
-
         }
 
         public void Visit(RootCompareObject root)
         {
-            //
+            XmlDocument xmlDoc = new XmlDocument();
+            string xmlPath = "";
+            string [] listOfPaths = root.Paths;
+            DirectoryInfo di = null;
+            List<XMLObject> xmlObjList = null;
+            List<string> folderNames = null;
+
+            FileInfo[] fileInfoList = null;
+            DirectoryInfo[] dirInfoList = null;
+
+            for (int i = 0; i < listOfPaths.Length; i++)
+            {
+                xmlPath = Path.Combine(listOfPaths[i], METADATAPATH);
+                if (!File.Exists(xmlPath))
+                    continue;
+
+                xmlDoc.Load(xmlPath);
+                di = new DirectoryInfo(listOfPaths[i]);
+                fileInfoList = di.GetFiles();
+                dirInfoList = di.GetDirectories();
+
+                folderNames = GetAllFoldersInXML(xmlDoc);
+                xmlObjList = GetAllFilesInXML(xmlDoc);
+
+                RemoveSimilarFiles(xmlObjList, fileInfoList);
+                RemoveSimilarFolders(folderNames, dirInfoList);
+
+
+                AddFolderToRoot(folderNames, root, i, root.Paths.Length);
+                AddFileToRoot(xmlObjList, root, i, root.Paths.Length);
+                xmlObjList.Clear();
+            }
+
         }
 
         #endregion
@@ -180,6 +210,32 @@ namespace Syncless.CompareAndSync.Visitor
             return objectList;
         }
 
+        private List<string> GetAllFoldersInXML(XmlDocument xmlDoc)
+        {
+            string name = "";
+            List<string> folderList = new List<string>();
+
+            XmlNodeList xmlFolderList = xmlDoc.SelectNodes(XPATH_EXPR + "/folder");
+            if (xmlFolderList == null)
+                return folderList;
+
+            foreach (XmlNode folderNodes in xmlFolderList)
+            {
+                XmlNodeList folders = folderNodes.ChildNodes;
+                foreach (XmlNode node in folders)
+                {
+                    switch (node.Name)
+                    {
+                        case NODE_NAME:
+                            folderList.Add(node.InnerText);
+                            break;
+                    }
+                }
+            }
+
+            return folderList;
+        }
+
         private void RemoveSimilarFiles(List<XMLObject> xmlObjList, FileInfo[] fileList)
         {
             if (xmlObjList.Count == 0)
@@ -197,7 +253,25 @@ namespace Syncless.CompareAndSync.Visitor
             }
         }
 
-        private void AddToChild(List<XMLObject> xmlFileList , FolderCompareObject folder, int counter ,int length)
+        private void RemoveSimilarFolders(List<string> folderNameList, DirectoryInfo[] dirList)
+        {
+            if (folderNameList.Count == 0)
+                return;
+
+            for (int i = 0; i < dirList.Length; i++)
+            {
+                for (int j = 0; j < folderNameList.Count; j++)
+                {
+                    DirectoryInfo dirInfo = dirList[i];
+                    string folderName = folderNameList[j];
+                    if (dirInfo.Name.Equals(folderName))
+                        folderNameList.RemoveAt(j);
+                }
+            }
+        }
+
+
+        private void AddFileToChild(List<XMLObject> xmlFileList, FolderCompareObject folder, int counter, int length)
         {
             for (int i = 0; i < xmlFileList.Count; i++)
             {
@@ -219,6 +293,76 @@ namespace Syncless.CompareAndSync.Visitor
                     folder.AddChild(fco);
             }
         }
+
+        private void AddFolderToChild(List<string> folderName, FolderCompareObject folder, int counter, int length)
+        {
+            for (int i = 0; i < folderName.Count; i++)
+            {
+                BaseCompareObject o = folder.GetChild(folderName[i]);
+                FileCompareObject fco = null;
+
+                if (o == null)
+                    fco = new FileCompareObject(folderName[i], length, folder);
+                else
+                    fco = (FileCompareObject)o;
+
+                fco.MetaExists[counter] = true;
+
+                if (o == null)
+                    folder.AddChild(fco);
+            }
+        }
+
+
+        private void AddFileToRoot(List<XMLObject> xmlFileList, RootCompareObject root, int counter, int length)
+        {
+            if (xmlFileList.Count == 0)
+                return;
+
+            for (int i = 0; i < xmlFileList.Count; i++)
+            {
+                BaseCompareObject o = root.GetChild(xmlFileList[i].Name);
+                FileCompareObject fco = null;
+
+                if (o == null)
+                    fco = new FileCompareObject(xmlFileList[i].Name, length, root);
+                else
+                    fco = (FileCompareObject)o;
+
+                fco.MetaCreationTime[counter] = xmlFileList[i].CreatedTime;
+                fco.MetaHash[counter] = xmlFileList[i].Hash;
+                fco.MetaLastWriteTime[counter] = xmlFileList[i].LastModifiedTime;
+                fco.MetaLength[counter] = xmlFileList[i].Size;
+                fco.MetaExists[counter] = true;
+
+                if (o == null)
+                    root.AddChild(fco);
+            }
+        }
+
+        private void AddFolderToRoot(List<string> folderName, RootCompareObject root, int counter, int length)
+        {
+            if (folderName.Count == 0)
+                return;
+
+            for (int i = 0; i < folderName.Count; i++)
+            {
+                BaseCompareObject o = root.GetChild(folderName[i]);
+                FolderCompareObject fco = null;
+
+                if (o == null)
+                    fco = new FolderCompareObject(folderName[i], length, root);
+                else
+                    fco = (FolderCompareObject)o;
+
+                fco.MetaExists[counter] = true;
+
+                if (o == null)
+                    root.AddChild(fco);
+            }
+        }
+
+
 
         private void ProcessFileMetaData(FileCompareObject file, string[] currentPaths)
         {
