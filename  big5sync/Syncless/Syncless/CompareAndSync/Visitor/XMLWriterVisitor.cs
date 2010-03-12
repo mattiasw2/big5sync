@@ -63,7 +63,8 @@ namespace Syncless.CompareAndSync.Visitor
 
             lock (syncLock)
             {
-                Directory.CreateDirectory(Path.Combine(path, META_DIR));
+                DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, META_DIR));
+                di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
                 XmlTextWriter writer = new XmlTextWriter(xmlPath, null);
                 writer.Formatting = Formatting.Indented;
                 writer.WriteStartDocument();
@@ -85,6 +86,12 @@ namespace Syncless.CompareAndSync.Visitor
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(xmlPath);
             FinalState? changeType = file.FinalState[counter];
+            
+            if (changeType == null)
+            {
+                HandleNullCases(xmlDoc , currentPath , file);
+                return;
+            }
 
             switch (changeType)
             {
@@ -302,6 +309,16 @@ namespace Syncless.CompareAndSync.Visitor
                 else
                     DeleteFileObject(xmlDoc, file);
             }
+        }
+
+        private void HandleNullCases(XmlDocument xmlDoc , string currentPath , FileCompareObject file)
+        {
+            string fullPath = Path.Combine(currentPath, file.Name);
+            if (File.Exists(fullPath))
+                return;
+
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
+            node.ParentNode.RemoveChild(node);
         }
 
         private void ProcessFolderFinalState(string currentPath, FolderCompareObject folder, int counter)
