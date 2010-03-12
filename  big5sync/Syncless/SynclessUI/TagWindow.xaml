@@ -126,7 +126,7 @@
 											</VisualState>
 										</VisualStateGroup>
 									</VisualStateManager.VisualStateGroups>
-									<TextBox x:Name="Text" Margin="0" Style="{TemplateBinding TextBoxStyle}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Foreground="{TemplateBinding Foreground}" IsTabStop="True" Padding="{TemplateBinding Padding}" PreviewKeyDown="Text_PreviewKeyDown"/>
+									<TextBox x:Name="Text" Margin="0" Style="{TemplateBinding TextBoxStyle}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Foreground="{TemplateBinding Foreground}" IsTabStop="True" Padding="{TemplateBinding Padding}" PreviewKeyDown="Text_PreviewKeyDown" Loaded="Text_Loaded"/>
 									<Border x:Name="ValidationErrorElement" Visibility="Collapsed" BorderBrush="#FFDB000C" BorderThickness="1" CornerRadius="1">
 										<Border.ToolTip>
 											<ToolTip x:Name="validationTooltip" Placement="Right">

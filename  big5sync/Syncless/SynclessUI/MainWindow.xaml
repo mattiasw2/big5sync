@@ -42,7 +42,7 @@
     		<Image x:Name="SynclessLogo" Source="Icons/logo.ico" Width="40" Height="40" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Margin="-5,0,-10,0" Stretch="Fill" MouseLeftButtonDown="SynclessLogo_MouseLeftButtonDown" Cursor="Hand"/>
     		<Label x:Name="AppTitle" Content="Syncless" Foreground="#FFEEEEEE" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="0,-5,250,0" FontFamily="Fonts/#BankGothic Md BT"/>		
 			<!-- Menubar -->
-			<Menu x:Name="MainMenu" VerticalAlignment="Center" FontSize="13.333" Background="{x:Null}" Margin="0,8,0,0" FontWeight="Bold" HorizontalAlignment="Right">        
+			<Menu x:Name="MainMenu" VerticalAlignment="Center" FontSize="13.333" Background="{x:Null}" Margin="0,8,0,0" FontWeight="Bold" HorizontalAlignment="Right" Visibility="Hidden">        
 				<MenuItem Header="_File" Foreground="#FF8799EB">
 					<MenuItem Header="Minimize to System Tray" InputGestureText="Ctrl + M" />
 					<MenuItem Header="Exit" />
