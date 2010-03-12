@@ -619,5 +619,61 @@ namespace SynclessUI
 			PreviewSyncWindow psw = new PreviewSyncWindow(this, _selectedTag);
 			psw.ShowDialog();
 		}
+
+		private void BtnEject_Click(object sender, System.Windows.RoutedEventArgs e)
+		{
+            ContextMenu driveMenu = new ContextMenu();
+
+            List<DriveInfo> removableDrives = this.GetAllRemovableDrives();
+            if (removableDrives.Count == 0)
+            {
+                MenuItem driveMenuItem = new MenuItem();
+                driveMenuItem.Header = "No Removable Drives Found";
+                driveMenu.Items.Add(driveMenuItem);
+            }
+            else
+            {
+                foreach (DriveInfo di in removableDrives)
+                {
+                    MenuItem driveMenuItem = new MenuItem();
+                    driveMenuItem.Header = di.Name;
+                    driveMenuItem.Click += new RoutedEventHandler(driveMenuItem_Click);
+                    driveMenu.Items.Add(driveMenuItem);
+                }
+            }
+			
+			driveMenu.PlacementTarget = this;
+			driveMenu.IsOpen = true;
+        }
+		
+		private List<DriveInfo> GetAllRemovableDrives() {
+            DriveInfo[] allDrives = System.IO.DriveInfo.GetDrives();
+            List<DriveInfo> removableDrives = new List<DriveInfo>();
+
+            foreach (DriveInfo di in allDrives)
+            {
+                if(di.DriveType == DriveType.Removable) {
+                    removableDrives.Add(di);
+                }
+            }
+
+            return removableDrives;
+		}
+
+        void driveMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem source = (MenuItem)sender;
+            string driveletter = (string) source.Header;
+            DriveInfo drive = new DriveInfo(driveletter);
+            if (!gui.AllowForRemoval(drive))
+            {
+                string messageBoxText = "Syncless could not prepare " + driveletter + " for removal.";
+                string caption = "Drive Removal Error";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Error;
+
+                MessageBox.Show(messageBoxText, caption, button, icon);
+            }
+		}
     }
 }
