@@ -24,6 +24,9 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(FileCompareObject file, string[] currentPaths)
         {
+            if (file.Invalid)
+                return;
+
             int maxPriorityPos = 0;
             for (int i = 0; i < currentPaths.Length; i++)
             {
@@ -56,6 +59,9 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(FolderCompareObject folder, string[] currentPaths)
         {
+            if (folder.Invalid)
+                return;
+
             int maxPriorityPos = 0;
             for (int i = 0; i < currentPaths.Length; i++)
             {
