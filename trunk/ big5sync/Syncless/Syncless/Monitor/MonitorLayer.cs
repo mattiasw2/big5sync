@@ -36,6 +36,12 @@ namespace Syncless.Monitor
             rootsAndParent = new Hashtable();
         }
 
+        public void Terminate()
+        {
+            FileSystemEventDispatcher.Instance.Terminate();
+            FileSystemEventProcessor.Instance.Terminate();
+        }
+
         /// <summary>
         /// Start monitoring a path. If the path is already monitored, raise an exception.
         ///    001:/Lectures

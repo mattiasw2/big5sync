@@ -32,7 +32,7 @@ namespace Syncless.Monitor
             waitHandle = new AutoResetEvent(true);
         }
 
-        private void Terminate()
+        public void Terminate()
         {
             waitHandle.Close();
             if (dispatcherThread != null)
