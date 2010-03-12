@@ -13,12 +13,18 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(FileCompareObject file, string[] currentPaths)
         {
+            if (file.Invalid)
+                return;
+
             DetectFileRename(file, currentPaths);
             CompareFiles(file, currentPaths);
         }
 
         public void Visit(FolderCompareObject folder, string[] currentPaths)
         {
+            if (folder.Invalid)
+                return;
+
             CompareFolders(folder, currentPaths);
         }
 
@@ -39,7 +45,7 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 if (file.ChangeType[i] == MetaChangeType.Delete)
                 {
-                    f = file.Parent.GetIdenticalFile(file.MetaHash[i], file.MetaCreationTime[i]);
+                    f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);
                     
                     if (f != null)
                     {
@@ -57,8 +63,7 @@ namespace Syncless.CompareAndSync.Visitor
 
                         file.NewName = f.Name;
                         file.ChangeType[i] = MetaChangeType.Rename;
-                        //file.Parent.Contents.Remove(f.Name);
-                        f.ChangeType[i] = MetaChangeType.Invalid;
+                        f.Invalid = true;
                     }
                 }
             }
@@ -80,7 +85,7 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 if (file.ChangeType[i] == MetaChangeType.Delete)
                     deletePos.Add(i);
-                else if (file.ChangeType[i] != MetaChangeType.NoChange)
+                else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null)
                 {
                     deletePos.Clear();
                     break;

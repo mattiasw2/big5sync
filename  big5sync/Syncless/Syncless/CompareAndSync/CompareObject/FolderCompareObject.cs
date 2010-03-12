@@ -23,11 +23,11 @@ namespace Syncless.CompareAndSync.CompareObject
             _contents.Add(child.Name, child);
         }
 
-        public FileCompareObject GetIdenticalFile(string hash, long creationTime)
+        public FileCompareObject GetIdenticalFile(string name, string hash, long creationTime, int pos)
         {
             Dictionary<string, BaseCompareObject>.ValueCollection objects = _contents.Values;
             FileCompareObject f = null, result = null;
-            int counter = 0, indexOfHash = -1, indexOfCreationTime = -1;
+            int counter = 0;
 
             for (int i = 0; i < objects.Count; i++)
             {
@@ -35,9 +35,7 @@ namespace Syncless.CompareAndSync.CompareObject
                     if (objects.ElementAt(i) is FileCompareObject)
                     {
                         f = (FileCompareObject)objects.ElementAt(i);
-                        indexOfHash = Array.IndexOf<string>(f.Hash, hash);
-                        indexOfCreationTime = Array.IndexOf<long>(f.CreationTime, creationTime);
-                        if (indexOfHash > -1 && indexOfCreationTime > -1 && indexOfHash == indexOfCreationTime && f.Exists[indexOfHash] && f.Name != this.Name)
+                        if (f.Exists[pos] && f.Name != name && f.CreationTime[pos] == creationTime && f.Hash[pos] == hash)
                         {
                             result = (FileCompareObject)objects.ElementAt(i);
                             counter++;

@@ -46,9 +46,7 @@ namespace Syncless.CompareAndSync
                 string[] newCurrentPath = root.Paths;
                 if (o is FolderCompareObject)
                 {
-                    //TO BE REMOVED
-                    if (o.Name != ".syncless")
-                        TraverseFolderHelper((FolderCompareObject)o, newCurrentPath, visitor, type);
+                    TraverseFolderHelper((FolderCompareObject)o, newCurrentPath, visitor, type);
                 }
                 else
                 {
@@ -75,9 +73,7 @@ namespace Syncless.CompareAndSync
                 }
                 if (o is FolderCompareObject)
                 {
-                    //TO BE REMOVED (HANDLE USING FILTERS)
-                    if (o.Name != ".syncless")
-                        TraverseFolderHelper((FolderCompareObject)o, newCurrentPath, visitor, type);
+                    TraverseFolderHelper((FolderCompareObject)o, newCurrentPath, visitor, type);
                 }
                 else
                 {

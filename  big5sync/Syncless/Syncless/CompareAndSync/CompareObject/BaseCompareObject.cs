@@ -25,6 +25,7 @@ namespace Syncless.CompareAndSync.CompareObject
         private string _newName;
         private FolderCompareObject _parent;
         private ToDo? _todo;
+        private bool _invalid;
 
         protected BaseCompareObject(string name, int numOfPaths, FolderCompareObject parent)
         {
@@ -38,6 +39,7 @@ namespace Syncless.CompareAndSync.CompareObject
             _priority = new int[numOfPaths];
             //_newNames = new List<string>();
             _parent = parent;
+            _invalid = false;
         }
 
         public string Name
@@ -110,6 +112,12 @@ namespace Syncless.CompareAndSync.CompareObject
         {
             get { return _todo; }
             set { _todo = value; }
+        }
+
+        public bool Invalid
+        {
+            get { return _invalid; }
+            set { _invalid = value; }
         }
 
 
