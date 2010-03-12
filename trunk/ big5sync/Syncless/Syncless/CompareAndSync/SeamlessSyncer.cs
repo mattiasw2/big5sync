@@ -55,7 +55,10 @@ namespace Syncless.CompareAndSync
                             case AutoSyncRequestType.Rename:
                                 string oldFullPath = Path.Combine(dest, request.OldName);
                                 string newFullPath = Path.Combine(dest, request.NewName);
-                                CommonMethods.MoveFile(oldFullPath, newFullPath);
+                                if (!File.Exists(oldFullPath))
+                                    CommonMethods.CopyFile(sourceFullPath, newFullPath, true);
+                                else
+                                    CommonMethods.MoveFile(oldFullPath, newFullPath);
                                 break;
                         }
                     }
