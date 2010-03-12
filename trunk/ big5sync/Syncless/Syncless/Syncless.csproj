@@ -69,6 +69,7 @@
     <Compile Include="CompareAndSync\Exceptions\HashFileException.cs" />
     <Compile Include="CompareAndSync\Exceptions\MoveFileException.cs" />
     <Compile Include="CompareAndSync\Exceptions\MoveFolderException.cs" />
+    <Compile Include="CompareAndSync\Exceptions\SynclessIOException.cs" />
     <Compile Include="CompareAndSync\FileChangeType.cs" />
     <Compile Include="CompareAndSync\Request\AutoSyncRequest.cs" />
     <Compile Include="CompareAndSync\Request\ManualCompareRequest.cs" />

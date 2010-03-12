@@ -35,20 +35,20 @@ namespace Syncless.CompareAndSync
             filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
 
             RootCompareObject rco = new RootCompareObject(request.Paths);
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters));
-            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
-            CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor());
-            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config));
-            CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor());
+            CompareObjectHelper.PreTraverseFolder(ref rco, new BuilderVisitor(filters));
+            CompareObjectHelper.PreTraverseFolder(ref rco, new XMLMetadataVisitor());
+            CompareObjectHelper.PostTraverseFolder(ref rco, new ComparerVisitor());
+            CompareObjectHelper.PreTraverseFolder(ref rco, new SyncerVisitor(request.Config));
+            CompareObjectHelper.PreTraverseFolder(ref rco, new XMLWriterVisitor());
             return rco;
         }
 
         public RootCompareObject Compare(ManualCompareRequest request)
         {
             RootCompareObject rco = new RootCompareObject(request.Paths);
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters));
-            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
-            CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor());
+            CompareObjectHelper.PreTraverseFolder(ref rco, new BuilderVisitor(request.Filters));
+            CompareObjectHelper.PreTraverseFolder(ref rco, new XMLMetadataVisitor());
+            CompareObjectHelper.PostTraverseFolder(ref rco, new ComparerVisitor());
             return rco;
         }
 
