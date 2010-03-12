@@ -12,14 +12,10 @@ namespace Syncless.CompareAndSync.Visitor
     {
         #region IVisitor Members
         private SyncConfig _syncConfig;
-        private readonly string ARCHIVENAME;
-        private readonly int ARCHIVELIMIT;
 
         public SyncerVisitor(SyncConfig syncConfig)
         {
             _syncConfig = syncConfig;
-            ARCHIVENAME = syncConfig.ArchiveName;
-            ARCHIVELIMIT = syncConfig.ArchiveLimit;
         }
 
         public void Visit(FileCompareObject file, string[] currentPaths)
