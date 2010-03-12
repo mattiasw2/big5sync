@@ -47,7 +47,10 @@ namespace Syncless.Core
         #endregion
 
         #region IMonitorControllerInterface
-
+        /// <summary>
+        /// Handling File Change
+        /// </summary>
+        /// <param name="fe">File Change Event with all the objects.</param>
         public void HandleFileChange(FileChangeEvent fe)
         {
             try
@@ -127,7 +130,10 @@ namespace Syncless.Core
                 ExceptionHandler.Handle(e);
             }
         }
-
+        /// <summary>
+        /// Handling Folder Change
+        /// </summary>
+        /// <param name="fe">Folder Change Event with all the objects.</param>
         public void HandleFolderChange(FolderChangeEvent fe)
         {
             try
@@ -183,7 +189,10 @@ namespace Syncless.Core
                 ExceptionHandler.Handle(e);
             }
         }
-
+        /// <summary>
+        /// Handling Delete Change
+        /// </summary>
+        /// <param name="dce">Delete Change Event with all the objects</param>
         public void HandleDeleteChange(DeleteChangeEvent dce)
         {
             try
@@ -216,7 +225,10 @@ namespace Syncless.Core
                 ExceptionHandler.Handle(e);
             }
         }
-
+        /// <summary>
+        /// Handling Drive Change
+        /// </summary>
+        /// <param name="dce">Drive Change Event with all the objects</param>
         public void HandleDriveChange(DriveChangeEvent dce)
         {
             try

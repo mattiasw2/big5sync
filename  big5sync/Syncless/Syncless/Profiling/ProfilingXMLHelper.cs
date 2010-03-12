@@ -9,6 +9,18 @@ namespace Syncless.Profiling
 {
     internal class ProfilingXMLHelper
     {
+        #region XML ELEMENT 
+        public const string ELE_PROFILE_ROOT = "profile";
+        public const string ELE_PROFILE_ROOT_NAME = "name";
+        public const string ELE_PROFILE_ROOT_LASTUPDATED = "lastupdated";
+
+        public const string ELE_DRIVE_ROOT = "drive";
+        public const string ELE_DRIVE_LOGICAL = "logical";
+        public const string ELE_DRIVE_GUID = "guid";
+        #endregion
+
+
+
         #region Save Profile
         public static void SaveProfile(Profile profile, List<string> paths)
         {
@@ -138,13 +150,13 @@ namespace Syncless.Profiling
         }
         private static Profile ConvertToProfile(XmlDocument profilexml)
         {
-            XmlNodeList list = profilexml.GetElementsByTagName("profile");
+            XmlNodeList list = profilexml.GetElementsByTagName(ELE_PROFILE_ROOT);
             Syncless.Core.ServiceLocator.Getlogger(Syncless.Core.ServiceLocator.DEBUG_LOG).WriteLine("" + list.Count);
             if (list.Count != 0)
             {
                 XmlElement element = (XmlElement)list.Item(0);
-                string profilename = element.GetAttribute("name");
-                string lastupdate = element.GetAttribute("lastupdated");
+                string profilename = element.GetAttribute(ELE_PROFILE_ROOT_NAME);
+                string lastupdate = element.GetAttribute(ELE_PROFILE_ROOT_LASTUPDATED);
                 long lastUpdatedLong = long.Parse(lastupdate);
                 Profile profile = new Profile(profilename);
                 profile.LastUpdatedTime = lastUpdatedLong;
@@ -156,13 +168,13 @@ namespace Syncless.Profiling
         }
         private static Profile ProcessListing(Profile profile, XmlElement root)
         {
-            XmlNodeList nodeList = root.GetElementsByTagName("drive");
+            XmlNodeList nodeList = root.GetElementsByTagName(ELE_DRIVE_ROOT);
             foreach (XmlNode node in nodeList)
             {
                 XmlElement drive = (XmlElement)node;
-                XmlElement logical = (XmlElement)drive.GetElementsByTagName("logical").Item(0);
+                XmlElement logical = (XmlElement)drive.GetElementsByTagName(ELE_DRIVE_LOGICAL).Item(0);
                 
-                XmlElement guid = (XmlElement)drive.GetElementsByTagName("guid").Item(0);
+                XmlElement guid = (XmlElement)drive.GetElementsByTagName(ELE_DRIVE_GUID).Item(0);
                 profile.CreateMapping(logical.InnerText, "", guid.InnerText);
             }
             return profile;
@@ -184,9 +196,9 @@ namespace Syncless.Profiling
         }
         private static XmlElement CreateRoot(XmlDocument profilexml, Profile profile)
         {
-            XmlElement root = profilexml.CreateElement("profile");
-            XmlAttribute nameAttr = profilexml.CreateAttribute("name");
-            XmlAttribute timeAttr = profilexml.CreateAttribute("lastupdated");
+            XmlElement root = profilexml.CreateElement(ELE_PROFILE_ROOT);
+            XmlAttribute nameAttr = profilexml.CreateAttribute(ELE_PROFILE_ROOT_NAME);
+            XmlAttribute timeAttr = profilexml.CreateAttribute(ELE_PROFILE_ROOT_LASTUPDATED);
             nameAttr.Value = profile.ProfileName;
             timeAttr.Value = profile.LastUpdatedTime + "";
             root.SetAttributeNode(nameAttr);
@@ -195,10 +207,10 @@ namespace Syncless.Profiling
         }
         private static XmlElement CreateElementForMapping(XmlDocument profilexml, ProfileMapping mapping)
         {
-            XmlElement map = profilexml.CreateElement("drive");
-            XmlElement logical = profilexml.CreateElement("logical");
+            XmlElement map = profilexml.CreateElement(ELE_DRIVE_ROOT);
+            XmlElement logical = profilexml.CreateElement(ELE_DRIVE_LOGICAL);
 
-            XmlElement guid = profilexml.CreateElement("guid");
+            XmlElement guid = profilexml.CreateElement(ELE_DRIVE_GUID);
             Debug.Assert(mapping.GUID != null);
             Debug.Assert(mapping.LogicalAddress != null);
             logical.InnerText = mapping.LogicalAddress;
