@@ -59,7 +59,7 @@ namespace Syncless.CompareAndSync
 
         public void PrepareForTermination()
         {
-            
+            SeamlessQueueControl.Instance.Dispose();
         }
     }
 }
