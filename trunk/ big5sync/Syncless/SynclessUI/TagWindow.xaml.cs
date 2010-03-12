@@ -34,7 +34,7 @@ namespace SynclessUI
 		public TagWindow(MainWindow main, string clipath, string _selectedtag)
         {
             InitializeComponent();
-			
+
 			_main = main;
 			ACBName.IsEnabled = false;
 
@@ -99,9 +99,6 @@ namespace SynclessUI
                     ACBName.IsEnabled = true;
                     ACBName.ItemsSource = _main.gui.GetAllTags();
                     ACBName.Text = _selectedtag;
-					if(ACBTextBox != null) {
-						ACBTextBox.SelectAll();
-					}
                 }
                 else
                 {
@@ -250,13 +247,5 @@ namespace SynclessUI
 		{
 			popupclosed = true;
 		}
-
-		private void Text_Loaded(object sender, System.Windows.RoutedEventArgs e)
-		{
-            ACBTextBox = (TextBox)sender;
-            MessageBox.Show("Lol");
-		}
-
-        private TextBox ACBTextBox = null;
     }
 }
