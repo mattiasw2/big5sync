@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Syncless.CompareAndSync
+namespace Syncless.CompareAndSync.CompareObject
 {
-    class XMLObject
+    class XMLCompareObject
     {
         private long size;
         private string name;
@@ -13,7 +13,7 @@ namespace Syncless.CompareAndSync
         private long lastModifiedTime;
         private string hash;
 
-        public XMLObject(string newName, string newHash, long newSize, long newCreatedTime, long newModifiedTime)
+        public XMLCompareObject(string newName, string newHash, long newSize, long newCreatedTime, long newModifiedTime)
         {
             size = newSize;
             name = newName;
