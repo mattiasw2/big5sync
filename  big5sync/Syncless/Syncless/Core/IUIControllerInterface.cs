@@ -42,6 +42,8 @@ namespace Syncless.Core
 
         RootCompareObject PreviewSync(string tagname);
 
+        bool AllowForRemoval(DriveInfo drive);
+
         // To be Implemented
 
         // bool DeleteAllTags(); // Delete all existing tags (This one is like a general reset, might not need)

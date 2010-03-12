@@ -642,6 +642,11 @@ namespace Syncless.Core
             }
         }
 
+        public bool AllowForRemoval(DriveInfo drive)
+        {
+            return true;
+        }
+
         #endregion
 
         #region IOriginsFinder Members
