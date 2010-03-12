@@ -46,6 +46,7 @@ namespace SynclessUI
             {
                 _path = clipath;
             }
+
             ProcessPath(_path, _selectedtag);
 
             if (cancelstatus)
@@ -131,33 +132,42 @@ namespace SynclessUI
 					} else {
 						proceedtotag = true;
 					}
-					
-					if(proceedtotag) {
-						TagView tv1 = _main.gui.Tag(_tagname, new DirectoryInfo(_path));
-						
-						if(tv1 != null) {
-							_main.InitializeTagList();
-							_main.SelectTag(_tagname);
-						} else {
-							string messageBoxText = "Tag Error Occured. Please Try Again.";
-							string caption = "Tag Error";
-							MessageBoxButton button = MessageBoxButton.OK;
-							MessageBoxImage icon = MessageBoxImage.Error;
-			
-							MessageBox.Show(messageBoxText, caption, button, icon);
-						}
-						this.Close();
-					}
-					
-					if(!proceedtotag) {
-						string messageBoxText = "Folder Tag Error";
-						string caption = "Folder Not Tagged";
-						MessageBoxButton button = MessageBoxButton.OK;
-						MessageBoxImage icon = MessageBoxImage.Error;
-		
-						MessageBox.Show(messageBoxText, caption, button, icon);
-                        this.Close();
-					}
+
+                    bool tocontinue = this.TriggerLongPathWarning();
+
+                    if (tocontinue)
+                    {
+                        if (proceedtotag)
+                        {
+                            TagView tv1 = _main.gui.Tag(_tagname, new DirectoryInfo(_path));
+
+                            if (tv1 != null)
+                            {
+                                _main.InitializeTagList();
+                                _main.SelectTag(_tagname);
+                            }
+                            else
+                            {
+                                string messageBoxText = "Tag Error Occured. Please Try Again.";
+                                string caption = "Tag Error";
+                                MessageBoxButton button = MessageBoxButton.OK;
+                                MessageBoxImage icon = MessageBoxImage.Error;
+
+                                MessageBox.Show(messageBoxText, caption, button, icon);
+                            }
+                            this.Close();
+                        }
+                        else
+                        {
+                            string messageBoxText = "Folder Tag Error";
+                            string caption = "Folder Not Tagged";
+                            MessageBoxButton button = MessageBoxButton.OK;
+                            MessageBoxImage icon = MessageBoxImage.Error;
+
+                            MessageBox.Show(messageBoxText, caption, button, icon);
+                            this.Close();
+                        }
+                    }
 				} else {
 					string messageBoxText = "Please select a folder to tag.";
 					string caption = "Folder Not Selected";
@@ -175,6 +185,30 @@ namespace SynclessUI
                 MessageBox.Show(messageBoxText, caption, button, icon);
 			}
 		}
+
+        private bool TriggerLongPathWarning()
+        {
+            if (_path.Length > 200)
+            {
+                string messageBoxText = "NTFS Systems do not handle paths which are 248 characters or more in length. \nAre you sure you wish to continue";
+                string caption = "Long Path Name Warning";
+                MessageBoxButton button = MessageBoxButton.OKCancel;
+                MessageBoxImage icon = MessageBoxImage.Warning;
+
+                MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
+
+                switch (result)
+                {
+                    case MessageBoxResult.OK:
+                        return true;
+                    case MessageBoxResult.No:
+                        return false;
+                }
+            }
+
+            return true;
+
+        }
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
