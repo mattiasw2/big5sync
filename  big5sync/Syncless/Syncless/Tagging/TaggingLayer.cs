@@ -529,13 +529,17 @@ namespace Syncless.Tagging
             string logicalid = TaggingHelper.GetLogicalID(filePath);
             List<string> pathList = new List<string>();
             List<Tag> matchingTag = RetrieveTagById(logicalid);
+            FilterChain chain = new FilterChain();
             foreach (Tag tag in matchingTag)
             {
                 if (!tag.IsSeamless)
                 {
                     continue;
                 }
-
+                List<Filter> tempFilters = new List<Filter>();
+                tempFilters.Add(new SynclessArchiveFilter(tag.ArchiveName));
+                tempFilters.AddRange(tag.Filters);
+                
                 string appendedPath;
                 string trailingPath = tag.FindMatchedParentDirectory(filePath, false);
                 if (trailingPath != null)
@@ -545,7 +549,9 @@ namespace Syncless.Tagging
                         appendedPath = p.Append(trailingPath);
                         if (!pathList.Contains(appendedPath) && !appendedPath.Equals(filePath))
                         {
-                            pathList.Add(appendedPath);
+                            
+                            if (chain.ApplyFilter(tempFilters, appendedPath))
+                                pathList.Add(appendedPath);
                         }
                     }
                 }
@@ -583,7 +589,7 @@ namespace Syncless.Tagging
         public List<Tag> RetrieveParentTagByPath(string path)
         {
             List<Tag> parentPathList = new List<Tag>();
-        
+
             foreach (Tag tag in _taggingProfile.TagList)
             {
                 foreach (TaggedPath p in tag.FilteredPathList)
