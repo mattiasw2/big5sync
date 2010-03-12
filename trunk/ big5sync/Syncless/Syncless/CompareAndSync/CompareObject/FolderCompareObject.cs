@@ -23,6 +23,30 @@ namespace Syncless.CompareAndSync.CompareObject
             _contents.Add(child.Name, child);
         }
 
+        public FileCompareObject GetSameCreationTime(long creationTime, int pos)
+        {
+            Dictionary<string, BaseCompareObject>.ValueCollection objects = _contents.Values;
+            FileCompareObject f = null, result = null;
+            int counter = 0;
+
+            for (int i = 0; i < objects.Count; i++)
+            {
+                {
+                    if (objects.ElementAt(i) is FileCompareObject)
+                    {
+                        f = (FileCompareObject)objects.ElementAt(i);
+                        if (f.CreationTime[pos] == creationTime)
+                        {
+                            result = (FileCompareObject)objects.ElementAt(i);
+                            counter++;
+                        }
+                    }
+                }
+            }
+
+            return counter == 1 ? result : null;
+        }
+
         public FileCompareObject GetIdenticalFile(string name, string hash, long creationTime, int pos)
         {
             Dictionary<string, BaseCompareObject>.ValueCollection objects = _contents.Values;
