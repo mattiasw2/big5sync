@@ -25,39 +25,37 @@ namespace Syncless.CompareAndSync
         private const string FILES = "files";
         private static readonly object syncLock = new object();
 
-        public static void UpdateXML(List<BaseXMLWriteObject> xmlWriteList)
+        public static void UpdateXML(BaseXMLWriteObject xmlWriteList)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            foreach (BaseXMLWriteObject xmlWriteObj in xmlWriteList)
+
+            string xmlPath = Path.Combine(xmlWriteList.FullPath, METADATAPATH);
+            CreateFileIfNotExist(xmlWriteList.FullPath);
+            xmlDoc.Load(xmlPath);
+            if (xmlWriteList is XMLWriteFolderObject)
             {
-                string xmlPath = Path.Combine(xmlWriteObj.FullPath, METADATAPATH);
-                CreateFileIfNotExist(xmlWriteObj.FullPath);
-                xmlDoc.Load(xmlPath);
-                if (xmlWriteObj is XMLWriteFolderObject)
-                {
-                    HandleFolder(xmlDoc, xmlWriteObj);
-                    xmlDoc.Save(xmlPath);
-                    continue;
-                }
-
-                switch (xmlWriteObj.ChangeType)
-                {
-                    case MetaChangeType.New:
-                        CreateFile(xmlDoc, (XMLWriteFileObject)xmlWriteObj);
-                        break;
-                    case MetaChangeType.Delete:
-                        DeleteFile(xmlDoc, (XMLWriteFileObject)xmlWriteObj);
-                        break;
-                    case MetaChangeType.Rename:
-                        RenameFile(xmlDoc, (XMLWriteFileObject)xmlWriteObj);
-                        break;
-                    case MetaChangeType.Update:
-                        UpdateFile(xmlDoc, (XMLWriteFileObject)xmlWriteObj);
-                        break;
-                }
-
+                HandleFolder(xmlDoc, xmlWriteList);
                 xmlDoc.Save(xmlPath);
+                return;
             }
+
+            switch (xmlWriteList.ChangeType)
+            {
+                case MetaChangeType.New:
+                    CreateFile(xmlDoc, (XMLWriteFileObject)xmlWriteList);
+                     break;
+                case MetaChangeType.Delete:
+                     DeleteFile(xmlDoc, (XMLWriteFileObject)xmlWriteList);
+                     break;
+                case MetaChangeType.Rename:
+                     RenameFile(xmlDoc, (XMLWriteFileObject)xmlWriteList);
+                     break;
+                case MetaChangeType.Update:
+                     UpdateFile(xmlDoc, (XMLWriteFileObject)xmlWriteList);
+                     break;
+            }
+
+            xmlDoc.Save(xmlPath);
         }
 
         private static void CreateFileIfNotExist(string path)
