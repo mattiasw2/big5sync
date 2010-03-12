@@ -8,33 +8,51 @@ namespace Syncless.Profiling
 {
     public class Profile
     {
-        
+        /// <summary>
+        /// Profile name
+        /// </summary>
         private string _profilename;
+        /// <summary>
+        /// Profile name
+        /// </summary>
         public string ProfileName
         {
             get { return _profilename; }
             set { _profilename = value; }
         }
 
+        /// <summary>
+        /// List of Profile Mapping
+        /// </summary>
         private List<ProfileMapping> _mappingList;
+        /// <summary>
+        /// List of Profile Mapping
+        /// </summary>
         public List<ProfileMapping> Mappings
         {
             get { return _mappingList;}
         }
-        
+        /// <summary>
+        /// Last Updated Time
+        /// </summary>
+        private long _lastUpdatedTime;
+        /// <summary>
+        /// Last Updated Time
+        /// </summary>
+        public long LastUpdatedTime
+        {
+            get { return _lastUpdatedTime; }
+            set { _lastUpdatedTime = value; }
+        }
+                
+
         public Profile(string name)
         {
             this._profilename = name;
             _mappingList = new List<ProfileMapping>();
             
         }
-        private long _lastUpdatedTime;
-        public long LastUpdatedTime
-        {
-            get { return _lastUpdatedTime; }
-            set { _lastUpdatedTime = value; }
-        }
-            
+    
         /// <summary>
         /// Check if a Profilemapping is Contain in this profile.
         ///   throw ProfileMappingConflictException if Profile Mapping has Conflict.
@@ -54,6 +72,12 @@ namespace Syncless.Profiling
             }
             return false;
         }
+        /// <summary>
+        /// Create a Profile Mapping
+        /// </summary>
+        /// <param name="logicalAddress">the logical address</param>
+        /// <param name="physicalAddress">the physical address</param>
+        /// <param name="guid">the guid</param>
         public void CreateMapping(string logicalAddress, string physicalAddress,string guid)
         {
             ProfileMapping map = new ProfileMapping(logicalAddress, physicalAddress, guid);
@@ -64,12 +88,16 @@ namespace Syncless.Profiling
             _mappingList.Add(map);
             
         }
+        /// <summary>
+        /// Create a Profille Mapping
+        /// </summary>
+        /// <param name="mapping">the profilemapping to create.</param>
         public void CreateMapping(ProfileMapping mapping)
         {
             this.CreateMapping(mapping.LogicalAddress, mapping.PhyiscalAddress, mapping.GUID);
         }
         /// <summary>
-        /// Find a Physical Address from a Logical Address
+        /// Find a Physical Mapping From a Logical Mapping
         /// </summary>
         /// <param name="logical">logical address</param>
         /// <returns>physical address . return null if the logical address is not found or the physical drive is not in.</returns>
@@ -89,6 +117,11 @@ namespace Syncless.Profiling
             }
             return null;
         }
+        /// <summary>
+        /// Find a Logical Mapping From a Physical Mapping
+        /// </summary>
+        /// <param name="physical"></param>
+        /// <returns></returns>
         public string FindLogicalFromPhysical(string physical)
         {
             foreach (ProfileMapping mapping in _mappingList)
@@ -100,6 +133,11 @@ namespace Syncless.Profiling
             }
             return null;
         }
+        /// <summary>
+        /// Update a Particular drive with to its GUID
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <param name="driveid"></param>
         public void UpdateDrive(string guid, string driveid)
         {
             ProfileMapping mapping = FindMappingFromGUID(guid);
@@ -118,6 +156,11 @@ namespace Syncless.Profiling
             }
 
         }
+        /// <summary>
+        /// Remove a Drive from Profiling to mark it unavailable
+        /// </summary>
+        /// <param name="driveid">The id of the drive to remove</param>
+        /// <returns>true if something was removed</returns>
         public bool RemoveDrive(string driveid)
         {
             ProfileMapping mapping = FindMappingFromPhysical(driveid);
@@ -135,28 +178,7 @@ namespace Syncless.Profiling
             }
             return true;
         }
-        private ProfileMapping FindMappingFromGUID(string guid)
-        {
-            foreach (ProfileMapping mapping in _mappingList)
-            {
-                if (mapping.GUID.Equals(guid))
-                {
-                    return mapping;
-                }
-            }
-            return null;
-        }
-        private ProfileMapping FindMappingFromPhysical(string physical)
-        {
-            foreach (ProfileMapping mapping in _mappingList)
-            {
-                if (mapping.PhyiscalAddress.Equals(physical))
-                {
-                    return mapping;
-                }
-            }
-            return null;
-        }
+
         public bool CanMerge(Profile profile)
         {
             try
@@ -195,5 +217,31 @@ namespace Syncless.Profiling
             }
             return profile;
         }
+
+
+        #region private method
+        private ProfileMapping FindMappingFromGUID(string guid)
+        {
+            foreach (ProfileMapping mapping in _mappingList)
+            {
+                if (mapping.GUID.Equals(guid))
+                {
+                    return mapping;
+                }
+            }
+            return null;
+        }
+        private ProfileMapping FindMappingFromPhysical(string physical)
+        {
+            foreach (ProfileMapping mapping in _mappingList)
+            {
+                if (mapping.PhyiscalAddress.Equals(physical))
+                {
+                    return mapping;
+                }
+            }
+            return null;
+        }
+        #endregion
     }
 }
