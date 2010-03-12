@@ -32,8 +32,9 @@ namespace SynclessUI
         private const string BI_DIRECTIONAL = "Bi-Dir..";
         private const string UNI_DIRECTIONAL = "Uni-Dir..";
         private string _selectedTag {
-            get { if (ListBoxTag.SelectedItem == null) return null; else return ListBoxTag.SelectedItem.ToString(); }
+            get { if (TagTitle.Text== "Select A Tag" && (string) ListBoxTag.SelectedItem != "Select A Tag") return null; else return TagTitle.Text; }
         }
+
         private string _filter {
             get { return TxtBoxFilterTag.Text.Trim(); }
         }
