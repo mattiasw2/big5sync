@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Request;
+using Syncless.CompareAndSync.Exceptions;
 
 namespace Syncless.CompareAndSync
 {
@@ -93,7 +94,7 @@ namespace Syncless.CompareAndSync
             {
                 return (CommonMethods.CalculateMD5Hash(sourceFile) != CommonMethods.CalculateMD5Hash(destFile));
             }
-            catch (FileNotFoundException)
+            catch (HashFileException)
             {
                 return true;
             }

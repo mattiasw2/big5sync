@@ -26,6 +26,16 @@ namespace Syncless.Helper
         #endregion
         #region CompareAndSync Error Messages (Error Code : 300~499)
         public const string CAS_UNABLE_TO_HASH_EXCEPTION = "300";
+        public const string CAS_UNABLE_TO_COPY_FILE_EXCEPTION = "301";
+        public const string CAS_UNABLE_TO_DELETE_FILE_EXCEPTION = "302";
+        public const string CAS_UNABLE_TO_MOVE_FILE_EXCEPTION = "303";
+        public const string CAS_UNABLE_TO_ARCHIVE_FILE_EXCEPTION = "304";
+
+        public const string CAS_UNABLE_TO_COPY_FOLDER_EXCEPTION = "350";
+        public const string CAS_UNABLE_TO_CREATE_FOLDER_EXCEPTION = "351";
+        public const string CAS_UNABLE_TO_DELETE_FOLDER_EXCEPTION = "352";
+        public const string CAS_UNABLE_TO_MOVE_FOLDER_EXCEPTION = "353";        
+        public const string CAS_UNABLE_TO_ARCHIVE_FOLDER_EXCEPTION = "354";
         #endregion
         #region Monitor Error Messages (Error Code : 500~599)
         public const string PATH_NOT_FOUND = "500";
