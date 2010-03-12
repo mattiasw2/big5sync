@@ -17,6 +17,7 @@ namespace Syncless.CompareAndSync.Visitor
                 return;
 
             DetectFileRename(file, currentPaths);
+            DetectFileRenameAndUpdate(file, currentPaths);
             CompareFiles(file, currentPaths);
         }
 
@@ -36,6 +37,59 @@ namespace Syncless.CompareAndSync.Visitor
         #endregion
 
         #region Files
+
+        //If an asshole decides to do this
+        private void DetectFileRenameAndUpdate(FileCompareObject file, string[] currentPaths)
+        {
+            //Get a Delete type
+            //1. Find something that is New and has the same creation time
+            //2. Check that the New is null for all other indexes
+            //3. If above is verified, check that Delete is NoChange or null for all other indexes
+            //4. If all is verified, set the ChangeType to New.
+
+            FileCompareObject f = null;
+            int counter = 0;
+            List<int> indexes = new List<int>();
+
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                if (file.ChangeType[i] == MetaChangeType.Delete)
+                {
+                    counter++;
+                    indexes.Add(i);
+                }
+                else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType != null)
+                    return;
+            }
+
+            if (counter < 1)
+                return;
+
+            bool found = true;
+
+            for (int i = 0; i < indexes.Count; i++)
+            {
+                f = file.Parent.GetSameCreationTime(file.MetaCreationTime[indexes[i]], indexes[i]);
+
+                if (f != null && f.ChangeType[indexes[i]] == MetaChangeType.New)
+                {
+                    found = true;
+                    for (int j = 0; j < f.ChangeType.Length; j++)
+                    {
+                        if (j != indexes[i] && f.ChangeType[j] != null)
+                        {
+                            found = false;
+                            break;
+                        }
+                    }
+
+                    if (found)
+                        file.ChangeType[indexes[i]] = null;
+
+                }
+            }
+
+        }
 
         private void DetectFileRename(FileCompareObject file, string[] currentPaths)
         {
