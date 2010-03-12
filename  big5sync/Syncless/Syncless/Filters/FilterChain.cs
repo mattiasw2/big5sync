@@ -57,7 +57,7 @@ namespace Syncless.Filters
         }
         private List<string> ApplyInclude(List<Filter> filters, List<string> patterns)
         {
-            if (filters.Count == 0)
+            if (filters.Count == 0 || patterns.Count==0)
             {
                 //if no include filter, default include all
                 return patterns;
@@ -69,7 +69,7 @@ namespace Syncless.Filters
             {
                 Debug.Assert(filter.Mode == FilterMode.INCLUDE);
                 List<string> tempList = filter.ApplyFilter(patterns);
-                if (outputList.Count == 0)
+                if (tempList.Count == 0)
                 {
                     continue;
                 }

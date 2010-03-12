@@ -44,9 +44,12 @@ namespace Syncless.Filters
                 }
                 FileInfo file = new FileInfo(pattern);
                 
-                if (!Match(file.Name))
+                if (Match(file.Name))
                 {
-                    outputList.Add(pattern);
+                    if (!outputList.Contains(pattern))
+                    {
+                        outputList.Add(pattern);
+                    }
                 }
             }
             return outputList;

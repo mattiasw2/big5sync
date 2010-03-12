@@ -476,6 +476,20 @@ namespace Syncless.Tagging
             }
             return tagList;
         }
+        private List<Tag> RetrieveTagById(string logicalid)
+        {
+            bool found;
+            List<Tag> tagList = new List<Tag>();
+            foreach (Tag tag in _taggingProfile.TagList)
+            {
+                found = CheckID(tag, logicalid);
+                if (found)
+                {
+                    tagList.Add(tag);
+                }
+            }
+            return tagList;
+        }
 
         /// <summary>
         /// Find a list of paths of folders or sub-folders which share the same Tag as folderPath
@@ -519,45 +533,7 @@ namespace Syncless.Tagging
             return pathList;
         }
 
-        /// <summary>
-        /// Find a list of paths of files which share the same parent directories as filePath
-        /// </summary>
-        /// <param name="filePath">The path to search</param>
-        /// <returns>The list of similar paths</returns>
-        public List<string> FindSimilarSeamlessPathForFile(string filePath)
-        {
-            string logicalid = TaggingHelper.GetLogicalID(filePath);
-            List<string> pathList = new List<string>();
-            List<Tag> matchingTag = RetrieveTagById(logicalid);
-            FilterChain chain = new FilterChain();
-            foreach (Tag tag in matchingTag)
-            {
-                if (!tag.IsSeamless)
-                {
-                    continue;
-                }
-                List<Filter> tempFilters = new List<Filter>();
-                tempFilters.Add(new SynclessArchiveFilter(tag.ArchiveName));
-                tempFilters.AddRange(tag.Filters);
-                
-                string appendedPath;
-                string trailingPath = tag.FindMatchedParentDirectory(filePath, false);
-                if (trailingPath != null)
-                {
-                    foreach (TaggedPath p in tag.FilteredPathList)
-                    {
-                        appendedPath = p.Append(trailingPath);
-                        if (!pathList.Contains(appendedPath) && !appendedPath.Equals(filePath))
-                        {
-                            
-                            if (chain.ApplyFilter(tempFilters, appendedPath))
-                                pathList.Add(appendedPath);
-                        }
-                    }
-                }
-            }
-            return pathList;
-        }
+        
 
         /// <summary>
         /// Retrieve the list of parent directories of a given path
@@ -718,21 +694,7 @@ namespace Syncless.Tagging
             return false;
         }
 
-        private List<Tag> RetrieveTagById(string logicalid)
-        {
-            bool found;
-            List<Tag> tagList = new List<Tag>();
-            foreach (Tag tag in _taggingProfile.TagList)
-            {
-                found = CheckID(tag, logicalid);
-                if (found)
-                {
-                    tagList.Add(tag);
-                }
-            }
-            return tagList;
-        }
-
+       
         private bool CheckID(Tag tag, string ID)
         {
             foreach (TaggedPath path in tag.FilteredPathList)

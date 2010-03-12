@@ -54,9 +54,8 @@ namespace Syncless.Core
         {
             if (fe.Event == EventChangeType.CREATED)
             {
-                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
-                List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
-                List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);                
+                List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
                 List<string> parentList = new List<string>();
                 foreach (string path in convertedList)
                 {
@@ -76,8 +75,7 @@ namespace Syncless.Core
             else if (fe.Event == EventChangeType.MODIFIED)
             {
                 string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
-                List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
-                List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
+                List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
                 List<string> parentList = new List<string>();
                 foreach (string path in convertedList)
                 {
@@ -97,8 +95,7 @@ namespace Syncless.Core
             else if (fe.Event == EventChangeType.RENAMED)
             {
                 string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
-                List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
-                List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
+                List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
                 List<string> parentList = new List<string>();
                 foreach (string path in convertedList)
                 {
@@ -123,8 +120,7 @@ namespace Syncless.Core
             if (fe.Event == EventChangeType.CREATED)
             {
                 string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
-                List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
-                List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
+                List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
                 List<string> parentList = new List<string>();
                 foreach (string path in convertedList)
                 {
@@ -145,8 +141,7 @@ namespace Syncless.Core
             else if (fe.Event == EventChangeType.RENAMED)
             {
                 string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
-                List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
-                List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
+                List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress); 
                 List<string> parentList = new List<string>();
                 foreach (string path in convertedList)
                 {
@@ -207,8 +202,7 @@ namespace Syncless.Core
             if (dce.Event == EventChangeType.DELETED)
             {
                 string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(dce.Path.FullName, false);
-                List<string> unconvertedList = TaggingLayer.Instance.FindSimilarSeamlessPathForFile(logicalAddress);
-                List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(unconvertedList);
+                List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
                 List<string> parentList = new List<string>();
                 foreach (string path in convertedList)
                 {
@@ -771,5 +765,46 @@ namespace Syncless.Core
             MonitorTag(tag,tag.IsSeamless);
         }
         #endregion
+
+
+        /// <summary>
+        /// Find a list of paths of files which share the same parent directories as filePath
+        /// </summary>
+        /// <param name="filePath">The path to search</param>
+        /// <returns>The list of similar paths</returns>
+        public List<string> FindSimilarSeamlessPathForFile(string filePath)
+        {
+            string logicalid = TaggingHelper.GetLogicalID(filePath);
+            List<string> pathList = new List<string>();
+            List<Tag> matchingTag = TaggingLayer.Instance.RetrieveTagByLogicalId(logicalid);
+            FilterChain chain = new FilterChain();
+            foreach (Tag tag in matchingTag)
+            {
+                if (!tag.IsSeamless)
+                {
+                    continue;
+                }
+                List<Filter> tempFilters = new List<Filter>();
+                tempFilters.Add(new SynclessArchiveFilter(tag.ArchiveName));
+                tempFilters.AddRange(tag.Filters);
+
+                string appendedPath;
+                string trailingPath = tag.FindMatchedParentDirectory(filePath, false);
+                if (trailingPath != null)
+                {
+                    foreach (TaggedPath p in tag.FilteredPathList)
+                    {
+                        appendedPath = p.Append(trailingPath);
+                        if (!pathList.Contains(appendedPath) && !appendedPath.Equals(filePath))
+                        {
+                            string physicalAddress = ProfilingLayer.Instance.ConvertLogicalToPhysical(appendedPath);
+                            if (physicalAddress!=null && chain.ApplyFilter(tempFilters, physicalAddress))
+                                pathList.Add(physicalAddress);
+                        }
+                    }
+                }
+            }
+            return pathList;
+        }
     }
 }
