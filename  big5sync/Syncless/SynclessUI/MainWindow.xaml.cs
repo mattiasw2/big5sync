@@ -16,6 +16,8 @@ using Syncless.Tagging;
 using System.Collections;
 using System.IO;
 using SynclessUI.Helper;
+using System.Windows.Navigation;
+using System.Diagnostics;
 
 namespace SynclessUI
 {
@@ -602,5 +604,20 @@ namespace SynclessUI
 			ow.ShowDialog();
 		}
 		
+		private void OpenSynclessWebpage()
+  		{
+			Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/"));
+  		}
+
+		private void SynclessLogo_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			OpenSynclessWebpage();
+		}
+
+		private void BtnPreview_Click(object sender, System.Windows.RoutedEventArgs e)
+		{
+			PreviewSyncWindow psw = new PreviewSyncWindow(this, _selectedTag);
+			psw.ShowDialog();
+		}
     }
 }
