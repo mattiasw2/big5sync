@@ -45,21 +45,18 @@ namespace Syncless.Core
 
         #endregion
 
-        
-
-
         #region IMonitorControllerInterface
 
         public void HandleFileChange(FileChangeEvent fe)
         {
             if (fe.Event == EventChangeType.CREATED)
             {
-                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);                
+                string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
                 List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
                 if (convertedList.Count == 0)
                     return;
                 List<string> parentList = new List<string>();
-                
+
 
                 foreach (string path in convertedList)
                 {
@@ -143,7 +140,7 @@ namespace Syncless.Core
                 {
                     return;
                 }
-                
+
                 SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
                 AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Parent.FullName, parentList, true, AutoSyncRequestType.New, syncConfig);
                 CompareAndSyncController.Instance.Sync(request);
@@ -368,6 +365,13 @@ namespace Syncless.Core
                 try
                 {
                     int count = TaggingLayer.Instance.UntagFolder(path, tagname);
+                    List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(path);
+                    if (tagList.Count == 0)
+                    {
+                        MonitorLayer.Instance.UnMonitorPath(path);
+
+                    }
+
                     return count;
                 }
                 catch (TagNotFoundException tnfe)
@@ -509,7 +513,7 @@ namespace Syncless.Core
                 ExceptionHandler.Handle(e);
                 throw new UnhandledException(e);
             }
-            
+
         }
         /// <summary>
         /// Check if the Program can Terminate
@@ -558,7 +562,7 @@ namespace Syncless.Core
             try
             {
                 this._userInterface = inf;
-                
+
                 bool init = Initiate();
                 SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return init;
@@ -643,7 +647,9 @@ namespace Syncless.Core
 
         public bool AllowForRemoval(DriveInfo drive)
         {
+
             MonitorLayer.Instance.UnMonitorDrive(drive.Name);
+            ProfilingLayer.Instance.RemoveDrive(drive);
             return true;
         }
 
@@ -682,7 +688,7 @@ namespace Syncless.Core
                 {
                     try
                     {
-                        
+
                         MonitorLayer.Instance.MonitorPath(path);
                     }
                     catch (MonitorPathNotFoundException)
@@ -796,6 +802,7 @@ namespace Syncless.Core
         #region For TagMerger
         public void AddTagPath(Tag tag, TaggedPath path)
         {
+            
             if (tag.IsSeamless)
             {
                 MonitorTag(tag, tag.IsSeamless);
@@ -815,12 +822,9 @@ namespace Syncless.Core
         public void AddTag(Tag tag)
         {
             TaggingLayer.Instance.AddTag(tag);
-            MonitorTag(tag,tag.IsSeamless);
+            MonitorTag(tag, tag.IsSeamless);
         }
         #endregion
 
-
-        
-        
     }
 }
