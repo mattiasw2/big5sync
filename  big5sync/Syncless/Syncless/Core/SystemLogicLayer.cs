@@ -821,10 +821,10 @@ namespace Syncless.Core
         }
         private void Merge(DriveInfo drive)
         {
-            string profilingPath = drive.RootDirectory.FullName + "\\" + ProfilingLayer.RELATIVE_PROFILING_SAVE_PATH;
+            string profilingPath = PathHelper.FormatFolderPath(drive.RootDirectory.FullName)  + ProfilingLayer.RELATIVE_PROFILING_SAVE_PATH;
             ProfilingLayer.Instance.Merge(profilingPath);
 
-            string taggingPath = drive.RootDirectory.FullName + "\\" + TaggingLayer.RELATIVE_TAGGING_SAVE_PATH;
+            string taggingPath = PathHelper.FormatFolderPath(drive.RootDirectory.FullName) + TaggingLayer.RELATIVE_TAGGING_SAVE_PATH;
             TaggingLayer.Instance.Merge(taggingPath);
 
             
