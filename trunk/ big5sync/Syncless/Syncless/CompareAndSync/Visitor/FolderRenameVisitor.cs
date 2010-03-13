@@ -60,6 +60,7 @@ namespace Syncless.CompareAndSync.Visitor
                         folder.NewName = f.Name;
                         folder.ChangeType[i] = MetaChangeType.Rename;
                         folder.Contents = f.Contents;
+                        f.Contents = new Dictionary<string, BaseCompareObject>();
                         f.Invalid = true; //Invalidate the new folder so it will not be processed
                     }
                 }
