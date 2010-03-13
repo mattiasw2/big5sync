@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Syncless.Helper;
 
 namespace Syncless.Tagging
 {
@@ -48,7 +49,7 @@ namespace Syncless.Tagging
         public TaggedPath(string path, long created)
         {
             this._logicalid = TaggingHelper.GetLogicalID(path);
-            this._pathName = path;
+            this._pathName = PathHelper.FormatFolderPath(path);
             this._lastUpdatedDate = created;
             this._createdDate = created;
             this._isDeleted = false;
@@ -76,7 +77,7 @@ namespace Syncless.Tagging
 
         public void Replace(string oldPath, string newPath)
         {
-            _pathName = _pathName.Replace(oldPath, newPath);
+            _pathName = _pathName.Replace(PathHelper.FormatFolderPath(oldPath), PathHelper.FormatFolderPath(newPath));
         }
     }
 }

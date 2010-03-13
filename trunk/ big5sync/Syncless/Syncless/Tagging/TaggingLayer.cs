@@ -674,6 +674,26 @@ namespace Syncless.Tagging
             return parentPathList;
         }
 
+        public List<string> RetrieveAncestors(string path)
+        {
+            List<string> ancestors = new List<string>();
+            foreach (Tag tag in _taggingProfile.TagList)
+            {
+                ancestors.AddRange(tag.FindAncestors(path));
+            }
+            return ancestors;
+        }
+
+        public List<string> RetrieveDescendants(string path)
+        {
+            List<string> descendants = new List<string>();
+            foreach (Tag tag in _taggingProfile.TagList)
+            {
+                descendants.AddRange(tag.FindDescendants(path));
+            }
+            return descendants;
+        }
+
         /// <summary>
         /// Check if a logicalid exists
         /// </summary>
@@ -760,7 +780,7 @@ namespace Syncless.Tagging
         {
             foreach (Tag tag in _taggingProfile.TagList)
             {
-                if (tag.TagName.ToLower().Equals(tagname.ToLower()))
+                if (TaggingHelper.FormatTagName(tag.TagName).Equals(TaggingHelper.FormatTagName(tagname)))
                 {
                     return tag;
                 }
@@ -772,7 +792,7 @@ namespace Syncless.Tagging
         {
             foreach (Tag tag in _taggingProfile.TagList)
             {
-                if (tag.TagName.ToLower().Equals(tagname.ToLower()))
+                if (TaggingHelper.FormatTagName(tag.TagName).Equals(TaggingHelper.FormatTagName(tagname)))
                 {
                     return true;
                 }
