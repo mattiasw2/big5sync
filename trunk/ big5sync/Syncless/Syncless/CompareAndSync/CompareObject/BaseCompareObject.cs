@@ -120,12 +120,12 @@ namespace Syncless.CompareAndSync.CompareObject
             set { _invalid = value; }
         }
 
-        public string GetFullPath()
+        public virtual string GetFullPath(int index)
         {
             if (_parent == null)
                 return NewName != null ? NewName : Name;
             else
-                return _parent.GetFullPath() + "\\" + (NewName != null ? NewName : Name);
+                return _parent.GetFullPath(index) + "\\" + (NewName != null ? NewName : Name);
 
         }
     }
