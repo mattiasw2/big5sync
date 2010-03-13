@@ -12,14 +12,21 @@ TaggingLayer logic = TaggingLayer.Instance;
 
 ==Test Case 1a : Create Tag==
 *Pre-conditions:*<br>
-1) Tag of name "Lecture" has not been created.<br><br>
+1) Tag of name "Lecture" has not been created.<br>
+<br>
 *Actions:*<br>
-1) Tag tag = logic.CreateTag("Lecture");<br><br>
+1) Tag tag = logic.CreateTag("Lecture");<br>
+<br>
 *Expected result:* A tag of name "Lecture" created.<br>
 
-==Test Case 1b : Create Tag - Tag already created==
+==Test Case 1b : Create Tag==
+*Pre-conditions*<br>
+1) Tag of name "Lecture" already exists.<br>
+<br>
 *Action:*<br>
-*Expected result:*<br>
+1) Tag tag = logic.CreateTag("Lecture");<br>
+<br>
+*Expected result:* TagAlreadyExistsException thrown.<br>
 
 ==Test Case 2a : Tag Folder - Tag already created==
 *Action:*<br>
