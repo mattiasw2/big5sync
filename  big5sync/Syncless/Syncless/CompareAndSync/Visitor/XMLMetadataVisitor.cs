@@ -6,6 +6,7 @@ using Syncless.CompareAndSync.CompareObject;
 using System.IO;
 using System.Xml;
 using Syncless.CompareAndSync.Enum;
+using System.Diagnostics;
 
 namespace Syncless.CompareAndSync.Visitor
 {
@@ -42,9 +43,27 @@ namespace Syncless.CompareAndSync.Visitor
             ProcessFileMetaData(file, currentPaths);
         }
 
+        private void PopulateFolderMetaName(FolderCompareObject folder, string[] currentPaths)
+        {
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                string currMetaData = Path.Combine(Path.Combine(currentPaths[i], folder.Name), METADATAPATH);
+                if (File.Exists(currMetaData))
+                {
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.Load(currMetaData);
+                    folder.MetaName = xmlDoc.SelectSingleNode(XPATH_EXPR + "/name").InnerText;
+                }
+            }
+        }
+
         public void Visit(FolderCompareObject folder, string[] currentPaths)
         {
             XmlDocument xmlDoc = new XmlDocument();
+
+            PopulateFolderMetaName(folder, currentPaths);
+            
+            
             for (int i = 0; i < currentPaths.Length; i++)
             {
                 if (currentPaths[i].Contains(META_DIR))

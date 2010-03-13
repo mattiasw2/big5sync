@@ -41,18 +41,14 @@ namespace Syncless.CompareAndSync
                 visitor.Visit(root);
 
             Dictionary<string, BaseCompareObject>.ValueCollection values = root.Contents.Values;
+            FolderCompareObject fco = null;
             foreach (BaseCompareObject o in values)
             {
                 string[] newCurrentPath = root.Paths;
-                if (o is FolderCompareObject)
-                {
-                    FolderCompareObject fco = (FolderCompareObject)o;
+                if ((fco = o as FolderCompareObject) != null)
                     TraverseFolderHelper(fco, newCurrentPath, visitor, type);
-                }
                 else
-                {
-                    visitor.Visit((FileCompareObject)o, newCurrentPath);
-                }
+                    visitor.Visit(o as FileCompareObject, newCurrentPath);
             }
 
             if (type == TraverseType.Post)
@@ -65,22 +61,16 @@ namespace Syncless.CompareAndSync
                 visitor.Visit(folder, currentPath);
 
             Dictionary<string, BaseCompareObject>.ValueCollection values = folder.Contents.Values;
+            FolderCompareObject fco = null;
             foreach (BaseCompareObject o in values)
             {
                 string[] newCurrentPath = new string[currentPath.Length];
                 for (int i = 0; i < currentPath.Length; i++)
-                {
                     newCurrentPath[i] = currentPath[i] + @"\" + folder.Name;
-                }
-                if (o is FolderCompareObject)
-                {
-                    FolderCompareObject fco = (FolderCompareObject)o;
+                if ((fco = o as FolderCompareObject) != null)
                     TraverseFolderHelper(fco, newCurrentPath, visitor, type);
-                }
                 else
-                {
-                    visitor.Visit((FileCompareObject)o, newCurrentPath);
-                }
+                    visitor.Visit(o as FileCompareObject, newCurrentPath);
             }
 
             if (type == TraverseType.Post)

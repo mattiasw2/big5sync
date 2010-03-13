@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Syncless.CompareAndSync.Enum;
 
 namespace Syncless.CompareAndSync.CompareObject
 {
@@ -48,6 +49,29 @@ namespace Syncless.CompareAndSync.CompareObject
             return counter == 1 ? result : null;
         }
 
+        //TODO: Shift this method to ComparerVisitor
+        public FolderCompareObject GetRenamedFolder(string name, long creationTime, int pos)
+        {
+            Dictionary<string, BaseCompareObject>.ValueCollection objects = _contents.Values;
+            FolderCompareObject f = null, result = null;
+            int counter = 0;
+
+            for (int i = 0; i < objects.Count; i++)
+            {
+                if ((f = objects.ElementAt(i) as FolderCompareObject) != null)
+                {
+                    if (f.MetaName != null && f.MetaName == name && f.Name != name && f.ChangeType[pos] == MetaChangeType.New)
+                    {
+                        result = f;
+                        counter++;
+                    }
+                }
+            }
+
+            return counter == 1 ? result : null;
+        }
+
+        //TODO: Shift this method to ComparerVisitor
         public FileCompareObject GetIdenticalFile(string name, string hash, long creationTime, int pos)
         {
             Dictionary<string, BaseCompareObject>.ValueCollection objects = _contents.Values;
@@ -57,12 +81,11 @@ namespace Syncless.CompareAndSync.CompareObject
             for (int i = 0; i < objects.Count; i++)
             {
                 {
-                    if (objects.ElementAt(i) is FileCompareObject)
+                    if ((f = objects.ElementAt(i) as FileCompareObject) != null)
                     {
-                        f = (FileCompareObject)objects.ElementAt(i);
                         if (f.Exists[pos] && f.Name != name && f.CreationTime[pos] == creationTime && f.Hash[pos] == hash)
                         {
-                            result = (FileCompareObject)objects.ElementAt(i);
+                            result = f;
                             counter++;
                         }
                     }

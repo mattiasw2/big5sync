@@ -77,6 +77,8 @@ namespace Syncless.CompareAndSync.Visitor
                     case MetaChangeType.NoChange:
                         CreateFolder(folder, currentPaths, maxPriorityPos);
                         break;
+                    case MetaChangeType.Rename:
+                        break;
                 }
             }
         }
@@ -92,6 +94,14 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void CopyFile(FileCompareObject fco, string[] currentPaths, int srcFilePos)
         {
+            //Probable folder rename
+            if (fco.Parent.Invalid)
+            {
+                DirectoryInfo dir = new DirectoryInfo(currentPaths[srcFilePos]);
+                if (dir.Name == fco.Parent.MetaName)
+                    currentPaths[srcFilePos] = Path.Combine(dir.Parent.FullName, fco.Parent.Name);
+            }
+
             string src = Path.Combine(currentPaths[srcFilePos], fco.Name);
             bool fileExists = false;
             string destFile = null;
@@ -103,7 +113,8 @@ namespace Syncless.CompareAndSync.Visitor
                     if (fco.Priority[i] != fco.Priority[srcFilePos])
                     {
                         try
-                        {
+                        {                           
+
                             destFile = Path.Combine(currentPaths[i], fco.Name);
                             fileExists = File.Exists(destFile);
 
