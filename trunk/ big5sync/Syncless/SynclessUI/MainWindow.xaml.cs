@@ -31,8 +31,17 @@ namespace SynclessUI
 
         private const string BI_DIRECTIONAL = "Bi-Dir..";
         private const string UNI_DIRECTIONAL = "Uni-Dir..";
+
+        /*
         private string _selectedTag {
-            get { if (TagTitle.Text== "Select A Tag" && (string) ListBoxTag.SelectedItem != "Select A Tag") return null; else return TagTitle.Text; }
+            get { if (TagTitle.Text== "Select a Tag") return null; else return TagTitle.Text; }
+        }
+        */
+
+        private string _selectedTag
+        {
+            get { return (string) Application.Current.Properties["SelectedTag"]; }
+            set { Application.Current.Properties["SelectedTag"] = value; }
         }
 
         private string _filter {
@@ -87,7 +96,8 @@ namespace SynclessUI
         {
             if (ListBoxTag.SelectedItem != null)
             {
-                ViewTagInfo(ListBoxTag.SelectedItem.ToString());
+                _selectedTag = ListBoxTag.SelectedItem.ToString();
+                ViewTagInfo(_selectedTag);
             }
         }
 
@@ -132,10 +142,12 @@ namespace SynclessUI
 
             ListBoxTag.ItemsSource = taglist;
             LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
+            _selectedTag = (string) ListBoxTag.SelectedItem;
 
             if (taglist.Count != 0)
             {
-                SelectTag(taglist[0]);
+                _selectedTag = taglist[0];
+                SelectTag(_selectedTag);
             }
         }
 
