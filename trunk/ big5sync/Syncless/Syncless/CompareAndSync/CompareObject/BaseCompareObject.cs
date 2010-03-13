@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Syncless.CompareAndSync.Enum;
-using Syncless.Helper;
+
 namespace Syncless.CompareAndSync.CompareObject
 {
     public abstract class BaseCompareObject
@@ -26,6 +26,8 @@ namespace Syncless.CompareAndSync.CompareObject
         private FolderCompareObject _parent;
         private ToDo? _todo;
         private bool _invalid;
+
+        private bool? _ancestorRenamed;
 
         protected BaseCompareObject(string name, int numOfPaths, FolderCompareObject parent)
         {
@@ -120,13 +122,28 @@ namespace Syncless.CompareAndSync.CompareObject
             set { _invalid = value; }
         }
 
+        public bool? AncestorOrItselfRenamed
+        {
+            get
+            {
+                if (_ancestorRenamed.HasValue)
+                    return _ancestorRenamed;
+                else
+                    if (this is RootCompareObject)
+                        return false;
+                    else
+                        return _parent.AncestorOrItselfRenamed;
+            }
+            set { _ancestorRenamed = value; }
+        }
+
         public virtual string GetFullPath(int index)
         {
             if (_parent == null)
-                return NewName != null ? NewName : Name;
+                return _newName != null ? _newName : _name;
             else
-                return _parent.GetFullPath(index) + "\\" + (NewName != null ? NewName : Name);
-
+                return GetFullPath(index) + "\\" + _newName != null ? _newName : _name;
         }
+
     }
 }

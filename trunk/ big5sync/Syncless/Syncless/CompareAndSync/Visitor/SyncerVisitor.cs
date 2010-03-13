@@ -78,6 +78,7 @@ namespace Syncless.CompareAndSync.Visitor
                         CreateFolder(folder, currentPaths, maxPriorityPos);
                         break;
                     case MetaChangeType.Rename:
+                        MoveFolder(folder, currentPaths, maxPriorityPos);
                         break;
                 }
             }
@@ -95,10 +96,10 @@ namespace Syncless.CompareAndSync.Visitor
         private void CopyFile(FileCompareObject fco, string[] currentPaths, int srcFilePos)
         {
             //Probable folder rename
-            if (fco.Parent.Invalid)
+            if ((bool)fco.Parent.AncestorOrItselfRenamed && fco.Parent.FinalState[srcFilePos] == FinalState.Renamed)
             {
                 DirectoryInfo dir = new DirectoryInfo(currentPaths[srcFilePos]);
-                if (dir.Name == fco.Parent.MetaName)
+                if (dir.Name == fco.Parent.NewName)
                     currentPaths[srcFilePos] = Path.Combine(dir.Parent.FullName, fco.Parent.Name);
             }
 
@@ -114,8 +115,13 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-
-                            destFile = Path.Combine(currentPaths[i], fco.Name);
+                            if ((bool)fco.Parent.AncestorOrItselfRenamed && fco.Parent.FinalState[srcFilePos] != FinalState.Renamed)
+                            {
+                                destFile = fco.GetFullPath(i);
+                            }
+                            else
+                                destFile = Path.Combine(currentPaths[i], fco.Name);
+                            
                             fileExists = File.Exists(destFile);
 
                             if (fileExists)
@@ -218,7 +224,7 @@ namespace Syncless.CompareAndSync.Visitor
                                 CommonMethods.CopyFile(Path.Combine(currentPaths[srcFilePos], fco.NewName), Path.Combine(currentPaths[i], fco.NewName), true);
                                 fco.FinalState[i] = FinalState.Created;
                             }
-                            
+
                         }
                         catch (MoveFileException e)
                         {
@@ -311,6 +317,42 @@ namespace Syncless.CompareAndSync.Visitor
                 }
             }
             folder.FinalState[srcFilePos] = FinalState.Propagated;
+        }
+
+        private void MoveFolder(FolderCompareObject folder, string[] currentPaths, int srcFolderPos)
+        {
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                if (i != srcFolderPos)
+                {
+                    if (folder.Priority[i] != folder.Priority[srcFolderPos])
+                    {
+                        try
+                        {
+                            if (Directory.Exists(Path.Combine(currentPaths[i], folder.Name)))
+                            {
+                                CommonMethods.MoveFolder(Path.Combine(currentPaths[i], folder.Name), Path.Combine(currentPaths[i], folder.NewName));
+                                folder.FinalState[i] = FinalState.Renamed;
+                            }
+                            else
+                            {
+                                CommonMethods.CopyDirectory(Path.Combine(currentPaths[srcFolderPos], folder.NewName), Path.Combine(currentPaths[i], folder.NewName));
+                                folder.FinalState[i] = FinalState.Created;
+                            }
+
+                        }
+                        catch (MoveFolderException e)
+                        {
+                            folder.FinalState[i] = FinalState.Error;
+                        }
+                    }
+                    else
+                    {
+                        folder.FinalState[i] = FinalState.Unchanged;
+                    }
+                }
+            }
+            folder.FinalState[srcFolderPos] = FinalState.Propagated;
         }
 
         #endregion
