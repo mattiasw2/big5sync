@@ -223,11 +223,6 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region Folders
 
-        private void DetectFolderRename(FolderCompareObject folder, string[] currentPaths)
-        {
-
-        }
-
         private void CompareFolders(FolderCompareObject folder, string[] currentPaths)
         {
             //Delete will only occur if none of the folders are marked as dirty
