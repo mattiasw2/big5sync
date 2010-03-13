@@ -1,0 +1,6 @@
+==Step 1 : Open Syncless.exe==
+<img src="http://big5sync.googlecode.com/files/mainscreen.JPG"/><br><br>
+==Step 2 : Right click on your folder==
+<img src="http://big5sync.googlecode.com/files/context.JPG"/><br><br>
+==Step 3 : Give your tag a name==
+<img src="http://big5sync.googlecode.com/files/tag.JPG"/><br>
