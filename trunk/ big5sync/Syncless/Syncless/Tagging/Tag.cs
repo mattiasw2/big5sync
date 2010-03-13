@@ -295,6 +295,7 @@ namespace Syncless.Tagging
             string logicalid = TaggingHelper.GetLogicalID(path);
             foreach (TaggedPath p in _pathList)
             {
+                path = path.ToLower();
                 if (isFolder)
                 {
                     path = PathHelper.FormatFolderPath(path);

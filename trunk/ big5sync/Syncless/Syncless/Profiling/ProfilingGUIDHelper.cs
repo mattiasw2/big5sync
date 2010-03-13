@@ -53,7 +53,8 @@ namespace Syncless.Profiling
             }
             catch (DirectoryNotFoundException)
             {
-                Directory.CreateDirectory(fileInfo.Directory.FullName);
+                DirectoryInfo info = Directory.CreateDirectory(fileInfo.Directory.FullName);
+                info.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
                 fs = fileInfo.Create();
             }
 
