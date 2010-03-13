@@ -113,7 +113,7 @@ namespace Syncless.CompareAndSync.Visitor
                     if (fco.Priority[i] != fco.Priority[srcFilePos])
                     {
                         try
-                        {                           
+                        {
 
                             destFile = Path.Combine(currentPaths[i], fco.Name);
                             fileExists = File.Exists(destFile);
@@ -208,8 +208,17 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            CommonMethods.MoveFile(Path.Combine(currentPaths[i], fco.Name), Path.Combine(currentPaths[i], fco.NewName));
-                            fco.FinalState[i] = FinalState.Renamed;
+                            if (File.Exists(Path.Combine(currentPaths[i], fco.Name)))
+                            {
+                                CommonMethods.MoveFile(Path.Combine(currentPaths[i], fco.Name), Path.Combine(currentPaths[i], fco.NewName));
+                                fco.FinalState[i] = FinalState.Renamed;
+                            }
+                            else
+                            {
+                                CommonMethods.CopyFile(Path.Combine(currentPaths[srcFilePos], fco.NewName), Path.Combine(currentPaths[i], fco.NewName), true);
+                                fco.FinalState[i] = FinalState.Created;
+                            }
+                            
                         }
                         catch (MoveFileException e)
                         {
