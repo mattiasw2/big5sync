@@ -70,7 +70,7 @@ namespace Syncless.Profiling
         #endregion      
         public static Profile CreateDefaultProfile(string path)
         {
-            Profile profile = new Profile("Unnamed Profile");
+            Profile profile = new Profile("");
             XmlDocument xml = ConvertToXMLDocument(profile);
             FileInfo fileInfo = new FileInfo(path);
             if (!fileInfo.Exists)

@@ -295,7 +295,11 @@ namespace Syncless.Tagging
             string logicalid = TaggingHelper.GetLogicalID(path);
             foreach (TaggedPath p in _pathList)
             {
-                if (PathHelper.FormatFolderPath(path).StartsWith(p.PathName + "\\"))
+                if (isFolder)
+                {
+                    path = PathHelper.FormatFolderPath(path);
+                }
+                if (path.StartsWith(PathHelper.FormatFolderPath(p.PathName)))
                 {
                     if (!PathHelper.FormatFolderPath(path).Equals(p.PathName))
                     {
