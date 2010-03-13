@@ -329,6 +329,10 @@ namespace Syncless.CompareAndSync.Visitor
         {
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
             CreateFileIfNotExist(currentPath);
+
+            string subFolderXml = Path.Combine(currentPath, folder.Name);
+            CreateFileIfNotExist(subFolderXml);
+
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(xmlPath);
             FinalState?[] finalStateList = folder.FinalState;
