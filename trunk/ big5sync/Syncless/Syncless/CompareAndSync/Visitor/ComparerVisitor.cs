@@ -244,6 +244,7 @@ namespace Syncless.CompareAndSync.Visitor
                 return;
             }
 
+            /*
             //Rename will only occur if all other changes are MetaChangeType.NoChange or null
             int renamePos = -1;
 
@@ -262,7 +263,7 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 folder.Priority[renamePos] = 1;
                 return;
-            }
+            }*/
 
             int mostUpdatedPos = 0;
 

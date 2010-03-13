@@ -77,9 +77,9 @@ namespace Syncless.CompareAndSync.Visitor
                     case MetaChangeType.NoChange:
                         CreateFolder(folder, currentPaths, maxPriorityPos);
                         break;
-                    case MetaChangeType.Rename:
-                        MoveFolder(folder, currentPaths, maxPriorityPos);
-                        break;
+                    //case MetaChangeType.Rename:
+                    //    MoveFolder(folder, currentPaths, maxPriorityPos);
+                    //    break;
                 }
             }
         }
@@ -95,13 +95,12 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void CopyFile(FileCompareObject fco, string[] currentPaths, int srcFilePos)
         {
+            /*
             //Probable folder rename
-            if ((bool)fco.Parent.AncestorOrItselfRenamed && fco.Parent.FinalState[srcFilePos] == FinalState.Renamed)
+            if (fco.Parent.FinalState[srcFilePos] == FinalState.Renamed)
             {
-                DirectoryInfo dir = new DirectoryInfo(currentPaths[srcFilePos]);
-                if (dir.Name == fco.Parent.NewName)
-                    currentPaths[srcFilePos] = Path.Combine(dir.Parent.FullName, fco.Parent.Name);
-            }
+                currentPaths[srcFilePos] = fco.Parent.GetFullParentPath(srcFilePos);
+            }*/
 
             string src = Path.Combine(currentPaths[srcFilePos], fco.Name);
             bool fileExists = false;
@@ -115,12 +114,10 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            if ((bool)fco.Parent.AncestorOrItselfRenamed && fco.Parent.FinalState[srcFilePos] != FinalState.Renamed)
-                            {
-                                destFile = fco.GetFullPath(i);
-                            }
-                            else
+                            //if (fco.Parent.FinalState[srcFilePos] != FinalState.Renamed)
                                 destFile = Path.Combine(currentPaths[i], fco.Name);
+                            //else
+                            //    destFile = fco.GetFullParentPath(i);
                             
                             fileExists = File.Exists(destFile);
 

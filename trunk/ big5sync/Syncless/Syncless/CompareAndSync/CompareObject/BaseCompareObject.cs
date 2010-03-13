@@ -27,7 +27,7 @@ namespace Syncless.CompareAndSync.CompareObject
         private ToDo? _todo;
         private bool _invalid;
 
-        private bool? _ancestorRenamed;
+        //private bool? _ancestorRenamed;
 
         protected BaseCompareObject(string name, int numOfPaths, FolderCompareObject parent)
         {
@@ -122,6 +122,7 @@ namespace Syncless.CompareAndSync.CompareObject
             set { _invalid = value; }
         }
 
+        /*
         public bool? AncestorOrItselfRenamed
         {
             get
@@ -135,15 +136,9 @@ namespace Syncless.CompareAndSync.CompareObject
                         return _parent.AncestorOrItselfRenamed;
             }
             set { _ancestorRenamed = value; }
-        }
+        }*/
 
-        public virtual string GetFullPath(int index)
-        {
-            if (_parent == null)
-                return _newName != null ? _newName : _name;
-            else
-                return GetFullPath(index) + "\\" + _newName != null ? _newName : _name;
-        }
+        public abstract string GetFullParentPath(int index);
 
     }
 }
