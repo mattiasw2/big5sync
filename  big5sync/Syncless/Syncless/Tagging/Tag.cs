@@ -192,13 +192,13 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.PathName.StartsWith(PathHelper.FormatFolderPath(oldPath)))
+                if (PathHelper.FormatFolderPath(p.PathName).StartsWith(PathHelper.FormatFolderPath(oldPath)))
                 {
                     p.Replace(oldPath, newPath);
                 }
-                else if (p.PathName.Equals(PathHelper.FormatFolderPath(oldPath)))
+                else if (PathHelper.FormatFolderPath(p.PathName).Equals(PathHelper.FormatFolderPath(oldPath)))
                 {
-                    p.PathName = PathHelper.FormatFolderPath(newPath);
+                    p.PathName = newPath;
                 }
                 _lastUpdatedDate = updated;
             }
@@ -208,7 +208,7 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.PathName.Equals(PathHelper.FormatFolderPath(path)))
+                if (PathHelper.FormatFolderPath(p.PathName).Equals(PathHelper.FormatFolderPath(path)))
                 {
                     if (p.IsDeleted)
                     {
@@ -229,7 +229,7 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.PathName.Equals(PathHelper.FormatFolderPath(path.PathName)))
+                if (PathHelper.FormatFolderPath(p.PathName).Equals(PathHelper.FormatFolderPath(path.PathName)))
                 {
                     if (p.IsDeleted)
                     {
@@ -261,7 +261,7 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.PathName.Equals(PathHelper.FormatFolderPath(path)))
+                if (PathHelper.FormatFolderPath(p.PathName).Equals(PathHelper.FormatFolderPath(path)))
                 {
                     return true;
                 }
@@ -274,7 +274,7 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.PathName.Equals(PathHelper.FormatFolderPath(path)))
+                if (PathHelper.FormatFolderPath(p.PathName).Equals(PathHelper.FormatFolderPath(path)))
                 {
                     if (p.IsDeleted)
                     {
@@ -301,7 +301,7 @@ namespace Syncless.Tagging
                 }
                 if (path.StartsWith(PathHelper.FormatFolderPath(p.PathName)))
                 {
-                    if (!PathHelper.FormatFolderPath(path).Equals(p.PathName))
+                    if (!path.Equals(PathHelper.FormatFolderPath(p.PathName)))
                     {
                         string[] pTokens = TaggingHelper.TrimEnd(p.PathName.Split('\\'));
                         int trailingIndex = TaggingHelper.Match(pathTokens, pTokens);
@@ -352,7 +352,7 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.PathName.Equals(PathHelper.FormatFolderPath(path)))
+                if (PathHelper.FormatFolderPath(p.PathName).Equals(PathHelper.FormatFolderPath(path)))
                 {
                     if (filtered && p.IsDeleted)
                     {
@@ -390,9 +390,9 @@ namespace Syncless.Tagging
             List<string> descendants = new List<string>();
             foreach (TaggedPath p in _pathList)
             {
-                if (p.PathName.StartsWith(PathHelper.FormatFolderPath(path)))
+                if (PathHelper.FormatFolderPath(p.PathName).StartsWith(PathHelper.FormatFolderPath(path)))
                 {
-                    if (!p.PathName.Equals(PathHelper.FormatFolderPath(path)))
+                    if (!PathHelper.FormatFolderPath(p.PathName).Equals(PathHelper.FormatFolderPath(path)))
                     {
                         descendants.Add(p.PathName);
                     }
