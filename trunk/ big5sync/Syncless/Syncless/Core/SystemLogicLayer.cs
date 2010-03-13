@@ -455,9 +455,10 @@ namespace Syncless.Core
                 {
                     throw new TagNotFoundException(tagname);
                 }
+                
                 StartMonitorTag(tag, mode);
                 //MonitorTag(tag, tag.IsSeamless);
-                Console.WriteLine("Bye");
+                
                 return true;
             }
             catch (Exception e)
@@ -732,6 +733,7 @@ namespace Syncless.Core
         
         #region private methods & delegate
         public delegate void MonitorTagDelegate(Tag t, bool isSeamless);
+        public delegate void ManualSyncDelegate(Tag tag);
         public void StartMonitorTag(Tag tag, bool mode)
         {
             MonitorTagDelegate monitordelegate = new MonitorTagDelegate(MonitorTag);
@@ -757,8 +759,9 @@ namespace Syncless.Core
                     {
                         MonitorLayer.Instance.MonitorPath(path);
                     }
-                    catch (MonitorPathNotFoundException)
+                    catch (MonitorPathNotFoundException e)
                     {
+                        Console.WriteLine(e.Message);
                     }
                 }
             }
