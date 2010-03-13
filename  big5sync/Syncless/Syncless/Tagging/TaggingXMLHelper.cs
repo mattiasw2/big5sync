@@ -99,6 +99,12 @@ namespace Syncless.Tagging
         {
             XmlTextWriter textWriter = null;
             FileStream fs = null;
+            FileInfo fileInfo = new FileInfo(path);
+            if (!fileInfo.Directory.Exists)
+            {
+                DirectoryInfo info = Directory.CreateDirectory(fileInfo.Directory.FullName);
+                info.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+            }
             try
             {
                 if (File.Exists(path))
