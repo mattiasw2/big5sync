@@ -206,8 +206,6 @@
     <Resource Include="Icons\minus-8.png" />
     <Resource Include="Icons\option.ico" />
     <Resource Include="Icons\plus-8.png" />
-    <Resource Include="Icons\plus.gif" />
-    <Resource Include="Icons\minus.gif" />
     <Resource Include="Icons\logo.ico" />
     <Resource Include="Icons\max.ico" />
     <Resource Include="Icons\min.ico" />

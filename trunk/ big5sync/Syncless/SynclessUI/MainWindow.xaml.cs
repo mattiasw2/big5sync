@@ -345,9 +345,12 @@ namespace SynclessUI
                     MessageBox.Show(messageBoxText, caption, button, icon);
                 }
             }
-            catch (Syncless.Tagging.Exceptions.TagAlreadyExistsException)
+            catch (Exception e)
             {
-				return true;
+                if (e.InnerException is Syncless.Tagging.Exceptions.TagAlreadyExistsException)
+                {
+                    return true;
+                }
             }
 			
 			return false;
