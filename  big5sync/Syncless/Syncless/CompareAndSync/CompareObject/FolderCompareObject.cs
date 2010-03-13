@@ -8,14 +8,15 @@ namespace Syncless.CompareAndSync.CompareObject
     public class FolderCompareObject : BaseCompareObject
     {
         private Dictionary<string, BaseCompareObject> _contents;
-        private List<string> _possibleNewNames;
+        //private List<string> _possibleNewNames;
         private bool _dirty;
+        private string _metaName;
 
         public FolderCompareObject(string name, int numOfPaths, FolderCompareObject parent)
             : base(name, numOfPaths, parent)
         {
             _contents = new Dictionary<string, BaseCompareObject>(StringComparer.OrdinalIgnoreCase);
-            _possibleNewNames = new List<string>();
+            //_possibleNewNames = new List<string>();
         }
 
         public void AddChild(BaseCompareObject child)
@@ -79,6 +80,12 @@ namespace Syncless.CompareAndSync.CompareObject
                 return child;
             else
                 return child;
+        }
+
+        public string MetaName
+        {
+            get { return _metaName; }
+            set { _metaName = value; }
         }
 
         public bool ContainsChild(string name)
