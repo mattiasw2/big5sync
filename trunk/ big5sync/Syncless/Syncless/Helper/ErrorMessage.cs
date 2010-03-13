@@ -36,6 +36,8 @@ namespace Syncless.Helper
         public const string CAS_UNABLE_TO_DELETE_FOLDER_EXCEPTION = "352";
         public const string CAS_UNABLE_TO_MOVE_FOLDER_EXCEPTION = "353";        
         public const string CAS_UNABLE_TO_ARCHIVE_FOLDER_EXCEPTION = "354";
+
+        public const string CAS_INCOMPATIBLE_TYPE_EXCEPTION = "400";
         #endregion
         #region Monitor Error Messages (Error Code : 500~599)
         public const string PATH_NOT_FOUND = "500";

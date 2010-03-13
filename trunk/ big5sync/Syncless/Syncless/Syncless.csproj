@@ -64,9 +64,11 @@
     <Compile Include="CompareAndSync\Exceptions\CopyFileException.cs" />
     <Compile Include="CompareAndSync\Exceptions\CopyFolderException.cs" />
     <Compile Include="CompareAndSync\Exceptions\CreateFolderException.cs" />
+    <Compile Include="CompareAndSync\Exceptions\DatabaseSetup.cs" />
     <Compile Include="CompareAndSync\Exceptions\DeleteFileException.cs" />
     <Compile Include="CompareAndSync\Exceptions\DeleteFolderException.cs" />
     <Compile Include="CompareAndSync\Exceptions\HashFileException.cs" />
+    <Compile Include="CompareAndSync\Exceptions\IncompatibleTypeException.cs" />
     <Compile Include="CompareAndSync\Exceptions\MoveFileException.cs" />
     <Compile Include="CompareAndSync\Exceptions\MoveFolderException.cs" />
     <Compile Include="CompareAndSync\Exceptions\SynclessIOException.cs" />
