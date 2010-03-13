@@ -29,5 +29,18 @@ namespace Syncless.Helper
             }
             return path;
         }
+
+        public static string AddTrailingSlash(string path)
+        {
+            if (path.EndsWith("\\"))
+            {
+                return path;
+            }
+            else
+            {
+                path += "\\";
+                return path;
+            }
+        }
     }
 }

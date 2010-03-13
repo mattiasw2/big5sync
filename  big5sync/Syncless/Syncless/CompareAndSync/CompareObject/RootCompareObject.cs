@@ -19,6 +19,7 @@ namespace Syncless.CompareAndSync.CompareObject
         {
             get { return _paths; }
         }
+
         public override string GetFullPath(int index)
         {
             return _paths[index];
