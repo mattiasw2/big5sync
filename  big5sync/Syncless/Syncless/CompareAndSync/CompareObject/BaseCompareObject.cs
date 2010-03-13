@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Syncless.CompareAndSync.Enum;
-
+using Syncless.Helper;
 namespace Syncless.CompareAndSync.CompareObject
 {
     public abstract class BaseCompareObject
@@ -13,7 +13,7 @@ namespace Syncless.CompareAndSync.CompareObject
         private long[] _creationTime;
         private bool[] _exists;
 
-       //Meta file
+        //Meta file
         private long[] _metaCreationTime;
         private bool[] _metaExists;
 
@@ -120,6 +120,13 @@ namespace Syncless.CompareAndSync.CompareObject
             set { _invalid = value; }
         }
 
+        public string GetFullPath()
+        {
+            if (_parent == null)
+                return NewName != null ? NewName : Name;
+            else
+                return _parent.GetFullPath() + "\\" + (NewName != null ? NewName : Name);
 
+        }
     }
 }
