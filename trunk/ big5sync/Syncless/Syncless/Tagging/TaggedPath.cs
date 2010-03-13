@@ -49,7 +49,7 @@ namespace Syncless.Tagging
         public TaggedPath(string path, long created)
         {
             this._logicalid = TaggingHelper.GetLogicalID(path);
-            this._pathName = PathHelper.FormatFolderPath(path);
+            this._pathName = path;
             this._lastUpdatedDate = created;
             this._createdDate = created;
             this._isDeleted = false;
@@ -75,9 +75,14 @@ namespace Syncless.Tagging
             }
         }
 
+        public void Rename(string newpath)
+        {
+            _pathName = newpath;
+        }
+
         public void Replace(string oldPath, string newPath)
         {
-            _pathName = _pathName.Replace(PathHelper.FormatFolderPath(oldPath), PathHelper.FormatFolderPath(newPath));
+            _pathName = _pathName.Replace(oldPath, newPath);
         }
     }
 }
