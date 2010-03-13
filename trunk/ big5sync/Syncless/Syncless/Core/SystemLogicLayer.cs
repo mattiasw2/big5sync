@@ -388,7 +388,7 @@ namespace Syncless.Core
                 {
                     return null;
                 }               
-                MonitorTag(tag.TagName, true);
+                MonitorTag(tag.TagName, tag.IsSeamless);
                 return ConvertToTagView(tag);
             }
             catch (Exception e) // Handle Unexpected Exception
