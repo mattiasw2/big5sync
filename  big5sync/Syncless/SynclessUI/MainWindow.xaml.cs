@@ -46,14 +46,7 @@ namespace SynclessUI
 
             InitializeComponent();
             InitializeSyncless();
-			reset();
         }
-		
-		private void reset() {
-			if(DateTime.Now.ToString("dd") == "" + 13) {
-				special.Visibility = System.Windows.Visibility.Visible;
-			}
-		}
 
         #region Application Settings
 
