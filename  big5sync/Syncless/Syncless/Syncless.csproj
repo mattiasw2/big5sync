@@ -118,6 +118,7 @@
     <Compile Include="Filters\FilterFactory.cs" />
     <Compile Include="Filters\SynclessArchiveFilter.cs" />
     <Compile Include="Filters\SynclessConfigFilter.cs" />
+    <Compile Include="Helper\Cleaner.cs" />
     <Compile Include="Helper\ErrorMessage.cs" />
     <Compile Include="Helper\PathHelper.cs" />
     <Compile Include="Logging\Logger.cs" />
