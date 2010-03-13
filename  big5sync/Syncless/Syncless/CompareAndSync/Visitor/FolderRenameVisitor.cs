@@ -57,15 +57,68 @@ namespace Syncless.CompareAndSync.Visitor
                         if (counter != 1)
                             return;
 
-                        folder.NewName = f.Name;
-                        folder.ChangeType[i] = MetaChangeType.Rename;
-                        folder.AncestorOrItselfRenamed = true;
-                        folder.Contents = f.Contents;
-                        f.Contents = new Dictionary<string, BaseCompareObject>();
-                        f.Invalid = true;  //Invalidate the new folder so it will not be processed 
+                        MergeRenamedFolder(folder, f, i);
                     }
                 }
             }
+        }
+
+        //Merge the renamed folder into the folders with its old name, so that files are all compared.
+        private void MergeRenamedFolder(FolderCompareObject actualFolder, FolderCompareObject renamedFolder, int pos)
+        {
+            Dictionary<string, BaseCompareObject>.KeyCollection renamedFolderContents = renamedFolder.Contents.Keys;
+            BaseCompareObject o = null;
+            FolderCompareObject actualFldrObj = null;
+            FolderCompareObject renamedFolderObj = null;
+            FileCompareObject actualFileObj = null;
+            FileCompareObject renamedFileObj = null;
+
+            actualFolder.NewNames[pos] = renamedFolder.Name;
+            actualFolder.ChangeType[pos] = MetaChangeType.Rename;
+
+            foreach (string name in renamedFolderContents)
+            {
+                if (actualFolder.Contents.TryGetValue(name, out o))
+                {
+
+                    if ((actualFldrObj = o as FolderCompareObject) != null)
+                    {
+                        renamedFolderObj = renamedFolder.Contents[name] as FolderCompareObject;
+                        actualFldrObj.ChangeType[pos] = renamedFolder.ChangeType[pos];
+                        actualFldrObj.CreationTime[pos] = renamedFolder.CreationTime[pos];
+                        actualFldrObj.Exists[pos] = renamedFolder.Exists[pos];
+                        actualFldrObj.MetaCreationTime[pos] = renamedFolder.MetaCreationTime[pos];
+                        actualFldrObj.MetaExists[pos] = renamedFolder.MetaExists[pos];
+                        //actualFldrObj.MetaName[pos] = renamedFolder.MetaName[pos];
+                        MergeRenamedFolder(actualFldrObj, renamedFolderObj, pos);
+                    }
+                    else
+                    {
+                        actualFileObj = o as FileCompareObject;
+                        renamedFileObj = renamedFolder.Contents[name] as FileCompareObject;
+                        actualFileObj.CreationTime[pos] = renamedFileObj.CreationTime[pos];
+                        actualFileObj.Exists[pos] = renamedFileObj.Exists[pos];
+                        actualFileObj.Hash[pos] = renamedFileObj.Hash[pos];
+                        actualFileObj.LastWriteTime[pos] = renamedFileObj.LastWriteTime[pos];
+                        actualFileObj.Length[pos] = renamedFileObj.Length[pos];
+                        actualFileObj.MetaCreationTime[pos] = renamedFileObj.MetaCreationTime[pos];
+                        actualFileObj.MetaExists[pos] = renamedFileObj.MetaExists[pos];
+                        actualFileObj.MetaHash[pos] = renamedFileObj.MetaHash[pos];
+                        actualFileObj.MetaLastWriteTime[pos] = renamedFileObj.MetaLastWriteTime[pos];
+                        actualFileObj.MetaLength[pos] = renamedFileObj.MetaLength[pos];
+                        actualFileObj.ChangeType[pos] = renamedFileObj.ChangeType[pos];
+                    }
+                }
+                else
+                {
+                    actualFolder.AddChild(renamedFolder.Contents[name]);
+                }
+            }
+
+            actualFolder.NewNames[pos] = renamedFolder.Name;
+            actualFolder.ChangeType[pos] = MetaChangeType.Rename;
+            renamedFolder.Contents = new Dictionary<string, BaseCompareObject>();
+            renamedFolder.Invalid = true;
         }
     }
 }

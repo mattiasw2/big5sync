@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
+using System.Diagnostics;
 
 namespace Syncless.CompareAndSync.CompareObject
 {
@@ -61,6 +63,12 @@ namespace Syncless.CompareAndSync.CompareObject
         {
             get { return _metaLastWriteTime; }
             set { _metaLastWriteTime = value; }
+        }
+
+        public override string GetFullParentPath(int index)
+        {
+            Debug.Assert(Parent != null);
+            return Path.Combine(Parent.GetFullParentPath(index), string.IsNullOrEmpty(Parent.NewNames[index]) ? Parent.Name : Parent.NewNames[index]);
         }
     }
 }
