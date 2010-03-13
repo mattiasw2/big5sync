@@ -1,13 +1,42 @@
-#summary One-sentence summary of this page.
+#summary This page contains the various test cases for important operations in TaggingLayer
 
 = Introduction =
 
-Add your content here.
+This page contains the various test cases for important operations in TaggingLayer
 
 
 = Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+Examples:
+
+==Test Case 1a : Create Tag - Tag not yet created==
+*Action:*<br>
+*Expected result:*<br>
+
+==Test Case 1b : Create Tag - Tag already created==
+*Action:*<br>
+*Expected result:*<br>
+
+==Test Case 2a : Tag Folder - Tag already created==
+*Action:*<br>
+*Expected result:*<br>
+
+==Test Case 2b : Tag Folder - Tag not yet created==
+*Action:*<br>
+*Expected result:*<br>
+
+==Test Case 3a : Untag Folder - Folder already tagged==
+*Action:*<br>
+*Expected result:*<br>
+
+==Test Case 3b : Untag Folder - Folder not yet tagged==
+*Action:*<br>
+*Expected result:*<br>
+
+==Test Case 4a : Delete Tag - Tag already created==
+*Action:*<br>
+*Expected result:*<br>
+
+==Test Case 4b : Delete Tag - Tag not yet created==
+*Action:*<br>
+*Expected result:*<br>
