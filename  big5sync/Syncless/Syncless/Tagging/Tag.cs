@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Syncless.Tagging.Exceptions;
 using Syncless.Filters;
+using Syncless.Helper;
+
 namespace Syncless.Tagging
 {
     public class Tag
@@ -190,13 +192,13 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.PathName.StartsWith(oldPath))
+                if (p.PathName.StartsWith(PathHelper.FormatFolderPath(oldPath)))
                 {
                     p.Replace(oldPath, newPath);
                 }
-                else if (p.PathName.Equals(oldPath))
+                else if (p.PathName.Equals(PathHelper.FormatFolderPath(oldPath)))
                 {
-                    p.PathName = newPath;
+                    p.PathName = PathHelper.FormatFolderPath(newPath);
                 }
                 _lastUpdatedDate = updated;
             }
@@ -206,7 +208,7 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.PathName.ToLower().Equals(path.ToLower()))
+                if (p.PathName.Equals(PathHelper.FormatFolderPath(path)))
                 {
                     if (p.IsDeleted)
                     {
@@ -227,7 +229,7 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.PathName.ToLower().Equals(path.PathName.ToLower()))
+                if (p.PathName.Equals(PathHelper.FormatFolderPath(path.PathName)))
                 {
                     if (p.IsDeleted)
                     {
@@ -259,7 +261,7 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in _pathList)
             {
-                if ((p.PathName.ToLower()).Equals(path.ToLower()))
+                if (p.PathName.Equals(PathHelper.FormatFolderPath(path)))
                 {
                     return true;
                 }
@@ -272,7 +274,7 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in _pathList)
             {
-                if ((p.PathName.ToLower()).Equals(path.ToLower()))
+                if (p.PathName.Equals(PathHelper.FormatFolderPath(path)))
                 {
                     if (p.IsDeleted)
                     {
@@ -293,9 +295,9 @@ namespace Syncless.Tagging
             string logicalid = TaggingHelper.GetLogicalID(path);
             foreach (TaggedPath p in _pathList)
             {
-                if (path.StartsWith(p.PathName + "\\"))
+                if (PathHelper.FormatFolderPath(path).StartsWith(p.PathName + "\\"))
                 {
-                    if (!path.Equals(p.PathName))
+                    if (!PathHelper.FormatFolderPath(path).Equals(p.PathName))
                     {
                         string[] pTokens = TaggingHelper.TrimEnd(p.PathName.Split('\\'));
                         int trailingIndex = TaggingHelper.Match(pathTokens, pTokens);
@@ -346,7 +348,7 @@ namespace Syncless.Tagging
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (p.PathName.Equals(path))
+                if (p.PathName.Equals(PathHelper.FormatFolderPath(path)))
                 {
                     if (filtered && p.IsDeleted)
                     {
@@ -361,6 +363,38 @@ namespace Syncless.Tagging
         public TaggedPath FindPath(string path)
         {
             return FindPath(path, true);
+        }
+
+        public List<string> FindAncestors(string path)
+        {
+            List<string> ancestors = new List<string>();
+            foreach (TaggedPath p in _pathList)
+            {
+                if (PathHelper.FormatFolderPath(path).StartsWith(p.PathName))
+                {
+                    if (!PathHelper.FormatFolderPath(path).Equals(p.PathName))
+                    {
+                        ancestors.Add(p.PathName);
+                    }
+                }
+            }
+            return ancestors;
+        }
+
+        public List<string> FindDescendants(string path)
+        {
+            List<string> descendants = new List<string>();
+            foreach (TaggedPath p in _pathList)
+            {
+                if (p.PathName.StartsWith(PathHelper.FormatFolderPath(path)))
+                {
+                    if (!p.PathName.Equals(PathHelper.FormatFolderPath(path)))
+                    {
+                        descendants.Add(p.PathName);
+                    }
+                }
+            }
+            return descendants;
         }
 
         #region private implementations
@@ -386,8 +420,5 @@ namespace Syncless.Tagging
         #endregion
 
         #endregion
-
-
-
     }
 }

@@ -24,6 +24,11 @@ namespace Syncless.Tagging
             return tempPathTokens;
         }
 
+        internal static string FormatTagName(string tagname)
+        {
+            return tagname.ToLower();
+        }
+
         internal static string GetLogicalID(string path)
         {
             string[] tokens = path.Split('\\');
