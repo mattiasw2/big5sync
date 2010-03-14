@@ -261,9 +261,9 @@ namespace Syncless.Tagging
         {
             foreach (Tag tag in _tagList)
             {
-                if (tag.Contains(oldpath))
+                if (tag.ContainsParent(oldpath))
                 {
-                    if (!tag.Contains(newpath))
+                    if (!tag.ContainsParent(newpath))
                     {
                         CurrentTime current = new CurrentTime();
                         tag.RenamePath(oldpath, newpath, current.CurrentTimeLong);
