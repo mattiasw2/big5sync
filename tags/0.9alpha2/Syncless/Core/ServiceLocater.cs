@@ -1,0 +1,51 @@
+﻿using System;
+using Syncless.Core.Exceptions;
+using Syncless.Helper;
+using Syncless.Logging;
+
+namespace Syncless.Core
+{
+    public class ServiceLocator
+    {
+        public const string USER_LOG = "user";
+        public const string DEBUG_LOG = "debug";
+
+        public static IUIControllerInterface GUI{
+            get { 
+                return SystemLogicLayer.Instance; 
+                //return null;
+            }
+        } // SystemLogicLayer.Instance;
+        public static IMonitorControllerInterface MonitorI
+        {
+            get { 
+                return SystemLogicLayer.Instance;
+                //return null;
+            }
+        }
+        
+        public static ICommandLineControllerInterface CommandLine
+        {
+            get { return SystemLogicLayer.Instance; }
+        }
+                
+        public static Logger Getlogger(string type)
+        {
+            if (type.Equals(USER_LOG))
+            {
+                SystemLogicLayer sll = SystemLogicLayer.Instance;
+                return sll.GetLogger(USER_LOG);
+            }
+            else if (type.Equals(DEBUG_LOG))
+            {
+                SystemLogicLayer sll = SystemLogicLayer.Instance;
+                return sll.GetLogger(DEBUG_LOG);
+            }
+            else
+            {
+                throw new LoggerNotFoundException(ErrorMessage.LOGGER_NOT_FOUND);
+            }
+        }
+        
+    }
+}
