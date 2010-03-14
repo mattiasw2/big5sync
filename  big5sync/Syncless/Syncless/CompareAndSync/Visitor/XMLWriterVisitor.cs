@@ -27,6 +27,7 @@ namespace Syncless.CompareAndSync.Visitor
         private const string XPATH_EXPR = "/meta-data";
         private const string LAST_MODIFIED = "/last_modified";
         private const int FIRST_POSITION = 0;
+        private static bool CHECK_XML_UPDATE = false;
         private static readonly object syncLock = new object();
         private string[] pathList = null;
 
@@ -349,7 +350,10 @@ namespace Syncless.CompareAndSync.Visitor
                     HandleUnchangedOrPropagatedFolder(xmlDoc, folder, counter, currentPath);
                     break;
             }
-            xmlDoc.Save(xmlPath);
+            if (!CHECK_XML_UPDATE)
+                xmlDoc.Save(xmlPath);
+            else
+                CHECK_XML_UPDATE = false;
         }
 
 
@@ -396,6 +400,7 @@ namespace Syncless.CompareAndSync.Visitor
                 XmlNode parentXmlFolderNode = parentXmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
                 parentXmlFolderNode.FirstChild.InnerText = folder.NewName;
                 parentXmlDoc.Save(Path.Combine(currentPath, METADATAPATH));
+                CHECK_XML_UPDATE = true;
             }
         }
 
