@@ -257,6 +257,18 @@ namespace Syncless.Tagging
             _lastUpdatedDate = TaggingHelper.GetCurrentTime();
         }
 
+        public bool ContainsParent(string path)
+        {
+            foreach (TaggedPath p in _pathList)
+            {
+                if (PathHelper.FormatFolderPath(p.PathName).StartsWith(PathHelper.FormatFolderPath(path)))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public bool ContainsIgnoreDeleted(string path)
         {
             foreach (TaggedPath p in _pathList)
