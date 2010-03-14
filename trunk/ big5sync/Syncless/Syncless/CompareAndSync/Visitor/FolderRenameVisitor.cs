@@ -31,6 +31,22 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void DetectFolderRename(FolderCompareObject folder, string[] currentPaths)
         {
+            //Check that there is exactly one delete
+            List<int> deletePos = new List<int>();
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                if (folder.ChangeType[i] == MetaChangeType.Delete)
+                    deletePos.Add(i);
+            }
+
+            if (deletePos.Count != 1)
+            {
+                foreach (int i in deletePos)
+                    folder.ChangeType[i] = null;
+                return;
+            }
+
+
             //1. If there exists a folder for which meta exists is true and exists is false, it is (aka changeType.delete)
             //highly probable that it is a folder rename
             //2. We check all folders which has the same meta name but different name as the non-existent folder
@@ -55,7 +71,10 @@ namespace Syncless.CompareAndSync.Visitor
                         }
 
                         if (counter != 1)
+                        {
+                            folder.ChangeType[i] = null;                         
                             return;
+                        }
 
                         MergeRenamedFolder(folder, f, i);
                     }
