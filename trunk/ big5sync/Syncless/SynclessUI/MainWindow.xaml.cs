@@ -129,6 +129,26 @@ namespace SynclessUI
             KeyGesture kg5 = new KeyGesture(Key.E, ModifierKeys.Control);
             InputBinding ib5 = new InputBinding(EjectCommand, kg5);
             this.InputBindings.Add(ib5);
+
+            // Options Command
+            RoutedCommand OptionsCommand = new RoutedCommand();
+
+            CommandBinding cb6 = new CommandBinding(OptionsCommand, OptionsCommandExecute, OptionsCommandCanExecute);
+            this.CommandBindings.Add(cb6);
+
+            KeyGesture kg6 = new KeyGesture(Key.O, ModifierKeys.Control);
+            InputBinding ib6 = new InputBinding(OptionsCommand, kg6);
+            this.InputBindings.Add(ib6);
+
+            // Minimize Command
+            RoutedCommand MinimizeCommand = new RoutedCommand();
+
+            CommandBinding cb7 = new CommandBinding(MinimizeCommand, MinimizeCommandExecute, MinimizeCommandCanExecute);
+            this.CommandBindings.Add(cb7);
+
+            KeyGesture kg7 = new KeyGesture(Key.M, ModifierKeys.Control);
+            InputBinding ib7 = new InputBinding(MinimizeCommand, kg7);
+            this.InputBindings.Add(ib7);
         }
 
         private void CreateTagCommandExecute(object sender, ExecutedRoutedEventArgs e)
@@ -267,6 +287,32 @@ namespace SynclessUI
         }
 
         private void EjectCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+            e.Handled = true;
+        }
+
+        private void OptionsCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            e.Handled = true;
+            //Actual Code
+            DisplayOptionsWindow();
+        }
+
+        private void OptionsCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+            e.Handled = true;
+        }
+
+        private void MinimizeCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            e.Handled = true;
+            //Actual Code
+            MinimizeWindow();
+        }
+
+        private void MinimizeCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;
@@ -420,6 +466,11 @@ namespace SynclessUI
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BtnMin_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            MinimizeWindow();
+        }
+
+        private void MinimizeWindow()
         {
             this.WindowState = WindowState.Minimized;
         }
@@ -830,6 +881,10 @@ namespace SynclessUI
 
         private void BtnOptions_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            DisplayOptionsWindow();
+        }
+
+        private void DisplayOptionsWindow() {
             OptionsWindow ow = new OptionsWindow();
             ow.ShowDialog();
         }
