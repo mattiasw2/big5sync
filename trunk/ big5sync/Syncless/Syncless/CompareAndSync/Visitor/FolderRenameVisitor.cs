@@ -73,7 +73,7 @@ namespace Syncless.CompareAndSync.Visitor
             FileCompareObject actualFileObj = null;
             FileCompareObject renamedFileObj = null;
 
-            actualFolder.NewNames[pos] = renamedFolder.Name;
+            actualFolder.NewName = renamedFolder.Name;
             actualFolder.ChangeType[pos] = MetaChangeType.Rename;
 
             foreach (string name in renamedFolderContents)
@@ -89,7 +89,6 @@ namespace Syncless.CompareAndSync.Visitor
                         actualFldrObj.Exists[pos] = renamedFolder.Exists[pos];
                         actualFldrObj.MetaCreationTime[pos] = renamedFolder.MetaCreationTime[pos];
                         actualFldrObj.MetaExists[pos] = renamedFolder.MetaExists[pos];
-                        //actualFldrObj.MetaName[pos] = renamedFolder.MetaName[pos];
                         MergeRenamedFolder(actualFldrObj, renamedFolderObj, pos);
                     }
                     else
@@ -115,7 +114,7 @@ namespace Syncless.CompareAndSync.Visitor
                 }
             }
 
-            actualFolder.NewNames[pos] = renamedFolder.Name;
+            actualFolder.UpdateRename(pos);
             actualFolder.ChangeType[pos] = MetaChangeType.Rename;
             renamedFolder.Contents = new Dictionary<string, BaseCompareObject>();
             renamedFolder.Invalid = true;

@@ -18,7 +18,7 @@ namespace Syncless.CompareAndSync.CompareObject
         private long[] _metaLength, _metaLastWriteTime;
 
         public FileCompareObject(string name, int numOfPaths, FolderCompareObject parent)
-            : base (name, numOfPaths, parent)
+            : base(name, numOfPaths, parent)
         {
             _hash = new string[numOfPaths];
             _length = new long[numOfPaths];
@@ -65,10 +65,5 @@ namespace Syncless.CompareAndSync.CompareObject
             set { _metaLastWriteTime = value; }
         }
 
-        public override string GetFullParentPath(int index)
-        {
-            Debug.Assert(Parent != null);
-            return Path.Combine(Parent.GetFullParentPath(index), string.IsNullOrEmpty(Parent.NewNames[index]) ? Parent.Name : Parent.NewNames[index]);
-        }
     }
 }

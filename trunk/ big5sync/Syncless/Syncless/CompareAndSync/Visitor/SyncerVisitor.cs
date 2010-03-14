@@ -77,9 +77,9 @@ namespace Syncless.CompareAndSync.Visitor
                     case MetaChangeType.NoChange:
                         CreateFolder(folder, currentPaths, maxPriorityPos);
                         break;
-                    //case MetaChangeType.Rename:
-                    //    MoveFolder(folder, currentPaths, maxPriorityPos);
-                    //    break;
+                    case MetaChangeType.Rename:
+                        MoveFolder(folder, currentPaths, maxPriorityPos);
+                        break;
                 }
             }
         }
@@ -95,14 +95,8 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void CopyFile(FileCompareObject fco, string[] currentPaths, int srcFilePos)
         {
-            /*
-            //Probable folder rename
-            if (fco.Parent.FinalState[srcFilePos] == FinalState.Renamed)
-            {
-                currentPaths[srcFilePos] = fco.Parent.GetFullParentPath(srcFilePos);
-            }*/
+            string src = Path.Combine(fco.GetSmartParentPath(srcFilePos), fco.Name);
 
-            string src = Path.Combine(currentPaths[srcFilePos], fco.Name);
             bool fileExists = false;
             string destFile = null;
 
@@ -114,11 +108,9 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            //if (fco.Parent.FinalState[srcFilePos] != FinalState.Renamed)
-                                destFile = Path.Combine(currentPaths[i], fco.Name);
-                            //else
-                            //    destFile = fco.GetFullParentPath(i);
-                            
+                            //destFile = Path.Combine(currentPaths[i], fco.Name);
+
+                            destFile = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
                             fileExists = File.Exists(destFile);
 
                             if (fileExists)
@@ -170,7 +162,7 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            destFile = Path.Combine(currentPaths[i], fco.Name);
+                            destFile = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
 
                             if (_syncConfig.ArchiveLimit >= 0)
                                 CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
@@ -213,12 +205,12 @@ namespace Syncless.CompareAndSync.Visitor
                         {
                             if (File.Exists(Path.Combine(currentPaths[i], fco.Name)))
                             {
-                                CommonMethods.MoveFile(Path.Combine(currentPaths[i], fco.Name), Path.Combine(currentPaths[i], fco.NewName));
+                                CommonMethods.MoveFile(Path.Combine(fco.GetSmartParentPath(i), fco.Name), Path.Combine(fco.GetSmartParentPath(i), fco.NewName));
                                 fco.FinalState[i] = FinalState.Renamed;
                             }
                             else
                             {
-                                CommonMethods.CopyFile(Path.Combine(currentPaths[srcFilePos], fco.NewName), Path.Combine(currentPaths[i], fco.NewName), true);
+                                CommonMethods.CopyFile(Path.Combine(fco.GetSmartParentPath(srcFilePos), fco.NewName), Path.Combine(fco.GetSmartParentPath(i), fco.NewName), true);
                                 fco.FinalState[i] = FinalState.Created;
                             }
 
@@ -249,11 +241,11 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     if (folder.Priority[i] != folder.Priority[srcFilePos])
                     {
-                        if (!Directory.Exists(Path.Combine(currentPaths[i], folder.Name)))
+                        if (!Directory.Exists(Path.Combine(folder.GetSmartParentPath(i), folder.Name)))
                         {
                             try
                             {
-                                CommonMethods.CreateFolder(Path.Combine(currentPaths[i], folder.Name));
+                                CommonMethods.CreateFolder(Path.Combine(folder.GetSmartParentPath(i), folder.Name));
                                 folder.Exists[i] = true;
                                 folder.FinalState[i] = FinalState.Created;
                             }
@@ -285,7 +277,7 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            destFolder = Path.Combine(currentPaths[i], folder.Name);
+                            destFolder = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
 
                             if (_syncConfig.ArchiveLimit >= 0)
                                 CommonMethods.ArchiveFolder(destFolder, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
@@ -326,14 +318,16 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            if (Directory.Exists(Path.Combine(currentPaths[i], folder.Name)))
+                            string oldFolderName = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
+
+                            if (Directory.Exists(oldFolderName))
                             {
-                                CommonMethods.MoveFolder(Path.Combine(currentPaths[i], folder.Name), Path.Combine(currentPaths[i], folder.NewName));
+                                CommonMethods.MoveFolder(oldFolderName, Path.Combine(folder.GetSmartParentPath(i), folder.NewName));
                                 folder.FinalState[i] = FinalState.Renamed;
                             }
                             else
                             {
-                                CommonMethods.CopyDirectory(Path.Combine(currentPaths[srcFolderPos], folder.NewName), Path.Combine(currentPaths[i], folder.NewName));
+                                CommonMethods.CopyDirectory(Path.Combine(folder.GetSmartParentPath(srcFolderPos), folder.NewName), Path.Combine(folder.GetSmartParentPath(i), folder.NewName));
                                 folder.FinalState[i] = FinalState.Created;
                             }
 

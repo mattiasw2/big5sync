@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Syncless.CompareAndSync.Enum;
+using System.IO;
+using System.Diagnostics;
 
 namespace Syncless.CompareAndSync.CompareObject
 {
     public abstract class BaseCompareObject
     {
-        //Actual file
+        //Actual
         private string _name;
         private long[] _creationTime;
         private bool[] _exists;
 
-        //Meta file
+        //Meta
         private long[] _metaCreationTime;
         private bool[] _metaExists;
 
@@ -21,13 +23,10 @@ namespace Syncless.CompareAndSync.CompareObject
         private MetaChangeType?[] _changeType;
         private FinalState?[] _finalState;
         private int[] _priority;
-        //private List<string> _newNames;
-        private string _newName;
         private FolderCompareObject _parent;
         private ToDo? _todo;
         private bool _invalid;
-
-        //private bool? _ancestorRenamed;
+        private string _newName;
 
         protected BaseCompareObject(string name, int numOfPaths, FolderCompareObject parent)
         {
@@ -39,7 +38,6 @@ namespace Syncless.CompareAndSync.CompareObject
             _metaExists = new bool[numOfPaths];
             _changeType = new MetaChangeType?[numOfPaths];
             _priority = new int[numOfPaths];
-            //_newNames = new List<string>();
             _parent = parent;
             _invalid = false;
         }
@@ -91,19 +89,6 @@ namespace Syncless.CompareAndSync.CompareObject
             set { _priority = value; }
         }
 
-        /*
-        public List<string> NewNames
-        {
-            get { return _newNames; }
-            set { _newNames = value; }
-        }*/
-
-        public string NewName
-        {
-            get { return _newName; }
-            set { _newName = value; }
-        }
-
         public FolderCompareObject Parent
         {
             get { return _parent; }
@@ -122,23 +107,30 @@ namespace Syncless.CompareAndSync.CompareObject
             set { _invalid = value; }
         }
 
-        /*
-        public bool? AncestorOrItselfRenamed
+        public string NewName
         {
-            get
+            get { return _newName; }
+            set { _newName = value; }
+        }
+
+        public string GetSmartParentPath(int index)
+        {
+            if (Parent == null)
+                return "ROOT"; //Will throw exception in future
+
+            RootCompareObject rco = null;
+            if ((rco = Parent as RootCompareObject) != null)
+                return rco.Paths[index];
+            else
             {
-                if (_ancestorRenamed.HasValue)
-                    return _ancestorRenamed;
+                if (Parent.ChangeType[index] == MetaChangeType.Rename)
+                    return Path.Combine(Parent.GetSmartParentPath(index), Parent.NewName);
                 else
-                    if (this is RootCompareObject)
-                        return false;
-                    else
-                        return _parent.AncestorOrItselfRenamed;
+                    return Path.Combine(Parent.GetSmartParentPath(index), Parent.FinalState[index] == Syncless.CompareAndSync.Enum.FinalState.Renamed ? Parent.NewName : Parent.Name);
             }
-            set { _ancestorRenamed = value; }
-        }*/
+        }
 
-        public abstract string GetFullParentPath(int index);
-
+        //public abstract string GetSmartParentPath(int index);
+        //public abstract string GetFullParentPath(int index);
     }
 }
