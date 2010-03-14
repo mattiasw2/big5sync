@@ -39,7 +39,7 @@ namespace Syncless.CompareAndSync
         {
             RootCompareObject rco = new RootCompareObject(request.Paths);
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters));
-            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
+            CompareObjectHelper.PreTraverseFolder(rco, new IgnoreMetaDataVisitor());
             CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor());
             CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config));
             return rco;
@@ -62,6 +62,10 @@ namespace Syncless.CompareAndSync
 
         public RootCompareObject Compare(ManualCompareRequest request)
         {
+            //TODO: Add config into ManualCompareRequest
+            //List<Filter> filters = request.Filters.ToList<Filter>();
+            //filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
+
             RootCompareObject rco = new RootCompareObject(request.Paths);
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters));
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
