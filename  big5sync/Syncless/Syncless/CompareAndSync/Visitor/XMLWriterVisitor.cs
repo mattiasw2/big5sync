@@ -330,9 +330,6 @@ namespace Syncless.CompareAndSync.Visitor
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
             CreateFileIfNotExist(currentPath);
 
-            string subFolderXml = Path.Combine(currentPath, folder.Name);
-            CreateFileIfNotExist(subFolderXml);
-
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(xmlPath);
             FinalState?[] finalStateList = folder.FinalState;
@@ -340,13 +337,13 @@ namespace Syncless.CompareAndSync.Visitor
             switch (changeType)
             {
                 case FinalState.Created:
-                    CreateFolderObject(xmlDoc, folder);
+                    CreateFolderObject(xmlDoc, folder , currentPath);
                     break;
                 case FinalState.Deleted:
                     DeleteFolderObject(xmlDoc, folder);
                     break;
                 case FinalState.Renamed:
-                    RenameFolderObject(xmlDoc, folder);
+                    RenameFolderObject(xmlDoc, folder , currentPath);
                     break;
                 case FinalState.Propagated:
                     HandleUnchangedOrPropagatedFolder(xmlDoc, folder, counter, currentPath);
@@ -356,7 +353,7 @@ namespace Syncless.CompareAndSync.Visitor
         }
 
 
-        private void CreateFolderObject(XmlDocument xmlDoc, FolderCompareObject folder)
+        private void CreateFolderObject(XmlDocument xmlDoc, FolderCompareObject folder , string currentPath)
         {
             DoFolderCleanUp(xmlDoc, folder.Name);
             XmlText nameText = xmlDoc.CreateTextNode(folder.Name);
@@ -366,17 +363,40 @@ namespace Syncless.CompareAndSync.Visitor
             nameElement.AppendChild(nameOfFolder);
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR);
             node.AppendChild(nameElement);
+
+            string subFolderXML = Path.Combine(currentPath, folder.Name);
+            CreateFileIfNotExist(subFolderXML);
         }
 
-        private void RenameFolderObject(XmlDocument xmlDoc, FolderCompareObject folder)
+        private void RenameFolderObject(XmlDocument xmlDoc, FolderCompareObject folder, string currentPath)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
-            if (node == null)
+            if (Directory.Exists(Path.Combine(currentPath, folder.Name)))
             {
-                CreateFolderObject(xmlDoc, folder);
-                return;
+                XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
+                if (node == null)
+                {
+                    CreateFolderObject(xmlDoc, folder, currentPath);
+                    return;
+                }
+
+                node.FirstChild.InnerText = folder.NewName;
             }
-            node.FirstChild.InnerText = folder.NewName;
+            else
+            {
+                XmlDocument newXmlDoc = new XmlDocument();
+                string editOldXML = Path.Combine(Path.Combine(currentPath, folder.NewName), METADATAPATH);
+                newXmlDoc.Load(editOldXML); //rename the sub directory
+                XmlNode xmlNameNode = newXmlDoc.SelectSingleNode(XPATH_EXPR + "/name");
+                xmlNameNode.InnerText = folder.NewName;
+                newXmlDoc.Save(editOldXML); // rename the parent directory
+
+                string parentXML = Path.Combine(currentPath, METADATAPATH);
+                XmlDocument parentXmlDoc = new XmlDocument();
+                parentXmlDoc.Load(parentXML);
+                XmlNode parentXmlFolderNode = parentXmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
+                parentXmlFolderNode.FirstChild.InnerText = folder.NewName;
+                parentXmlDoc.Save(Path.Combine(currentPath, METADATAPATH));
+            }
         }
 
         private void DeleteFolderObject(XmlDocument xmlDoc, FolderCompareObject folder)
@@ -397,13 +417,13 @@ namespace Syncless.CompareAndSync.Visitor
                 bool folderExist = folder.Exists[position];
                 if (folderExist == true) //UPDATE
                 {
-                    CreateFolderObject(xmlDoc, folder);
+                    CreateFolderObject(xmlDoc, folder , folderPath);
                 }
             }
             else                 //DELETE OR RENAME
             {
                 if (folder.NewName != null)
-                    RenameFolderObject(xmlDoc, folder);
+                    RenameFolderObject(xmlDoc, folder , folderPath);
                 else
                     DeleteFolderObject(xmlDoc, folder);
             }
