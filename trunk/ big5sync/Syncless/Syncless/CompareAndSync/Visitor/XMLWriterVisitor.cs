@@ -29,7 +29,9 @@ namespace Syncless.CompareAndSync.Visitor
         private const int FIRST_POSITION = 0;
         private static bool CHECK_XML_UPDATE = false;
         private static readonly object syncLock = new object();
-        private string[] pathList = null;
+        private string[] pathList ;
+        private List<string> newNameList = new List<string>();
+        private List<string> oldNameList = new List<string>();
 
         public void Visit(FileCompareObject file, string[] currentPath)
         {
@@ -82,7 +84,16 @@ namespace Syncless.CompareAndSync.Visitor
         private void ProcessMetaChangeType(string currentPath, FileCompareObject file, int counter)
         {
 
-            string xmlPath = Path.Combine(currentPath, METADATAPATH);
+            int flag = CheckForRename(file.Parent.Name);
+            string newName = "";
+            string xmlPath = "";
+            if (flag != -1)
+            {
+                newName = newNameList[flag];
+                currentPath = Swap(currentPath, newName , file.Parent.Name);
+            }
+
+            xmlPath = Path.Combine(currentPath, METADATAPATH);
             CreateFileIfNotExist(currentPath);
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(xmlPath);
@@ -249,6 +260,21 @@ namespace Syncless.CompareAndSync.Visitor
             node.ParentNode.RemoveChild(node);
         }
 
+        private int CheckForRename(string name)
+        {
+            for (int i = 0; i < oldNameList.Count; i++)
+            {
+                if (oldNameList[i].Equals(name))
+                    return i;
+            }
+            return -1;
+        }
+
+        private string Swap(string name, string newName , string oldName)
+        {
+            return name.Replace(oldName, newName);
+        }
+
         private int GetPropagated(FileCompareObject file)
         {
             FinalState?[] states = file.FinalState;
@@ -400,6 +426,8 @@ namespace Syncless.CompareAndSync.Visitor
                 XmlNode parentXmlFolderNode = parentXmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
                 parentXmlFolderNode.FirstChild.InnerText = folder.NewName;
                 parentXmlDoc.Save(Path.Combine(currentPath, METADATAPATH));
+                newNameList.Add(folder.NewName);
+                oldNameList.Add(folder.Name);
                 CHECK_XML_UPDATE = true;
             }
         }
