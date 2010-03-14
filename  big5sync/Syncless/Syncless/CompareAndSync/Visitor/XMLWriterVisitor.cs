@@ -376,7 +376,6 @@ namespace Syncless.CompareAndSync.Visitor
                 CreateFolderObject(xmlDoc, folder);
                 return;
             }
-
             node.FirstChild.InnerText = folder.NewName;
         }
 

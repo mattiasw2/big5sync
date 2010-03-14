@@ -19,10 +19,5 @@ namespace Syncless.CompareAndSync.CompareObject
         {
             get { return _paths; }
         }
-
-        public override string GetFullParentPath(int index)
-        {
-            return null; //May change to return root?
-        }
     }
 }

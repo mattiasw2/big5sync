@@ -4,23 +4,22 @@ using System.Linq;
 using System.Text;
 using Syncless.CompareAndSync.Enum;
 using System.IO;
+using System.Diagnostics;
 
 namespace Syncless.CompareAndSync.CompareObject
 {
     public class FolderCompareObject : BaseCompareObject
     {
         private Dictionary<string, BaseCompareObject> _contents;
-        //private List<string> _possibleNewNames;
         private bool _dirty;
         private string _metaName;
-        private string[] _newNames;
+        private bool[] _useNewName;
 
         public FolderCompareObject(string name, int numOfPaths, FolderCompareObject parent)
             : base(name, numOfPaths, parent)
         {
             _contents = new Dictionary<string, BaseCompareObject>(StringComparer.OrdinalIgnoreCase);
-            //_possibleNewNames = new List<string>();
-            _newNames = new string[numOfPaths];
+            _useNewName = new bool[numOfPaths];
         }
 
         public void AddChild(BaseCompareObject child)
@@ -131,19 +130,21 @@ namespace Syncless.CompareAndSync.CompareObject
             set { _contents = value; }
         }
 
-        public string[] NewNames
+        public bool DoRename(int index)
         {
-            get { return _newNames; }
-            set { _newNames = value; }
+            return _useNewName[index];
         }
 
-        public override string GetFullParentPath(int index)
+        public void UpdateRename(int posNewName)
         {
-            RootCompareObject root = null;
-            if ((root = Parent as RootCompareObject) != null)
-                return root.Paths[index];
-            else
-                return Path.Combine(Parent.GetFullParentPath(index), string.IsNullOrEmpty(Parent.NewNames[index]) ? Parent.Name : Parent.NewNames[index]);
+            for (int i = 0; i < _useNewName.Length; i++)
+            {
+                if (i != posNewName)
+                    _useNewName[i] = true;
+                else
+                    _useNewName[i] = false;
+            }
         }
+
     }
 }
