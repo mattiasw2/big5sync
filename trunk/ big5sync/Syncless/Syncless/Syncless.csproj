@@ -122,6 +122,7 @@
     <Compile Include="Filters\SynclessArchiveFilter.cs" />
     <Compile Include="Filters\SynclessConfigFilter.cs" />
     <Compile Include="Helper\Cleaner.cs" />
+    <Compile Include="Helper\CommonXmlHelper.cs" />
     <Compile Include="Helper\ErrorMessage.cs" />
     <Compile Include="Helper\PathHelper.cs" />
     <Compile Include="Logging\Logger.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Monitor\DTO\FolderChangeEvent.cs" />
     <Compile Include="Monitor\FileSystemEventProcessor.cs" />
     <Compile Include="Monitor\MonitorLayer.cs" />
+    <Compile Include="Profiling\Exceptions\ProfileLoadException.cs" />
     <Compile Include="Profiling\Exceptions\ProfileNameDifferentException.cs" />
     <Compile Include="Profiling\Profile.cs" />
     <Compile Include="Profiling\Exceptions\ProfileConflictException.cs" />
