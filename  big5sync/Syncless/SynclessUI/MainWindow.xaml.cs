@@ -149,6 +149,16 @@ namespace SynclessUI
             KeyGesture kg7 = new KeyGesture(Key.M, ModifierKeys.Control);
             InputBinding ib7 = new InputBinding(MinimizeCommand, kg7);
             this.InputBindings.Add(ib7);
+			
+            // Shortcuts Command
+            RoutedCommand ShortcutsCommand = new RoutedCommand();
+
+            CommandBinding cb8 = new CommandBinding(ShortcutsCommand, ShortcutsCommandExecute, ShortcutsCommandCanExecute);
+            this.CommandBindings.Add(cb8);
+
+            KeyGesture kg8 = new KeyGesture(Key.S, ModifierKeys.Control);
+            InputBinding ib8 = new InputBinding(ShortcutsCommand, kg8);
+            this.InputBindings.Add(ib8);
         }
 
         private void CreateTagCommandExecute(object sender, ExecutedRoutedEventArgs e)
@@ -317,6 +327,24 @@ namespace SynclessUI
             e.CanExecute = true;
             e.Handled = true;
         }
+		
+        private void ShortcutsCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            e.Handled = true;
+            //Actual Code
+			DisplayShortcutWindow();
+        }
+
+        private void ShortcutsCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+            e.Handled = true;
+        }
+		
+		private void DisplayShortcutWindow() {
+		    ShortcutsWindow sw = new ShortcutsWindow();
+			sw.ShowDialog();
+		}
 
         #endregion
 
@@ -944,6 +972,11 @@ namespace SynclessUI
 
                 MessageBox.Show(messageBoxText, caption, button, icon);
             }
+        }
+
+        private void BtnShortcuts_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+        	DisplayShortcutWindow();
         }
     }
 }

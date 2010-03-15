@@ -102,6 +102,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ShortcutsWindow.xaml.cs">
+      <DependentUpon>ShortcutsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PreviewSyncWindow.xaml.cs">
       <DependentUpon>PreviewSyncWindow.xaml</DependentUpon>
     </Compile>
@@ -163,6 +166,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ShortcutsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="PreviewSyncWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -203,6 +210,7 @@
     <Resource Include="Icons\explorer.ico" />
     <Resource Include="Icons\filter.ico" />
     <Resource Include="Icons\folder.ico" />
+    <Resource Include="Icons\kb.ico" />
     <Resource Include="Icons\minus-8.png" />
     <Resource Include="Icons\option.ico" />
     <Resource Include="Icons\plus-8.png" />
