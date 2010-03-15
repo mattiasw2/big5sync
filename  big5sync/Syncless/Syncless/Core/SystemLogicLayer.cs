@@ -66,7 +66,7 @@ namespace Syncless.Core
 
                     foreach (string path in convertedList)
                     {
-                        FileInfo info = new FileInfo(path);
+                        FileInfo info = new FileInfo(PathHelper.RemoveTrailingSlash(path));
                         string parent = info.Directory.FullName;
                         parentList.Add(parent);
                     }
@@ -88,7 +88,7 @@ namespace Syncless.Core
                     List<string> parentList = new List<string>();
                     foreach (string path in convertedList)
                     {
-                        FileInfo info = new FileInfo(path);
+                        FileInfo info = new FileInfo(PathHelper.RemoveTrailingSlash(path));
                         string parent = info.Directory.FullName;
                         parentList.Add(parent);
                     }
@@ -110,7 +110,7 @@ namespace Syncless.Core
                     List<string> parentList = new List<string>();
                     foreach (string path in convertedList)
                     {
-                        FileInfo info = new FileInfo(path);
+                        FileInfo info = new FileInfo(PathHelper.RemoveTrailingSlash(path));
                         string parent = info.Directory.FullName;
                         parentList.Add(parent);
                     }
@@ -164,6 +164,7 @@ namespace Syncless.Core
                 else if (fe.Event == EventChangeType.RENAMED)
                 {
                     string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
+                    string newLogicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.NewPath.FullName,false);
                     List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
                     if (convertedList.Count == 0)
                         return;
@@ -182,6 +183,7 @@ namespace Syncless.Core
                     SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
                     AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, fe.OldPath.Parent.FullName, parentList, true, AutoSyncRequestType.Rename, syncConfig);
                     CompareAndSyncController.Instance.Sync(request);
+                    TaggingLayer.Instance.RenameFolder(logicalAddress, newLogicalAddress);
                 }
             }
             catch (Exception e)
@@ -313,6 +315,7 @@ namespace Syncless.Core
                 try
                 {
                     Tag t = TaggingLayer.Instance.DeleteTag(tagname);
+                    SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                     return t != null;
                 }
                 catch (TagNotFoundException te)
@@ -339,6 +342,7 @@ namespace Syncless.Core
                 try
                 {
                     Tag t = TaggingLayer.Instance.CreateTag(tagname);
+                    SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                     return ConvertToTagView(t);
                 }
                 catch (TagAlreadyExistsException te)
@@ -389,6 +393,7 @@ namespace Syncless.Core
                     return null;
                 }               
                 MonitorTag(tag.TagName, tag.IsSeamless);
+                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return ConvertToTagView(tag);
             }
             catch (Exception e) // Handle Unexpected Exception
@@ -422,10 +427,11 @@ namespace Syncless.Core
                         catch (MonitorPathNotFoundException)
                         {
                             //do nothing
+                            //in case the path does not exist.
                         }
 
                     }
-
+                    SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                     return count;
                 }
                 catch (TagNotFoundException tnfe)
