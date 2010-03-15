@@ -158,6 +158,8 @@ namespace Syncless.CompareAndSync.Visitor
         {
             XmlDocument xmlDoc = new XmlDocument();
             currentPath = UpdateToRenamedFolder(file.Parent.Name, currentPath);
+            currentPath = RemoveOldFolderName(currentPath);
+
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
             CreateFileIfNotExist(currentPath);
             xmlDoc.Load(xmlPath);
@@ -199,6 +201,8 @@ namespace Syncless.CompareAndSync.Visitor
         {
             XmlDocument xmlDoc = new XmlDocument();
             currentPath = UpdateToRenamedFolder(file.Parent.Name, currentPath);
+            currentPath = RemoveOldFolderName(currentPath);
+
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
             CreateFileIfNotExist(currentPath);
             xmlDoc.Load(xmlPath);
@@ -244,6 +248,8 @@ namespace Syncless.CompareAndSync.Visitor
         {
             XmlDocument xmlDoc = new XmlDocument();
             currentPath = UpdateToRenamedFolder(file.Parent.Name, currentPath);
+            currentPath = RemoveOldFolderName(currentPath);
+
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
             CreateFileIfNotExist(currentPath);
 
@@ -285,6 +291,22 @@ namespace Syncless.CompareAndSync.Visitor
                 return currentPath;
             }
 
+        }
+
+        private string RemoveOldFolderName(string currentPath)
+        {
+            string [] splitUpPaths = currentPath.Split('\\');
+            string parentFolderName = splitUpPaths[splitUpPaths.Length - 1];
+            int flag = CheckForRename(parentFolderName);
+            if (flag == -1)
+            {
+                return currentPath;
+            }
+            else
+            {
+                currentPath = currentPath.Replace(parentFolderName , newNameList[flag]);
+                return currentPath;
+            }
         }
 
         private int CheckForRename(string name)
@@ -346,6 +368,8 @@ namespace Syncless.CompareAndSync.Visitor
         private void HandleUnchangedOrPropagatedFile(FileCompareObject file, int position, string filePath)
         {
             filePath = UpdateToRenamedFolder(file.Parent.Name, filePath);
+            filePath = RemoveOldFolderName(filePath);
+
             string name = Path.Combine(filePath, file.Name);
             if (File.Exists(name)) //CREATE OR UPDATED
             {
