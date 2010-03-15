@@ -286,16 +286,9 @@ namespace Syncless.Core
                 {
                     return false;
                 }
-                try
-                {
-                    bool result = StartManualSync(tag);
-                    return result;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-                return false;
+
+                bool result = StartManualSync(tag);
+                return result;
             }
             catch (Exception e) // Handle Unexpected Exception
             {
@@ -312,16 +305,15 @@ namespace Syncless.Core
         {
             try
             {
-                try
-                {
-                    Tag t = TaggingLayer.Instance.DeleteTag(tagname);
-                    //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
-                    return t != null;
-                }
-                catch (TagNotFoundException te)
-                {
-                    throw te;
-                }
+                Tag t = TaggingLayer.Instance.DeleteTag(tagname);
+                //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                return t != null;
+
+
+            }
+            catch (TagNotFoundException te)
+            {
+                throw te;
             }
             catch (Exception e)// Handle Unexpected Exception
             {
@@ -464,6 +456,10 @@ namespace Syncless.Core
                 //MonitorTag(tag, tag.IsSeamless);
 
                 return true;
+            }
+            catch (TagNotFoundException tge)
+            {
+                throw tge;
             }
             catch (Exception e)
             {
@@ -668,18 +664,14 @@ namespace Syncless.Core
         /// <returns>true if succeed</returns>
         public bool UpdateFilterList(string tagname, List<Filter> filterlist)
         {
-
             try
             {
-                try
-                {
-                    TaggingLayer.Instance.UpdateFilter(tagname, filterlist);
-                    return true;
-                }
-                catch (TagNotFoundException tnfe)
-                {
-                    throw tnfe;
-                }
+                TaggingLayer.Instance.UpdateFilter(tagname, filterlist);
+                return true;
+            }
+            catch (TagNotFoundException tnfe)
+            {
+                throw tnfe;
             }
             catch (Exception e)
             {
@@ -698,7 +690,6 @@ namespace Syncless.Core
             {
                 Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
                 return t.Filters;
-
             }
             catch (Exception e)
             {
@@ -715,16 +706,13 @@ namespace Syncless.Core
         {
             try
             {
-                try
-                {
-                    MonitorLayer.Instance.UnMonitorDrive(drive.Name);
-                    ProfilingLayer.Instance.RemoveDrive(drive);
-                    return true;
-                }
-                catch (DriveNotFoundException dnfe)
-                {
-                    return false;
-                }
+                MonitorLayer.Instance.UnMonitorDrive(drive.Name);
+                ProfilingLayer.Instance.RemoveDrive(drive);
+                return true;
+            }
+            catch (DriveNotFoundException)
+            {
+                return false;
             }
             catch (Exception e)
             {
@@ -765,7 +753,7 @@ namespace Syncless.Core
                     }
                     catch (MonitorPathNotFoundException e)
                     {
-                        Console.WriteLine(e.Message);
+                        
                     }
                 }
             }
@@ -797,7 +785,7 @@ namespace Syncless.Core
                     //MonitorTag(t, t.IsSeamless);
                 }
             }
-            Console.WriteLine("Bye");
+            
             DeviceWatcher.Instance.ToString(); //Starts watching for Drive Change
             return true;
         }
