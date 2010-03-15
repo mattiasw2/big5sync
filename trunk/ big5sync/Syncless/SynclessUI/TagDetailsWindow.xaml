@@ -208,21 +208,21 @@
 	                		<RowDefinition Height="*"/>
 	                	</Grid.RowDefinitions>
 	                    <Label Content="List of Filters" FontFamily="Century Gothic" FontSize="13.333" Foreground="#FFEEEEEE" Grid.RowSpan="3" Grid.ColumnSpan="2"/>
-	                    <ListBox x:Name="ListFilters" Margin="5" Grid.Row="1" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White" MaxHeight="155" Grid.ColumnSpan="2" SelectionChanged="ListFilters_SelectionChanged" Style="{DynamicResource ListTaggedPathStyle}"/>
+	                    <ListBox x:Name="ListFilters" Margin="5" Grid.Row="1" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White" MaxHeight="155" Grid.ColumnSpan="2" SelectionChanged="ListFilters_SelectionChanged" Style="{DynamicResource ListTaggedPathStyle}" Height="155" VerticalAlignment="Top"/>
 	                	<StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="-2,0,5,0">
-	                		<Button x:Name="BtnAddFilter" Width="16" Height="16" Margin="0,0,2,0" Click="BtnAddFilter_Click">
+	                		<Button x:Name="BtnAddFilter" Width="16" Height="16" Margin="0,0,2,0" Click="BtnAddFilter_Click" ToolTip="Add New Filter">
 	                			<Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="Icons/plus-8.png" Stretch="None"/>
 	                		</Button>
-	                		<Button x:Name="BtnRemoveFilter" Width="16" Height="16" Click="BtnRemoveFilter_Click">
+	                		<Button x:Name="BtnRemoveFilter" Width="16" Height="16" Click="BtnRemoveFilter_Click" ToolTip="Remove Selected Filter">
 	                			<Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="Icons/minus-8.png" Stretch="None" />
 	                		</Button>
 	                	</StackPanel>
 	                </Grid>
 	            </TabItem>
-	            <TabItem x:Name="TabItemProperties" Header="Properties" Height="30" Style="{DynamicResource TabItemStyle}" Background="{DynamicResource TabButtonBackground}" Foreground="{DynamicResource TabButtonForeground}" GotFocus="TabItemProperties_GotFocus">
+	            <TabItem x:Name="TabItemProperties" Header="Properties" Height="30" Style="{DynamicResource TabItemStyle}" Background="{DynamicResource TabButtonBackground}" Foreground="{DynamicResource TabButtonForeground}" GotFocus="TabItemProperties_GotFocus" Visibility="Collapsed">
 	            	<Grid/>
 	            </TabItem>
-	            <TabItem x:Name="TabItemVersioning" Header="Versioning" Height="30" Style="{DynamicResource TabItemStyle}" Background="{DynamicResource TabButtonBackground}" Foreground="{DynamicResource TabButtonForeground}" GotFocus="TabItemVersioning_GotFocus">
+	            <TabItem x:Name="TabItemVersioning" Header="Versioning" Height="30" Style="{DynamicResource TabItemStyle}" Background="{DynamicResource TabButtonBackground}" Foreground="{DynamicResource TabButtonForeground}" GotFocus="TabItemVersioning_GotFocus" Visibility="Collapsed">
 	                <Grid/>
 	            </TabItem>
         	</TabControl>

@@ -217,7 +217,7 @@
     <Resource Include="Icons\logo.ico" />
     <Resource Include="Icons\max.ico" />
     <Resource Include="Icons\min.ico" />
-    <Resource Include="Icons\properties.ico" />
+    <Resource Include="Icons\details.ico" />
     <Resource Include="Icons\removetag.ico" />
     <Resource Include="Icons\tag.ico" />
     <Resource Include="Icons\taglist.ico" />

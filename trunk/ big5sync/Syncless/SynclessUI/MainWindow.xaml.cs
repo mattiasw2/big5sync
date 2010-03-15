@@ -333,7 +333,7 @@ namespace SynclessUI
         {
             e.Handled = true;
             //Actual Code
-			DisplayShortcutWindow();
+			DisplayShortcutsWindow();
         }
 
         private void ShortcutsCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -342,7 +342,7 @@ namespace SynclessUI
             e.Handled = true;
         }
 		
-		private void DisplayShortcutWindow() {
+		private void DisplayShortcutsWindow() {
 		    ShortcutsWindow sw = new ShortcutsWindow();
 			sw.ShowDialog();
 		}
@@ -977,7 +977,12 @@ namespace SynclessUI
 
         private void BtnShortcuts_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-        	DisplayShortcutWindow();
+        	DisplayShortcutsWindow();
+        }
+
+        private void LayoutRoot_DragOver(object sender, System.Windows.DragEventArgs e)
+        {
+        	MessageBox.Show("lol");
         }
     }
 }
