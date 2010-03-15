@@ -1,11 +1,26 @@
-#summary One-sentence summary of this page.
+#summary This page details the expected results when a user does an unusual combination of actions.
+#labels Featured
 
 = Introduction =
 
-Add your content here.
+Syncless will, as far as we can, never throw a synchronization conflict since that contradicts our vision of seamless synchronization. This page details the unusual combination of actions as well as how Syncless will handle each case. For all cases, please assume that at least 3 folders are tagged.
 
 
 = Details =
+
+== Manual Mode ==
+
+=== Renaming A Folder In One Of The Tagged Folders ===
+If a user renames a folder within one of the tagged folders, Syncless will propagate this folder rename to the other folders. Most of the commercial tools currently available will handle this as a "Delete" followed by a "Copy" event, which is infeasible if the folder being renamed has updates or contain large amount of files.
+
+=== Renaming A Folder In More Than One Of The Tagged Folders, And Adding Or Updating Files In It ===
+Similar to the above case, Syncless will propagate this folder rename across the other folders. At the same time, it is also able to merge the contents of these differently-named folders, and the end result will be all the tagged folders having the new folder name, as well as the most updated version of the files.
+
+=== Renaming A Folder In More Than One Of The Tagged Folders ===
+Assume the user has a "Music" folder in all the folders you have tagged "Media". If a user renames "Music" to "Songs" in one of these tagged folders and "Music" to "Mp3" in another of these folders, Syncless will handle this by propagating all 3 folders ("Media", "Music", "Songs") to all other folders tagged "Media".
+
+The reason for doing so is because it is in actual fact, a rename conflict, but more importantly, it is highly probable that the user wants to keep different things in them, and thus the conflicting renames.
+
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
