@@ -335,5 +335,20 @@ namespace Syncless.CompareAndSync
 
         #endregion
 
+        /// <summary>
+        /// Checks if all the give file system objects are the same type, that is, file or folder.
+        /// </summary>
+        /// <param name="paths"></param>
+        private static void CheckIfSameType(List<string> paths)
+        {
+            bool isFile = System.IO.File.Exists(paths[0]);
+
+            for (int i = 1; i < paths.Count; i++)
+            {
+                if (isFile != System.IO.File.Exists(paths[i]))
+                    throw new IncompatibleTypeException();
+
+            }
+        }
     }
 }

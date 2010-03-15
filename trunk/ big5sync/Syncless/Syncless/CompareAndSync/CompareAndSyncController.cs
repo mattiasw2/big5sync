@@ -31,23 +31,10 @@ namespace Syncless.CompareAndSync
         }
 
         /// <summary>
-        /// Checks if all the give file system objects are the same type, that is, file or folder.
-        /// </summary>
-        /// <param name="paths"></param>
-        private void CheckIfSameType(List<string> paths)
-        {
-            //bool isFolder  = Directory.Exists(;
-
-            foreach (string path in paths)
-            {
-            }
-        }
-
-        /// <summary>
         /// Temporary method to handle non-existent folders until we handle deletion of tagged folders
         /// </summary>
         /// <param name="paths"></param>
-        private void CreateRootIfNotExist(List<string> paths)
+        private void CreateRootIfNotExist(string[] paths)
         {
             foreach (string path in paths)
             {
@@ -65,8 +52,7 @@ namespace Syncless.CompareAndSync
         /// <returns></returns>
         public RootCompareObject SyncFolders(ManualSyncRequest request)
         {
-
-
+            CreateRootIfNotExist(request.Paths);
             RootCompareObject rco = new RootCompareObject(request.Paths);
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters));
             CompareObjectHelper.PreTraverseFolder(rco, new IgnoreMetaDataVisitor());
