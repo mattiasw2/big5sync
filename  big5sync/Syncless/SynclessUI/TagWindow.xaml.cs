@@ -139,23 +139,41 @@ namespace SynclessUI
                     {
                         if (proceedtotag)
                         {
-                            TagView tv1 = _main.gui.Tag(_tagname, new DirectoryInfo(_path));
-
-                            if (tv1 != null)
-                            {
-                                _main.InitializeTagList();
-                                _main.SelectTag(_tagname);
-                            }
-                            else
-                            {
-                                string messageBoxText = "Tag Error Occured. Please Try Again.";
-                                string caption = "Tag Error";
-                                MessageBoxButton button = MessageBoxButton.OK;
-                                MessageBoxImage icon = MessageBoxImage.Error;
-
-                                MessageBox.Show(messageBoxText, caption, button, icon);
-                            }
-                            this.Close();
+							TagView tv1 = null;
+							
+							try {
+                            	tv1 = _main.gui.Tag(_tagname, new DirectoryInfo(_path));
+								
+								if (tv1 != null)
+								{
+									_main.InitializeTagList();
+									_main.SelectTag(_tagname);
+                            		this.Close();
+								}
+								else
+								{
+									string messageBoxText = "Tag Error Occured. Please Try Again.";
+									string caption = "Tag Error";
+									MessageBoxButton button = MessageBoxButton.OK;
+									MessageBoxImage icon = MessageBoxImage.Error;
+	
+									MessageBox.Show(messageBoxText, caption, button, icon);
+								}
+							} catch(Syncless.Tagging.Exceptions.RecursiveDirectoryException) {
+								string messageBoxText = "Folder could not be tagged as it is a sub-folder of a folder already tagged.";
+								string caption = "Recursive Directory Error";
+								MessageBoxButton button = MessageBoxButton.OK;
+								MessageBoxImage icon = MessageBoxImage.Error;
+	
+								MessageBox.Show(messageBoxText, caption, button, icon);
+							} catch(Syncless.Tagging.Exceptions.PathAlreadyExistsException) {
+								string messageBoxText = "The path you tried to tag is already tagged.";
+								string caption = "Path Already Exists";
+								MessageBoxButton button = MessageBoxButton.OK;
+								MessageBoxImage icon = MessageBoxImage.Error;
+	
+								MessageBox.Show(messageBoxText, caption, button, icon);
+							}
                         }
                         else
                         {
