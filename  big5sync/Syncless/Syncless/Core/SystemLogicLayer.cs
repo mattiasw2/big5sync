@@ -147,8 +147,8 @@ namespace Syncless.Core
                     List<string> parentList = new List<string>();
                     foreach (string path in convertedList)
                     {
-                        FileInfo info = new FileInfo(path);
-                        string parent = info.Directory.FullName;
+                        DirectoryInfo info = new DirectoryInfo(path);
+                        string parent = info.Parent.FullName;
                         parentList.Add(parent);
                     }
                     List<Tag> tag = TaggingLayer.Instance.RetrieveParentTagByPath(logicalAddress);
@@ -171,8 +171,8 @@ namespace Syncless.Core
                     List<string> parentList = new List<string>();
                     foreach (string path in convertedList)
                     {
-                        FileInfo info = new FileInfo(path);
-                        string parent = info.Directory.FullName;
+                        DirectoryInfo info = new DirectoryInfo(path);
+                        string parent = info.Parent.FullName;
                         parentList.Add(parent);
                     }
                     List<Tag> tag = TaggingLayer.Instance.RetrieveParentTagByPath(logicalAddress);
@@ -315,7 +315,7 @@ namespace Syncless.Core
                 try
                 {
                     Tag t = TaggingLayer.Instance.DeleteTag(tagname);
-                    SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                    //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                     return t != null;
                 }
                 catch (TagNotFoundException te)
@@ -342,7 +342,7 @@ namespace Syncless.Core
                 try
                 {
                     Tag t = TaggingLayer.Instance.CreateTag(tagname);
-                    SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                    //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                     return ConvertToTagView(t);
                 }
                 catch (TagAlreadyExistsException te)
@@ -393,7 +393,7 @@ namespace Syncless.Core
                     return null;
                 }               
                 MonitorTag(tag.TagName, tag.IsSeamless);
-                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return ConvertToTagView(tag);
             }
             catch (Exception e) // Handle Unexpected Exception
@@ -431,7 +431,7 @@ namespace Syncless.Core
                         }
 
                     }
-                    SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                    //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                     return count;
                 }
                 catch (TagNotFoundException tnfe)
