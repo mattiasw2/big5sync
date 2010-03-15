@@ -9,8 +9,6 @@ namespace Syncless.Monitor
 {
     public class FileSystemEventProcessor
     {
-        private const int SLEEP_TIME = 1000;
-
         private static FileSystemEventProcessor _instance;
         public static FileSystemEventProcessor Instance
         {
@@ -123,7 +121,6 @@ namespace Syncless.Monitor
             switch (fse.EventType)
             {
                 case EventChangeType.CREATING:
-                    //Console.WriteLine("File Creating: " + fse.Path);
                     createList.Add(fse.Path);
                     break;
                 case EventChangeType.CREATED:
@@ -133,9 +130,6 @@ namespace Syncless.Monitor
                         if (path.ToLower().Equals(fse.Path.ToLower()))
                         {
                             createList.RemoveAt(i);
-                            //Console.WriteLine("File Created: " + fse.Path);
-                            //fileEvent = new FileChangeEvent(new FileInfo(fse.Path), EventChangeType.CREATED);
-                            //ServiceLocator.MonitorI.HandleFileChange(fileEvent);
                             processList.Add(fse);
                             break;
                         }
@@ -146,36 +140,22 @@ namespace Syncless.Monitor
                     {
                         if (path.ToLower().Equals(fse.Path.ToLower()))
                         {
-                            //Console.WriteLine("File Still Creating: " + fse.Path);
                             return;
                         }
                     }
-                    //Console.WriteLine("File Modified: " + fse.Path);
-                    //fileEvent = new FileChangeEvent(new FileInfo(fse.Path), EventChangeType.MODIFIED);
-                    //ServiceLocator.MonitorI.HandleFileChange(fileEvent);
                     bool addModified = true;
                     for (int i = 0; i < processList.Count; i++)
                     {
                         FileSystemEvent pEvent = processList[i];
                         if (pEvent.Path.ToLower().Equals(fse.Path.ToLower()))
                         {
-                            /*if (pEvent.FileSystemType == fse.FileSystemType)
-                            {
-                                addModified = false;
-                                break;
-                            }
-                            else if (pEvent.FileSystemType != FileSystemType.FOLDER && pEvent.EventType == EventChangeType.DELETED)
-                            {
-                                addModified = false;
-                                break;
-                            }*/
                             addModified = false;
                             break;
                         }
                         else if (pEvent.EventType == EventChangeType.RENAMED)
                         {
                             if (pEvent.OldPath.ToLower().Equals(fse.Path.ToLower()) && pEvent.FileSystemType == fse.FileSystemType)
-                            {// found renamed from event in processlist
+                            {
                                 addModified = false;
                                 break;
                             }
@@ -193,7 +173,6 @@ namespace Syncless.Monitor
                         string path = createList[i];
                         if (path.ToLower().Equals(fse.Path.ToLower()))
                         {
-                            //Console.WriteLine("File Deleted: " + fse.Path);
                             createList.RemoveAt(i);
                             addDeleted = false;
                             break;
@@ -204,18 +183,6 @@ namespace Syncless.Monitor
                         FileSystemEvent pEvent = processList[i];
                         if (pEvent.Path.ToLower().Equals(fse.Path.ToLower()))
                         {
-                            /*if (pEvent.FileSystemType == fse.FileSystemType)
-                            {
-                                processList.RemoveAt(i);
-                                if (pEvent.EventType == EventChangeType.CREATED || pEvent.EventType == EventChangeType.RENAMED)
-                                {
-                                    addDeleted = false;
-                                }
-                            }
-                            else if (pEvent.FileSystemType != FileSystemType.FOLDER && pEvent.EventType == EventChangeType.DELETED)
-                            {
-                                processList.RemoveAt(i);
-                            }*/
                             processList.RemoveAt(i);
                             if (pEvent.EventType == EventChangeType.CREATED || pEvent.EventType == EventChangeType.RENAMED)
                             {
@@ -227,9 +194,6 @@ namespace Syncless.Monitor
                     {
                         processList.Add(fse);
                     }
-                    //Console.WriteLine("File Deleted: " + fse.Path);
-                    //fileEvent = new FileChangeEvent(new FileInfo(fse.Path), EventChangeType.DELETED);
-                    //ServiceLocator.MonitorI.HandleFileChange(fileEvent);
                     break;
                 case EventChangeType.RENAMED:
                     bool hasCreating = false;
@@ -259,21 +223,6 @@ namespace Syncless.Monitor
                         FileSystemEvent pEvent = processList[i];
                         if (pEvent.Path.ToLower().Equals(fse.OldPath.ToLower()))
                         {
-                            /*if (pEvent.FileSystemType == fse.FileSystemType)
-                            {
-                                processList.RemoveAt(i);
-                                if (pEvent.EventType == EventChangeType.CREATED)
-                                {
-                                    addRenamed = false;
-                                    processList.Add(new FileSystemEvent(fse.Path, EventChangeType.CREATED, fse.FileSystemType));
-                                }
-                            }
-                            else if (pEvent.EventType == EventChangeType.RENAMED)
-                            {
-                                processList.RemoveAt(i);
-                                addRenamed = false;
-                                processList.Add(new FileSystemEvent(pEvent.OldPath, fse.Path, fse.FileSystemType));
-                            }*/
                             processList.RemoveAt(i);
                             if (pEvent.EventType == EventChangeType.CREATED)
                             {
@@ -296,9 +245,6 @@ namespace Syncless.Monitor
                         waitingList = new List<FileSystemEvent>(eventList);
                         eventList.Clear();
                     }
-                    //Console.WriteLine("File Renamed: " + fse.OldPath + " " + fse.Path);
-                    //fileEvent = new FileChangeEvent(new FileInfo(fse.OldPath), new FileInfo(fse.Path));
-                    //ServiceLocator.MonitorI.HandleFileChange(fileEvent);
                     break;
                 default:
                     break;
@@ -310,33 +256,15 @@ namespace Syncless.Monitor
             switch (fse.EventType)
             {
                 case EventChangeType.CREATED:
-                    //Console.WriteLine("Folder Created: " + fse.Path);
-                    //folderEvent = new FolderChangeEvent(new DirectoryInfo(fse.Path), EventChangeType.CREATED);
-                    //ServiceLocator.MonitorI.HandleFolderChange(folderEvent);
                     processList.Add(fse);
                     break;
                 case EventChangeType.DELETED:
-                    //Console.WriteLine("Folder Deleted: " + fse.Path);
-                    //folderEvent = new FolderChangeEvent(new DirectoryInfo(fse.Path), EventChangeType.DELETED);
-                    //ServiceLocator.MonitorI.HandleFolderChange(folderEvent);
                     bool addDeleted = true;
                     for (int i = 0; i < processList.Count; i++)
                     {
                         FileSystemEvent pEvent = processList[i];
                         if (pEvent.Path.ToLower().Equals(fse.Path.ToLower()))
                         {
-                            /*if (pEvent.FileSystemType == fse.FileSystemType)
-                            {
-                                processList.RemoveAt(i);
-                                if (pEvent.EventType == EventChangeType.CREATED || pEvent.EventType == EventChangeType.RENAMED)
-                                {
-                                    addDeleted = false;
-                                }
-                            }
-                            else if (pEvent.FileSystemType != FileSystemType.FILE && pEvent.EventType == EventChangeType.DELETED)
-                            {
-                                processList.RemoveAt(i);
-                            }*/
                             processList.RemoveAt(i);
                             if (pEvent.EventType == EventChangeType.CREATED || pEvent.EventType == EventChangeType.RENAMED)
                             {
@@ -350,29 +278,12 @@ namespace Syncless.Monitor
                     }
                     break;
                 case EventChangeType.RENAMED:
-                    //Console.WriteLine("Folder Renamed: " + fse.OldPath + " " + fse.Path);
-                    //folderEvent = new FolderChangeEvent(new DirectoryInfo(fse.OldPath), new DirectoryInfo(fse.Path));
-                    //ServiceLocator.MonitorI.HandleFolderChange(folderEvent);
                     bool addRenamed = true;
                     for (int i = 0; i < processList.Count; i++)
                     {
                         FileSystemEvent pEvent = processList[i];
                         if (pEvent.Path.ToLower().Equals(fse.OldPath.ToLower()))
                         {
-                            /*if (pEvent.FileSystemType == fse.FileSystemType)
-                            {
-                                processList.RemoveAt(i);
-                                if (pEvent.EventType == EventChangeType.CREATED)
-                                {
-                                    addRenamed = false;
-                                    processList.Add(new FileSystemEvent(fse.Path, EventChangeType.CREATED, fse.FileSystemType));
-                                }
-                                else if (pEvent.EventType == EventChangeType.RENAMED)
-                                {
-                                    addRenamed = false;
-                                    processList.Add(new FileSystemEvent(pEvent.OldPath, fse.Path, fse.FileSystemType));
-                                }
-                            }*/
                             processList.RemoveAt(i);
                             if (pEvent.EventType == EventChangeType.CREATED)
                             {
@@ -401,20 +312,15 @@ namespace Syncless.Monitor
             switch (fse.EventType)
             {
                 case EventChangeType.CREATED:
-                    //Console.WriteLine("Created File not exist! " + fse.Path);
                     processList.Add(fse);
                     break;
                 case EventChangeType.DELETED:
-                    //Console.WriteLine("File/Folder Deleted: " + fse.Path);
-                    //DeleteChangeEvent deleteEvent = new DeleteChangeEvent(new DirectoryInfo(fse.Path), new DirectoryInfo(fse.WatchPath));
-                    //ServiceLocator.MonitorI.HandleDeleteChange(deleteEvent);
                     bool addDeleted = true;
                     for (int i = 0; i < createList.Count; i++)
                     {
                         string path = createList[i];
                         if (path.ToLower().Equals(fse.Path.ToLower()))
                         {
-                            //Console.WriteLine("File Deleted: " + fse.Path);
                             createList.RemoveAt(i);
                             addDeleted = false;
                             break;

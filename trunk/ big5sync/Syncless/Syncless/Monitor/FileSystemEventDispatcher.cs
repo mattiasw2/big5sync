@@ -7,7 +7,7 @@ namespace Syncless.Monitor
 {
     public class FileSystemEventDispatcher
     {
-        private const int SLEEP_TIME = 2000;
+        private const int SLEEP_TIME = 1000;
 
         private static FileSystemEventDispatcher _instance;
         public static FileSystemEventDispatcher Instance
