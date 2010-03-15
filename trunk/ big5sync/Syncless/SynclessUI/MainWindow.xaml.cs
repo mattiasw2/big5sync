@@ -19,6 +19,7 @@ using SynclessUI.Helper;
 using System.Windows.Navigation;
 using System.Diagnostics;
 using System.Windows.Threading;
+using System.Windows.Media.Media3D;
 
 namespace SynclessUI
 {
@@ -553,7 +554,7 @@ namespace SynclessUI
 
         private void AutoMode()
         {
-            LblSyncMode.Content = "Auto";
+            LblSyncMode.Content = "Seamless";
             BtnPreview.Visibility = System.Windows.Visibility.Hidden;
             BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
         }
@@ -569,7 +570,7 @@ namespace SynclessUI
         {
             if (!gui.StartManualSync(_selectedTag))
             {
-                string messageBoxText = "' " + _selectedTag + " ' could not be synchronized.";
+                string messageBoxText = "'" + _selectedTag + "' could not be synchronized.";
                 string caption = "Synchronization Error";
                 MessageBoxButton button = MessageBoxButton.OK;
                 MessageBoxImage icon = MessageBoxImage.Error;
