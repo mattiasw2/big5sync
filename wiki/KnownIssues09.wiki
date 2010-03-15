@@ -1,0 +1,12 @@
+#summary This is a list of known issues grouped by category for V0.9.
+
+= Introduction =
+
+These are the current known issues with Syncless 0.9, and will be handled at a later version.
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
