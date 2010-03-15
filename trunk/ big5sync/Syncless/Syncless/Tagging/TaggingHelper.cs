@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.IO;
 using Syncless.Logging;
+using Syncless.Helper;
 
 namespace Syncless.Tagging
 {
@@ -53,21 +54,14 @@ namespace Syncless.Tagging
             return datestring;
         }
 
-        internal static string CreatePath(int trailingIndex, string[] pathTokens, bool isFolder)
+        internal static string CreatePath(int trailingIndex, string[] pathTokens)
         {
             string trailingPath = null;
             for (int i = trailingIndex; i < pathTokens.Length - 1; i++)
             {
                 trailingPath += (pathTokens[i] + "\\");
             }
-            if (isFolder)
-            {
-                trailingPath += (pathTokens[pathTokens.Length - 1] + "\\");
-            }
-            else
-            {
-                trailingPath += pathTokens[pathTokens.Length - 1];
-            }
+            trailingPath += pathTokens[pathTokens.Length - 1];
             return trailingPath;
         }
 

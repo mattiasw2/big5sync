@@ -9,16 +9,20 @@ namespace Syncless.Helper
     {
         public static string FormatFolderPath(string path)
         {
-            path = path.ToLower();
             if (path.EndsWith("\\"))
             {
-                return path;
+                return path.ToLower();
             }
             else
             {
                 path += "\\";
-                return path;
+                return path.ToLower();
             }
+        }
+
+        public static string FormatPath(string path)
+        {
+            return path.ToLower();
         }
 
         public static string RemoveTrailingSlash(string path)
@@ -41,6 +45,32 @@ namespace Syncless.Helper
                 path += "\\";
                 return path;
             }
+        }
+
+        public static bool ContainsIgnoreCase(List<string> pathlist, string path)
+        {
+            foreach (string p in pathlist)
+            {
+                if (FormatFolderPath(p).Equals(FormatFolderPath(path)))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool EqualsIgnoreCase(string p1, string p2)
+        {
+            if (FormatFolderPath(p1).Equals(FormatFolderPath(p2)))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static bool StartsWithIgnoreCase(string childpath, string parentpath)
+        {
+            return FormatFolderPath(childpath).StartsWith(FormatFolderPath(parentpath));
         }
     }
 }

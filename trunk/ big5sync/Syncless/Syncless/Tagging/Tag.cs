@@ -136,6 +136,7 @@ namespace Syncless.Tagging
             _lastUpdatedDate = lastupdated;
         }
 
+        //refactor done
         public bool AddPath(string path, long created)
         {
             TaggedPath p = FindPath(path, false);
@@ -163,6 +164,7 @@ namespace Syncless.Tagging
             }
         }
 
+        //refactor done
         public bool AddPath(TaggedPath path)
         {
             TaggedPath p = FindPath(path.PathName, false);
@@ -188,15 +190,16 @@ namespace Syncless.Tagging
             }
         }
 
+        //refactor done
         public void RenamePath(string oldPath, string newPath, long updated)
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (PathHelper.FormatFolderPath(p.PathName).StartsWith(PathHelper.FormatFolderPath(oldPath)))
+                if (PathHelper.StartsWithIgnoreCase(p.PathName, oldPath))
                 {
                     p.Replace(oldPath, newPath);
                 }
-                else if (PathHelper.FormatFolderPath(p.PathName).Equals(PathHelper.FormatFolderPath(oldPath)))
+                else if (PathHelper.EqualsIgnoreCase(p.PathName, oldPath))
                 {
                     p.PathName = newPath;
                 }
@@ -204,11 +207,12 @@ namespace Syncless.Tagging
             }
         }
         
+        //refactor done
         public bool RemovePath(string path, long lastupdated)
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (PathHelper.FormatFolderPath(p.PathName).Equals(PathHelper.FormatFolderPath(path)))
+                if (PathHelper.EqualsIgnoreCase(p.PathName, path))
                 {
                     if (p.IsDeleted)
                     {
@@ -225,11 +229,12 @@ namespace Syncless.Tagging
             return false;
         }
 
+        //refactor done
         public bool RemovePath(TaggedPath path)
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (PathHelper.FormatFolderPath(p.PathName).Equals(PathHelper.FormatFolderPath(path.PathName)))
+                if (PathHelper.EqualsIgnoreCase(p.PathName, path.PathName))
                 {
                     if (p.IsDeleted)
                     {
@@ -257,11 +262,13 @@ namespace Syncless.Tagging
             _lastUpdatedDate = TaggingHelper.GetCurrentTime();
         }
 
+        //path is the parent path
+        //refactor done
         public bool ContainsParent(string path)
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (PathHelper.FormatFolderPath(p.PathName).StartsWith(PathHelper.FormatFolderPath(path)))
+                if (PathHelper.StartsWithIgnoreCase(p.PathName, path))
                 {
                     return true;
                 }
@@ -269,11 +276,12 @@ namespace Syncless.Tagging
             return false;
         }
 
+        //refactor done
         public bool ContainsIgnoreDeleted(string path)
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (PathHelper.FormatFolderPath(p.PathName).Equals(PathHelper.FormatFolderPath(path)))
+                if (PathHelper.EqualsIgnoreCase(p.PathName, path))
                 {
                     return true;
                 }
@@ -281,12 +289,12 @@ namespace Syncless.Tagging
             return false;
         }
 
-        //only return paths which are not set as deleted
+        //refactor done
         public bool Contains(string path)
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (PathHelper.FormatFolderPath(p.PathName).Equals(PathHelper.FormatFolderPath(path)))
+                if (PathHelper.EqualsIgnoreCase(p.PathName, path))
                 {
                     if (p.IsDeleted)
                     {
@@ -301,26 +309,30 @@ namespace Syncless.Tagging
             return false;
         }
 
+        //refactor done
         public string CreateTrailingPath(string path, bool isFolder)
         {
-            string[] pathTokens = TaggingHelper.TrimEnd(path.Split('\\'));
+            string[] pathTokens = path.Trim().Split('\\');
+            //string[] pathTokens = TaggingHelper.TrimEnd(path.Split('\\'));
             string logicalid = TaggingHelper.GetLogicalID(path);
             foreach (TaggedPath p in _pathList)
             {
-                path = path.ToLower();
-                if (isFolder)
+                if (PathHelper.StartsWithIgnoreCase(path, p.PathName))
+                //if (path.StartsWith((p.PathName)))
                 {
-                    path = PathHelper.FormatFolderPath(path);
-                }
-                if (path.StartsWith(PathHelper.FormatFolderPath(p.PathName)))
-                {
-                    if (!path.Equals(PathHelper.FormatFolderPath(p.PathName)))
+                    if (!PathHelper.EqualsIgnoreCase(path, p.PathName))
+                    //if (!path.Equals((p.PathName)))
                     {
-                        string[] pTokens = TaggingHelper.TrimEnd(p.PathName.Split('\\'));
+                        string[] pTokens = p.PathName.Trim().Split('\\');
+                        //string[] pTokens = TaggingHelper.TrimEnd(p.PathName.Split('\\'));
                         int trailingIndex = TaggingHelper.Match(pathTokens, pTokens);
                         if (trailingIndex > 0)
                         {
-                            return TaggingHelper.CreatePath(trailingIndex, pathTokens, isFolder);
+                            if (isFolder)
+                            {
+                                return PathHelper.AddTrailingSlash(TaggingHelper.CreatePath(trailingIndex, pathTokens));
+                            }
+                            return TaggingHelper.CreatePath(trailingIndex, pathTokens);
                         }
                     }
                 }
@@ -361,11 +373,12 @@ namespace Syncless.Tagging
             }
         }
 
+        //refactor done
         public TaggedPath FindPath(string path, bool filtered)
         {
             foreach (TaggedPath p in _pathList)
             {
-                if (PathHelper.FormatFolderPath(p.PathName).Equals(PathHelper.FormatFolderPath(path)))
+                if (PathHelper.EqualsIgnoreCase(p.PathName, path))
                 {
                     if (filtered && p.IsDeleted)
                     {
@@ -382,32 +395,40 @@ namespace Syncless.Tagging
             return FindPath(path, true);
         }
 
+        //refactor done
         public List<string> FindAncestors(string path)
         {
             List<string> ancestors = new List<string>();
             foreach (TaggedPath p in _pathList)
             {
-                if (PathHelper.FormatFolderPath(path).StartsWith(p.PathName))
+                if (PathHelper.StartsWithIgnoreCase(path, p.PathName))
                 {
-                    if (!PathHelper.FormatFolderPath(path).Equals(p.PathName))
+                    if (!PathHelper.EqualsIgnoreCase(path, p.PathName))
                     {
-                        ancestors.Add(p.PathName);
+                        if (!PathHelper.ContainsIgnoreCase(ancestors, p.PathName))
+                        {
+                            ancestors.Add(p.PathName);
+                        }
                     }
                 }
             }
             return ancestors;
         }
 
+        //refactor done
         public List<string> FindDescendants(string path)
         {
             List<string> descendants = new List<string>();
             foreach (TaggedPath p in _pathList)
             {
-                if (PathHelper.FormatFolderPath(p.PathName).StartsWith(PathHelper.FormatFolderPath(path)))
+                if (PathHelper.StartsWithIgnoreCase(p.PathName, path))
                 {
-                    if (!PathHelper.FormatFolderPath(p.PathName).Equals(PathHelper.FormatFolderPath(path)))
+                    if (!PathHelper.EqualsIgnoreCase(p.PathName, path))
                     {
-                        descendants.Add(p.PathName);
+                        if (!PathHelper.ContainsIgnoreCase(descendants, p.PathName))
+                        {
+                            descendants.Add(p.PathName);
+                        }
                     }
                 }
             }
