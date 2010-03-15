@@ -16,7 +16,7 @@ namespace Syncless.CompareAndSync.XMLWriteObject
 
         //Rename
         public XMLWriteFolderObject(string name, string newName, string fullPath, long creationTime, MetaChangeType changeType)
-            : base(name, fullPath, creationTime, changeType)
+            : base(name, newName, fullPath, creationTime, changeType)
         {
         }
 
