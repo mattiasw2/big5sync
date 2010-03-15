@@ -49,7 +49,7 @@ namespace Syncless.Tagging
         public TaggedPath(string path, long created)
         {
             this._logicalid = TaggingHelper.GetLogicalID(path);
-            this._pathName = path;
+            this._pathName = PathHelper.AddTrailingSlash(path);
             this._lastUpdatedDate = created;
             this._createdDate = created;
             this._isDeleted = false;
@@ -65,24 +65,17 @@ namespace Syncless.Tagging
 
         public string Append(string trailingPath)
         {
-            if (_pathName.EndsWith("\\"))
-            {
-                return (_pathName + trailingPath);
-            }
-            else
-            {
-                return (_pathName + "\\" + trailingPath);
-            }
+            return PathHelper.AddTrailingSlash(_pathName + trailingPath);
         }
 
         public void Rename(string newpath)
         {
-            _pathName = newpath;
+            _pathName = PathHelper.AddTrailingSlash(newpath);
         }
 
         public void Replace(string oldPath, string newPath)
         {
-            _pathName = _pathName.Replace(oldPath, newPath);
+            _pathName = _pathName.Replace(oldPath, PathHelper.AddTrailingSlash(newPath));
         }
     }
 }

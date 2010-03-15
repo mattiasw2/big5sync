@@ -535,7 +535,8 @@ namespace Syncless.Tagging
         {
             return _taggingProfile.RetrieveTagsByPath(path);
         }
-
+        
+        //refactor done
         /// <summary>
         /// Retrieve all paths having logicalid
         /// </summary>
@@ -551,7 +552,7 @@ namespace Syncless.Tagging
                 {
                     if (path.LogicalDriveId.Equals(logicalid))
                     {
-                        if (!pathList.Contains(path.PathName))
+                        if (!PathHelper.ContainsIgnoreCase(pathList, path.PathName))
                         {
                             pathList.Add(path.PathName);
                         }
@@ -581,6 +582,7 @@ namespace Syncless.Tagging
             return tagList;
         }
 
+        //refactor done
         /// <summary>
         /// Find a list of paths of folders or sub-folders which share the same Tag as folderPath
         /// </summary>
@@ -596,7 +598,7 @@ namespace Syncless.Tagging
                 {
                     foreach (TaggedPath p in tag.FilteredPathList)
                     {
-                        if (!pathList.Contains(p.PathName) && !p.PathName.Equals(folderPath))
+                        if (!PathHelper.ContainsIgnoreCase(pathList, p.PathName) && !PathHelper.EqualsIgnoreCase(p.PathName, folderPath))
                         {
                             pathList.Add(p.PathName);
                         }
@@ -613,7 +615,7 @@ namespace Syncless.Tagging
                     foreach (TaggedPath p in tag.FilteredPathList)
                     {
                         appendedPath = p.Append(trailingPath);
-                        if (!pathList.Contains(appendedPath) && !appendedPath.Equals(folderPath))
+                        if (!PathHelper.ContainsIgnoreCase(pathList, appendedPath) && !PathHelper.EqualsIgnoreCase(appendedPath, folderPath))
                         {
                             pathList.Add(appendedPath);
                         }
@@ -623,34 +625,7 @@ namespace Syncless.Tagging
             return pathList;
         }
 
-        /// <summary>
-        /// Retrieve the list of parent directories of a given path
-        /// </summary>
-        /// <param name="path">The path of which the parent directories to be found</param>
-        /// <returns>The list of parent directories</returns>
-        public List<string> RetrieveParentByPath(string path)
-        {
-            List<string> parentPathList = new List<string>();
-            foreach (Tag tag in _taggingProfile.TagList)
-            {
-                foreach (TaggedPath p in tag.FilteredPathList)
-                {
-                    if (path.StartsWith(p.PathName))
-                    {
-                        if (!path.Equals(p.PathName))
-                        {
-                            if (!parentPathList.Contains(p.PathName))
-                            {
-                                parentPathList.Add(p.PathName);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            return parentPathList;
-        }
-
+        //refactor done
         public List<Tag> RetrieveParentTagByPath(string path)
         {
             List<Tag> parentPathList = new List<Tag>();
@@ -659,14 +634,12 @@ namespace Syncless.Tagging
             {
                 foreach (TaggedPath p in tag.FilteredPathList)
                 {
-                    if (path.StartsWith(p.PathName))
+                    if (PathHelper.StartsWithIgnoreCase(path, p.PathName))
                     {
-                        if (!path.Equals(p.PathName))
+                        if (!PathHelper.EqualsIgnoreCase(path, p.PathName))
                         {
-
                             parentPathList.Add(tag);
                             break;
-
                         }
                     }
                 }
@@ -674,22 +647,36 @@ namespace Syncless.Tagging
             return parentPathList;
         }
 
+        //refactor done
         public List<string> RetrieveAncestors(string path)
         {
             List<string> ancestors = new List<string>();
             foreach (Tag tag in _taggingProfile.TagList)
             {
-                ancestors.AddRange(tag.FindAncestors(path));
+                foreach (string found in tag.FindAncestors(path))
+                {
+                    if (!PathHelper.ContainsIgnoreCase(ancestors, found))
+                    {
+                        ancestors.Add(found);
+                    }
+                }
             }
             return ancestors;
         }
 
+        //refactor done
         public List<string> RetrieveDescendants(string path)
         {
             List<string> descendants = new List<string>();
             foreach (Tag tag in _taggingProfile.TagList)
             {
-                descendants.AddRange(tag.FindDescendants(path));
+                foreach (string found in tag.FindDescendants(path))
+                {
+                    if (!PathHelper.ContainsIgnoreCase(descendants, found))
+                    {
+                        descendants.Add(found);
+                    }
+                }
             }
             return descendants;
         }
