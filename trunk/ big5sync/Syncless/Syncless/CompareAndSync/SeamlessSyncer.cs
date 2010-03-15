@@ -88,7 +88,7 @@ namespace Syncless.CompareAndSync
                         catch (ArchiveFileException e)
                         {
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString()); 
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                         catch (DeleteFileException e)
                         {
@@ -187,39 +187,37 @@ namespace Syncless.CompareAndSync
                 foreach (string dest in request.DestinationFolders)
                 {
                     destFullPath = Path.Combine(dest, request.SourceName);
-                    if (DoSync(sourceFullPath, destFullPath))
+
+                    try
                     {
-                        try
+                        switch (request.ChangeType)
                         {
-                            switch (request.ChangeType)
-                            {
-                                case AutoSyncRequestType.New:
-                                    CommonMethods.CreateFolder(destFullPath);
-                                    currFolder = new DirectoryInfo(destFullPath);
-                                    XMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, dest, currFolder.CreationTime.Ticks, MetaChangeType.New));
-                                    break;
-                                case AutoSyncRequestType.Rename:
-                                    string oldFullPath = Path.Combine(dest, request.OldName);
-                                    string newFullPath = Path.Combine(dest, request.NewName);
-                                    if (!Directory.Exists(newFullPath))
-                                    {
-                                        CommonMethods.MoveFolder(oldFullPath, newFullPath);
-                                        currFolder = new DirectoryInfo(newFullPath);
-                                        XMLHelper.UpdateXML(new XMLWriteFolderObject(request.OldName, request.NewName, dest, currFolder.CreationTime.Ticks, MetaChangeType.Rename));
-                                    }
-                                    break;
-                            }
+                            case AutoSyncRequestType.New:
+                                CommonMethods.CreateFolder(destFullPath);
+                                currFolder = new DirectoryInfo(destFullPath);
+                                XMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, dest, currFolder.CreationTime.Ticks, MetaChangeType.New));
+                                break;
+                            case AutoSyncRequestType.Rename:
+                                string oldFullPath = Path.Combine(dest, request.OldName);
+                                string newFullPath = Path.Combine(dest, request.NewName);
+                                if (!Directory.Exists(newFullPath))
+                                {
+                                    CommonMethods.MoveFolder(oldFullPath, newFullPath);
+                                    currFolder = new DirectoryInfo(newFullPath);
+                                    XMLHelper.UpdateXML(new XMLWriteFolderObject(request.OldName, request.NewName, dest, currFolder.CreationTime.Ticks, MetaChangeType.Rename));
+                                }
+                                break;
                         }
-                        catch (CreateFolderException e)
-                        {
-                            //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
-                        }
-                        catch (MoveFolderException e)
-                        {
-                            //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
-                        }
+                    }
+                    catch (CreateFolderException e)
+                    {
+                        //TODO: Throw to notification queue in future
+                        ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                    }
+                    catch (MoveFolderException e)
+                    {
+                        //TODO: Throw to notification queue in future
+                        ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                     }
                 }
             }
