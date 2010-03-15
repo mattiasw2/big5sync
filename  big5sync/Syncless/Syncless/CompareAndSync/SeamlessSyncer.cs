@@ -266,7 +266,7 @@ namespace Syncless.CompareAndSync
 
             for (int i = 0; i < destinations.Count; i++)
             {
-                destTest = Path.Combine(destinations[0], sourceName);
+                destTest = Path.Combine(destinations[i], sourceName);
                 if (Directory.Exists(destTest))
                 {
                     result = true;
