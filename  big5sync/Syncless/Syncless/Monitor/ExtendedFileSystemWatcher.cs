@@ -7,7 +7,7 @@ namespace Syncless.Monitor
 {
     public class ExtendedFileSystemWatcher : FileSystemWatcher
     {
-        private const int SLEEP_TIME = 2000;
+        private const int SLEEP_TIME = 1000;
 
         private List<FileSystemEventArgs> inQueue;
         private Thread watcherThread;
