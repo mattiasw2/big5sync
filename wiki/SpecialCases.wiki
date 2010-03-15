@@ -3,12 +3,19 @@
 
 = Introduction =
 
-Syncless will, as far as we can, never throw a synchronization conflict since that contradicts our vision of seamless synchronization. This page details the unusual combination of actions as well as how Syncless will handle each case. For all cases, please assume that at least 3 folders are tagged.
+Syncless will, as far as we can, never throw a synchronization conflict since that contradicts our vision of seamless synchronization. This page details the unusual combination of actions as well as how Syncless will handle each case. For all cases, please assume that at least 3 folders are tagged under the same tag.
 
+For a list of known issues with certain special cases, please look HERE.
 
 = Details =
 
 == Manual Mode ==
+
+=== Renaming A File In One Of The Tagged Folders ===
+If a user renames a file, the rename will be propagated across all the folders.
+
+=== Renaming A File In More Than One of The Tagged Folders ===
+Assuming a user has the file "Lecture15.pdf" in all of the tagged folders. If he renames it to "Comm Skills.pdf" in one and "Communication and Skills.pdf" in another, Syncless will not propagate the rename, and instead, will treat each of them as new files and propagate them across all the tagged folders. The end result will be all the tagged folders having all 3 files ("Lecture15.pdf", "Comm Skills.pdf", "Communication and Skills.pdf").
 
 === Renaming A Folder In One Of The Tagged Folders ===
 If a user renames a folder within one of the tagged folders, Syncless will propagate this folder rename to the other folders. Most of the commercial tools currently available will handle this as a "Delete" followed by a "Copy" event, which is infeasible if the folder being renamed has updates or contain large amount of files.
@@ -20,9 +27,3 @@ Similar to the above case, Syncless will propagate this folder rename across the
 Assume the user has a "Music" folder in all the folders you have tagged "Media". If a user renames "Music" to "Songs" in one of these tagged folders and "Music" to "Mp3" in another of these folders, Syncless will handle this by propagating all 3 folders ("Media", "Music", "Songs") to all other folders tagged "Media".
 
 The reason for doing so is because it is in actual fact, a rename conflict, but more importantly, it is highly probable that the user wants to keep different things in them, and thus the conflicting renames.
-
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
