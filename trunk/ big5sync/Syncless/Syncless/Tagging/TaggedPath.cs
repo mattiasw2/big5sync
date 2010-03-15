@@ -75,7 +75,7 @@ namespace Syncless.Tagging
 
         public void Replace(string oldPath, string newPath)
         {
-            _pathName = _pathName.Replace(oldPath, PathHelper.AddTrailingSlash(newPath));
+            _pathName = _pathName.Replace(PathHelper.AddTrailingSlash(oldPath), PathHelper.AddTrailingSlash(newPath));
         }
     }
 }
