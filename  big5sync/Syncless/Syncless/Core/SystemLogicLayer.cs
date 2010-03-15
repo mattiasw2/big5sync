@@ -419,9 +419,9 @@ namespace Syncless.Core
                         {
                             MonitorLayer.Instance.UnMonitorPath(folder.FullName);
                         }
-                        catch (PathNotFoundException pnfe)
+                        catch (MonitorPathNotFoundException)
                         {
-
+                            //do nothing
                         }
 
                     }

@@ -5,6 +5,9 @@ using System.Text;
 using System.Xml;
 using System.IO;
 using System.Diagnostics;
+using Syncless.Helper;
+using Syncless.Profiling.Exceptions;
+
 namespace Syncless.Profiling
 {
     internal class ProfilingXMLHelper
@@ -28,54 +31,10 @@ namespace Syncless.Profiling
             UpdateLastUpdateTime(xml, DateTime.Now.Ticks);
             foreach (string path in paths)
             {
-                SaveProfile(xml, path);
+                CommonXmlHelper.SaveXml(xml, path);
             }
         }
-        private static void SaveProfile(XmlDocument xml, string path)
-        {
-            XmlTextWriter textWriter = null;
-            FileStream fs = null;
-
-            FileInfo fileInfo = new FileInfo(path);
-            if (!fileInfo.Directory.Exists)
-            {
-                DirectoryInfo info = Directory.CreateDirectory(fileInfo.Directory.FullName);
-                info.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-            }
-
-
-            try
-            {
-                if (File.Exists(path))
-                {
-                    File.Delete(path);
-                }
-                fs = new FileStream(path, FileMode.OpenOrCreate);
-                textWriter = new XmlTextWriter(fs, Encoding.UTF8);
-                textWriter.Formatting = Formatting.Indented;
-                xml.WriteContentTo(textWriter);
-            }
-            catch (IOException io)
-            {
-                //TODO : Error Log
-                Console.WriteLine(io.StackTrace);                
-            }
-            finally
-            {
-                if (textWriter != null)
-                {
-                    try
-                    {
-                        textWriter.Close();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-
-            }
-
-        }
+        
         #endregion      
         public static Profile CreateDefaultProfile(string path)
         {
@@ -88,7 +47,6 @@ namespace Syncless.Profiling
                 try
                 {
                     fs = fileInfo.Create();
-
                 }
                 catch (DirectoryNotFoundException)
                 {
@@ -111,45 +69,16 @@ namespace Syncless.Profiling
                 }
 
             }
-            SaveProfile(xml, fileInfo.FullName);
+            CommonXmlHelper.SaveXml(xml, fileInfo.FullName);
             return profile;
         }
        
-        private static XmlDocument LoadFile(string path)
-        {
-            FileStream fs = null;
-            try
-            {
-                FileInfo info = new FileInfo(path);
-                if (!info.Exists)
-                {
-                    return null;
-                }
-                fs = info.Open(FileMode.Open);
-                XmlDocument xml = new XmlDocument();
-                xml.Load(fs);
-                return xml;
-            }
-            catch (XmlException xml)
-            {
-                Console.WriteLine(xml.ToString());
-                return null;
-            }
-            finally
-            {
-                if (fs != null)
-                {
-                    try { fs.Close(); }
-                    catch (Exception) { }
-                }
-            }
-
-        }
+        
         
         #region convert to profile public methods
         public static Profile LoadProfile(string path)
         {
-            XmlDocument profilexml = ProfilingXMLHelper.LoadFile(path);
+            XmlDocument profilexml = CommonXmlHelper.LoadXml(path);
             if (profilexml == null)
             {
                 //TODO
@@ -160,20 +89,35 @@ namespace Syncless.Profiling
         private static Profile ConvertToProfile(XmlDocument profilexml)
         {
             XmlNodeList list = profilexml.GetElementsByTagName(ELE_PROFILE_ROOT);
-            Syncless.Core.ServiceLocator.Getlogger(Syncless.Core.ServiceLocator.DEBUG_LOG).WriteLine("" + list.Count);
             if (list.Count != 0)
             {
                 XmlElement element = (XmlElement)list.Item(0);
+                if (element == null)
+                {
+                    throw new ProfileLoadException();
+                }
                 string profilename = element.GetAttribute(ELE_PROFILE_ROOT_NAME);
                 string lastupdate = element.GetAttribute(ELE_PROFILE_ROOT_LASTUPDATED);
-                long lastUpdatedLong = long.Parse(lastupdate);
+                if (profilename == null || lastupdate == null)
+                {
+                    throw new ProfileLoadException();
+                }
+                long lastUpdatedLong = 0;
+                try
+                {
+                    lastUpdatedLong = long.Parse(lastupdate);
+                }
+                catch (FormatException fe)
+                {
+                    throw new ProfileLoadException(fe);
+                }
                 Profile profile = new Profile(profilename);
                 profile.LastUpdatedTime = lastUpdatedLong;
                 profile = ProcessListing(profile, element);
                 return profile;
             }
             //TODO need to throw exception here =D
-            throw new FileNotFoundException();
+            throw new ProfileLoadException();
         }
         private static Profile ProcessListing(Profile profile, XmlElement root)
         {
@@ -181,6 +125,7 @@ namespace Syncless.Profiling
             foreach (XmlNode node in nodeList)
             {
                 XmlElement drive = (XmlElement)node;
+                
                 XmlElement logical = (XmlElement)drive.GetElementsByTagName(ELE_DRIVE_LOGICAL).Item(0);
                 
                 XmlElement guid = (XmlElement)drive.GetElementsByTagName(ELE_DRIVE_GUID).Item(0);

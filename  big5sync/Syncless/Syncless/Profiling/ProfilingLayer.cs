@@ -88,6 +88,11 @@ namespace Syncless.Profiling
             string relativepath = ProfilingHelper.ExtractRelativePath(path);
             return logicalid + ":" + relativepath; 
         }
+        /// <summary>
+        /// Take in a list of logical address , convert them to physical and return only those that are currently available.
+        /// </summary>
+        /// <param name="pathList">The list of logical address to convert</param>
+        /// <returns></returns>
         public List<string> ConvertAndFilterToPhysical(List<string> pathList)
         {
             List<string> convertedPathList = new List<string>();
@@ -107,7 +112,9 @@ namespace Syncless.Profiling
 
         }
         /// <summary>
-        /// Take in a list of logical address , convert them to physical and return only those that are currently available.
+        /// Take in a list of logical address , convert them to physical and return 2 list of address
+        ///   first list are the converted paths
+        ///   second list are the unconverted path
         /// </summary>
         /// <param name="pathList">The list of logical address to convert</param>
         /// <returns>two array of path. string[0] -> converted path , string[1] -> unconverted path.</returns>
