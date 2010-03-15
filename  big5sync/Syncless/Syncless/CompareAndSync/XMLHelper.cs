@@ -27,35 +27,28 @@ namespace Syncless.CompareAndSync
 
         public static void UpdateXML(BaseXMLWriteObject xmlWriteList)
         {
-            XmlDocument xmlDoc = new XmlDocument();
-
-            string xmlPath = Path.Combine(xmlWriteList.FullPath, METADATAPATH);
-            CreateFileIfNotExist(xmlWriteList.FullPath);
-            xmlDoc.Load(xmlPath);
+           
             if (xmlWriteList is XMLWriteFolderObject)
             {
-                HandleFolder(xmlDoc, xmlWriteList);
-                xmlDoc.Save(xmlPath);
+                HandleFolder(xmlWriteList);
                 return;
             }
 
             switch (xmlWriteList.ChangeType)
             {
                 case MetaChangeType.New:
-                    CreateFile(xmlDoc, (XMLWriteFileObject)xmlWriteList);
+                     CreateFile((XMLWriteFileObject)xmlWriteList);
                      break;
                 case MetaChangeType.Delete:
-                     DeleteFile(xmlDoc, (XMLWriteFileObject)xmlWriteList);
+                     DeleteFile((XMLWriteFileObject)xmlWriteList);
                      break;
                 case MetaChangeType.Rename:
-                     RenameFile(xmlDoc, (XMLWriteFileObject)xmlWriteList);
+                     RenameFile((XMLWriteFileObject)xmlWriteList);
                      break;
                 case MetaChangeType.Update:
-                     UpdateFile(xmlDoc, (XMLWriteFileObject)xmlWriteList);
+                     UpdateFile((XMLWriteFileObject)xmlWriteList);
                      break;
             }
-
-            xmlDoc.Save(xmlPath);
         }
 
         private static void CreateFileIfNotExist(string path)
@@ -80,8 +73,13 @@ namespace Syncless.CompareAndSync
                 writer.Close();
             }
         }
-        private static void CreateFile(XmlDocument xmlDoc, XMLWriteFileObject xmlWriteObj)
+        private static void CreateFile(XMLWriteFileObject xmlWriteObj)
         {
+            XmlDocument xmlDoc = new XmlDocument();
+            string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, METADATAPATH);
+            CreateFileIfNotExist(xmlWriteObj.FullPath);
+            xmlDoc.Load(xmlFilePath);
+
             DoFileCleanUp(xmlDoc, xmlWriteObj.Name);
             XmlText nameText = xmlDoc.CreateTextNode(xmlWriteObj.Name);
             XmlText hashText = xmlDoc.CreateTextNode(xmlWriteObj.Hash);
@@ -110,14 +108,22 @@ namespace Syncless.CompareAndSync
 
             XmlNode rootNode = xmlDoc.SelectSingleNode(XPATH_EXPR);
             rootNode.AppendChild(fileElement);
+
+            xmlDoc.Save(xmlFilePath);
         }
 
-        private static void UpdateFile(XmlDocument xmlDoc, XMLWriteFileObject xmlWriteObj)
+        private static void UpdateFile(XMLWriteFileObject xmlWriteObj)
         {
+            XmlDocument xmlDoc = new XmlDocument();
+            string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, METADATAPATH);
+            CreateFileIfNotExist(xmlWriteObj.FullPath);
+            xmlDoc.Load(xmlFilePath);
+
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + xmlWriteObj.Name + "']");
             if (node == null)
             {
-                CreateFile(xmlDoc, xmlWriteObj);
+                xmlDoc.Save(xmlFilePath);
+                CreateFile(xmlWriteObj);
                 return;
             }
 
@@ -146,22 +152,41 @@ namespace Syncless.CompareAndSync
                     nodes.InnerText = xmlWriteObj.CreationTime.ToString();
                 }
             }
+
+            xmlDoc.Save(xmlFilePath);
         }
 
-        private static void RenameFile(XmlDocument xmlDoc, BaseXMLWriteObject xmlWriteObj)
+        //REDO AGAIN LATER
+        private static void RenameFile(BaseXMLWriteObject xmlWriteObj)
         {
+            XmlDocument xmlDoc = new XmlDocument();
+            string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, METADATAPATH);
+            CreateFileIfNotExist(xmlWriteObj.FullPath);
+            xmlDoc.Load(xmlFilePath);
+
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + xmlWriteObj.Name + "']");
             if (node == null)
                 return;
             node.FirstChild.InnerText = xmlWriteObj.NewName;
+
+            xmlDoc.Save(xmlFilePath);
         }
 
-        private static void DeleteFile(XmlDocument xmlDoc, BaseXMLWriteObject xmlWriteObj)
+        private static void DeleteFile(BaseXMLWriteObject xmlWriteObj)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + xmlWriteObj.Name + "']");
-            if (node == null)
-                return;
-            node.ParentNode.RemoveChild(node);
+            XmlDocument xmlDoc = new XmlDocument();
+            string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, METADATAPATH);
+            if (File.Exists(xmlFilePath))
+            {
+                xmlDoc.Load(xmlFilePath);
+                XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + xmlWriteObj.Name + "']");
+                if (node == null)
+                    return;
+                node.ParentNode.RemoveChild(node);
+                xmlDoc.Save(xmlFilePath);
+            }
+
+            
         }
 
         private static string GetLastFileIndex(string filePath)
@@ -193,23 +218,29 @@ namespace Syncless.CompareAndSync
             node.ParentNode.RemoveChild(node);
         }
 
-        private static void HandleFolder(XmlDocument xmlDoc, BaseXMLWriteObject xmlWriteObj)
+        private static void HandleFolder(BaseXMLWriteObject xmlWriteObj)
         {
             switch (xmlWriteObj.ChangeType)
             {
                 case MetaChangeType.New:
-                    CreateFolder(xmlDoc, xmlWriteObj);
+                    CreateFolder(xmlWriteObj);
                     break;
                 case MetaChangeType.Rename:
-                    RenameFolder(xmlDoc, xmlWriteObj);
+                    RenameFolder(xmlWriteObj);
                     break;
                 case MetaChangeType.Delete:
+                    DeleteFolder(xmlWriteObj);
                     break;
             }
         }
 
-        private static void CreateFolder(XmlDocument xmlDoc, BaseXMLWriteObject xmlWriteObj)
+        private static void CreateFolder(BaseXMLWriteObject xmlWriteObj)
         {
+            XmlDocument xmlDoc = new XmlDocument();
+            string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, METADATAPATH);
+            CreateFileIfNotExist(xmlWriteObj.FullPath);
+            xmlDoc.Load(xmlFilePath);
+
             DoFolderCleanUp(xmlDoc, xmlWriteObj.Name);
             XmlText nameText = xmlDoc.CreateTextNode(xmlWriteObj.Name);
             XmlElement nameOfFolder = xmlDoc.CreateElement(NODE_NAME);
@@ -219,22 +250,35 @@ namespace Syncless.CompareAndSync
 
             XmlNode rootNode = xmlDoc.SelectSingleNode(XPATH_EXPR);
             rootNode.AppendChild(folder);
+
+            xmlDoc.Save(xmlFilePath);
         }
 
-        private static void RenameFolder(XmlDocument xmlDoc, BaseXMLWriteObject xmlWriteObj)
+
+        //TODO AGAIN
+        private static void RenameFolder(BaseXMLWriteObject xmlWriteObj)
         {
+            XmlDocument xmlDoc = new XmlDocument();
+
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + xmlWriteObj.Name + "']");
             if (node == null)
                 return;
             node.FirstChild.InnerText = xmlWriteObj.NewName;
         }
 
-        private static void DeleteFolder(XmlDocument xmlDoc, BaseXMLWriteObject xmlWriteObj)
+        private static void DeleteFolder(BaseXMLWriteObject xmlWriteObj)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + xmlWriteObj.Name + "']");
-            if (node == null)
-                return;
-            node.ParentNode.RemoveChild(node);
+            string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, METADATAPATH);
+            XmlDocument xmlDoc = new XmlDocument();
+            if (File.Exists(xmlFilePath))
+            {
+                xmlDoc.Load(xmlFilePath);
+                XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + xmlWriteObj.Name + "']");
+                if (node == null)
+                    return;
+                node.ParentNode.RemoveChild(node);
+                xmlDoc.Save(xmlFilePath);
+            }
         }
     }
 }
