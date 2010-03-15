@@ -980,9 +980,20 @@ namespace SynclessUI
         	DisplayShortcutsWindow();
         }
 
-        private void LayoutRoot_DragOver(object sender, System.Windows.DragEventArgs e)
+        private void LayoutRoot_Drop(object sender, System.Windows.DragEventArgs e)
         {
-        	MessageBox.Show("lol");
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+                foreach (string i in foldernames)
+                {
+                    DirectoryInfo folder = new DirectoryInfo(i);
+                    if (folder.Exists)
+                    {
+                        TagWindow tw = new TagWindow(this, i, _selectedTag);
+                    }
+                }
+            }
         }
     }
 }

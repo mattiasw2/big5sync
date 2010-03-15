@@ -2,8 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:System_Windows_Controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit" xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="SynclessUI.TagWindow"
-    Title="TagWindow" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}" Width="600" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Height="300" Icon="Icons/logo.ico" Opacity="0.95">
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:System_Windows_Controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit" xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="Window" x:Class="SynclessUI.TagWindow"
+    Title="Tag" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}" Width="600" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Height="300" Icon="Icons/logo.ico" Opacity="0.95">
 	<Grid x:Name="LayoutRoot" HorizontalAlignment="Center" VerticalAlignment="Center">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="20"/>
