@@ -414,7 +414,7 @@ namespace SynclessUI
             ListTaggedPath.ItemsSource = tv.PathStringList;
 
             TagIcon.Visibility = System.Windows.Visibility.Visible;
-            TagStatusPanel.Visibility = System.Windows.Visibility.Visible;
+            //TagStatusPanel.Visibility = System.Windows.Visibility.Visible;
             SyncPanel.Visibility = System.Windows.Visibility.Visible;
             if (tv.PathStringList.Count == 0)
             {
