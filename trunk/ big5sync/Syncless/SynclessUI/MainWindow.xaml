@@ -34,6 +34,7 @@
     	<TextBlock Grid.Row="0" Margin="0" Padding="5" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Grid.ColumnSpan="5" Cursor="Hand"/>
     	<!-- MinClose Panel -->
 		<StackPanel x:Name="OptionMinClosePanel" Grid.Row="0" Grid.Column="3" Height="20" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,-5,0" Cursor="Hand" Grid.RowSpan="2">
+			<Image x:Name="BtnShortcuts" Source="Icons/kb.ico" Width="16" Height="16" Margin="0,2.5,3,2.5" MouseLeftButtonDown="BtnShortcuts_MouseLeftButtonDown" />
 			<Image x:Name="BtnOptions" Source="Icons/option.ico" Width="15" Height="15" Margin="0,0,3,0" MouseLeftButtonDown="BtnOptions_MouseLeftButtonDown" />
 			<Image x:Name="BtnMin" Source="Icons/min.ico" Width="20" Height="20" Stretch="UniformToFill" d:LayoutOverrides="VerticalMargin" MouseLeftButtonDown="BtnMin_MouseLeftButtonDown" />
 			<Image x:Name="BtnClose" Source="Icons/close.ico" Width="19" Height="20" Stretch="UniformToFill" d:LayoutOverrides="VerticalMargin" MouseLeftButtonDown="BtnClose_MouseLeftButtonDown" />

@@ -1,0 +1,133 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Name="Window" x:Class="SynclessUI.ShortcutsWindow"
+    Title="Shortcuts" WindowStyle="None" AllowsTransparency="True" Icon="Icons/logo.ico" Width="600" WindowStartupLocation="CenterScreen" Height="400" Opacity="0.95" Background="{x:Null}" KeyDown="Window_KeyDown" MouseDown="Window_MouseDown">
+	<Grid x:Name="LayoutRoot">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="20"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="20"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="20"/>
+			<RowDefinition Height="30"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="20"/>
+		</Grid.RowDefinitions>
+		<Rectangle Grid.Row="0" x:Name="Canvas" RadiusX="10" RadiusY="10" Margin="0,1,0,0" Stroke="Black" Grid.RowSpan="4" Grid.ColumnSpan="3">
+			<Rectangle.Fill>
+				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+					<GradientStop Color="#FF707271" Offset="0"/>
+					<GradientStop Color="#FF111113" Offset="1"/>
+					<GradientStop Color="#FF111113" Offset="0.06"/>
+				</LinearGradientBrush>
+			</Rectangle.Fill>
+		</Rectangle>
+		<TextBlock Grid.Row="0" Margin="0" Padding="5" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Cursor="Hand" Grid.ColumnSpan="3"/>
+		<Label x:Name="LblShortcutsTitle" Content="Useful Shortcuts" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1"/>
+		<StackPanel  x:Name="ToolBar" OpacityMask="Black" Orientation="Horizontal" Background="#FF626262" Margin="0,40,0,0" Height="60" Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left">
+			<StackPanel x:Name="BtnCreatePanel" Orientation="Vertical" Margin="5,0,2,0" VerticalAlignment="Bottom"><Button x:Name="BtnCreate" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons\createtag.ico" Stretch="Fill" ToolTip="Create Tag"/></Button><Label x:Name="LblCreate" HorizontalAlignment="Center" Content="Create" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+			<StackPanel x:Name="BtnRemovePanel" Orientation="Vertical" Margin="0,0,5,0" VerticalAlignment="Bottom"><Button x:Name="btnRemove" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons\removetag.ico" Stretch="Fill" ToolTip="Remove Tag"/></Button><Label x:Name="LblRemove" HorizontalAlignment="Center" Content="Remove" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE" Background="#00BDBDBD"/></StackPanel>
+			<StackPanel x:Name="BtnTagPanel" Orientation="Vertical" Margin="0,0,11,0" VerticalAlignment="Bottom"><Button x:Name="btnTag" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons\tag.ico" Stretch="Fill" ToolTip="Tag Folder"/></Button><Label x:Name="LblTag" HorizontalAlignment="Center" Content="Tag" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+			<StackPanel x:Name="BtnUntagPanel" Orientation="Vertical" Margin="0,0,11,0" VerticalAlignment="Bottom"><Button x:Name="btnUntag" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons\tag.ico" Stretch="Fill" ToolTip="Tag Folder"/></Button><Label x:Name="LblUntag" HorizontalAlignment="Center" Content="Untag" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+			<StackPanel x:Name="BtnDetailsPanel" Orientation="Vertical" Margin="-2,0,5,0" VerticalAlignment="Bottom"><Button x:Name="BtnDetails" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons\properties.ico" Stretch="Fill" ToolTip="Tag Properties"/></Button><Label x:Name="LblDetails" HorizontalAlignment="Center" Content="Details" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+			<StackPanel x:Name="BtnEjectPanel" Orientation="Vertical" Margin="4,0,5,0" VerticalAlignment="Bottom"><Button x:Name="BtnEject" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons\eject.ico" Stretch="Fill" ToolTip="Prepare a Removable Drive for Safety Removal"/></Button><Label x:Name="LblEject" HorizontalAlignment="Center" Content="Eject" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+		</StackPanel>
+		<Label HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Content="Application Commands" Grid.Column="1" Grid.Row="2" FontFamily="Century Gothic" FontSize="16" Foreground="White"/>
+		<StackPanel HorizontalAlignment="Left" Margin="15,95,0,0" VerticalAlignment="Top" Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
+			<Grid>
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="1" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+			<Grid Margin="30,0,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="2" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+			<Grid Margin="27,0,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="3" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+			<Grid Margin="27,0,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="4" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+			<Grid Margin="27,0,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="5" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+			<Grid Margin="30,0,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="6" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+		</StackPanel>
+		<StackPanel HorizontalAlignment="Left" Margin="330,40,0,0" VerticalAlignment="Top" Grid.Column="1" Grid.Row="2">
+			<Grid>
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="1" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+			<Grid Margin="0,5,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="2" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+			<Grid Margin="0,5,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="3" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+			<Grid Margin="0,5,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="4" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+			<Grid Margin="0,5,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="5" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+			<Grid Margin="0,5,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="6" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+			<Grid Margin="0,5,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="7" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+			<Grid Margin="0,5,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="8" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+			<Grid Margin="0,5,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="9" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+			<Grid Margin="0,5,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="24" Height="24"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="10" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
+			</Grid>
+		</StackPanel>
+		<TextBlock HorizontalAlignment="Left" Margin="360,42,0,0" Grid.Column="1" Grid.Row="2" FontFamily="Century Gothic" Foreground="White" Width="185.566" LineHeight="29.333"><Run Text="Ctrl-A (Create Tag)&#xa;Ctrl-R (Remove Tag)&#xa;Ctrl-T (Tag Folder)&#xa;Ctrl-U (Untag Folder)&#xa;Ctrl-D (Tag Details)&#xa;Ctrl-E (Eject Removable Drives)"/><LineBreak/><Run Text="Ctrl-S (Useful Shortcuts)"/><LineBreak/><Run Text="Ctrl-O (Application Options)"/><LineBreak/><Run Text="Ctrl-M (Minimize Syncless)"/><LineBreak/><Run Text="Alt-F4 (Quit Syncless)"/></TextBlock>
+		<StackPanel x:Name="OptionMinClosePanel" Grid.Row="2" Grid.Column="1" Height="20" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,162,0,0" Cursor="Hand">
+			<Image x:Name="BtnShortcuts" Source="Icons\kb.ico" Width="16" Height="16" Margin="0,2.5,3,1.5" />
+			<Image x:Name="BtnOptions" Source="Icons\option.ico" Width="15" Height="15" Margin="0,0,3,0" />
+			<Image x:Name="BtnMin" Source="Icons\min.ico" Width="20" Height="20" Stretch="UniformToFill"/>
+			<Image x:Name="BtnClose" Source="Icons\close.ico" Width="19" Height="20" Stretch="UniformToFill"/>
+		</StackPanel>
+		<Label HorizontalAlignment="Left" Margin="0,128.383,0,0" VerticalAlignment="Top" Content="Window Commands" Grid.Column="1" Grid.Row="2" FontFamily="Century Gothic" FontSize="16" Foreground="White"/>
+		<StackPanel HorizontalAlignment="Left" Margin="8,175,0,0" VerticalAlignment="Top" Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
+			<Grid>
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="16" Height="16"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="7" FontFamily="Century Gothic" FontSize="9.333" Foreground="White" />
+			</Grid>
+			<Grid Margin="2,0,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="16" Height="16"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="8" FontFamily="Century Gothic" FontSize="9.333" Foreground="White" />
+			</Grid>
+			<Grid Margin="5,0,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="16" Height="16"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="9" FontFamily="Century Gothic" FontSize="9.333" Foreground="White" />
+			</Grid>
+			<Grid Margin="1,0,0,0">
+				<Ellipse Fill="#FF008DFF" Stroke="Black" Width="16" Height="16"/>
+				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="10" FontFamily="Century Gothic" FontSize="9.333" Foreground="White" />
+			</Grid>
+		</StackPanel>
+	</Grid>
+</Window>
