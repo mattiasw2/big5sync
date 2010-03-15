@@ -31,23 +31,23 @@ namespace SynclessUI
 		
         private string _path;
         
-		public TagWindow(MainWindow main, string clipath, string _selectedtag)
+		public TagWindow(MainWindow main, string path, string tagname)
         {
             InitializeComponent();
 
 			_main = main;
 			ACBName.IsEnabled = false;
 
-            if (clipath == "")
+            if (path == "")
             {
                 _path = SelectPath(true);
             }
             else
             {
-                _path = clipath;
+                _path = path;
             }
 
-            ProcessPath(_path, _selectedtag);
+            ProcessPath(_path, tagname);
 
             if (cancelstatus)
             {
