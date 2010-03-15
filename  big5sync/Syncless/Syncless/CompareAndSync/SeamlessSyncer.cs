@@ -87,16 +87,23 @@ namespace Syncless.CompareAndSync
                         }
                         catch (ArchiveFileException e)
                         {
-
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString()); 
                         }
                         catch (DeleteFileException e)
                         {
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                         catch (CopyFileException e)
                         {
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                         catch (MoveFileException e)
                         {
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                     }
                 }
@@ -123,9 +130,13 @@ namespace Syncless.CompareAndSync
                         }
                         catch (ArchiveFileException e)
                         {
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                         catch (DeleteFileException e)
                         {
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                     }
                 }
@@ -141,8 +152,10 @@ namespace Syncless.CompareAndSync
             {
                 return (CommonMethods.CalculateMD5Hash(sourceFile) != CommonMethods.CalculateMD5Hash(destFile));
             }
-            catch (HashFileException)
+            catch (HashFileException e)
             {
+                //TODO: Throw to notification queue in future
+                ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                 return true;
             }
         }
@@ -199,9 +212,13 @@ namespace Syncless.CompareAndSync
                         }
                         catch (CreateFolderException e)
                         {
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                         catch (MoveFolderException e)
                         {
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                     }
                 }
@@ -228,10 +245,13 @@ namespace Syncless.CompareAndSync
                         }
                         catch (ArchiveFolderException e)
                         {
-
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                         catch (DeleteFolderException e)
                         {
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                     }
                 }
