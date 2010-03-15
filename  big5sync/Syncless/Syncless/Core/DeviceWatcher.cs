@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.IO;
 using System.Management;
 using System.Threading;
@@ -24,7 +24,7 @@ namespace Syncless.Core
                 return _instance;
             }
         }
-        private List<DriveInfo> connectedDrives;
+        private Hashtable connectedDrives;
         private ManagementEventWatcher insertUSBWatcher;
         private ManagementEventWatcher removeUSBWatcher;
         private const int DELAY_TIME = 10000;
@@ -40,14 +40,14 @@ namespace Syncless.Core
         /// Retrieve all fixed and removable connected drives.
         /// </summary>
         /// <returns></returns>
-        private List<DriveInfo> RetrieveAllDrives()
+        private Hashtable RetrieveAllDrives()
         {
-            List<DriveInfo> drives = new List<DriveInfo>();
+            Hashtable drives = new Hashtable();
             foreach (DriveInfo driveInfo in DriveInfo.GetDrives())
             {
-                if (driveInfo.DriveType == DriveType.Fixed || driveInfo.DriveType == DriveType.Removable || driveInfo.DriveType == DriveType.Unknown)
+                if (driveInfo.DriveType == DriveType.Fixed || driveInfo.DriveType == DriveType.Removable)
                 {
-                    drives.Add(driveInfo);
+                    drives.Add(driveInfo.Name.ToLower(), driveInfo);
                 }
             }
             return drives;
@@ -82,28 +82,16 @@ namespace Syncless.Core
         private void USBInserted(object sender, EventArrivedEventArgs e)
         {
             Thread.Sleep(DELAY_TIME);
-            IMonitorControllerInterface control = ServiceLocator.MonitorI;
-            List<DriveInfo> newConnectedDrives = RetrieveAllDrives();
-            int i = 0;
-            foreach (DriveInfo drive in newConnectedDrives)
+            Hashtable newConnectedDrives = RetrieveAllDrives();
+            foreach (DictionaryEntry de in newConnectedDrives)
             {
-                bool inserted = false;
-                if (i >= connectedDrives.Count)
+                if (!connectedDrives.Contains(de.Key))
                 {
-                    inserted = true;
-                }
-                else if (!drive.Name.Equals(connectedDrives[i].Name))
-                {
-                    inserted = true;
-                    i--;
-                }
-                if (inserted)
-                {
+                    DriveInfo drive = (DriveInfo)de.Value;
                     DriveChangeEvent dce = new DriveChangeEvent(DriveChangeType.DRIVE_IN, drive);
-                    control.HandleDriveChange(dce);
+                    ServiceLocator.MonitorI.HandleDriveChange(dce);
                     Console.WriteLine(drive.Name + " inserted.");
                 }
-                i++;
             }
             connectedDrives = newConnectedDrives;
         }
@@ -136,28 +124,16 @@ namespace Syncless.Core
 
         private void USBRemoved(object sender, EventArrivedEventArgs e)
         {
-            IMonitorControllerInterface control = ServiceLocator.MonitorI;
-            List<DriveInfo> newConnectedDrives = RetrieveAllDrives();
-            int i = 0;
-            foreach (DriveInfo drive in connectedDrives)
+            Hashtable newConnectedDrives = RetrieveAllDrives();
+            foreach (DictionaryEntry de in connectedDrives)
             {
-                bool removed = false;
-                if (i >= newConnectedDrives.Count)
+                if (!newConnectedDrives.Contains(de.Key))
                 {
-                    removed = true;
-                }
-                else if (!drive.Name.Equals(newConnectedDrives[i].Name))
-                {
-                    removed = true;
-                    i--;
-                }
-                if (removed)
-                {
+                    DriveInfo drive = (DriveInfo)de.Value;
                     DriveChangeEvent dce = new DriveChangeEvent(DriveChangeType.DRIVE_OUT, drive);
-                    control.HandleDriveChange(dce);
+                    ServiceLocator.MonitorI.HandleDriveChange(dce);
                     Console.WriteLine(drive.Name + " removed.");
                 }
-                i++;
             }
             connectedDrives = newConnectedDrives;
         }
