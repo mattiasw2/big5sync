@@ -6,6 +6,7 @@ using System.IO;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Exceptions;
+using Syncless.Core;
 
 namespace Syncless.CompareAndSync.Visitor
 {
@@ -135,10 +136,14 @@ namespace Syncless.CompareAndSync.Visitor
                         catch (ArchiveFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                         catch (CopyFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                     }
                     else
@@ -177,10 +182,15 @@ namespace Syncless.CompareAndSync.Visitor
                         catch (ArchiveFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+
                         }
                         catch (DeleteFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
 
                     }
@@ -218,6 +228,8 @@ namespace Syncless.CompareAndSync.Visitor
                         catch (MoveFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                     }
                     else
@@ -252,6 +264,8 @@ namespace Syncless.CompareAndSync.Visitor
                             catch (CreateFolderException e)
                             {
                                 folder.FinalState[i] = FinalState.Error;
+                                //TODO: Throw to notification queue in future
+                                ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                             }
                         }
                     }
@@ -293,10 +307,14 @@ namespace Syncless.CompareAndSync.Visitor
                         catch (ArchiveFolderException e)
                         {
                             folder.FinalState[i] = FinalState.Error;
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                         catch (DeleteFolderException e)
                         {
                             folder.FinalState[i] = FinalState.Error;
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                     }
                     else
@@ -335,6 +353,8 @@ namespace Syncless.CompareAndSync.Visitor
                         catch (MoveFolderException e)
                         {
                             folder.FinalState[i] = FinalState.Error;
+                            //TODO: Throw to notification queue in future
+                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
                         }
                     }
                     else
