@@ -23,6 +23,8 @@
    In the future, we will ensure that the system will be able to merge profiles stored in external hard disk, thumbdrive and SD card.
 
 6. Preview Sync Result.
+   This feature will be implemented in the future to show the result before synchronization.
 
 7. Implement uni-directional synchronization.
+   Currently, our software only handles bi-directional synchronization. In the future, Uni directional will be implemented.
   
