@@ -4,6 +4,8 @@
 
 == Overview ==
 
+The Tagging component provides the underlying operations of creating/removing a tag, tagging/untagging a folder to/from a tag and managing filter properties. 
+
 == Class Diagram ==
 
 == Description of Design ==
