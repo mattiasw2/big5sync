@@ -47,7 +47,9 @@ You have files and folders which you wish to synchronize automatically without y
 
 To synchronize 2 or more folders together, you must first tag them with the same name. This tagging process can be initiated in multiple ways.
   * Tagging from Syncless
+
   * Tagging from Windows Explorer
+
   * Drag-and-Drop folder(s) on the Main Window
 
 To edit and share your photos, you must first transfer them to your computer. This
