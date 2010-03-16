@@ -1,6 +1,18 @@
 #summary Developer Guide
 
 = 1. System Overview =
+     == 1.1. Architecture ==
+        
+        Following the MVC model, the system into UI and Logic. The UI is developed 
+        separately from the System Core logic. The logic layer follows a facade pattern. 
+        It is further divided into sub components which will work together and complete 
+        the job.
+
+        Communication between the User Interface and Core Logic is done through a Service                   
+        Locator and Interface. This allow us to change the logic without affecting the
+        User Inteface. On top of that, this also allow other developer to create their own
+        user interface to work with Syncless Core Logic.
+
 
 = 2. System Components =
 
@@ -35,16 +47,23 @@
 
      == 2.4. Monitor ==
 
+        The Monitor Component provides implementations to monitor the file system and 
+        drives. This is used to detect drives changes and to provide synchronization when 
+        a device is plugged in. The component monitor changes in the file system to detect 
+        changes in the files and folder to synchronize them. 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentMonitor">More details...</a>
 
      == 2.5. Filter ==
-
+        
+        The Filter Component provides a means to filter files and folders to synchronize a 
+        specified set of files/folders. This is to provide an easy way to extend this    
+        feature into future instead of coupling it in the Tagging Component.
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentFilter">More details...</a>
 
      == 2.6. Logging ==
 
-     The Logging component performs logging of messages produced when exceptions are 
-     caught to a debug log file. It also logs user actions to a user log file.
+        The Logging component performs logging of messages produced when exceptions are 
+        caught to a debug log file. It also logs user actions to a user log file.
 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentLogging">More details...</a>
 
