@@ -4,30 +4,30 @@
 
 = Welcome to Syncless =
 
-  File Synchronization is taken on a whole new level with _*Syncless*_. This document familiarizes you with the basic features in _*Syncless*_ and introduces you to the concepts of *tagging* and *n-way* _seamless synchronization_ in _*Syncless*_.
+File Synchronization is taken on a whole new level with _*Syncless*_. This document familiarizes you with the basic features in _*Syncless*_ and introduces you to the concepts of *tagging* and *n-way* _seamless synchronization_ in _*Syncless*_.
 
-  _*Syncless*_ allows you to synchronize your files and folders automatically through the use of tags, even across removable drives. With _*Syncless*_, you can quickly tag multiple folders and configure them to be either in _seamless_ mode or _manual_ synchronization mode. Syncless also includes powerful filters and versioning capability, along with the finest usability that caters to individual's workflow. Lastly, Syncless is a portable app, so it will run off any removable drive and no installation is required.
+_*Syncless*_ allows you to synchronize your files and folders automatically through the use of tags, even across removable drives. With _*Syncless*_, you can quickly tag multiple folders and configure them to be either in _seamless_ mode or _manual_ synchronization mode. Syncless also includes powerful filters and versioning capability, along with the finest usability that caters to individual's workflow. Lastly, Syncless is a portable app, so it will run off any removable drive and no installation is required.
 
-  == What You’ll Learn ==
-  If you follow all the steps in this tutorial, you’ll be able to:
-    * Synchronize files/folders
-    * Tag in multiple ways
-    * Manage Tags
-    * Run Syncless off a thumbdrive
-    * Apply filters to tags
-    * Learn shortcuts to speed up productivity
-    * Eject removable drives
+== What You’ll Learn ==
+If you follow all the steps in this tutorial, you’ll be able to:
+  * Synchronize files/folders
+  * Tag in multiple ways
+  * Manage Tags
+  * Run Syncless off a thumbdrive
+  * Apply filters to tags
+  * Learn shortcuts to speed up productivity
+  * Eject removable drives
 
-  == Downloading and Running ==
-  Before continuing, make sure you are running a Windows operating system (XP and above has been tested so far to be working well).
+== Downloading and Running ==
+Before continuing, make sure you are running a Windows operating system (XP and above has been tested so far to be working well).
 
-  To download Syncless, please visit http://code.google.com/p/big5sync/downloads/list to get the latest version (ver 0.9) of Syncless. After that, unzip the package to anywhere and run Syncless.exe. No installation of Syncless is absolutely required.
+To download Syncless, please visit http://code.google.com/p/big5sync/downloads/list to get the latest version (ver 0.9) of Syncless. After that, unzip the package to anywhere and run Syncless.exe. No installation of Syncless is absolutely required.
 
-  To make it easier to do the tasks in this tutorial, it is a good idea to print this document before you start. In some tasks shown in this tutorial, you will need to choose toolbar commands, which looks like this:
-  Toolbar > Create Tag
+To make it easier to do the tasks in this tutorial, it is a good idea to print this document before you start. In some tasks shown in this tutorial, you will need to choose toolbar commands, which looks like this:
+Toolbar > Create Tag
 
-  The term after Toolbar is the name of the command in the main toolbar located in the Main Window.
+The term after Toolbar is the name of the command in the main toolbar located in the Main Window.
 
-  == The Syncless Interface ==
+== The Syncless Interface ==
 
-  When you run Syncless, you will be greeted with the viewing area, which allows you to choose what you want to do next, such as create tag, tag a folder, view tag details or etc.
+When you run Syncless, you will be greeted with the viewing area, which allows you to choose what you want to do next, such as create tag, tag a folder, view tag details or etc.
