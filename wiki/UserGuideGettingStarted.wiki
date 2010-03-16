@@ -36,7 +36,7 @@ http://big5sync.googlecode.com/files/main-interface.png
 
 = Learn Syncless =
 
-Continue to Explore Syncless
+== Continue to Explore Syncless ==
 
 Syncless offers other powerful features to do synchronization. Check out
 one or more of these additional features:
