@@ -4,9 +4,11 @@
 
 == Overview ==
 
-The Profiling component performs drive/computer recognization. It makes *Syncless* portable because of the ability to recognize different drives/computers by creating a Globally Unique IDentifier (GUID) in each of them. It also performs conversion from a physical drive/computer GUID to a logical ID.
+The Profiling component performs drive/computer recognization. It makes *Syncless* portable because of the ability to recognize different drives/computers by creating a Globally Unique IDentifier (GUID) in each of them. It also performs conversion of a physical directory/file path to a logical address, and vice versa. This conversion is necessary, because *CompareAndSync* only recognizes physical path while *Tagging* recognizes a logical path.
 
 == The Classes ==
+
+The Profiling component consists of several important sub-components, including a main logic layer - *ProfilingLayer*, model objects - *Profile* and *ProfileMapping*, helper components - *ProfileMerger*, *ProfilingHelper*, *ProfilingXMLHelper* and *ProfilingGUIDHelper*.
 
 === ProfilingLayer ===
 
@@ -31,3 +33,7 @@ Like-wise, when a drive-out event is detected, *ProfilingLayer* will remove the 
 == Explanation of ==
 
 == Extending Profiling ==
+
+== Glossary ==
+
+_GUID_
