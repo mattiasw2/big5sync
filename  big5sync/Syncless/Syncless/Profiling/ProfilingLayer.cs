@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using Syncless.Profiling.Exceptions;
+using Syncless.Helper;
 namespace Syncless.Profiling
 {
     public class ProfilingLayer
@@ -30,7 +31,7 @@ namespace Syncless.Profiling
         private Profile _profile;
         private ProfilingLayer()
         {
-            _profile = new Profile("Unnamed");
+            _profile = new Profile("");
         }
         public void ChangeProfileName(string newName)
         {
@@ -127,11 +128,11 @@ namespace Syncless.Profiling
                 string convertedPath = ConvertLogicalToPhysical(path);
                 if (convertedPath != null)
                 {
-                    convertedPathList.Add(convertedPath);
+                    convertedPathList.Add(PathHelper.RemoveTrailingSlash(convertedPath));
                 }
                 else
                 {
-                    unconvertedPathList.Add(path);
+                    unconvertedPathList.Add(PathHelper.RemoveTrailingSlash(path));
                 }
 
             }
