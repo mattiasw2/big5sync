@@ -128,4 +128,11 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
+		
+		<Storyboard x:Key="WindowOnLoaded">
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="{x:Null}" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.2500000" Value="0.95"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
 </ResourceDictionary>
