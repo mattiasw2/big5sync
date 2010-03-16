@@ -7,17 +7,17 @@ Add your content here.
 
 = 2. System Components =
 
-== 2.1. Tagging ==
+     == 2.1. Tagging ==
 
-== 2.2. Profiling ==
+     == 2.2. Profiling ==
 
-== 2.3. CompareAndSync ==
+     == 2.3. CompareAndSync ==
 
-== 2.4. Monitor ==
+     == 2.4. Monitor ==
 
-== 2.5. Filter ==
+     == 2.5. Filter ==
 
-== 2.6. Logging ==
+     == 2.6. Logging ==
 
 = 3. Developing a UI for Syncless =
 
