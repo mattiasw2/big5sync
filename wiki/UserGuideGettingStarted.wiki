@@ -1,4 +1,5 @@
 #summary Getting Started Tutorial: Get up to speed with Syncless [Ver. 0.9] and enjoy the power of n-way seamless file synchronization through tagging.
+#labels Featured,Phase-Implementation
 
 = Contents =
 
@@ -21,7 +22,7 @@ If you follow all the steps in this tutorial, you’ll be able to:
 == Downloading and Running ==
 Before continuing, make sure you are running a Windows operating system (XP and above has been tested so far to be working well).
 
-To download Syncless, please visit http://code.google.com/p/big5sync/downloads/list to get the latest version (ver 0.9) of Syncless. After that, unzip the package to anywhere and run Syncless.exe. No installation of Syncless is absolutely required.
+To download Syncless, please visit http://code.google.com/p/big5sync/downloads/list to get the latest version (ver 0.9) of Syncless. After that, unzip the package to anywhere and run Syncless.exe. Absolutely no installation of Syncless is required.
 
 To make it easier to do the tasks in this tutorial, it is a good idea to print this document before you start. In some tasks shown in this tutorial, you will need to choose toolbar commands, which looks like this:
 Toolbar > Create Tag
