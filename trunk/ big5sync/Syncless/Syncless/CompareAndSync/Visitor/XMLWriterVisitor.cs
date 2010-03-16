@@ -574,7 +574,7 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 lock (syncLock)
                 {
-                    CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+                    CommonMethods.LoadXML(ref xmlDoc, xmlPath);
                 }
 
                 XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
