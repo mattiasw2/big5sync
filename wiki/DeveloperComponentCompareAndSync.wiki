@@ -1,14 +1,18 @@
 #summary Developer's Guide - Component - CompareAndSync
 #labels Phase-Implementation
 
-= Introduction =
+= CompareAndSync =
 
-Add your content here.
+== Overview ==
 
 
-= Details =
+== Class Diagram ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+
+== Description of Design ==
+
+
+== Explanation of ==
+
+
+== Extending CompareAndSync ==
