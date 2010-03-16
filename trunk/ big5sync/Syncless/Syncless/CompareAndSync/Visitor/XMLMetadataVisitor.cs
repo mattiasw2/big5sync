@@ -231,7 +231,6 @@ namespace Syncless.CompareAndSync.Visitor
 
         private List<string> GetAllFoldersInXML(XmlDocument xmlDoc)
         {
-            string name = "";
             List<string> folderList = new List<string>();
 
             XmlNodeList xmlFolderList = xmlDoc.SelectNodes(XPATH_EXPR + "/folder");
