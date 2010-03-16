@@ -34,3 +34,13 @@ The term after Toolbar is the name of the command in the main toolbar located in
 When you run Syncless, you will be greeted with the viewing area, which allows you to choose what you want to do next, such as create tag, tag a folder, view tag details or etc.
 
 http://big5sync.googlecode.com/files/main-interface.png
+
+
+== Getting More Help ==
+
+To get help while you are using Syncless, refer to the full user guide [PROVIDE LINK]. You'll find more information about the topics covered in this document, as well as information about and instructions for many more topics. You can also view a video of the quick run-through of the features at http://www.youtube.com/watch?v=i30Q2U7ceWs
+
+For technical information and list of issues, go to http://code.google.com/p/big5sync/issues/list
+
+For complete and up-to-date information about Syncless, go to Syncless's website at
+http://code.google.com/p/big5sync/
