@@ -1,14 +1,17 @@
 #summary Developer's Guide - Components - UI
 #labels Phase-Implementation
+#sidebar DeveloperGuideSidebar
 
-= Introduction =
+= User Interface =
 
-Add your content here.
+<wiki:toc max_depth="4" />
 
+== Overview ==
 
-= Details =
+== Class Diagram ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== Description of Design ==
+
+== Explanation of ==
+
+== Extending UI ==
