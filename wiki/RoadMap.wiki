@@ -1,23 +1,24 @@
 #summary This page contains the list of features/bug fix we will implement in the future.
 
 1. Solve the recursion directory issue.  
-   Currently, if the folders that are tagged form a recursion, if all of the tags are in seamless mode, folders and file will be continuously created until the maximum path length is reached. After which, an exception will be thrown.
+   Currently, if the folders that are tagged form a recursion, if all of the tags are in seamless mode, folders and files will be continuously created until the maximum path length is reached. After which, an exception will be thrown.
    Example of recursion : 
    
    <a href = "http://big5sync.googlecode.com/files/RecursiveTagging.jpg"><img src = "http://big5sync.googlecode.com/files/RecursiveTagging.jpg" /></a>
 
-   If Folder A is tagged with Folder D , and Folder C is tagged with Folder B. 
+   Folder A is tagged with Folder D , and Folder C is tagged with Folder B. 
    
 
 2. Untag a tagged folder if it is deleted.
 
-3. Implement a Notification to send message from Logic Layer to User Interface.
+3. Implement a Notification system to send message from Logic Layer to User Interface.
    Currently, messages from the System Core are not sent to User Interface. We will need to implement a Notification system to send notification to the UI. This is needed to inform the user on many issues, for example, Conflict in Profile, Sync Result etc.
    
 4. Implement a Manual Sync Queue instead of having multiple threads running.
-   Currently, every sync request is created as a thread and the sync job will be run. However, this may cause many problems when writing meta data and file updating. In the future, a Queue may be implemented to allow only 1 job to be sync at one time.
+   Currently, every sync request is created as a thread and the sync job will be run. However, this may cause many problems when writing meta data and updating file. In the future, a Queue may be implemented to allow only 1 job to be sync at one time.
 
 5. Merge Profile for Hard disk.
+   
 
 6. Preview Sync Result.
 
