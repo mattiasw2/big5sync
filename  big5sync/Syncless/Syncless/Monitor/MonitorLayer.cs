@@ -219,7 +219,16 @@ namespace Syncless.Monitor
                 {
                     DirectoryInfo newDirectory = new DirectoryInfo(parent);
                     DirectoryInfo existingDirectory = new DirectoryInfo(rootWatchPath);
-                    if (!newDirectory.Parent.FullName.ToLower().Equals(existingDirectory.Parent.FullName.ToLower())) // Adding a child directory
+                    bool isChild = false;
+                    if (newDirectory.Root.FullName.ToLower().Equals(newDirectory.FullName.ToLower()))
+                    {
+                        isChild = true;
+                    }
+                    else if (!newDirectory.Parent.FullName.ToLower().Equals(existingDirectory.Parent.FullName.ToLower())) // Adding a child directory
+                    {
+                        isChild = true;
+                    }
+                    if (isChild)
                     {
                         rootWatcher.Dispose();
                         rootWatchers.RemoveAt(i);
