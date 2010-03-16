@@ -91,10 +91,9 @@ Using pre-traversal, BuilderVisitor will build a tree based on the given root pa
 
 From the above, we can see that "SWEN.pdf" exists only in Lectures, "BizComm.ppt" only in Notes, and "Extra Notes" folder exists in both Lectures and School. With the above, we will generate the following tree:
 
-[http://big5sync.googlecode.com/files/DeveloperCompareAndSyncDiagTree.png thumb]
+http://big5sync.googlecode.com/files/DeveloperCompareAndSyncDiagTreeSmall.png
 
-
-
+With the above tree, it is very easy to compare as we only need to concern ourselves with a single node for every file. Now that the tree is built and populated with files, the XMLMetadataVisitor will populate each node with metadata, as well as create nodes if the file exists in the metadata but not in the folder. 
 
 
 == Extending CompareAndSync ==
