@@ -1,7 +1,7 @@
 #summary Developer Guide
 #sidebar DeveloperGuideSidebar
 
-<wiki:toc max_depth="6">
+<wiki:toc max_depth="6" />
 
 = 1. System Overview =
 
