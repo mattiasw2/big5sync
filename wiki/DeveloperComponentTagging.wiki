@@ -12,9 +12,25 @@ The Tagging component consists of several important sub-components, including a 
 
 === TaggingLayer ===
 
-This is the main logic layer which is called by the *SystemLogicLayer* to perform tag-related operations. When initialized, *TaggingLayer* will call *TaggingXMLHelper* to load the current tagging profile from _tagging.xml_ in the computer.
+This is the main logic layer which is called by the *SystemLogicLayer* to perform tag-related operations. When *Syncless* is started up, *SystemLogicLayer* will call *TaggingLayer* for initialization. 
 
-==== Sequence Diagram ====
+When initialized, *TaggingLayer* will call *TaggingXMLHelper* to load the current tagging profile from _tagging.xml_ in the computer. If there are more than one _tagging.xml_ files available (this may happen if there are removable drives plugged into the computer), *TaggingLayer* will call *TagMerger* to perform merging of several tagging profiles based on various sources of _tagging.xml_.
+
+==== Sequence Diagram of Init ====
+
+After initialization, *TaggingLayer* can be called to perform tag-related operations.
+
+=== TaggingProfile ===
+
+This is the main object contained in *TaggingLayer* to store information related to tagging operations.
+
+Properties of *TaggingProfile* include:<br>
+-ProfileName<br>
+-TagList<br>
+-CreatedDate<br>
+-LastUpdatedDate<br>
+
+
 
 == Description of Design ==
 
