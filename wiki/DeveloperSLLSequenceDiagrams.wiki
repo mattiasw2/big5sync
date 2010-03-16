@@ -17,6 +17,6 @@
 
 <img src = "http://big5sync.googlecode.com/files/SLLDeleteTag.jpg" />
 
-== StartManualSync ==
+== !StartManualSync ==
 
 <img src = "http://big5sync.googlecode.com/files/SLLStartManualSync.jpg" width = 856 height = 470 />
