@@ -72,7 +72,7 @@ namespace Syncless.CompareAndSync.Visitor
                                 fco = (FileCompareObject)o;
 
                             fco.CreationTime[index] = info.CreationTime.Ticks;
-                            fco.Hash[index] = CommonMethods.CalculateMD5Hash(info.FullName);
+                            fco.Hash[index] = CommonMethods.CalculateMD5Hash(info);
                             fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
                             fco.Length[index] = info.Length;
                             fco.Exists[index] = true;
