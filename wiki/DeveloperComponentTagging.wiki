@@ -30,7 +30,7 @@ Properties of *TaggingProfile* include:<br>
 -CreatedDate<br>
 -LastUpdatedDate<br>
 
-
+*TagList* contains a list of tags which are created when *Syncless* is run. Most methods under *TaggingProfile* will need to make changes to *TagList*, such as *AddTag*, *DeleteTag*, *TagFolder*, *UntagFolder* and *UpdateFilter*.
 
 == Description of Design ==
 
