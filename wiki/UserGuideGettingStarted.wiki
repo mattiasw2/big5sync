@@ -30,7 +30,7 @@ The term after Toolbar is the name of the command in the main toolbar located in
 
 == The Syncless Interface ==
 
-When you run Syncless, you will be greeted with the viewing area, which allows you to choose what you want to do next, such as create tag, tag a folder, view tag details or etc.
+When you run Syncless, you will be greeted with the viewing area, which allows you to choose what you want to do next, such as create tag, tag a folder, view tag details or etc. The interface incorporates a lot of useful shortcuts to speed up productivity.
 
 http://big5sync.googlecode.com/files/main-interface.png
 
