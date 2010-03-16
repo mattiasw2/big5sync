@@ -39,23 +39,23 @@ As stated in the overview, the manual portion of the CompareAndSync component is
 
 The classes of concern to us are:
 
-  *CompareObjectHelper
-  *BuilderVisitor
-  *ComparerVisitor
-  *FolderRenameVisitor
-  *IVisitor
-  *SyncerVisitor
-  *XMLMetadataVisitor
-  *XMLWriterVisitor
+  * CompareObjectHelper
+  * BuilderVisitor
+  * ComparerVisitor
+  * FolderRenameVisitor
+  * IVisitor
+  * SyncerVisitor
+  * XMLMetadataVisitor
+  * XMLWriterVisitor
 
 CompareObjectHelper is the class that contains the various traversal methods, namely, pre-traversal, post-traversal, and level-order traversal for traversing the tree. All the Visitor classes implement IVisitor interface. The general course of actions that occur for each synchronization are as follows:
 
-  #BuilderVisitor takes in a RootCompareObject, and builds the directory trees for it under the given root paths.
-  #XMLMetadataVisitor will then visit this built tree, and populate it with metadata about each file, if the file exists.
-  #FolderRenameVisitor is a very specific class that will then check for folder renames.
-  #Next, ComparerVisitor visits the tree and updates the state of each CompareObject based on certain attributes like the last time the file was modified.
-  #SyncerVisitor will now traverse the tree and carry out the necessary actions based on the states updated by ComparerVisitor, as well as update the final state of each folder and file.
-  #Finally, XMLWriterVisitor will traverse the tree, and write the updated information of each folder and file to XML.
+  # BuilderVisitor takes in a RootCompareObject, and builds the directory trees for it under the given root paths.
+  # XMLMetadataVisitor will then visit this built tree, and populate it with metadata about each file, if the file exists.
+  # FolderRenameVisitor is a very specific class that will then check for folder renames.
+  # Next, ComparerVisitor visits the tree and updates the state of each CompareObject based on certain attributes like the last time the file was modified.
+  # SyncerVisitor will now traverse the tree and carry out the necessary actions based on the states updated by ComparerVisitor, as well as update the final state of each folder and file.
+  # Finally, XMLWriterVisitor will traverse the tree, and write the updated information of each folder and file to XML.
 
 Also, all the Visitors use pre-traversal, since it makes sense to build, populate and synchronize the CompareObjects from top-down. However, ComparerVisitor uses post-traversal because it is necessary to update the state of each folder if a file under it has changed.
 
