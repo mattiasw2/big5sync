@@ -8,7 +8,7 @@ The Logging component performs logging of messages produced when exceptions are 
 
 == The Classes ==
 
-The Logging component makes use of a third-party Dynamic Link Library (DLL), _log4net.dll_ to perform logging.
+The Logging component makes use of a third-party Dynamic Link Library (DLL), _log4net.dll_, to perform logging.
 
 === LoggingLayer ===
 
