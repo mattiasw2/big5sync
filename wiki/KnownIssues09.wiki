@@ -47,8 +47,6 @@ Due to the way FileSystemWatcher is implemented in C#, we are unable to handle c
 
 The current workaround for this is to wait about 10 seconds before doing the next action. We are currently looking into fixing it. [http://code.google.com/p/big5sync/issues/detail?id=11 Issue #11]
 
-== Logging ==
-
 
 == User Interface ==
 === Shortcut Keys Do Not Work ===
