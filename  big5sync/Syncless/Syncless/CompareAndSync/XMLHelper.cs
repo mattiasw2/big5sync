@@ -156,7 +156,7 @@ namespace Syncless.CompareAndSync
             xmlDoc.Save(xmlFilePath);
         }
 
-        //REDO AGAIN LATER
+       
         private static void RenameFile(BaseXMLWriteObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -254,16 +254,30 @@ namespace Syncless.CompareAndSync
             xmlDoc.Save(xmlFilePath);
         }
 
-
-        //TODO AGAIN
         private static void RenameFolder(BaseXMLWriteObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
+            string xmlPath = Path.Combine(xmlWriteObj.FullPath , METADATAPATH);
+            CreateFileIfNotExist(xmlWriteObj.FullPath);
+            xmlDoc.Load(xmlPath);
 
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + xmlWriteObj.Name + "']");
             if (node == null)
                 return;
             node.FirstChild.InnerText = xmlWriteObj.NewName;
+            xmlDoc.Save(xmlPath);
+
+            XmlDocument subFolderXmlDoc = new XmlDocument();
+            string subFolder = Path.Combine(xmlWriteObj.FullPath, xmlWriteObj.NewName);
+            string subFolderXmlPath = Path.Combine(subFolder, METADATAPATH);
+            CreateFileIfNotExist(subFolder);
+            subFolderXmlDoc.Load(subFolderXmlPath);
+            XmlNode subFolderNode = subFolderXmlDoc.SelectSingleNode(XPATH_EXPR + "/name");
+            if (subFolderNode == null)
+                return;
+            subFolderNode.InnerText = xmlWriteObj.NewName;
+            subFolderXmlDoc.Save(subFolderXmlPath);
+
         }
 
         private static void DeleteFolder(BaseXMLWriteObject xmlWriteObj)
