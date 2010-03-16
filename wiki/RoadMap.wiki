@@ -3,8 +3,8 @@
 1. Solve the recursion directory issue.  
    Currently, if the folders that are tagged form a recursion, if all of the tags are in seamless mode, folders and file will be continuously created until the maximum path length is reached. After which, an exception will be thrown.
    Example of recursion : 
-              Folder A                    Folder C
-                  |_____Folder B              |_______Folder D
+   
+   <a href = "http://big5sync.googlecode.com/files/RecursiveTagging.jpg"><img src = "http://big5sync.googlecode.com/files/RecursiveTagging.jpg" /></a>
 
    If Folder A is tagged with Folder D , and Folder C is tagged with Folder B. 
    
