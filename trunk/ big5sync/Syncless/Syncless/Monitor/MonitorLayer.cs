@@ -453,7 +453,6 @@ namespace Syncless.Monitor
         {
             if (File.Exists(e.FullPath))
             {
-                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                 FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.MODIFIED, FileSystemType.FILE);
                 FileSystemEventDispatcher.Instance.Enqueue(fse);
             }
@@ -461,68 +460,57 @@ namespace Syncless.Monitor
         
         private void OnCreated(object source, FileSystemEventArgs e)
         {
+            FileSystemEvent fse;
             if (File.Exists(e.FullPath))
             {
-                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
-                FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATING, FileSystemType.FILE);
-                FileSystemEventDispatcher.Instance.Enqueue(fse);
+                fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATING, FileSystemType.FILE);
             }
             else if (Directory.Exists(e.FullPath))
             {
-                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
-                FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.FOLDER);
-                FileSystemEventDispatcher.Instance.Enqueue(fse);
+                fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.FOLDER);
             }
             else
             {
-                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
-                FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.UNKNOWN);
-                FileSystemEventDispatcher.Instance.Enqueue(fse);
+                fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.UNKNOWN);
             }
+            FileSystemEventDispatcher.Instance.Enqueue(fse);
         }
 
         private void OnDeleted(object source, FileSystemEventArgs e)
         {
             ExtendedFileSystemWatcher watcher = (ExtendedFileSystemWatcher)source;
+            FileSystemEvent fse;
             if (!watcher.Filter.Equals("*.*"))
             {
-                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
-                FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.DELETED, FileSystemType.FILE);
-                FileSystemEventDispatcher.Instance.Enqueue(fse);
+                fse = new FileSystemEvent(e.FullPath, EventChangeType.DELETED, FileSystemType.FILE);
             }
             else
             {
-                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
-                FileSystemEvent fse = new FileSystemEvent(e.FullPath, watcher.Path);
-                FileSystemEventDispatcher.Instance.Enqueue(fse);
+                fse = new FileSystemEvent(e.FullPath, watcher.Path);
             }
+            FileSystemEventDispatcher.Instance.Enqueue(fse);
         }
 
         private static void OnRenamed(object source, RenamedEventArgs e)
         {
+            FileSystemEvent fse;
             if (File.Exists(e.FullPath))
             {
-                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
-                FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FILE);
-                FileSystemEventDispatcher.Instance.Enqueue(fse);
+                fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FILE);
             }
             else if (Directory.Exists(e.FullPath))
             {
-                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
-                FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FOLDER);
-                FileSystemEventDispatcher.Instance.Enqueue(fse);
+                fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FOLDER);
             }
             else
             {
-                Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
-                FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.UNKNOWN);
-                FileSystemEventDispatcher.Instance.Enqueue(fse);
+                fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.UNKNOWN);
             }
+            FileSystemEventDispatcher.Instance.Enqueue(fse);
         }
 
         private void OnCreateComplete(object source, FileSystemEventArgs e)
         {
-            Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
             FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.FILE);
             FileSystemEventDispatcher.Instance.Enqueue(fse);
         }
@@ -551,7 +539,6 @@ namespace Syncless.Monitor
             foreach(string folder in folders) {
                 if (e.FullPath.Equals(folder))
                 {
-                    Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                     FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.DELETED, FileSystemType.FOLDER);
                     FileSystemEventDispatcher.Instance.Enqueue(fse);
                     return;
@@ -567,7 +554,6 @@ namespace Syncless.Monitor
             {
                 if (e.OldFullPath.Equals(folder))
                 {
-                    Console.WriteLine(System.Threading.Thread.CurrentThread.ManagedThreadId);
                     FileSystemEvent fse = new FileSystemEvent(e.OldFullPath, e.FullPath, FileSystemType.FOLDER);
                     FileSystemEventDispatcher.Instance.Enqueue(fse);
                     return;
