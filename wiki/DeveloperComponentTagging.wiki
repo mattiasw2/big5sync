@@ -109,7 +109,9 @@ Conversion from *TaggingProfile* to XML:<br>
 -CreateTagElement(XmlDocument, Tag)<br>
 -CreateFoldersElements(XmlDocument, Tag)<br>
 -CreateTaggedFolderElement(XmlDocument, TaggedPath)<br>
-
+-CreateConfigElement(XmlDocument, Tag)<br>
+-CreateFilterElementList(XmlDocument, Tag)<br>
+-CreateFilterElement(XmlDocument, Filter)<br>
 
 == Description of Design ==
 
