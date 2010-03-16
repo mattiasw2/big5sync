@@ -40,6 +40,17 @@ You have files and folders which you wish to synchronize automatically without y
 
 == Step 1: Tag Folders ==
 
+To synchronize 2 or more folders together, you must first tag them with the same name. This tagging process can be initiated in multiple ways.
+  * Tagging from Syncless
+  * Tagging from Windows Explorer
+  * Drag-and-Drop folder(s) on the Main Window
+
+To edit and share your photos, you must first transfer them to your computer. This
+transfer process, known as importing, copies the photo files from their original source
+into iPhoto, where you can then work with them in a variety of ways.
+Importing from a digital camera is the most common method of transferring photos to
+iPhoto.
+
 == Continue to Explore Syncless ==
 
 Syncless offers other powerful features. Check out one or more of these additional features:
