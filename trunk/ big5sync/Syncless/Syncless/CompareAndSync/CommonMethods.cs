@@ -249,7 +249,7 @@ namespace Syncless.CompareAndSync
                 FileInfo[] fileInfos = sourceInfo.GetFiles();
                 foreach (FileInfo fileInfo in fileInfos)
                 {
-                    fileInfo.CopyTo(destination + "\\" + fileInfo.Name, true);
+                    fileInfo.CopyTo(Path.Combine(destination, fileInfo.Name), true);
 
                 }
             }
