@@ -9,7 +9,8 @@ These are the current known issues with Syncless 0.9, and will be handled at a l
 
 = Details =
 == Profiling ==
-
+=== Corrupted/Non-Standard XML Format ===
+If the XML is corrupted due to user interference, Syncless will have erratic behaviour. The next version will detect this and handle it properly. [http://code.google.com/p/big5sync/issues/detail?id=33 Issue #33]
 
 == Tagging ==
 === Recursive Tagging ===
@@ -49,3 +50,6 @@ The current workaround for this is to wait about 10 seconds before doing the nex
 == User Interface ==
 === Shortcut Keys Do Not Work ===
 Under certain circumstances, the shortcut keys will stop working. One guaranteed way to reproduce this is to do a "Ctrl + T", followed by any other shortcut key. After that, all shortcut keys will stop working until you click on one of the buttons. [http://code.google.com/p/big5sync/issues/detail?id=26 Issue #26]
+
+=== Folder Dialog Does Not Show Certain Folders ===
+The folder dialog may not show certain folders such as "My Computer" in certain cases. We are still looking into this issue. [http://code.google.com/p/big5sync/issues/detail?id=32 Issue #32]
