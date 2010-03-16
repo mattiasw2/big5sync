@@ -1,7 +1,7 @@
 #summary Developer's Guide - Component - CompareAndSync
 #labels Phase-Implementation
 
-= CompareAndSync =
+= CompareAndSync1 =
 
 == Overview ==
 The *CompareAndSync* component in *Syncless* is the part of the system that handles the comparison and syncing of files and folders. From a logical point of view, it can be briefly split into 2 subcomponents; the manual subcomponent that handles all manual operations, and the seamless subcomponent that handles all the automated synchronization requests from another component, the *Monitor*.
