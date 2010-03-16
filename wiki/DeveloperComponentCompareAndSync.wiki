@@ -21,11 +21,11 @@ Before going in depth into the design, we will first take a look at the data tra
 
 
 ==== Request ====
-Requests are data transfer objects sent to CompareAndSync when a comparison or synchronization action is to be done. The Request object is an abstract class, from which all other requests will extend from. AutoSyncRequest and ManualRequest are the respective requests for seamless and manual mode. ManualRequest is further extended to ManualSyncRequest and ManualCompareRequest.
+Requests are data transfer objects sent to CompareAndSync when a comparison or synchronization action is to be done. The *Request* object is an abstract class, from which all other requests will extend from. *AutoSyncRequest* and *ManualRequest* are the respective requests for seamless and manual mode. *ManualRequest* is further extended to *ManualSyncRequest* and *ManualCompareRequest*.
 
 
 ==== CompareObject ====
-CompareObjects are entities which are used during comparison and synchronization. There are basically 2 main kinds of CompareObjects, the FileCompareObject and the FolderCompareObject. RootCompareObject is a specific kind of FolderCompareObject used to represent the root paths to be compared. There is also the XMLCompareObject which is used to store the file metadata and then used to populate the main CompareObjects.
+CompareObjects are entities which are used during comparison and synchronization. There are basically 2 main kinds of CompareObjects, the *FileCompareObject* and the *FolderCompareObject*. *RootCompareObject* is a specific kind of FolderCompareObject used to represent the root paths to be compared. There is also the *XMLCompareObject* which is used to store the file metadata and then used to populate the main CompareObjects.
 
 
 == Main Components ==
@@ -50,14 +50,14 @@ The classes of concern to us are:
   * XMLMetadataVisitor
   * XMLWriterVisitor
 
-CompareObjectHelper is the class that contains the various traversal methods, namely, pre-traversal, post-traversal, and level-order traversal for traversing the tree. All the Visitor classes implement IVisitor interface. The general course of actions that occur for each synchronization are as follows:
+*CompareObjectHelper* is the class that contains the various traversal methods, namely, pre-traversal, post-traversal, and level-order traversal for traversing the tree. All the Visitor classes implement IVisitor interface. The general course of actions that occur for each synchronization are as follows:
 
-  # BuilderVisitor takes in a RootCompareObject, and builds the directory trees for it under the given root paths.
-  # XMLMetadataVisitor will then visit this built tree, and populate it with metadata about each file, if the file exists.
-  # FolderRenameVisitor is a very specific class that will then check for folder renames.
-  # Next, ComparerVisitor visits the tree and updates the state of each CompareObject based on certain attributes like the last time the file was modified.
-  # SyncerVisitor will now traverse the tree and carry out the necessary actions based on the states updated by ComparerVisitor, as well as update the final state of each folder and file.
-  # Finally, XMLWriterVisitor will traverse the tree, and write the updated information of each folder and file to XML.
+  # *BuilderVisitor* takes in a RootCompareObject, and builds the directory trees for it under the given root paths.
+  # *XMLMetadataVisitor* will then visit this built tree, and populate it with metadata about each file, if the file exists.
+  # *FolderRenameVisitor* is a very specific class that will then check for folder renames.
+  # Next, *ComparerVisitor* visits the tree and updates the state of each CompareObject based on certain attributes like the last time the file was modified.
+  # *SyncerVisitor* will now traverse the tree and carry out the necessary actions based on the states updated by ComparerVisitor, as well as update the final state of each folder and file.
+  # Finally, *XMLWriterVisitor* will traverse the tree, and write the updated information of each folder and file to XML.
 
 Also, all the Visitors use pre-traversal, since it makes sense to build, populate and synchronize the CompareObjects from top-down. However, ComparerVisitor uses post-traversal because it is necessary to update the state of each folder if a file under it has changed. Assuming a user wants to compare and analyze the results, but not do any actual synchronization, we simply remove SyncerVisitor and XMLWriterVisitor from the sequence. It is also important to note that the Tree Visitor Pattern allows for very good modularity, and we can simply add on extra visitors to perform other tasks if necessary. Similarly, we can remove any visitors (except for BuilderVisitor, because it is required to build the tree), if necessary. A good example would be to remove FolderRenameVisitor if the developer does not want to handle folder renames.
 
@@ -71,7 +71,7 @@ The classes of concern to us for the seamless portion are as follows:
   * SeamlessSyncer
   * XMLHelper
 
-SeamlessQueueControl is a class that contains a single queue to ensure the requests are handled in order, so as to prevent any possible conflicts. SeamlessSyncer contains the necessary methods to handle seamless file synchronization, and upon each successful synchronization, XMLHelper will be called to update the metadata stored in side.
+*SeamlessQueueControl* is a class that contains a single queue to ensure the requests are handled in order, so as to prevent any possible conflicts. *SeamlessSyncer* contains the necessary methods to handle seamless file synchronization, and upon each successful synchronization, *XMLHelper* will be called to update the metadata stored in side.
 
 
 == Explanation of Algorithms ==
@@ -80,16 +80,16 @@ The main algorithm we are going to discuss here is the manual component comparis
 Using pre-traversal, BuilderVisitor will build a tree based on the given root paths. However, instead of a node for each and every folder, it groups files and folders of the same name at each level into single node. For example, if we want to synchronize "Lectures", "Notes" and "School", and the content of the folders are as follows:
 
 *Lectures*
--SWEN.pdf
--Extra Notes
- -Principles of Software Engineering.pdf
+  * SWEN.pdf
+  * Extra Notes
+    * Principles of Software Engineering.pdf
 
 *Notes*
--BizComm.ppt
+  * BizComm.ppt
 
 *School*
--Extra Notes
- -Principles of Software Engineering.pdf
+  * Extra Notes
+    * Principles of Software Engineering.pdf
 
 From the above, we can see that "SWEN.pdf" exists only in Lectures, "BizComm.ppt" only in Notes, and "Extra Notes" folder exists in both Lectures and School. With the above, we will generate the following tree:
 
