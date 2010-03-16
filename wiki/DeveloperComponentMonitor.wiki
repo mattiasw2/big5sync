@@ -1,6 +1,9 @@
 #summary Developer's Guide - Component - Monitor
+#sidebar DeveloperGuideSidebar
 
 = Monitor =
+
+<wiki:toc max_depth="4" />
 
 == Overview ==
 
