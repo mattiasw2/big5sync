@@ -24,4 +24,4 @@ This is the main logic layer which is called by the *SystemLogicLayer* to perfor
 
 == Glossary ==
 
-<A NAME = "xmldocument"> _tagging.xml_ </A>
+<a name = "xmldocument"> _tagging.xml_ </a>
