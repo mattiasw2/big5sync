@@ -8,5 +8,6 @@
     * [DeveloperComponentLogging Logging]
     * [DeveloperComponentUI User Interface]
   * [KnownIssues09 Known Issues]
+  * [SpecialCases Special Cases]
   * [DeveloperGuideRecommendations Recommended Resources]
   * [DeveloperGuideReferences References]
