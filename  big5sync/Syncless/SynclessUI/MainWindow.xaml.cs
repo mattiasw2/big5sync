@@ -48,7 +48,7 @@ namespace SynclessUI
 
         public MainWindow()
         {
-            //MinimizeToTray.Enable(this);
+            MinimizeToTray.Enable(this);
 
             InitializeComponent();
             InitializeSyncless();
@@ -981,11 +981,6 @@ namespace SynclessUI
             }
         }
 
-        private void BtnShortcuts_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-        	DisplayShortcutsWindow();
-        }
-
         private void LayoutRoot_Drop(object sender, System.Windows.DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -1005,6 +1000,11 @@ namespace SynclessUI
         private void SynclessLogoContainer_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
         	LogoHighlight.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void BtnShortcuts_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+        	DisplayShortcutsWindow();
         }
     }
 }
