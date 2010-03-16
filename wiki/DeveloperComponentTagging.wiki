@@ -30,7 +30,48 @@ Properties of *TaggingProfile* include:<br>
 -CreatedDate<br>
 -LastUpdatedDate<br>
 
-*TagList* contains a list of tags which are created when *Syncless* is run. Most methods under *TaggingProfile* will need to make changes to *TagList*, such as *AddTag*, *DeleteTag*, *TagFolder*, *UntagFolder* and *UpdateFilter*.
+*TagList* contains a list of tags which are created when *Syncless* is run. Most methods under *TaggingProfile* will need to make changes to *TagList*, such as *AddTag*, *TagFolder*, *UntagFolder* and *RenameFolder*.
+
+=== Tag ===
+
+This is the object that stores information of each individual tag.
+
+Properties of *Tag* include:<br>
+-TagName<br>
+-UnfilteredPathList<br>
+-FilteredPathList<br>
+-FilteredPathListString<br>
+-CreatedDate<br>
+-LastUpdatedDate<br>
+-IsDeleted<br>
+-DeletedDate<br>
+-Config<br>
+-IsSeamless<br>
+-ArchiveName<br>
+-ArchiveCount<br>
+-Recycle<br>
+-Filters<br>
+-FiltersUpdatedDate<br>
+
+*UnfilteredPathList* contains a list of all folder paths tagged to this particular tag, including untagged folder paths which were previously tagged, and folder paths which are currently still tagged.<br><br>
+*FilteredPathList* contains a list of folder paths which are currently still tagged.<br><br>
+*Config* contains the additional tag configurations as defined by the user.<br><br>
+*Filters* contains a list of all filters.<br>
+
+=== TaggedPath ===
+
+This is the object that stores information of each folder path that is being tagged.
+
+Properties of *TaggedPath* include:<br>
+-PathName<br>
+-CreatedDate<br>
+-LastUpdatedDate<br>
+-DeletedDate<br>
+-IsDeleted<br>
+-LogicalDriveId<br>
+
+*PathName* is the full path name of a particular folder that is being tagged.<br><br>
+*IsDeleted* indicates whether this particular path has been untagged.<br>
 
 == Description of Design ==
 
