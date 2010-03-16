@@ -25,4 +25,5 @@
 
   To make it easier to do the tasks in this tutorial, it is a good idea to print this document before you start. In some tasks shown in this tutorial, you will need to choose toolbar commands, which looks like this:
   Toolbar > Create Tag
+
   The term after Toolbar is the name of the command in the main toolbar located in the Main Window.
