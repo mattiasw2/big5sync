@@ -13,7 +13,7 @@ namespace Syncless.Profiling
 
         internal static string GetGUID(string driveid)
         {
-            FileInfo fileInfo = new FileInfo(driveid + ":" + ProfilingLayer.RELATIVE_GUID_SAVE_PATH);
+            FileInfo fileInfo = new FileInfo(driveid + ":\\" + ProfilingLayer.RELATIVE_GUID_SAVE_PATH);
             if (fileInfo.Exists)
             {
                 return ReadGUID(fileInfo);
@@ -39,7 +39,7 @@ namespace Syncless.Profiling
             return guid;
 
         }
-        internal static string CreateGUID(string path)
+        private static string CreateGUID(string path)
         {
             Guid guid = Guid.NewGuid();
             string guidString = guid.ToString();
