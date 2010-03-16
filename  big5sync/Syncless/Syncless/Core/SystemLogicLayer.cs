@@ -237,8 +237,8 @@ namespace Syncless.Core
             {
                 if (dce.Type == DriveChangeType.DRIVE_IN)
                 {
-                    Merge(dce.Info);
                     ProfilingLayer.Instance.UpdateDrive(dce.Info);
+                    Merge(dce.Info);                                     
                     string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
                     List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logical);
 
@@ -309,8 +309,6 @@ namespace Syncless.Core
                 Tag t = TaggingLayer.Instance.DeleteTag(tagname);
                 //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return t != null;
-
-
             }
             catch (TagNotFoundException te)
             {
@@ -335,8 +333,6 @@ namespace Syncless.Core
                 Tag t = TaggingLayer.Instance.CreateTag(tagname);
                 //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return ConvertToTagView(t);
-
-
             }
             catch (TagAlreadyExistsException te)
             {
@@ -705,6 +701,7 @@ namespace Syncless.Core
         /// <returns>true if succeess , false if fail.</returns>
         public bool AllowForRemoval(DriveInfo drive)
         {
+            SaveLoadHelper.SaveAll(_userInterface.getAppPath());
             try
             {
                 MonitorLayer.Instance.UnMonitorDrive(drive.Name);
@@ -866,10 +863,10 @@ namespace Syncless.Core
         #region For TagMerger
         public void AddTagPath(Tag tag, TaggedPath path)
         {
-
             if (tag.IsSeamless)
             {
-                StartMonitorTag(tag, tag.IsSeamless);
+                string newPath = ProfilingLayer.Instance.ConvertLogicalToPhysical(path.PathName);
+                MonitorLayer.Instance.MonitorPath(newPath);
             }
         }
         public void RemoveTagPath(Tag tag, TaggedPath path)

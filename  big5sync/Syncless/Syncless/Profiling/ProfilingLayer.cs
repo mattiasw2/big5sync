@@ -105,12 +105,8 @@ namespace Syncless.Profiling
                 {
                     convertedPathList.Add(convertedPath);
                 }
-
             }
-
-
             return convertedPathList;
-
         }
         /// <summary>
         /// Take in a list of logical address , convert them to physical and return 2 list of address
