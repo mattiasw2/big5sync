@@ -20,7 +20,7 @@ If a user tags two folders, say "C:\Notes" and "D:\Lectures", and tags another f
 Syncless has the ability to merge all the tags on the thumb drive with that on the computer. However, there are times when this does not happen. [http://code.google.com/p/big5sync/issues/detail?id=30 Issue #30]
 
 
-== CompareAndSync ==
+== !CompareAndSync ==
 === Path Too Long To Sync ===
 If a user tags a folder which has a path that is too long, Syncless currently does not handle it. The main reason is because we have yet to implement a proper notification system. [http://code.google.com/p/big5sync/issues/detail?id=8 Issue #8]
 
@@ -33,12 +33,12 @@ If you have a few folders that are tagged in seamless mode, deleting one of thes
 === Renamed Files Not Getting Propagated ===
 This will only happen if you create, delete and then create again with the same filename, followed by a rename, all within a short span of time. This cannot be fixed as far as we know due to how Windows handles the file system. [http://code.google.com/p/big5sync/issues/detail?id=22 Issue #22]
 
-== Seamless Mode Issues ==
+=== Seamless Mode Issues ===
 Please refer to the Monitor section.
 
 == Monitor ==
 === Handling of File System Events ===
-Due to the way FileSystemWatcher is implemented in C#, we are unable to handle certain cases by default. As such, we have added some delay and additional logic on top of FileSystemWatcher to ensure that files and folders are propagated properly. However, this results in "unpredictable" effects when a user does a sequence of actions too quickly. An example would be following:
+Due to the way !FileSystemWatcher is implemented in C#, we are unable to handle certain cases by default. As such, we have added some delay and additional logic on top of !FileSystemWatcher to ensure that files and folders are propagated properly. However, this results in "unpredictable" effects when a user does a sequence of actions too quickly. An example would be following:
 
   # Tag at least 2 folders under the same tag, make sure seamless mode is on
   # Copy a folder contain about 100 folders, at least 2MB to 3MB each to one of these tagged folders so that it will take a while to propagate over
