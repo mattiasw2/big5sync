@@ -216,6 +216,16 @@ After FolderRenameVisitor is done with its job, ComparerVisitor, the only visito
 }}}
 
 
+To summarize, ComparerVisitor simply assigns a priority of 1 to the first file that it determines exist. Subsequently, it will iterate through, and files which are less updated than it will be untouched (thus, 0, since that is the default int value), and when it comes across a file which is more updated, the most updated position will be set to this file, with the priority incremented by one. Files which are determined to be equal to the one with the most updated position will be given the same priority. In other words, if all files in the given FileCompareObject are equal, then all files will have priority 1. Let us further illustrate with the following example, using just the time of the day to represent how updated the file is:
+
+A\Note.txt (10PM), B\Note.txt (10PM), C\Note.txt (9PM), D\Note.txt (11PM), E\Note.txt (8AM)
+
+After applying the above algorithm, we should get the following, with the priorities in brackets now.
+
+A\Note.txt (1), B\Note.txt (1), C\Note.txt (0), D\Note.txt (2), E\Note.txt(0)
+
+Clearly, D\Note.txt is the most updated file.
+
 
 == Extending CompareAndSync ==
 
