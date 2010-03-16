@@ -59,7 +59,7 @@ namespace Syncless.Tagging
             string trailingPath = null;
             for (int i = trailingIndex; i < pathTokens.Length - 1; i++)
             {
-                trailingPath += (pathTokens[i] + "\\");
+                trailingPath += (PathHelper.AddTrailingSlash(pathTokens[i]));
             }
             trailingPath += pathTokens[pathTokens.Length - 1];
             return trailingPath;
