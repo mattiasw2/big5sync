@@ -4,7 +4,7 @@
 
 = Tagging =
 
-<wiki:toc max_depth="4" />
+<wiki:toc max_depth="6" />
 
 == Overview ==
 
