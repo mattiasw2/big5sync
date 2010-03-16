@@ -42,13 +42,13 @@ namespace Syncless.CompareAndSync
                 switch (request.ChangeType)
                 {
                     case AutoSyncRequestType.New:
-                        XMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.New));
+                        XMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent, CommonMethods.CalculateMD5Hash(sourceFullPath), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.New));
                         break;
                     case AutoSyncRequestType.Update:
-                        XMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.Update));
+                        XMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent, CommonMethods.CalculateMD5Hash(sourceFullPath), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.Update));
                         break;
                     case AutoSyncRequestType.Rename:
-                        XMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName, request.SourceParent, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.Rename));
+                        XMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName, request.SourceParent, CommonMethods.CalculateMD5Hash(sourceFullPath), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.Rename));
                         break;
                 }
 
@@ -71,7 +71,7 @@ namespace Syncless.CompareAndSync
                                         CommonMethods.DeleteFileToRecycleBin(destFullPath);
                                     CommonMethods.CopyFile(sourceFullPath, destFullPath, true);
                                     currFile = new FileInfo(destFullPath);
-                                    XMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, request.ChangeType == AutoSyncRequestType.New ? MetaChangeType.New : MetaChangeType.Update));
+                                    XMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, CommonMethods.CalculateMD5Hash(sourceFullPath), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, request.ChangeType == AutoSyncRequestType.New ? MetaChangeType.New : MetaChangeType.Update));
                                     break;
                                 case AutoSyncRequestType.Rename:
                                     string oldFullPath = Path.Combine(dest, request.OldName);
@@ -81,7 +81,7 @@ namespace Syncless.CompareAndSync
                                     else
                                         CommonMethods.MoveFile(oldFullPath, newFullPath);
                                     currFile = new FileInfo(newFullPath);
-                                    XMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName, dest, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.Rename));
+                                    XMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName, dest, CommonMethods.CalculateMD5Hash(sourceFullPath), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.Rename));
                                     break;
                             }
                         }
@@ -145,12 +145,12 @@ namespace Syncless.CompareAndSync
 
         private static bool DoSync(string sourceFullPath, string destFullPath)
         {
-            FileInfo sourceFile = new FileInfo(sourceFullPath);
-            FileInfo destFile = new FileInfo(destFullPath);
+            //FileInfo sourceFile = new FileInfo(sourceFullPath);
+            //FileInfo destFile = new FileInfo(destFullPath);
 
             try
             {
-                return (CommonMethods.CalculateMD5Hash(sourceFile) != CommonMethods.CalculateMD5Hash(destFile));
+                return (CommonMethods.CalculateMD5Hash(sourceFullPath) != CommonMethods.CalculateMD5Hash(destFullPath));
             }
             catch (HashFileException e)
             {
