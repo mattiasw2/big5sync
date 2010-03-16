@@ -95,12 +95,11 @@ http://big5sync.googlecode.com/files/DeveloperCompareAndSyncDiagTreeSmall.png
 
 With the above tree, it is very easy to compare as we only need to concern ourselves with a single node for every file. Now that the tree is built and populated with files, the XMLMetadataVisitor will populate each node with metadata, as well as create nodes if the file exists in the metadata but not in the folder. The metadata is very important in detecting if a file or folder has been renamed or deleted, so that the changes will be propagated across.
 
-The FolderRenameVisitor will now visit the tree, and detect for folder renames. The reason why it has to occur before any file comparison can take place is due to the fact that the algorithm attempts to merge any renamed folder with folders that have the old name, so that files can still be compared.
+The FolderRenameVisitor will now visit the tree, and detect for folder renames. The reason why it has to occur before any file comparison can take place is due to the fact that the algorithm attempts to merge any renamed folder with folders that have the old name, so that files can still be compared. There are two main methods in FolderRenameVisitor, namely _DetectFolderRename_ and  _MergeRenamedFolder_, that handles this. The code for _DetectFolderRename_ is as follows.
 
 {{{
         private void DetectFolderRename(FolderCompareObject folder, string[] currentPaths)
         {
-            //Check that there is exactly one delete
             List<int> deletePos = new List<int>();
             for (int i = 0; i < currentPaths.Length; i++)
             {
