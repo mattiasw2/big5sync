@@ -81,8 +81,19 @@ namespace Syncless.Profiling
                 else
                 {
                     string guid = ProfilingGUIDHelper.GetGUID(driveid);
-                    Debug.Assert(guid != null && !guid.Equals(""));
-                    _profile.CreateMapping(guid, driveid, guid);
+                    //try to find a mapping
+                    logicalid = _profile.FindLogicalFromGUID(guid);
+                    if (logicalid == null)
+                    {
+                        Debug.Assert(guid != null && !guid.Equals(""));
+                        _profile.CreateMapping(guid, driveid, guid);
+                    }
+                    else
+                    {
+                        _profile.UpdateDrive(guid, driveid);
+                        return logicalid;
+                    }
+                    
                     logicalid = guid;
                 }
             }
