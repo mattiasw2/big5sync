@@ -48,7 +48,7 @@ namespace SynclessUI
 
         public MainWindow()
         {
-            MinimizeToTray.Enable(this);
+            //MinimizeToTray.Enable(this);
 
             InitializeComponent();
             InitializeSyncless();
