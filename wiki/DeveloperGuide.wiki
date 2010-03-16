@@ -4,10 +4,10 @@
 
      == 1.1. Architecture ==
         
-        Following the MVC model, the system into UI and Logic. The UI is developed 
-        separately from the System Core logic. The logic layer follows a facade pattern. 
-        It is further divided into sub components which will work together and complete 
-        the job.
+        Following the MVC model, the system is split into UI and Logic. The UI is 
+        developed separately from the System Core logic. The logic layer follows a facade 
+        pattern. It is further divided into sub components which will work together and 
+        complete the job.
 
         Communication between the User Interface and Core Logic is done through a Service                   
         Locator and Interface. This allow us to change the logic without affecting the
@@ -26,8 +26,6 @@
         moment, the xml is stored in the folder /.syncless and is hidden. In the future, 
         we are intending to move this to somewhere else to avoid creating too many folders 
         and files in the user's folders.
-
-  
  
 = 2. System Components =
 
