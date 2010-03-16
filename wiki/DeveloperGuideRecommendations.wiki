@@ -1,14 +1,7 @@
-#summary Developer's Guide - Recommended Resources for Developers
+#summary Developer's Guide - Recommended Resources and Readings for Developers
 #labels Phase-Implementation
 
-= Introduction =
-
-Add your content here.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== Tree Visitor Pattern ==
+[http://etymon.blogspot.com/2006/04/visitor-pattern-and-trees-considered.html Etymon - Visitor Pattern and Trees Considered Harmful]
+[http://groovy.codehaus.org/Visitor+Pattern Groovy - Visitor Pattern]
+[http://www.surfscranton.com/architecture/VisitorPattern.htm Jim's Pages - Visitor Pattern]
