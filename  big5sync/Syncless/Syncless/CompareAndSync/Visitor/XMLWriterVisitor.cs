@@ -29,7 +29,7 @@ namespace Syncless.CompareAndSync.Visitor
         private const int FIRST_POSITION = 0;
         private static bool CHECK_XML_UPDATE = false;
         private static readonly object syncLock = new object();
-        private string[] pathList ;
+        private string[] pathList;
         private List<string> newNameList = new List<string>();
         private List<string> oldNameList = new List<string>();
 
@@ -83,7 +83,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void ProcessMetaChangeType(string currentPath, FileCompareObject file, int counter)
         {
-        
+
             FinalState? changeType = file.FinalState[counter];
 
             if (changeType == null)
@@ -95,16 +95,16 @@ namespace Syncless.CompareAndSync.Visitor
             switch (changeType)
             {
                 case FinalState.Created:
-                    CreateFileObject(file, counter , currentPath);
+                    CreateFileObject(file, counter, currentPath);
                     break;
                 case FinalState.Updated:
-                    UpdateFileObject(file, counter , currentPath);
+                    UpdateFileObject(file, counter, currentPath);
                     break;
                 case FinalState.Deleted:
-                    DeleteFileObject(file , currentPath);
+                    DeleteFileObject(file, currentPath);
                     break;
                 case FinalState.Renamed:
-                    RenameFileObject(file, counter , currentPath);
+                    RenameFileObject(file, counter, currentPath);
                     break;
                 case FinalState.Unchanged:
                     HandleUnchangedOrPropagatedFile(file, counter, currentPath);
@@ -114,7 +114,7 @@ namespace Syncless.CompareAndSync.Visitor
                     break;
             }
 
-            
+
         }
 
         private void UpdateLastModifiedTime(XmlDocument xmlDoc)
@@ -154,7 +154,7 @@ namespace Syncless.CompareAndSync.Visitor
         }
 
 
-        private void CreateFileObject(FileCompareObject file, int counter , string currentPath)
+        private void CreateFileObject(FileCompareObject file, int counter, string currentPath)
         {
             XmlDocument xmlDoc = new XmlDocument();
             currentPath = UpdateToRenamedFolder(file.Parent.Name, currentPath);
@@ -167,8 +167,6 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 xmlDoc.Load(s);
             }
-
-            //xmlDoc.Load(xmlPath);
 
             int position = GetPropagated(file);
             DoFileCleanUp(xmlDoc, file.Name);
@@ -203,7 +201,7 @@ namespace Syncless.CompareAndSync.Visitor
             xmlDoc.Save(xmlPath);
         }
 
-        private void UpdateFileObject(FileCompareObject file, int counter , string currentPath)
+        private void UpdateFileObject(FileCompareObject file, int counter, string currentPath)
         {
             XmlDocument xmlDoc = new XmlDocument();
             currentPath = UpdateToRenamedFolder(file.Parent.Name, currentPath);
@@ -211,17 +209,16 @@ namespace Syncless.CompareAndSync.Visitor
 
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
             CreateFileIfNotExist(currentPath);
-
-            lock(syncLock)
+            using (Stream s = File.OpenRead(xmlPath))
             {
-                xmlDoc.Load(xmlPath);
+                xmlDoc.Load(s);
             }
-            
+
             int position = GetPropagated(file);
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
             if (node == null)
             {
-                CreateFileObject(file, counter , currentPath);
+                CreateFileObject(file, counter, currentPath);
                 return;
             }
 
@@ -251,13 +248,10 @@ namespace Syncless.CompareAndSync.Visitor
                 }
             }
 
-            lock (syncLock)
-            {
-                xmlDoc.Save(xmlPath);
-            }
+            xmlDoc.Save(xmlPath);
         }
 
-        private void RenameFileObject(FileCompareObject file , int counter , string currentPath)
+        private void RenameFileObject(FileCompareObject file, int counter, string currentPath)
         {
             XmlDocument xmlDoc = new XmlDocument();
             currentPath = UpdateToRenamedFolder(file.Parent.Name, currentPath);
@@ -265,7 +259,6 @@ namespace Syncless.CompareAndSync.Visitor
 
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
             CreateFileIfNotExist(currentPath);
-
             using (Stream s = File.OpenRead(xmlPath))
             {
                 xmlDoc.Load(s);
@@ -274,15 +267,15 @@ namespace Syncless.CompareAndSync.Visitor
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
             if (node == null)
             {
-                CreateFileObject(file , counter , currentPath);
-                return ;
+                CreateFileObject(file, counter, currentPath);
+                return;
             }
             node.FirstChild.InnerText = file.NewName;
 
             xmlDoc.Save(xmlPath);
         }
 
-        private void DeleteFileObject(FileCompareObject file , string currentPath)
+        private void DeleteFileObject(FileCompareObject file, string currentPath)
         {
             XmlDocument xmlDoc = new XmlDocument();
             currentPath = UpdateToRenamedFolder(file.Parent.Name, currentPath);
@@ -296,8 +289,6 @@ namespace Syncless.CompareAndSync.Visitor
                     xmlDoc.Load(s);
                 }
 
-                //xmlDoc.Load(xmlPath);
-
                 XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
                 if (node == null)
                     return;
@@ -306,7 +297,7 @@ namespace Syncless.CompareAndSync.Visitor
             }
         }
 
-        private string UpdateToRenamedFolder(string parentFolderName , string currentPath)
+        private string UpdateToRenamedFolder(string parentFolderName, string currentPath)
         {
             int flag = CheckForRename(parentFolderName);
             if (flag != -1)
@@ -322,7 +313,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         private string RemoveOldFolderName(string currentPath)
         {
-            string [] splitUpPaths = currentPath.Split('\\');
+            string[] splitUpPaths = currentPath.Split('\\');
             string parentFolderName = splitUpPaths[splitUpPaths.Length - 1];
             int flag = CheckForRename(parentFolderName);
             if (flag == -1)
@@ -331,7 +322,7 @@ namespace Syncless.CompareAndSync.Visitor
             }
             else
             {
-                currentPath = currentPath.Replace(parentFolderName , newNameList[flag]);
+                currentPath = currentPath.Replace(parentFolderName, newNameList[flag]);
                 return currentPath;
             }
         }
@@ -346,7 +337,7 @@ namespace Syncless.CompareAndSync.Visitor
             return -1;
         }
 
-        private string Swap(string name, string newName , string oldName)
+        private string Swap(string name, string newName, string oldName)
         {
             return name.Replace(oldName, newName);
         }
@@ -404,25 +395,25 @@ namespace Syncless.CompareAndSync.Visitor
                 bool fileExist = file.Exists[position];
                 if (metaExist == true && fileExist == true) //UPDATE
                 {
-                    UpdateFileObject(file, position , filePath);
+                    UpdateFileObject(file, position, filePath);
                 }
                 else  //NEW
                 {
-                    CreateFileObject(file, position , filePath);
+                    CreateFileObject(file, position, filePath);
                 }
             }
             else                 //DELETE OR RENAME
             {
                 if (file.NewName != null)
-                    RenameFileObject(file , position , filePath);
+                    RenameFileObject(file, position, filePath);
                 else
-                    DeleteFileObject(file , filePath);
+                    DeleteFileObject(file, filePath);
             }
         }
 
         private void HandleNullCases(string currentPath, FileCompareObject file)
         {
-           
+
             string fullPath = Path.Combine(currentPath, file.Name);
             if (File.Exists(fullPath))
                 return;
@@ -435,8 +426,6 @@ namespace Syncless.CompareAndSync.Visitor
                 xmlDoc.Load(s);
             }
 
-            //xmlDoc.Load(xmlPath);
-
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
             if (node != null)
                 node.ParentNode.RemoveChild(node);
@@ -446,19 +435,19 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void ProcessFolderFinalState(string currentPath, FolderCompareObject folder, int counter)
         {
-            
+
             FinalState?[] finalStateList = folder.FinalState;
             FinalState? changeType = finalStateList[counter];
             switch (changeType)
             {
                 case FinalState.Created:
-                    CreateFolderObject(folder , currentPath);
+                    CreateFolderObject(folder, currentPath);
                     break;
                 case FinalState.Deleted:
-                    DeleteFolderObject(folder , currentPath);
+                    DeleteFolderObject(folder, currentPath);
                     break;
                 case FinalState.Renamed:
-                    RenameFolderObject(folder , currentPath);
+                    RenameFolderObject(folder, currentPath);
                     break;
                 case FinalState.Propagated:
                     HandleUnchangedOrPropagatedFolder(folder, counter, currentPath);
@@ -467,7 +456,7 @@ namespace Syncless.CompareAndSync.Visitor
         }
 
 
-        private void CreateFolderObject(FolderCompareObject folder , string currentPath)
+        private void CreateFolderObject(FolderCompareObject folder, string currentPath)
         {
             XmlDocument xmlDoc = new XmlDocument();
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
@@ -476,8 +465,6 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 xmlDoc.Load(s);
             }
-
-            //xmlDoc.Load(xmlPath);
 
             DoFolderCleanUp(xmlDoc, folder.Name);
             XmlText nameText = xmlDoc.CreateTextNode(folder.Name);
@@ -495,7 +482,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void RenameFolderObject(FolderCompareObject folder, string currentPath)
         {
-          
+
             if (Directory.Exists(Path.Combine(currentPath, folder.Name)))
             {
                 XmlDocument xmlDoc = new XmlDocument();
@@ -504,8 +491,6 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     xmlDoc.Load(s);
                 }
-
-                //xmlDoc.Load(xmlPath);
 
                 XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
                 if (node == null)
@@ -523,13 +508,12 @@ namespace Syncless.CompareAndSync.Visitor
                 string editOldXML = Path.Combine(Path.Combine(currentPath, folder.NewName), METADATAPATH);
                 using (Stream s = File.OpenRead(editOldXML))
                 {
-                    newXmlDoc.Load(s);
+                    newXmlDoc.Load(s); //rename subdirectory
                 }
 
-                //newXmlDoc.Load(editOldXML); //rename the sub directory
                 XmlNode xmlNameNode = newXmlDoc.SelectSingleNode(XPATH_EXPR + "/name");
                 xmlNameNode.InnerText = folder.NewName;
-                newXmlDoc.Save(editOldXML); // rename the parent directory
+                newXmlDoc.Save(editOldXML);
 
                 string parentXML = Path.Combine(currentPath, METADATAPATH);
                 XmlDocument parentXmlDoc = new XmlDocument();
@@ -538,7 +522,6 @@ namespace Syncless.CompareAndSync.Visitor
                     parentXmlDoc.Load(s);
                 }
 
-                //parentXmlDoc.Load(parentXML);
                 XmlNode parentXmlFolderNode = parentXmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
                 parentXmlFolderNode.FirstChild.InnerText = folder.NewName;
                 parentXmlDoc.Save(Path.Combine(currentPath, METADATAPATH));
@@ -547,7 +530,7 @@ namespace Syncless.CompareAndSync.Visitor
             }
         }
 
-        private void DeleteFolderObject(FolderCompareObject folder , string currentPath)
+        private void DeleteFolderObject(FolderCompareObject folder, string currentPath)
         {
             XmlDocument xmlDoc = new XmlDocument();
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
@@ -558,7 +541,6 @@ namespace Syncless.CompareAndSync.Visitor
                     xmlDoc.Load(s);
                 }
 
-                //xmlDoc.Load(xmlPath);
                 XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
                 if (node == null)
                     return;
@@ -577,15 +559,15 @@ namespace Syncless.CompareAndSync.Visitor
                 bool folderExist = folder.Exists[position];
                 if (folderExist == true) //UPDATE
                 {
-                    CreateFolderObject(folder , folderPath);
+                    CreateFolderObject(folder, folderPath);
                 }
             }
             else                 //DELETE OR RENAME
             {
                 if (folder.NewName != null)
-                    RenameFolderObject(folder , folderPath);
+                    RenameFolderObject(folder, folderPath);
                 else
-                    DeleteFolderObject(folder , folderPath);
+                    DeleteFolderObject(folder, folderPath);
             }
         }
 

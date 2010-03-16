@@ -11,7 +11,7 @@ using Syncless.CompareAndSync.XMLWriteObject;
 
 namespace Syncless.CompareAndSync
 {
-    public class SeamlessSyncer
+    public static class SeamlessSyncer
     {
         public static void Sync(AutoSyncRequest request)
         {
