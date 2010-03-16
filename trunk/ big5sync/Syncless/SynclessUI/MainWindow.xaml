@@ -12,7 +12,7 @@
 			<GradientStop Color="#FF8FE2FD" Offset="0.5"/>
 		</LinearGradientBrush>
 	</Window.Resources>
-    <Grid x:Name="LayoutRoot" Width="700" Drop="LayoutRoot_Drop">
+    <Grid x:Name="LayoutRoot" Width="700" Drop="LayoutRoot_Drop" AllowDrop="True">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="20"/>
 			<RowDefinition Height="50"/>
@@ -109,7 +109,7 @@
 					</Rectangle.Fill>
 				</Rectangle>
 			
-			<TextBox IsReadOnly="True" x:Name="TagTitle" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Foreground="#FFEEEEEE" FontSize="16" Text="Select a Tag" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Margin="1,0,10,0" Padding="10,5,0,0" Background="{x:Null}" Width="331" KeyDown="TagTitleOnKeyDownHandler" LostFocus="TagTitle_LostFocus" ToolTip="{Binding Text, ElementName=TagTitle, Mode=Default}"/>
+			<TextBox IsReadOnly="True" x:Name="TagTitle" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Foreground="#FFEEEEEE" FontSize="16" Text="Select a Tag" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Margin="1,0,10,0" Padding="10,5,0,0" Background="{x:Null}" Width="331" KeyDown="TagTitleOnKeyDownHandler" LostFocus="TagTitle_LostFocus" ToolTip="{Binding Text, ElementName=TagTitle, Mode=Default}" AllowDrop="False"/>
 			
 			<!-- Tag General Details -->
 			<Image x:Name="TagIcon" Source="Icons\folder.ico" HorizontalAlignment="Right" Margin="0,0,-5,0" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="3" VerticalAlignment="Top" d:LayoutOverrides="HorizontalMargin" Grid.ColumnSpan="2" Cursor="Hand" MouseDown="TagIcon_MouseDown" ToolTip="Click to Access Tag Details"/>
