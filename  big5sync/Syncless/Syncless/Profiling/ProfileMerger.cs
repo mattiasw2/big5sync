@@ -30,7 +30,7 @@ namespace Syncless.Profiling
         }
         public static Profile Merge(Profile currentProfile, Profile newProfile)
         {
-            if (currentProfile.ProfileName.Equals(newProfile.ProfileName))
+            if (!currentProfile.ProfileName.Equals(newProfile.ProfileName))
             {
                 throw new ProfileNameDifferentException();
             }
