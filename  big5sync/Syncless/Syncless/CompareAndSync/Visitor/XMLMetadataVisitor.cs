@@ -22,6 +22,7 @@ namespace Syncless.CompareAndSync.Visitor
         private const string NODE_LAST_MODIFIED = "last_modified";
         private const string NODE_LAST_CREATED = "last_created";
         private const string FILES = "files";
+        private static readonly object syncLock = new object();
 
         #region IVisitor Members
 
@@ -35,7 +36,12 @@ namespace Syncless.CompareAndSync.Visitor
                 string path = Path.Combine(currentPaths[i], METADATAPATH);
                 if (!File.Exists(path))
                     continue;
-                xmlDoc.Load(path);
+
+                lock (syncLock)
+                {
+                    CommonMethods.LoadXML(ref xmlDoc, path);
+                }
+
                 file = PopulateFileWithMetaData(xmlDoc, file, i);
                 //xmlDoc.Save(path);                
             }
@@ -51,7 +57,12 @@ namespace Syncless.CompareAndSync.Visitor
                 if (File.Exists(currMetaData))
                 {
                     XmlDocument xmlDoc = new XmlDocument();
-                    xmlDoc.Load(currMetaData);
+
+                    lock (syncLock)
+                    {
+                        CommonMethods.LoadXML(ref xmlDoc, currMetaData);
+                    }
+
                     folder.MetaName = xmlDoc.SelectSingleNode(XPATH_EXPR + "/name").InnerText;
                 }
             }
@@ -71,7 +82,12 @@ namespace Syncless.CompareAndSync.Visitor
                 string path = Path.Combine(currentPaths[i], METADATAPATH);
                 if (!File.Exists(path))
                     continue;
-                xmlDoc.Load(path);
+
+                lock (syncLock)
+                {
+                    CommonMethods.LoadXML(ref xmlDoc, path);
+                }
+
                 folder = PopulateFolderWithMetaData(xmlDoc, folder, i);
                 //xmlDoc.Save(path);               
             }
@@ -98,7 +114,11 @@ namespace Syncless.CompareAndSync.Visitor
                     if (!File.Exists(xmlPath))
                         continue;
 
-                    xmlDoc.Load(xmlPath);
+                    lock (syncLock)
+                    {
+                        CommonMethods.LoadXML(ref xmlDoc, xmlPath);
+                    }
+
                     xmlObjList = GetAllFilesInXML(xmlDoc);
                     xmlFolderList = GetAllFoldersInXML(xmlDoc);
                     RemoveSimilarFiles(xmlObjList, fileList);
@@ -130,7 +150,11 @@ namespace Syncless.CompareAndSync.Visitor
                 if (!File.Exists(xmlPath))
                     continue;
 
-                xmlDoc.Load(xmlPath);
+                lock (syncLock)
+                {
+                    CommonMethods.LoadXML(ref xmlDoc, xmlPath);
+                }
+
                 di = new DirectoryInfo(listOfPaths[i]);
                 fileInfoList = di.GetFiles();
                 dirInfoList = di.GetDirectories();
