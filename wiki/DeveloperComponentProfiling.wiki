@@ -20,6 +20,12 @@ After initilization, *ProfilingLayer* can be called to perform profiling-related
 
 When a drive-in event is detected, *ProfilingLayer* will create a mapping profile based on the _guid.id_ contained in the new drive, and perform a merge of the new mapping profile with the current working profile.
 
+==== Sequence Diagram of UpdateDrive ====
+
+Like-wise, when a drive-out event is detected, *ProfilingLayer* will remove the mapping profile of that particular drive and mark it as unavailable.
+
+==== Sequence Diagram of RemoveDrive ====
+
 == Description of Design ==
 
 == Explanation of ==
