@@ -12,45 +12,45 @@ The Tagging component provides the underlying operations of creating/removing a 
 
 == The Classes ==
 
-The Tagging component consists of several important sub-components, including a main logic layer - *!TaggingLayer*, model objects - *!TaggingProfile*, *Tag*, *!TaggedPath* and *!TagConfig*, helper components - *!TagMerger*, *!TaggingHelper* and *!TaggingXMLHelper*.<br><br>
+The Tagging component consists of several important sub-components, including a main logic layer - *!TaggingLayer*, model objects - *!TaggingProfile*, *Tag*, *!TaggedPath* and *!TagConfig*, helper components - *!TagMerger*, *!TaggingHelper* and *TaggingXMLHelper*.<br><br>
 
 === !TaggingLayer ===
 
-This is the main logic layer which is called by the *SystemLogicLayer* to perform tag-related operations. When *Syncless* is started up, *SystemLogicLayer* will call *TaggingLayer* for initialization. 
+This is the main logic layer which is called by the *!SystemLogicLayer* to perform tag-related operations. When *Syncless* is started up, *!SystemLogicLayer* will call *!TaggingLayer* for initialization. 
 
-When initialized, *TaggingLayer* will call *TaggingXMLHelper* to load the current tagging profile from _tagging.xml_ in the computer. If there are more than one _tagging.xml_ files available (this may happen if there are removable drives plugged into the computer), *TaggingLayer* will call *TagMerger* to perform merging of several tagging profiles based on various sources of _tagging.xml_.<br><br>
+When initialized, *!TaggingLayer* will call *TaggingXMLHelper* to load the current tagging profile from _tagging.xml_ in the computer. If there are more than one _tagging.xml_ files available (this may happen if there are removable drives plugged into the computer), *!TaggingLayer* will call *!TagMerger* to perform merging of several tagging profiles based on various sources of _tagging.xml_.<br><br>
 
 ==== Sequence Diagram of Init ====
 
 <a href = "http://big5sync.googlecode.com/files/TaggingInit.jpg"><img src = "http://big5sync.googlecode.com/files/TaggingInit.jpg" width = 595 height = 607 /></a>
 
-After initialization, *TaggingLayer* can be called to perform tag-related operations.
+After initialization, *!TaggingLayer* can be called to perform tag-related operations.
 
 The main operations which will trigger interactions among the various classes in Tagging component include:<br>
--CreateTag<br>
--DeleteTag<br>
--TagFolder<br>
--UntagFolder<br>
--UpdateFilter<br>
+-!CreateTag<br>
+-!DeleteTag<br>
+-!TagFolder<br>
+-!UntagFolder<br>
+-!UpdateFilter<br>
 <br>
 
-==== Sequence Diagram of CreateTag ====
+==== Sequence Diagram of !CreateTag ====
 
 <a href = "http://big5sync.googlecode.com/files/TaggingCreateTag.jpg"><img src = "http://big5sync.googlecode.com/files/TaggingCreateTag.jpg" /></a>
 
-==== Sequence Diagram of DeleteTag ====
+==== Sequence Diagram of !DeleteTag ====
 
 <a href = "http://big5sync.googlecode.com/files/TaggingDeleteTag.jpg"><img src = "http://big5sync.googlecode.com/files/TaggingDeleteTag.jpg" /></a>
 
-==== Sequence Diagram of TagFolder ====
+==== Sequence Diagram of !TagFolder ====
 
 <a href = "http://big5sync.googlecode.com/files/TaggingTagFolder.jpg"><img src = "http://big5sync.googlecode.com/files/TaggingTagFolder.jpg" /></a>
 
-==== Sequence Diagram of UntagFolder ====
+==== Sequence Diagram of !UntagFolder ====
 
 <a href = "http://big5sync.googlecode.com/files/TaggingUntagFolder.jpg"><img src = "http://big5sync.googlecode.com/files/TaggingUntagFolder.jpg" /></a>
 
-==== Sequence Diagram of UpdateFilter ====
+==== Sequence Diagram of !UpdateFilter ====
 
 <a href = "http://big5sync.googlecode.com/files/TaggingUpdateFilter.jpg"><img src = "http://big5sync.googlecode.com/files/TaggingUpdateFilter.jpg" /></a>
 
@@ -58,26 +58,26 @@ The main operations which will trigger interactions among the various classes in
 
 This is a helper which performs XML-related operations. It reads from and writes to _tagging.xml_ which stores information of all tags and their configuration.
 
-The conversion from a tagging profile to _tagging.xml_, and vice versa, is easily extensible. There are separate methods which take care of reading/writing each tagging profile property. If there are more properties to be added to *TaggingProfile*, only *ConvertTaggingProfileToXml* and *ConvertXmlToTaggingProfile* need to be changed, and then just create additional methods which read/write each of the new property.
+The conversion from a tagging profile to _tagging.xml_, and vice versa, is easily extensible. There are separate methods which take care of reading/writing each tagging profile property. If there are more properties to be added to *!TaggingProfile*, only *!ConvertTaggingProfileToXml* and *!ConvertXmlToTaggingProfile* need to be changed, and then just create additional methods which read/write each of the new property.
 
-Conversion from _tagging.xml_ to *TaggingProfile*:<br>
-  # ConvertXmlToTaggingProfile(XmlDocument)<br>
-  # CreateTaggingProfile(XmlElement)<br>
-  # CreateTagFromXml(XmlElement)<br>
-  # CreateFolders(XmlElement)<br>
-  # CreatePath(XmlElement)<br>
-  # CreateTagConfig(XmlElement)<br>
-  # LoadFilterList(XmlElement)<br>
-  # LoadFilter(XmlElement)<br>
+Conversion from _tagging.xml_ to *!TaggingProfile*:<br>
+  # !ConvertXmlToTaggingProfile(!XmlDocument)<br>
+  # !CreateTaggingProfile(!XmlElement)<br>
+  # !CreateTagFromXml(!XmlElement)<br>
+  # !CreateFolders(!XmlElement)<br>
+  # !CreatePath(!XmlElement)<br>
+  # !CreateTagConfig(!XmlElement)<br>
+  # !LoadFilterList(!XmlElement)<br>
+  # !LoadFilter(!XmlElement)<br>
 
-Conversion from *TaggingProfile* to _tagging.xml_:<br>
-  # ConvertTaggingProfileToXml(TaggingProfile)<br>
-  # CreateTagElement(XmlDocument, Tag)<br>
-  # CreateFoldersElements(XmlDocument, Tag)<br>
-  # CreateTaggedFolderElement(XmlDocument, TaggedPath)<br>
-  # CreateConfigElement(XmlDocument, Tag)<br>
-  # CreateFilterElementList(XmlDocument, Tag)<br>
-  # CreateFilterElement(XmlDocument, Filter)<br>
+Conversion from *!TaggingProfile* to _tagging.xml_:<br>
+  # !ConvertTaggingProfileToXml(!TaggingProfile)<br>
+  # !CreateTagElement(!XmlDocument, Tag)<br>
+  # !CreateFoldersElements(!XmlDocument, Tag)<br>
+  # !CreateTaggedFolderElement(!XmlDocument, !TaggedPath)<br>
+  # !CreateConfigElement(!XmlDocument, Tag)<br>
+  # !CreateFilterElementList(!XmlDocument, Tag)<br>
+  # !CreateFilterElement(!XmlDocument, Filter)<br>
 <br>
 
 == Description of Design ==
