@@ -1,6 +1,6 @@
 #summary This page contains the sequence diagrams for System Logic Layer
 #labels Phase-Implementation
-
+#sidebar DeveloperGuideSidebar
 = CreateTag =
 
 <a href = "http://big5sync.googlecode.com/files/SLLCreateTag.jpg"><img src = "http://big5sync.googlecode.com/files/SLLCreateTag.jpg" /></a>
