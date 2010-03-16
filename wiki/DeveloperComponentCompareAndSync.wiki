@@ -17,7 +17,7 @@ Both sub-components are implemented very differently, as manual synchronization 
 
 == Description of Design ==
 === Data Transfer Objects and Entities ===
-Before going in depth into the design, we will first take a look at the data transfer objects (DTO) and entities used throughout CompareAndSync.
+Before going in depth into the design, we will first take a look at the data transfer objects (DTO) and entities used throughout !CompareAndSync.
 
 
 ==== Request ====
@@ -29,7 +29,7 @@ CompareObjects are entities which are used during comparison and synchronization
 
 
 == Main Components ==
-We will now take a look at the main components of CompareAndSync, which can be broadly divided to the controller layer, the manual component and the seamless component.
+We will now take a look at the main components of !CompareAndSync, which can be broadly divided to the controller layer, the manual component and the seamless component.
 
 
 === Controller ===
@@ -37,7 +37,7 @@ We will now take a look at the main components of CompareAndSync, which can be b
 
 
 === Manual Components ===
-As stated in the overview, the manual portion of the CompareAndSync component is done using the Tree Visitor Pattern. Although the Tree Visitor Pattern is considered a bad design pattern in some cases, the usage of this pattern in our implementation of CompareAndSync greatly enhances extensibility, as you will see later.
+As stated in the overview, the manual portion of the !CompareAndSync component is done using the Tree Visitor Pattern. Although the Tree Visitor Pattern is considered a bad design pattern in some cases, the usage of this pattern in our implementation of CompareAndSync greatly enhances extensibility, as you will see later.
 
 The classes of concern to us are:
 
