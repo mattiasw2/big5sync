@@ -4,7 +4,11 @@
 
 == Overview ==
 
-== Class Diagram ==
+The Profiling component performs drive/computer recognization. It makes *Syncless* portable because of the ability to recognize different drives/computers by creating a Globally Unique IDentifier (GUID) in each of them. It also performs conversion from a physical drive/computer GUID to a logical ID.
+
+== The Classes ==
+
+
 
 == Description of Design ==
 
