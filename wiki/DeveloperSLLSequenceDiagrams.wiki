@@ -1,0 +1,22 @@
+#summary This page contains the sequence diagrams for System Logic Layer
+#labels Phase-Implementation
+
+= CreateTag =
+
+<a href = "http://big5sync.googlecode.com/files/SLLCreateTag.jpg"><img src = "http://big5sync.googlecode.com/files/SLLCreateTag.jpg" /></a>
+
+= TagFolder =
+
+<a href = "http://big5sync.googlecode.com/files/SLLTagFolder.jpg"><img src = "http://big5sync.googlecode.com/files/SLLTagFolder.jpg" /></a>
+
+= UntagFolder =
+
+<a href = "http://big5sync.googlecode.com/files/SLLUntagFolder.jpg"><img src = "http://big5sync.googlecode.com/files/SLLUntagFolder.jpg" /></a>
+
+= DeleteTag =
+
+<a href = "http://big5sync.googlecode.com/files/SLLDeleteTag.jpg"><img src = "http://big5sync.googlecode.com/files/SLLDeleteTag.jpg" /></a>
+
+= StartManualSync =
+
+<a href = "http://big5sync.googlecode.com/files/SLLStartManualSync.jpg"><img src = "http://big5sync.googlecode.com/files/SLLStartManualSync.jpg" /></a>
