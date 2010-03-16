@@ -212,12 +212,10 @@ namespace Syncless.CompareAndSync.Visitor
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
             CreateFileIfNotExist(currentPath);
 
-            using (Stream s = File.OpenRead(xmlPath))
+            lock(syncLock)
             {
-                xmlDoc.Load(s);
+                xmlDoc.Load(xmlPath);
             }
-
-            //xmlDoc.Load(xmlPath);
             
             int position = GetPropagated(file);
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
@@ -253,8 +251,10 @@ namespace Syncless.CompareAndSync.Visitor
                 }
             }
 
-            xmlDoc.Save(xmlPath);
-            xmlDoc = null;
+            lock (syncLock)
+            {
+                xmlDoc.Save(xmlPath);
+            }
         }
 
         private void RenameFileObject(FileCompareObject file , int counter , string currentPath)
@@ -270,8 +270,6 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 xmlDoc.Load(s);
             }
-
-            //xmlDoc.Load(xmlPath);
 
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
             if (node == null)
