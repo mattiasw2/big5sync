@@ -917,11 +917,6 @@ namespace SynclessUI
 
         #endregion
 
-        private void TagIcon_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            ViewTagDetails();
-        }
-
         private void ViewTagDetails()
         {
             if (_selectedTag != null)
@@ -953,8 +948,17 @@ namespace SynclessUI
 
         private void BtnPreview_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            string messageBoxText = "This feature will come in a future version of Syncless.";
+            string caption = "Feature Not Implemented Yet";
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Exclamation;
+
+            MessageBox.Show(messageBoxText, caption, button, icon);
+
+            /*
             PreviewSyncWindow psw = new PreviewSyncWindow(this, _selectedTag);
             psw.ShowDialog();
+            */
         }
 		
         private List<DriveInfo> GetAllRemovableDrives()
@@ -989,10 +993,10 @@ namespace SynclessUI
             }
             else
             {
-                string messageBoxText = "You may proceed to eject " + driveletter;
-                string caption = "Drive Allowed for Removal";
+                string messageBoxText = "Syncless has ceased all synchronization operations with " + driveletter + " " + "\nYou may proceed to remove it safely.";
+                string caption = driveletter + " Allowed for Removal";
                 MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
+                MessageBoxImage icon = MessageBoxImage.Information;
 
                 MessageBox.Show(messageBoxText, caption, button, icon);
             }
@@ -1022,6 +1026,11 @@ namespace SynclessUI
         private void BtnShortcuts_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
         	DisplayShortcutsWindow();
+        }
+
+        private void TagIcon_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ViewTagDetails();
         }
     }
 }

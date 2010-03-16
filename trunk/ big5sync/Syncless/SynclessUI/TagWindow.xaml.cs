@@ -25,7 +25,7 @@ namespace SynclessUI
 		private MainWindow _main;
 		private bool cancelstatus = false;
         private string _tagname {
-            get { return ACBName.Text.Trim(); }
+            get { if(ACBName.Text != null) return ACBName.Text.Trim(); else return ""; }
         }
 		private bool popupclosed = true;
 		
