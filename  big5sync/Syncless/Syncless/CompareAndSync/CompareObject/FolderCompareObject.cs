@@ -36,12 +36,11 @@ namespace Syncless.CompareAndSync.CompareObject
             for (int i = 0; i < objects.Count; i++)
             {
                 {
-                    if (objects.ElementAt(i) is FileCompareObject)
+                    if ((f = objects.ElementAt(i) as FileCompareObject) != null)
                     {
-                        f = (FileCompareObject)objects.ElementAt(i);
                         if (f.CreationTime[pos] == creationTime)
                         {
-                            result = (FileCompareObject)objects.ElementAt(i);
+                            result = f;
                             counter++;
                         }
                     }
@@ -62,7 +61,7 @@ namespace Syncless.CompareAndSync.CompareObject
             {
                 if ((f = objects.ElementAt(i) as FolderCompareObject) != null)
                 {
-                    if (f.MetaName != null && f.MetaName == name && f.Name != name && f.ChangeType[pos] == MetaChangeType.New)
+                    if (f.MetaName != null && f.MetaName == name && f.Name != name && f.CreationTime[pos] == creationTime && f.ChangeType[pos] == MetaChangeType.New)
                     {
                         result = f;
                         counter++;
@@ -85,7 +84,7 @@ namespace Syncless.CompareAndSync.CompareObject
                 {
                     if ((f = objects.ElementAt(i) as FileCompareObject) != null)
                     {
-                        if (f.Exists[pos] && f.Name != name && f.CreationTime[pos] == creationTime && f.Hash[pos] == hash)
+                        if (f.Name != name && f.CreationTime[pos] == creationTime && f.Hash[pos] == hash && f.ChangeType[pos] == MetaChangeType.New)
                         {
                             result = f;
                             counter++;

@@ -1,0 +1,341 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Syncless.CompareAndSync.CommonMethods" Collapsed="true">
+    <Position X="16" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEEAAAAAAAAIAoAAIAAAEAAAAAAAAAAAGAAABAEAE=</HashCode>
+      <FileName>CompareAndSync\CommonMethods.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.CompareAndSyncController" Collapsed="true">
+    <Position X="17.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAUAAAEAAAAAACAAAAAAAACAAAAAAAAQABAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\CompareAndSyncController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.CompareObjectHelper" Collapsed="true">
+    <Position X="19.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAIAAAgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\CompareObjectHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.SeamlessQueueControl" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABEAAgIACAAIAAAAAAAAABCAQAAAAgAQAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\SeamlessQueueControl.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Syncless.CompareAndSync.SeamlessSyncer" Collapsed="true">
+    <Position X="12.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAABAAAAAAAAgAAAAAQEAA=</HashCode>
+      <FileName>CompareAndSync\SeamlessSyncer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.SyncConfig" Collapsed="true">
+    <Position X="14.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAABEAAAEADAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\SyncConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.XMLHelper" Collapsed="true">
+    <Position X="14.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAVAhAABCAQAAAAwSCACgAAEAACAAAAAEJAAJCAAA=</HashCode>
+      <FileName>CompareAndSync\XMLHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.CompareObject.BaseCompareObject" Collapsed="true">
+    <Position X="2.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQkAIAAAEAAAAACEEAEAQAYQBAADQRAIAIAAgAEAEAA=</HashCode>
+      <FileName>CompareAndSync\CompareObject\BaseCompareObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.CompareObject.FileCompareObject" Collapsed="true">
+    <Position X="1" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QBAAAACAIAIAAAAAAAAAAABAAAABAABARAAAACAAQAA=</HashCode>
+      <FileName>CompareAndSync\CompareObject\FileCompareObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.CompareObject.FolderCompareObject" Collapsed="true">
+    <Position X="3.25" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAgAAAAAEABBBEIAAAAAAAAAAAQIAIAAICBAACA=</HashCode>
+      <FileName>CompareAndSync\CompareObject\FolderCompareObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.CompareObject.RootCompareObject" Collapsed="true">
+    <Position X="3.25" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\CompareObject\RootCompareObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.CompareObject.XMLCompareObject" Collapsed="true">
+    <Position X="12.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAIAgAACAIAAAAwAAAAEAAAAAAAAAQAAAAE=</HashCode>
+      <FileName>CompareAndSync\CompareObject\XMLCompareObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Exceptions.ArchiveFileException" Collapsed="true">
+    <Position X="10.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Exceptions\ArchiveFileException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Exceptions.ArchiveFolderException" Collapsed="true">
+    <Position X="12.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Exceptions\ArchiveFolderException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Exceptions.CopyFileException" Collapsed="true">
+    <Position X="12.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Exceptions\CopyFileException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Exceptions.CopyFolderException" Collapsed="true">
+    <Position X="14.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Exceptions\CopyFolderException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Exceptions.CreateFolderException" Collapsed="true">
+    <Position X="16" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Exceptions\CreateFolderException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Exceptions.DeleteFileException" Collapsed="true">
+    <Position X="17.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Exceptions\DeleteFileException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Exceptions.DeleteFolderException" Collapsed="true">
+    <Position X="19.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Exceptions\DeleteFolderException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Exceptions.HashFileException" Collapsed="true">
+    <Position X="12.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Exceptions\HashFileException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Exceptions.IncompatibleTypeException" Collapsed="true">
+    <Position X="16" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Exceptions\IncompatibleTypeException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Exceptions.MoveFileException" Collapsed="true">
+    <Position X="17.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Exceptions\MoveFileException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Exceptions.MoveFolderException" Collapsed="true">
+    <Position X="19.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Exceptions\MoveFolderException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Exceptions.SynclessIOException" Collapsed="true">
+    <Position X="17.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAAgAIAAAAAAAAACAAAAA=</HashCode>
+      <FileName>CompareAndSync\Exceptions\SynclessIOException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Request.AutoSyncRequest" Collapsed="true">
+    <Position X="1.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAACAgAAQkAAAAEAAAAABAAAAAAIAoAEAAQAAJA=</HashCode>
+      <FileName>CompareAndSync\Request\AutoSyncRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Request.ManualCompareRequest" Collapsed="true">
+    <Position X="5.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Request\ManualCompareRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Request.ManualRequest" Collapsed="true">
+    <Position X="4.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAECAAEAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Request\ManualRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Request.ManualSyncRequest" Collapsed="true">
+    <Position X="3.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAgAAAAAAAAAAAAAAAAAAAEAAAAAAAAQAAAA=</HashCode>
+      <FileName>CompareAndSync\Request\ManualSyncRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Request.Request" Collapsed="true">
+    <Position X="3.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Request\Request.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Visitor.BuilderVisitor" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAABAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Visitor\BuilderVisitor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Visitor.ComparerVisitor" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAACAAAAACAggAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Visitor\ComparerVisitor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Visitor.FolderRenameVisitor" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAgAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Visitor\FolderRenameVisitor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Visitor.IgnoreMetaDataVisitor" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Visitor\IgnoreMetaDataVisitor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Visitor.SyncerVisitor" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEEAAAAAAAAAQIAAAAAAEAAAAAAAAAAAEAAARAAAA=</HashCode>
+      <FileName>CompareAndSync\Visitor\SyncerVisitor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Visitor.TodoXMLReader" Collapsed="true">
+    <Position X="19.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAQAADAACAAQQAAgICAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>CompareAndSync\Visitor\TodoXMLReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Visitor.TodoXMLWriterVisitor" Collapsed="true">
+    <Position X="10.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAESACCADAAAQQAAgADAAhIAAAAAAEAAAEBAAACAEA=</HashCode>
+      <FileName>CompareAndSync\Visitor\TodoXMLWriterVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Visitor.XMLMetadataVisitor" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUAQQAAAACAQAQAAwACEAAAEAAAIQCAARAJAQoSAAA=</HashCode>
+      <FileName>CompareAndSync\Visitor\XMLMetadataVisitor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Syncless.CompareAndSync.Visitor.XMLWriterVisitor" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAJAQAhAABCAQARAAwACQkogUHIBAABEUIQJAgICEAA=</HashCode>
+      <FileName>CompareAndSync\Visitor\XMLWriterVisitor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Syncless.CompareAndSync.XMLWriteObject.BaseXMLWriteObject" Collapsed="true">
+    <Position X="7.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAgAIAAAAAAAAABAAAEAAAQAAAABAAAIAAAAgAAAEAA=</HashCode>
+      <FileName>CompareAndSync\XMLWriteObject\BaseXMLWriteObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.XMLWriteObject.XMLWriteFileObject" Collapsed="true">
+    <Position X="6" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAIAgAAAAAAAAAACAAAAAABAAAAAAAIAAAA=</HashCode>
+      <FileName>CompareAndSync\XMLWriteObject\XMLWriteFileObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Syncless.CompareAndSync.XMLWriteObject.XMLWriteFolderObject">
+    <Position X="8.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\XMLWriteObject\XMLWriteFolderObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Syncless.CompareAndSync.Visitor.IVisitor" Collapsed="true">
+    <Position X="10.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Visitor\IVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Syncless.CompareAndSync.FileChangeType" Collapsed="true">
+    <Position X="12.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAEAAEAAAAAAAAEAgAA=</HashCode>
+      <FileName>CompareAndSync\XMLChangeType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Syncless.CompareAndSync.Enum.AutoSyncRequestType" Collapsed="true">
+    <Position X="10.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAACAAAAAAAAAAAAEAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>CompareAndSync\Enum\AutoSyncRequestType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Syncless.CompareAndSync.Enum.FinalState" Collapsed="true">
+    <Position X="14.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABQgAAAAAEAAAAAAAAAQAQABAAAAAAAA=</HashCode>
+      <FileName>CompareAndSync\Enum\FinalState.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Syncless.CompareAndSync.Enum.MetaChangeType" Collapsed="true">
+    <Position X="16" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAACAAAAAAAAAEAAEAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>CompareAndSync\Enum\MetaChangeType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Syncless.CompareAndSync.Enum.ToDo" Collapsed="true">
+    <Position X="17.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>CompareAndSync\Enum\ToDo.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
