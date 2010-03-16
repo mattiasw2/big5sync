@@ -250,7 +250,6 @@ namespace Syncless.CompareAndSync
                 foreach (FileInfo fileInfo in fileInfos)
                 {
                     fileInfo.CopyTo(Path.Combine(destination, fileInfo.Name), true);
-
                 }
             }
             catch (PathTooLongException e)
