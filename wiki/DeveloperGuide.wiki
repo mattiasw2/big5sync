@@ -1,7 +1,7 @@
 #summary Developer Guide
 #sidebar DeveloperGuideSidebar
 
-<wiki:toc max_depth="5">
+<wiki:toc max_depth="6">
 
 = 1. System Overview =
 
@@ -17,7 +17,7 @@
         affecting the UI. On top of that, this also allows other developers to create 
         their own user interface to work with Syncless Core Logic.
 
-     == 1.2. Data storing ==
+     == 1.2. Data Storing ==
       
         Syncless uses many files to store the information. We use XML to store the  
         information as it is more readable and portable. Examples are tagging.xml and 
