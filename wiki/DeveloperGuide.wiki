@@ -9,15 +9,44 @@ Add your content here.
 
      == 2.1. Tagging ==
 
+        The Tagging component provides the underlying operations of creating/removing a 
+        tag, tagging/untagging a folder to/from a tag, managing filter properties and 
+        configuring tag properties.
+
+        <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentTagging">More details...</a>
+
      == 2.2. Profiling ==
+
+        The Profiling component performs drive/computer recognization. It makes Syncless
+        portable because of the ability to recognize different drives/computers by creating a 
+        Globally Unique IDentifier (GUID) in each of them. It also performs conversion of a 
+        physical directory/file path to a logical address, and vice versa. This conversion is 
+        necessary, because CompareAndSync only recognizes physical path while Tagging 
+        recognizes a logical path.
+
+        <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentProfiling">More details...</a>
 
      == 2.3. CompareAndSync ==
 
+        The CompareAndSync component in Syncless is the part of the system that handles 
+        the comparison and syncing of files and folders. From a logical point of view, it 
+        can be briefly split into 2 subcomponents; the manual subcomponent that handles 
+        all manual operations, and the seamless subcomponent that handles all the 
+        automated synchronization requests from another component, the Monitor.
+
+        <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentCompareAndSync">More details...</a>
+
      == 2.4. Monitor ==
+
+        <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentMonitor">More details...</a>
 
      == 2.5. Filter ==
 
+        <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentFilter">More details...</a>
+
      == 2.6. Logging ==
+
+        <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentLogging">More details...</a>
 
 = 3. Developing a UI for Syncless =
 
