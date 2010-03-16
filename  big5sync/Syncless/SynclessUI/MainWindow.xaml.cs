@@ -555,6 +555,7 @@ namespace SynclessUI
         private void SeamlessMode()
         {
             LblSyncMode.Content = "Seamless";
+			BtnSyncMode.ToolTip = "Switch to Manual Synchronization Mode";
             BtnPreview.Visibility = System.Windows.Visibility.Hidden;
             BtnSyncNow.Visibility = System.Windows.Visibility.Hidden; 
 			BtnSyncMode.SetResourceReference(Control.BackgroundProperty, "ToggleOnBrush");
@@ -565,6 +566,7 @@ namespace SynclessUI
         private void ManualMode()
         {
             LblSyncMode.Content = "Manual";
+			BtnSyncMode.ToolTip = "Switch to Seamless Synchronization Mode";
             BtnPreview.Visibility = System.Windows.Visibility.Visible;
             BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
             BtnSyncMode.SetResourceReference(Control.BackgroundProperty, "ToggleOffBrush");

@@ -176,7 +176,7 @@
 					</Button.Background>
 					<Label x:Name="LblDirection" FontFamily="Century Gothic" FontSize="10.667" Foreground="Black" OpacityMask="Black" BorderBrush="Black" HorizontalAlignment="Right" Content="Uni-Dir.."/>
 				</Button>
-				<Button x:Name="BtnSyncMode" Height="35" Margin="0,0,0,5" Click="BtnSyncMode_Click" ToolTip="Switch Between Manual &amp; Seamless Mode" Style="{DynamicResource CustomButtonStyle}" Background="{DynamicResource ToggleOffBrush}" Foreground="White">
+				<Button x:Name="BtnSyncMode" Height="35" Margin="0,0,0,5" Click="BtnSyncMode_Click" ToolTip="" Style="{DynamicResource CustomButtonStyle}" Background="{DynamicResource ToggleOffBrush}" Foreground="White">
 					<Button.Resources>
 						<Style x:Key="ButtonFocusVisual">
 							<Setter Property="Control.Template">
