@@ -12,14 +12,16 @@ namespace Syncless.Core
     {
         public static void SaveAll(string appPath)
         {
-            SaveTagging(appPath);
+            
             SaveProfiling(appPath);
+            SaveTagging(appPath);
         }
 
         public static void LoadAll(string appPath)
         {
-            LoadTagging(appPath);
+            
             LoadProfiling(appPath);
+            LoadTagging(appPath);
         }
 
         #region private methods for Loading Tagging and Profiling.

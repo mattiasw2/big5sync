@@ -116,8 +116,9 @@ namespace Syncless.Tagging
                 textWriter.Formatting = Formatting.Indented;
                 xmlDoc.WriteContentTo(textWriter);
             }
-            catch (IOException)
+            catch (IOException io)
             {
+                Console.WriteLine(io);
                 return false;
             }
             finally
@@ -201,8 +202,9 @@ namespace Syncless.Tagging
                 xml.Load(fs);
                 return xml;
             }
-            catch (XmlException)
+            catch (XmlException xml)
             {
+                Console.WriteLine(xml);
                 return null;
             }
             finally
