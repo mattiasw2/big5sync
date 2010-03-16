@@ -32,12 +32,5 @@ Like-wise, when a drive-out event is detected, *ProfilingLayer* will remove the 
 
 ==== Sequence Diagram of RemoveDrive ====
 
-== Description of Design ==
-
-== Explanation of ==
-
-== Extending Profiling ==
-
-== Glossary ==
 
 _GUID_
