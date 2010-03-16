@@ -1,5 +1,5 @@
 #summary This page details the expected results when a user does an unusual combination of actions.
-#labels Featured
+#labels Phase-Implementation
 
 = Introduction =
 
