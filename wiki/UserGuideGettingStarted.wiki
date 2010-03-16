@@ -10,10 +10,10 @@ _*Syncless*_ allows you to synchronize your files and folders automatically thro
 
 = What You’ll Learn =
 If you follow all the steps in this tutorial, you’ll be able to:
-*Connect your camera to your computer
-*Import your photos into iPhoto from your camera
-*Sort your photos in several ways
-*Use or add keywords to find and organize your photos
-*Group your photos into one or more photo albums
-*Create and play a slideshow
-*Create a book
+  * Connect your camera to your computer
+  * Import your photos into iPhoto from your camera
+  * Sort your photos in several ways
+  * Use or add keywords to find and organize your photos
+  * Group your photos into one or more photo albums
+  * Create and play a slideshow
+  * Create a book
