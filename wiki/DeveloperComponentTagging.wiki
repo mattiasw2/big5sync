@@ -4,9 +4,13 @@
 
 == Overview ==
 
-The Tagging component provides the underlying operations of creating/removing a tag, tagging/untagging a folder to/from a tag and managing filter properties. 
+The Tagging component provides the underlying operations of creating/removing a tag, tagging/untagging a folder to/from a tag, managing filter properties and configuring tag properties.
 
 == Class Diagram ==
+
+The Tagging component consists of several important sub-components, including a main logic layer - *TaggingLayer*, model objects - *TaggingProfile*, *Tag*, *TaggedPath* and *TagConfig*, helper components - *TagMerger*, *TaggingHelper* and *TaggingXMLHelper*.
+
+=== TaggingLayer ===
 
 == Description of Design ==
 
