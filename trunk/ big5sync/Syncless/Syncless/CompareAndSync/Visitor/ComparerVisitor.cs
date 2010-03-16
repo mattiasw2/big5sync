@@ -38,7 +38,6 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region Files
 
-        //If an asshole decides to do this
         private void DetectFileRenameAndUpdate(FileCompareObject file, string[] currentPaths)
         {
             //Get a Delete type
@@ -48,21 +47,17 @@ namespace Syncless.CompareAndSync.Visitor
             //4. If all is verified, set the ChangeType to New.
 
             FileCompareObject f = null;
-            int counter = 0;
             List<int> indexes = new List<int>();
 
             for (int i = 0; i < currentPaths.Length; i++)
             {
                 if (file.ChangeType[i] == MetaChangeType.Delete)
-                {
-                    counter++;
                     indexes.Add(i);
-                }
                 else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType != null)
                     return;
             }
 
-            if (counter < 1)
+            if (indexes.Count < 1)
                 return;
 
             bool found = true;
@@ -84,7 +79,7 @@ namespace Syncless.CompareAndSync.Visitor
                     }
 
                     if (found)
-                        file.ChangeType[indexes[i]] = null;
+                        file.ChangeType[indexes[i]] = null; //TODO: Unchanged?
 
                 }
             }
@@ -94,6 +89,9 @@ namespace Syncless.CompareAndSync.Visitor
         private void DetectFileRename(FileCompareObject file, string[] currentPaths)
         {
             FileCompareObject f = null;
+            FileCompareObject result = null;
+            int resultPos = -1;
+            int counter = 0;
 
             for (int i = 0; i < currentPaths.Length; i++)
             {
@@ -101,33 +99,28 @@ namespace Syncless.CompareAndSync.Visitor
                     return;
             }
 
-
             for (int i = 0; i < currentPaths.Length; i++)
             {
                 if (file.ChangeType[i] == MetaChangeType.Delete)
                 {
-                    f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);
+                    f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);      
 
                     if (f != null)
                     {
-                        int counter = 0;
-
-                        //Check that f is MetaChangeType.New for exactly one i
-                        for (int j = 0; j < f.ChangeType.Length; j++)
-                        {
-                            if (f.ChangeType[j].HasValue && f.ChangeType[j] == MetaChangeType.New)
-                                counter++;
-                        }
-
-                        if (counter != 1)
-                            return;
-
-                        file.NewName = f.Name;
-                        file.ChangeType[i] = MetaChangeType.Rename;
-                        f.Invalid = true;
+                        counter++;
+                        result = f;
+                        resultPos = i;
                     }
                 }
             }
+
+            if (counter == 1)
+            {
+                file.NewName = result.Name;
+                file.ChangeType[resultPos] = MetaChangeType.Rename;
+                result.Invalid = true;
+            }
+
         }
 
         private void CompareFiles(FileCompareObject file, string[] currentPaths)
