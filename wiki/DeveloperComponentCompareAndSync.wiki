@@ -12,6 +12,7 @@ Both sub-components are implemented very differently, as manual synchronization 
 == Class Diagram ==
 
 
+
 == Description of Design ==
 Before going in depth into the design, we will first take a look at the data transfer objects (DTO) and entities used throughout CompareAndSync.
 
@@ -22,8 +23,9 @@ Requests are data transfer objects sent to CompareAndSync when a comparison or s
 
 === Entities ===
 === CompareObject ===
-CompareObjects are entities which are used during comparison and synchronization.
+CompareObjects are entities which are used during comparison and synchronization. There are basically 2 main kinds of CompareObjects, the FileCompareObject and the FolderCompareObject. RootCompareObject is a specific kind of FolderCompareObject used to represent the root paths to be compared.
 
+===  ===
 
 
 == Explanation of Algorithm ==
