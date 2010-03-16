@@ -23,7 +23,7 @@ Requests are data transfer objects sent to CompareAndSync when a comparison or s
 
 
 === CompareObject ===
-CompareObjects are entities which are used during comparison and synchronization. There are basically 2 main kinds of CompareObjects, the FileCompareObject and the FolderCompareObject. RootCompareObject is a specific kind of FolderCompareObject used to represent the root paths to be compared.
+CompareObjects are entities which are used during comparison and synchronization. There are basically 2 main kinds of CompareObjects, the FileCompareObject and the FolderCompareObject. RootCompareObject is a specific kind of FolderCompareObject used to represent the root paths to be compared. There is also the XMLCompareObject which is used to store the file metadata and then used to populate the main CompareObjects.
 
 
 == Main Components ==
@@ -60,7 +60,15 @@ CompareObjectHelper is the class that contains the various traversal methods, na
 Also, all the Visitors use pre-traversal, since it makes sense to build, populate and synchronize the CompareObjects from top-down. However, ComparerVisitor uses post-traversal because it is necessary to update the state of each folder if a file under it has changed.
 
 === Seamless Components ===
+CompareAndSync is made such that the seamless component is completely separated from the manual component. There are various design and implementation issues for this, with one of them being that the seamless component is largely depending on receiving information from other objects. Moreover, in seamless mode, the file to sync is already know, with little to no need of doing a comparison. As such, there is no need to do the tedious job of building a tree.
 
+The classes of concern to us for the seamless portion are as follows:
+
+  * SeamlessQueueControl
+  * SeamlessSyncer
+  * XMLHelper
+
+SeamlessQueueControl is a class that contains a single queue to ensure the requests are handled in order, so as to prevent any possible conflicts. SeamlessSyncer contains the necessary methods to handle seamless file synchronization, and upon each successful synchronization, XMLHelper will be called to update the metadata stored in side.
 
 
 == Explanation of Algorithm ==
