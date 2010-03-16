@@ -100,6 +100,7 @@ The FolderRenameVisitor will now visit the tree, and detect for folder renames. 
 {{{
         private void DetectFolderRename(FolderCompareObject folder, string[] currentPaths)
         {
+            //Count the number of items which are marked as delete inside this FolderCompareObject
             List<int> deletePos = new List<int>();
             for (int i = 0; i < currentPaths.Length; i++)
             {
@@ -107,8 +108,10 @@ The FolderRenameVisitor will now visit the tree, and detect for folder renames. 
                     deletePos.Add(i);
             }
 
+            //If the number of items are not exactly 1, exit current method
             if (deletePos.Count != 1)
             {
+                //If the number of items are more than one, mark each of their ChangeType to null, so that changes will propagate back to it
                 foreach (int i in deletePos)
                     folder.ChangeType[i] = null;
                 return;
@@ -120,6 +123,7 @@ The FolderRenameVisitor will now visit the tree, and detect for folder renames. 
             {
                 if (folder.ChangeType[i] == MetaChangeType.Delete)
                 {
+                    //Find the possible renamed folder based on metadata
                     f = folder.Parent.GetRenamedFolder(folder.Name, folder.CreationTime[i], i);
 
                     if (f != null)
@@ -128,16 +132,19 @@ The FolderRenameVisitor will now visit the tree, and detect for folder renames. 
 
                         for (int j = 0; j < f.ChangeType.Length; j++)
                         {
+                            //Count the number of items marked as New, should have exactly one
                             if (f.ChangeType[j].HasValue && f.ChangeType[j] == MetaChangeType.New)
                                 counter++;
                         }
 
+                        //If number of items marked is not exactly one, mark the ChangeType as null so that changes will propagate over, and exit the method
                         if (counter != 1)
                         {
                             folder.ChangeType[i] = null;                         
                             return;
                         }
 
+                        //Merge renamed folder with deleted folder
                         MergeRenamedFolder(folder, f, i);
                     }
                 }
