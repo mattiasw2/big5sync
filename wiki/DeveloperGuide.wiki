@@ -43,8 +43,8 @@
         portable because of the ability to recognize different drives/computers by 
         creating a Globally Unique IDentifier (GUID) in each of them. It also performs 
         conversion of a physical directory/file path to a logical address, and vice versa. 
-        This conversion is necessary, because CompareAndSync only recognizes physical path 
-        while Tagging recognizes a logical path.
+        This conversion is necessary, because !CompareAndSync only recognizes physical 
+        path while Tagging recognizes a logical path.
 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentProfiling">More details...</a>
 
@@ -56,9 +56,9 @@
 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentTagging">More details...</a>
 
-     == 2.3. CompareAndSync ==
+     == 2.3. !CompareAndSync ==
 
-        The CompareAndSync component in Syncless is the part of the system that handles 
+        The !CompareAndSync component in Syncless is the part of the system that handles 
         the comparison and syncing of files and folders. From a logical point of view, it 
         can be briefly split into 2 subcomponents; the manual subcomponent that handles 
         all manual operations, and the seamless subcomponent that handles all the 
@@ -93,7 +93,7 @@
 
      == 3.2. Advanced ==
         
-        Extending Filter to other area can be done easily. This can be done by extending the Filter Object and overriding the Match method. If the filter meant to work only on file, the developer can extend FileFilter instead. FileFilter will let all folder pass the filter.
+        Extending Filter to other area can be done easily. This can be done by extending the Filter Object and overriding the Match method. If the filter meant to work only on file, the developer can extend !FileFilter instead. !FileFilter will let all folder pass the filter.
         
 = 4. Known Issues =
 
