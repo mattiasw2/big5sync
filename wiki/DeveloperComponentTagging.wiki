@@ -40,6 +40,8 @@ The main operations which will trigger interactions among the various classes in
 
 ==== Sequence Diagram of DeleteTag ====
 
+<a href = "http://big5sync.googlecode.com/files/TaggingDeleteTag.jpg"><img src = "http://big5sync.googlecode.com/files/TaggingDeleteTag.jpg" /></a>
+
 ==== Sequence Diagram of TagFolder ====
 
 <a href = "http://big5sync.googlecode.com/files/TaggingTagFolder.jpg"><img src = "http://big5sync.googlecode.com/files/TaggingTagFolder.jpg" /></a>
