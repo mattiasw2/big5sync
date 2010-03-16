@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using Syncless.Core;
 using Syncless.Helper;
 using Syncless.Monitor.DTO;
@@ -52,6 +53,7 @@ namespace Syncless.Monitor
         /// <param name="path">The Path to be monitored</param>
         /// <returns>Boolean stating if the monitor can be started</returns>
         /// <exception cref="Syncless.Monitor.Exception.MonitorPathNotFoundException">Throw when the path is not found.</exception>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public bool MonitorPath(string path)
         {
             if (File.Exists(path))
@@ -491,7 +493,7 @@ namespace Syncless.Monitor
             FileSystemEventDispatcher.Instance.Enqueue(fse);
         }
 
-        private static void OnRenamed(object source, RenamedEventArgs e)
+        private void OnRenamed(object source, RenamedEventArgs e)
         {
             FileSystemEvent fse;
             if (File.Exists(e.FullPath))
