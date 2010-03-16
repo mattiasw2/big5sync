@@ -73,7 +73,6 @@
     <Compile Include="CompareAndSync\Exceptions\SynclessIOException.cs" />
     <Compile Include="CompareAndSync\Visitor\FolderRenameVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\IgnoreMetaDataVisitor.cs" />
-    <Compile Include="CompareAndSync\XMLChangeType.cs" />
     <Compile Include="CompareAndSync\Request\AutoSyncRequest.cs" />
     <Compile Include="CompareAndSync\Request\ManualCompareRequest.cs" />
     <Compile Include="CompareAndSync\Request\ManualRequest.cs" />

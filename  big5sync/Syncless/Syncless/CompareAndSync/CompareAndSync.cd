@@ -3,7 +3,7 @@
   <Class Name="Syncless.CompareAndSync.CommonMethods" Collapsed="true">
     <Position X="16" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQEEAAAAAAAAIAoAAIAAAEAAAAAAAAAAAGAAABAEAE=</HashCode>
+      <HashCode>AAQEEAAAAAAAAIAoIAIgAAEAAAAAAAAAAAGAAABAEAE=</HashCode>
       <FileName>CompareAndSync\CommonMethods.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -253,7 +253,7 @@
   <Class Name="Syncless.CompareAndSync.Visitor.XMLMetadataVisitor" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="16" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAUAQQAAAACAQAQAAwACEAAAEAAAIQCAARAJAQoSAAA=</HashCode>
+      <HashCode>AAUAQQAAAACAQAQAAwACEAgAEAAAIQCAARAJAQoSAAA=</HashCode>
       <FileName>CompareAndSync\Visitor\XMLMetadataVisitor.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -261,7 +261,7 @@
   <Class Name="Syncless.CompareAndSync.Visitor.XMLWriterVisitor" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="17.75" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAJAQAhAABCAQARAAwACQkogUHIBAABEUIQJAgICEAA=</HashCode>
+      <HashCode>CAJAQAhAABCAQARAAwACQkogUHIBAAAEUIQJAgICEAA=</HashCode>
       <FileName>CompareAndSync\Visitor\XMLWriterVisitor.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -294,13 +294,6 @@
       <FileName>CompareAndSync\Visitor\IVisitor.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Enum Name="Syncless.CompareAndSync.FileChangeType" Collapsed="true">
-    <Position X="12.5" Y="6.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAEAAEAAAAAAAAEAgAA=</HashCode>
-      <FileName>CompareAndSync\XMLChangeType.cs</FileName>
-    </TypeIdentifier>
-  </Enum>
   <Enum Name="Syncless.CompareAndSync.Enum.AutoSyncRequestType" Collapsed="true">
     <Position X="10.75" Y="6.75" Width="1.5" />
     <TypeIdentifier>
