@@ -1,8 +1,8 @@
-#summary Getting Started With Syncless
+#summary Getting Started: Get up to speed with Syncless and enjoy the power of seamless file synchronization through tagging.
 
 = Introduction =
 
-Add your content here.
+
 
 
 = Details =
