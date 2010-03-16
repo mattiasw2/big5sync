@@ -1,12 +1,17 @@
 #summary This page contains the list of features/bug fix we will implement in the future.
 
-  # Solve the recursion directory issue.  
+1. Solve the recursion directory issue.  
           
-      wadawdawdaw
-  # Untag a tagged folder if it is deleted.
-  # Implement a Notification to send message from Logic Layer to User Interface.
-  # Implement a Manual Sync Queue instead of having multiple thread running.
-  # Merge Profile for Hard disk
-  # Preview Sync Result
-  # 
+      * wadawdawdaw
+2. Untag a tagged folder if it is deleted.
+
+3. Implement a Notification to send message from Logic Layer to User Interface.
+
+4. Implement a Manual Sync Queue instead of having multiple thread running.
+
+5. Merge Profile for Hard disk.
+
+6. Preview Sync Result.
+
+7. Implement uni-directional synchronization.
   
