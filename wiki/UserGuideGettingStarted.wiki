@@ -37,6 +37,13 @@ http://big5sync.googlecode.com/files/main-interface.png
 
 = Learn Syncless =
 
+Continue to Explore Syncless
+
+Syncless offers other powerful features to do synchronization. Check out
+one or more of these additional features:
+
+* *Filtering*:  Use Syncless's filtering features for the ultimate control in synchronization. Currently, Syncless is able to include or exclude files and folders by extension and path. Other filters will be available in later versions.
+
 == Getting More Help ==
 
 To get help while you are using Syncless, refer to the full user guide [PROVIDE LINK]. You'll find more information about the topics covered in this document, as well as information about and instructions for many more topics. You can also view a video of the quick run-through of the features at http://www.youtube.com/watch?v=i30Q2U7ceWs
