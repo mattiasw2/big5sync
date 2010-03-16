@@ -2,11 +2,11 @@
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
-= CompareAndSync! =
+= !CompareAndSync =
 <wiki:toc max_depth="5" />
 
 == Overview ==
-The *CompareAndSync!* component in *Syncless* is the part of the system that handles the comparison and syncing of files and folders. From a logical point of view, it can be briefly split into 2 subcomponents; the manual subcomponent that handles all manual operations, and the seamless subcomponent that handles all the automated synchronization requests from another component, the *Monitor*.
+The *!CompareAndSync* component in *Syncless* is the part of the system that handles the comparison and syncing of files and folders. From a logical point of view, it can be briefly split into 2 subcomponents; the manual subcomponent that handles all manual operations, and the seamless subcomponent that handles all the automated synchronization requests from another component, the *Monitor*.
 
 Both sub-components are implemented very differently, as manual synchronization and automated synchronization are largely different. The manual subcomponent is implemented using a *Tree* in conjunction with the *Visitor Pattern*, while the seamless subcomponent is implemented using a *Queue*.
 
