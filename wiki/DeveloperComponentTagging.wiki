@@ -1,6 +1,9 @@
 #summary Developer's Guide - Component - Tagging
+#labels Phase-Implementation
 
 = Tagging =
+
+<wiki:toc max_depth="4" />
 
 == Overview ==
 
