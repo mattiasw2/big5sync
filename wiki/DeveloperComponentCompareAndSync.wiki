@@ -1,7 +1,7 @@
 #summary Developer's Guide - Component - CompareAndSync
 #labels Phase-Implementation
 
-<wiki:toc max_depth="1" />
+<wiki:toc max_depth="5" />
 
 = CompareAndSync=
 
