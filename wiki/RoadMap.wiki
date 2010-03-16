@@ -1,8 +1,14 @@
 #summary This page contains the list of features/bug fix we will implement in the future.
 
 1. Solve the recursion directory issue.  
-          
-      * wadawdawdaw
+   Currently, if the folders that are tagged form a recursion, if all of the tags are in seamless mode, folders and file will be continuously created until the maximum path length is reached. After which, an exception will be thrown.
+   Example of recursion : 
+              Folder A                    Folder C
+                  |_____Folder B              |_______Folder D
+
+   If Folder A is tagged with Folder D , and Folder C is tagged with Folder B. 
+   
+
 2. Untag a tagged folder if it is deleted.
 
 3. Implement a Notification to send message from Logic Layer to User Interface.
