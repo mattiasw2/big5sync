@@ -1,12 +1,26 @@
 #summary This is a list of known issues grouped by category for V0.9.
+#labels Phase-Implementation
+#sidebar DeveloperGuideSidebar
 
-= Introduction =
+= Known Issues (as of 0.9) =
+<wiki:toc max_depth="5" />
 
 These are the current known issues with Syncless 0.9, and will be handled at a later version.
 
 = Details =
+== Profiling ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+
+== Tagging ==
+
+
+== CompareAndSync ==
+
+
+== Monitor ==
+
+
+== Logging ==
+
+
+== User Interface ==
