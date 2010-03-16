@@ -705,6 +705,10 @@ namespace Syncless.Core
             SaveLoadHelper.SaveAll(_userInterface.getAppPath());
             try
             {
+                if (!drive.IsReady)
+                {
+                    return false;
+                }
                 MonitorLayer.Instance.UnMonitorDrive(drive.Name);
                 ProfilingLayer.Instance.RemoveDrive(drive);
                 return true;
