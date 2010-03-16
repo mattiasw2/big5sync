@@ -49,6 +49,8 @@ one or more of these additional features:
 
  * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder will be archived up to 5 backups at one time. Currently as of Ver. 0.9, archiving is not user-configurable, but will be in the future.
 
+ * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving on your computer. 
+
 == Getting More Help ==
 
 To get help while you are using Syncless, refer to the full user guide [PROVIDE LINK]. You'll find more information about the topics covered in this document, as well as information about and instructions for many more topics. You can also view a video of the quick run-through of the features at http://www.youtube.com/watch?v=i30Q2U7ceWs
