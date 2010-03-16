@@ -896,6 +896,21 @@ namespace SynclessUI
                 ListBoxTag.ItemsSource = taglist;
                 LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
             }));
+			
+            ListTaggedPath.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+            (Action)(() =>
+            {
+				TagView tv = gui.GetTag(_selectedTag);
+				if (tv.IsSeamless)
+				{
+					SeamlessMode();
+				}
+				else
+				{
+					ManualMode();
+				}
+				ListTaggedPath.ItemsSource = tv.PathStringList;
+            }));
         }
 
         #endregion
