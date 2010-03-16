@@ -36,23 +36,23 @@ The main operations which will trigger interactions among the various classes in
 
 ==== Sequence Diagram of !CreateTag ====
 
-<img src = "http://big5sync.googlecode.com/files/TaggingCreateTag.jpg" />
+http://big5sync.googlecode.com/files/TaggingCreateTag.jpg
 
 ==== Sequence Diagram of !DeleteTag ====
 
-<img src = "http://big5sync.googlecode.com/files/TaggingDeleteTag.jpg" />
+http://big5sync.googlecode.com/files/TaggingDeleteTag.jpg
 
 ==== Sequence Diagram of !TagFolder ====
 
-<img src = "http://big5sync.googlecode.com/files/TaggingTagFolder.jpg" />
+http://big5sync.googlecode.com/files/TaggingTagFolder.jpg
 
 ==== Sequence Diagram of !UntagFolder ====
 
-<img src = "http://big5sync.googlecode.com/files/TaggingUntagFolder.jpg" />
+http://big5sync.googlecode.com/files/TaggingUntagFolder.jpg
 
 ==== Sequence Diagram of !UpdateFilter ====
 
-<img src = "http://big5sync.googlecode.com/files/TaggingUpdateFilter.jpg" />
+http://big5sync.googlecode.com/files/TaggingUpdateFilter.jpg
 
 === TaggingXMLHelper ===
 
