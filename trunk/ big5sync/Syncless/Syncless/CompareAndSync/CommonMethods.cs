@@ -106,50 +106,18 @@ namespace Syncless.CompareAndSync
 
         }
 
-
-        //This actually calculates Adler32. Will rename method in future to prevent too much code from breaking now.
+        /*
         public static string CalculateMD5Hash(string path)
         {
+
             if (!File.Exists(path))
                 throw new HashFileException(new FileNotFoundException());
 
             try
             {
-                CompareAndSync.Adler32.Adler32 adler32 = new CompareAndSync.Adler32.Adler32();
-                adler32.Update(File.ReadAllBytes(path));
-                return adler32.Value.ToString("X");
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                throw new HashFileException(e);
-            }
-            catch (DirectoryNotFoundException e)
-            {
-                throw new HashFileException(e);
-            }
-            catch (IOException e)
-            {
-                throw new HashFileException(e);
-            }
-        }
-
-        /*
-        public static string CalculateMD5Hash(FileInfo fileInput)
-        {
-            if (!fileInput.Exists)
-                throw new HashFileException(new FileNotFoundException());
-
-            try
-            {
-                FileStream fileStream = fileInput.OpenRead();
+                FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
                 byte[] fileHash = MD5.Create().ComputeHash(fileStream);
-                fileStream.Close();
-                StringBuilder sb = new StringBuilder();
-
-                for (int i = 0; i < fileHash.Length; i++)
-                    sb.Append(fileHash[i].ToString("X2"));
-
-                return sb.ToString();
+                return BitConverter.ToString(fileHash).Replace("-", "");
             }
             catch (UnauthorizedAccessException e)
             {
@@ -164,6 +132,39 @@ namespace Syncless.CompareAndSync
                 throw new HashFileException(e);
             }
         }*/
+
+        public static string CalculateMD5Hash(FileInfo fileInput)
+        {
+            if (!fileInput.Exists)
+                throw new HashFileException(new FileNotFoundException());
+
+            try
+            {
+                FileStream fileStream = fileInput.OpenRead();
+                byte[] fileHash = MD5.Create().ComputeHash(fileStream);
+                fileStream.Close();
+                return BitConverter.ToString(fileHash).Replace("-", "");
+
+                //StringBuilder sb = new StringBuilder();
+
+                //for (int i = 0; i < fileHash.Length; i++)
+                //    sb.Append(fileHash[i].ToString("X2"));
+
+                //return sb.ToString();
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                throw new HashFileException(e);
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                throw new HashFileException(e);
+            }
+            catch (IOException e)
+            {
+                throw new HashFileException(e);
+            }
+        }
 
         public static void CopyFile(string sourceFile, string destFile, bool overwrite)
         {
