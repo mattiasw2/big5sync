@@ -9,8 +9,6 @@ Add your content here.
 
      == 2.1. Tagging ==
 
-        <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentTagging#xmldocument">Click here to go to Tagging</a>
-
      == 2.2. Profiling ==
 
      == 2.3. CompareAndSync ==
