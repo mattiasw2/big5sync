@@ -6,7 +6,7 @@
 
 The Tagging component provides the underlying operations of creating/removing a tag, tagging/untagging a folder to/from a tag, managing filter properties and configuring tag properties.
 
-== Class Diagram ==
+== The Classes ==
 
 The Tagging component consists of several important sub-components, including a main logic layer - *TaggingLayer*, model objects - *TaggingProfile*, *Tag*, *TaggedPath* and *TagConfig*, helper components - *TagMerger*, *TaggingHelper* and *TaggingXMLHelper*.
 
@@ -20,73 +20,22 @@ When initialized, *TaggingLayer* will call *TaggingXMLHelper* to load the curren
 
 After initialization, *TaggingLayer* can be called to perform tag-related operations.
 
-=== TaggingProfile ===
+The main operations which will trigger interactions among the various classes in Tagging component include:<br>
+-CreateTag<br>
+-DeleteTag<br>
+-TagFolder<br>
+-UntagFolder<br>
+-UpdateFilter<br>
 
-This is the main object contained in *TaggingLayer* to store information related to tagging operations.
+==== Sequence Diagram of CreateTag ====
 
-Properties of *TaggingProfile* include:<br>
--ProfileName<br>
--TagList<br>
--CreatedDate<br>
--LastUpdatedDate<br>
+==== Sequence Diagram of DeleteTag ====
 
-*TagList* contains a list of tags which are created when *Syncless* is run. Most methods under *TaggingProfile* will need to make changes to *TagList*, such as *AddTag*, *TagFolder*, *UntagFolder* and *RenameFolder*.
+==== Sequence Diagram of TagFolder ====
 
-=== Tag ===
+==== Sequence Diagram of UntagFolder ====
 
-This is the object that stores information of each individual tag.
-
-Properties of *Tag* include:<br>
--TagName<br>
--UnfilteredPathList<br>
--FilteredPathList<br>
--FilteredPathListString<br>
--CreatedDate<br>
--LastUpdatedDate<br>
--IsDeleted<br>
--DeletedDate<br>
--Config<br>
--IsSeamless<br>
--ArchiveName<br>
--ArchiveCount<br>
--Recycle<br>
--Filters<br>
--FiltersUpdatedDate<br>
-
-*UnfilteredPathList* contains a list of all folder paths tagged to this particular tag, including untagged folder paths which were previously tagged, and folder paths which are currently still tagged.<br><br>
-*FilteredPathList* contains a list of folder paths which are currently still tagged.<br><br>
-*Config* contains the additional tag configurations as defined by the user.<br><br>
-*Filters* contains a list of all filters.<br>
-
-=== TaggedPath ===
-
-This is the object that stores information of each folder path that is being tagged.
-
-Properties of *TaggedPath* include:<br>
--PathName<br>
--CreatedDate<br>
--LastUpdatedDate<br>
--DeletedDate<br>
--IsDeleted<br>
--LogicalDriveId<br>
-
-*PathName* is the full path name of a particular folder that is being tagged.<br><br>
-*IsDeleted* indicates whether this particular path has been untagged.<br>
-
-=== TagConfig ===
-
-This is the object that stores the configuration of a particular tag.
-
-Properties of *TagConfig* include:<br>
--IsSeamless<br>
--ArchiveFolderName<br>
--ArchiveCount<br>
--Recycle<br>
-
-*IsSeamless* indicates whether the mode of synchronization is seamless or manual.<br><br>
-*ArchiveFolderName* is the name of the folder that stores archived files.<br><br>
-*ArchiveCount* indicates the number of archive files to keep.<br><br>
-*Recycle* indicates whether to keep deleted files in the Recycle Bin.<br>
+==== Sequence Diagram of UpdateFilter ====
 
 === TaggingXMLHelper ===
 
