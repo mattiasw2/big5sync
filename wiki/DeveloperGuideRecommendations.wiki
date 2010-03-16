@@ -1,5 +1,6 @@
 #summary Developer's Guide - Recommended Resources and Readings for Developers
 #labels Phase-Implementation
+#sidebar DeveloperGuideSidebar
 
 == Tree Visitor Pattern ==
 [http://etymon.blogspot.com/2006/04/visitor-pattern-and-trees-considered.html Etymon - Visitor Pattern and Trees Considered Harmful]
