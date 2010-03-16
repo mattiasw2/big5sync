@@ -12,9 +12,9 @@ The Tagging component provides the underlying operations of creating/removing a 
 
 == The Classes ==
 
-The Tagging component consists of several important sub-components, including a main logic layer - *TaggingLayer*, model objects - *TaggingProfile*, *Tag*, *TaggedPath* and *TagConfig*, helper components - *TagMerger*, *TaggingHelper* and *TaggingXMLHelper*.<br><br>
+The Tagging component consists of several important sub-components, including a main logic layer - *!TaggingLayer*, model objects - *!TaggingProfile*, *Tag*, *!TaggedPath* and *!TagConfig*, helper components - *!TagMerger*, *!TaggingHelper* and *!TaggingXMLHelper*.<br><br>
 
-=== TaggingLayer ===
+=== !TaggingLayer ===
 
 This is the main logic layer which is called by the *SystemLogicLayer* to perform tag-related operations. When *Syncless* is started up, *SystemLogicLayer* will call *TaggingLayer* for initialization. 
 
