@@ -403,7 +403,7 @@ namespace SynclessUI
 
             if (tv.IsSeamless)
             {
-                AutoMode();
+                SeamlessMode();
             }
             else
             {
@@ -522,7 +522,7 @@ namespace SynclessUI
             {
                 if (gui.MonitorTag(_selectedTag, true))
                 {
-                    AutoMode();
+                    SeamlessMode();
                 }
                 else
                 {
@@ -552,11 +552,14 @@ namespace SynclessUI
             }
         }
 
-        private void AutoMode()
+        private void SeamlessMode()
         {
             LblSyncMode.Content = "Seamless";
             BtnPreview.Visibility = System.Windows.Visibility.Hidden;
-            BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
+            BtnSyncNow.Visibility = System.Windows.Visibility.Hidden; 
+			BtnSyncMode.SetResourceReference(Control.BackgroundProperty, "ToggleOnBrush");
+            LblSyncMode.SetResourceReference(Control.MarginProperty, "ToggleOnMargin");
+			LblSyncMode.SetResourceReference(Control.ForegroundProperty, "ToggleOnForeground");
         }
 
         private void ManualMode()
@@ -564,6 +567,9 @@ namespace SynclessUI
             LblSyncMode.Content = "Manual";
             BtnPreview.Visibility = System.Windows.Visibility.Visible;
             BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
+            BtnSyncMode.SetResourceReference(Control.BackgroundProperty, "ToggleOffBrush");
+            LblSyncMode.SetResourceReference(Control.MarginProperty, "ToggleOffMargin");
+			LblSyncMode.SetResourceReference(Control.ForegroundProperty, "ToggleOffForeground");
         }
 
         private void BtnSyncNow_Click(object sender, System.Windows.RoutedEventArgs e)

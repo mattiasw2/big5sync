@@ -94,8 +94,8 @@
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="10"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="70"/>
+				<ColumnDefinition/>
+				<ColumnDefinition Width="80"/>
 				<ColumnDefinition Width="10"/>
 			</Grid.ColumnDefinitions>
 			
@@ -109,7 +109,7 @@
 					</Rectangle.Fill>
 				</Rectangle>
 			
-			<TextBox IsReadOnly="True" x:Name="TagTitle" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Foreground="#FFEEEEEE" FontSize="16" Text="Select a Tag" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Margin="1,0,20.4,0" Padding="10,5,0,0" Background="{x:Null}" Width="331" KeyDown="TagTitleOnKeyDownHandler" LostFocus="TagTitle_LostFocus" ToolTip="{Binding Text, ElementName=TagTitle, Mode=Default}"/>
+			<TextBox IsReadOnly="True" x:Name="TagTitle" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Foreground="#FFEEEEEE" FontSize="16" Text="Select a Tag" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Margin="1,0,10,0" Padding="10,5,0,0" Background="{x:Null}" Width="331" KeyDown="TagTitleOnKeyDownHandler" LostFocus="TagTitle_LostFocus" ToolTip="{Binding Text, ElementName=TagTitle, Mode=Default}"/>
 			
 			<!-- Tag General Details -->
 			<Image x:Name="TagIcon" Source="Icons\folder.ico" HorizontalAlignment="Right" Margin="0,0,-5,0" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="3" VerticalAlignment="Top" d:LayoutOverrides="HorizontalMargin" Grid.ColumnSpan="2" Cursor="Hand" MouseDown="TagIcon_MouseDown" ToolTip="Click to Access Tag Details"/>
@@ -121,7 +121,7 @@
 			</StackPanel>
 			
 			<!-- Tag Sync Panel -->
-			<StackPanel x:Name="SyncPanel" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Top">
+			<StackPanel x:Name="SyncPanel" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Top" Width="80">
 				<Button x:Name="BtnDirection" Height="28" Margin="0,0,0,5" Click="BtnDirection_Click" Visibility="Collapsed">
 					<Button.Background>
 						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -132,14 +132,74 @@
 					</Button.Background>
 					<Label x:Name="LblDirection" FontFamily="Century Gothic" FontSize="10.667" Foreground="Black" OpacityMask="Black" BorderBrush="Black" HorizontalAlignment="Right" Content="Uni-Dir.."/>
 				</Button>
-				<Button x:Name="BtnSyncMode" Height="35" Margin="0,0,0,5" Click="BtnSyncMode_Click" ToolTip="Switch Between Manual &amp; Seamless Mode">
-					<Button.Background>
-						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" MappingMode="RelativeToBoundingBox">
-							<GradientStop Color="#FF00FFF0"/>
-							<GradientStop Color="Red" Offset="1"/>
+				<Button x:Name="BtnSyncMode" Height="35" Margin="0,0,0,5" Click="BtnSyncMode_Click" ToolTip="Switch Between Manual &amp; Seamless Mode" Style="{DynamicResource CustomButtonStyle}" Background="{DynamicResource ToggleOffBrush}" Foreground="White">
+					<Button.Resources>
+						<Style x:Key="ButtonFocusVisual">
+							<Setter Property="Control.Template">
+								<Setter.Value>
+									<ControlTemplate>
+										<Rectangle Stroke="Black" StrokeDashArray="1 2" StrokeThickness="1" Margin="2" SnapsToDevicePixels="true"/>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+						<LinearGradientBrush x:Key="ButtonNormalBackground" EndPoint="0,1" StartPoint="0,0">
+							<GradientStop Color="#F3F3F3" Offset="0"/>
+							<GradientStop Color="#EBEBEB" Offset="0.5"/>
+							<GradientStop Color="#DDDDDD" Offset="0.5"/>
+							<GradientStop Color="#CDCDCD" Offset="1"/>
 						</LinearGradientBrush>
-					</Button.Background>
-					<Label x:Name="LblSyncMode" FontFamily="Century Gothic" FontSize="10.667" Foreground="Black" OpacityMask="Black" BorderBrush="Black" HorizontalAlignment="Center" Content="Manual" Margin="-15,0,0,0"/>
+						<SolidColorBrush x:Key="ButtonNormalBorder" Color="#FF707070"/>
+						<Style x:Key="CustomButtonStyle" TargetType="{x:Type Button}">
+							<Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
+							<Setter Property="Background" Value="{StaticResource ButtonNormalBackground}"/>
+							<Setter Property="BorderBrush" Value="{StaticResource ButtonNormalBorder}"/>
+							<Setter Property="BorderThickness" Value="1"/>
+							<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+							<Setter Property="HorizontalContentAlignment" Value="Center"/>
+							<Setter Property="VerticalContentAlignment" Value="Center"/>
+							<Setter Property="Padding" Value="1"/>
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="{x:Type Button}">
+										<dropShadow:ButtonChrome x:Name="Chrome" SnapsToDevicePixels="true" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" RenderDefaulted="{TemplateBinding IsDefaulted}"  RenderPressed="{TemplateBinding IsPressed}">
+											<ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" RecognizesAccessKey="True"/>
+										</dropShadow:ButtonChrome>
+										<ControlTemplate.Triggers>
+											<Trigger Property="ToggleButton.IsChecked" Value="true">
+												<Setter Property="RenderPressed" TargetName="Chrome" Value="true"/>
+											</Trigger>
+											<Trigger Property="IsEnabled" Value="false">
+												<Setter Property="Foreground" Value="#ADADAD"/>
+											</Trigger>
+										</ControlTemplate.Triggers>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+						<LinearGradientBrush x:Key="ToggleOffBrush" EndPoint="1,0.5" StartPoint="0,0.5" MappingMode="RelativeToBoundingBox">
+							<GradientStop Color="#FFCDCDCD" Offset="1"/>
+							<GradientStop Color="#FFF82D34"/>
+							<GradientStop Color="#FFF3F3F3" Offset="0.77"/>
+							<GradientStop Color="#FFFC878C" Offset="0.75"/>
+							<GradientStop Color="#FF999999" Offset="0.76"/>
+						</LinearGradientBrush>
+						<LinearGradientBrush x:Key="ToggleOnBrush" EndPoint="1,0.5" StartPoint="0,0.5" MappingMode="RelativeToBoundingBox">
+							<GradientStop Color="#FFCDCDCD"/>
+							<GradientStop Color="#FF56FF1E" Offset="1"/>
+							<GradientStop Color="#FFF3F3F3" Offset="0.23"/>
+							<GradientStop Color="#FF91FF8A" Offset="0.25"/>
+							<GradientStop Color="#FF999999" Offset="0.24"/>
+						</LinearGradientBrush>
+					</Button.Resources>
+					<Label x:Name="LblSyncMode" FontFamily="Century Gothic" FontSize="10.667" Foreground="{DynamicResource ToggleOffForeground}" OpacityMask="Black" BorderBrush="Black" HorizontalAlignment="Center" Content="Manual" Margin="{DynamicResource ToggleOffMargin}">
+						<Label.Resources>
+							<Thickness x:Key="ToggleOffMargin">-20,0,0,0</Thickness>
+							<Thickness x:Key="ToggleOnMargin">16,0,0,0</Thickness>
+							<SolidColorBrush x:Key="ToggleOffForeground" Color="White"/>
+							<SolidColorBrush x:Key="ToggleOnForeground" Color="Black"/>
+						</Label.Resources>
+					</Label>
 				</Button>
 				<Button x:Name="BtnPreview" Height="35" Margin="0,0,0,5" Click="BtnPreview_Click" ToolTip="Preview Synchronization">
 					<Label x:Name="LblPreview" FontFamily="Century Gothic" FontSize="10.667" Content="Preview"/>
@@ -150,7 +210,7 @@
 			</StackPanel>
 			<Border x:Name="BdrTaggedPath" Padding="10" Grid.Row="2" Grid.Column="1" BorderBrush="#FF6F6F6F" BorderThickness="1" CornerRadius="5" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,10,0,0">
 				<StackPanel>
-					<ListBox x:Name="ListTaggedPath" MaxHeight="130" MinHeight="20" Width="300" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Style="{DynamicResource ListTaggedPathStyle}" MouseDoubleClick="ListTaggedPath_MouseDoubleClick" Cursor="Hand" ItemContainerStyle="{DynamicResource TooltipListBoxItemStyle}">
+					<ListBox x:Name="ListTaggedPath" MaxHeight="130" MinHeight="20" Width="290" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Style="{DynamicResource ListTaggedPathStyle}" MouseDoubleClick="ListTaggedPath_MouseDoubleClick" Cursor="Hand" ItemContainerStyle="{DynamicResource TooltipListBoxItemStyle}">
 						<ListBox.ContextMenu>
 							<ContextMenu>
 								<MenuItem x:Name="OpenInExplorerRightClick" Header="Open In Windows Explorer" Click="OpenInExplorerRightClick_Click"><MenuItem.Icon><Image Width="16" Height="16" Source="Icons/explorer.ico"/></MenuItem.Icon></MenuItem>
