@@ -1,6 +1,7 @@
 #summary Developer Guide
 
 = 1. System Overview =
+
      == 1.1. Architecture ==
         
         Following the MVC model, the system into UI and Logic. The UI is developed 
@@ -72,6 +73,7 @@
         The Filter Component provides a means to filter files and folders to synchronize a 
         specified set of files/folders. This is to provide an easy way to extend this    
         feature into future instead of coupling it in the Tagging Component.
+
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentFilter">More details...</a>
 
      == 2.6. Logging ==
