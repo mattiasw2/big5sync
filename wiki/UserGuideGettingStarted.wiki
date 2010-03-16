@@ -27,3 +27,7 @@
   Toolbar > Create Tag
 
   The term after Toolbar is the name of the command in the main toolbar located in the Main Window.
+
+  == The Syncless Interface ==
+
+  When you run Syncless, you will be greeted with the viewing area, which allows you to choose what you want to do next, such as create tag, tag a folder, view tag details or etc.
