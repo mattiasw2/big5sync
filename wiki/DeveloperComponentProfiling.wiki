@@ -1,6 +1,9 @@
 #summary Developer's Guide - Component - Profiling
+#sidebar DeveloperGuideSidebar
 
 = Profiling =
+
+<wiki:toc max_depth="4" />
 
 == Overview ==
 
