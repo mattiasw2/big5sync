@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompareAndSync\Adler32\Adler32.cs" />
     <Compile Include="CompareAndSync\CommonMethods.cs" />
     <Compile Include="CompareAndSync\CompareAndSyncController.cs" />
     <Compile Include="CompareAndSync\CompareObjectHelper.cs" />
