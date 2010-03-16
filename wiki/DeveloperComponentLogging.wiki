@@ -1,5 +1,5 @@
 #summary Developer's Guide - Component - Logging
-#side DeveloperGuideSidebar
+#sidebar DeveloperGuideSidebar
 
 = Logging =
 
