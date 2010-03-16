@@ -36,7 +36,9 @@ http://big5sync.googlecode.com/files/main-interface.png
 
 = Learn Syncless =
 
-You have files and folders which you wish to synchronize automatically without you putting too much effort in doing it. Now is the time to use Syncless to help you organise them by using tags to make automatic synchronization an ease.
+You have files and folders which you wish to synchronize automatically without you putting too much effort in doing it. Now is the time to use Syncless to help you organise them by using tags.
+
+== Step 1: Tag Folders ==
 
 == Continue to Explore Syncless ==
 
