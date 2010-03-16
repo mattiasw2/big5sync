@@ -1,5 +1,6 @@
 #summary Developer's Guide - Component - CompareAndSync
 #labels Phase-Implementation
+#sidebar DeveloperGuideSidebar
 
 = CompareAndSync=
 
