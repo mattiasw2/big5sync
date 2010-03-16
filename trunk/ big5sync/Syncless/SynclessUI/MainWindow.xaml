@@ -16,11 +16,41 @@
 				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
 				<SplineDoubleKeyFrame KeyTime="00:00:00.2500000" Value="1"/>
 			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LogoHighlight" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Key="SynclessLogoJumps">
+			<ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="SynclessLogo" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+				<SplineThicknessKeyFrame KeyTime="00:00:00" Value="0"/>
+				<SplineThicknessKeyFrame KeyTime="00:00:00.2000000" Value="0,-5,0,0"/>
+			</ThicknessAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LogoHighlight" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Key="SynclessLogoLands">
+			<ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="SynclessLogo" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+				<SplineThicknessKeyFrame KeyTime="00:00:00" Value="0,-5,0,0"/>
+				<SplineThicknessKeyFrame KeyTime="00:00:00.2000000" Value="0"/>
+			</ThicknessAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LogoHighlight" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
 		</Storyboard>
 	</Window.Resources>
 	<Window.Triggers>
 		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
 			<BeginStoryboard Storyboard="{StaticResource MainWindowOnLoaded}"/>
+		</EventTrigger>
+		<EventTrigger RoutedEvent="Mouse.MouseEnter" SourceName="SynclessLogoContainer">
+			<BeginStoryboard x:Name="SynclessLogoJumps_BeginStoryboard" Storyboard="{StaticResource SynclessLogoJumps}"/>
+		</EventTrigger>
+		<EventTrigger RoutedEvent="Mouse.MouseLeave" SourceName="SynclessLogoContainer">
+			<BeginStoryboard x:Name="SynclessLogoJumps_BeginStoryboard1" Storyboard="{StaticResource SynclessLogoLands}"/>
 		</EventTrigger>
 	</Window.Triggers>
     <Grid x:Name="LayoutRoot" Width="700" Drop="LayoutRoot_Drop" AllowDrop="True">
@@ -59,8 +89,11 @@
 		</StackPanel>
 		<!-- Header Panel -->
 		<StackPanel x:Name="HeaderPanel" Grid.Row="1" Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Top" Height="50" Grid.ColumnSpan="4">
-    		<Image x:Name="SynclessLogo" Source="Icons/logo.ico" Width="40" Height="40" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Margin="-5,0,-10,0" Stretch="Fill" MouseLeftButtonDown="SynclessLogo_MouseLeftButtonDown" Cursor="Hand" ToolTip="Visit Syncless's Google Code Homepage"/>
-    		<Label x:Name="AppTitle" Content="Syncless" Foreground="#FFEEEEEE" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="0,-5,250,0" FontFamily="Fonts/#BankGothic Md BT"/>		
+    		<StackPanel x:Name="SynclessLogoContainer" Margin="0,5,0,0" Orientation="Vertical" MouseEnter="SynclessLogoContainer_MouseEnter">
+    			<Image x:Name="SynclessLogo" Source="Icons/logo.ico" Height="40" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Stretch="Fill" MouseLeftButtonDown="SynclessLogo_MouseLeftButtonDown" Cursor="Hand" ToolTip="Visit Syncless's Google Code Homepage" Width="40"/>
+    			<Ellipse x:Name="LogoHighlight" Stroke="Black" Width="10" Height="3" Fill="White" Visibility="Hidden" Margin="0,-2,0,0"/>
+			</StackPanel>
+    		<Label x:Name="AppTitle" Content="Syncless" Foreground="#FFEEEEEE" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="-10,-5,250,0" FontFamily="Fonts/#BankGothic Md BT"/>		
 			<!-- Menubar -->
 			<Menu x:Name="MainMenu" VerticalAlignment="Center" FontSize="13.333" Background="{x:Null}" Margin="0,8,0,0" FontWeight="Bold" HorizontalAlignment="Right" Visibility="Hidden">        
 				<MenuItem Header="_File" Foreground="#FF8799EB">
