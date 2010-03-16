@@ -71,7 +71,8 @@
         The Monitor Component provides implementations to monitor the file system and 
         drives. This is used to detect drives changes and to provide synchronization when 
         a device is plugged in. The component monitor changes in the file system to detect 
-        changes in the files and folder to synchronize them. 
+        changes in the files and folder to synchronize them.
+ 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentMonitor">More details...</a>
 
      == 2.5. Logging ==
