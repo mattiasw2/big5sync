@@ -21,11 +21,11 @@ Before going in depth into the design, we will first take a look at the data tra
 
 
 ==== Request ====
-Requests are data transfer objects sent to CompareAndSync when a comparison or synchronization action is to be done. The *Request* object is an abstract class, from which all other requests will extend from. *AutoSyncRequest* and *ManualRequest* are the respective requests for seamless and manual mode. *ManualRequest* is further extended to *ManualSyncRequest* and *ManualCompareRequest*.
+Requests are data transfer objects sent to !CompareAndSync when a comparison or synchronization action is to be done. The *!Request* object is an abstract class, from which all other requests will extend from. *!AutoSyncRequest* and *!ManualRequest* are the respective requests for seamless and manual mode. *!ManualRequest* is further extended to *!ManualSyncRequest* and *!ManualCompareRequest*.
 
 
-==== CompareObject ====
-CompareObjects are entities which are used during comparison and synchronization. There are basically 2 main kinds of CompareObjects, the *FileCompareObject* and the *FolderCompareObject*. *RootCompareObject* is a specific kind of FolderCompareObject used to represent the root paths to be compared. There is also the *XMLCompareObject* which is used to store the file metadata and then used to populate the main CompareObjects.
+==== !CompareObject ====
+CompareObjects are entities which are used during comparison and synchronization. There are basically 2 main kinds of !CompareObjects, the *!FileCompareObject* and the *!FolderCompareObject*. *!RootCompareObject* is a specific kind of !FolderCompareObject used to represent the root paths to be compared. There is also the *!XMLCompareObject* which is used to store the file metadata and then used to populate the main CompareObjects.
 
 
 == Main Components ==
@@ -33,7 +33,7 @@ We will now take a look at the main components of !CompareAndSync, which can be 
 
 
 === Controller ===
-*CompareAndSyncController* is a facade for the other layers to interact with, hiding the underlying implementations and exposing only the necessary methods for syncing.
+*!CompareAndSyncController* is a facade for the other layers to interact with, hiding the underlying implementations and exposing only the necessary methods for syncing.
 
 
 === Manual Components ===
@@ -41,29 +41,29 @@ As stated in the overview, the manual portion of the !CompareAndSync component i
 
 The classes of concern to us are:
 
-  * CompareObjectHelper
-  * BuilderVisitor
-  * ComparerVisitor
-  * FolderRenameVisitor
-  * IVisitor
-  * SyncerVisitor
-  * XMLMetadataVisitor
-  * XMLWriterVisitor
+  * !CompareObjectHelper
+  * !BuilderVisitor
+  * !ComparerVisitor
+  * !FolderRenameVisitor
+  * !IVisitor
+  * !SyncerVisitor
+  * !XMLMetadataVisitor
+  * !XMLWriterVisitor
 
-*CompareObjectHelper* is the class that contains the various traversal methods, namely, pre-traversal, post-traversal, and level-order traversal for traversing the tree. All the Visitor classes implement IVisitor interface. The general course of actions that occur for each synchronization are as follows:
+*!CompareObjectHelper* is the class that contains the various traversal methods, namely, pre-traversal, post-traversal, and level-order traversal for traversing the tree. All the Visitor classes implement IVisitor interface. The general course of actions that occur for each synchronization are as follows:
 
-  # *BuilderVisitor* takes in a RootCompareObject, and builds the directory trees for it under the given root paths.
-  # *XMLMetadataVisitor* will then visit this built tree, and populate it with metadata about each file, if the file exists.
-  # *FolderRenameVisitor* is a very specific class that will then check for folder renames.
-  # Next, *ComparerVisitor* visits the tree and updates the state of each CompareObject based on certain attributes like the last time the file was modified.
-  # *SyncerVisitor* will now traverse the tree and carry out the necessary actions based on the states updated by ComparerVisitor, as well as update the final state of each folder and file.
-  # Finally, *XMLWriterVisitor* will traverse the tree, and write the updated information of each folder and file to XML.
+  # *!BuilderVisitor* takes in a RootCompareObject, and builds the directory trees for it under the given root paths.
+  # *!XMLMetadataVisitor* will then visit this built tree, and populate it with metadata about each file, if the file exists.
+  # *!FolderRenameVisitor* is a very specific class that will then check for folder renames.
+  # Next, *!ComparerVisitor* visits the tree and updates the state of each CompareObject based on certain attributes like the last time the file was modified.
+  # *!SyncerVisitor* will now traverse the tree and carry out the necessary actions based on the states updated by ComparerVisitor, as well as update the final state of each folder and file.
+  # Finally, *!XMLWriterVisitor* will traverse the tree, and write the updated information of each folder and file to XML.
 
-Also, all the Visitors use pre-traversal, since it makes sense to build, populate and synchronize the CompareObjects from top-down. However, ComparerVisitor uses post-traversal because it is necessary to update the state of each folder if a file under it has changed. Assuming a user wants to compare and analyze the results, but not do any actual synchronization, we simply remove SyncerVisitor and XMLWriterVisitor from the sequence. It is also important to note that the Tree Visitor Pattern allows for very good modularity, and we can simply add on extra visitors to perform other tasks if necessary. Similarly, we can remove any visitors (except for BuilderVisitor, because it is required to build the tree), if necessary. A good example would be to remove FolderRenameVisitor if the developer does not want to handle folder renames.
+Also, all the Visitors use pre-traversal, since it makes sense to build, populate and synchronize the !CompareObjects from top-down. However, !ComparerVisitor uses post-traversal because it is necessary to update the state of each folder if a file under it has changed. Assuming a user wants to compare and analyze the results, but not do any actual synchronization, we simply remove !SyncerVisitor and !XMLWriterVisitor from the sequence. It is also important to note that the Tree Visitor Pattern allows for very good modularity, and we can simply add on extra visitors to perform other tasks if necessary. Similarly, we can remove any visitors (except for !BuilderVisitor, because it is required to build the tree), if necessary. A good example would be to remove !FolderRenameVisitor if the developer does not want to handle folder renames.
 
 
 === Seamless Components ===
-CompareAndSync is made such that the seamless component is completely separated from the manual component. There are various design and implementation issues for this, with one of them being that the seamless component is largely depending on receiving information from other objects. Moreover, in seamless mode, the file to sync is already know, with little to no need of doing a comparison. As such, there is no need to do the tedious job of building a tree.
+!CompareAndSync is made such that the seamless component is completely separated from the manual component. There are various design and implementation issues for this, with one of them being that the seamless component is largely depending on receiving information from other objects. Moreover, in seamless mode, the file to sync is already know, with little to no need of doing a comparison. As such, there is no need to do the tedious job of building a tree.
 
 The classes of concern to us for the seamless portion are as follows:
 
