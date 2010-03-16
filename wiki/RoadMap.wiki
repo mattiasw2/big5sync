@@ -12,10 +12,10 @@
 2. Untag a tagged folder if it is deleted.
 
 3. Implement a Notification to send message from Logic Layer to User Interface.
-   Currently, messages from the System Core is not send to User Interface. We will need to implement a Notification system to send notification to the UI. This is needed to inform the user on many issues, example are Conflict in Profile, Sync Result etc.
+   Currently, messages from the System Core are not sent to User Interface. We will need to implement a Notification system to send notification to the UI. This is needed to inform the user on many issues, for example, Conflict in Profile, Sync Result etc.
    
-4. Implement a Manual Sync Queue instead of having multiple thread running.
-   Currently, every sync request is created as a thread and the job is run. However this may cause many problem when writing meta data and file updating.
+4. Implement a Manual Sync Queue instead of having multiple threads running.
+   Currently, every sync request is created as a thread and the sync job will be run. However, this may cause many problems when writing meta data and file updating. In the future, a Queue may be implemented to allow only 1 job to be sync at one time.
 
 5. Merge Profile for Hard disk.
 
