@@ -242,6 +242,7 @@ namespace Syncless.CompareAndSync.Visitor
             }
 
             xmlDoc.Save(xmlPath);
+            xmlDoc = null;
         }
 
         private void RenameFileObject(FileCompareObject file , int counter , string currentPath)
