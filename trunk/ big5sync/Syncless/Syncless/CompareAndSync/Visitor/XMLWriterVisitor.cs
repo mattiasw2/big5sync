@@ -205,8 +205,9 @@ namespace Syncless.CompareAndSync.Visitor
                     xmlDoc.Save(xmlPath);
                     break;
                 }
-                catch (UnauthorizedAccessException)
+                catch (IOException e)
                 {
+                    Console.WriteLine(e.ToString());
                     System.Threading.Thread.Sleep(250);
                 }
             }
@@ -267,8 +268,9 @@ namespace Syncless.CompareAndSync.Visitor
                     xmlDoc.Save(xmlPath);
                     break;
                 }
-                catch (UnauthorizedAccessException)
+                catch (IOException e)
                 {
+                    Console.WriteLine(e.ToString());
                     System.Threading.Thread.Sleep(250);
                 }
             }
