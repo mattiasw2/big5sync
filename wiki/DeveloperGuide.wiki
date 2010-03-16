@@ -7,9 +7,9 @@
 
      == 1.1. Architecture ==
         
-        Following the Model-View-Controller(MVC) model, the system is split into User  
-        Interface(UI) and System Logic Layer(SLL). The UI is developed and separated from 
-        SLL. The SLL follows a facade pattern. It is further divided into several sub   
+        Following the Model-View-Controller (MVC) model, the system is split into User  
+        Interface (UI) and System Logic Layer (SLL). The UI is developed and separated 
+        from SLL. The SLL follows a facade pattern. It is further divided into several sub   
         components which will work together and complete the job.
 
         Communication between the UI and the Core Logic is done through a Service                   
@@ -29,17 +29,21 @@
         moment, the xml is stored in the folder /.syncless and is hidden. In the future, 
         we are intending to move this to somewhere else to avoid creating too many folders 
         and files in the user's folders.
+
+     == 1.3. Interaction among Sub-components ==
+
+        <a href = "http://code.google.com/p/big5sync/wiki/DeveloperSLLSequenceDiagrams">Sequence Diagrams</a>
  
 = 2. System Components =
 
      == 2.1. Profiling ==
 
         The Profiling component performs drive/computer recognization. It makes Syncless
-        portable because of the ability to recognize different drives/computers by creating a 
-        Globally Unique IDentifier (GUID) in each of them. It also performs conversion of a 
-        physical directory/file path to a logical address, and vice versa. This conversion is 
-        necessary, because CompareAndSync only recognizes physical path while Tagging 
-        recognizes a logical path.
+        portable because of the ability to recognize different drives/computers by 
+        creating a Globally Unique IDentifier (GUID) in each of them. It also performs 
+        conversion of a physical directory/file path to a logical address, and vice versa. 
+        This conversion is necessary, because CompareAndSync only recognizes physical path 
+        while Tagging recognizes a logical path.
 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentProfiling">More details...</a>
 
