@@ -134,6 +134,22 @@ namespace Syncless.Profiling
             return null;
         }
         /// <summary>
+        /// Find a Logical Mapping From a Physical Mapping
+        /// </summary>
+        /// <param name="physical"></param>
+        /// <returns></returns>
+        public string FindLogicalFromGUID(string guid)
+        {
+            foreach (ProfileMapping mapping in _mappingList)
+            {
+                if (mapping.GUID.Equals(guid))
+                {
+                    return mapping.LogicalAddress;
+                }
+            }
+            return null;
+        }
+        /// <summary>
         /// Update a Particular drive with to its GUID
         /// </summary>
         /// <param name="guid"></param>
