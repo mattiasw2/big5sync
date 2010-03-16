@@ -11,7 +11,18 @@
 			<GradientStop Color="#FF0AACE2" Offset="1"/>
 			<GradientStop Color="#FF8FE2FD" Offset="0.5"/>
 		</LinearGradientBrush>
+		<Storyboard x:Key="MainWindowOnLoaded">
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="{x:Null}" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.2500000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
 	</Window.Resources>
+	<Window.Triggers>
+		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
+			<BeginStoryboard Storyboard="{StaticResource MainWindowOnLoaded}"/>
+		</EventTrigger>
+	</Window.Triggers>
     <Grid x:Name="LayoutRoot" Width="700" Drop="LayoutRoot_Drop" AllowDrop="True">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="20"/>
@@ -48,7 +59,7 @@
 		</StackPanel>
 		<!-- Header Panel -->
 		<StackPanel x:Name="HeaderPanel" Grid.Row="1" Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Top" Height="50" Grid.ColumnSpan="4">
-    		<Image x:Name="SynclessLogo" Source="Icons/logo.ico" Width="40" Height="40" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Margin="-5,0,-10,0" Stretch="Fill" MouseLeftButtonDown="SynclessLogo_MouseLeftButtonDown" Cursor="Hand" ToolTip="Access Syncless's Webpage in Your Web Browser"/>
+    		<Image x:Name="SynclessLogo" Source="Icons/logo.ico" Width="40" Height="40" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Margin="-5,0,-10,0" Stretch="Fill" MouseLeftButtonDown="SynclessLogo_MouseLeftButtonDown" Cursor="Hand" ToolTip="Visit Syncless's Google Code Homepage"/>
     		<Label x:Name="AppTitle" Content="Syncless" Foreground="#FFEEEEEE" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="0,-5,250,0" FontFamily="Fonts/#BankGothic Md BT"/>		
 			<!-- Menubar -->
 			<Menu x:Name="MainMenu" VerticalAlignment="Center" FontSize="13.333" Background="{x:Null}" Margin="0,8,0,0" FontWeight="Bold" HorizontalAlignment="Right" Visibility="Hidden">        
