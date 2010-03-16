@@ -1001,5 +1001,10 @@ namespace SynclessUI
                 }
             }
         }
+
+        private void SynclessLogoContainer_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+        	LogoHighlight.Visibility = System.Windows.Visibility.Visible;
+        }
     }
 }
