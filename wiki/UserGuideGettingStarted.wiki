@@ -30,18 +30,13 @@ The term after Toolbar is the name of the command in the main toolbar located in
 
 == The Syncless Interface ==
 
-When you run Syncless, you will be greeted with the viewing area, which allows you to choose what you want to do next, such as create tag, tag a folder, view tag details or etc. The interface incorporates a lot of useful shortcuts to speed up productivity.
+When you run Syncless, you will be greeted with the main window, which allows you to choose what you want to do next, such as create tag, tag a folder, view tag details or etc. The interface also incorporates a lot of useful shortcuts to speed up productivity.
 
 http://big5sync.googlecode.com/files/main-interface.png
 
 = Learn Syncless =
 
-You have never ever used a synchronization software in your life or went round one full round but none 
-
-You’ve shot some great pictures with your digital camera.
-Now it’s time to import them into iPhoto and organize them
-in ways that make it easy to share them by creating
-slideshows, books, and more.
+You have files and folders which you wish to synchronize automatically without you putting too much effort in doing it. Now is the time to use Syncless to help you organise them by using tags to make automatic synchronization an ease.
 
 == Continue to Explore Syncless ==
 
