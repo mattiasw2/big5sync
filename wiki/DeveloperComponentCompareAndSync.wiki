@@ -1,8 +1,6 @@
 #summary Developer's Guide - Component - CompareAndSync
 #labels Phase-Implementation
 
-<wiki:toc max_depth="5" />
-
 = CompareAndSync=
 
 == Overview ==
@@ -73,7 +71,29 @@ The classes of concern to us for the seamless portion are as follows:
 SeamlessQueueControl is a class that contains a single queue to ensure the requests are handled in order, so as to prevent any possible conflicts. SeamlessSyncer contains the necessary methods to handle seamless file synchronization, and upon each successful synchronization, XMLHelper will be called to update the metadata stored in side.
 
 
-== Explanation of Algorithm ==
+== Explanation of Algorithms ==
+The main algorithm we are going to discuss here is the manual component comparison. Yes, Syncless' main aim is seamless synchronization, but the manual synchronization is in fact activated every time a user launches the application, or connects a removable storage drive to it. In a way, it is "seamless" too. Thus, it is as important as the seamless component.
+
+Using pre-traversal, BuilderVisitor will build a tree based on the given root paths. However, instead of a node for each and every folder, it groups files and folders of the same name at each level into single node. For example, if we want to synchronize "Lectures", "Notes" and "School", and the content of the folders are as follows:
+
+*Lectures*
+-SWEN.pdf
+-Extra Notes
+ -Principles of Software Engineering.pdf
+
+
+*Notes*
+-BizComm.ppt
+
+*School*
+-Extra Notes
+ -Principles of Software Engineering.pdf
+
+From the above, we can see that "SWEN.pdf" exists only in Lectures, "BizComm.ppt" only in Notes, and "Extra Notes" folder exists in both Lectures and School. With the above, we will generate the following tree:
+
+http://big5sync.googlecode.com/files/DeveloperCompareAndSyncDiagTree.png
+
+
 
 
 
