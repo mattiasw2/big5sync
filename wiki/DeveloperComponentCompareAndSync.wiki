@@ -45,21 +45,21 @@ The classes of concern to us are:
   * !BuilderVisitor
   * !ComparerVisitor
   * !FolderRenameVisitor
-  * !IVisitor
+  * IVisitor
   * !SyncerVisitor
-  * !XMLMetadataVisitor
-  * !XMLWriterVisitor
+  * XMLMetadataVisitor
+  * XMLWriterVisitor
 
 *!CompareObjectHelper* is the class that contains the various traversal methods, namely, pre-traversal, post-traversal, and level-order traversal for traversing the tree. All the Visitor classes implement IVisitor interface. The general course of actions that occur for each synchronization are as follows:
 
-  # *!BuilderVisitor* takes in a RootCompareObject, and builds the directory trees for it under the given root paths.
-  # *!XMLMetadataVisitor* will then visit this built tree, and populate it with metadata about each file, if the file exists.
+  # *!BuilderVisitor* takes in a !RootCompareObject, and builds the directory trees for it under the given root paths.
+  # *XMLMetadataVisitor* will then visit this built tree, and populate it with metadata about each file, if the file exists.
   # *!FolderRenameVisitor* is a very specific class that will then check for folder renames.
-  # Next, *!ComparerVisitor* visits the tree and updates the state of each CompareObject based on certain attributes like the last time the file was modified.
+  # Next, *!ComparerVisitor* visits the tree and updates the state of each !CompareObject based on certain attributes like the last time the file was modified.
   # *!SyncerVisitor* will now traverse the tree and carry out the necessary actions based on the states updated by ComparerVisitor, as well as update the final state of each folder and file.
-  # Finally, *!XMLWriterVisitor* will traverse the tree, and write the updated information of each folder and file to XML.
+  # Finally, *XMLWriterVisitor* will traverse the tree, and write the updated information of each folder and file to XML.
 
-Also, all the Visitors use pre-traversal, since it makes sense to build, populate and synchronize the !CompareObjects from top-down. However, !ComparerVisitor uses post-traversal because it is necessary to update the state of each folder if a file under it has changed. Assuming a user wants to compare and analyze the results, but not do any actual synchronization, we simply remove !SyncerVisitor and !XMLWriterVisitor from the sequence. It is also important to note that the Tree Visitor Pattern allows for very good modularity, and we can simply add on extra visitors to perform other tasks if necessary. Similarly, we can remove any visitors (except for !BuilderVisitor, because it is required to build the tree), if necessary. A good example would be to remove !FolderRenameVisitor if the developer does not want to handle folder renames.
+Also, all the Visitors use pre-traversal, since it makes sense to build, populate and synchronize the !CompareObjects from top-down. However, !ComparerVisitor uses post-traversal because it is necessary to update the state of each folder if a file under it has changed. Assuming a user wants to compare and analyze the results, but not do any actual synchronization, we simply remove !SyncerVisitor and XMLWriterVisitor from the sequence. It is also important to note that the Tree Visitor Pattern allows for very good modularity, and we can simply add on extra visitors to perform other tasks if necessary. Similarly, we can remove any visitors (except for !BuilderVisitor, because it is required to build the tree), if necessary. A good example would be to remove !FolderRenameVisitor if the developer does not want to handle folder renames.
 
 
 === Seamless Components ===
@@ -67,17 +67,17 @@ Also, all the Visitors use pre-traversal, since it makes sense to build, populat
 
 The classes of concern to us for the seamless portion are as follows:
 
-  * SeamlessQueueControl
-  * SeamlessSyncer
+  * !SeamlessQueueControl
+  * !SeamlessSyncer
   * XMLHelper
 
-*SeamlessQueueControl* is a class that contains a single queue to ensure the requests are handled in order, so as to prevent any possible conflicts. *SeamlessSyncer* contains the necessary methods to handle seamless file synchronization, and upon each successful synchronization, *XMLHelper* will be called to update the metadata stored in side.
+*!SeamlessQueueControl* is a class that contains a single queue to ensure the requests are handled in order, so as to prevent any possible conflicts. *!SeamlessSyncer* contains the necessary methods to handle seamless file synchronization, and upon each successful synchronization, *XMLHelper* will be called to update the metadata stored in side.
 
 
 == Explanation of Algorithms ==
 The main algorithm we are going to discuss here is the manual component comparison. Yes, Syncless' main aim is seamless synchronization, but the manual synchronization is in fact activated every time a user launches the application, or connects a removable storage drive to it. In a way, it is "seamless" too. Thus, it is as important as the seamless component.
 
-Using pre-traversal, BuilderVisitor will build a tree based on the given root paths. However, instead of a node for each and every folder, it groups files and folders of the same name at each level into single node. For example, if we want to synchronize "Lectures", "Notes" and "School", and the content of the folders are as follows:
+Using pre-traversal, !BuilderVisitor will build a tree based on the given root paths. However, instead of a node for each and every folder, it groups files and folders of the same name at each level into single node. For example, if we want to synchronize "Lectures", "Notes" and "School", and the content of the folders are as follows:
 
 *Lectures*
   * SWEN.pdf
@@ -85,19 +85,19 @@ Using pre-traversal, BuilderVisitor will build a tree based on the given root pa
     * Principles of Software Engineering.pdf
 
 *Notes*
-  * BizComm.ppt
+  * !BizComm.ppt
 
 *School*
   * Extra Notes
     * Principles of Software Engineering.pdf
 
-From the above, we can see that "SWEN.pdf" exists only in Lectures, "BizComm.ppt" only in Notes, and "Extra Notes" folder exists in both Lectures and School. With the above, we will generate the following tree:
+From the above, we can see that "SWEN.pdf" exists only in Lectures, "!BizComm.ppt" only in Notes, and "Extra Notes" folder exists in both Lectures and School. With the above, we will generate the following tree:
 
 http://big5sync.googlecode.com/files/DeveloperCompareAndSyncDiagTreeSmall.png
 
 With the above tree, it is very easy to compare as we only need to concern ourselves with a single node for every file. Now that the tree is built and populated with files, the XMLMetadataVisitor will populate each node with metadata, as well as create nodes if the file exists in the metadata but not in the folder. The metadata is very important in detecting if a file or folder has been renamed or deleted, so that the changes will be propagated across.
 
-The FolderRenameVisitor will now visit the tree, and detect for folder renames. The reason why it has to occur before any file comparison can take place is due to the fact that the algorithm attempts to merge any renamed folder with folders that have the old name, so that files can still be compared. There are two main methods in FolderRenameVisitor, namely _DetectFolderRename_ and  _MergeRenamedFolder_, that handles this. The code for _DetectFolderRename_ is as follows.
+The !FolderRenameVisitor will now visit the tree, and detect for folder renames. The reason why it has to occur before any file comparison can take place is due to the fact that the algorithm attempts to merge any renamed folder with folders that have the old name, so that files can still be compared. There are two main methods in !FolderRenameVisitor, namely _!DetectFolderRename_ and  _!MergeRenamedFolder_, that handles this. The code for _!DetectFolderRename_ is as follows.
 
 {{{
         private void DetectFolderRename(FolderCompareObject folder, string[] currentPaths)
@@ -154,7 +154,7 @@ The FolderRenameVisitor will now visit the tree, and detect for folder renames. 
         }
 }}}
 
-After FolderRenameVisitor is done with its job, ComparerVisitor, the only visitor to use post-traversal instead of pre-traversal, will visit the tree. There are various methods in ComparerVisitor that handles the detection of renamed files, as well as the comparing of files and folders. Let us take a look at the main function, _CompareFiles_.
+After !FolderRenameVisitor is done with its job, !ComparerVisitor, the only visitor to use post-traversal instead of pre-traversal, will visit the tree. There are various methods in !ComparerVisitor that handles the detection of renamed files, as well as the comparing of files and folders. Let us take a look at the main function, _!CompareFiles_.
 
 {{{
         private void CompareFiles(FileCompareObject file, string[] currentPaths)
@@ -216,7 +216,7 @@ After FolderRenameVisitor is done with its job, ComparerVisitor, the only visito
 }}}
 
 
-To summarize, ComparerVisitor simply assigns a priority of 1 to the first file that it determines exist. Subsequently, it will iterate through, and files which are less updated than it will be untouched (thus, 0, since that is the default int value), and when it comes across a file which is more updated, the most updated position will be set to this file, with the priority incremented by one. Files which are determined to be equal to the one with the most updated position will be given the same priority. In other words, if all files in the given FileCompareObject are equal, then all files will have priority 1. Let us further illustrate with the following example, using just the time of the day to represent how updated the file is:
+To summarize, !ComparerVisitor simply assigns a priority of 1 to the first file that it determines exist. Subsequently, it will iterate through, and files which are less updated than it will be untouched (thus, 0, since that is the default int value), and when it comes across a file which is more updated, the most updated position will be set to this file, with the priority incremented by one. Files which are determined to be equal to the one with the most updated position will be given the same priority. In other words, if all files in the given !FileCompareObject are equal, then all files will have priority 1. Let us further illustrate with the following example, using just the time of the day to represent how updated the file is:
 
 || A\Note.txt (10PM) || B\Note.txt (10PM) || C\Note.txt (9PM) || D\Note.txt (11PM) || E\Note.txt (8AM) ||
 
@@ -224,8 +224,8 @@ After applying the above algorithm, we should get the following, with the priori
 
 || A\Note.txt (1) || B\Note.txt (1) || C\Note.txt (0) || D\Note.txt (2) || E\Note.txt(0) ||
 
-Clearly, D\Note.txt is the most updated file. To end it off, SyncerVisitor will then look for the file or folder with the highest priority at each node, and execute the necessary action base on the ChangeType. Once that is done, XMLWriterVisitor will visit it and write the updated values, such as the hash and last modified date, back to the metadata.
+Clearly, D\Note.txt is the most updated file. To end it off, !SyncerVisitor will then look for the file or folder with the highest priority at each node, and execute the necessary action base on the !ChangeType. Once that is done, XMLWriterVisitor will visit it and write the updated values, such as the hash and last modified date, back to the metadata.
 
 
 == Extending CompareAndSync ==
-Further functionality can be added into CompareAndSync should a developer wish to. He can simply create his own visitor that visits each node and performs the action he decides. A good example would be to generate a report after a synchronization. A developer can simply code a visitor to create a report based on the attributes of each node.
+Further functionality can be added into !CompareAndSync should a developer wish to. He can simply create his own visitor that visits each node and performs the action he decides. A good example would be to generate a report after a synchronization. A developer can simply code a visitor to create a report based on the attributes of each node.
