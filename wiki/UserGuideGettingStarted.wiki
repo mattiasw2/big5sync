@@ -41,22 +41,18 @@ http://big5sync.googlecode.com/files/main-interface.png
 
 = Learn Syncless =
 
-You have files and folders which you wish to synchronize automatically without you putting too much effort in doing it. Now is the time to use Syncless to help you organise them by using tags.
+You have files and folders that you wish to synchronize automatically without putting too much effort in doing it. Now is the time to use Syncless to help you organise them by using tags.
 
 == Step 1: Tag Folders ==
 
 To synchronize 2 or more folders together, you must first tag them with the same name. This tagging process can be initiated in multiple ways.
   * Tagging from Syncless
 
-  * Tagging from Windows Explorer
-
   * Drag-and-Drop folder(s) on the Main Window
 
-To edit and share your photos, you must first transfer them to your computer. This
-transfer process, known as importing, copies the photo files from their original source
-into iPhoto, where you can then work with them in a variety of ways.
-Importing from a digital camera is the most common method of transferring photos to
-iPhoto.
+  * Tagging from Windows Explorer
+
+We will tag a folder from Windows Explorer.
 
 == Continue to Explore Syncless ==
 
