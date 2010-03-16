@@ -63,7 +63,7 @@ public static class MinimizeToTray
                 // Initialize NotifyIcon instance "on demand"
                 _notifyIcon = new NotifyIcon();
                 _notifyIcon.Icon = Icon.ExtractAssociatedIcon(Assembly.GetEntryAssembly().Location);
-                _notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(HandleNotifyIconOrBalloonClicked);
+                _notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(HandleNotifyIconOrBalloonClicked);
                 _notifyIcon.BalloonTipClicked += new EventHandler(HandleNotifyIconOrBalloonClicked);
             }
             // Update copy of Window Title in case it has changed
@@ -76,7 +76,7 @@ public static class MinimizeToTray
             if (minimized && !_balloonShown)
             {
                 // If this is the first time minimizing to the tray, show the user what happened
-                _notifyIcon.ShowBalloonTip(1000, null, _window.Title + " has been minimized.", ToolTipIcon.None);
+                _notifyIcon.ShowBalloonTip(1000, null, _window.Title + " has been minimized.", ToolTipIcon.Info);
                 _balloonShown = true;
             }
         }
