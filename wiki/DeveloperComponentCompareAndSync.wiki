@@ -57,7 +57,8 @@ CompareObjectHelper is the class that contains the various traversal methods, na
   # SyncerVisitor will now traverse the tree and carry out the necessary actions based on the states updated by ComparerVisitor, as well as update the final state of each folder and file.
   # Finally, XMLWriterVisitor will traverse the tree, and write the updated information of each folder and file to XML.
 
-Also, all the Visitors use pre-traversal, since it makes sense to build, populate and synchronize the CompareObjects from top-down. However, ComparerVisitor uses post-traversal because it is necessary to update the state of each folder if a file under it has changed.
+Also, all the Visitors use pre-traversal, since it makes sense to build, populate and synchronize the CompareObjects from top-down. However, ComparerVisitor uses post-traversal because it is necessary to update the state of each folder if a file under it has changed. Assuming a user wants to compare and analyze the results, but not do any actual synchronization, we simply remove SyncerVisitor and XMLWriterVisitor from the sequence. It is also important to note that the Tree Visitor Pattern allows for very good modularity, and we can simply add on extra visitors to perform other tasks if necessary. Similarly, we can remove any visitors (except for BuilderVisitor, because it is required to build the tree), if necessary. A good example would be to remove FolderRenameVisitor if the developer does not want to handle folder renames.
+
 
 === Seamless Components ===
 CompareAndSync is made such that the seamless component is completely separated from the manual component. There are various design and implementation issues for this, with one of them being that the seamless component is largely depending on receiving information from other objects. Moreover, in seamless mode, the file to sync is already know, with little to no need of doing a comparison. As such, there is no need to do the tedious job of building a tree.
@@ -81,7 +82,6 @@ Using pre-traversal, BuilderVisitor will build a tree based on the given root pa
 -Extra Notes
  -Principles of Software Engineering.pdf
 
-
 *Notes*
 -BizComm.ppt
 
@@ -93,7 +93,58 @@ From the above, we can see that "SWEN.pdf" exists only in Lectures, "BizComm.ppt
 
 http://big5sync.googlecode.com/files/DeveloperCompareAndSyncDiagTreeSmall.png
 
-With the above tree, it is very easy to compare as we only need to concern ourselves with a single node for every file. Now that the tree is built and populated with files, the XMLMetadataVisitor will populate each node with metadata, as well as create nodes if the file exists in the metadata but not in the folder. 
+With the above tree, it is very easy to compare as we only need to concern ourselves with a single node for every file. Now that the tree is built and populated with files, the XMLMetadataVisitor will populate each node with metadata, as well as create nodes if the file exists in the metadata but not in the folder. The metadata is very important in detecting if a file or folder has been renamed or deleted, so that the changes will be propagated across.
+
+The FolderRenameVisitor will now visit the tree, and detect for folder renames. The reason why it has to occur before any file comparison can take place is due to the fact that the algorithm attempts to merge any renamed folder with folders that have the old name, so that files can still be compared.
+
+{{{
+        private void DetectFolderRename(FolderCompareObject folder, string[] currentPaths)
+        {
+            //Check that there is exactly one delete
+            List<int> deletePos = new List<int>();
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                if (folder.ChangeType[i] == MetaChangeType.Delete)
+                    deletePos.Add(i);
+            }
+
+            if (deletePos.Count != 1)
+            {
+                foreach (int i in deletePos)
+                    folder.ChangeType[i] = null;
+                return;
+            }
+
+            FolderCompareObject f = null;
+
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                if (folder.ChangeType[i] == MetaChangeType.Delete)
+                {
+                    f = folder.Parent.GetRenamedFolder(folder.Name, folder.CreationTime[i], i);
+
+                    if (f != null)
+                    {
+                        int counter = 0;
+
+                        for (int j = 0; j < f.ChangeType.Length; j++)
+                        {
+                            if (f.ChangeType[j].HasValue && f.ChangeType[j] == MetaChangeType.New)
+                                counter++;
+                        }
+
+                        if (counter != 1)
+                        {
+                            folder.ChangeType[i] = null;                         
+                            return;
+                        }
+
+                        MergeRenamedFolder(folder, f, i);
+                    }
+                }
+            }
+        }
+}}}
 
 
 == Extending CompareAndSync ==
