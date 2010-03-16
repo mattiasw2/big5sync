@@ -19,4 +19,4 @@
 
 = StartManualSync =
 
-<a href = "http://big5sync.googlecode.com/files/SLLStartManualSync.jpg"><img src = "http://big5sync.googlecode.com/files/SLLStartManualSync.jpg" /></a>
+<a href = "http://big5sync.googlecode.com/files/SLLStartManualSync.jpg"><img src = "http://big5sync.googlecode.com/files/SLLStartManualSync.jpg" width = 856 height = 470 /></a>
