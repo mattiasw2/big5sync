@@ -2,7 +2,7 @@
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
-= CompareAndSync=
+= CompareAndSync =
 <wiki:toc max_depth="5" />
 
 == Overview ==
