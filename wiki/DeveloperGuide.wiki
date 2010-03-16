@@ -7,10 +7,10 @@
 
      == 1.1. Architecture ==
         
-        Following the MVC model, the system is split into User Interface and System Core 
-        Logic. The UI is developed separately from the Core Logic. The logic layer follows 
-        a facade pattern. It is further divided into several sub components which will 
-        work together and complete the job.
+        Following the Model-View-Controller(MVC) model, the system is split into User  
+        Interface(UI) and System Logic Layer(SLL). The UI is developed and separated from 
+        SLL. The SLL follows a facade pattern. It is further divided into several sub   
+        components which will work together and complete the job.
 
         Communication between the UI and the Core Logic is done through a Service                   
         Locator and an Interface. This allows us to change the Core Logic without 
