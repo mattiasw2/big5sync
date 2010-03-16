@@ -71,8 +71,6 @@
     <Compile Include="CompareAndSync\Exceptions\MoveFileException.cs" />
     <Compile Include="CompareAndSync\Exceptions\MoveFolderException.cs" />
     <Compile Include="CompareAndSync\Exceptions\SynclessIOException.cs" />
-    <Compile Include="CompareAndSync\ManualQueueControl.cs" />
-    <Compile Include="CompareAndSync\ManualSyncer.cs" />
     <Compile Include="CompareAndSync\Visitor\FolderRenameVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\IgnoreMetaDataVisitor.cs" />
     <Compile Include="CompareAndSync\XMLChangeType.cs" />
