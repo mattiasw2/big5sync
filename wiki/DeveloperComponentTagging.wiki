@@ -43,7 +43,7 @@ This is a helper which performs XML-related operations. It reads from and writes
 
 The conversion from a tagging profile to _tagging.xml_, and vice versa, is easily extensible. There are separate methods which take care of reading/writing each tagging profile property. If there are more properties to be added to *TaggingProfile*, only *ConvertTaggingProfileToXml* and *ConvertXmlToTaggingProfile* need to be changed, and then just create additional methods which read/write each of the new property.
 
-Conversion from XML to *TaggingProfile*:<br>
+Conversion from _tagging.xml_ to *TaggingProfile*:<br>
 -ConvertXmlToTaggingProfile(XmlDocument)<br>
 -CreateTaggingProfile(XmlElement)<br>
 -CreateTagFromXml(XmlElement)<br>
@@ -53,7 +53,7 @@ Conversion from XML to *TaggingProfile*:<br>
 -LoadFilterList(XmlElement)<br>
 -LoadFilter(XmlElement)<br>
 
-Conversion from *TaggingProfile* to XML:<br>
+Conversion from *TaggingProfile* to _tagging.xml_:<br>
 -ConvertTaggingProfileToXml(TaggingProfile)<br>
 -CreateTagElement(XmlDocument, Tag)<br>
 -CreateFoldersElements(XmlDocument, Tag)<br>
