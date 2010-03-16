@@ -237,6 +237,7 @@ namespace Syncless.Core
             {
                 if (dce.Type == DriveChangeType.DRIVE_IN)
                 {
+                    Merge(dce.Info);
                     ProfilingLayer.Instance.UpdateDrive(dce.Info);
                     string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
                     List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logical);
@@ -246,7 +247,7 @@ namespace Syncless.Core
                         StartMonitorTag(t, t.IsSeamless);
                         //MonitorTag(t, t.IsSeamless);
                     }
-                    Merge(dce.Info);
+                    
                 }
                 else
                 {
@@ -813,10 +814,10 @@ namespace Syncless.Core
         }
         private void Merge(DriveInfo drive)
         {
-            string profilingPath = PathHelper.FormatFolderPath(drive.RootDirectory.FullName) + ProfilingLayer.RELATIVE_PROFILING_SAVE_PATH;
+            string profilingPath = PathHelper.AddTrailingSlash(drive.RootDirectory.FullName) + ProfilingLayer.RELATIVE_PROFILING_SAVE_PATH;
             ProfilingLayer.Instance.Merge(profilingPath);
 
-            string taggingPath = PathHelper.FormatFolderPath(drive.RootDirectory.FullName) + TaggingLayer.RELATIVE_TAGGING_SAVE_PATH;
+            string taggingPath = PathHelper.AddTrailingSlash(drive.RootDirectory.FullName) + TaggingLayer.RELATIVE_TAGGING_SAVE_PATH;
             TaggingLayer.Instance.Merge(taggingPath);
 
 

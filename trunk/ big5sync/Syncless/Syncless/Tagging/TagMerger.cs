@@ -95,7 +95,9 @@ namespace Syncless.Tagging
                     TaggedPath currentPath = current.FindPath(newPath.PathName, false);
                     if (currentPath == null)
                     {
+                        
                         SystemLogicLayer.Instance.AddTagPath(current, newPath);
+                        current.AddPath(newPath);
                     }
                     else
                     {
