@@ -1,13 +1,19 @@
 #summary Developer Guide
 
-= Introduction =
+= 1. System Overview =
 
 Add your content here.
 
 
-= Details =
+= 2. System Components =
 
 Add your content here.  Format your content with:
   * Text in *bold* or _italic_
   * Headings, paragraphs, and lists
   * Automatic links to other wiki pages
+
+= 3. Developing a UI for Syncless =
+
+= 4. Known Issues =
+
+= 5. Extra Tips for Developers =
