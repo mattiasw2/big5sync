@@ -1,13 +1,13 @@
 #summary Developer's Guide - Component - Filter
 
-= Introduction =
+= Filter =
 
-Add your content here.
+== Overview ==
 
+== Class Diagram ==
 
-= Details =
+== Description of Design ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== Explanation of ==
+
+== Extending Filter ==
