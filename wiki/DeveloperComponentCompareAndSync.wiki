@@ -113,7 +113,8 @@ The !FolderRenameVisitor will now visit the tree, and detect for folder renames.
             //If the number of items are not exactly 1, exit current method
             if (deletePos.Count != 1)
             {
-                //If the number of items are more than one, mark each of their ChangeType to null, so that changes will propagate back to it
+                //If the number of items are more than one, mark each of their ChangeType to null, 
+                //so that changes will propagate back to it
                 foreach (int i in deletePos)
                     folder.ChangeType[i] = null;
                 return;
@@ -139,7 +140,8 @@ The !FolderRenameVisitor will now visit the tree, and detect for folder renames.
                                 counter++;
                         }
 
-                        //If number of items marked is not exactly one, mark the ChangeType as null so that changes will propagate over, and exit the method
+                        //If number of items marked is not exactly one, mark the ChangeType as null,
+                        //so that changes will propagate over, and exit the method
                         if (counter != 1)
                         {
                             folder.ChangeType[i] = null;                         
@@ -187,7 +189,8 @@ After !FolderRenameVisitor is done with its job, !ComparerVisitor, the only visi
                     continue;
                 }
 
-                 //If the length or hash of the file at the most updated position is different from the current index, a change has occurred
+                 //If the length or hash of the file at the most updated position is different from the current index,
+                //a change has occurred
                 if (file.Length[mostUpdatedPos] != file.Length[i] || file.Hash[mostUpdatedPos] != file.Hash[i])
                 {
                     //Update the value of most updated position if the file at index i is more updated
