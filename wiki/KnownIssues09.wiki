@@ -5,22 +5,28 @@
 = Known Issues (as of 0.9) =
 <wiki:toc max_depth="5" />
 
-These are the current known issues with Syncless 0.9, and will be handled at a later version.
+These are the current known issues with Syncless 0.9, and will be handled at a later version. For a list of how Syncless handles certain unique sequence of actions, please look at [SpecialCases here].
 
 = Details =
 == Profiling ==
 
 
 == Tagging ==
+=== Recursive Tagging ===
+If a user tags two folders, say "C:\Notes" and "D:\Lectures", and tags another folder within "C:\Notes" with another tag to "D:\Lectures", this will result in Syncless recursively generating files over and over again. Granted, this is an unusual case, and should not happen generally. [http://code.google.com/p/big5sync/issues/detail?id=6 Issue #6]
 
 
 == CompareAndSync ==
-
+=== Path Too Long To Sync ===
+If a user tags a folder which has a path that is too long, Syncless currently does not handle it. The main reason is because we have yet to implement a proper notification system. [http://code.google.com/p/big5sync/issues/detail?id=8 Issue #8]
 
 == Monitor ==
-
+=== Handling of File System Events ===
+Due to the way FileSystemWatcher is implemented in C#, we are unable to handle certain cases by default. As such, we have 
 
 == Logging ==
 
 
 == User Interface ==
+=== Shortcut Keys Do Not Work ===
+Under certain circumstances, the shortcut keys will stop working. One guaranteed way to reproduce this is to do a "Ctrl + T", followed by any other shortcut key. After that, all shortcut keys will stop working until you click on one of the buttons. [http://code.google.com/p/big5sync/issues/detail?id=26 Issues #26]
