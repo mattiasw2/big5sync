@@ -21,6 +21,9 @@ Syncless has the ability to merge all the tags on the thumb drive with that on t
 
 
 == !CompareAndSync ==
+=== Long Time To Sync When Dealing With Large File Sizes In Manual Mode, Or On Program Startup ===
+This is due to the MD5 hash used when building the tree for comparison and for writing to metadata, we will look into implementing CRC32 or Adler32 as well, although initial trials with Adler32 proved little to no improvement, as the main bottleneck is actually disk I/O. [http://code.google.com/p/big5sync/issues/detail?id=34 Issue #34]
+
 === Path Too Long To Sync ===
 If a user tags a folder which has a path that is too long, Syncless currently does not handle it. The main reason is because we have yet to implement a proper notification system. [http://code.google.com/p/big5sync/issues/detail?id=8 Issue #8]
 
