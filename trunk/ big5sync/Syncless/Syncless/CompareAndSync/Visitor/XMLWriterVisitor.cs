@@ -267,6 +267,9 @@ namespace Syncless.CompareAndSync.Visitor
         private void DeleteFileObject(FileCompareObject file , string currentPath)
         {
             XmlDocument xmlDoc = new XmlDocument();
+            currentPath = UpdateToRenamedFolder(file.Parent.Name, currentPath);
+            currentPath = RemoveOldFolderName(currentPath);
+
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
             if (File.Exists(xmlPath))
             {
