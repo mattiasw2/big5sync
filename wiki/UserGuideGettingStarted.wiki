@@ -35,6 +35,7 @@ When you run Syncless, you will be greeted with the viewing area, which allows y
 
 http://big5sync.googlecode.com/files/main-interface.png
 
+= Learn Syncless =
 
 == Getting More Help ==
 
