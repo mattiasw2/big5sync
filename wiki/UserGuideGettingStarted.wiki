@@ -12,10 +12,15 @@ _*Syncless*_ allows you to synchronize your files and folders automatically thro
 == What You’ll Learn ==
 If you follow all the steps in this tutorial, you’ll be able to:
   * Synchronize files/folders
+
   * Tag in multiple ways
+
   * Manage Tags
+
   * Run Syncless off a thumbdrive
+
   * Apply filters to tags
+
   * Learn shortcuts to speed up productivity
 
 == Downloading and Running ==
