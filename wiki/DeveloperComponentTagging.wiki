@@ -8,21 +8,21 @@
 
 == Overview ==
 
-The Tagging component provides the underlying operations of creating/removing a tag, tagging/untagging a folder to/from a tag, managing filter properties and configuring tag properties.
+The Tagging component provides the underlying operations of creating/removing a tag, tagging/untagging a folder to/from a tag, managing filter properties and configuring tag properties.<br><br>
 
 == The Classes ==
 
-The Tagging component consists of several important sub-components, including a main logic layer - *TaggingLayer*, model objects - *TaggingProfile*, *Tag*, *TaggedPath* and *TagConfig*, helper components - *TagMerger*, *TaggingHelper* and *TaggingXMLHelper*.
+The Tagging component consists of several important sub-components, including a main logic layer - *TaggingLayer*, model objects - *TaggingProfile*, *Tag*, *TaggedPath* and *TagConfig*, helper components - *TagMerger*, *TaggingHelper* and *TaggingXMLHelper*.<br><br>
 
 === TaggingLayer ===
 
 This is the main logic layer which is called by the *SystemLogicLayer* to perform tag-related operations. When *Syncless* is started up, *SystemLogicLayer* will call *TaggingLayer* for initialization. 
 
-When initialized, *TaggingLayer* will call *TaggingXMLHelper* to load the current tagging profile from _tagging.xml_ in the computer. If there are more than one _tagging.xml_ files available (this may happen if there are removable drives plugged into the computer), *TaggingLayer* will call *TagMerger* to perform merging of several tagging profiles based on various sources of _tagging.xml_.
+When initialized, *TaggingLayer* will call *TaggingXMLHelper* to load the current tagging profile from _tagging.xml_ in the computer. If there are more than one _tagging.xml_ files available (this may happen if there are removable drives plugged into the computer), *TaggingLayer* will call *TagMerger* to perform merging of several tagging profiles based on various sources of _tagging.xml_.<br><br>
 
 ==== Sequence Diagram of Init ====
 
-<img src = "http://big5sync.googlecode.com/files/TaggingInit.jpg" width = 595 height = 607 />
+<a href = "http://big5sync.googlecode.com/files/TaggingInit.jpg"><img src = "http://big5sync.googlecode.com/files/TaggingInit.jpg" width = 595 height = 607 /></a>
 
 After initialization, *TaggingLayer* can be called to perform tag-related operations.
 
@@ -32,16 +32,25 @@ The main operations which will trigger interactions among the various classes in
 -TagFolder<br>
 -UntagFolder<br>
 -UpdateFilter<br>
+<br>
 
 ==== Sequence Diagram of CreateTag ====
+
+<a href = "http://big5sync.googlecode.com/files/TaggingCreateTag.jpg"><img src = "http://big5sync.googlecode.com/files/TaggingCreateTag.jpg" /></a>
 
 ==== Sequence Diagram of DeleteTag ====
 
 ==== Sequence Diagram of TagFolder ====
 
+<a href = "http://big5sync.googlecode.com/files/TaggingTagFolder.jpg"><img src = "http://big5sync.googlecode.com/files/TaggingTagFolder.jpg" /></a>
+
 ==== Sequence Diagram of UntagFolder ====
 
+<a href = "http://big5sync.googlecode.com/files/TaggingUntagFolder.jpg"><img src = "http://big5sync.googlecode.com/files/TaggingUntagFolder.jpg" /></a>
+
 ==== Sequence Diagram of UpdateFilter ====
+
+<a href = "http://big5sync.googlecode.com/files/TaggingUpdateFilter.jpg"><img src = "http://big5sync.googlecode.com/files/TaggingUpdateFilter.jpg" /></a>
 
 === TaggingXMLHelper ===
 
@@ -67,6 +76,7 @@ Conversion from *TaggingProfile* to _tagging.xml_:<br>
 -CreateConfigElement(XmlDocument, Tag)<br>
 -CreateFilterElementList(XmlDocument, Tag)<br>
 -CreateFilterElement(XmlDocument, Filter)<br>
+<br>
 
 == Description of Design ==
 
