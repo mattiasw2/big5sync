@@ -20,8 +20,14 @@ If a user tags two folders, say "C:\Notes" and "D:\Lectures", and tags another f
 === Path Too Long To Sync ===
 If a user tags a folder which has a path that is too long, Syncless currently does not handle it. The main reason is because we have yet to implement a proper notification system. [http://code.google.com/p/big5sync/issues/detail?id=8 Issue #8]
 
-=== Re-creating Of Deleted Tagged Folders ===
-If you have a folder that is tagged, and you delete it, Syncless will re-create it the next time you synchronize, be it seamless or manual mode. Again, this is because we have yet to implement a proper notification system [http://code.google.com/p/big5sync/issues/detail?id=19 Issue #19]
+=== Re-creating of Deleted Tagged Folders (Manual) ===
+If you have a folder that is tagged, and you delete it, Syncless will re-create it the next time you synchronize in manual mode. Again, this is because we have yet to implement a proper notification system. [http://code.google.com/p/big5sync/issues/detail?id=19 Issue #19]
+
+=== Deletion of Tagged Folders in Seamless Mode ===
+If you have a few folders that are tagged in seamless mode, deleting one of these tagged folders will cause the contents of the other tagged folders to be deleted. [http://code.google.com/p/big5sync/issues/detail?id=19 Issue #19]
+
+=== Renamed Files Not Getting Propagated ===
+This will only happen if you create, delete and then create again with the same filename, followed by a rename, all within a short span of time. This cannot be fixed as far as we know due to how Windows handles the file system. [http://code.google.com/p/big5sync/issues/detail?id=22 Issue #22]
 
 == Seamless Mode Issues ==
 Please refer to the Monitor section.
@@ -42,4 +48,4 @@ The current workaround for this is to wait about 10 seconds before doing the nex
 
 == User Interface ==
 === Shortcut Keys Do Not Work ===
-Under certain circumstances, the shortcut keys will stop working. One guaranteed way to reproduce this is to do a "Ctrl + T", followed by any other shortcut key. After that, all shortcut keys will stop working until you click on one of the buttons. [http://code.google.com/p/big5sync/issues/detail?id=26 Issues #26]
+Under certain circumstances, the shortcut keys will stop working. One guaranteed way to reproduce this is to do a "Ctrl + T", followed by any other shortcut key. After that, all shortcut keys will stop working until you click on one of the buttons. [http://code.google.com/p/big5sync/issues/detail?id=26 Issue #26]
