@@ -3,7 +3,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:dropShadow="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" xmlns:ic="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions" x:Class="SynclessUI.MainWindow" x:Name="Window" Title="Syncless" Background="Transparent" Icon="Icons/logo.ico" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" WindowStyle="None" Foreground="Transparent" AllowsTransparency="True" Closing="Window_Closing">
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" 
+	xmlns:tb="http://www.hardcodet.net/taskbar" x:Class="SynclessUI.MainWindow" x:Name="Window" Title="Syncless" Background="Transparent" Icon="Icons/logo.ico" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" WindowStyle="None" Foreground="Transparent" AllowsTransparency="True" Closing="Window_Closing">
+	<Window.Resources>
+		<LinearGradientBrush x:Key="StandardButtonBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+			<GradientStop Color="#FF8FE2FD" Offset="0"/>
+			<GradientStop Color="#FF0AACE2" Offset="1"/>
+			<GradientStop Color="#FF8FE2FD" Offset="0.5"/>
+		</LinearGradientBrush>
+	</Window.Resources>
     <Grid x:Name="LayoutRoot" Width="700" Drop="LayoutRoot_Drop">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="20"/>
@@ -126,13 +134,12 @@
 				</Button>
 				<Button x:Name="BtnSyncMode" Height="35" Margin="0,0,0,5" Click="BtnSyncMode_Click" ToolTip="Switch Between Manual &amp; Seamless Mode">
 					<Button.Background>
-						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-							<GradientStop Color="#FF8FE2FD" Offset="0"/>
-							<GradientStop Color="#FF0AACE2" Offset="1"/>
-							<GradientStop Color="#FF8FE2FD" Offset="0.5"/>
+						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" MappingMode="RelativeToBoundingBox">
+							<GradientStop Color="#FF00FFF0"/>
+							<GradientStop Color="Red" Offset="1"/>
 						</LinearGradientBrush>
 					</Button.Background>
-					<Label x:Name="LblSyncMode" FontFamily="Century Gothic" FontSize="10.667" Foreground="Black" OpacityMask="Black" BorderBrush="Black" HorizontalAlignment="Right" Content="Manual"/>
+					<Label x:Name="LblSyncMode" FontFamily="Century Gothic" FontSize="10.667" Foreground="Black" OpacityMask="Black" BorderBrush="Black" HorizontalAlignment="Center" Content="Manual" Margin="-15,0,0,0"/>
 				</Button>
 				<Button x:Name="BtnPreview" Height="35" Margin="0,0,0,5" Click="BtnPreview_Click" ToolTip="Preview Synchronization">
 					<Label x:Name="LblPreview" FontFamily="Century Gothic" FontSize="10.667" Content="Preview"/>
