@@ -152,38 +152,6 @@ namespace Syncless.CompareAndSync.Visitor
             return folderPath;
         }
 
-        private void SaveXML(ref XmlDocument xmlDoc, string xmlPath)
-        {
-            while (true)
-            {
-                try
-                {
-                    xmlDoc.Save(xmlPath);
-                    break;
-                }
-                catch (IOException)
-                {
-                    System.Threading.Thread.Sleep(250);
-                }
-            }
-        }
-
-        private void LoadXML(ref XmlDocument xmlDoc, string xmlPath)
-        {
-            while (true)
-            {
-                try
-                {
-                    xmlDoc.Load(xmlPath);
-                    break;
-                }
-                catch (IOException)
-                {
-                    System.Threading.Thread.Sleep(250);
-                }
-            }
-        }
-
         private void CreateFileObject(FileCompareObject file, int counter, string currentPath)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -195,7 +163,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             lock (syncLock)
             {
-                LoadXML(ref xmlDoc, xmlPath);
+                CommonMethods.LoadXML(ref xmlDoc, xmlPath);
             }
 
             int position = GetPropagated(file);
@@ -230,7 +198,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             lock (syncLock)
             {
-                SaveXML(ref xmlDoc, xmlPath);
+                CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
         }
 
@@ -245,7 +213,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             lock (syncLock)
             {
-                LoadXML(ref xmlDoc, xmlPath);
+                CommonMethods.LoadXML(ref xmlDoc, xmlPath);
             }
 
             int position = GetPropagated(file);
@@ -284,7 +252,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             lock (syncLock)
             {
-                SaveXML(ref xmlDoc, xmlPath);
+                CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
         }
 
@@ -298,7 +266,7 @@ namespace Syncless.CompareAndSync.Visitor
             CreateFileIfNotExist(currentPath);
             lock (syncLock)
             {
-                LoadXML(ref xmlDoc, xmlPath);
+                CommonMethods.LoadXML(ref xmlDoc, xmlPath);
             }
 
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
@@ -311,7 +279,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             lock (syncLock)
             {
-                SaveXML(ref xmlDoc, xmlPath);
+                CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
         }
 
@@ -326,7 +294,7 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 lock (syncLock)
                 {
-                    LoadXML(ref xmlDoc, xmlPath);
+                    CommonMethods.LoadXML(ref xmlDoc, xmlPath);
                 }
 
                 XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
@@ -336,7 +304,7 @@ namespace Syncless.CompareAndSync.Visitor
 
                 lock (syncLock)
                 {
-                    SaveXML(ref xmlDoc, xmlPath);
+                    CommonMethods.SaveXML(ref xmlDoc, xmlPath);
                 }
             }
         }
@@ -467,7 +435,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             lock (syncLock)
             {
-                LoadXML(ref xmlDoc, xmlPath);
+                CommonMethods.LoadXML(ref xmlDoc, xmlPath);
             }
 
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
@@ -476,7 +444,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             lock (syncLock)
             {
-                SaveXML(ref xmlDoc, xmlPath);
+                CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
         }
 
@@ -508,10 +476,12 @@ namespace Syncless.CompareAndSync.Visitor
             XmlDocument xmlDoc = new XmlDocument();
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
             CreateFileIfNotExist(currentPath);
+
             lock (syncLock)
             {
-                LoadXML(ref xmlDoc, xmlPath);
+                CommonMethods.LoadXML(ref xmlDoc, xmlPath);
             }
+
             DoFolderCleanUp(xmlDoc, folder.Name);
             XmlText nameText = xmlDoc.CreateTextNode(folder.Name);
             XmlElement nameOfFolder = xmlDoc.CreateElement(NODE_NAME);
@@ -526,7 +496,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             lock (syncLock)
             {
-                SaveXML(ref xmlDoc, xmlPath);
+                CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
         }
 
@@ -537,9 +507,10 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 XmlDocument xmlDoc = new XmlDocument();
                 string xmlPath = Path.Combine(currentPath, METADATAPATH);
+
                 lock (syncLock)
                 {
-                    LoadXML(ref xmlDoc, xmlPath);
+                    CommonMethods.LoadXML(ref xmlDoc, xmlPath);
                 }
 
                 XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
@@ -550,9 +521,10 @@ namespace Syncless.CompareAndSync.Visitor
                 }
 
                 node.FirstChild.InnerText = folder.NewName;
+
                 lock (syncLock)
                 {
-                    SaveXML(ref xmlDoc, xmlPath);
+                    CommonMethods.SaveXML(ref xmlDoc, xmlPath);
                 }
             }
             else
@@ -562,7 +534,7 @@ namespace Syncless.CompareAndSync.Visitor
 
                 lock (syncLock)
                 {
-                    LoadXML(ref newXmlDoc, editOldXML);
+                    CommonMethods.LoadXML(ref newXmlDoc, editOldXML);
                 }
 
                 XmlNode xmlNameNode = newXmlDoc.SelectSingleNode(XPATH_EXPR + "/name");
@@ -570,7 +542,7 @@ namespace Syncless.CompareAndSync.Visitor
 
                 lock (syncLock)
                 {
-                    SaveXML(ref newXmlDoc, editOldXML);
+                    CommonMethods.SaveXML(ref newXmlDoc, editOldXML);
                 }
 
                 string parentXML = Path.Combine(currentPath, METADATAPATH);
@@ -578,7 +550,7 @@ namespace Syncless.CompareAndSync.Visitor
 
                 lock (syncLock)
                 {
-                    LoadXML(ref parentXmlDoc, parentXML);
+                    CommonMethods.LoadXML(ref parentXmlDoc, parentXML);
                 }
 
                 XmlNode parentXmlFolderNode = parentXmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
@@ -586,7 +558,7 @@ namespace Syncless.CompareAndSync.Visitor
 
                 lock (syncLock)
                 {
-                    SaveXML(ref parentXmlDoc, Path.Combine(currentPath, METADATAPATH));
+                    CommonMethods.SaveXML(ref parentXmlDoc, Path.Combine(currentPath, METADATAPATH));
                 }
 
                 newNameList.Add(folder.NewName);
@@ -602,7 +574,7 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 lock (syncLock)
                 {
-                    SaveXML(ref xmlDoc, xmlPath);
+                    CommonMethods.SaveXML(ref xmlDoc, xmlPath);
                 }
 
                 XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
@@ -611,7 +583,7 @@ namespace Syncless.CompareAndSync.Visitor
                 node.ParentNode.RemoveChild(node);
                 lock (syncLock)
                 {
-                    SaveXML(ref xmlDoc, xmlPath);
+                    CommonMethods.SaveXML(ref xmlDoc, xmlPath);
                 }
 
             }

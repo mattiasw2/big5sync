@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using Syncless.Core;
 using Syncless.CompareAndSync.Exceptions;
+using System.Xml;
 
 namespace Syncless.CompareAndSync
 {
@@ -15,6 +16,42 @@ namespace Syncless.CompareAndSync
     /// </summary>
     public static class CommonMethods
     {
+
+        #region XML
+
+        public static void SaveXML(ref XmlDocument xmlDoc, string xmlPath)
+        {
+            while (true)
+            {
+                try
+                {
+                    xmlDoc.Save(xmlPath);
+                    break;
+                }
+                catch (IOException)
+                {
+                    System.Threading.Thread.Sleep(250);
+                }
+            }
+        }
+
+        public static void LoadXML(ref XmlDocument xmlDoc, string xmlPath)
+        {
+            while (true)
+            {
+                try
+                {
+                    xmlDoc.Load(xmlPath);
+                    break;
+                }
+                catch (IOException)
+                {
+                    System.Threading.Thread.Sleep(250);
+                }
+            }
+        }
+
+        #endregion
 
         #region File Operations
 
