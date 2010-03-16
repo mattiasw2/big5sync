@@ -1,5 +1,8 @@
 #summary Developer Guide
 #sidebar DeveloperGuideSidebar
+
+<wiki:toc max_depth="5">
+
 = 1. System Overview =
 
      == 1.1. Architecture ==
@@ -29,15 +32,7 @@
  
 = 2. System Components =
 
-     == 2.1. Tagging ==
-
-        The Tagging component provides the underlying operations of creating/removing a 
-        tag, tagging/untagging a folder to/from a tag, managing filter properties and 
-        configuring tag properties.
-
-        <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentTagging">More details...</a>
-
-     == 2.2. Profiling ==
+     == 2.1. Profiling ==
 
         The Profiling component performs drive/computer recognization. It makes Syncless
         portable because of the ability to recognize different drives/computers by creating a 
@@ -47,6 +42,14 @@
         recognizes a logical path.
 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentProfiling">More details...</a>
+
+     == 2.2. Tagging ==
+
+        The Tagging component provides the underlying operations of creating/removing a 
+        tag, tagging/untagging a folder to/from a tag, managing filter properties and 
+        configuring tag properties.
+
+        <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentTagging">More details...</a>
 
      == 2.3. CompareAndSync ==
 
@@ -66,20 +69,14 @@
         changes in the files and folder to synchronize them. 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentMonitor">More details...</a>
 
-     == 2.5. Filter ==
-        
-        The Filter Component provides a means to filter files and folders to synchronize a 
-        specified set of files/folders. This is to provide an easy way to extend this    
-        feature into future instead of coupling it in the Tagging Component.
-
-        <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentFilter">More details...</a>
-
-     == 2.6. Logging ==
+     == 2.5. Logging ==
 
         The Logging component performs logging of messages produced when exceptions are 
         caught to a debug log file. It also logs user actions to a user log file.
 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentLogging">More details...</a>
+
+     == 2.6. User Interface ==
 
 = 3. Developing a UI for Syncless =
 
