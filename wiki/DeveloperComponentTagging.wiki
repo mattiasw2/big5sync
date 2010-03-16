@@ -1,5 +1,6 @@
 #summary Developer's Guide - Component - Tagging
 #labels Phase-Implementation
+#sidebar DeveloperGuideSidebar
 
 = Tagging =
 
