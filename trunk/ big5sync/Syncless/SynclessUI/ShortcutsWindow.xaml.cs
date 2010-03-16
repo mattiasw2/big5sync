@@ -37,5 +37,10 @@ namespace SynclessUI
 		{
 			this.Close();
 		}
+
+		private void LayoutRoot_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			this.Close();
+		}
     }
 }
