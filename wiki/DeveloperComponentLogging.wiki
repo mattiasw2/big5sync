@@ -1,6 +1,9 @@
 #summary Developer's Guide - Component - Logging
+#side DeveloperGuideSidebar
 
 = Logging =
+
+<wiki:toc max_depth="4" />
 
 == Overview ==
 
