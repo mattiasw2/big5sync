@@ -1,13 +1,7 @@
 #summary This page contains the list of features we will implement in the future.
 
-= Introduction =
+  # Solve the recursion directory issue.<br>
+  
+  # Untag a tagged folder if it is deleted.<br>
 
-Add your content here.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+  # 
