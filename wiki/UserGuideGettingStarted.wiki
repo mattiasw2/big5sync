@@ -1,4 +1,4 @@
-#summary Get to know Syncless and discover the power of seamless file synchronization through the tagging.
+#summary Getting Started With Syncless
 
 = Introduction =
 
