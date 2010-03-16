@@ -22,7 +22,7 @@ When initialized, *TaggingLayer* will call *TaggingXMLHelper* to load the curren
 
 ==== Sequence Diagram of Init ====
 
-<img src = "http://big5sync.googlecode.com/files/TaggingInit.jpg" width = 510 height = 520 />
+<img src = "http://big5sync.googlecode.com/files/TaggingInit.jpg" width = 595 height = 607 />
 
 After initialization, *TaggingLayer* can be called to perform tag-related operations.
 
