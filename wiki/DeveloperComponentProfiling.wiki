@@ -1,9 +1,10 @@
 #summary Developer's Guide - Component - Profiling
+#labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
 = Profiling =
 
-<wiki:toc max_depth="4" />
+<wiki:toc max_depth="6" />
 
 == Overview ==
 
