@@ -190,7 +190,7 @@ After FolderRenameVisitor is done with its job, ComparerVisitor, the only visito
                  //If the length or hash of the file at the most updated position is different from the current index, a change has occurred
                 if (file.Length[mostUpdatedPos] != file.Length[i] || file.Hash[mostUpdatedPos] != file.Hash[i])
                 {
-                    //
+                    //Update the value of most updated position if the file at index i is more updated
                     if (file.LastWriteTime[i] > file.LastWriteTime[mostUpdatedPos])
                     {
                         file.Priority[i] = file.Priority[mostUpdatedPos] + 1;
@@ -198,13 +198,14 @@ After FolderRenameVisitor is done with its job, ComparerVisitor, the only visito
                     }
                 }
                 else
-                {
+                {   //Set the priority of index i to be same as that of the most updated position if there is no change
                     file.Priority[i] = file.Priority[mostUpdatedPos];
                 }
             }
 
             for (int i = 0; i < currentPaths.Length; i++)
             {
+                //Set parent folder to be dirty if the file has a lower priority than the one with the most updated position
                 if (file.Exists[i] && file.Priority[i] != file.Priority[mostUpdatedPos])
                 {
                     file.Parent.Dirty = true;
@@ -213,6 +214,7 @@ After FolderRenameVisitor is done with its job, ComparerVisitor, the only visito
             }
         }
 }}}
+
 
 
 == Extending CompareAndSync ==
