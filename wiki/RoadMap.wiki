@@ -20,6 +20,8 @@
 5. Merge Profile for Hard disk.
    Currently, the system only merges the profiles from removable drives with the current profile. However, the external hard disk is not considered as a removable drive. Therefore, the profiling.xml file on the external hard disk will not be detected, and hence will not be merged with the current profile when it is plugged in to the computer.
 
+   In the future, we will ensure that the system will be able to merge profiles stored in external hard disk, thumbdrive and SD card.
+
 6. Preview Sync Result.
 
 7. Implement uni-directional synchronization.
