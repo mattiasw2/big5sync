@@ -1,4 +1,5 @@
 #summary Developer's Guide - Component - Logging
+#labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
 = Logging =
