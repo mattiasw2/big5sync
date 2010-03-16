@@ -228,10 +228,4 @@ Clearly, D\Note.txt is the most updated file. To end it off, SyncerVisitor will 
 
 
 == Extending CompareAndSync ==
-
-
-Tree Visitor Pattern:
-http://groovy.codehaus.org/Visitor+Pattern
-http://nice.sourceforge.net/visitor.html
-http://www.surfscranton.com/architecture/VisitorPattern.htm
-http://etymon.blogspot.com/2006/04/visitor-pattern-and-trees-considered.html
+Further functionality can be added into CompareAndSync should a developer wish to. He can simply create his own visitor that visits each node and performs the action he decides. A good example would be to generate a report after a synchronization. A developer can simply code a visitor to create a report based on the attributes of each node.
