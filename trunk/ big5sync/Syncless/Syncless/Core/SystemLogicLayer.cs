@@ -287,9 +287,10 @@ namespace Syncless.Core
                 {
                     return false;
                 }
-
-                bool result = StartManualSync(tag);
-                return result;
+                ManualSyncDelegate del = new ManualSyncDelegate(StartManualSync);
+                del.BeginInvoke(tag, null, null);
+                //StartManualSync(tag);
+                return true;
             }
             catch (Exception e) // Handle Unexpected Exception
             {
@@ -796,7 +797,7 @@ namespace Syncless.Core
             view.IsSeamless = t.IsSeamless;
             return view;
         }
-        private bool StartManualSync(Tag tag)
+        private void StartManualSync(Tag tag)
         {
             List<string> paths = tag.FilteredPathListString;
             List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
@@ -807,7 +808,7 @@ namespace Syncless.Core
 
                 CompareAndSyncController.Instance.Sync(syncRequest);
             }
-            return true;
+            
         }
         private void Merge(DriveInfo drive)
         {
