@@ -2,9 +2,6 @@
 
 = 1. System Overview =
 
-Add your content here.
-
-
 = 2. System Components =
 
      == 2.1. Tagging ==
