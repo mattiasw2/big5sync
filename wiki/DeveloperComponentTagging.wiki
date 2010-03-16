@@ -12,8 +12,16 @@ The Tagging component consists of several important sub-components, including a 
 
 === TaggingLayer ===
 
+This is the main logic layer which is called by the *SystemLogicLayer* to perform tag-related operations. When initialized, *TaggingLayer* will call *TaggingXMLHelper* to load the current tagging profile from <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentTagging#xmldocument">_tagging.xml_</a> in the computer.
+
+==== Sequence Diagram ====
+
 == Description of Design ==
 
 == Explanation of ==
 
 == Extending Tagging ==
+
+== Glossary ==
+
+<A NAME = "xmldocument"> _tagging.xml_ </A>
