@@ -62,10 +62,13 @@ Also, all the Visitors use pre-traversal, since it makes sense to build, populat
 === Seamless Components ===
 
 
+
 == Explanation of Algorithm ==
 
 
+
 == Extending CompareAndSync ==
+
 
 Tree Visitor Pattern:
 http://groovy.codehaus.org/Visitor+Pattern
