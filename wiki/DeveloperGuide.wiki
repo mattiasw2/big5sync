@@ -1,18 +1,18 @@
 #summary Developer Guide
-
+#sidebar DeveloperGuideSidebar
 = 1. System Overview =
 
      == 1.1. Architecture ==
         
-        Following the MVC model, the system is split into UI and Logic. The UI is 
-        developed separately from the System Core logic. The logic layer follows a facade 
-        pattern. It is further divided into sub components which will work together and 
-        complete the job.
+        Following the MVC model, the system is split into User Interface and System Core 
+        Logic. The UI is developed separately from the Core Logic. The logic layer follows 
+        a facade pattern. It is further divided into several sub components which will 
+        work together and complete the job.
 
-        Communication between the User Interface and Core Logic is done through a Service                   
-        Locator and Interface. This allow us to change the logic without affecting the
-        User Inteface. On top of that, this also allow other developer to create their own
-        user interface to work with Syncless Core Logic.
+        Communication between the UI and the Core Logic is done through a Service                   
+        Locator and an Interface. This allows us to change the Core Logic without 
+        affecting the UI. On top of that, this also allows other developers to create 
+        their own user interface to work with Syncless Core Logic.
 
      == 1.2. Data storing ==
       
