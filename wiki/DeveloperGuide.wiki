@@ -13,7 +13,21 @@
         User Inteface. On top of that, this also allow other developer to create their own
         user interface to work with Syncless Core Logic.
 
+     == 1.2. Data storing ==
+      
+        Syncless uses many files to store the information. We use XML to store the  
+        information as it is more readable and portable. Examples are tagging.xml and 
+        profiling.xml which are stored in the root folder of the application. On top of 
+        that, the xml is also stored on removable devices that the user tag. These xml are 
+        use to merge information between 2 computers. 
 
+        Metadata of the folders are also stored in the folder itself in xml format. At the  
+        moment, the xml is stored in the folder /.syncless and is hidden. In the future, 
+        we are intending to move this to somewhere else to avoid creating too many folders 
+        and files in the user's folders.
+
+  
+ 
 = 2. System Components =
 
      == 2.1. Tagging ==
