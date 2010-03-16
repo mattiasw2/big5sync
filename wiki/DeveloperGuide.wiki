@@ -1,4 +1,5 @@
 #summary Developer Guide
+#labels Phase-Implementation,Featured
 #sidebar DeveloperGuideSidebar
 
 <wiki:toc max_depth="6" />
