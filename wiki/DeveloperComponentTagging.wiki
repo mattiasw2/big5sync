@@ -22,6 +22,8 @@ When initialized, *TaggingLayer* will call *TaggingXMLHelper* to load the curren
 
 ==== Sequence Diagram of Init ====
 
+<img src = "http://big5sync.googlecode.com/files/TaggingInit.jpg" width = 510 height = 520 />
+
 After initialization, *TaggingLayer* can be called to perform tag-related operations.
 
 The main operations which will trigger interactions among the various classes in Tagging component include:<br>
