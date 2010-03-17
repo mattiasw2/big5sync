@@ -22,7 +22,7 @@ If you follow all the steps in this tutorial, you’ll be able to:
 
   * Apply filters to tags
 
-  * Eject removable drives
+  * Prepare removable drives for ejection
 
 == Downloading and Running ==
 Before continuing, make sure you are running a Windows operating system (XP and above has been tested so far to be working well).
@@ -73,7 +73,11 @@ http://big5sync.googlecode.com/files/tagging-complete.png
 
 == Step 2: ==
 
-== Step 3: ==
+== Step 3: Prepare Removable Drive for Ejection ==
+
+http://big5sync.googlecode.com/files/eject-removable-drive.png
+
+You can access this from the Toolbar > Eject or by using its keyboard shortcut equivalent (Ctrl-E)
 
 Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be stopped (Currently in Ver 0.9, only Seamless Operations are stopped) and thus the removable drive to be safely removed.
 
