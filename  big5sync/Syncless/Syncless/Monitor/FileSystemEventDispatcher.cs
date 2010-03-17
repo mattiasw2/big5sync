@@ -22,13 +22,13 @@ namespace Syncless.Monitor
             }
         }
 
-        private List<FileSystemEvent> queue;
+        private Queue<FileSystemEvent> queue;
         private Thread dispatcherThread;
         private EventWaitHandle waitHandle;
 
         private FileSystemEventDispatcher()
         {
-            queue = new List<FileSystemEvent>();
+            queue = new Queue<FileSystemEvent>();
             waitHandle = new AutoResetEvent(true);
         }
 
@@ -45,7 +45,7 @@ namespace Syncless.Monitor
         {
             lock (queue)
             {
-                queue.Add(e);
+                queue.Enqueue(e);
             }
             if (dispatcherThread == null)
             {
@@ -58,14 +58,14 @@ namespace Syncless.Monitor
             }
         }
 
-        private List<FileSystemEvent> BatchDequeue()
+        private Queue<FileSystemEvent> BatchDequeue()
         {
-            List<FileSystemEvent> eventList = null;
+            Queue<FileSystemEvent> eventList = null;
             lock (queue)
             {
                 if (queue.Count != 0)
                 {
-                    eventList = new List<FileSystemEvent>(queue);
+                    eventList = new Queue<FileSystemEvent>(queue);
                     queue.Clear();
                 }
             }
@@ -90,7 +90,7 @@ namespace Syncless.Monitor
                         count = queue.Count;
                     }
                 }
-                List<FileSystemEvent> eventList = BatchDequeue();
+                Queue<FileSystemEvent> eventList = BatchDequeue();
                 if (eventList != null)
                 {
                     FileSystemEventProcessor.Instance.Enqueue(eventList);
