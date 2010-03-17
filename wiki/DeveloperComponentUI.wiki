@@ -24,7 +24,10 @@ The whole user interface architecture is based on the Service Locator pattern. U
 The UI can then make use of these methods to interact with the logic layer. This decouples the UI from the SystemLogicLayer, preventing changes in the System Logic Layer from affecting the UI.
 
 == Application Resource Dictionary ==
-The UI makes use of the `AppResourceDictionary` to hold templates of controls and other resources such as BrushStyles or ColorResources, so as to allow for reusability of styles 
+The UI makes use of the `AppResourceDictionary` to hold templates of controls and other resources such as BrushStyles or ColorResources, so as to allow for their reusability in other controls.
+
+== Application Settings ==
+The user interface makes use of session settings to keep track of settings in a session of Syncless running and and properties in C# for persistance of resources such as application settings. However, since Syncless is intended to be portable, application settings need to be stored along with Syncless instead of being stored to the User Settings locale, thus we have adapted the `PortableSettingsProvider` for use as a CustomSettingsProvider.
      
 = Developing a Alternative UI for Syncless =
      
@@ -39,3 +42,4 @@ We would like to thank the following resources/developers for their valuable con
   * *Singleton Application* - http://www.switchonthecode.com/tutorials/wpf-writing-a-single-instance-application
   * *Combined File & Folder Browser Dialog* - http://dotnetzip.codeplex.com/SourceControl/changeset/view/29832#432677
   * *WPF ToolKit* - http://www.codeplex.com/wpf (For its DataGrid and Autocomplete Box, which WPF sorely lacks)
+  * *Portable Settings Provider* - http://www.codeproject.com/KB/vb/CustomSettingsProvider.aspx (C# version by gpgemini)
