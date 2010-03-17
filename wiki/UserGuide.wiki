@@ -19,6 +19,13 @@ Add your content here.
 == Tagging and Untagging Folders ==
 
 == Configuring Filters ==
+=== Using Extension Filter ===
+* - wildcard for any number of characters
+? - wildcard for one character.
+
+Example : 
+  # if we want to include only all .cs files, we can just include a filter "*.cs" and set it to include.
+  # if we want to exclude all .java file, we can just include a filter "*.java" and set it to exclude. 
 
 = Usability =
 
