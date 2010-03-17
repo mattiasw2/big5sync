@@ -18,11 +18,9 @@ If you follow all the steps in this tutorial, you’ll be able to:
 
   * Manage Tags
 
-  * Learn basic shortcuts to speed up productivity
-
-  * Apply filters to tags
-
   * Prepare removable drives for removal
+
+  * Learn basic shortcuts to speed up productivity
 
 == Downloading and Running ==
 Before continuing, make sure you are running a Windows operating system (XP and above has been tested so far to be working well).
@@ -47,7 +45,7 @@ You have folders on your computer and thumbdrive that you wish to synchronize au
 == Step 1: Tag Folders ==
 
 To synchronize 2 or more folders together, you must first tag them with the same name. This tagging process can be initiated in multiple ways.
-  * Tagging from Syncless
+  * Tagging from Syncless (Can also use the keyboard shortcut equivalent Ctrl-T)
 
   * Drag-and-Drop folder(s) on the Main Window
 
@@ -84,6 +82,8 @@ http://big5sync.googlecode.com/files/eject-removable-drive.png
 You can access this from the Toolbar > Eject or by using its keyboard shortcut equivalent (Ctrl-E)
 
 Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be stopped (Currently in Ver 0.9, only Seamless Operations are stopped) and thus the removable drive to be safely removed.
+
+With the successful operation of synchronization, you have now completed the full Syncless tutorial. Continue on to see other major features in Syncless
 
 == Continue to Explore Syncless ==
 
