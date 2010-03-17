@@ -50,7 +50,7 @@ This will only happen if you create, delete and then create again with the same 
 == Renaming More Than 3 Levels In A Directory Structure ==
 If you have the following C:\A\B\C\D, and you rename it to C:\A\E\F\G, the synchronization will be erratic. Similarly, if the renaming is too messy, the manual synchronization may go wrong. As a temporary workaround, doing a sync after the initial sync will cause all folders to be in sync again, and after which you can delete or move the files to your liking. [http://code.google.com/p/big5sync/issues/detail?id=38 Issue #38]
 
-== Corrupted Meta Data Due to Termination of File Creation Process ==
+== Corrupted Meta Data Due to Termination of File Copying Process ==
 When you try to copy a large file from a external hard disk to a local folder, the copying process might hang and corrupt the meta data XML document. [http://code.google.com/p/big5sync/issues/detail?id=41 Issue #41]
 
 == Seamless Mode Issues ==
