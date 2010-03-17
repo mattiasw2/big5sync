@@ -38,3 +38,4 @@ We would like to thank the following resources/developers for their valuable con
 
   * *Singleton Application* - http://www.switchonthecode.com/tutorials/wpf-writing-a-single-instance-application
   * *Combined File & Folder Browser Dialog* - http://dotnetzip.codeplex.com/SourceControl/changeset/view/29832#432677
+  * *WPF ToolKit* - http://www.codeplex.com/wpf (For its DataGrid and Autocomplete Box, which WPF sorely lacks)
