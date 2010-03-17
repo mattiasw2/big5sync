@@ -1,6 +1,16 @@
 #labels Phase-Implementation
   * [UserGuideGettingStarted Getting Started!]
     * [UserGuideGettingStarted#Welcome_to_Syncless Welcome to Syncless!]
+      * [UserGuideGettingStarted#What_You’ll_Learn] What You'll Learn]
+      * [UserGuideGettingStarted#Downloading_and_Running Downloading and Running]
+      * [UserGuideGettingStarted#The_Syncless_Interface The Syncless Interface]
+    * [UserGuideGettingStarted#Learn_Syncless Learn Syncless]
+      * [UserGuideGettingStarted#Step_1:_Tag_Folders Step 1: Tag Folders]
+      * [UserGuideGettingStarted#Step_2:_Switch_to_Manual_Mode Step 2: Switch to Manual Mode]
+      * [UserGuideGettingStarted#Step_3:_Prepare_Removable_Drive_for_Removal Step 3: Prepare Removable Drive for Removal]
+      * [UserGuideGettingStarted#Continue_to_Explore_Syncless Continue to Explore Syncless]
+      * [UserGuideGettingStarted#Misc:_Keyboard_Shortcuts Misc. Keyboard Shortcuts]
+      * [UserGuideGettingStarted#Getting_More_Help Getting More Help]
   * [UserGuide Users' Guide]
   * [DeveloperGuide Developers' Guide]
     * Detailed Description of Sub-Components
