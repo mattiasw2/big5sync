@@ -1,4 +1,4 @@
-#summary Developer's Guide - Component - Filter
+#summary Developers' Guide - Component - Filter
 #sidebar DeveloperGuideSidebar
 <wiki:toc max_depth="6" />
 
