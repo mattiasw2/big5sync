@@ -92,3 +92,5 @@
         http://code.google.com/p/big5sync/wiki/SpecialCases
 
 = Recommended Resources =
+
+        http://code.google.com/p/big5sync/wiki/DeveloperGuideRecommendations
