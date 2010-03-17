@@ -16,7 +16,7 @@ If you follow all the steps in this tutorial, you’ll be able to:
 
   * Tag in multiple ways
 
-  * Manage Tags
+  * Manage tags
 
   * Prepare removable drives for removal
 
