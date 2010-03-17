@@ -5,7 +5,7 @@
 
 = Overview =
 
-The *Tagging* component provides the underlying operations of creating/removing a tag, tagging/untagging a folder to/from a tag, managing filter properties and configuring tag properties.
+The *Tagging* component provides the underlying operations of creating and removing tags, as well as tagging and untagging folders from tags. It also manages other settings such as the filter settings per tag.
 
 = Classes =
 
