@@ -33,7 +33,17 @@ The user interface makes use of session settings to keep track of settings in a 
 The UI makes use of the `RegistryHelper` to write registry entries to enable shell integration. It also uses the `CommandLineHelper` to handle command line arguments, which any action from the shell uses.
 
 = UI Design Principles & Philosophy =
-     
+
+Our overall UI goal is to have a minimalist interface and make the tagging process as simple as ever.
+
+1. Seamless - Like the way sychronization is handled, we will make our UI seamless so that our user will even forget that Syncless is running in the background, quietly carrying our seamless synchronization
+
+2. Minimalist - Our interface aims to prevent cognitive overload on users.3. Intuitive - Users should find it intuitive to not worry 
+
+4. Accessible - 
+
+
+  
 = Developing a Alternative UI for Syncless =
      
 To create a UI for Syncless, the developer just need to follow a few steps.
