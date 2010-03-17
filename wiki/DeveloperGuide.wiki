@@ -10,67 +10,67 @@ http://big5sync.googlecode.com/files/mainpagelogosmall.png
 
 = System Overview =
 
-     == Architecture ==
+== Architecture ==
         
-        Following the Model-View-Controller (MVC) model, the system is split into User Interface (UI) and System Logic Layer (SLL). The UI is completely separated from SLL. The SLL uses a facade pattern. It is further divided into several sub-components, all of which work independently of one another.
+Following the Model-View-Controller (MVC) model, the system is split into User Interface (UI) and System Logic Layer (SLL). The UI is completely separated from SLL. The SLL uses a facade pattern. It is further divided into several sub-components, all of which work independently of one another.
 
-        Communication between the UI and the SLL is done through a Service Locator and an Interface. This allows us to change the SLL without affecting the UI. On top of that, this also allows other developers to create their own user interfaces to work with SLL.
+Communication between the UI and the SLL is done through a Service Locator and an Interface. This allows us to change the SLL without affecting the UI. On top of that, this also allows other developers to create their own user interfaces to work with SLL.
 
-        [http://big5sync.googlecode.com/files/overview.png http://big5sync.googlecode.com/files/thumbnail%20overview.png]
+[http://big5sync.googlecode.com/files/overview.png http://big5sync.googlecode.com/files/thumbnail%20overview.png]
 
-     == Data Storing ==
+== Data Storing ==
       
-        Syncless uses various XML files to store information. XML was chosen as it is more readable and portable. Examples are tagging.xml and profiling.xml, which are stored in the root folder of the application. On top of that, some XML is also stored on the removable devices that the user has tagged. These XML files are use to communicate information between 2 computers. 
+Syncless uses various XML files to store information. XML was chosen as it is more readable and portable. Examples are tagging.xml and profiling.xml, which are stored in the root folder of the application. On top of that, some XML is also stored on the removable devices that the user has tagged. These XML files are use to communicate information between 2 computers. 
 
-        Finally, each folder that is tagged also have metadata stored in them. At the moment, the XML is stored in a folder {{{.syncless}}} and is hidden. In the future, we will move this metadata elsewhere as most users do not like seeing "unwanted" files appearing all over the place.
+Finally, each folder that is tagged also have metadata stored in them. At the moment, the XML is stored in a folder {{{.syncless}}} and is hidden. In the future, we will move this metadata elsewhere as most users do not like seeing "unwanted" files appearing all over the place.
 
-     == Interaction among Sub-Components ==
+== Interaction among Sub-Components ==
 
-        To understand how the SLL interacts with the other components to perform the main operations, refer to sequence diagrams [http://code.google.com/p/big5sync/wiki/DeveloperSLLSequenceDiagrams here].
+To understand how the SLL interacts with the other components to perform the main operations, refer to sequence diagrams [http://code.google.com/p/big5sync/wiki/DeveloperSLLSequenceDiagrams here].
  
 = System Components =
 
-     == Profiling ==
+== Profiling ==
 
-        The Profiling component performs drive/computer recognization. It makes Syncless truly portable because of its ability to recognize different drives/computers by creating a Globally Unique IDentifier (GUID) in each of them. It also performs conversion of a physical directory/file path to a logical address, and vice versa. This conversion is necessary, because !CompareAndSync only recognizes physical path while Tagging recognizes a logical path.
+The Profiling component performs drive/computer recognization. It makes Syncless truly portable because of its ability to recognize different drives/computers by creating a Globally Unique IDentifier (GUID) in each of them. It also performs conversion of a physical directory/file path to a logical address, and vice versa. This conversion is necessary, because !CompareAndSync only recognizes physical path while Tagging recognizes a logical path.
 
-        To understand more about Profiling component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentProfiling here].
+To understand more about Profiling component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentProfiling here].
 
-     == Tagging ==
+== Tagging ==
 
-        The Tagging component provides the underlying operations of creating and removing tags, as well as tagging and untagging folders from tags. It also manages other settings such as the filter settings per tag.
+The Tagging component provides the underlying operations of creating and removing tags, as well as tagging and untagging folders from tags. It also manages other settings such as the filter settings per tag.
 
-        To understand more about Tagging component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentTagging here].
+To understand more about Tagging component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentTagging here].
 
-     == !CompareAndSync ==
+== !CompareAndSync ==
 
-        The !CompareAndSync component in Syncless is the part of the system that handles the comparison and syncing of files and folders. From a logical point of view, it can be briefly split into 2 subcomponents; the manual subcomponent that handles all manual operations, and the seamless subcomponent that handles all the automated synchronization requests from another component, the Monitor.
+The !CompareAndSync component in Syncless is the part of the system that handles the comparison and syncing of files and folders. From a logical point of view, it can be briefly split into 2 subcomponents; the manual subcomponent that handles all manual operations, and the seamless subcomponent that handles all the automated synchronization requests from another component, the Monitor.
 
-        To understand more about CompareAndSync component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentCompareAndSync here].
+To understand more about CompareAndSync component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentCompareAndSync here].
 
-     == Monitor ==
+== Monitor ==
 
-        The Monitor component provides functions to monitor the file system and drive insertion events. Upon each kind of event detected, it will decide whether or not to alert the SLL, which will then communicate with the other components to perform an auto synchronization.
+The Monitor component provides functions to monitor the file system and drive insertion events. Upon each kind of event detected, it will decide whether or not to alert the SLL, which will then communicate with the other components to perform an auto synchronization.
  
-        To understand more about Monitor component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentMonitor here].
+To understand more about Monitor component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentMonitor here].
 
-     == Logging ==
+== Logging ==
 
-        The Logging component is in charge of handling all user and debug logging actions. It is implemented using log4net with the Decorator pattern.
+The Logging component is in charge of handling all user and debug logging actions. It is implemented using log4net with the Decorator pattern.
 
-        To understand more about Logging component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentLogging here].
+To understand more about Logging component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentLogging here].
      
-     == Filter ==
+== Filter ==
         
-        The Filter component provides a set of classes to cater to filtering folders and files. They can be used to filter default .syncless configuration files as well as archive files.
+The Filter component provides a set of classes to cater to filtering folders and files. They can be used to filter default .syncless configuration files as well as archive files.
 
-        To understand more about Filter component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentFilter here].
+To understand more about Filter component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentFilter here].
 
-     == User Interface ==
+== User Interface ==
 
-        The User Interface component is in charge of handling all interactions between the user and the control layer. It is implemented using WPF for its powerful framework which allows for the creation of clean, professional look-and-feel. It also allows for the true separation of the User Interface from the System Logic Layer, allowing other developers to create their own User Interface to interact with our Logic Layer. 
+The User Interface component is in charge of handling all interactions between the user and the control layer. It is implemented using WPF for its powerful framework which allows for the creation of clean, professional look-and-feel. It also allows for the true separation of the User Interface from the System Logic Layer, allowing other developers to create their own User Interface to interact with our Logic Layer. 
 
-        To understand more about User Interface component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentUI here].
+To understand more about User Interface component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentUI here].
      
 = Known Issues =
 There are some known issues with V0.9, and they can be found [http://code.google.com/p/big5sync/wiki/KnownIssues09 here].
