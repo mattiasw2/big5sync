@@ -1,5 +1,6 @@
 #summary This page details the expected results when a user does an unusual combination of actions.
 #labels Phase-Implementation
+#sidebar DeveloperGuideSidebar
 
 = Introduction =
 
