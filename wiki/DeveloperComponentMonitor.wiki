@@ -26,7 +26,7 @@ This is implemented using `FileSystemwatcher` from the C# library. The `FileSyst
 == Description of Design ==
 To solve problem 1, we reference the codes from: http://geekswithblogs.net/thibbard/articles/ExtendingFileSystemWatcher.aspx. This is done by extending the `FileSystemwatcher` and adding new events to trigger a complete creation event.
 
-To solve problem 2, we reference the codes from: http://csharp-codesamples.com/2009/02/file-system-watcher-and-large-file-volumes/. Instead of writing our logic in the handler, we will dispatch the jobs to a queue which is processed by a separate thread. As such, the only work done by the handler is to dispatch the jobs to a queue, so that the control moves out of the handler thus releasing the buffer.
+To solve problem 2, we reference the codes from: http://csharp-codesamples.com/2009/02/file-system-watcher-and-large-file-volumes/. Instead of writing our logic in the handler, we will dispatch the sequence of events to a queue which is processed by a separate thread. As such, the only work done by the handler is to dispatch the events to the queue, so that it can release the buffer and start monitoring more events.
 
 To solve problem 3, we thought of an algorithm to transfer all the events currently in the waiting queue to another process queue if there is an idle time of 1 second with no new events. This process queue will look through all the events and produce the most simplest form of events to be synchronized.
 
