@@ -2,11 +2,11 @@
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
-== General ==
+= General =
 [http://www.cis.upenn.edu/~bcpierce/papers/snc-mobicom.ps What is a File Synchronizer?]
 
 
-== Tree Visitor Pattern ==
+= Tree Visitor Pattern =
 [http://etymon.blogspot.com/2006/04/visitor-pattern-and-trees-considered.html Etymon - Visitor Pattern and Trees Considered Harmful]
 
 [http://groovy.codehaus.org/Visitor+Pattern Groovy - Visitor Pattern]
