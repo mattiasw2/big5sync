@@ -73,7 +73,7 @@ http://big5sync.googlecode.com/files/tag-view.png
 
 3. Drag and drop the removable drive folder to tag
 
-http://big5sync.googlecode.com/files/drag-and-drop-tagging.png
+http://big5sync.googlecode.com/files/drag-and-drop-and-tag.png
 
 4. Tagging is complete and synchronization begins
 
@@ -89,7 +89,7 @@ Switching to manual modes is a simple matter of pressing the button. After switc
 
 == Step 3: Prepare Removable Drive for Removal ==
 
-http://big5sync.googlecode.com/files/eject-removable-drive.png
+http://big5sync.googlecode.com/files/eject-removable-drives.png
 
 You can access this from the Toolbar > Eject or by using its keyboard shortcut equivalent (Ctrl-E)
 
