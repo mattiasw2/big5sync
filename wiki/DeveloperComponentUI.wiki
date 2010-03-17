@@ -2,8 +2,6 @@
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
-= User Interface =
-
 <wiki:toc max_depth="6" />
 
 == Overview ==
