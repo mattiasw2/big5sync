@@ -45,7 +45,7 @@ You have folders on your computer and thumbdrive that you wish to synchronize au
 == Step 1: Tag Folders ==
 
 To synchronize 2 or more folders together, you must first tag them with the same name. This tagging process can be initiated in multiple ways.
-  * Tagging from Syncless (Can also use the keyboard shortcut equivalent Ctrl-T, Refer to [UserGuideGettingStarted#Misc: Keyboard Shortcuts] for a complete list of shortcuts)
+  * Tagging from Syncless (Can also use the keyboard shortcut equivalent Ctrl-T, refer to [UserGuideGettingStarted#Misc:_Keyboard_Shortcuts] for a complete list of shortcuts)
 
   * Drag-and-Drop folder(s) on the Main Window
 
