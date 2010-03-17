@@ -12,4 +12,17 @@
 
 = Explanation of =
 
-= Extending UI =
+== User Interface ==
+
+= Developing a UI for Syncless =
+     == Basic ==
+        
+        To create a UI for Syncless, the developer just need to follow a few steps.
+        # implements IUInterface. This is to provide the System Core with some fundamental methods.
+        # use Service locator to get the IUIControllerInterface. This provide the basic functionality to the developer who is coding the UI.
+        # Call the Init method that pass in UI itself. 
+
+     == Advanced ==
+        
+        Extending Filter to other area can be done easily. This can be done by extending the Filter Object and overriding the Match method. If the filter meant to work only on file, the developer can extend !FileFilter instead. !FileFilter will let all folder pass the filter.
+        
