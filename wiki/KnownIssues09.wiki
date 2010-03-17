@@ -43,6 +43,9 @@ If you have a few folders that are tagged in seamless mode, deleting one of thes
 == Renamed Files Not Getting Propagated ==
 This will only happen if you create, delete and then create again with the same filename, followed by a rename, all within a short span of time. This cannot be fixed as far as we know due to how Windows handles the file system. [http://code.google.com/p/big5sync/issues/detail?id=22 Issue #22]
 
+== Renaming More Than 3 Levels In A Directory Structure ==
+If you have the following C:\A\B\C\D, and you rename it to C:\A\E\F\G, the synchronization will be erratic. Similarly, if the renaming is too messy, the manual synchronization may go wrong. As a temporary workaround, doing a sync after the initial sync will cause all folders to be in sync again, and after which you can delete or move the files to your liking. [http://code.google.com/p/big5sync/issues/detail?id=38 Issue #38]
+
 == Seamless Mode Issues ==
 Please refer to the Monitor section.
 
