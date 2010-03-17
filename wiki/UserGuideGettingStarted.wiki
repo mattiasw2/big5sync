@@ -57,6 +57,7 @@ We will tag both the folder on the computer and on the thumbdrive from Windows E
 
   # http://big5sync.googlecode.com/files/tagshell.png
   # http://big5sync.googlecode.com/files/tagview.png
+  # http://big5sync.googlecode.com/files/drag-and-drop-tagging.png
 
 == Step 2: ==
 
