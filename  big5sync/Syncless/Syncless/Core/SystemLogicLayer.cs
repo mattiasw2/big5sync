@@ -711,6 +711,7 @@ namespace Syncless.Core
                 }
                 MonitorLayer.Instance.UnMonitorDrive(drive.Name);
                 ProfilingLayer.Instance.RemoveDrive(drive);
+                _userInterface.DriveChanged();
                 return true;
             }
             catch (DriveNotFoundException)
