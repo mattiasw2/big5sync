@@ -56,7 +56,7 @@
 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentTagging">More details...</a>
 
-     == CompareAndSync ==
+     == !CompareAndSync ==
 
         The !CompareAndSync component in Syncless is the part of the system that handles 
         the comparison and syncing of files and folders. From a logical point of view, it 
