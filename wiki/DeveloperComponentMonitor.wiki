@@ -16,12 +16,12 @@ This is implemented using `FileSystemwatcher` from the C# library. The `FileSyst
 
 == Problems with `FileSystemwatcher` ==
 `FileSystemwatcher` has the following problems:
-  #When creating a large file, the file created events was triggered before the file finished the actual creation. Exception will occured when we are attempting to perform some operations on the new file before it finishes creating.
+  # When creating a large file, the file created events was triggered before the file finished the actual creation. Exception will occured when we are attempting to perform some operations on the new file before it finishes creating.
+  # When the `FileSystemwatcher` is working with large volumes of files, it is unreliable. The reason is that there is a fixed buffer allocated to each `FileSystemwatcher` which is used to store information on the events raised. When a large number of files raise an event then this buffer gets full and some events might not be captured.
+  # Different applications has different ways of handling a file/folder operation. Temporary files are sometimes used and this will caused some problem when we do a sync. Exception will occured when trying to sync a temporary file when the file has already been deleted.
 
 == Class Diagram ==
 [http://big5sync.googlecode.com/files/monitor.png http://big5sync.googlecode.com/files/thumbnail%20monitor.png]
-
-
 
 = Description of Design =
 
