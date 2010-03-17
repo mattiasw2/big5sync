@@ -8,6 +8,9 @@
 
 The User Interface component is in charge of handling all interactions between the user and the control layer. It is implemented using WPF for its powerful framework which allows for the creation of clean, professional look-and-feel. It also allows for the true separation of the User Interface from the System Logic Layer, allowing other developers to create their own User Interface to interact with our Logic Layer.
 
+= Classes =
+The User Interface component consists of several important sub-components, including the Single Instance Supporting Layer - `SingleInstanceManager` , `SynclessApplication`, helper components - `CommandLineHelper`, `RegistryHelper`, Windows - `MainWindow`, `TagWindow`, `UntagWindow`, `TagDetailsWindow`, `ShortcutsWindow` and `OptionsWindow`, resource dictionary - `AppResourceDictionary`, Misc Components - `PortableSettingsProvider` and `FolderBrowseDialogEx`.
+
 = Description of Design =
 
 The whole architecture is based on Service Locator pattern. Using this method, we can hide the implementation from the User Interface. The Interface provides a list of method provided by the Logic Layer. The UI can make use of these methods interact with the whole Logic Layer. This is to prevent changes in System Logic Layer from affecting the UI.
