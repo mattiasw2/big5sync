@@ -49,7 +49,7 @@
 
         The Tagging component provides the underlying operations of creating and removing tags, as well as tagging and untagging folders from tags. It also manages other settings such as the filter settings per tag.
 
-        ["http://code.google.com/p/big5sync/wiki/DeveloperComponentTagging More details...]
+        [http://code.google.com/p/big5sync/wiki/DeveloperComponentTagging More details...]
 
      == !CompareAndSync ==
 
