@@ -148,13 +148,13 @@ http://big5sync.googlecode.com/files/listofshortcuts.png
 To save time and increase productivity, refer to the list of keyboard shortcuts.
 
 
-= Getting More Help =
-
-To get help while you are using Syncless, refer to the [http://code.google.com/p/big5sync/w/edit/UserGuide User Guide]. You'll find more information about the topics covered in this document, as well as information about and instructions for many more topics. You can also view a video of the quick run-through of the features:
-
-<wiki:video url="http://www.youtube.com/watch?v=i30Q2U7ceWs"/>
+= Ending Note =
 
 Please report any bugs you find at http://code.google.com/p/big5sync/issues/list, thank you! You may wish to take a look at http://code.google.com/p/big5sync/wiki/KnownIssues09 for the known bugs in version 0.9. You may also contact us at *_big5.syncless@gmail.com_*.
+
+You can also view a video of the quick run-through of the features:
+
+<wiki:video url="http://www.youtube.com/watch?v=i30Q2U7ceWs"/>
 
 Interested in what's coming after version 0.9? Take a look [http://code.google.com/p/big5sync/wiki/ComingSoon here]!
 
