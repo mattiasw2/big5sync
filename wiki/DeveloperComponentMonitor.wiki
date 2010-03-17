@@ -31,4 +31,4 @@ To solve problem 2, we reference the codes from: http://csharp-codesamples.com/2
 To solve problem 3, we thought of an algorithm to transfer all the events currently in the waiting queue to another process queue if there is an idle time of 1 second with no new events. This process queue will look through all the events and produce the simplest form of events to be synchronized.
 
 == Extending Monitor ==
-If there is any other custom events that requires the `FileSystemwatcher` to trigger, just extend our `ExtendedFileSystemWatcher` and do a replacement in the *Monitor Component*.
+If there are other custom events which require `FileSystemWatcher` to trigger, simply extend `ExtendedFileSystemWatcher` and replace the current `ExtendedFileSystemWatcher` calls to the newly extended class.
