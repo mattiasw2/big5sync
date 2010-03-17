@@ -7,9 +7,9 @@
 <wiki:toc max_depth="6" />
 
 == Overview ==
-The *Monitor Layer* provide a set of classes to detect file system changes. The monitor Layer is implemented using FileSystemwatcher from C# library. The FileSystemWatcher was extended to handle extra cases that the original FileSystemWatcher cannot handle.
+The *Monitor Layer* provide a set of classes to detect file system changes. The Monitor Layer is implemented using `FileSystemwatcher` from C# library. The `FileSystemWatcher` was extended to handle extra cases that the original `FileSystemWatcher` cannot handle.
 
-`hi` hi `hi`
+
 == Class Diagram ==
 
 == Description of Design ==
