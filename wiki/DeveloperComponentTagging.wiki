@@ -77,6 +77,8 @@ Conversion from `TaggingProfile` to _tagging.xml_:<br>
   # `CreateFilterElementList`(`XmlDocument`, `Tag`)<br>
   # `CreateFilterElement`(`XmlDocument`, `Filter`)<br>
 
+= Merging Multiple _tagging.xml_ =
+
 = Glossary =
 
 _tagging.xml_ : This is an XML document which stores the information of tags.
