@@ -12,6 +12,10 @@ Note: As much as we try to keep this page updated, please take a look at the pro
 == Corrupted/Non-Standard XML Format ==
 If the XML is corrupted due to user interference, Syncless will have erratic behaviour. The next version will detect this and handle it properly. [http://code.google.com/p/big5sync/issues/detail?id=33 Issue #33]
 
+== Unable to Load Profile ==
+Sometime profile is not able to be load from some removable drive due to the read and write access. The next patch should fix this.
+[http://code.google.com/p/big5sync/issues/detail?id=39 Issue #39]
+
 = Tagging =
 == Recursive Tagging ==
 If Folder A is tagged with Folder D and Folder B is tagged with Folder C, a recursion will occur and folders will be created in them until they hit the maximum file path length.
