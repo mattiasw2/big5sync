@@ -24,8 +24,8 @@ Add your content here.
 ? - wildcard for one character.
 
 Example : 
-  # if we want to include only all .cs files, we can just include a filter "*.cs" and set it to include.
-  # if we want to exclude all .java file, we can just include a filter "*.java" and set it to exclude. 
+  # if we want to include only all .cs files, we can just include a filter "\*.cs" and set it to include.
+  # if we want to exclude all .java file, we can just include a filter "\*.java" and set it to exclude. 
 
 = Usability =
 
