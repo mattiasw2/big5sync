@@ -6,7 +6,7 @@
 
 Syncless will, as far as we can, never throw a synchronization conflict since that contradicts our vision of seamless synchronization. This page details the unusual combination of actions as well as how Syncless will handle each case. For all cases, please assume that at least 3 folders are tagged under the same tag.
 
-For a list of known issues with certain special cases, please look HERE.
+For a list of known issues with certain special cases, please look [http://code.google.com/p/big5sync/wiki/KnownIssues09 here].
 
 = Details =
 
