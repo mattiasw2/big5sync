@@ -1,3 +1,4 @@
+#summary current pending bug and issues.
 == Bug Fixes ==
 
 1. Solve the recursion directory issue.  
