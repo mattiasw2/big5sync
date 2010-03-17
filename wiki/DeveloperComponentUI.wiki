@@ -15,7 +15,7 @@ The User Interface component consists of several important sub-components, inclu
 = Description of Design =
 
 == Single Instance Layer ==
-In order to support many of the other fundamental features which Syncless has such as shell integration and possible future CLI support, the UI had to converted to a single instance application which support arguments. 
+In order to support many of the other fundamental features which Syncless has such as shell integration and possible future CLI support, the UI had to converted to a single instance application which support arguments. App.xaml had to be removed and replaced with the combination of `SingleInstanceManager` and `SynclessApplication`.
 
 == Separation of View from Control & Logic ==
 
@@ -29,3 +29,8 @@ To create a UI for Syncless, the developer just need to follow a few steps.
   # Implement Syncless.Core.IUInterface. This is to provide the System Core with a way to to update the interface as and when necessary.
   # Use Syncless.Core.ServiceLocator to get the IUIControllerInterface. This provide the list of methods which the UI developer can use to call from the UI.
   # Call the Initiate method in the IUIControllerInterface to initiate the System Logic Layer.
+
+= Credits =
+We would like to thank the following resources/developers for their valuable contributions to challenges that WPF developers will encounter in the course of development.
+
+  * *Singleton Application* - http://www.switchonthecode.com/tutorials/wpf-writing-a-single-instance-application
