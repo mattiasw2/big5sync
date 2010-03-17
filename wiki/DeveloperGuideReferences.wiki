@@ -1,5 +1,6 @@
 #summary Developers' Guide - References
 #labels Phase-Implementation
+#sidebar DeveloperGuideSidebar
 
 = Introduction =
 
