@@ -5,18 +5,16 @@
 <wiki:toc max_depth="6" />
 
 = Overview =
-     
-     The User Interface is separated from the System Logic Layer. This is to allow other developer to create their own User Interface to interact with our Logic Layer. However, we provided a simple yet complete User Interface.
+
+The User Interface component is in charge of handling all interactions between the user and the control layer. It is implemented using WPF for its powerful framework which allows for the creation of clean, professional look-and-feel. It also allows for the true separation of the User Interface from the System Logic Layer, allowing other developers to create their own User Interface to interact with our Logic Layer.
 
 = Description of Design =
 
-     The whole architecture is based on Service Locator pattern. Using this method, we can hide the implementation from the User Interface. The Interface provides a list of method provided by the Logic Layer. The UI can make use of these methods interact with the whole Logic Layer. This is to prevent changes in System Logic Layer from affecting the UI.
+The whole architecture is based on Service Locator pattern. Using this method, we can hide the implementation from the User Interface. The Interface provides a list of method provided by the Logic Layer. The UI can make use of these methods interact with the whole Logic Layer. This is to prevent changes in System Logic Layer from affecting the UI.
      
 = Developing a UI for Syncless =
      
-     To create a UI for Syncless, the developer just need to follow a few steps.
-     # implements IUInterface. This is to provide the System Core with some fundamental methods.
-     # use Service locator to get the IUIControllerInterface. This provide the basic functionality to the developer who is coding the UI.
-     # Call the Init method that pass in UI itself. 
-
-        
+To create a UI for Syncless, the developer just need to follow a few steps.
+# implements IUInterface. This is to provide the System Core with some fundamental methods.
+# use Service locator to get the IUIControllerInterface. This provide the basic functionality to the developer who is coding the UI.
+# Call the Init method that pass in UI itself.
