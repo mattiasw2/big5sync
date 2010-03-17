@@ -1,4 +1,4 @@
-#summary This page contains the sequence diagrams for System Logic Layer
+#summary Developers' Guide - Diagram - SystemLogicLayer
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 == !CreateTag ==
