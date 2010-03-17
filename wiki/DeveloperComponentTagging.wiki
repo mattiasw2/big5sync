@@ -120,7 +120,8 @@ Let's take a look at the pseudo-code for the merging the tags:
       if currentTag was deleted && newTag exists
           if newTag was created later than currentTag
               add newTag to currentProfile
-      merge paths from currentTag and newTag
+      else
+          merge paths from currentTag and newTag
       return true
   else
       return false
