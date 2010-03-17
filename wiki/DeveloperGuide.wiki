@@ -81,6 +81,7 @@ http://big5sync.googlecode.com/files/mainpagelogosmall.png
      == Filter ==
         
         Filter Layer provide a set of classes to cater to filtering folders and files. They can be used to filter default .syncless configuration files as well as archive file.
+
         [http://code.google.com/p/big5sync/wiki/DeveloperComponentFilter More details...]
 
      == User Interface ==
