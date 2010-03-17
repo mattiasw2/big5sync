@@ -2,38 +2,38 @@
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
-== Overview ==
+= Overview =
 The *!CompareAndSync* component in *Syncless* is the part of the system that handles the comparison and syncing of files and folders. From a logical point of view, it can be briefly split into 2 subcomponents; the manual subcomponent that handles all manual operations, and the seamless subcomponent that handles all the automated synchronization requests from another component, the *Monitor*.
 
 Both sub-components are implemented very differently, as manual synchronization and automated synchronization are largely different. The manual subcomponent is implemented using a *Tree* in conjunction with the *Visitor Pattern*, while the seamless subcomponent is implemented using a *Queue*.
 
 
-== Class Diagram ==
+= Class Diagram =
 
 
 
-== Description of Design ==
-=== Data Transfer Objects and Entities ===
+= Description of Design =
+== Data Transfer Objects and Entities ==
 Before going in depth into the design, we will first take a look at the data transfer objects (DTO) and entities used throughout !CompareAndSync.
 
 
-==== Request ====
+=== Request ===
 Requests are data transfer objects sent to !CompareAndSync when a comparison or synchronization action is to be done. The *Request* object is an abstract class, from which all other requests will extend from. *!AutoSyncRequest* and *!ManualRequest* are the respective requests for seamless and manual mode. *!ManualRequest* is further extended to *!ManualSyncRequest* and *!ManualCompareRequest*.
 
 
-==== !CompareObject ====
+=== !CompareObject ===
 !CompareObjects are entities which are used during comparison and synchronization. There are basically 2 main kinds of !CompareObjects, the *!FileCompareObject* and the *!FolderCompareObject*. *!RootCompareObject* is a specific kind of !FolderCompareObject used to represent the root paths to be compared. There is also the *XMLCompareObject* which is used to store the file metadata and then used to populate the main !CompareObjects.
 
 
-== Main Components ==
+= Main Components =
 We will now take a look at the main components of !CompareAndSync, which can be broadly divided to the controller layer, the manual component and the seamless component.
 
 
-=== Controller ===
+== Controller ==
 *!CompareAndSyncController* is a facade for the other layers to interact with, hiding the underlying implementations and exposing only the necessary methods for syncing.
 
 
-=== Manual Components ===
+== Manual Components ==
 As stated in the overview, the manual portion of the !CompareAndSync component is done using the Tree Visitor Pattern. Although the Tree Visitor Pattern is considered a bad design pattern in some cases, the usage of this pattern in our implementation of !CompareAndSync greatly enhances extensibility, as you will see later.
 
 The classes of concern to us are:
@@ -59,7 +59,7 @@ The classes of concern to us are:
 Also, all the Visitors use pre-traversal, since it makes sense to build, populate and synchronize the !CompareObjects from top-down. However, !ComparerVisitor uses post-traversal because it is necessary to update the state of each folder if a file under it has changed. Assuming a user wants to compare and analyze the results, but not do any actual synchronization, we simply remove !SyncerVisitor and XMLWriterVisitor from the sequence. It is also important to note that the Tree Visitor Pattern allows for very good modularity, and we can simply add on extra visitors to perform other tasks if necessary. Similarly, we can remove any visitors (except for !BuilderVisitor, because it is required to build the tree), if necessary. A good example would be to remove !FolderRenameVisitor if the developer does not want to handle folder renames.
 
 
-=== Seamless Components ===
+== Seamless Components ==
 !CompareAndSync is made such that the seamless component is completely separated from the manual component. There are various design and implementation issues for this, with one of them being that the seamless component is largely depending on receiving information from other objects. Moreover, in seamless mode, the file to sync is already know, with little to no need of doing a comparison. As such, there is no need to do the tedious job of building a tree.
 
 The classes of concern to us for the seamless portion are as follows:
@@ -71,7 +71,7 @@ The classes of concern to us for the seamless portion are as follows:
 *!SeamlessQueueControl* is a class that contains a single queue to ensure the requests are handled in order, so as to prevent any possible conflicts. *!SeamlessSyncer* contains the necessary methods to handle seamless file synchronization, and upon each successful synchronization, *XMLHelper* will be called to update the metadata stored in side.
 
 
-== Explanation of Algorithms ==
+= Explanation of Algorithms =
 The main algorithm we are going to discuss here is the manual component comparison. Yes, Syncless' main aim is seamless synchronization, but the manual synchronization is in fact activated every time a user launches the application, or connects a removable storage drive to it. In a way, it is "seamless" too. Thus, it is as important as the seamless component.
 
 Using pre-traversal, !BuilderVisitor will build a tree based on the given root paths. However, instead of a node for each and every folder, it groups files and folders of the same name at each level into single node. For example, if we want to synchronize "Lectures", "Notes" and "School", and the content of the folders are as follows:
@@ -227,5 +227,5 @@ After applying the above algorithm, we should get the following, with the priori
 Clearly, D\Note.txt is the most updated file. To end it off, !SyncerVisitor will then look for the file or folder with the highest priority at each node, and execute the necessary action base on the !ChangeType. Once that is done, XMLWriterVisitor will visit it and write the updated values, such as the hash and last modified date, back to the metadata.
 
 
-== Extending !CompareAndSync ==
+= Extending !CompareAndSync =
 Further functionality can be added into !CompareAndSync should a developer wish to. He can simply create his own visitor that visits each node and performs the action he decides. A good example would be to generate a report after a synchronization. A developer can simply code a visitor to create a report based on the attributes of each node.
