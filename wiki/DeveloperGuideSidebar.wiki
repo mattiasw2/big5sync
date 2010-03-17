@@ -2,7 +2,7 @@
   * [UserGuideGettingStarted Getting Started!]
     * [UserGuideGettingStarted#Welcome_to_Syncless Welcome to Syncless!]
       * [UserGuideGettingStarted#What_You'll_Learn What You'll Learn]
-      * [UserGuideGettingStarted#Downloading_and_Running Downloading and Running]
+      * [UserGuideGettingStarted#What_You'll_Need What You'll Need]
       * [UserGuideGettingStarted#The_Syncless_Interface The Syncless Interface]
     * [UserGuideGettingStarted#Learn_Syncless Learn Syncless]
       * [UserGuideGettingStarted#Step_1:_Tag_Folders Step 1: Tag Folders]
