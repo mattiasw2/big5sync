@@ -17,7 +17,7 @@ This is the main logic layer which is called by the `SystemLogicLayer` to perfor
 
 When initialized, `TaggingLayer` will call `TaggingXMLHelper` to load the current tagging profile from _tagging.xml_ in the computer. If there are more than one _tagging.xml_ files available (this may happen if there are removable drives plugged into the computer), `TaggingLayer` will call `TagMerger` to perform merging of several tagging profiles based on various sources of _tagging.xml_.
 
-=== Sequence Diagram of `Init` ===
+=== Sequence Diagram of Init ===
 
 http://big5sync.googlecode.com/files/TaggingInitResized.jpg
 
@@ -30,23 +30,23 @@ The main operations which will trigger interactions among the various classes in
   # `UntagFolder`
   # `UpdateFilter`
 
-=== Sequence Diagram of `CreateTag` ===
+=== Sequence Diagram of CreateTag ===
 
 http://big5sync.googlecode.com/files/TaggingCreateTag.jpg
 
-=== Sequence Diagram of `DeleteTag` ===
+=== Sequence Diagram of DeleteTag ===
 
 http://big5sync.googlecode.com/files/TaggingDeleteTag.jpg
 
-=== Sequence Diagram of `TagFolder` ===
+=== Sequence Diagram of TagFolder ===
 
 http://big5sync.googlecode.com/files/TaggingTagFolder.jpg
 
-=== Sequence Diagram of `UntagFolder` ===
+=== Sequence Diagram of UntagFolder ===
 
 http://big5sync.googlecode.com/files/TaggingUntagFolder.jpg
 
-=== Sequence Diagram of `UpdateFilter` ===
+=== Sequence Diagram of UpdateFilter ===
 
 http://big5sync.googlecode.com/files/TaggingUpdateFilter.jpg
 
