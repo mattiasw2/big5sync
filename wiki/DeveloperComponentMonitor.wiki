@@ -5,7 +5,7 @@
 <wiki:toc max_depth="6" />
 
 = Overview =
-The *Monitor Component* provides a set of classes to detect file system changes. There are 2 roles for the Monitor Component. The first role is to detect the insertion and removal of USB removable drives, such as external hard disk and flash drive, and the second role is to capture any changes to a file or folder.
+The *Monitor* component provides a set of classes to detect file system changes. There are 2 roles for the Monitor component. The first role is to detect the insertion and removal of USB removable drives, such as external hard disks and flash drives, and the second role is to capture any changes to a file or folder within a tagged folder.
 
 = Classes =
 [http://big5sync.googlecode.com/files/monitor.png http://big5sync.googlecode.com/files/thumbnail%20monitor.png]
@@ -13,22 +13,21 @@ The *Monitor Component* provides a set of classes to detect file system changes.
 = Description of Design =
 
 == Detecting USB Removable Drive Events ==
-This is implemented using Windows Management Instrumentation. The code for the detection of USB devices is referenced from:  http://dotnetslackers.com/community/blogs/basharkokash/archive/2008/03/15/USB-Detection-source-code.aspx.
-When the application starts, all the currently connected drives are recorded. Whenever a USB event is triggered, we will find out the new list of connected drives and compare them with the last records. From the result, we will be able to tell which drives are being inserted or removed. `DeviceWatcher` will handle the detection of USB devices.
+This is implemented using Windows Management Instrumentation. The code for the detection of USB devices is referenced from:  [http://dotnetslackers.com/community/blogs/basharkokash/archive/2008/03/15/USB-Detection-source-code.aspx here]. When the application starts, all the currently connected drives are recorded. Whenever a USB event is triggered, we will find out the new list of connected drives and compare them with the last records. From the result, we will be able to tell which drives are being inserted or removed. `DeviceWatcher` will handle the detection of USB devices.
 
 == Capturing File/Folder Change Events ==
-This is implemented using `FileSystemwatcher` from the C# library. The `FileSystemWatcher` is extended to handle extra cases that the original `FileSystemWatcher` cannot handle.
+This is implemented using `FileSystemWatcher` from the C# library. The `FileSystemWatcher` is extended to handle extra cases that the original `FileSystemWatcher` cannot handle.
 
-== Problems with `FileSystemwatcher` ==
-`FileSystemwatcher` has the following problems:
-  # When creating a large file, the file creation event is triggered before the file has finished the actual creation. Exceptions will occur when we are attempting to perform some operations on the new file before it finishes creating.
-  # When `FileSystemwatcher` is working with large volumes of file, it is unreliable. The reason is that there is a fixed buffer allocated to each `FileSystemwatcher` which is used to store information on the events raised. When a large number of files raises an event, this buffer gets full and some events might not be captured.
+== Problems with `FileSystemWatcher` ==
+`FileSystemWatcher` has the following problems:
+  # When creating a large file, the file creation event is triggered before the file has finished the actual creation. Exceptions will occur when we attempt to perform some operations on the new file before it finishes creation.
+  # When `FileSystemWatcher` is working with large volumes of file, it is unreliable. The reason is that there is a fixed buffer allocated to each `FileSystemWatcher` which is used to store information on the events raised. When a large number of files raises an event, this buffer gets full and some events might not be captured.
   # Different applications have different ways of handling a file/folder operation. Temporary files are sometimes used and this will cause some problems when we do a sync. Exception will occur when trying to sync a temporary file when the file has already been deleted.
 
 = Explanation of Algorithms =
-To solve problem 1, we reference the codes from: http://geekswithblogs.net/thibbard/articles/ExtendingFileSystemWatcher.aspx. This is done by extending the `FileSystemwatcher` and adding new events to trigger a complete creation event.
+To solve problem 1, we reference the codes from [http://geekswithblogs.net/thibbard/articles/ExtendingFileSystemWatcher.aspx here]. This is done by extending the `FileSystemwatcher` and adding new events to trigger a complete creation event.
 
-To solve problem 2, we reference the codes from: http://csharp-codesamples.com/2009/02/file-system-watcher-and-large-file-volumes/. Instead of writing our logic in the handler, we will dispatch the sequence of events to a queue which is processed by a separate thread. As such, the only work done by the handler is to dispatch the events to the queue, so that it can release the buffer and start monitoring more events.
+To solve problem 2, we reference the codes from [http://csharp-codesamples.com/2009/02/file-system-watcher-and-large-file-volumes/ here]. Instead of writing our logic in the handler, we will dispatch the sequence of events to a queue which is processed by a separate thread. As such, the only work done by the handler is to dispatch the events to the queue, so that it can release the buffer and start monitoring more events.
 
 To solve problem 3, we thought of an algorithm to transfer all the events currently in the waiting queue to another process queue if there is an idle time of 1 second with no new events. This process queue will look through all the events and produce the simplest form of events to be synchronized.
 
