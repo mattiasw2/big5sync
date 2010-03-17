@@ -1,4 +1,4 @@
-#summary This is a list of known issues grouped by category for V0.9.
+#summary Developers' Guide - Known Issues - V0.9
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
