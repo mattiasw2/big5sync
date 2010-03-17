@@ -155,3 +155,5 @@ The system first checks whether _newPath_ exists in _currentTag_, if it does not
 If the updated time of _newPath_ is earlier than that of _currentPath_, the system will not do anything. Otherwise, further checks will be done on the deletion time and creation time of both paths and perform addition/removal of path accordingly.
 
 = Extending Tagging =
+
+As a tag object is configurable, developers can extend the `TagConfig` classes to include more properties. Currently, existing properties include `IsSeamless`, `ArchiveName`, `ArchiveCount` and `Recycle`.
