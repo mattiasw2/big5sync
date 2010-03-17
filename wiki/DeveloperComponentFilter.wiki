@@ -10,7 +10,7 @@ The *Filter* component provides a set of classes to cater to filtering folders a
 == Classes ==
 
 == Description of Design ==
-Filter component is designed based on the factory pattern. `FilterFactory` is used to create all the `Filter` objects. This allows the developers to create different types of `Filter` objects easily. Since all the filters will be used as Filter object and therefore the developer does not need to use the concrete class.
+Filter component is designed based on the factory pattern. `FilterFactory` is used to create all the `Filter` objects. This allows the developers to create different types of `Filter` objects easily without know what is the underlying implementations.
 
 == Extending Filter ==
 Extending Filter can be easily done. It can be extended by created Custom Filter that extend Filter class. The developer need to only implement the Match method. If the developer only want to apply the Filter to Files, he/she can extend the FileFilter object instead. It will ensure that folders will pass through. The user can then edit the FilterFactory to create more type of filter. However, if the developer do not want to change the implementation of the System Core, he/she can choose to extend the FilterFactory instead.
