@@ -54,7 +54,7 @@ http://big5sync.googlecode.com/files/TaggingUpdateFilter.jpg
 
 This is a helper which performs XML-related operations. It reads from and writes to _tagging.xml_ which stores information of all tags and their configuration.
 
-The conversion from a tagging profile to _tagging.xml_, and vice versa, is easily extensible. There are separate methods which take care of reading/writing each tagging profile property. If there are more properties to be added to `TaggingProfile`, only `ConvertTaggingProfileToXml` and `ConvertXmlToTaggingProfile` need to be changed, and then just create additional methods which read/write each of the new property.
+The conversions from a tagging profile to _tagging.xml_, and vice versa, are easily extensible. There are separate methods which take care of reading/writing each tagging profile property. If there are more properties to be added to `TaggingProfile`, only `ConvertTaggingProfileToXml` and `ConvertXmlToTaggingProfile` need to be changed, and then just create additional methods which read/write each of the new properties.
 
 Conversion from _tagging.xml_ to `TaggingProfile`:
   # `ConvertXmlToTaggingProfile`(`XmlDocument`)
