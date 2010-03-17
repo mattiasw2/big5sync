@@ -75,7 +75,9 @@ Conversion from `TaggingProfile` to _tagging.xml_:
   # `CreateFilterElementList`(`XmlDocument`, `Tag`)
   # `CreateFilterElement`(`XmlDocument`, `Filter`)
 
-= Merging Multiple _tagging.xml_ =
+= Explanation of Algorithms =
+
+== Merging Multiple _tagging.xml_ ==
 
 Merging of multiple _tagging.xml_ files is necessary when the user maintains tags which contain folders across multiple devices. For example, the user may tag a folder in his home workstation and a folder in his office workstation to the same tag, and uses a thumbdrive as the intermediary device to sync the two folders. In this case, both his home workstation and office workstation will contain _tagging.xml_ files, as well as in the thumbdrive.
 
@@ -152,6 +154,4 @@ The system first checks whether _newPath_ exists in _currentTag_, if it does not
 
 If the updated time of _newPath_ is earlier than that of _currentPath_, the system will not do anything. Otherwise, further checks will be done on the deletion time and creation time of both paths and perform addition/removal of path accordingly.
 
-= Glossary =
-
-_tagging.xml_ : This is an XML document which stores the information of tags.
+= Extending Tagging =
