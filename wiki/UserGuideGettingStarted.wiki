@@ -98,33 +98,40 @@ Syncless cares about the safety of your removable drives. It allows for all curr
 With the successful operation of synchronization, you have now completed the full Syncless tutorial. Continue on to see other major features in Syncless.
 
 
-== Continue to Explore Syncless ==
+= Continue to Explore Syncless =
 
 Syncless offers other powerful features. Check out one or more of these additional features:
 
   * *N-way Synchronization*: Why restrict yourself to just syncing two folders? Let Syncless perform n-way synchronization between multiple folders for you.
 
-  * *Filtering*:  Use Syncless's filtering features for the ultimate control in synchronization. Currently, Syncless is able to include or exclude files and folders by extension and path. Other filters will be available in later versions.
+  * *Filtering*:  Use Syncless's filtering features for the ultimate control in synchronization. Currently, Syncless is able to include or exclude files and folders by extension and path. Other filters will be available in later versions. Take note exclusion will always take precedence over inclusion.
 
  * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder will be archived up to 5 backups at one time. As of version 0.9, archiving is not user-configurable, but will be in the future.
 
- * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving it on your computer. 
+ * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving it on your computer.
+
+== Filtering ==
 
 
-== Misc: Keyboard Shortcuts ==
+== Portability ==
+If you frequently use your removable storage drive on various computers, Syncless can automate this job for you. For example, a student has a home computer, as well as a regular workstation in his school lab. He wishes to keep his school work synchronized across both computers. By having Syncless on both his home computer and school workstation, and giving them the same tag, say "Lectures", Syncless will auto-detect and synchronize each time the removable storage drive is inserted. See the below diagrams for a clearer illustration:
+
+http://big5sync.googlecode.com/files/merging.png
+
+= Misc: Keyboard Shortcuts =
 
 http://big5sync.googlecode.com/files/listofshortcuts.png
 
 To save time and increase productivity, refer to the list of keyboard shortcuts.
 
 
-== Getting More Help ==
+= Getting More Help =
 
 To get help while you are using Syncless, refer to the [http://code.google.com/p/big5sync/w/edit/UserGuide User Guide]. You'll find more information about the topics covered in this document, as well as information about and instructions for many more topics. You can also view a video of the quick run-through of the features:
 
 <wiki:video url="http://www.youtube.com/watch?v=i30Q2U7ceWs"/>
 
-Please report any bugs you find at http://code.google.com/p/big5sync/issues/list, thank you! You may wish to take a look at http://code.google.com/p/big5sync/wiki/KnownIssues09 for the known bugs in version 0.9.
+Please report any bugs you find at http://code.google.com/p/big5sync/issues/list, thank you! You may wish to take a look at http://code.google.com/p/big5sync/wiki/KnownIssues09 for the known bugs in version 0.9. You may also contact us at *_big5.syncless@gmail.com_*.
 
 Interested in what's coming after version 0.9? Take a look [http://code.google.com/p/big5sync/wiki/ComingSoon here]!
 
