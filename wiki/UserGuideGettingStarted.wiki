@@ -123,7 +123,8 @@ Now, click on "+" to add a new filter. You can now set the "Ext. Mask" and the "
 === Construct a Filter ===
 Ext. mask can be an actual filename, or simply a name with wildcards. Some examples will be "Storyboard.ppt", "`*`.exe" or "File?.txt".
 
-*`*`* - Wildcard for any number of characters. For example, s*t will mean sit, sat, shoot, skit, etc.
+*`*`* - Wildcard for any number of characters. For example, s`*`t will mean sit, sat, shoot, skit, etc.
+
 *?* Wildcard for exactly one character. For example, s?t  will mean sit, sat, etc.
 
 Mode can be set to exclusion or inclusion mode. If a filter is set to exclusion mode, then all files that match the ext. mask will be excluded. On the contrary, if a filter is set to inclusion mode, then all files matching the ext. mask will be included.
