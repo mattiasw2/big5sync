@@ -10,19 +10,19 @@ The Profiling component performs drive/computer recognization. It makes *Syncles
 
 = The Classes =
 
-The Profiling component consists of several important sub-components, including a main logic layer - *!ProfilingLayer*, model objects - *Profile* and *!ProfileMapping*, helper components - *!ProfileMerger*, *!ProfilingHelper*, *ProfilingXMLHelper* and *ProfilingGUIDHelper*.
+The *Profiling* component consists of several important sub-components, including a main logic layer - !`ProfilingLayer`, model objects - `Profile` and !`ProfileMapping`, helper components - !`ProfileMerger`, !`ProfilingHelper`,`ProfilingXMLHelper` and `ProfilingGUIDHelper`.
 
 == !ProfilingLayer ==
 
-This is the main logic layer which is called by the *!SystemLogicLayer* to perform profiling-related operations. When *Syncless* is started up, *!SystemLogicLayer* will call *!ProfilingLayer* for initialization.
+This is the main logic layer which is called by the *!SystemLogicLayer* to perform profiling-related operations. When Syncless is started up, !SystemLogicLayer will call *!ProfilingLayer* for initialization.
 
-When initialized, *!ProfilingLayer* will call *ProfileXMLHelper* to load the default drive/computer profile from _profiling.xml_ in the computer. If there are more than one _profiling.xml_ files available, *!ProfilingLayer* will call *!ProfileMerger* to perform merging of several drive/computer profiles based on the various sources of _profiling.xml_.
+When initialized, !`ProfilingLayer` will call `ProfileXMLHelper` to load the default drive/computer profile from _profiling.xml_ in the computer. If there are more than one _profiling.xml_ files available, !`ProfilingLayer` will call !`ProfileMerger` to perform merging of several drive/computer profiles based on the various sources of _profiling.xml_.
 
-After initilization, *!ProfilingLayer* can be called to perform profiling-related operations when a drive-in/drive out event is detected.
+After initilization, !`ProfilingLayer` can be called to perform profiling-related operations when a drive-in/drive out event is detected.
 
-When a drive-in event is detected, *!ProfilingLayer* will create a mapping profile based on the _guid.id_ contained in the new drive, and perform a merge of the new mapping profile with the current working profile.
+When a drive-in event is detected, !`ProfilingLayer` will create a mapping profile based on the _guid.id_ contained in the new drive, and perform a merge of the new mapping profile with the current working profile.
 
-Likewise, when a drive-out event is detected, *!ProfilingLayer* will remove the mapping profile of that particular drive and mark it as unavailable.
+Likewise, when a drive-out event is detected, !`ProfilingLayer` will remove the mapping profile of that particular drive and mark it as unavailable.
 
 == Glossary ==
 
