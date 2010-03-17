@@ -95,6 +95,12 @@ Syncless offers other powerful features. Check out one or more of these addition
 
  * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving on your computer. 
 
+== Misc: Keyboard Shortcuts ==
+
+http://big5sync.googlecode.com/files/listofshortcuts.png
+
+To save time and increase productivity, refer to the list of keyboard shortcuts.
+
 == Getting More Help ==
 
 To get help while you are using Syncless, refer to the full user guide [PROVIDE LINK]. You'll find more information about the topics covered in this document, as well as information about and instructions for many more topics. You can also view a video of the quick run-through of the features at http://www.youtube.com/watch?v=i30Q2U7ceWs
