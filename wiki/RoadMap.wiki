@@ -2,20 +2,20 @@
 
 == Features ==
 
-1. Preview Sync Result.
+==== Preview Sync Result ====
    This feature will be implemented in the future to show the result before synchronization.
 
-2. Implement uni-directional synchronization.
+==== Implement uni-directional synchronization ====
    Currently, our software only handles bi-directional synchronization. In the future, Uni directional will be implemented.
 
-3. Implement a Notification system to send message from Logic Layer to User Interface.
+==== Implement a Notification system to feedback to the user ====
    Currently, messages from the System Core are not sent to User Interface. We will need to implement a Notification system to send notification to the UI. This is needed to inform the user on many issues, for example, Conflict in Profile, Sync Result etc.
 
-4. Merge Profile for Hard disk.
+==== Merge Profile for Hard disk. ====
    Currently, the system only merges the profiles from removable drives with the current profile. However, due to some implementation, external hard disk profile does not merge. We are looking into a better design to implement the merging.
 
-5. Configurable Tag.
+==== Configurable Tag ====
    Currently, the system will by default archive the last 5 files. In the future, we will allow the user to customize different settings for archival.
 
-6. More Filters
+==== More Filters ====
    Currently, Syncless only provides Extension filters. In the future, we will provide more type of filter like size filter and folder filter.
