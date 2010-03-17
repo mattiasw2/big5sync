@@ -14,6 +14,9 @@ When the application starts, all the currently connected drives are recorded. Wh
 = Capturing File/Folder Changes Event =
 This is implemented using `FileSystemwatcher` from the C# library. The `FileSystemWatcher` was extended to handle extra cases that the original `FileSystemWatcher` cannot handle.
 
+== Problems with `FileSystemwatcher` ==
+`FileSystemwatcher` has the following problems:
+  #When creating a large file, the file created events was triggered before the file finished the actual creation. Exception will occured when we are attempting to perform some operations on the new file before it finishes creating.
 
 == Class Diagram ==
 [http://big5sync.googlecode.com/files/monitor.png http://big5sync.googlecode.com/files/thumbnail%20monitor.png]
