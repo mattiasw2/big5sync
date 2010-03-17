@@ -1,5 +1,6 @@
 #summary Getting Started Tutorial: Get up to speed with Syncless [Ver. 0.9] and enjoy the power of n-way seamless file synchronization through tagging.
 #labels Featured,Phase-Implementation
+#sidebar DeveloperGuideSidebar
 
 <wiki:toc max_depth="6" />
 
