@@ -22,7 +22,7 @@ If you follow all the steps in this tutorial, you’ll be able to:
 
   * Apply filters to tags
 
-  * Prepare removable drives for ejection
+  * Prepare removable drives for removal
 
 == Downloading and Running ==
 Before continuing, make sure you are running a Windows operating system (XP and above has been tested so far to be working well).
@@ -71,9 +71,11 @@ http://big5sync.googlecode.com/files/tagging-complete.png
 
 4. Tagging is complete and synchronization begins
 
-== Step 2: ==
+== Step 2: Switch to Manual Mode ==
 
-== Step 3: Prepare Removable Drive for Ejection ==
+http://big5sync.googlecode.com/files/switch-manual-mode.png
+
+== Step 3: Prepare Removable Drive for Removal ==
 
 http://big5sync.googlecode.com/files/eject-removable-drive.png
 
