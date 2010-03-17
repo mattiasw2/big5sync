@@ -1,4 +1,4 @@
-#summary Developer Guide
+#summary Developers' Guide
 #labels Phase-Implementation,Featured
 #sidebar DeveloperGuideSidebar
 
@@ -37,7 +37,7 @@
  
 = 2. System Components =
 
-     == 2.1. Profiling ==
+     == Profiling ==
 
         The Profiling component performs drive/computer recognization. It makes Syncless
         portable because of the ability to recognize different drives/computers by 
@@ -48,7 +48,7 @@
 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentProfiling">More details...</a>
 
-     == 2.2. Tagging ==
+     == Tagging ==
 
         The Tagging component provides the underlying operations of creating/removing a 
         tag, tagging/untagging a folder to/from a tag, managing filter properties and 
@@ -56,7 +56,7 @@
 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentTagging">More details...</a>
 
-     == 2.3. !CompareAndSync ==
+     == CompareAndSync ==
 
         The !CompareAndSync component in Syncless is the part of the system that handles 
         the comparison and syncing of files and folders. From a logical point of view, it 
@@ -66,7 +66,7 @@
 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentCompareAndSync">More details...</a>
 
-     == 2.4. Monitor ==
+     == Monitor ==
 
         The Monitor Component provides implementations to monitor the file system and 
         drives. This is used to detect drives changes and to provide synchronization when 
@@ -75,14 +75,14 @@
  
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentMonitor">More details...</a>
 
-     == 2.5. Logging ==
+     == Logging ==
 
         The Logging component performs logging of messages produced when exceptions are 
         caught to a debug log file. It also logs user actions to a user log file.
 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperComponentLogging">More details...</a>
 
-     == 2.6. User Interface ==
+     == User Interface ==
 
 = 3. Developing a UI for Syncless =
      == 3.1. Basic ==
