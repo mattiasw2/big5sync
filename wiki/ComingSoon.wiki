@@ -1,25 +1,24 @@
 #summary What's In It For You After 0.9?
-#labels Featured
 
 = Features =
 
-== Preview Sync Result ==
-   This feature will be implemented in the future to show the result before synchronization.
+== Preview and Reporting of Sync Results ==
+We are in the process of coming up with a clean and clear interface on presenting preview and synchronization results, and this will be implemented very soon.
 
-== Implement uni-directional synchronization ==
-   Currently, our software only handles bi-directional synchronization. In the future, Uni directional will be implemented.
+== Implement Uni-Directional Synchronization ==
+Currently, our software simply keeps every folder under the same tag in sync. In future, we will look at including options for setting sources and targets, so that the synchronization is uni-directional.
 
-== Implement a Notification system to feedback to the user ==
-   Currently, messages from the System Core are not sent to User Interface. We will need to implement a Notification system to send notification to the UI. This is needed to inform the user on many issues, for example, Conflict in Profile, Sync Result etc.
+== Implement a Notification System to Feedback to the User ==
+Currently, error and notification messages from the sub-components are not sent to User Interface, due to multiple threading issues. We are looking into this so there is a intuitive feedback system.
 
-== Merge Profile for Hard disk. ==
-   Currently, the system only merges the profiles from removable drives with the current profile. However, due to some implementation, external hard disk profile does not merge. We are looking into a better design to implement the merging.
+== Merge Profiles for External Hard Disks ==
+Currently, the system only merges the profiles from certain removable drives with the current profile. However, due to some implementation, certain removable drives are not detected as removable drives, but instead, as hard disks. We will fix this in an upcoming release.
 
-== Configurable Tag ==
-   Currently, the system will by default archive the last 5 files. In the future, we will allow the user to customize different settings for archival.
+== Configurable Tag Options ==
+Currently, the system will by default archive the last 5 files. In the future, we will allow the user to customize different settings for archival. Other common options like the ability to send files to recycle bin upon deletion will also be implemented.
 
 == More Filters ==
-   Currently, Syncless only provides Extension filters. In the future, we will provide more type of filter like size filter and folder filter.
+Currently, Syncless only provides file extension filters. In the future, we will provide more types of filter like size filter and folder filter.
 
-== Allow naming of Profile ==
-   Currently, all profile will be merged. In the future, the user will be able to name their profile and only profile with the same name will be merge.
+== Allow Naming of Profile ==
+Currently, all profiles will be merged. In the future, the user will be able to name their profile and only profile with the same name will be merge.
