@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Syncless.Core.Exceptions;
 
 namespace SynclessUI
 {
@@ -34,31 +35,44 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-			string tagName = TxtBoxTagName.Text.Trim();
-			
-            if(tagName != "") {
-				bool tagexists = false;
-				
-				tagexists = _main.CreateTag(tagName);
-				
-				if(tagexists) {
-					string messageBoxText = "Please specify another tagname.";
-					string caption = "Tag Already Exist";
-					MessageBoxButton button = MessageBoxButton.OK;
-					MessageBoxImage icon = MessageBoxImage.Error;
-	
-					MessageBox.Show(messageBoxText, caption, button, icon);
-				} else {
-					this.Close();
-				}
-			} else {
-                string messageBoxText = "Please specify a tagname.";
-                string caption = "Tagname Empty";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
+            try
+            {
+                string tagName = TxtBoxTagName.Text.Trim();
 
-                MessageBox.Show(messageBoxText, caption, button, icon);
-			}            
+                if (tagName != "")
+                {
+                    bool tagexists = false;
+
+                    tagexists = _main.CreateTag(tagName);
+
+                    if (tagexists)
+                    {
+                        string messageBoxText = "Please specify another tagname.";
+                        string caption = "Tag Already Exist";
+                        MessageBoxButton button = MessageBoxButton.OK;
+                        MessageBoxImage icon = MessageBoxImage.Error;
+
+                        MessageBox.Show(messageBoxText, caption, button, icon);
+                    }
+                    else
+                    {
+                        this.Close();
+                    }
+                }
+                else
+                {
+                    string messageBoxText = "Please specify a tagname.";
+                    string caption = "Tagname Empty";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Error;
+
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+                }
+            }
+            catch (UnhandledException)
+            {
+                _main.DisplayUnhandledExceptionMessage();
+            }
         }
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)

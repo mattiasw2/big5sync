@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SynclessUI;
 using Syncless.Core;
+using Syncless.Core.Exceptions;
 using Syncless.Tagging;
 using System.Collections;
 using System.IO;
@@ -181,46 +182,51 @@ namespace SynclessUI
         {
             e.Handled = true;
             //Actual Code
-            if (_selectedTag != null)
+            try
             {
-                string messageBoxText = "Are you sure you want to delete the tag '" + _selectedTag + "'?";
-                string caption = "Delete Tag";
-                MessageBoxButton button = MessageBoxButton.OKCancel;
-                MessageBoxImage icon = MessageBoxImage.Warning;
-
-                MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
-
-                switch (result)
+                if (_selectedTag != null)
                 {
-                    case MessageBoxResult.OK:
-                        bool success = gui.DeleteTag(_selectedTag);
-                        if (success)
-                        {
-                            InitializeTagList();
-                            InitializeTagInfoPanel();
-                        }
-                        else
-                        {
-                            messageBoxText = "' " + _selectedTag + " ' could not be deleted.";
-                            caption = "Delete Tag Error";
-                            button = MessageBoxButton.OK;
-                            icon = MessageBoxImage.Error;
+                    string messageBoxText = "Are you sure you want to delete the tag '" + _selectedTag + "'?";
+                    string caption = "Delete Tag";
+                    MessageBoxButton button = MessageBoxButton.OKCancel;
+                    MessageBoxImage icon = MessageBoxImage.Warning;
 
-                            MessageBox.Show(messageBoxText, caption, button, icon);
-                        }
-                        break;
-                    case MessageBoxResult.No:
-                        break;
+                    MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
+
+                    switch (result)
+                    {
+                        case MessageBoxResult.OK:
+                            bool success = gui.DeleteTag(_selectedTag);
+                            if (success)
+                            {
+                                InitializeTagList();
+                                InitializeTagInfoPanel();
+                            }
+                            else
+                            {
+                                messageBoxText = "' " + _selectedTag + " ' could not be deleted.";
+                                caption = "Delete Tag Error";
+                                button = MessageBoxButton.OK;
+                                icon = MessageBoxImage.Error;
+
+                                MessageBox.Show(messageBoxText, caption, button, icon);
+                            }
+                            break;
+                        case MessageBoxResult.No:
+                            break;
+                    }
                 }
-            }
-            else
-            {
-                string messageBoxText = "Please select a tag.";
-                string caption = "No Tag Selected";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
+                else
+                {
+                    string messageBoxText = "Please select a tag.";
+                    string caption = "No Tag Selected";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Error;
 
-                MessageBox.Show(messageBoxText, caption, button, icon);
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+                }
+            } catch(UnhandledException) {
+                DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -363,25 +369,32 @@ namespace SynclessUI
         /// </summary>
         private void InitializeSyncless()
         {
-            _app_path = @System.Reflection.Assembly.GetExecutingAssembly().Location;
-            gui = ServiceLocator.GUI;
-
-            if (gui.Initiate(this))
+            try
             {
-                RegistryHelper.CreateRegistry(_app_path);
-                InitializeTagInfoPanel();
-                InitializeTagList();
+                _app_path = @System.Reflection.Assembly.GetExecutingAssembly().Location;
+                gui = ServiceLocator.GUI;
+
+                if (gui.Initiate(this))
+                {
+                    RegistryHelper.CreateRegistry(_app_path);
+                    InitializeTagInfoPanel();
+                    InitializeTagList();
+                }
+                else
+                {
+                    string messageBoxText = "Syncless has failed to initialize and will now exit.";
+                    string caption = "Syncless Initialization Error";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Error;
+
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+
+                    this.Close();
+                }
             }
-            else
+            catch (UnhandledException)
             {
-                string messageBoxText = "Syncless has failed to initialize and will now exit.";
-                string caption = "Syncless Initialization Error";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
-
-                MessageBox.Show(messageBoxText, caption, button, icon);
-
-                this.Close();
+                DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -396,33 +409,39 @@ namespace SynclessUI
 
         public void ViewTagInfo(string tagname)
         {
-            TagView tv = gui.GetTag(tagname);
+            try {
+                TagView tv = gui.GetTag(tagname);
 
-            TagTitle.Text = tagname;
-            // tag.direction not implemented yet
+                TagTitle.Text = tagname;
+                // tag.direction not implemented yet
 
-            if (tv.IsSeamless)
-            {
-                SeamlessMode();
+                if (tv.IsSeamless)
+                {
+                    SeamlessMode();
+                }
+                else
+                {
+                    ManualMode();
+                }
+
+                LblStatusText.Content = "";
+                ListTaggedPath.ItemsSource = tv.PathStringList;
+
+                TagIcon.Visibility = System.Windows.Visibility.Visible;
+                //TagStatusPanel.Visibility = System.Windows.Visibility.Visible;
+                SyncPanel.Visibility = System.Windows.Visibility.Visible;
+                if (tv.PathStringList.Count == 0)
+                {
+                    BdrTaggedPath.Visibility = System.Windows.Visibility.Hidden;
+                }
+                else
+                {
+                    BdrTaggedPath.Visibility = System.Windows.Visibility.Visible;
+                }
             }
-            else
+            catch (UnhandledException)
             {
-                ManualMode();
-            }
-
-            LblStatusText.Content = "";
-            ListTaggedPath.ItemsSource = tv.PathStringList;
-
-            TagIcon.Visibility = System.Windows.Visibility.Visible;
-            //TagStatusPanel.Visibility = System.Windows.Visibility.Visible;
-            SyncPanel.Visibility = System.Windows.Visibility.Visible;
-            if (tv.PathStringList.Count == 0)
-            {
-                BdrTaggedPath.Visibility = System.Windows.Visibility.Hidden;
-            }
-            else
-            {
-                BdrTaggedPath.Visibility = System.Windows.Visibility.Visible;
+                DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -431,25 +450,39 @@ namespace SynclessUI
         /// </summary>
         public void InitializeTagList()
         {
-            List<string> taglist = gui.GetAllTags();
-
-            ListBoxTag.ItemsSource = taglist;
-            LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
-            _selectedTag = (string)ListBoxTag.SelectedItem;
-
-            if (taglist.Count != 0)
+            try
             {
-                _selectedTag = taglist[0];
-                SelectTag(_selectedTag);
+                List<string> taglist = gui.GetAllTags();
+
+                ListBoxTag.ItemsSource = taglist;
+                LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
+                _selectedTag = (string)ListBoxTag.SelectedItem;
+
+                if (taglist.Count != 0)
+                {
+                    _selectedTag = taglist[0];
+                    SelectTag(_selectedTag);
+                }
+            }
+            catch (UnhandledException)
+            {
+                DisplayUnhandledExceptionMessage();
             }
         }
 
         public void SelectTag(string tagname)
         {
-            List<string> taglist = gui.GetAllTags();
-            int index = taglist.IndexOf(tagname);
-            ListBoxTag.SelectedIndex = index;
-            ViewTagInfo(tagname);
+            try
+            {
+                List<string> taglist = gui.GetAllTags();
+                int index = taglist.IndexOf(tagname);
+                ListBoxTag.SelectedIndex = index;
+                ViewTagInfo(tagname);
+            }
+            catch (UnhandledException)
+            {
+                DisplayUnhandledExceptionMessage();
+            }
         }
 
         /// <summary>
@@ -457,15 +490,21 @@ namespace SynclessUI
         /// </summary>
         private void InitializeTagInfoPanel()
         {
-            List<string> taglist = gui.GetAllTags();
+            try {
+                List<string> taglist = gui.GetAllTags();
 
-            if (taglist.Count == 0)
+                if (taglist.Count == 0)
+                {
+                    TagTitle.Text = "Select a Tag";
+                    TagIcon.Visibility = System.Windows.Visibility.Hidden;
+                    TagStatusPanel.Visibility = System.Windows.Visibility.Hidden;
+                    SyncPanel.Visibility = System.Windows.Visibility.Hidden;
+                    BdrTaggedPath.Visibility = System.Windows.Visibility.Hidden;
+                }
+            }
+            catch (UnhandledException)
             {
-                TagTitle.Text = "Select a Tag";
-                TagIcon.Visibility = System.Windows.Visibility.Hidden;
-                TagStatusPanel.Visibility = System.Windows.Visibility.Hidden;
-                SyncPanel.Visibility = System.Windows.Visibility.Hidden;
-                BdrTaggedPath.Visibility = System.Windows.Visibility.Hidden;
+                DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -518,37 +557,44 @@ namespace SynclessUI
 
         private void BtnSyncMode_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (string.Compare((string)LblSyncMode.Content, "Manual") == 0)
+            try
             {
-                if (gui.MonitorTag(_selectedTag, true))
+                if (string.Compare((string)LblSyncMode.Content, "Manual") == 0)
                 {
-                    SeamlessMode();
+                    if (gui.MonitorTag(_selectedTag, true))
+                    {
+                        SeamlessMode();
+                    }
+                    else
+                    {
+                        string messageBoxText = "' " + _selectedTag + " ' could not be set into Seamless Mode.";
+                        string caption = "Change Synchronization Mode Error";
+                        MessageBoxButton button = MessageBoxButton.OK;
+                        MessageBoxImage icon = MessageBoxImage.Error;
+
+                        MessageBox.Show(messageBoxText, caption, button, icon);
+                    }
                 }
                 else
                 {
-                    string messageBoxText = "' " + _selectedTag + " ' could not be set into Seamless Mode.";
-                    string caption = "Change Synchronization Mode Error";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Error;
+                    if (gui.MonitorTag(_selectedTag, false))
+                    {
+                        ManualMode();
+                    }
+                    else
+                    {
+                        string messageBoxText = "' " + _selectedTag + " ' could not be set into Manual Mode.";
+                        string caption = "Change Synchronization Mode Error";
+                        MessageBoxButton button = MessageBoxButton.OK;
+                        MessageBoxImage icon = MessageBoxImage.Error;
 
-                    MessageBox.Show(messageBoxText, caption, button, icon);
+                        MessageBox.Show(messageBoxText, caption, button, icon);
+                    }
                 }
             }
-            else
+            catch (UnhandledException)
             {
-                if (gui.MonitorTag(_selectedTag, false))
-                {
-                    ManualMode();
-                }
-                else
-                {
-                    string messageBoxText = "' " + _selectedTag + " ' could not be set into Manual Mode.";
-                    string caption = "Change Synchronization Mode Error";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Error;
-
-                    MessageBox.Show(messageBoxText, caption, button, icon);
-                }
+                DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -576,59 +622,73 @@ namespace SynclessUI
 
         private void BtnSyncNow_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (!gui.StartManualSync(_selectedTag))
+            try
             {
-                string messageBoxText = "'" + _selectedTag + "' could not be synchronized.";
-                string caption = "Synchronization Error";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
+                if (!gui.StartManualSync(_selectedTag))
+                {
+                    string messageBoxText = "'" + _selectedTag + "' could not be synchronized.";
+                    string caption = "Synchronization Error";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Error;
 
-                MessageBox.Show(messageBoxText, caption, button, icon);
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+                }
+            }
+            catch (UnhandledException)
+            {
+                DisplayUnhandledExceptionMessage();
             }
         }
 
         private void btnRemove_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (_selectedTag != null)
+            try
             {
-                string messageBoxText = "Are you sure you want to delete the tag '" + _selectedTag + "'?";
-                string caption = "Delete Tag";
-                MessageBoxButton button = MessageBoxButton.OKCancel;
-                MessageBoxImage icon = MessageBoxImage.Warning;
-
-                MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
-
-                switch (result)
+                if (_selectedTag != null)
                 {
-                    case MessageBoxResult.OK:
-                        bool success = gui.DeleteTag(_selectedTag);
-                        if (success)
-                        {
-                            InitializeTagList();
-                            InitializeTagInfoPanel();
-                        }
-                        else
-                        {
-                            messageBoxText = "' " + _selectedTag + " ' could not be deleted.";
-                            caption = "Delete Tag Error";
-                            button = MessageBoxButton.OK;
-                            icon = MessageBoxImage.Error;
+                    string messageBoxText = "Are you sure you want to delete the tag '" + _selectedTag + "'?";
+                    string caption = "Delete Tag";
+                    MessageBoxButton button = MessageBoxButton.OKCancel;
+                    MessageBoxImage icon = MessageBoxImage.Warning;
 
-                            MessageBox.Show(messageBoxText, caption, button, icon);
-                        }
-                        break;
-                    case MessageBoxResult.No:
-                        break;
+                    MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
+
+                    switch (result)
+                    {
+                        case MessageBoxResult.OK:
+                            bool success = gui.DeleteTag(_selectedTag);
+                            if (success)
+                            {
+                                InitializeTagList();
+                                InitializeTagInfoPanel();
+                            }
+                            else
+                            {
+                                messageBoxText = "' " + _selectedTag + " ' could not be deleted.";
+                                caption = "Delete Tag Error";
+                                button = MessageBoxButton.OK;
+                                icon = MessageBoxImage.Error;
+
+                                MessageBox.Show(messageBoxText, caption, button, icon);
+                            }
+                            break;
+                        case MessageBoxResult.No:
+                            break;
+                    }
+                }
+                else
+                {
+                    string messageBoxText = "Please select a tag.";
+                    string caption = "No Tag Selected";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Error;
+
+                    MessageBox.Show(messageBoxText, caption, button, icon);
                 }
             }
-            else
+            catch (UnhandledException)
             {
-                string messageBoxText = "Please select a tag.";
-                string caption = "No Tag Selected";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
-
-                MessageBox.Show(messageBoxText, caption, button, icon);
+                DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -636,28 +696,35 @@ namespace SynclessUI
         {
             try
             {
-                TagView tv = gui.CreateTag(tagName);
-                if (tv != null)
+                try
                 {
-                    InitializeTagList();
-                    SelectTag(tagName);
-                }
-                else
-                {
-                    string messageBoxText = "Tag could not be created.";
-                    string caption = "Tag Creation Error";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Error;
+                    TagView tv = gui.CreateTag(tagName);
+                    if (tv != null)
+                    {
+                        InitializeTagList();
+                        SelectTag(tagName);
+                    }
+                    else
+                    {
+                        string messageBoxText = "Tag could not be created.";
+                        string caption = "Tag Creation Error";
+                        MessageBoxButton button = MessageBoxButton.OK;
+                        MessageBoxImage icon = MessageBoxImage.Error;
 
-                    MessageBox.Show(messageBoxText, caption, button, icon);
+                        MessageBox.Show(messageBoxText, caption, button, icon);
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (e.InnerException is Syncless.Tagging.Exceptions.TagAlreadyExistsException)
+                    {
+                        return true;
+                    }
                 }
             }
-            catch (Exception e)
+            catch (UnhandledException)
             {
-                if (e.InnerException is Syncless.Tagging.Exceptions.TagAlreadyExistsException)
-                {
-                    return true;
-                }
+                DisplayUnhandledExceptionMessage();
             }
 
             return false;
@@ -665,45 +732,43 @@ namespace SynclessUI
 
         private void TxtBoxFilterTag_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            if (gui != null)
+            try
             {
-                List<string> taglist = gui.GetAllTags();
-                List<string> filteredtaglist = new List<string>();
-
-                int initial = taglist.Count;
-
-                foreach (string x in taglist)
+                if (gui != null)
                 {
-                    if (x.ToLower().Contains(_filter.ToLower()))
-                        filteredtaglist.Add(x);
+                    List<string> taglist = gui.GetAllTags();
+                    List<string> filteredtaglist = new List<string>();
+
+                    int initial = taglist.Count;
+
+                    foreach (string x in taglist)
+                    {
+                        if (x.ToLower().Contains(_filter.ToLower()))
+                            filteredtaglist.Add(x);
+                    }
+
+                    int after = filteredtaglist.Count;
+
+                    LblTagCount.Content = "[" + after + "/" + initial + "]";
+
+                    ListBoxTag.ItemsSource = null;
+                    ListBoxTag.ItemsSource = filteredtaglist;
                 }
-
-                int after = filteredtaglist.Count;
-
-                LblTagCount.Content = "[" + after + "/" + initial + "]";
-
-                ListBoxTag.ItemsSource = null;
-                ListBoxTag.ItemsSource = filteredtaglist;
+            }
+            catch (UnhandledException)
+            {
+                DisplayUnhandledExceptionMessage();
             }
         }
 
         private void Untag()
         {
-            if (!ListTaggedPath.HasItems)
+            try
             {
-                string messageBoxText = "There is nothing to untag.";
-                string caption = "Nothing to Untag";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
-
-                MessageBox.Show(messageBoxText, caption, button, icon);
-            }
-            else
-            {
-                if (ListTaggedPath.SelectedIndex == -1)
+                if (!ListTaggedPath.HasItems)
                 {
-                    string messageBoxText = "Please select a path to untag.";
-                    string caption = "No Path Selected";
+                    string messageBoxText = "There is nothing to untag.";
+                    string caption = "Nothing to Untag";
                     MessageBoxButton button = MessageBoxButton.OK;
                     MessageBoxImage icon = MessageBoxImage.Error;
 
@@ -711,54 +776,76 @@ namespace SynclessUI
                 }
                 else
                 {
-                    TagView tv = gui.GetTag((string)TagTitle.Text);
+                    if (ListTaggedPath.SelectedIndex == -1)
+                    {
+                        string messageBoxText = "Please select a path to untag.";
+                        string caption = "No Path Selected";
+                        MessageBoxButton button = MessageBoxButton.OK;
+                        MessageBoxImage icon = MessageBoxImage.Error;
 
-                    gui.Untag(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
+                        MessageBox.Show(messageBoxText, caption, button, icon);
+                    }
+                    else
+                    {
+                        TagView tv = gui.GetTag((string)TagTitle.Text);
 
-                    SelectTag(tv.TagName);
+                        gui.Untag(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
+
+                        SelectTag(tv.TagName);
+                    }
                 }
+            }
+            catch (UnhandledException)
+            {
+                DisplayUnhandledExceptionMessage();
             }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // Prepares the SLL for termination
-
-            if (gui.PrepareForTermination())
+            try
             {
-                string messageBoxText = "Are you sure you want to exit Syncless?" +
-                    "\nExiting Syncless will disable seamless synchronization.";
-                string caption = "Exit";
-                MessageBoxButton button = MessageBoxButton.OKCancel;
-                MessageBoxImage icon = MessageBoxImage.Warning;
-
-                MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
-
-                switch (result)
+                // Prepares the SLL for termination
+                if (gui.PrepareForTermination())
                 {
-                    case MessageBoxResult.OK:
-                        // Terminates the SLL and closes the UI
-                        gui.Terminate();
-                        SaveApplicationSettings();
-                        if (Properties.Settings.Default.PersistRegistryIntegration == false)
-                        {
-                            RegistryHelper.RemoveRegistry();
-                        }
-                        break;
-                    case MessageBoxResult.Cancel:
-                        e.Cancel = true;
-                        break;
+                    string messageBoxText = "Are you sure you want to exit Syncless?" +
+                        "\nExiting Syncless will disable seamless synchronization.";
+                    string caption = "Exit";
+                    MessageBoxButton button = MessageBoxButton.OKCancel;
+                    MessageBoxImage icon = MessageBoxImage.Warning;
+
+                    MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
+
+                    switch (result)
+                    {
+                        case MessageBoxResult.OK:
+                            // Terminates the SLL and closes the UI
+                            gui.Terminate();
+                            SaveApplicationSettings();
+                            if (Properties.Settings.Default.PersistRegistryIntegration == false)
+                            {
+                                RegistryHelper.RemoveRegistry();
+                            }
+                            break;
+                        case MessageBoxResult.Cancel:
+                            e.Cancel = true;
+                            break;
+                    }
+                }
+                else
+                {
+                    string messageBoxText = "Syncless is not ready for termination. Please try again later";
+                    string caption = "Syncless Termination Error";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Error;
+
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+                    e.Cancel = true;
                 }
             }
-            else
+            catch (UnhandledException)
             {
-                string messageBoxText = "Syncless is not ready for termination. Please try again later";
-                string caption = "Syncless Termination Error";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
-
-                MessageBox.Show(messageBoxText, caption, button, icon);
-                e.Cancel = true;
+                DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -890,29 +977,36 @@ namespace SynclessUI
 
         private void RepopulateTagList_ThreadSafe()
         {
-            List<string> taglist = gui.GetAllTags();
+            try
+            {
+                List<string> taglist = gui.GetAllTags();
 
-            ListBoxTag.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-            (Action)(() =>
+                ListBoxTag.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                (Action)(() =>
+                {
+                    ListBoxTag.ItemsSource = taglist;
+                    LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
+                }));
+
+                ListTaggedPath.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                (Action)(() =>
+                {
+                    TagView tv = gui.GetTag(_selectedTag);
+                    if (tv.IsSeamless)
+                    {
+                        SeamlessMode();
+                    }
+                    else
+                    {
+                        ManualMode();
+                    }
+                    ListTaggedPath.ItemsSource = tv.PathStringList;
+                }));
+            }
+            catch (UnhandledException)
             {
-                ListBoxTag.ItemsSource = taglist;
-                LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
-            }));
-			
-            ListTaggedPath.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-            (Action)(() =>
-            {
-				TagView tv = gui.GetTag(_selectedTag);
-				if (tv.IsSeamless)
-				{
-					SeamlessMode();
-				}
-				else
-				{
-					ManualMode();
-				}
-				ListTaggedPath.ItemsSource = tv.PathStringList;
-            }));
+                DisplayUnhandledExceptionMessage();
+            }
         }
 
         #endregion
@@ -977,28 +1071,35 @@ namespace SynclessUI
             return removableDrives;
         }
 
-        void driveMenuItem_Click(object sender, RoutedEventArgs e)
+        private void driveMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            MenuItem source = (MenuItem)sender;
-            string driveletter = (string)source.Header;
-            DriveInfo drive = new DriveInfo(driveletter);
-            if (!gui.AllowForRemoval(drive))
+            try
             {
-                string messageBoxText = "Syncless could not prepare " + driveletter + " for removal.";
-                string caption = "Drive Removal Error";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
+                MenuItem source = (MenuItem)sender;
+                string driveletter = (string)source.Header;
+                DriveInfo drive = new DriveInfo(driveletter);
+                if (!gui.AllowForRemoval(drive))
+                {
+                    string messageBoxText = "Syncless could not prepare " + driveletter + " for removal.";
+                    string caption = "Drive Removal Error";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Error;
 
-                MessageBox.Show(messageBoxText, caption, button, icon);
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+                }
+                else
+                {
+                    string messageBoxText = "Syncless has stopped all monitoring (seamless) operations on " + driveletter + " " + "\nYou may proceed to remove it safely.";
+                    string caption = "Monitoring Stopped for " + driveletter;
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Information;
+
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+                }
             }
-            else
+            catch (UnhandledException)
             {
-                string messageBoxText = "Syncless has ceased all synchronization operations with " + driveletter + " " + "\nYou may proceed to remove it safely.";
-                string caption = driveletter + " Allowed for Removal";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Information;
-
-                MessageBox.Show(messageBoxText, caption, button, icon);
+                DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -1031,6 +1132,16 @@ namespace SynclessUI
         private void TagIcon_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             ViewTagDetails();
+        }
+
+        public void DisplayUnhandledExceptionMessage()
+        {
+            string messageBoxText = "An unexpected error has occured. \n\nPlease help us by - \n 1. Submitting the debug.log in your Syncless Application Folder to big5.syncless@gmail.com \n 2. Raise it as an issue on our GCPH @ http://code.google.com/p/big5sync/issues/list\n\n Please restart Syncless.";
+            string caption = "Unexpected Error";
+            MessageBoxButton button = MessageBoxButton.OK;
+            MessageBoxImage icon = MessageBoxImage.Error;
+
+            MessageBox.Show(messageBoxText, caption, button, icon);
         }
     }
 }

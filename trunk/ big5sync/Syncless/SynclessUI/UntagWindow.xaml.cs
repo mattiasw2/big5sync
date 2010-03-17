@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using Ionic.Utils;
 using System.IO;
 using Syncless.Core;
+using Syncless.Core.Exceptions;
 
 namespace SynclessUI
 {
@@ -25,26 +26,33 @@ namespace SynclessUI
         
 		public UntagWindow(MainWindow main, string clipath)
         {
-            InitializeComponent();
-			
-			_main = main;
-			
-            List<string> tagListByFolder = _main.gui.GetTags(new DirectoryInfo(clipath));
-            if (tagListByFolder.Count != 0)
+            try
             {
-                TxtBoxPath.Text = clipath;
-                taglist.ItemsSource = tagListByFolder;
-                this.ShowDialog();
-            }
-            else
-            {
-                string messageBoxText = "The folder you were trying to untag had no tags on it.";
-                string caption = "No Tags Found";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
+                InitializeComponent();
 
-                MessageBox.Show(messageBoxText, caption, button, icon);
-                this.Close();
+                _main = main;
+
+                List<string> tagListByFolder = _main.gui.GetTags(new DirectoryInfo(clipath));
+                if (tagListByFolder.Count != 0)
+                {
+                    TxtBoxPath.Text = clipath;
+                    taglist.ItemsSource = tagListByFolder;
+                    this.ShowDialog();
+                }
+                else
+                {
+                    string messageBoxText = "The folder you were trying to untag had no tags on it.";
+                    string caption = "No Tags Found";
+                    MessageBoxButton button = MessageBoxButton.OK;
+                    MessageBoxImage icon = MessageBoxImage.Error;
+
+                    MessageBox.Show(messageBoxText, caption, button, icon);
+                    this.Close();
+                }
+            }
+            catch (UnhandledException)
+            {
+                _main.DisplayUnhandledExceptionMessage();
             }
         }
 		
@@ -55,23 +63,30 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (taglist.SelectedIndex == -1) return;
-
-            foreach (string t in taglist.SelectedItems)
+            try
             {
-                int result = _main.gui.Untag(t, new DirectoryInfo(TxtBoxPath.Text));
-                if (result != 1)
-                {
-                    string messageBoxText = t + " could not be untagged from " + TxtBoxPath.Text;
-                    string caption = "Untagging Error";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Error;
+                if (taglist.SelectedIndex == -1) return;
 
-                    MessageBox.Show(messageBoxText, caption, button, icon);
+                foreach (string t in taglist.SelectedItems)
+                {
+                    int result = _main.gui.Untag(t, new DirectoryInfo(TxtBoxPath.Text));
+                    if (result != 1)
+                    {
+                        string messageBoxText = t + " could not be untagged from " + TxtBoxPath.Text;
+                        string caption = "Untagging Error";
+                        MessageBoxButton button = MessageBoxButton.OK;
+                        MessageBoxImage icon = MessageBoxImage.Error;
+
+                        MessageBox.Show(messageBoxText, caption, button, icon);
+                    }
                 }
+                _main.InitializeTagList();
+                this.Close();
             }
-            _main.InitializeTagList();
-            this.Close();
+            catch (UnhandledException)
+            {
+                _main.DisplayUnhandledExceptionMessage();
+            }
         }
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
