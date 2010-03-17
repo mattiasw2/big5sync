@@ -67,6 +67,10 @@ http://big5sync.googlecode.com/files/drag-and-drop-tagging.png
 
 3. Drag and drop the removable drive folder to tag
 
+http://big5sync.googlecode.com/files/tagging-complete.png
+
+4. Tagging is complete and synchronization begins
+
 == Step 2: ==
 
 
