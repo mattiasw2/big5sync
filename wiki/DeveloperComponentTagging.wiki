@@ -78,12 +78,6 @@ Conversion from `TaggingProfile` to _tagging.xml_:<br>
   # `CreateFilterElement`(`XmlDocument`, `Filter`)<br>
 <br>
 
-= Description of Design =
-
-= Explanation of =
-
-= Extending Tagging =
-
 = Glossary =
 
 _tagging.xml_
