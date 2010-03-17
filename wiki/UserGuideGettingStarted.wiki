@@ -89,6 +89,8 @@ With the successful operation of synchronization, you have now completed the ful
 
 Syncless offers other powerful features. Check out one or more of these additional features:
 
+  * *N-way Synchronization*: Why restrict yourself to just syncing two folders? Let Syncless perform n-way synchronization between multiple folders for you.
+
   * *Filtering*:  Use Syncless's filtering features for the ultimate control in synchronization. Currently, Syncless is able to include or exclude files and folders by extension and path. Other filters will be available in later versions.
 
  * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder will be archived up to 5 backups at one time. Currently as of Ver. 0.9, archiving is not user-configurable, but will be in the future.
