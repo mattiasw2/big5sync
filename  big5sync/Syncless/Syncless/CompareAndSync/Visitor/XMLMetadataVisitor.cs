@@ -179,7 +179,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         private FileCompareObject PopulateFileWithMetaData(XmlDocument xmlDoc, FileCompareObject file, int counter)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + XmlConvert.EncodeName(file.Name) + "']");
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
             if (node == null)
                 return file;
 
@@ -432,7 +432,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         private FolderCompareObject PopulateFolderWithMetaData(XmlDocument xmlDoc, FolderCompareObject folder, int counter)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + XmlConvert.EncodeName(folder.Name) + "']");
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
             if (node == null)
                 return folder;
 

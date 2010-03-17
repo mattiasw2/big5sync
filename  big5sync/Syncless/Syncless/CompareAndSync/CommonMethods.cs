@@ -396,5 +396,41 @@ namespace Syncless.CompareAndSync
 
             }
         }
+
+        public static string ParseXpathString(string input)
+        {
+            // If we don't have any " then encase string in " 
+            if (!input.Contains("\""))
+                return String.Format("\"{0}\"", input);
+
+            // If we have some " but no ' then encase in ' 
+            if (!input.Contains("'"))
+                return String.Format("'{0}'", input);
+
+            // If we get here we have both " and ' in the string so must use Concat 
+            StringBuilder sb = new StringBuilder("concat(");
+
+            // Going to look for " as they are LESS likely than ' in our data so will minimise 
+            // number of arguments to concat. 
+            int lastPos = 0;
+            int nextPos = input.IndexOf("\"");
+            while (nextPos != -1)
+            {
+                // If this is not the first time through the loop then seperate arguments with , 
+                if (lastPos != 0)
+                    sb.Append(",");
+
+                sb.AppendFormat("\"{0}\",'\"'", input.Substring(lastPos, nextPos - lastPos));
+                lastPos = ++nextPos;
+
+                // Find next occurance 
+                nextPos = input.IndexOf("\"", lastPos);
+            }
+
+            sb.Append(")");
+            return sb.ToString();
+        } 
+
+
     }
 }
