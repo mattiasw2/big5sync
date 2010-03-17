@@ -24,10 +24,8 @@ When a drive-in event is detected, `ProfilingLayer` will create a mapping profil
 
 Likewise, when a drive-out event is detected, `ProfilingLayer` will remove the mapping profile of that particular drive and mark it as unavailable.
 
-= Merging Multiple _profiling.xml_ =
+= Explanation of Algorithms =
+
+== Merging Multiple _profiling.xml_ ==
 
 Profile from many computer will be merged. Currently, logicalId and GUID is the same. Therefore we will do a direct merge. As long as the guid and logicalid does not have conflict with the existing mapping, it will be added to the current profile.
-
-= Glossary =
-
-_GUID_ : <a href = "http://en.wikipedia.org/wiki/Globally_Unique_Identifier">Reference</a>
