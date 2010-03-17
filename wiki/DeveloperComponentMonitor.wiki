@@ -1,4 +1,4 @@
-#summary Developer's Guide - Component - Monitor
+#summary Developers' Guide - Component - Monitor
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
