@@ -28,6 +28,11 @@ The UI makes use of the `AppResourceDictionary` to hold templates of controls an
 
 == Application Settings ==
 The user interface makes use of session settings to keep track of settings in a session of Syncless running and and properties in C# for persistance of resources such as application settings. However, since Syncless is intended to be portable, application settings need to be stored along with Syncless instead of being stored to the User Settings locale, thus we have adapted the `PortableSettingsProvider` for use as a CustomSettingsProvider.
+
+== Shell Integration ==
+The UI makes use of the `RegistryHelper` to write registry entries to enable shell integration. It also uses the `CommandLineHelper` to handle command line arguments, which any action from the shell uses.
+
+= UI Design Principles & Philosophy =
      
 = Developing a Alternative UI for Syncless =
      
