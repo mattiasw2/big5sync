@@ -12,7 +12,8 @@ http://big5sync.googlecode.com/files/mainpagelogosmall.png
 
 Synchronization is taken on a whole new level with _*Syncless*_. This document familiarizes you with the basic features in _*Syncless*_ and introduces you to the concepts of *tagging* and *n-way* _seamless synchronization_ in _*Syncless*_.
 
-_*Syncless*_ allows you to synchronize your files and folders automatically through the use of tags, even across removable drives. With _*Syncless*_, you can quickly tag multiple folders and configure them to be either in _seamless_ or _manual_ synchronization mode. Syncless also includes powerful filters and versioning capability, along with the finest usability that caters to individual's workflow. Lastly, Syncless is a portable app, so it will run off any removable drive and no installation is required.
+_*Syncless*_ allows you to synchronize your files and folders automatically through the use of tags, even across removable drives. With _*Syncless*_, you can quickly tag multiple folders and configure them to be either in _seamless_ or _manual_ synchronization mode. Syncless also includes powerful filters and versioning capability, along with the finest usability that caters to each individual's workflow. Lastly, Syncless is a portable application, so it will run off any removable drive with no installation required.
+
 
 == What You’ll Learn ==
 If you follow all the steps in this tutorial, you’ll be able to:
@@ -26,6 +27,7 @@ If you follow all the steps in this tutorial, you’ll be able to:
 
   * Learn basic shortcuts to speed up productivity
 
+
 == Downloading and Running ==
 Before continuing, make sure you are running a Windows operating system (XP and above has been tested so far to be working well).
 
@@ -36,14 +38,17 @@ Toolbar > Create Tag
 
 The term after Toolbar is the name of the command in the main toolbar located in the Main Window.
 
+
 == The Syncless Interface ==
 When you run Syncless, you will be greeted with the main window, which allows you to choose what you want to do next, such as create tag, tag a folder, view tag details or etc. The interface also incorporates a lot of useful shortcuts to speed up productivity.
 
 http://big5sync.googlecode.com/files/maininterface.png
 
+
 = Learn Syncless =
 
 You have folders on your computer and thumbdrive that you wish to synchronize automatically without putting too much effort in doing it. Now is the time to use Syncless to help you organise them by using tags.
+
 
 == Step 1: Tag Folders ==
 
@@ -103,11 +108,13 @@ Syncless offers other powerful features. Check out one or more of these addition
 
  * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving it on your computer. 
 
+
 == Misc: Keyboard Shortcuts ==
 
 http://big5sync.googlecode.com/files/listofshortcuts.png
 
 To save time and increase productivity, refer to the list of keyboard shortcuts.
+
 
 == Getting More Help ==
 
