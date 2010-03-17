@@ -70,3 +70,6 @@ The folder dialog may not show certain folders such as "My Computer" in certain 
 
 == Removable Storage Drive Not Displayed For Removable ==
 In Syncless, there is a button that allows for the safety removal of removable drives. In some cases, the drives will not be displayed. [http://code.google.com/p/big5sync/issues/detail?id=31 Issue #31]
+
+== Eject Does Not Remove Drive From Application ==
+The "Eject" button simply tells Syncless to stop actively monitoring the drive, so that you can proceed to use the "Safely Remove" feature in Windows. We are looking at ways to implement safely removal. [http://code.google.com/p/big5sync/issues/detail?id=28 Issue #28]
