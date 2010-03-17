@@ -130,7 +130,22 @@ Basically, the system will check whether a tag is marked as deleted in one profi
 
 === Merging the !TaggedPath ===
 
+For clearer illustration, we will denote the path found in _newTag_ as _newPath_ and the path found in _currentTag_ as _currentPath_.
 
+Let's take a look at the pseudo-code for the merging of paths:
+
+{{{
+  if newPath is not found in currentTag
+      add newPath to currentTag
+  else
+     if newPath is updated at a later time than the updated time of currentPath
+         if newPath was deleted && currentPath exists
+             if newPath was deleted later than the creation of currentPath
+                 remove currentPath from currentTag
+         else if currentPath was deleted && newPath exists
+             if _newPath_ was created later than the deletion of currentPath
+                 add newPath to currentTag
+}}}
 
 = Glossary =
 
