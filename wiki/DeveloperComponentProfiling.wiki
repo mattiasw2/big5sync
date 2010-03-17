@@ -2,8 +2,6 @@
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
-= Profiling =
-
 <wiki:toc max_depth="6" />
 
 == Overview ==
