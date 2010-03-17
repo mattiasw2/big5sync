@@ -79,6 +79,8 @@ Conversion from `TaggingProfile` to _tagging.xml_:<br>
 
 = Merging Multiple _tagging.xml_ =
 
+Merging of multiple _tagging.xml_ is necessary when the user maintains tags which contain folders across multiple devices. For example, the user may tag a folder in his home workstation and a folder in his office workstation to the same tag, and uses a thumbdrive as the intermediary device to sync the two folders. In this case, both his home workstation and office workstation will contain _tagging.xml_, as well as in the thumbdrive.
+
 = Glossary =
 
 _tagging.xml_ : This is an XML document which stores the information of tags.
