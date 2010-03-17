@@ -50,7 +50,7 @@ To understand more about !CompareAndSync component, please click [http://code.go
 
 == Monitor ==
 
-The Monitor component provides functions to monitor the file system and drive insertion events. Upon each kind of event detected, it will decide whether or not to alert the SLL, which will then communicate with the other components to perform an auto synchronization.
+The Monitor Component provides a set of classes to detect file system changes. There are 2 roles for the Monitor Component. The first role is to detect the insertion and removal of USB removable drives, such as external hard disk and flash drive, and the second role is to capture any changes to a file or folder.
 
  
 To understand more about Monitor component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentMonitor here].
