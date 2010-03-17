@@ -9,15 +9,18 @@
 The User Interface component is in charge of handling all interactions between the user and the control layer. It is implemented using WPF for its powerful framework which allows for the creation of clean, professional look-and-feel. It also allows for the true separation of the User Interface from the System Logic Layer, allowing other developers to create their own User Interface to interact with our Logic Layer.
 
 = Classes =
+
 The User Interface component consists of several important sub-components, including the single instance layer - `SingleInstanceManager` , `SynclessApplication`, windows - `MainWindow`, `TagWindow`, `UntagWindow`, `TagDetailsWindow`, `ShortcutsWindow` and `OptionsWindow`, helper components - `CommandLineHelper`, `RegistryHelper`, resource dictionary - `AppResourceDictionary`, misc components - `PortableSettingsProvider`, `FolderBrowseDialogEx` and `MinimizeToTray`.
 
 = Description of Design =
 
-The whole architecture is based on Service Locator pattern. Using this method, we can hide the implementation from the User Interface. The Interface provides a list of method provided by the Logic Layer. The UI can make use of these methods interact with the whole Logic Layer. This is to prevent changes in System Logic Layer from affecting the UI.
+The whole user interface architecture is based on the Service Locator pattern. Using this pattern, we can hide the implementation from the UI. The UI will retrieve from the Service Locator the Syncless.Core.IUIControllerInterface Interface, which abstracts a subset of methods which the SystemLogicLayer will provide to the user interface.
+
+The UI can then make use of these methods to interact with the logic layer. This decouples the UI from the SystemLogicLayer, preventing changes in the System Logic Layer from affecting the UI.
      
-= Developing a UI for Syncless =
+= Developing a Alternative UI for Syncless =
      
 To create a UI for Syncless, the developer just need to follow a few steps.
-# implements IUInterface. This is to provide the System Core with some fundamental methods.
-# use Service locator to get the IUIControllerInterface. This provide the basic functionality to the developer who is coding the UI.
-# Call the Init method that pass in UI itself.
+# Implement Syncless.Core.IUInterface. This is to provide the System Core with a way to to update the interface as and when necessary.
+# Use Syncless.Core.ServiceLocator to get the IUIControllerInterface. This provide the list of methods which the UI developer can use to call from the UI.
+# Call the Initiate() method in the IUIControllerInterface to initiate the System Logic Layer.
