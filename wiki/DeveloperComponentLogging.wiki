@@ -2,8 +2,6 @@
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
-= Logging =
-
 <wiki:toc max_depth="6" />
 
 == Overview ==
