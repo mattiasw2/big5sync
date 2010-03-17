@@ -1,0 +1,19 @@
+== Bug Fixes ==
+
+1. Solve the recursion directory issue.  
+   Currently, if the folders that are tagged form a recursion, if all of the tags are in seamless mode, folders and files will be continuously created until the maximum path length is reached. After which, an exception will be thrown.
+   Example of recursion : 
+   
+   <img src = "http://big5sync.googlecode.com/files/RecursiveTagging.jpg" />
+
+   Folder A is tagged with Folder D , and Folder C is tagged with Folder B. This is a recursion. Our aim is to provide informative feedback to the user to inform them that it cannot be tagged. 
+
+2. Untag a tagged folder if it is deleted.
+   
+   Currently, if a tagged folder is deleted from the file system, many problems may occur. Firstly if the User set the Tag to manual mode, nothing will happen until the user decides  to sync the tag. In this case, the deleted folder will be recreated. However if the tag is in seamless mode, all the folder that is tagged with it will be "emptied". All the files from the other tagged folder will be moved to archive.
+
+   Our aim is to let the user know, and instead of deleting everything else, we will untag the folder instead.
+   
+3. Implement a Manual Sync Queue instead of having multiple threads running.
+   Currently, every sync request is created as a thread and the sync job will be run. However, this may cause many problems when writing meta data and updating file. In the future, a Queue may be implemented to allow only 1 job to be sync at one time.
+ 
