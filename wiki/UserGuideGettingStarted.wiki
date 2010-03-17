@@ -1,4 +1,4 @@
-#summary Getting Started Guide: Get up to speed with Syncless [Ver. 0.9] and enjoy the power of n-way seamless file synchronization through tagging.
+#summary Getting Started User Guide: Get up to speed with Syncless [Ver. 0.9] and enjoy the power of n-way seamless file synchronization through tagging.
 #labels Featured,Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
