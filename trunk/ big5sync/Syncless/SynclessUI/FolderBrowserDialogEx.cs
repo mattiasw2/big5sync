@@ -1,4 +1,10 @@
-﻿// FolderBrowserDialogEx.cs
+﻿/*
+ * Credits:
+ * Combined File & Folder Browser Dialog
+ * http://dotnetzip.codeplex.com/SourceControl/changeset/view/29832#432677  
+*/
+
+// FolderBrowserDialogEx.cs
 //
 // A replacement for the builtin System.Windows.Forms.FolderBrowserDialog class.
 // This one includes an edit box, and also displays the full path in the edit box. 

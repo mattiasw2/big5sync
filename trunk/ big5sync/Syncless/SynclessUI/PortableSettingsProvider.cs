@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * Credits:
+ * Referenced from Portable Settings Provider
+ * http://www.codeproject.com/KB/vb/CustomSettingsProvider.aspx  (C# version by gpgemini) 
+*/
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
