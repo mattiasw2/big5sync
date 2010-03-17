@@ -30,6 +30,3 @@ Similar to the above case, Syncless will propagate this folder rename across the
 Assume the user has a "Music" folder in all the folders you have tagged "Media". If a user renames "Music" to "Songs" in one of these tagged folders and "Music" to "Mp3" in another of these folders, Syncless will handle this by propagating all 3 folders ("Media", "Music", "Songs") to all other folders tagged "Media".
 
 The reason for doing so is because it is in actual fact, a rename conflict, but more importantly, it is highly probable that the user wants to keep different things in them, and thus the conflicting renames.
-
-=== Renaming A Sub-Folder Within Another Renamed Sub-Folder ===
-In this case, Syncless will attempt to merge it if possible, and if not possible, all the folders will propagate across. However, there are some bugs with this which we have not been able to determine yet.
