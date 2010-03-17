@@ -1,8 +1,5 @@
 #summary What the user can expect from Syncless in the Future
 
-Below is a list of things that the user can expect from Syncless in the future.
-(subjective to changes)
-
 == Features ==
 
 1. Preview Sync Result.
