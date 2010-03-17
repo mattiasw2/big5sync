@@ -123,9 +123,9 @@ Now, click on "+" to add a new filter. You can now set the "Ext. Mask" and the "
 === Construct a Filter ===
 Ext. mask can be an actual filename, or simply a name with wildcards. Some examples will be "Storyboard.ppt", "`*`.exe" or "File?.txt".
 
-*`*`* - Wildcard for any number of characters. For example, s`*`t will mean sit, sat, shoot, skit, etc.
+  * *`*`* - Wildcard for any number of characters. For example, s`*`t will mean sit, sat, shoot, skit, etc.
 
-*?* Wildcard for exactly one character. For example, s?t  will mean sit, sat, etc.
+  * *?* Wildcard for exactly one character. For example, s?t  will mean sit, sat, etc.
 
 Mode can be set to exclusion or inclusion mode. If a filter is set to exclusion mode, then all files that match the ext. mask will be excluded. On the contrary, if a filter is set to inclusion mode, then all files matching the ext. mask will be included.
 
@@ -133,6 +133,8 @@ Now, let us look at some real-world examples. For example, if you want to includ
 
   # Ext. Mask: `*`.ppt, Mode: Inclusion
   # Ext. Mask: Introduction.ppt, Mode: Exclusion
+
+As seen from the above, creating a filter is a simple and intuitive task in Syncless.
 
 == Portability ==
 If you frequently use your removable storage drive on various computers, Syncless can automate this job for you. For example, a student has a home computer, as well as a regular workstation in his school lab. He wishes to keep his school work synchronized across both computers. By having Syncless on both his home computer and school workstation, and giving them the same tag, say "Lectures", Syncless will auto-detect and synchronize each time the removable storage drive is inserted. See the below diagrams for a clearer illustration:
