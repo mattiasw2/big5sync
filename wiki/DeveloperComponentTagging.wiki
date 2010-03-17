@@ -76,7 +76,6 @@ Conversion from `TaggingProfile` to _tagging.xml_:<br>
   # `CreateConfigElement`(`XmlDocument`, `Tag`)<br>
   # `CreateFilterElementList`(`XmlDocument`, `Tag`)<br>
   # `CreateFilterElement`(`XmlDocument`, `Filter`)<br>
-<br>
 
 = Glossary =
 
