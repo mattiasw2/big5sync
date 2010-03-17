@@ -20,7 +20,7 @@ Add your content here.
 
 == Configuring Filters ==
 === Using Extension Filter ===
-* - wildcard for any number of characters
+`*` - wildcard for any number of characters
 ? - wildcard for one character.
 
 Example : 
