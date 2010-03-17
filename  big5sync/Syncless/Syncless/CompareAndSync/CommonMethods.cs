@@ -106,33 +106,6 @@ namespace Syncless.CompareAndSync
 
         }
 
-        /*
-        public static string CalculateMD5Hash(string path)
-        {
-
-            if (!File.Exists(path))
-                throw new HashFileException(new FileNotFoundException());
-
-            try
-            {
-                FileStream fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
-                byte[] fileHash = MD5.Create().ComputeHash(fileStream);
-                return BitConverter.ToString(fileHash).Replace("-", "");
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                throw new HashFileException(e);
-            }
-            catch (DirectoryNotFoundException e)
-            {
-                throw new HashFileException(e);
-            }
-            catch (IOException e)
-            {
-                throw new HashFileException(e);
-            }
-        }*/
-
         public static string CalculateMD5Hash(FileInfo fileInput)
         {
             if (!fileInput.Exists)
