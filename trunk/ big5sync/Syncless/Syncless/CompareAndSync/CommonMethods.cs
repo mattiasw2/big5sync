@@ -44,6 +44,10 @@ namespace Syncless.CompareAndSync
                     xmlDoc.Load(xmlPath);
                     break;
                 }
+                catch (FileNotFoundException)
+                {
+                    throw new FileNotFoundException("Error :(");
+                }
                 catch (IOException)
                 {
                     System.Threading.Thread.Sleep(250);
