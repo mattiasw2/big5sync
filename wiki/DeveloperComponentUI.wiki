@@ -23,4 +23,4 @@ The UI can then make use of these methods to interact with the logic layer. This
 To create a UI for Syncless, the developer just need to follow a few steps.
 # Implement Syncless.Core.IUInterface. This is to provide the System Core with a way to to update the interface as and when necessary.
 # Use Syncless.Core.ServiceLocator to get the IUIControllerInterface. This provide the list of methods which the UI developer can use to call from the UI.
-# Call the Initiate() method in the IUIControllerInterface to initiate the System Logic Layer.
+# Call the Initiate method in the IUIControllerInterface to initiate the System Logic Layer.
