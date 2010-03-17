@@ -2,17 +2,15 @@
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
-= Monitor =
-
 <wiki:toc max_depth="6" />
 
-== Overview ==
+= Overview =
 The *Monitor Layer* provide a set of classes to detect file system changes. The Monitor Layer is implemented using `FileSystemwatcher` from C# library. The `FileSystemWatcher` was extended to handle extra cases that the original `FileSystemWatcher` cannot handle.
 
-== Class Diagram ==
+= Class Diagram =
 
-== Description of Design ==
+= Description of Design =
 
-== Explanation of ==
+= Explanation of =
 
-== Extending Monitor ==
+= Extending Monitor =
