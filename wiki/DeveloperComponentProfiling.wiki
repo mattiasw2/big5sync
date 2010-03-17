@@ -24,4 +24,6 @@ When a drive-in event is detected, *!ProfilingLayer* will create a mapping profi
 
 Like-wise, when a drive-out event is detected, *!ProfilingLayer* will remove the mapping profile of that particular drive and mark it as unavailable.
 
-_GUID_
+=== Glossary ===
+
+_GUID_ : <a href = "http://en.wikipedia.org/wiki/Globally_Unique_Identifier">Reference</a>
