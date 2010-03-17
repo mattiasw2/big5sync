@@ -6,7 +6,7 @@
 
 = Overview =
 
-The *Profiling* component performs drive/computer recognization. It makes *Syncless* portable because of the ability to recognize different drives/computers by creating a Globally Unique IDentifier (GUID) in each of them. It also performs conversion of a physical directory/file path to a logical address, and vice versa. This conversion is necessary, because *!CompareAndSync* only recognizes physical path while *Tagging* recognizes a logical path.
+The *Profiling* component performs drive/computer recognization. It makes *Syncless* truly portable because of its ability to recognize different drives/computers by creating a Globally Unique IDentifier (GUID) in each of them. It also performs conversion of a physical directory/file path to a logical address, and vice versa. This conversion is necessary, because *!CompareAndSync* only recognizes physical path while *Tagging* recognizes a logical path.
 
 = Classes =
 
