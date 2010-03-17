@@ -23,13 +23,12 @@ This is implemented using `FileSystemwatcher` from the C# library. The `FileSyst
 == Class Diagram ==
 [http://big5sync.googlecode.com/files/monitor.png http://big5sync.googlecode.com/files/thumbnail%20monitor.png]
 
-== Description of Design ==
+== Description of Design and Algorithm==
 To solve problem 1, we reference the codes from: http://geekswithblogs.net/thibbard/articles/ExtendingFileSystemWatcher.aspx This is done by extending the `FileSystemwatcher` and add new events to trigger a create complete event.
 
-To solve problem 2, we reference the code from: http://csharp-codesamples.com/2009/02/file-system-watcher-and-large-file-volumes/ Instead of writing our logic in the handler, we will dispatch the jobs to a queue where there will be another thread to process them. So the only work done by the handler is to dispatch the jobs to a queue the control moves out of the handler thus releasing the buffer.
+To solve problem 2, we reference the code from: http://csharp-codesamples.com/2009/02/file-system-watcher-and-large-file-volumes/ Instead of writing our logic in the handler, we will dispatch the events to a queue where there will be another thread to process them. So the only work done by the handler is to dispatch the events to a queue the control moves out of the handler thus releasing the buffer.
 
-To solve problem 3, we thought of a 
+To solve problem 3, we thought of an algorithm to transfer all the events currently in the waiting queue to another process queue if there is an idle time of 1 second with no new events. This process queue will look through all the events and produce the most simplest form of events to be synchronized.
 
-= Explanation of =
-
-= Extending Monitor =
+== Extending Monitor ==
+If there is any other custom events that requires the `FileSystemwatcher` to trigger, just extend our `ExtendedFileSystemWatcher` and do a replacement in the *Monitor Component*.
