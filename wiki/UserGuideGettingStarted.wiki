@@ -7,7 +7,7 @@
 
 File Synchronization is taken on a whole new level with _*Syncless*_. This document familiarizes you with the basic features in _*Syncless*_ and introduces you to the concepts of *tagging* and *n-way* _seamless synchronization_ in _*Syncless*_.
 
-_*Syncless*_ allows you to synchronize your files and folders automatically through the use of tags, even across removable drives. With _*Syncless*_, you can quickly tag multiple folders and configure them to be either in _seamless_ mode or _manual_ synchronization mode. _*Syncless*_ also includes powerful filters and versioning capability, along with the finest usability that caters to individual's workflow. Lastly, _*Syncless*_ is a portable app, so it will run off any removable drive and no installation is required.
+_*Syncless*_ allows you to synchronize your files and folders automatically through the use of tags, even across removable drives. With _*Syncless*_, you can quickly tag multiple folders and configure them to be either in _seamless_ mode or _manual_ synchronization mode. Syncless also includes powerful filters and versioning capability, along with the finest usability that caters to individual's workflow. Lastly, Syncless is a portable app, so it will run off any removable drive and no installation is required.
 
 == What You’ll Learn ==
 If you follow all the steps in this tutorial, you’ll be able to:
