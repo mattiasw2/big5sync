@@ -24,7 +24,7 @@ When a drive-in event is detected, `ProfilingLayer` will create a mapping profil
 
 Likewise, when a drive-out event is detected, `ProfilingLayer` will remove the mapping profile of that particular drive and mark it as unavailable.
 
-= Merging Multiple _profiling.xml_
+= Merging Multiple _profiling.xml_ =
 
 = Glossary =
 
