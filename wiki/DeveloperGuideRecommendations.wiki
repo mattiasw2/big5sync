@@ -1,4 +1,4 @@
-#summary Developer's Guide - Recommended Resources and Readings for Developers
+#summary Developers' Guide - Recommended Resources and Readings for Developers
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
