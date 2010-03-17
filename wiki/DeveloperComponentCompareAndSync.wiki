@@ -153,7 +153,7 @@ The !FolderRenameVisitor will now visit the tree, and detect for folder renames.
         }
 }}}
 
-After !FolderRenameVisitor is done with its job, !ComparerVisitor, the only visitor to use post-traversal instead of pre-traversal, will visit the tree. There are various methods in !ComparerVisitor that handles the detection of renamed files, as well as the comparing of files and folders. Let us take a look at the main function, _!CompareFiles_.
+After !FolderRenameVisitor is done with its job, !ComparerVisitor, the only visitor to use post-traversal instead of pre-traversal, will visit the tree. There are various methods in !ComparerVisitor that handles the detection of renamed files, as well as the comparing of files and folders. Let us take a look at the main function, '!CompareFiles'.
 
 {{{
         private void CompareFiles(FileCompareObject file, string[] currentPaths)
