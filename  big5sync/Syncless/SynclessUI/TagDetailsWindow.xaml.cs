@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using Ionic.Utils;
 using System.IO;
 using Syncless.Core;
+using Syncless.Core.Exceptions;
 using Syncless.Filters;
 
 namespace SynclessUI
@@ -28,14 +29,21 @@ namespace SynclessUI
         
 		public TagDetailsWindow(string tagname, MainWindow main)
         {
-            InitializeComponent();
-			_main = main;
-			_tagname = tagname;
-			LblTag_Details.Content = "Tag Details for " + _tagname;
-			filters = _main.gui.GetAllFilters(_tagname);
-			PopulateFilterStringList(false);
-			TxtBoxPattern.IsEnabled = false;
-			CmbBoxMode.IsEnabled = false;
+            try
+            {
+                InitializeComponent();
+                _main = main;
+                _tagname = tagname;
+                LblTag_Details.Content = "Tag Details for " + _tagname;
+                filters = _main.gui.GetAllFilters(_tagname);
+                PopulateFilterStringList(false);
+                TxtBoxPattern.IsEnabled = false;
+                CmbBoxMode.IsEnabled = false;
+            }
+            catch (UnhandledException)
+            {
+                _main.DisplayUnhandledExceptionMessage();
+            }
         }
 		
         private void PopulateFilterStringList(bool selectoriginal)
@@ -87,8 +95,14 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            bool result = _main.gui.UpdateFilterList(_tagname, filters);
-			this.Close();
+            try {
+                bool result = _main.gui.UpdateFilterList(_tagname, filters);
+			    this.Close();
+            }
+            catch (UnhandledException)
+            {
+                _main.DisplayUnhandledExceptionMessage();
+            }
         }
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)

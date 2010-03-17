@@ -42,17 +42,6 @@
 			</Button>
 		</StackPanel>
 		<Image x:Name="TagIcon" HorizontalAlignment="Right" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,-25,-25,0" Grid.ColumnSpan="2" Source="Icons/folder.ico"/>
-          <toolkit:DataGrid ItemsSource="{Binding GameData, ElementName=Window}" 
-               Margin="5,5,285,-46" AutoGenerateColumns="False" Grid.ColumnSpan="2" Grid.RowSpan="5" Visibility="Hidden">
-    <toolkit:DataGrid.Columns>
-      <toolkit:DataGridTextColumn Binding="{Binding Game Name}" Header="Game Name" />
-      <toolkit:DataGridTextColumn Binding="{Binding Creator}" Header="Creator" />
-      <toolkit:DataGridComboBoxColumn Header="Publisher" x:Name="_PublisherCombo"
-                                 SelectedItemBinding="{Binding Publisher}" />
-      <toolkit:DataGridCheckBoxColumn Binding="{Binding On Xbox}" 
-                                 Header="On Xbox 360" />
-    </toolkit:DataGrid.Columns>
-  </toolkit:DataGrid>
           <Label HorizontalAlignment="Left" Margin="8,1.555,0,0" Content="Under Construction" Grid.Column="1" Grid.Row="3" Width="152.993" Foreground="White"/>
 	</Grid>
 </Window>
