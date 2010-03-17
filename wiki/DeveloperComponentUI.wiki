@@ -42,7 +42,7 @@ Our overall goal is to make the tagging process as simple as ever and synchroniz
 
 3. Intuitive - Users should find applications functions intuitive. 
 
-4. Accessible - Users should be tag from any possible way they choose.
+4. Accessible - Users should be able to use Syncless they choose, whether by keyboard or by mouse, or tagging from the shell or just simply dragging and dropping.
 
 5. Best-of-Class - Aim to adopt the best UI practices from application and web development.
   
