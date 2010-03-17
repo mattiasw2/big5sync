@@ -411,7 +411,12 @@ namespace SynclessUI
         {
             try {
                 TagView tv = gui.GetTag(tagname);
-
+                //TODO
+                if (tv == null)
+                {
+                    return;
+                }
+                //TODO
                 TagTitle.Text = tagname;
                 // tag.direction not implemented yet
 
@@ -788,6 +793,12 @@ namespace SynclessUI
                     else
                     {
                         TagView tv = gui.GetTag((string)TagTitle.Text);
+                        //TODO 
+                        if (tv == null)
+                        {
+                            return;
+                        }
+                        //TODO
 
                         gui.Untag(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
 
