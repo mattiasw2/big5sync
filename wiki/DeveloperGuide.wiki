@@ -6,7 +6,7 @@
 
 = 1. System Overview =
 
-     == 1.1. Architecture ==
+     == Architecture ==
         
         Following the Model-View-Controller (MVC) model, the system is split into User  
         Interface (UI) and System Logic Layer (SLL). The UI is developed and separated 
@@ -18,7 +18,7 @@
         affecting the UI. On top of that, this also allows other developers to create 
         their own user interface to work with Syncless Core Logic.
 
-     == 1.2. Data Storing ==
+     == Data Storing ==
       
         Syncless uses many files to store the information. We use XML to store the  
         information as it is more readable and portable. Examples are tagging.xml and 
@@ -31,7 +31,7 @@
         we are intending to move this to somewhere else to avoid creating too many folders 
         and files in the user's folders.
 
-     == 1.3. Interaction among Sub-components ==
+     == Interaction among Sub-components ==
 
         <a href = "http://code.google.com/p/big5sync/wiki/DeveloperSLLSequenceDiagrams">Sequence Diagrams</a>
  
@@ -85,14 +85,14 @@
      == User Interface ==
 
 = 3. Developing a UI for Syncless =
-     == 3.1. Basic ==
+     == Basic ==
         
         To create a UI for Syncless, the developer just need to follow a few steps.
         # implements IUInterface. This is to provide the System Core with some fundamental methods.
         # use Service locator to get the IUIControllerInterface. This provide the basic functionality to the developer who is coding the UI.
         # Call the Init method that pass in UI itself. 
 
-     == 3.2. Advanced ==
+     == Advanced ==
         
         Extending Filter to other area can be done easily. This can be done by extending the Filter Object and overriding the Match method. If the filter meant to work only on file, the developer can extend !FileFilter instead. !FileFilter will let all folder pass the filter.
         
