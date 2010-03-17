@@ -14,7 +14,7 @@ This is implemented
 This is implemented using `FileSystemwatcher` from the C# library. The `FileSystemWatcher` was extended to handle extra cases that the original `FileSystemWatcher` cannot handle.
 
 = Class Diagram =
-[http://big5sync.googlecode.com/files/monitor.png]
+[http://big5sync.googlecode.com/files/monitor.png http://big5sync.googlecode.com/files/thumbnail%20monitor.png]
 
 = Description of Design =
 
