@@ -876,7 +876,10 @@ namespace Syncless.Core
             if (tag.IsSeamless)
             {
                 string newPath = ProfilingLayer.Instance.ConvertLogicalToPhysical(path.PathName);
-                MonitorLayer.Instance.MonitorPath(newPath);
+                if (newPath != null)
+                {
+                    MonitorLayer.Instance.MonitorPath(newPath);
+                }
             }
         }
         public void RemoveTagPath(Tag tag, TaggedPath path)
