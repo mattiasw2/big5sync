@@ -10,24 +10,10 @@ The *!CompareAndSync* component in *Syncless* is the part of the system that han
 Both sub-components are implemented very differently, as manual synchronization and automated synchronization are largely different. The manual subcomponent is implemented using a *Tree* in conjunction with the *Visitor Pattern*, while the seamless subcomponent is implemented using a *Queue*.
 
 
-= Class Diagram =
+= Classes =
 [http://big5sync.googlecode.com/files/compareandsync.png http://big5sync.googlecode.com/files/compareandsync_th.png]
 
 
-= Description of Design =
-== Data Transfer Objects and Entities ==
-Before going in depth into the design, we will first take a look at the data transfer objects (DTO) and entities used throughout !CompareAndSync.
-
-
-=== Request ===
-Requests are data transfer objects sent to !CompareAndSync when a comparison or synchronization action is to be done. The *Request* object is an abstract class, from which all other requests will extend from. *!AutoSyncRequest* and *!ManualRequest* are the respective requests for seamless and manual mode. *!ManualRequest* is further extended to *!ManualSyncRequest* and *!ManualCompareRequest*.
-
-
-=== !CompareObject ===
-!CompareObjects are entities which are used during comparison and synchronization. There are basically 2 main kinds of !CompareObjects, the *!FileCompareObject* and the *!FolderCompareObject*. *!RootCompareObject* is a specific kind of !FolderCompareObject used to represent the root paths to be compared. There is also the *XMLCompareObject* which is used to store the file metadata and then used to populate the main !CompareObjects.
-
-
-= Main Components =
 We will now take a look at the main components of !CompareAndSync, which can be broadly divided to the controller layer, the manual component and the seamless component.
 
 
@@ -71,6 +57,19 @@ The classes of concern to us for the seamless portion are as follows:
   * XMLHelper
 
 *!SeamlessQueueControl* is a class that contains a single queue to ensure the requests are handled in order, so as to prevent any possible conflicts. *!SeamlessSyncer* contains the necessary methods to handle seamless file synchronization, and upon each successful synchronization, *XMLHelper* will be called to update the metadata stored in side.
+
+
+= Description of Design =
+== Data Transfer Objects and Entities ==
+Before going in depth into the design, we will first take a look at the data transfer objects (DTO) and entities used throughout !CompareAndSync.
+
+
+=== Request ===
+Requests are data transfer objects sent to !CompareAndSync when a comparison or synchronization action is to be done. The *Request* object is an abstract class, from which all other requests will extend from. *!AutoSyncRequest* and *!ManualRequest* are the respective requests for seamless and manual mode. *!ManualRequest* is further extended to *!ManualSyncRequest* and *!ManualCompareRequest*.
+
+
+=== !CompareObject ===
+!CompareObjects are entities which are used during comparison and synchronization. There are basically 2 main kinds of !CompareObjects, the *!FileCompareObject* and the *!FolderCompareObject*. *!RootCompareObject* is a specific kind of !FolderCompareObject used to represent the root paths to be compared. There is also the *XMLCompareObject* which is used to store the file metadata and then used to populate the main !CompareObjects.
 
 
 = Explanation of Algorithms =
