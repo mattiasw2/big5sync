@@ -3,23 +3,23 @@
 
 = Features =
 
-== Preview and Reporting of Sync Results ==
+== Previewing and Reporting of Sync Results ==
 We are in the process of coming up with a clean and clear interface on presenting preview and synchronization results, and this will be implemented very soon.
 
-== Implement Uni-Directional Synchronization ==
+== Uni-Directional Synchronization ==
 Currently, our software simply keeps every folder under the same tag in sync. In future, we will look at including options for setting sources and targets, so that the synchronization is uni-directional.
 
-== Implement a Notification System to Feedback to the User ==
-Currently, error and notification messages from the sub-components are not sent to User Interface, due to multiple threading issues. We are looking into this so there is a intuitive feedback system.
+== Notification System Providing Feedback to User ==
+Currently, error and notification messages from the sub-components are not sent to the User Interface, due to multiple threading issues. We are looking into this so that there can be a intuitive feedback system to the user soon.
 
-== Merge Profiles for External Hard Disks ==
-Currently, the system only merges the profiles from certain removable drives with the current profile. However, due to some implementation, certain removable drives are not detected as removable drives, but instead, as hard disks. We will fix this in an upcoming release.
+== Merging of Profiles for External Hard Disks ==
+Currently, the system only merges the profiles from certain removable drives with the current profile. However, certain removable drives, such as the external hard disk, are detected as fixed drives instead, which affects our current implementation of profile merging. We will fix this in an upcoming release.
 
 == Configurable Tag Options ==
-Currently, the system will by default archive the last 5 files. In the future, we will allow the user to customize different settings for archival. Other common options like the ability to send files to recycle bin upon deletion will also be implemented.
+Currently, the system will by default archive the five last modified files. In the future, we will allow the user to customize different settings for archival. Other common options, such as the ability to send files to the Recycle Bin upon deletion, will also be implemented.
 
 == More Filters ==
 Currently, Syncless only provides file extension filters. In the future, we will provide more types of filter like size filter and folder filter.
 
 == Allow Naming of Profile ==
-Currently, all profiles will be merged. In the future, the user will be able to name their profile and only profile with the same name will be merge.
+Currently, all profiles will be merged. In the future, the user will be able to name their profiles and only profiles with the same name will be merged.
