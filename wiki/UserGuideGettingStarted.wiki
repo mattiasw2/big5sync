@@ -8,7 +8,7 @@
 
 Synchronization is taken on a whole new level with _*Syncless*_. This document familiarizes you with the basic features in _*Syncless*_ and introduces you to the concepts of *tagging* and *n-way* _seamless synchronization_ in _*Syncless*_.
 
-_*Syncless*_ allows you to synchronize your files and folders automatically through the use of tags, even across removable drives. With _*Syncless*_, you can quickly tag multiple folders and configure them to be either in _seamless_ mode or _manual_ synchronization mode. Syncless also includes powerful filters and versioning capability, along with the finest usability that caters to individual's workflow. Lastly, Syncless is a portable app, so it will run off any removable drive and no installation is required.
+_*Syncless*_ allows you to synchronize your files and folders automatically through the use of tags, even across removable drives. With _*Syncless*_, you can quickly tag multiple folders and configure them to be either in _seamless_ or _manual_ synchronization mode. Syncless also includes powerful filters and versioning capability, along with the finest usability that caters to individual's workflow. Lastly, Syncless is a portable app, so it will run off any removable drive and no installation is required.
 
 == What You’ll Learn ==
 If you follow all the steps in this tutorial, you’ll be able to:
@@ -33,7 +33,6 @@ Toolbar > Create Tag
 The term after Toolbar is the name of the command in the main toolbar located in the Main Window.
 
 == The Syncless Interface ==
-
 When you run Syncless, you will be greeted with the main window, which allows you to choose what you want to do next, such as create tag, tag a folder, view tag details or etc. The interface also incorporates a lot of useful shortcuts to speed up productivity.
 
 http://big5sync.googlecode.com/files/maininterface.png
@@ -59,7 +58,7 @@ http://big5sync.googlecode.com/files/tagshell.png
 
 2. Viewing the tag after Tagging
 
-http://big5sync.googlecode.com/files/tagview.png
+http://big5sync.googlecode.com/files/tag-view.png
 
 3. Drag and drop the removable drive folder to tag
 
@@ -69,11 +68,13 @@ http://big5sync.googlecode.com/files/drag-and-drop-tagging.png
 
 http://big5sync.googlecode.com/files/tagging-complete.png
 
+
 == Step 2: Switch to Manual Mode ==
 
 http://big5sync.googlecode.com/files/switch-manual-mode.png
 
 Switching to manual modes is a simple matter of pressing the button. After switching, additional operations in manual synchronization such as 'Preview of Manual Synchronization' (Not Implemented in UI yet) and 'Starting Manual Synchronization' will be displayed.
+
 
 == Step 3: Prepare Removable Drive for Removal ==
 
@@ -81,9 +82,10 @@ http://big5sync.googlecode.com/files/eject-removable-drive.png
 
 You can access this from the Toolbar > Eject or by using its keyboard shortcut equivalent (Ctrl-E)
 
-Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be stopped (Currently in Ver 0.9, only Seamless Operations are stopped) and thus the removable drive to be safely removed.
+Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be stopped (Currently in Ver 0.9, only seamless operations are stopped) and thus allow the removable drive to be safely removed.
 
-With the successful operation of synchronization, you have now completed the full Syncless tutorial. Continue on to see other major features in Syncless
+With the successful operation of synchronization, you have now completed the full Syncless tutorial. Continue on to see other major features in Syncless.
+
 
 == Continue to Explore Syncless ==
 
@@ -93,9 +95,9 @@ Syncless offers other powerful features. Check out one or more of these addition
 
   * *Filtering*:  Use Syncless's filtering features for the ultimate control in synchronization. Currently, Syncless is able to include or exclude files and folders by extension and path. Other filters will be available in later versions.
 
- * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder will be archived up to 5 backups at one time. Currently as of Ver. 0.9, archiving is not user-configurable, but will be in the future.
+ * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder will be archived up to 5 backups at one time. As of version 0.9, archiving is not user-configurable, but will be in the future.
 
- * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving on your computer. 
+ * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving it on your computer. 
 
 == Misc: Keyboard Shortcuts ==
 
@@ -105,9 +107,15 @@ To save time and increase productivity, refer to the list of keyboard shortcuts.
 
 == Getting More Help ==
 
-To get help while you are using Syncless, refer to the full user guide [PROVIDE LINK]. You'll find more information about the topics covered in this document, as well as information about and instructions for many more topics. You can also view a video of the quick run-through of the features at http://www.youtube.com/watch?v=i30Q2U7ceWs
+To get help while you are using Syncless, refer to the full user guide [PROVIDE LINK]. You'll find more information about the topics covered in this document, as well as information about and instructions for many more topics. You can also view a video of the quick run-through of the features:
 
-For refering to the list of issues and other technical information, visit  http://code.google.com/p/big5sync/issues/list
+<wiki:video url="http://www.youtube.com/watch?v=i30Q2U7ceWs"/>
+
+Please report any bugs you find at http://code.google.com/p/big5sync/issues/list, thank you! You may wish to take a look at http://code.google.com/p/big5sync/wiki/KnownIssues09 for the known bugs in version 0.9.
+
+Interested in what's coming after version 0.9? Take a look [http://code.google.com/p/big5sync/wiki/ComingSoon here]!
+
+Are you a developer? Interested to further improve Syncless? Have a [http://code.google.com/p/big5sync/wiki/DeveloperGuide look]!
 
 For complete and up-to-date information about Syncless, go to Syncless's website at
 http://code.google.com/p/big5sync/
