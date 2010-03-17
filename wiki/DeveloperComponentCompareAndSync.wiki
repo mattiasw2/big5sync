@@ -9,7 +9,7 @@ Both sub-components are implemented very differently, as manual synchronization 
 
 
 = Class Diagram =
-
+[http://big5sync.googlecode.com/files/compareandsync.png http://big5sync.googlecode.com/files/compareandsync_th.png]
 
 
 = Description of Design =
