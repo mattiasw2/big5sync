@@ -2,45 +2,43 @@
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
-= Known Issues (as of 0.9) =
 <wiki:toc max_depth="5" />
 
 These are the current known issues with Syncless 0.9, and will be handled at a later version. For a list of how Syncless handles certain unique sequence of actions, please look at [SpecialCases here].
 
-= Details =
-== Profiling ==
-=== Corrupted/Non-Standard XML Format ===
+= Profiling =
+== Corrupted/Non-Standard XML Format ==
 If the XML is corrupted due to user interference, Syncless will have erratic behaviour. The next version will detect this and handle it properly. [http://code.google.com/p/big5sync/issues/detail?id=33 Issue #33]
 
-== Tagging ==
-=== Recursive Tagging ===
+= Tagging =
+== Recursive Tagging ==
 If a user tags two folders, say "C:\Notes" and "D:\Lectures", and tags another folder within "C:\Notes" with another tag to "D:\Lectures", this will result in Syncless recursively generating files over and over again. Granted, this is an unusual case, and should not happen generally. [http://code.google.com/p/big5sync/issues/detail?id=6 Issue #6]
 
-=== Tag Merging from Thumb Drive to Computer Does Not Happen Sometimes ===
+== Tag Merging from Thumb Drive to Computer Does Not Happen Sometimes ==
 Syncless has the ability to merge all the tags on the thumb drive with that on the computer. However, there are times when this does not happen. [http://code.google.com/p/big5sync/issues/detail?id=30 Issue #30]
 
 
-== !CompareAndSync ==
-=== Long Time To Sync When Dealing With Large File Sizes In Manual Mode, Or On Program Startup ===
+= !CompareAndSync =
+== Long Time To Sync When Dealing With Large File Sizes In Manual Mode, Or On Program Startup ==
 This is due to the MD5 hash used when building the tree for comparison and for writing to metadata, we will look into implementing CRC32 or Adler32 as well, although initial trials with Adler32 proved little to no improvement, as the main bottleneck is actually disk I/O. [http://code.google.com/p/big5sync/issues/detail?id=34 Issue #34]
 
-=== Path Too Long To Sync ===
+== Path Too Long To Sync ==
 If a user tags a folder which has a path that is too long, Syncless currently does not handle it. The main reason is because we have yet to implement a proper notification system. [http://code.google.com/p/big5sync/issues/detail?id=8 Issue #8]
 
-=== Re-creating of Deleted Tagged Folders (Manual) ===
+== Re-creating of Deleted Tagged Folders (Manual) ==
 If you have a folder that is tagged, and you delete it, Syncless will re-create it the next time you synchronize in manual mode. Again, this is because we have yet to implement a proper notification system. [http://code.google.com/p/big5sync/issues/detail?id=19 Issue #19]
 
-=== Deletion of Tagged Folders in Seamless Mode ===
+== Deletion of Tagged Folders in Seamless Mode ==
 If you have a few folders that are tagged in seamless mode, deleting one of these tagged folders will cause the contents of the other tagged folders to be deleted. [http://code.google.com/p/big5sync/issues/detail?id=19 Issue #19]
 
-=== Renamed Files Not Getting Propagated ===
+== Renamed Files Not Getting Propagated ==
 This will only happen if you create, delete and then create again with the same filename, followed by a rename, all within a short span of time. This cannot be fixed as far as we know due to how Windows handles the file system. [http://code.google.com/p/big5sync/issues/detail?id=22 Issue #22]
 
-=== Seamless Mode Issues ===
+== Seamless Mode Issues ==
 Please refer to the Monitor section.
 
-== Monitor ==
-=== Handling of File System Events ===
+= Monitor =
+== Handling of File System Events ==
 Due to the way !FileSystemWatcher is implemented in C#, we are unable to handle certain cases by default. As such, we have added some delay and additional logic on top of !FileSystemWatcher to ensure that files and folders are propagated properly. However, this results in "unpredictable" effects when a user does a sequence of actions too quickly. An example would be following:
 
   # Tag at least 2 folders under the same tag, make sure seamless mode is on
@@ -51,12 +49,12 @@ Due to the way !FileSystemWatcher is implemented in C#, we are unable to handle 
 The current workaround for this is to wait about 10 seconds before doing the next action. We are currently looking into fixing it. [http://code.google.com/p/big5sync/issues/detail?id=11 Issue #11] [http://code.google.com/p/big5sync/issues/detail?id=21 Issue #21]
 
 
-== User Interface ==
-=== Shortcut Keys Do Not Work ===
+= User Interface =
+== Shortcut Keys Do Not Work ==
 Under certain circumstances, the shortcut keys will stop working. One guaranteed way to reproduce this is to do a "Ctrl + T", followed by any other shortcut key. After that, all shortcut keys will stop working until you click on one of the buttons. [http://code.google.com/p/big5sync/issues/detail?id=26 Issue #26]
 
-=== Folder Dialog Does Not Show Certain Folders ===
+== Folder Dialog Does Not Show Certain Folders ==
 The folder dialog may not show certain folders such as "My Computer" in certain cases. We are still looking into this issue. So far, we have only observed this on Windows Vista. [http://code.google.com/p/big5sync/issues/detail?id=32 Issue #32]
 
-=== Removable Storage Drive Not Displayed For Removable ===
+== Removable Storage Drive Not Displayed For Removable ==
 In Syncless, there is a button that allows for the safety removal of removable drives. In some cases, the drives will not be displayed. [http://code.google.com/p/big5sync/issues/detail?id=31 Issue #31]
