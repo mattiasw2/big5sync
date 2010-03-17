@@ -65,7 +65,7 @@ If a file is named file.txt and a folder is named file.txt, Syncless does not ha
 If a file is open in a folder that is tag and is in seamless mode , seamless mode will behave in a unexpected way.
 [http://code.google.com/p/big5sync/issues/detail?id=45 Issue #45]
 
-== Hash fail
+== Hash fail ==
 The program will throw a error if a file that is being hash is currently locked.
 [http://code.google.com/p/big5sync/issues/detail?id=44 Issue #44]
 
