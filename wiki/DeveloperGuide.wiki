@@ -86,7 +86,7 @@ http://big5sync.googlecode.com/files/mainpagelogosmall.png
 
      == User Interface ==
 
-        The User Interface component is in charge of handling all interactions between the user and the control layer. It is implemented using WPF to achieve true separation of the control layer from the view layer and a clean & professional look-and-feel.
+        The User Interface component is in charge of handling all interactions between the user and the control layer. It is implemented using WPF for its powerful framework which allows for the creation of clean, professional look-and-feel. It also allows for the true separation of the User Interface from the System Logic Layer, allowing other developers to create their own User Interface to interact with our Logic Layer. 
 
         [http://code.google.com/p/big5sync/wiki/DeveloperComponentUI More details...]
      
