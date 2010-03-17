@@ -1,4 +1,5 @@
 #summary Developers' Guide - Component - Tagging
+#labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
 <wiki:toc max_depth="6" />
@@ -30,23 +31,23 @@ The main operations which will trigger interactions among the various classes in
   # `UntagFolder`
   # `UpdateFilter`
 
-=== Sequence Diagram of CreateTag ===
+=== Sequence Diagram of !CreateTag ===
 
 http://big5sync.googlecode.com/files/TaggingCreateTag.jpg
 
-=== Sequence Diagram of DeleteTag ===
+=== Sequence Diagram of !DeleteTag ===
 
 http://big5sync.googlecode.com/files/TaggingDeleteTag.jpg
 
-=== Sequence Diagram of TagFolder ===
+=== Sequence Diagram of !TagFolder ===
 
 http://big5sync.googlecode.com/files/TaggingTagFolder.jpg
 
-=== Sequence Diagram of UntagFolder ===
+=== Sequence Diagram of !UntagFolder ===
 
 http://big5sync.googlecode.com/files/TaggingUntagFolder.jpg
 
-=== Sequence Diagram of UpdateFilter ===
+=== Sequence Diagram of !UpdateFilter ===
 
 http://big5sync.googlecode.com/files/TaggingUpdateFilter.jpg
 
