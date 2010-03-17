@@ -7,11 +7,16 @@
 = Overview =
 The *Monitor Component* provides a set of classes to detect file system changes. There are 2 roles for the Monitor Component. The first role is to detect the insertion and removal of USB removable drives, such as external hard disk and flash drive, and the second role is to capture any changes to a file or folder.
 
-= Detecting USB Removable Drive Events =
+= Classes =
+[http://big5sync.googlecode.com/files/monitor.png http://big5sync.googlecode.com/files/thumbnail%20monitor.png]
+
+= Description of Design =
+
+== Detecting USB Removable Drive Events ==
 This is implemented using Windows Management Instrumentation. The code for the detection of USB devices is referenced from:  http://dotnetslackers.com/community/blogs/basharkokash/archive/2008/03/15/USB-Detection-source-code.aspx.
 When the application starts, all the currently connected drives are recorded. Whenever a USB event is triggered, we will find out the new list of connected drives and compare them with the last records. From the result, we will be able to tell which drives are being inserted or removed. `DeviceWatcher` will handle the detection of USB devices.
 
-= Capturing File/Folder Change Events =
+== Capturing File/Folder Change Events ==
 This is implemented using `FileSystemwatcher` from the C# library. The `FileSystemWatcher` is extended to handle extra cases that the original `FileSystemWatcher` cannot handle.
 
 == Problems with `FileSystemwatcher` ==
@@ -20,10 +25,7 @@ This is implemented using `FileSystemwatcher` from the C# library. The `FileSyst
   # When `FileSystemwatcher` is working with large volumes of file, it is unreliable. The reason is that there is a fixed buffer allocated to each `FileSystemwatcher` which is used to store information on the events raised. When a large number of files raises an event, this buffer gets full and some events might not be captured.
   # Different applications have different ways of handling a file/folder operation. Temporary files are sometimes used and this will cause some problems when we do a sync. Exception will occur when trying to sync a temporary file when the file has already been deleted.
 
-== Classes ==
-[http://big5sync.googlecode.com/files/monitor.png http://big5sync.googlecode.com/files/thumbnail%20monitor.png]
-
-== Description of Design ==
+== Explanation of Algorithms ==
 To solve problem 1, we reference the codes from: http://geekswithblogs.net/thibbard/articles/ExtendingFileSystemWatcher.aspx. This is done by extending the `FileSystemwatcher` and adding new events to trigger a complete creation event.
 
 To solve problem 2, we reference the codes from: http://csharp-codesamples.com/2009/02/file-system-watcher-and-large-file-volumes/. Instead of writing our logic in the handler, we will dispatch the sequence of events to a queue which is processed by a separate thread. As such, the only work done by the handler is to dispatch the events to the queue, so that it can release the buffer and start monitoring more events.
