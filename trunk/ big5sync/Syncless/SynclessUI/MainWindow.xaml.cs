@@ -991,7 +991,15 @@ namespace SynclessUI
                 ListTaggedPath.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                 (Action)(() =>
                 {
+                    if (_selectedTag == null)
+                    {
+                        return;
+                    }
                     TagView tv = gui.GetTag(_selectedTag);
+                    if (tv == null)
+                    {
+                        return;
+                    }
                     if (tv.IsSeamless)
                     {
                         SeamlessMode();
