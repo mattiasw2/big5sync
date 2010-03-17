@@ -36,11 +36,11 @@ The UI makes use of the `RegistryHelper` to write registry entries to enable she
 
 Our overall goal is to make the tagging process as simple as ever and synchronization seamless.
 
-  #Seamless - When Syncless is synchronizing files in the background, users should not  forget their Syncless is on.
-  #Minimalist - Our interface aims to prevent cognitive overload on users.
-  #Intuitive - Users should find applications functions intuitive. 
-  #Accessible - Users should be able to use Syncless they choose, whether by keyboard or by mouse, or tagging from the shell or just simply dragging and dropping.
-  #Best-of-Class - Aim to adopt the best UI practices from application and web development.
+  # Seamless - When Syncless is synchronizing files in the background, users should not  forget their Syncless is on.
+  # Minimalist - Our interface aims to prevent cognitive overload on users.
+  # Intuitive - Users should find applications functions intuitive. 
+  # Accessible - Users should be able to use Syncless they choose, whether by keyboard or by mouse, or tagging from the shell or just simply dragging and dropping.
+  # Best-of-Class - Aim to adopt the best UI practices from application and web development.
   
 = Developing a Alternative UI for Syncless =
      
