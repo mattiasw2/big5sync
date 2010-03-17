@@ -37,7 +37,6 @@ The term after Toolbar is the name of the command in the main toolbar located in
 When you run Syncless, you will be greeted with the main window, which allows you to choose what you want to do next, such as create tag, tag a folder, view tag details or etc. The interface also incorporates a lot of useful shortcuts to speed up productivity.
 
 http://big5sync.googlecode.com/files/main-interface.png
-
 = Learn Syncless =
 
 You have folders on your computer and thumbdrive that you wish to synchronize automatically without putting too much effort in doing it. Now is the time to use Syncless to help you organise them by using tags.
