@@ -527,6 +527,10 @@ namespace Syncless.Core
         /// <returns></returns>
         public TagView GetTag(string tagname)
         {
+            if (tagname == null)
+            {
+                return null;
+            }
             try
             {
                 Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
