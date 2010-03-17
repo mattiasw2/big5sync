@@ -2,9 +2,9 @@
 #labels Featured
 <wiki:toc max_depth="6" />
 
-== Changelog for version _0.9a_ ==
+= Changelog for version _0.9a_ =
 First release of *Syncless*.
-=== Feature list === 
+== Feature list ==
    # Tagging of Folders.
        * From User Interface
        * From Window Context Menu
@@ -19,4 +19,3 @@ First release of *Syncless*.
    # Auto detection of drive change
        * Profiles are automatically merged when drives are plugin.
        * If Tags are in seamless mode, they will automatically be sync-ed.
-
