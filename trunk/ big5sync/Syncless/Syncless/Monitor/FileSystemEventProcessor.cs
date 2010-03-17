@@ -22,7 +22,7 @@ namespace Syncless.Monitor
             }
         }
 
-        private List<List<FileSystemEvent>> queue;
+        private Queue<Queue<FileSystemEvent>> queue;
         private List<string> createList;
         private List<FileSystemEvent> processList;
         private List<FileSystemEvent> waitingList;
@@ -31,7 +31,7 @@ namespace Syncless.Monitor
 
         private FileSystemEventProcessor()
         {
-            queue = new List<List<FileSystemEvent>>();
+            queue = new Queue<Queue<FileSystemEvent>>();
             createList = new List<string>();
             processList = new List<FileSystemEvent>();
             waitingList = new List<FileSystemEvent>();
@@ -47,11 +47,11 @@ namespace Syncless.Monitor
             }
         }
 
-        public void Enqueue(List<FileSystemEvent> eventList)
+        public void Enqueue(Queue<FileSystemEvent> eventList)
         {
             lock (queue)
             {
-                queue.Add(eventList);
+                queue.Enqueue(eventList);
             }
             if (processorThread == null)
             {
@@ -64,15 +64,14 @@ namespace Syncless.Monitor
             }
         }
 
-        private List<FileSystemEvent> Dequeue()
+        private Queue<FileSystemEvent> Dequeue()
         {
-            List<FileSystemEvent> eventList = null;
+            Queue<FileSystemEvent> eventList = null;
             lock (queue)
             {
                 if (queue.Count != 0)
                 {
-                    eventList = queue[0];
-                    queue.RemoveAt(0);
+                    eventList = queue.Dequeue();
                 }
             }
             return eventList;
@@ -84,7 +83,7 @@ namespace Syncless.Monitor
             {
                 List<FileSystemEvent> eventList = new List<FileSystemEvent>(waitingList);
                 waitingList.Clear();
-                List<FileSystemEvent> dequeue = Dequeue();
+                Queue<FileSystemEvent> dequeue = Dequeue();
                 if (dequeue != null)
                 {
                     eventList.AddRange(dequeue);
