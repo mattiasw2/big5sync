@@ -1,4 +1,5 @@
 #summary What's In It For You After 0.9?
+<wiki:toc max_depth="6" />
 
 = Features =
 
