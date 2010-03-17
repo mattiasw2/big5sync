@@ -1,0 +1,37 @@
+#summary One-sentence summary of this page.
+#labels Featured,Phase-Implementation
+#sidebar DeveloperGuideSidebar
+
+http://big5sync.googlecode.com/files/mainpagelogosmall.png
+
+= Preface =
+
+Add your content here.
+
+= Overview of User Interface =
+
+
+= 
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
+
+
+TOC for user guide
+=========
+1) Preface
+2) Index
+3) Getting Started
+4) Overview of UI
+    -shell integration
+5) Features (main use cases)
+    -create/remove tag
+    -tag/untag folder
+    -tag details (filter)
+6) Usability
+    -shortcuts
+7) Glossary
