@@ -1,4 +1,4 @@
-#summary Change Logs
+#summary List of changes in different version
 #labels Featured
 
 = Changelog for version _0.9a_ =
