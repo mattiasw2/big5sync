@@ -1,4 +1,4 @@
-#summary Developer's Guide - Components - UI
+#summary Developers' Guide - Components - UI
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
