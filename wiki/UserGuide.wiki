@@ -10,28 +10,16 @@ Add your content here.
 
 = Overview of User Interface =
 
+== Shell Integration ==
 
-= 
+= Features =
 
-= Details =
+== Creating and Removing Tags ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== Tagging and Untagging Folders ==
 
+== Configuring Filters ==
 
-TOC for user guide
-=========
-1) Preface
-2) Index
-3) Getting Started
-4) Overview of UI
-    -shell integration
-5) Features (main use cases)
-    -create/remove tag
-    -tag/untag folder
-    -tag details (filter)
-6) Usability
-    -shortcuts
-7) Glossary
+= Usability =
+
+== Keyboard Shortcuts ==
