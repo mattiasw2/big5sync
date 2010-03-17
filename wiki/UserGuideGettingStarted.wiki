@@ -86,7 +86,7 @@ http://big5sync.googlecode.com/files/eject-removable-drive.png
 
 You can access this from the Toolbar > Eject or by using its keyboard shortcut equivalent (Ctrl-E)
 
-Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be stopped (Currently in Ver 0.9, only seamless operations are stopped) and thus allow the removable drive to be safely removed.
+Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be stopped and thus allow the removable drive to be safely removed. Currently, the "Eject" button only tells Syncless to stop monitoring the removable drive selected, and you still have to use the "Safely Remove" in Windows. Future versions of Syncless will help to safely remove the drive as well.
 
 With the successful operation of synchronization, you have now completed the full Syncless tutorial. Continue on to see other major features in Syncless.
 
