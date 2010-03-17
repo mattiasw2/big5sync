@@ -56,13 +56,16 @@ To synchronize 2 or more folders together, you must first tag them with the same
 We will tag both the folder on the computer and on the thumbdrive from Windows Explorer.
 
 http://big5sync.googlecode.com/files/tagshell.png
-Tagging local folder from Windows Explorer
+
+1. Tagging local folder from Windows Explorer
 
 http://big5sync.googlecode.com/files/tagview.png
-Viewing the tag after Tagging
+
+2. Viewing the tag after Tagging
 
 http://big5sync.googlecode.com/files/drag-and-drop-tagging.png
-Drag and drop the removable drive folder to tag
+
+3. Drag and drop the removable drive folder to tag
 
 == Step 2: ==
 
