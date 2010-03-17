@@ -19,3 +19,6 @@
 
 ==== More Filters ====
    Currently, Syncless only provides Extension filters. In the future, we will provide more type of filter like size filter and folder filter.
+
+==== Allow naming of Profile ====
+   Currently, all profile will be merged. In the future, the user will be able to name their profile and only profile with the same name will be merge.
