@@ -85,6 +85,10 @@
      
 = Known Issues =
 
+http://code.google.com/p/big5sync/wiki/KnownIssues09
+
 = Special Cases =
+
+http://code.google.com/p/big5sync/wiki/SpecialCases
 
 = Recommended Resources =
