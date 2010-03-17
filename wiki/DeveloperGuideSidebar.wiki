@@ -1,6 +1,8 @@
 #labels Phase-Implementation
   * [UserGuideGettingStarted Getting Started!]
     * [UserGuideGettingStarted#Welcome_to_Syncless Welcome to Syncless!]
+  * [UserGuide Users' Guide]
+
   * [DeveloperGuide Developers' Guide]
     * Detailed Description of Sub-Components
       * [DeveloperComponentProfiling Profiling]
