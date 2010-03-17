@@ -411,12 +411,11 @@ namespace SynclessUI
         {
             try {
                 TagView tv = gui.GetTag(tagname);
-                //TODO
                 if (tv == null)
                 {
+                    InitializeTagInfoPanel();
                     return;
                 }
-                //TODO
                 TagTitle.Text = tagname;
                 // tag.direction not implemented yet
 
@@ -479,10 +478,13 @@ namespace SynclessUI
         {
             try
             {
-                List<string> taglist = gui.GetAllTags();
-                int index = taglist.IndexOf(tagname);
-                ListBoxTag.SelectedIndex = index;
-                ViewTagInfo(tagname);
+                if (tagname != null)
+                {
+                    List<string> taglist = gui.GetAllTags();
+                    int index = taglist.IndexOf(tagname);
+                    ListBoxTag.SelectedIndex = index;
+                    ViewTagInfo(tagname);
+                }
             }
             catch (UnhandledException)
             {
@@ -793,16 +795,26 @@ namespace SynclessUI
                     else
                     {
                         TagView tv = gui.GetTag((string)TagTitle.Text);
-                        //TODO 
-                        if (tv == null)
+
+                        if (tv != null)
                         {
+                            gui.Untag(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
+
+                            SelectTag(tv.TagName);
+                        }
+                        else
+                        {
+                            string messageBoxText = "The tag which you tried to untag does not exist";
+                            string caption = "Tag Does Not Exist";
+                            MessageBoxButton button = MessageBoxButton.OK;
+                            MessageBoxImage icon = MessageBoxImage.Error;
+
+                            MessageBox.Show(messageBoxText, caption, button, icon);
+
+                            InitializeTagInfoPanel();
+
                             return;
                         }
-                        //TODO
-
-                        gui.Untag(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
-
-                        SelectTag(tv.TagName);
                     }
                 }
             }

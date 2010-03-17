@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * Credits:
+ * Adapted from Singleton Application
+ * http://www.switchonthecode.com/tutorials/wpf-writing-a-single-instance-application
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
