@@ -36,7 +36,7 @@ http://big5sync.googlecode.com/files/mainpagelogosmall.png
 
      == Interaction among Sub-Components ==
 
-        [http://code.google.com/p/big5sync/wiki/DeveloperSLLSequenceDiagrams Sequence Diagrams]
+        To understand how the SLL interacts with the other components to perform the main operations, refer to sequence diagrams [http://code.google.com/p/big5sync/wiki/DeveloperSLLSequenceDiagrams here].
  
 = System Components =
 
