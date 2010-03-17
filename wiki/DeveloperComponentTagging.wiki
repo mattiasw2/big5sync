@@ -105,9 +105,27 @@ For clearer illustration, we denote the tag found in _newProfile_ as _newTag_ an
 
 For each _newTag_, if it has not already existed in _currentProfile_, it indicates that _newTag_ has been created elsewhere and should be added to _currentProfile_ so that details of _newTag_ can be displayed to the user. If _newTag_ exists in _currentProfile_, the system will do further check whether any modification has been made to the equivalent _currentTag_.
 
-=== Merging the Tag ===
+=== Merging the `Tag` ===
 
+Let's take a look at the pseudo-code for the merging the tags:
 
+{{{
+  if currentTag and newTag share the same name && both tags were modified at different time
+      if newTag was deleted && currentTag exists
+          if both tags were created at the same time
+              delete currentTag from currentProfile
+              return currentTag
+          else
+              do nothing
+      if currentTag was deleted && newTag exists
+          if newTag was created later than currentTag
+              add newTag to currentProfile
+              merge paths from currentTag and newTag
+}}}
+
+Basically, the system will check whether a tag is marked as deleted in one profile but exists in another profile. If that is the case, then further checks will be done on the creation time and deletion time in both tags to decide whether to add the _newTag_ to the _currentProfile_ or to delete the _currentTag_ from the _currentProfile_.
+
+=== Merging the `TaggedPath` ===
 
 = Glossary =
 
