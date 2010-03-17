@@ -6,11 +6,11 @@
 
 = Overview =
 
-The User Interface component is in charge of handling all interactions between the user and the control layer. It is implemented using WPF for its powerful framework which allows for the creation of clean, professional look-and-feel. It also allows for the true separation of the User Interface from the System Logic Layer, allowing other developers to create their own User Interface to interact with our Logic Layer.
+The User Interface (UI) component is in charge of handling all interactions between the user and the control layer. It is implemented using WPF for its powerful framework which allows for the creation of clean, professional look-and-feel. It also allows for the true separation of the UI from the System Logic Layer, allowing other developers to create their own UI to interact with our Logic Layer.
 
 = Classes =
 
-The User Interface component consists of several important sub-components, including the single instance layer - `SingleInstanceManager` , `SynclessApplication`, windows - `MainWindow`, `TagWindow`, `UntagWindow`, `TagDetailsWindow`, `ShortcutsWindow` and `OptionsWindow`, helper components - `CommandLineHelper`, `RegistryHelper`, resource dictionary - `AppResourceDictionary`, misc components - `PortableSettingsProvider`, `FolderBrowseDialogEx` and `MinimizeToTray`.
+The UI component consists of several important sub-components, including the single instance layer - `SingleInstanceManager` , `SynclessApplication`, windows - `MainWindow`, `TagWindow`, `UntagWindow`, `TagDetailsWindow`, `ShortcutsWindow` and `OptionsWindow`, helper components - `CommandLineHelper`, `RegistryHelper`, resource dictionary - `AppResourceDictionary`, misc components - `PortableSettingsProvider`, `FolderBrowseDialogEx` and `MinimizeToTray`.
 
 = Description of Design =
 
@@ -34,15 +34,17 @@ The UI makes use of the `RegistryHelper` to write registry entries to enable she
 
 = UI Design Principles & Philosophy =
 
-Our overall UI goal is to have a minimalist interface and make the tagging process as simple as ever.
+Our overall goal is to make the tagging process as simple as ever and synchronization seamless.
 
-1. Seamless - Like the way sychronization is handled, we will make our UI seamless so that our user will even forget that Syncless is running in the background, quietly carrying our seamless synchronization
+1. Seamless - When Syncless is synchronizing files in the background, users should not  forget their Syncless is on.
 
-2. Minimalist - Our interface aims to prevent cognitive overload on users.3. Intuitive - Users should find it intuitive to not worry 
+2. Minimalist - Our interface aims to prevent cognitive overload on users.
 
-4. Accessible - 
+3. Intuitive - Users should find applications functions intuitive. 
 
+4. Accessible - Users should be tag from any possible way they choose.
 
+5. Best-of-Class - Aim to adopt the best UI practices from application and web development.
   
 = Developing a Alternative UI for Syncless =
      
