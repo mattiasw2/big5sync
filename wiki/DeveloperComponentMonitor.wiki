@@ -9,7 +9,7 @@ The *Monitor Component* provide a set of classes to detect file system changes. 
 
 = Detecting USB Removable Drive Event =
 This is implemented using Windows Management Instrumentation. The code for the detection of USB device is referenced from:  http://dotnetslackers.com/community/blogs/basharkokash/archive/2008/03/15/USB-Detection-source-code.aspx
-When the application starts, all the currently connected drives are recorded. Whenever a USB Event was triggered, we will find out the new list of connected drives and compare with the last records. From the result, we will be able to tell which drives are being inserted or removed.
+When the application starts, all the currently connected drives are recorded. Whenever a USB Event was triggered, we will find out the new list of connected drives and compare with the last records. From the result, we will be able to tell which drives are being inserted or removed. 'DeviceWatcher.cs' will handle the detection of USB device.
 
 = Capturing File/Folder Changes Event =
 This is implemented using `FileSystemwatcher` from the C# library. The `FileSystemWatcher` was extended to handle extra cases that the original `FileSystemWatcher` cannot handle.
@@ -23,8 +23,12 @@ This is implemented using `FileSystemwatcher` from the C# library. The `FileSyst
 == Class Diagram ==
 [http://big5sync.googlecode.com/files/monitor.png http://big5sync.googlecode.com/files/thumbnail%20monitor.png]
 
-= Description of Design =
+== Description of Design ==
+To solve problem 1, we reference the codes from: http://geekswithblogs.net/thibbard/articles/ExtendingFileSystemWatcher.aspx This is done by extending the `FileSystemwatcher` and add new events to trigger a create complete event.
 
+To solve problem 2, we reference the code from: http://csharp-codesamples.com/2009/02/file-system-watcher-and-large-file-volumes/ Instead of writing our logic in the handler, we will dispatch the jobs to a queue where there will be another thread to process them. So the only work done by the handler is to dispatch the jobs to a queue the control moves out of the handler thus releasing the buffer.
+
+To solve problem 3, we thought of a 
 
 = Explanation of =
 
