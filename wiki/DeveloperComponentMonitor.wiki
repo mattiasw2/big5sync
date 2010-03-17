@@ -7,14 +7,18 @@
 = Overview =
 The *Monitor Component* provide a set of classes to detect file system changes. There are 2 roles for the *Monitor Component*. The first role is to be able to detect the insertion and removal of USB removable drive (external hard disk and flash drive) and the second role is to capture any changes to a file or folder.
 
-=Detecting USB Removable Drive Event=
+= Detecting USB Removable Drive Event =
 This is implemented using Windows Management Instrumentation. The code for the detection of USB device is referenced from:  http://dotnetslackers.com/community/blogs/basharkokash/archive/2008/03/15/USB-Detection-source-code.aspx
+When the application starts, all the currently connected drives are recorded. Whenever a USB Event was triggered, we will find out the new list of connected drives and compare with the last records. From the result, we will be able to tell which drives are being inserted or removed.
 
-=Capturing File/Folder Changes Event=
+= Capturing File/Folder Changes Event =
 This is implemented using `FileSystemwatcher` from the C# library. The `FileSystemWatcher` was extended to handle extra cases that the original `FileSystemWatcher` cannot handle.
 
-= Class Diagram =
+
+== Class Diagram ==
 [http://big5sync.googlecode.com/files/monitor.png http://big5sync.googlecode.com/files/thumbnail%20monitor.png]
+
+
 
 = Description of Design =
 
