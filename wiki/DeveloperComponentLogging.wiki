@@ -16,7 +16,7 @@ The Logging component makes use of a third-party Dynamic Link Library (DLL), _lo
 
 This is the main logic layer which is called by `SystemLogicLayer` to perform logging. A logger object is instantiated and returned to `SystemLogicLayer` when `SystemLogicLayer` call `GetLogger` method of `LoggingLayer`.
 
-== !Logger ==
+== Logger ==
 
 There are two types of logger object, namely the debug log and the user log. When instantiated, a name is passed to the constructor to indicate whether it is a debug log or a user log.
 
