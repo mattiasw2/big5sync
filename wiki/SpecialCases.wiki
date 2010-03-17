@@ -1,4 +1,4 @@
-#summary This page details the expected results when a user does an unusual combination of actions.
+#summary Developers' Guide - Handling special cases
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
