@@ -120,7 +120,7 @@ To save time and increase productivity, refer to the list of keyboard shortcuts.
 
 == Getting More Help ==
 
-To get help while you are using Syncless, refer to the http://code.google.com/p/big5sync/w/edit/UserGuide User Guide]. You'll find more information about the topics covered in this document, as well as information about and instructions for many more topics. You can also view a video of the quick run-through of the features:
+To get help while you are using Syncless, refer to the [http://code.google.com/p/big5sync/w/edit/UserGuide User Guide]. You'll find more information about the topics covered in this document, as well as information about and instructions for many more topics. You can also view a video of the quick run-through of the features:
 
 <wiki:video url="http://www.youtube.com/watch?v=i30Q2U7ceWs"/>
 
