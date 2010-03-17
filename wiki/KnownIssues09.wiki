@@ -6,6 +6,8 @@
 
 These are the current known issues with Syncless 0.9, and will be handled at a later version. For a list of how Syncless handles certain unique sequence of actions, please look at [SpecialCases here].
 
+Note: As much as we try to keep this page updated, please take a look at the project's [http://code.google.com/p/big5sync/issues/list issue tracker] before reporting any bugs, thank you.
+
 = Profiling =
 == Corrupted/Non-Standard XML Format ==
 If the XML is corrupted due to user interference, Syncless will have erratic behaviour. The next version will detect this and handle it properly. [http://code.google.com/p/big5sync/issues/detail?id=33 Issue #33]
