@@ -13,3 +13,9 @@
 
 4. Merge Profile for Hard disk.
    Currently, the system only merges the profiles from removable drives with the current profile. However, due to some implementation, external hard disk profile does not merge. We are looking into a better design to implement the merging.
+
+5. Configurable Tag.
+   Currently, the system will by default archive the last 5 files. In the future, we will allow the user to customize different settings for archival.
+
+6. More Filters
+   Currently, Syncless only provides Extension filters. In the future, we will provide more type of filter like size filter and folder filter.
