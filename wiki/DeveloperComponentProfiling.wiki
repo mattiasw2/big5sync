@@ -12,7 +12,7 @@ The Profiling component performs drive/computer recognization. It makes *Syncles
 
 The *Profiling* component consists of several important sub-components, including a main logic layer - `ProfilingLayer`, model objects - `Profile` and `ProfileMapping`, helper components - `ProfileMerger`, `ProfilingHelper`,`ProfilingXMLHelper` and `ProfilingGUIDHelper`.
 
-== `ProfilingLayer` ==
+== !ProfilingLayer ==
 
 This is the main logic layer which is called by the `SystemLogicLayer` to perform profiling-related operations. When Syncless is started up, `SystemLogicLayer` will call `ProfilingLayer` for initialization.
 
