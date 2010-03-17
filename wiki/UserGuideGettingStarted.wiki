@@ -69,7 +69,7 @@ http://big5sync.googlecode.com/files/tagshell.png
 
 2. Viewing the tag after Tagging
 
-http://big5sync.googlecode.com/files/tag-view.png
+http://big5sync.googlecode.com/files/viewing-tag.png
 
 3. Drag and drop the removable drive folder to tag
 
