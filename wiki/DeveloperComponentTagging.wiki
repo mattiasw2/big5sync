@@ -143,7 +143,7 @@ Let's take a look at the pseudo-code for the merging of paths:
              if newPath was deleted later than the creation of currentPath
                  remove currentPath from currentTag
          else if currentPath was deleted && newPath exists
-             if _newPath_ was created later than the deletion of currentPath
+             if newPath was created later than the deletion of currentPath
                  add newPath to currentTag
 }}}
 
