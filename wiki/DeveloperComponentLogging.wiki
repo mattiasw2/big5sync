@@ -21,4 +21,4 @@ This is the main logic layer which is called by `SystemLogicLayer` to perform lo
 There are two types of logger object, namely the debug log and the user log. When instantiated, a name is passed to the constructor to indicate whether it is a debug log or a user log.
 
 = Extending Logging =
-Logging uses decorator pattern. This allow the developer to extend the method to do pre processing and post processing before writing the log.
+Logging uses decorator pattern. This allows the developers to extend the method to do pre-processing and post-processing tasks before writing the log.
