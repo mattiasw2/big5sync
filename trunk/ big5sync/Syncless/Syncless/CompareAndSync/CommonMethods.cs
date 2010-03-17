@@ -16,6 +16,7 @@ namespace Syncless.CompareAndSync
     /// </summary>
     public static class CommonMethods
     {
+        private static readonly object syncLock = new object();
 
         #region XML
 
@@ -25,7 +26,10 @@ namespace Syncless.CompareAndSync
             {
                 try
                 {
-                    xmlDoc.Save(xmlPath);
+                    lock (syncLock)
+                    {
+                        xmlDoc.Save(xmlPath);
+                    }
                     break;
                 }
                 catch (IOException)
