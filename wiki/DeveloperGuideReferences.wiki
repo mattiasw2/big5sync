@@ -1,14 +1,10 @@
-#summary One-sentence summary of this page.
+#summary Developers' Guide - References
 #labels Phase-Implementation
 
 = Introduction =
 
-Add your content here.
-
+Throughout the development of *Syncless*, we referred to various code online, and adapted some of them for our own use. This page lists down all the code or resources we have referred to.
 
 = Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+[http://moazzam-khan.com/blog/?p=418 Producer/Consumer Queues in C#]
