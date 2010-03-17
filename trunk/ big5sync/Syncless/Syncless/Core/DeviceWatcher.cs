@@ -12,6 +12,7 @@ namespace Syncless.Core
         private static DeviceWatcher _instance;
         /// <summary>
         /// The singleton instance of DeviceWatcher object.
+        /// Reference from http://dotnetslackers.com/community/blogs/basharkokash/archive/2008/03/15/USB-Detection-source-code.aspx
         /// </summary>
         public static DeviceWatcher Instance
         {
