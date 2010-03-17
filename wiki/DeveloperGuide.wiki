@@ -78,6 +78,12 @@ http://big5sync.googlecode.com/files/mainpagelogosmall.png
 
         [http://code.google.com/p/big5sync/wiki/DeveloperComponentLogging More details...]
 
+     == User Interface ==
+
+        The User Interface component is in charge of handling all interactions between the user and the control layer. It is implemented using WPF to achieve true separation of the control layer from the view layer and a clean & professional look-and-feel.
+
+        [http://code.google.com/p/big5sync/wiki/DeveloperComponentUserInterface More details...]
+
      
 = Known Issues =
 There are some known issues with V0.9, and they can be found [http://code.google.com/p/big5sync/wiki/KnownIssues09 here].
