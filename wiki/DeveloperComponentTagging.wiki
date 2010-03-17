@@ -105,7 +105,7 @@ For clearer illustration, we denote the tag found in _newProfile_ as _newTag_ an
 
 For each _newTag_, if it has not already existed in _currentProfile_, it indicates that _newTag_ has been created elsewhere and should be added to _currentProfile_ so that details of _newTag_ can be displayed to the user. If _newTag_ exists in _currentProfile_, the system will do further check whether any modification has been made to the equivalent _currentTag_.
 
-=== Merging the !Tag ===
+=== Merging the Tag ===
 
 Let's take a look at the pseudo-code for the merging the tags:
 
