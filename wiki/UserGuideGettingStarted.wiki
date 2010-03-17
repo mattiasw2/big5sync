@@ -116,7 +116,7 @@ Syncless provides basic filtering for files currently. There are 2 main kinds of
 === Create a Filter ===
 Click on either the folder icon or the details icon in the toolbar to open up the filter panel. You should see a list of filters, and most likely, it will be blank since no filters have been added yet.
 
-ADD SCREENSHOTS HERE
+http://big5sync.googlecode.com/files/filtering.png
 
 Now, click on "+" to add a new filter. You can now set the "Ext. Mask" and the "Mode".
 
