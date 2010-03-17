@@ -29,7 +29,9 @@ If you follow all the steps in this tutorial, you’ll be able to:
 
 
 == Downloading and Running ==
-Before continuing, make sure you are running a Windows operating system (XP and above has been tested so far to be working well).
+Before continuing, make sure you have fulfill the following:
+* You are running a Windows operating system (XP and above has been tested so far to be working well). 
+* You have .NET 3.5 SP2 Framework installed on your computer, get from http://msdn.microsoft.com/en-us/netframework/default.aspx
 
 To download Syncless, please visit http://code.google.com/p/big5sync/downloads/list to get the latest version (ver 0.9) of Syncless. After that, unzip the package to anywhere and run Syncless.exe. Absolutely no installation of Syncless is required.
 
@@ -91,7 +93,7 @@ http://big5sync.googlecode.com/files/eject-removable-drive.png
 
 You can access this from the Toolbar > Eject or by using its keyboard shortcut equivalent (Ctrl-E)
 
-Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be stopped and thus allow the removable drive to be safely removed. Currently, the "Eject" button only tells Syncless to stop monitoring the removable drive selected, and you still have to use the "Safely Remove" in Windows. Future versions of Syncless will help to safely remove the drive as well.
+Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be *stopped* (only seamless operations will be stopped so far) and thus allow the removable drive to be safely removed. Currently, the "Eject" button only tells Syncless to stop monitoring the removable drive selected, and you still have to use the "Safely Remove" in Windows. Future versions of Syncless will help to safely remove the drive as well.
 
 With the successful operation of synchronization, you have now completed the full Syncless tutorial. Continue on to see other major features in Syncless.
 
