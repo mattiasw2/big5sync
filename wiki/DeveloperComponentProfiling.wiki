@@ -10,6 +10,8 @@ The Profiling component performs drive/computer recognization. It makes *Syncles
 
 = Classes =
 
+http://big5sync.googlecode.com/files/profiling.png
+
 The *Profiling* component consists of several important sub-components, including a main logic layer - `ProfilingLayer`, model objects - `Profile` and `ProfileMapping`, helper components - `ProfileMerger`, `ProfilingHelper`,`ProfilingXMLHelper` and `ProfilingGUIDHelper`.
 
 == !ProfilingLayer ==
