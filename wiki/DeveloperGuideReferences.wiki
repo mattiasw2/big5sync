@@ -9,4 +9,5 @@ Throughout the development of *Syncless*, we referred to various code online, an
 = Details =
 
 [http://moazzam-khan.com/blog/?p=418 Producer/Consumer Queues in C#]
+
 [http://dotnetslackers.com/community/blogs/basharkokash/archive/2008/03/15/USB-Detection-source-code.aspx USB Port Insert / Remove detection using WMI (Source Code)]
