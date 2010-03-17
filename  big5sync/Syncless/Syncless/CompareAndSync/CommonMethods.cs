@@ -397,6 +397,8 @@ namespace Syncless.CompareAndSync
             }
         }
 
+
+        // Method credited to http://stackoverflow.com/questions/642125/encoding-xpath-expressions-with-both-single-and-double-quotes
         public static string ParseXpathString(string input)
         {
             // If we don't have any " then encase string in " 
