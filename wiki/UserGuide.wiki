@@ -1,5 +1,5 @@
 #summary Users' Guide
-#labels Featured,Phase-Implementation
+#labels Phase-Implementation
 
 
 http://big5sync.googlecode.com/files/mainpagelogosmall.png
