@@ -4,12 +4,12 @@
 
 <wiki:toc max_depth="6" />
 
-== Overview ==
+= Overview =
 
-== Class Diagram ==
+= Class Diagram =
 
-== Description of Design ==
+= Description of Design =
 
-== Explanation of ==
+= Explanation of =
 
-== Extending UI ==
+= Extending UI =
