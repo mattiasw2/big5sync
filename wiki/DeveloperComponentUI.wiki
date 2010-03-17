@@ -22,6 +22,9 @@ In order to support many of the other fundamental features which Syncless has su
 The whole user interface architecture is based on the Service Locator pattern. Using this pattern, we can hide the implementation from the UI. The UI will retrieve from Syncless.Core.ServiceLocator the Syncless.Core.IUIControllerInterface Interface, which abstracts a subset of methods which the SystemLogicLayer will provide to the user interface.
 
 The UI can then make use of these methods to interact with the logic layer. This decouples the UI from the SystemLogicLayer, preventing changes in the System Logic Layer from affecting the UI.
+
+== Application Resource Dictionary ==
+The UI makes use of the `AppResourceDictionary` to hold templates of controls and other resources such as BrushStyles or ColorResources, so as to allow for reusability of styles 
      
 = Developing a Alternative UI for Syncless =
      
@@ -34,3 +37,4 @@ To create a UI for Syncless, the developer just need to follow a few steps.
 We would like to thank the following resources/developers for their valuable contributions to challenges that WPF developers will encounter in the course of development.
 
   * *Singleton Application* - http://www.switchonthecode.com/tutorials/wpf-writing-a-single-instance-application
+  * *Combined File & Folder Browser Dialog* - http://dotnetzip.codeplex.com/SourceControl/changeset/view/29832#432677
