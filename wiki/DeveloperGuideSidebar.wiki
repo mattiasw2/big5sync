@@ -1,7 +1,7 @@
 #labels Phase-Implementation
   * [UserGuideGettingStarted Getting Started!]
     * [UserGuideGettingStarted#Welcome_to_Syncless Welcome to Syncless!]
-      * [UserGuideGettingStarted#What_You\'ll_Learn] What You'll Learn]
+      * [UserGuideGettingStarted#What_You&#147ll_Learn] What You'll Learn]
       * [UserGuideGettingStarted#Downloading_and_Running Downloading and Running]
       * [UserGuideGettingStarted#The_Syncless_Interface The Syncless Interface]
     * [UserGuideGettingStarted#Learn_Syncless Learn Syncless]
