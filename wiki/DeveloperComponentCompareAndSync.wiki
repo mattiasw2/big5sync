@@ -1,4 +1,4 @@
-#summary Developer's Guide - Component - CompareAndSync
+#summary Developers' Guide - Component - CompareAndSync
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
