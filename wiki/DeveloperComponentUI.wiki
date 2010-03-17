@@ -14,6 +14,9 @@ The User Interface component consists of several important sub-components, inclu
 
 = Description of Design =
 
+== Single Instance Layer ==
+In order to support many of the other fundamental features which Syncless has such as shell integration and possible future CLI support, the UI had to converted to a single instance application which support arguments. 
+
 == Separation of View from Control & Logic ==
 
 The whole user interface architecture is based on the Service Locator pattern. Using this pattern, we can hide the implementation from the UI. The UI will retrieve from Syncless.Core.ServiceLocator the Syncless.Core.IUIControllerInterface Interface, which abstracts a subset of methods which the SystemLogicLayer will provide to the user interface.
