@@ -147,6 +147,10 @@ Let's take a look at the pseudo-code for the merging of paths:
                  add newPath to currentTag
 }}}
 
+The system first checks whether _newPath_ exists in _currentTag_, if it does not exist, then _newPath_ should be added to _currentTag_. If _newPath_ exists in _currentTag_, then the system needs to check whether there are changes made to the tagged path.
+
+If the updated time of _newPath_ is earlier than that of _currentPath_, the system will take 
+
 = Glossary =
 
 _tagging.xml_ : This is an XML document which stores the information of tags.
