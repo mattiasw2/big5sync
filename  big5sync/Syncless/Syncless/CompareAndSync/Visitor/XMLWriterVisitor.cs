@@ -27,7 +27,7 @@ namespace Syncless.CompareAndSync.Visitor
         private const string XPATH_EXPR = "/meta-data";
         private const string LAST_MODIFIED = "/last_modified";
         private const int FIRST_POSITION = 0;
-        private static readonly object syncLock = new object();
+        //private static readonly object syncLock = new object();
         private string[] pathList;
         private List<string> newNameList = new List<string>();
         private List<string> oldNameList = new List<string>();
@@ -63,18 +63,18 @@ namespace Syncless.CompareAndSync.Visitor
             if (File.Exists(xmlPath))
                 return;
 
-                DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, META_DIR));
-                di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-                XmlTextWriter writer = new XmlTextWriter(xmlPath, null);
-                writer.Formatting = Formatting.Indented;
-                writer.WriteStartDocument();
-                writer.WriteStartElement("meta-data");
-                writer.WriteElementString("last_modified", (DateTime.Now.Ticks).ToString());
-                writer.WriteElementString(NODE_NAME, GetLastFileIndex(path));
-                writer.WriteEndElement();
-                writer.WriteEndDocument();
-                writer.Flush();
-                writer.Close();
+            DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, META_DIR));
+            di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+            XmlTextWriter writer = new XmlTextWriter(xmlPath, null);
+            writer.Formatting = Formatting.Indented;
+            writer.WriteStartDocument();
+            writer.WriteStartElement("meta-data");
+            writer.WriteElementString("last_modified", (DateTime.Now.Ticks).ToString());
+            writer.WriteElementString(NODE_NAME, GetLastFileIndex(path));
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+            writer.Flush();
+            writer.Close();
         }
 
         private void ProcessMetaChangeType(string currentPath, FileCompareObject file, int counter)
@@ -187,7 +187,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR);
             node.AppendChild(fileElement);
-CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+            CommonMethods.SaveXML(ref xmlDoc, xmlPath);
         }
 
         private void UpdateFileObject(FileCompareObject file, int counter, string currentPath)
@@ -195,10 +195,10 @@ CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             XmlDocument xmlDoc = new XmlDocument();
             currentPath = UpdateToRenamedFolder(file.Parent.Name, currentPath);
             currentPath = RemoveOldFolderName(currentPath);
-
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
             CreateFileIfNotExist(currentPath);
-CommonMethods.LoadXML(ref xmlDoc, xmlPath);
+
+            CommonMethods.LoadXML(ref xmlDoc, xmlPath);
 
             int position = GetPropagated(file);
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
@@ -234,7 +234,7 @@ CommonMethods.LoadXML(ref xmlDoc, xmlPath);
                 }
             }
 
-CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+            CommonMethods.SaveXML(ref xmlDoc, xmlPath);
         }
 
         private void RenameFileObject(FileCompareObject file, int counter, string currentPath)
@@ -245,7 +245,7 @@ CommonMethods.SaveXML(ref xmlDoc, xmlPath);
 
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
             CreateFileIfNotExist(currentPath);
-CommonMethods.LoadXML(ref xmlDoc, xmlPath);
+            CommonMethods.LoadXML(ref xmlDoc, xmlPath);
 
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
             if (node == null)
@@ -255,7 +255,7 @@ CommonMethods.LoadXML(ref xmlDoc, xmlPath);
             }
             node.FirstChild.InnerText = file.NewName;
 
-CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+            CommonMethods.SaveXML(ref xmlDoc, xmlPath);
         }
 
         private void DeleteFileObject(FileCompareObject file, string currentPath)
@@ -274,7 +274,7 @@ CommonMethods.SaveXML(ref xmlDoc, xmlPath);
                     return;
                 node.ParentNode.RemoveChild(node);
 
-CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+                CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
         }
 
@@ -289,7 +289,6 @@ CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             {
                 return currentPath;
             }
-
         }
 
         private string RemoveOldFolderName(string currentPath)
@@ -402,13 +401,13 @@ CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             XmlDocument xmlDoc = new XmlDocument();
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
 
-CommonMethods.LoadXML(ref xmlDoc, xmlPath);
+            CommonMethods.LoadXML(ref xmlDoc, xmlPath);
 
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files" + "[name='" + file.Name + "']");
             if (node != null)
                 node.ParentNode.RemoveChild(node);
 
-CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+            CommonMethods.SaveXML(ref xmlDoc, xmlPath);
         }
 
         private void ProcessFolderFinalState(string currentPath, FolderCompareObject folder, int counter)
@@ -440,7 +439,7 @@ CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
             CreateFileIfNotExist(currentPath);
 
- CommonMethods.LoadXML(ref xmlDoc, xmlPath);
+            CommonMethods.LoadXML(ref xmlDoc, xmlPath);
 
             DoFolderCleanUp(xmlDoc, folder.Name);
             XmlText nameText = xmlDoc.CreateTextNode(folder.Name);
@@ -453,7 +452,7 @@ CommonMethods.SaveXML(ref xmlDoc, xmlPath);
 
             string subFolderXML = Path.Combine(currentPath, folder.Name);
             CreateFileIfNotExist(subFolderXML);
-CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+            CommonMethods.SaveXML(ref xmlDoc, xmlPath);
         }
 
         private void RenameFolderObject(FolderCompareObject folder, string currentPath)
@@ -464,7 +463,7 @@ CommonMethods.SaveXML(ref xmlDoc, xmlPath);
                 XmlDocument xmlDoc = new XmlDocument();
                 string xmlPath = Path.Combine(currentPath, METADATAPATH);
 
-               CommonMethods.LoadXML(ref xmlDoc, xmlPath);
+                CommonMethods.LoadXML(ref xmlDoc, xmlPath);
 
                 XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
                 if (node == null)
@@ -475,26 +474,26 @@ CommonMethods.SaveXML(ref xmlDoc, xmlPath);
 
                 node.FirstChild.InnerText = folder.NewName;
 
-                    CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+                CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
             else
             {
                 XmlDocument newXmlDoc = new XmlDocument();
                 string editOldXML = Path.Combine(Path.Combine(currentPath, folder.NewName), METADATAPATH);
 
-             CommonMethods.LoadXML(ref newXmlDoc, editOldXML);
+                CommonMethods.LoadXML(ref newXmlDoc, editOldXML);
 
                 XmlNode xmlNameNode = newXmlDoc.SelectSingleNode(XPATH_EXPR + "/name");
                 xmlNameNode.InnerText = folder.NewName;
-                    CommonMethods.SaveXML(ref newXmlDoc, editOldXML);
+                CommonMethods.SaveXML(ref newXmlDoc, editOldXML);
 
                 string parentXML = Path.Combine(currentPath, METADATAPATH);
                 XmlDocument parentXmlDoc = new XmlDocument();
-                    CommonMethods.LoadXML(ref parentXmlDoc, parentXML);
+                CommonMethods.LoadXML(ref parentXmlDoc, parentXML);
                 XmlNode parentXmlFolderNode = parentXmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
                 parentXmlFolderNode.FirstChild.InnerText = folder.NewName;
 
-                    CommonMethods.SaveXML(ref parentXmlDoc, Path.Combine(currentPath, METADATAPATH));
+                CommonMethods.SaveXML(ref parentXmlDoc, Path.Combine(currentPath, METADATAPATH));
 
                 newNameList.Add(folder.NewName);
                 oldNameList.Add(folder.Name);
@@ -507,13 +506,13 @@ CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             string xmlPath = Path.Combine(currentPath, METADATAPATH);
             if (File.Exists(xmlPath))
             {
-                    CommonMethods.LoadXML(ref xmlDoc, xmlPath);
+                CommonMethods.LoadXML(ref xmlDoc, xmlPath);
 
                 XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder" + "[name='" + folder.Name + "']");
                 if (node == null)
                     return;
                 node.ParentNode.RemoveChild(node);
-                    CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+                CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
         }
 
