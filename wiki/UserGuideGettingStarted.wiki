@@ -12,17 +12,17 @@ _*Syncless*_ allows you to synchronize your files and folders automatically thro
 
 == What You’ll Learn ==
 If you follow all the steps in this tutorial, you’ll be able to:
-  * Synchronize files/folders
+  * Synchronize files/folders between the computer and a removable drive
 
   * Tag in multiple ways
 
   * Manage Tags
 
-  * Run Syncless off a thumbdrive
+  * Learn basic shortcuts to speed up productivity
 
   * Apply filters to tags
 
-  * Learn shortcuts to speed up productivity
+  * Eject removable drives
 
 == Downloading and Running ==
 Before continuing, make sure you are running a Windows operating system (XP and above has been tested so far to be working well).
@@ -73,17 +73,15 @@ http://big5sync.googlecode.com/files/tagging-complete.png
 
 == Step 2: ==
 
+== Step 3: ==
 
-
-
+Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be stopped (Currently in Ver 0.9, only Seamless Operations are stopped) and thus the removable drive to be safely removed.
 
 == Continue to Explore Syncless ==
 
 Syncless offers other powerful features. Check out one or more of these additional features:
 
   * *Filtering*:  Use Syncless's filtering features for the ultimate control in synchronization. Currently, Syncless is able to include or exclude files and folders by extension and path. Other filters will be available in later versions.
-
-  * *Eject removable drives*: Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be stopped (Currently in Ver 0.9, only Seamless Operations are Stopped) and thus allow them to be safely removed from removable drives without any data loss.
 
  * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder will be archived up to 5 backups at one time. Currently as of Ver. 0.9, archiving is not user-configurable, but will be in the future.
 
