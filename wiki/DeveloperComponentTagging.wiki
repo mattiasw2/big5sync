@@ -52,7 +52,7 @@ http://big5sync.googlecode.com/files/TaggingUntagFolder.jpg
 
 http://big5sync.googlecode.com/files/TaggingUpdateFilter.jpg
 
-== TaggingXMLHelper ==
+== `TaggingXMLHelper` ==
 
 This is a helper which performs XML-related operations. It reads from and writes to _tagging.xml_ which stores information of all tags and their configuration.
 
