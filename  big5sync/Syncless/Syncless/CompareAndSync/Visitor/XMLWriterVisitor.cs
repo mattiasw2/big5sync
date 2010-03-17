@@ -521,11 +521,11 @@ namespace Syncless.CompareAndSync.Visitor
             int position, string folderPath)
         {
             string name = Path.Combine(folderPath, folder.Name);
-            if (Directory.Exists(name)) //CREATE OR UPDATED
+            if (Directory.Exists(name)) //CREATE 
             {
                 bool metaExist = folder.MetaExists[position];
                 bool folderExist = folder.Exists[position];
-                if (folderExist == true) //UPDATE
+                if (folderExist == true) //CREATE
                 {
                     CreateFolderObject(folder, folderPath);
                 }
