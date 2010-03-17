@@ -18,6 +18,9 @@ If Folder A is tagged with Folder D and Folder B is tagged with Folder C, a recu
 
 http://big5sync.googlecode.com/files/RecursiveTagging.jpg 
 
+== Tags Not Saved When Program Is Not Terminated Correctly ==
+Currently, Syncless only saves on proper termination. We are aware of this and will fix it at the next release. [http://code.google.com/p/big5sync/issues/detail?id=37 Issue #37]
+
 [http://code.google.com/p/big5sync/issues/detail?id=6 Issue #6]
 
 == Tag Merging from Thumb Drive to Computer Does Not Happen Sometimes ==
