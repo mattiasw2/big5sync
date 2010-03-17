@@ -53,6 +53,22 @@ If you have the following C:\A\B\C\D, and you rename it to C:\A\E\F\G, the synch
 == Corrupted Meta Data Due to Termination of File Copying Process ==
 When you try to copy a large file from a external hard disk to a local folder, the copying process might hang and corrupt the meta data XML document. [http://code.google.com/p/big5sync/issues/detail?id=41 Issue #41]
 
+== Does not detect that the drive is full==
+During synchronization, if the drive is full, Syncless is unable to detect the lack of disk space. 
+[http://code.google.com/p/big5sync/issues/detail?id=42 Issue #42]
+
+== File to Sync with Folder ==
+If a file is named file.txt and a folder is named file.txt, Syncless does not handle this unique case.
+[http://code.google.com/p/big5sync/issues/detail?id=43 Issue #43]
+
+== Opening some file in a folder that is monitored ==
+If a file is open in a folder that is tag and is in seamless mode , seamless mode will behave in a unexpected way.
+[http://code.google.com/p/big5sync/issues/detail?id=45 Issue #45]
+
+== Hash fail
+The program will throw a error if a file that is being hash is currently locked.
+[http://code.google.com/p/big5sync/issues/detail?id=44 Issue #44]
+
 == Seamless Mode Issues ==
 Please refer to the Monitor section.
 
