@@ -4,24 +4,24 @@
 
 <wiki:toc max_depth="6" />
 
-== Overview ==
+= Overview =
 
 The Logging component performs logging of messages produced when exceptions are caught to a debug log file. It also logs user actions to a user log file.
 
-== The Classes ==
+= The Classes =
 
 The Logging component makes use of a third-party Dynamic Link Library (DLL), _log4net.dll_, to perform logging.
 
-=== !LoggingLayer ===
+== !LoggingLayer ==
 
 This is the main logic layer which is called by *!SystemLogicLayer* to perform logging. A logger object is instantiated and returned to *!SystemLogicLayer* when *!SystemLogicLayer* call *!GetLogger* method of *!LoggingLayer*.
 
-=== Logger ===
+== Logger ==
 
 There are two types of logger object, namely the debug log and the user log. When instantiated, a name is passed to the constructor to indicate whether it is a debug log or a user log.
 
-== Description of Design ==
+= Description of Design =
 
-== Explanation of ==
+= Explanation of =
 
-== Extending Logging ==
+= Extending Logging =
