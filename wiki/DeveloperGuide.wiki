@@ -21,6 +21,8 @@ http://big5sync.googlecode.com/files/mainpagelogosmall.png
         affecting the UI. On top of that, this also allows other developers to create 
         their own user interfaces to work with SLL.
 
+        [http://big5sync.googlecode.com/files/thumbnail%20overview.png http://big5sync.googlecode.com/files/overview.png]
+
      == Data Storing ==
       
         Syncless uses various XML files to store information. XML was chosen as it is more readable and portable. Examples are tagging.xml and 
