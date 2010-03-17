@@ -79,4 +79,4 @@ Conversion from `TaggingProfile` to _tagging.xml_:<br>
 
 = Glossary =
 
-_tagging.xml_
+_tagging.xml_ : This is an XML document which stores the information of tags.
