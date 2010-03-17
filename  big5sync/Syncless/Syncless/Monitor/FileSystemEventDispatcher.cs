@@ -5,6 +5,9 @@ using Syncless.Monitor.DTO;
 
 namespace Syncless.Monitor
 {
+    /// <summary>
+    /// Reference from http://csharp-codesamples.com/2009/02/file-system-watcher-and-large-file-volumes/
+    /// </summary>
     public class FileSystemEventDispatcher
     {
         private const int SLEEP_TIME = 1000;

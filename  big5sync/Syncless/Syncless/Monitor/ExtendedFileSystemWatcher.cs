@@ -5,6 +5,9 @@ using System.Threading;
 
 namespace Syncless.Monitor
 {
+    /// <summary>
+    /// Reference from http://geekswithblogs.net/thibbard/articles/ExtendingFileSystemWatcher.aspx
+    /// </summary>
     public class ExtendedFileSystemWatcher : FileSystemWatcher
     {
         private const int SLEEP_TIME = 1000;
