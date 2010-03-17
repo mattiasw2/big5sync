@@ -25,12 +25,12 @@ This is implemented using `FileSystemwatcher` from the C# library. The `FileSyst
   # When `FileSystemwatcher` is working with large volumes of file, it is unreliable. The reason is that there is a fixed buffer allocated to each `FileSystemwatcher` which is used to store information on the events raised. When a large number of files raises an event, this buffer gets full and some events might not be captured.
   # Different applications have different ways of handling a file/folder operation. Temporary files are sometimes used and this will cause some problems when we do a sync. Exception will occur when trying to sync a temporary file when the file has already been deleted.
 
-== Explanation of Algorithms ==
+= Explanation of Algorithms =
 To solve problem 1, we reference the codes from: http://geekswithblogs.net/thibbard/articles/ExtendingFileSystemWatcher.aspx. This is done by extending the `FileSystemwatcher` and adding new events to trigger a complete creation event.
 
 To solve problem 2, we reference the codes from: http://csharp-codesamples.com/2009/02/file-system-watcher-and-large-file-volumes/. Instead of writing our logic in the handler, we will dispatch the sequence of events to a queue which is processed by a separate thread. As such, the only work done by the handler is to dispatch the events to the queue, so that it can release the buffer and start monitoring more events.
 
 To solve problem 3, we thought of an algorithm to transfer all the events currently in the waiting queue to another process queue if there is an idle time of 1 second with no new events. This process queue will look through all the events and produce the simplest form of events to be synchronized.
 
-== Extending Monitor ==
+= Extending Monitor =
 If there are other custom events which require `FileSystemWatcher` to trigger, simply extend `ExtendedFileSystemWatcher` and replace the current `ExtendedFileSystemWatcher` calls to the newly extended class.
