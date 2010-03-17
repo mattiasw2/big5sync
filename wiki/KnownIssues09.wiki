@@ -12,7 +12,8 @@ If the XML is corrupted due to user interference, Syncless will have erratic beh
 
 = Tagging =
 == Recursive Tagging ==
-If a user tags two folders, say "C:\Notes" and "D:\Lectures", and tags another folder within "C:\Notes" with another tag to "D:\Lectures", this will result in Syncless recursively generating files over and over again. Granted, this is an unusual case, and should not happen generally. [http://code.google.com/p/big5sync/issues/detail?id=6 Issue #6]
+If Folder A is tagged with Folder D and Folder B is tagged with Folder C, a recursion will occur and folders will be created in them until they hit the maximum file path length.
+http://big5sync.googlecode.com/files/RecursiveTagging.jpg [http://code.google.com/p/big5sync/issues/detail?id=6 Issue #6]
 
 == Tag Merging from Thumb Drive to Computer Does Not Happen Sometimes ==
 Syncless has the ability to merge all the tags on the thumb drive with that on the computer. However, there are times when this does not happen. [http://code.google.com/p/big5sync/issues/detail?id=30 Issue #30]
