@@ -109,8 +109,6 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            //destFile = Path.Combine(currentPaths[i], fco.Name);
-
                             destFile = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
                             fileExists = File.Exists(destFile);
 
@@ -213,7 +211,7 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            if (File.Exists(Path.Combine(fco.GetSmartParentPath(i), fco.Name)/*Path.Combine(currentPaths[i], fco.Name)*/))
+                            if (File.Exists(Path.Combine(fco.GetSmartParentPath(i), fco.Name)))
                             {
                                 CommonMethods.MoveFile(Path.Combine(fco.GetSmartParentPath(i), fco.Name), Path.Combine(fco.GetSmartParentPath(i), fco.NewName));
                                 fco.FinalState[i] = FinalState.Renamed;

@@ -31,7 +31,8 @@ namespace Syncless.CompareAndSync.Visitor
         {
             for (int index = 0; index < numOfPaths; index++)
             {
-                string path = currentPaths[index] + @"\" + folder.Name;
+                string path = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
+                //string path = currentPaths[index] + @"\" + folder.Name;
                 DirectoryInfo f = new DirectoryInfo(path);
 
                 if (f.Exists)
