@@ -100,3 +100,8 @@ In Syncless, there is a button that allows for the safety removal of removable d
 
 == Eject Does Not Remove Drive From Application ==
 The "Eject" button simply tells Syncless to stop actively monitoring the drive, so that you can proceed to use the "Safely Remove" feature in Windows. We are looking at ways to implement safely removal. [http://code.google.com/p/big5sync/issues/detail?id=28 Issue #28]
+
+== Main Window Minimized to Tray After Tagging ==
+Sometimes after the user tag a folder, the main window will be minimized to 
+tray. User may not notice it and will have problem figuring out where has the 
+main window gone to. [http://code.google.com/p/big5sync/issues/detail?id=48 Issue #48]
