@@ -22,14 +22,14 @@ namespace Syncless.CompareAndSync.Visitor
             _filterChain = new FilterChain();
         }
 
-        public void Visit(FileCompareObject file, string[] currentPaths)
+        public void Visit(FileCompareObject file, int numOfPaths)
         {
             //Do nothing
         }
 
-        public void Visit(FolderCompareObject folder, string[] currentPaths)
+        public void Visit(FolderCompareObject folder, int numOfPaths)
         {
-            for (int index = 0; index < currentPaths.Length; index++)
+            for (int index = 0; index < numOfPaths; index++)
             {
                 string path = currentPaths[index] + @"\" + folder.Name;
                 DirectoryInfo f = new DirectoryInfo(path);
@@ -46,7 +46,7 @@ namespace Syncless.CompareAndSync.Visitor
                             FolderCompareObject fco = null;
 
                             if (o == null)
-                                fco = new FolderCompareObject(info.Name, currentPaths.Length, folder);
+                                fco = new FolderCompareObject(info.Name, numOfPaths, folder);
                             else
                                 fco = (FolderCompareObject)o;
 
@@ -67,7 +67,7 @@ namespace Syncless.CompareAndSync.Visitor
                             FileCompareObject fco = null;
 
                             if (o == null)
-                                fco = new FileCompareObject(info.Name, currentPaths.Length, folder);
+                                fco = new FileCompareObject(info.Name, numOfPaths, folder);
                             else
                                 fco = (FileCompareObject)o;
 

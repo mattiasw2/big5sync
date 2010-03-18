@@ -12,14 +12,14 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region IVisitor Members
 
-        public void Visit(FileCompareObject file, string[] currentPaths)
+        public void Visit(FileCompareObject file, int numOfPaths)
         {
             //Do nothing
         }
 
-        public void Visit(FolderCompareObject folder, string[] currentPaths)
+        public void Visit(FolderCompareObject folder, int numOfPaths)
         {
-            DetectFolderRename(folder, currentPaths);
+            DetectFolderRename(folder, numOfPaths);
         }
 
         public void Visit(RootCompareObject root)
@@ -29,11 +29,11 @@ namespace Syncless.CompareAndSync.Visitor
 
         #endregion
 
-        private void DetectFolderRename(FolderCompareObject folder, string[] currentPaths)
+        private void DetectFolderRename(FolderCompareObject folder, int numOfPaths)
         {
             //Check that there is exactly one delete
             List<int> deletePos = new List<int>();
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (folder.ChangeType[i] == MetaChangeType.Delete)
                     deletePos.Add(i);
@@ -54,7 +54,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             FolderCompareObject f = null;
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (folder.ChangeType[i] == MetaChangeType.Delete)
                 {

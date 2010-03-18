@@ -26,13 +26,13 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region IVisitor Members
 
-        public void Visit(FileCompareObject file, string[] currentPaths)
+        public void Visit(FileCompareObject file, int numOfPaths)
         {
             XmlDocument xmlDoc = new XmlDocument();
             for (int i = 0; i < currentPaths.Length; i++)
             {
-                if (currentPaths[i].Contains(META_DIR))
-                    continue;
+                //if (currentPaths[i].Contains(META_DIR))
+                //    continue;
                 string path = Path.Combine(currentPaths[i], METADATAPATH);
                 if (!File.Exists(path))
                     continue;
@@ -49,36 +49,16 @@ namespace Syncless.CompareAndSync.Visitor
             ProcessFileMetaData(file, currentPaths);
         }
 
-        private void PopulateFolderMetaName(FolderCompareObject folder, string[] currentPaths)
-        {
-            for (int i = 0; i < currentPaths.Length; i++)
-            {
-                string currMetaData = Path.Combine(Path.Combine(currentPaths[i], folder.Name), METADATAPATH);
-                if (File.Exists(currMetaData))
-                {
-                    XmlDocument xmlDoc = new XmlDocument();
-
-                    lock (syncLock)
-                    {
-                        CommonMethods.LoadXML(ref xmlDoc, currMetaData);
-                    }
-
-                    folder.MetaName = xmlDoc.SelectSingleNode(XPATH_EXPR + "/name").InnerText;
-                }
-            }
-        }
-
-        public void Visit(FolderCompareObject folder, string[] currentPaths)
+        public void Visit(FolderCompareObject folder, int numOfPaths)
         {
             XmlDocument xmlDoc = new XmlDocument();
 
             PopulateFolderMetaName(folder, currentPaths);
-            
-            
-            for (int i = 0; i < currentPaths.Length; i++)
+
+            for (int i = 0; i < numOfPaths; i++)
             {
-                if (currentPaths[i].Contains(META_DIR))
-                    continue;
+                //if (currentPaths[i].Contains(META_DIR))
+                //    continue;
                 string path = Path.Combine(currentPaths[i], METADATAPATH);
                 if (!File.Exists(path))
                     continue;
@@ -429,6 +409,25 @@ namespace Syncless.CompareAndSync.Visitor
         #endregion
 
         #region Folders
+
+        private void PopulateFolderMetaName(FolderCompareObject folder, string[] currentPaths)
+        {
+            for (int i = 0; i < currentPaths.Length; i++)
+            {
+                string currMetaData = Path.Combine(Path.Combine(currentPaths[i], folder.Name), METADATAPATH);
+                if (File.Exists(currMetaData))
+                {
+                    XmlDocument xmlDoc = new XmlDocument();
+
+                    lock (syncLock)
+                    {
+                        CommonMethods.LoadXML(ref xmlDoc, currMetaData);
+                    }
+
+                    folder.MetaName = xmlDoc.SelectSingleNode(XPATH_EXPR + "/name").InnerText;
+                }
+            }
+        }
 
         private FolderCompareObject PopulateFolderWithMetaData(XmlDocument xmlDoc, FolderCompareObject folder, int counter)
         {
