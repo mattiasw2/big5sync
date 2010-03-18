@@ -29,11 +29,11 @@ namespace Syncless.CompareAndSync.Visitor
         public void Visit(FileCompareObject file, int numOfPaths)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 //if (currentPaths[i].Contains(META_DIR))
                 //    continue;
-                string path = Path.Combine(currentPaths[i], METADATAPATH);
+                string path = Path.Combine(file.GetSmartParentPath(i), METADATAPATH);
                 if (!File.Exists(path))
                     continue;
 
@@ -46,20 +46,19 @@ namespace Syncless.CompareAndSync.Visitor
                 //xmlDoc.Save(path);                
             }
             xmlDoc = null;
-            ProcessFileMetaData(file, currentPaths);
+            ProcessFileMetaData(file,numOfPaths);
         }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
             XmlDocument xmlDoc = new XmlDocument();
 
-            PopulateFolderMetaName(folder, currentPaths);
+            PopulateFolderMetaName(folder, numOfPaths);
 
             for (int i = 0; i < numOfPaths; i++)
             {
-                //if (currentPaths[i].Contains(META_DIR))
-                //    continue;
-                string path = Path.Combine(currentPaths[i], METADATAPATH);
+                
+                string path = Path.Combine(folder.GetSmartParentPath(i), METADATAPATH);
                 if (!File.Exists(path))
                     continue;
 
@@ -68,10 +67,9 @@ namespace Syncless.CompareAndSync.Visitor
                     CommonMethods.LoadXML(ref xmlDoc, path);
                 }
 
-                folder = PopulateFolderWithMetaData(xmlDoc, folder, i);
-                //xmlDoc.Save(path);               
+                folder = PopulateFolderWithMetaData(xmlDoc, folder, i);              
             }
-            ProcessFolderMetaData(folder, currentPaths);
+            ProcessFolderMetaData(folder,numOfPaths);
 
             DirectoryInfo dirInfo = null;
             FileInfo[] fileList = null;
@@ -80,9 +78,9 @@ namespace Syncless.CompareAndSync.Visitor
             List<string> xmlFolderList = null;
             string xmlPath = "";
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
-                string path = Path.Combine(currentPaths[i], folder.Name);
+                string path = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
 
 
                 if (Directory.Exists(path))
@@ -90,7 +88,7 @@ namespace Syncless.CompareAndSync.Visitor
                     dirInfo = new DirectoryInfo(path);
                     fileList = dirInfo.GetFiles();
                     dirInfoList = dirInfo.GetDirectories();
-                    xmlPath = Path.Combine(path, METADATAPATH);
+                    xmlPath = Path.Combine(path , METADATAPATH);
                     if (!File.Exists(xmlPath))
                         continue;
 
@@ -106,7 +104,7 @@ namespace Syncless.CompareAndSync.Visitor
                 }
 
 
-                AddFileToChild(xmlObjList, folder, i, currentPaths.Length);
+                AddFileToChild(xmlObjList, folder, i, numOfPaths);
 
                 xmlObjList.Clear();
             }
