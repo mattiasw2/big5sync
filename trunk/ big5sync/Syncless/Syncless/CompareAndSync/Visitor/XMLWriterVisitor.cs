@@ -33,23 +33,19 @@ namespace Syncless.CompareAndSync.Visitor
         private List<string> newNameList = new List<string>();
         private List<string> oldNameList = new List<string>();
 
-        public void Visit(FileCompareObject file, string[] currentPath)
+        public void Visit(FileCompareObject file, int numOfPaths)
         {
-            for (int i = 0; i < currentPath.Length; i++) // HANDLE ALL EXCEPT PROPAGATED
+            for (int i = 0; i < numOfPaths; i++) // HANDLE ALL EXCEPT PROPAGATED
             {
-                if (currentPath[i].Contains(META_DIR))
-                    continue;
-                ProcessMetaChangeType(currentPath[i], file, i);
+                ProcessMetaChangeType(file, i);
             }
         }
 
-        public void Visit(FolderCompareObject folder, string[] currentPath)
+        public void Visit(FolderCompareObject folder, int numOfPaths)
         {
-            for (int i = 0; i < currentPath.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
-                if (currentPath[i].Contains(META_DIR))
-                    continue;
-                ProcessFolderFinalState(currentPath[i], folder, i);
+                ProcessFolderFinalState(folder, i);
             }
         }
 
@@ -78,36 +74,35 @@ namespace Syncless.CompareAndSync.Visitor
             writer.Close();
         }
 
-        private void ProcessMetaChangeType(string currentPath, FileCompareObject file, int counter)
+        private void ProcessMetaChangeType(FileCompareObject file, int counter)
         {
-
             FinalState? changeType = file.FinalState[counter];
 
             if (changeType == null)
             {
-                HandleNullCases(currentPath, file);
+                HandleNullCases(file.GetSmartParentPath(counter), file);
                 return;
             }
 
             switch (changeType)
             {
                 case FinalState.Created:
-                    CreateFileObject(file, counter, currentPath);
+                    CreateFileObject(file, counter, file.GetSmartParentPath(counter));
                     break;
                 case FinalState.Updated:
-                    UpdateFileObject(file, counter, currentPath);
+                    UpdateFileObject(file, counter, file.GetSmartParentPath(counter));
                     break;
                 case FinalState.Deleted:
-                    DeleteFileObject(file, currentPath);
+                    DeleteFileObject(file, file.GetSmartParentPath(counter));
                     break;
                 case FinalState.Renamed:
-                    RenameFileObject(file, counter, currentPath);
+                    RenameFileObject(file, counter, file.GetSmartParentPath(counter));
                     break;
                 case FinalState.Unchanged:
-                    HandleUnchangedOrPropagatedFile(file, counter, currentPath);
+                    HandleUnchangedOrPropagatedFile(file, counter, file.GetSmartParentPath(counter));
                     break;
                 case FinalState.Propagated:
-                    HandleUnchangedOrPropagatedFile(file, counter, currentPath);
+                    HandleUnchangedOrPropagatedFile(file, counter, file.GetSmartParentPath(counter));
                     break;
             }
 
