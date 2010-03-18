@@ -384,9 +384,9 @@ namespace Syncless.CompareAndSync.Visitor
 
 
 
-        private void ProcessFileMetaData(FileCompareObject file, string[] currentPaths)
+        private void ProcessFileMetaData(FileCompareObject file, int numOfPaths)
         {
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (file.Exists[i] && !file.MetaExists[i])
                     file.ChangeType[i] = MetaChangeType.New; //Possible rename/move
@@ -408,11 +408,11 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region Folders
 
-        private void PopulateFolderMetaName(FolderCompareObject folder, string[] currentPaths)
+        private void PopulateFolderMetaName(FolderCompareObject folder, int numOfPaths)
         {
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths ; i++)
             {
-                string currMetaData = Path.Combine(Path.Combine(currentPaths[i], folder.Name), METADATAPATH);
+                string currMetaData = Path.Combine(Path.Combine(folder.GetSmartParentPath(i), folder.Name), METADATAPATH);
                 if (File.Exists(currMetaData))
                 {
                     XmlDocument xmlDoc = new XmlDocument();
@@ -437,9 +437,9 @@ namespace Syncless.CompareAndSync.Visitor
             return folder;
         }
 
-        private void ProcessFolderMetaData(FolderCompareObject folder, string[] currentPaths)
+        private void ProcessFolderMetaData(FolderCompareObject folder, int numOfPaths)
         {
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths ; i++)
             {
                 if (folder.Exists[i] && !folder.MetaExists[i])
                     folder.ChangeType[i] = MetaChangeType.New; //Possible rename/move
