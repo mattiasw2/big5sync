@@ -1,7 +1,7 @@
 #summary List of changes in different version
 #labels Featured
 
-= Changelog for version _0.9a_ =
+= Changelog for version _0.9_ =
  * First release of *Syncless*.
  * Feature List  
    # Tagging of Folders.
