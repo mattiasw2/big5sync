@@ -8,6 +8,10 @@ These are the current known issues with Syncless 0.9, and will be handled at a l
 
 Note: As much as we try to keep this page updated, please take a look at the project's [http://code.google.com/p/big5sync/issues/list issue tracker] before reporting any bugs, thank you.
 
+= General =
+== Non-Responsive When Manual Syncing A Lot of Large Files ==
+When doing a manual synchronization, and at least one of the folders has a lot of large files, Syncless seems to not be doing anything. In actual fact, it is busy comparing and determining the files for you. We will implement a feedback system for the next release. [http://code.google.com/p/big5sync/issues/detail?id=47 Issue #47]
+
 = Profiling =
 == Corrupted/Non-Standard XML Format ==
 If the XML is corrupted due to user interference, Syncless will have erratic behaviour. The next version will detect this and handle it properly. [http://code.google.com/p/big5sync/issues/detail?id=33 Issue #33]
