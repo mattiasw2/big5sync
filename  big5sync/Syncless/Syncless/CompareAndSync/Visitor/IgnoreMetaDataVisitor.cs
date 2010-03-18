@@ -12,15 +12,15 @@ namespace Syncless.CompareAndSync.Visitor
     {
         #region IVisitor Members
 
-        public void Visit(FileCompareObject file, string[] currentPaths)
+        public void Visit(FileCompareObject file, int numOfFiles)
         {
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfFiles; i++)
                 file.ChangeType[i] = MetaChangeType.New;
         }
 
-        public void Visit(FolderCompareObject folder, string[] currentPaths)
+        public void Visit(FolderCompareObject folder, int numOfFiles)
         {
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfFiles; i++)
                 folder.ChangeType[i] = MetaChangeType.New;
         }
 

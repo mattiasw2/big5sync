@@ -20,13 +20,13 @@ namespace Syncless.CompareAndSync.Visitor
             _syncConfig = syncConfig;
         }
 
-        public void Visit(FileCompareObject file, string[] currentPaths)
+        public void Visit(FileCompareObject file, int numOfPaths)
         {
             if (file.Invalid)
                 return;
 
             int maxPriorityPos = 0;
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (file.Priority[i] > file.Priority[maxPriorityPos])
                     maxPriorityPos = i;
@@ -37,16 +37,16 @@ namespace Syncless.CompareAndSync.Visitor
                 switch (file.ChangeType[maxPriorityPos])
                 {
                     case MetaChangeType.Delete:
-                        DeleteFile(file, currentPaths, maxPriorityPos);
+                        DeleteFile(file, numOfPaths, maxPriorityPos);
                         break;
                     case MetaChangeType.New:
                     case MetaChangeType.Update:
                     case MetaChangeType.NoChange:
-                        CopyFile(file, currentPaths, maxPriorityPos);
+                        CopyFile(file, numOfPaths, maxPriorityPos);
                         break;
 
                     case MetaChangeType.Rename:
-                        MoveFile(file, currentPaths, maxPriorityPos);
+                        MoveFile(file, numOfPaths, maxPriorityPos);
                         break;
                 }
             }
@@ -55,13 +55,13 @@ namespace Syncless.CompareAndSync.Visitor
 
         }
 
-        public void Visit(FolderCompareObject folder, string[] currentPaths)
+        public void Visit(FolderCompareObject folder, int numOfPaths)
         {
             if (folder.Invalid)
                 return;
 
             int maxPriorityPos = 0;
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (folder.Priority[i] > folder.Priority[maxPriorityPos])
                     maxPriorityPos = i;
@@ -72,14 +72,14 @@ namespace Syncless.CompareAndSync.Visitor
                 switch (folder.ChangeType[maxPriorityPos])
                 {
                     case MetaChangeType.Delete:
-                        DeleteFolder(folder, currentPaths, maxPriorityPos);
+                        DeleteFolder(folder, numOfPaths, maxPriorityPos);
                         break;
                     case MetaChangeType.New:
                     case MetaChangeType.NoChange:
-                        CreateFolder(folder, currentPaths, maxPriorityPos);
+                        CreateFolder(folder, numOfPaths, maxPriorityPos);
                         break;
                     case MetaChangeType.Rename:
-                        MoveFolder(folder, currentPaths, maxPriorityPos);
+                        MoveFolder(folder, numOfPaths, maxPriorityPos);
                         break;
                 }
             }
@@ -94,14 +94,14 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region File Methods
 
-        private void CopyFile(FileCompareObject fco, string[] currentPaths, int srcFilePos)
+        private void CopyFile(FileCompareObject fco, int numOfPaths, int srcFilePos)
         {
             string src = Path.Combine(fco.GetSmartParentPath(srcFilePos), fco.Name);
 
             bool fileExists = false;
             string destFile = null;
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (i != srcFilePos && fco.Parent.FinalState[i] != FinalState.Deleted)
                 {
@@ -155,11 +155,11 @@ namespace Syncless.CompareAndSync.Visitor
             fco.FinalState[srcFilePos] = FinalState.Propagated;
         }
 
-        private void DeleteFile(FileCompareObject fco, string[] currentPaths, int srcFilePos)
+        private void DeleteFile(FileCompareObject fco, int numOfPaths, int srcFilePos)
         {
             string destFile = null;
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (i != srcFilePos)
                 {
@@ -203,9 +203,9 @@ namespace Syncless.CompareAndSync.Visitor
             fco.FinalState[srcFilePos] = FinalState.Propagated;
         }
 
-        private void MoveFile(FileCompareObject fco, string[] currentPaths, int srcFilePos)
+        private void MoveFile(FileCompareObject fco, int numOfPaths, int srcFilePos)
         {
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (i != srcFilePos)
                 {
@@ -245,9 +245,9 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region Folder Methods
 
-        private void CreateFolder(FolderCompareObject folder, string[] currentPaths, int srcFilePos)
+        private void CreateFolder(FolderCompareObject folder, int numOfPaths, int srcFilePos)
         {
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (i != srcFilePos)
                 {
@@ -279,11 +279,11 @@ namespace Syncless.CompareAndSync.Visitor
 
         }
 
-        private void DeleteFolder(FolderCompareObject folder, string[] currentPaths, int srcFilePos)
+        private void DeleteFolder(FolderCompareObject folder, int numOfPaths, int srcFilePos)
         {
             string destFolder = null;
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (i != srcFilePos)
                 {
@@ -326,9 +326,9 @@ namespace Syncless.CompareAndSync.Visitor
             folder.FinalState[srcFilePos] = FinalState.Propagated;
         }
 
-        private void MoveFolder(FolderCompareObject folder, string[] currentPaths, int srcFolderPos)
+        private void MoveFolder(FolderCompareObject folder, int numOfPaths, int srcFolderPos)
         {
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (i != srcFolderPos)
                 {
