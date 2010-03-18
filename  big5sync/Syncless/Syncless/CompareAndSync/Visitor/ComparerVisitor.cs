@@ -169,7 +169,7 @@ namespace Syncless.CompareAndSync.Visitor
             //Update/Create handled in a similar way
             int mostUpdatedPos = 0;
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (file.Exists[i])
                 {
