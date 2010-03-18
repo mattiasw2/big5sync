@@ -31,7 +31,7 @@ namespace Syncless.CompareAndSync.Visitor
         {
             for (int index = 0; index < numOfPaths; index++)
             {
-                string path = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
+                string path = Path.Combine(folder.GetSmartParentPath(index), folder.Name);
                 //string path = currentPaths[index] + @"\" + folder.Name;
                 DirectoryInfo f = new DirectoryInfo(path);
 
@@ -92,7 +92,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(RootCompareObject root)
         {
-            Visit(root, root.Paths);
+            Visit(root, root.Paths.Length);
         }
 
         #endregion
