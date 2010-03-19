@@ -560,7 +560,8 @@ namespace Syncless.Core
                 List<string>[] filteredPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
                 if (filteredPaths[0].Count != 0)
                 {
-                    ManualCompareRequest request = new ManualCompareRequest(filteredPaths[0].ToArray(), tag.Filters);
+                    SyncConfig syncConfig = new SyncConfig(tag.ArchiveName, tag.ArchiveCount, tag.Recycle);
+                    ManualCompareRequest request = new ManualCompareRequest(filteredPaths[0].ToArray(), tag.Filters, syncConfig);
                     return CompareAndSyncController.Instance.Compare(request);
                 }
                 else
