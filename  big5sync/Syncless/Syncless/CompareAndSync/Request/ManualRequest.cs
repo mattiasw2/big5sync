@@ -10,11 +10,13 @@ namespace Syncless.CompareAndSync.Request
     {
         private string[] _paths;
         private List<Filter> _filters;
+        private SyncConfig _syncConfig;
 
-        public ManualRequest(string[] paths, List<Filter> filters)
+        public ManualRequest(string[] paths, List<Filter> filters, SyncConfig syncConfig)
         {
             _paths = paths;
             _filters = filters;
+            _syncConfig = syncConfig;
         }
 
         public string[] Paths
@@ -25,6 +27,11 @@ namespace Syncless.CompareAndSync.Request
         public List<Filter> Filters
         {
             get { return _filters; }
+        }
+
+        public SyncConfig Config
+        {
+            get { return _syncConfig; }
         }
 
     }

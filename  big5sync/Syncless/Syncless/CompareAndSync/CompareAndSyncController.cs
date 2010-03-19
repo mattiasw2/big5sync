@@ -61,34 +61,14 @@ namespace Syncless.CompareAndSync
             return rco;
         }
 
-        public RootCompareObject Sync(ManualSyncRequest request)
+        public void Sync(ManualSyncRequest request)
         {
-            CreateRootIfNotExist(request.Paths);
-            List<Filter> filters = request.Filters.ToList<Filter>();
-            filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
-
-            RootCompareObject rco = new RootCompareObject(request.Paths);
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters));
-            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
-            CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor());
-            CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor());
-            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config));
-            CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor());
-            return rco;
+            ManualQueueControl.Instance.AddSyncJob(request);
         }
 
-        public RootCompareObject Compare(ManualCompareRequest request)
+        public void Compare(ManualCompareRequest request)
         {
-            //TODO: Add config into ManualCompareRequest
-            //List<Filter> filters = request.Filters.ToList<Filter>();
-            //filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
-
-            RootCompareObject rco = new RootCompareObject(request.Paths);
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters));
-            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
-            CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor());
-            CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor());
-            return rco;
+            ManualQueueControl.Instance.AddSyncJob(request);
         }
 
         public void Sync(AutoSyncRequest request)

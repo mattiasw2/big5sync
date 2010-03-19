@@ -6,18 +6,18 @@ using Syncless.CompareAndSync.Request;
 namespace Syncless.CompareAndSync
 {
     /// <summary>
-    /// Class for queuing auto-sync jobs. Based off http://moazzam-khan.com/blog/?p=418
+    /// Class for queuing manual sync jobs. Based off http://moazzam-khan.com/blog/?p=418
     /// </summary>
-    public class SeamlessQueueControl : IDisposable
+    public class ManualQueueControl : IDisposable
     {
         private List<Thread> threads = new List<Thread>();
         private int threadsToUse = 1;
         private object locker = new object();
-        private Queue<AutoSyncRequest> jobs = new Queue<AutoSyncRequest>();
+        private Queue<ManualRequest> jobs = new Queue<ManualRequest>();
         private EventWaitHandle wh = new AutoResetEvent(false);
-        private static SeamlessQueueControl _instance;
+        private static ManualQueueControl _instance;
 
-        private SeamlessQueueControl()
+        private ManualQueueControl()
         {
             for (int i = 0; i < threadsToUse; i++)
             {
@@ -27,13 +27,13 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        public static SeamlessQueueControl Instance
+        public static ManualQueueControl Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new SeamlessQueueControl();
+                    _instance = new ManualQueueControl();
                 }
                 return _instance;
             }
@@ -45,7 +45,7 @@ namespace Syncless.CompareAndSync
         //    get { return threadsToUse; }
         //}
 
-        public void AddSyncJob(AutoSyncRequest item)
+        public void AddSyncJob(ManualRequest item)
         {
             lock (locker)
             {
@@ -58,7 +58,7 @@ namespace Syncless.CompareAndSync
         {
             while (true)
             {
-                AutoSyncRequest item = null;
+                ManualRequest item = null;
                 lock (locker)
                 {
                     if (jobs.Count > 0)
@@ -70,7 +70,10 @@ namespace Syncless.CompareAndSync
                 }
                 if (item != null)
                 {
-                    SeamlessSyncer.Sync(item);
+                    if (item is ManualSyncRequest)
+                        ManualSyncer.Sync(item as ManualSyncRequest);
+                    else
+                        ManualSyncer.Compare(item as ManualCompareRequest);
                 }
                 else
                 {
