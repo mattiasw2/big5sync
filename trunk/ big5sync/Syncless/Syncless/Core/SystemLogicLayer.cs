@@ -760,7 +760,7 @@ namespace Syncless.Core
                     {
                         MonitorLayer.Instance.MonitorPath(PathHelper.RemoveTrailingSlash(path));
                     }
-                    catch (MonitorPathNotFoundException e)
+                    catch (MonitorPathNotFoundException)
                     {
                         
                     }
