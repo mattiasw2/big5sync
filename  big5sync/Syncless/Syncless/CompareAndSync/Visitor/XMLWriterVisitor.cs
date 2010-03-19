@@ -30,8 +30,6 @@ namespace Syncless.CompareAndSync.Visitor
         private const int FIRST_POSITION = 0;
         //private static readonly object syncLock = new object();
         private string[] pathList;
-        private List<string> newNameList = new List<string>();
-        private List<string> oldNameList = new List<string>();
 
         public void Visit(FileCompareObject file, int numOfPaths)
         {
@@ -148,8 +146,6 @@ namespace Syncless.CompareAndSync.Visitor
         private void CreateFileObject(FileCompareObject file, int counter)
         {
             XmlDocument xmlDoc = new XmlDocument();
-     //       currentPath = UpdateToRenamedFolder(file.Parent.Name, currentPath);
-     //       currentPath = RemoveOldFolderName(currentPath);
 
             string xmlPath = Path.Combine(file.GetSmartParentPath(counter), METADATAPATH);
             CreateFileIfNotExist(file.GetSmartParentPath(counter));
@@ -189,8 +185,6 @@ namespace Syncless.CompareAndSync.Visitor
         private void UpdateFileObject(FileCompareObject file, int counter)
         {
             XmlDocument xmlDoc = new XmlDocument();
-  //          currentPath = UpdateToRenamedFolder(file.Parent.Name, currentPath);
-  //          currentPath = RemoveOldFolderName(currentPath);
             string xmlPath = Path.Combine(file.GetSmartParentPath(counter), METADATAPATH);
             CreateFileIfNotExist(file.GetSmartParentPath(counter));
 
@@ -236,9 +230,6 @@ namespace Syncless.CompareAndSync.Visitor
         private void RenameFileObject(FileCompareObject file, int counter)
         {
             XmlDocument xmlDoc = new XmlDocument();
-    //        currentPath = UpdateToRenamedFolder(file.Parent.Name, currentPath);
-    //        currentPath = RemoveOldFolderName(currentPath);
-
             string xmlPath = Path.Combine(file.GetSmartParentPath(counter), METADATAPATH);
             CreateFileIfNotExist(file.GetSmartParentPath(counter));
             CommonMethods.LoadXML(ref xmlDoc, xmlPath);
@@ -257,9 +248,6 @@ namespace Syncless.CompareAndSync.Visitor
         private void DeleteFileObject(FileCompareObject file, int counter)
         {
             XmlDocument xmlDoc = new XmlDocument();
-     //       currentPath = UpdateToRenamedFolder(file.Parent.Name, currentPath);
-     //       currentPath = RemoveOldFolderName(currentPath);
-
             string xmlPath = Path.Combine(file.GetSmartParentPath(counter), METADATAPATH);
             if (File.Exists(xmlPath))
             {
@@ -272,50 +260,6 @@ namespace Syncless.CompareAndSync.Visitor
 
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
-        }
-
-        private string UpdateToRenamedFolder(string parentFolderName, string currentPath)
-        {
-            int flag = CheckForRename(parentFolderName);
-            if (flag != -1)
-            {
-                return Swap(currentPath, newNameList[flag], parentFolderName);
-            }
-            else
-            {
-                return currentPath;
-            }
-        }
-
-        private string RemoveOldFolderName(string currentPath)
-        {
-            string[] splitUpPaths = currentPath.Split('\\');
-            string parentFolderName = splitUpPaths[splitUpPaths.Length - 1];
-            int flag = CheckForRename(parentFolderName);
-            if (flag == -1)
-            {
-                return currentPath;
-            }
-            else
-            {
-                currentPath = currentPath.Replace(parentFolderName, newNameList[flag]);
-                return currentPath;
-            }
-        }
-
-        private int CheckForRename(string name)
-        {
-            for (int i = 0; i < oldNameList.Count; i++)
-            {
-                if (oldNameList[i].Equals(name))
-                    return i;
-            }
-            return -1;
-        }
-
-        private string Swap(string name, string newName, string oldName)
-        {
-            return name.Replace(oldName, newName);
         }
 
         private int GetPropagated(FileCompareObject file)
@@ -361,9 +305,6 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void HandleUnchangedOrPropagatedFile(FileCompareObject file, int counter)
         {
- //           filePath = UpdateToRenamedFolder(file.Parent.Name, filePath);
- //           filePath = RemoveOldFolderName(filePath);
-
             string name = Path.Combine(file.GetSmartParentPath(counter), file.Name);
             if (File.Exists(name)) //CREATE OR UPDATED
             {
@@ -490,9 +431,6 @@ namespace Syncless.CompareAndSync.Visitor
                 parentXmlFolderNode.FirstChild.InnerText = folder.NewName;
 
                 CommonMethods.SaveXML(ref parentXmlDoc, Path.Combine(folder.GetSmartParentPath(counter), METADATAPATH));
-
-          //      newNameList.Add(folder.NewName);
-          //      oldNameList.Add(folder.Name);
             }
         }
 
