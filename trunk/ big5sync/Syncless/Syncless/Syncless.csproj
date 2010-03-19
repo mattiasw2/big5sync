@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{79C1CBE7-297A-4820-A2D9-BE3507B8EF19}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -71,6 +71,8 @@
     <Compile Include="CompareAndSync\Exceptions\MoveFileException.cs" />
     <Compile Include="CompareAndSync\Exceptions\MoveFolderException.cs" />
     <Compile Include="CompareAndSync\Exceptions\SynclessIOException.cs" />
+    <Compile Include="CompareAndSync\ManualQueueControl.cs" />
+    <Compile Include="CompareAndSync\ManualSyncer.cs" />
     <Compile Include="CompareAndSync\Visitor\FolderRenameVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\IgnoreMetaDataVisitor.cs" />
     <Compile Include="CompareAndSync\Request\AutoSyncRequest.cs" />
