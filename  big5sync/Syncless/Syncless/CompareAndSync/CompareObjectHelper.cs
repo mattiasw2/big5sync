@@ -62,20 +62,10 @@ namespace Syncless.CompareAndSync
             TraverseFolderHelper(root, visitor, TraverseType.Pre);
         }
 
-        //private static void PreTraverseFolder(FolderCompareObject folder, int numOfPaths, IVisitor visitor)
-        //{
-        //    TraverseFolderHelper(folder, numOfPaths, visitor, TraverseType.Pre);
-        //}
-
         public static void PostTraverseFolder(RootCompareObject root, IVisitor visitor)
         {
             TraverseFolderHelper(root, visitor, TraverseType.Post);
         }
-
-        //private static void PostTraverseFolder(FolderCompareObject folder, int numOfPaths, IVisitor visitor)
-        //{
-        //    TraverseFolderHelper(folder, numOfPaths, visitor, TraverseType.Post);
-        //}
 
         private static void TraverseFolderHelper(RootCompareObject root, IVisitor visitor, TraverseType type)
         {

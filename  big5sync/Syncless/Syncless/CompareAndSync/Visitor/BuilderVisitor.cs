@@ -29,10 +29,12 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
+            RootCompareObject root = folder as RootCompareObject;
+
             for (int index = 0; index < numOfPaths; index++)
             {
-                string path = Path.Combine(folder.GetSmartParentPath(index), folder.Name);
-                //string path = currentPaths[index] + @"\" + folder.Name;
+                string path = root == null ? Path.Combine(folder.GetSmartParentPath(index), folder.Name) : root.Paths[index];
+
                 DirectoryInfo f = new DirectoryInfo(path);
 
                 if (f.Exists)
