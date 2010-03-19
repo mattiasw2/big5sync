@@ -18,15 +18,15 @@ namespace Syncless.CompareAndSync
             RootCompareObject rco = new RootCompareObject(request.Paths);
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters));
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
-            CompareObjectHelper.LevelOrderTraverseFolder(rco, new FolderRenameVisitor());
+            CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor());
             CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor());
-            CompareObjectHelper.LevelOrderTraverseFolder(rco, new SyncerVisitor(request.Config));
-            CompareObjectHelper.LevelOrderTraverseFolder(rco, new XMLWriterVisitor());
+            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config));
+            CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor());
 
             //PUT RCO INTO NOTIFICATION QUEUE
         }
 
-        public static void Compare(ManualCompareRequest request)
+        public static RootCompareObject Compare(ManualCompareRequest request)
         {
             List<Filter> filters = request.Filters.ToList<Filter>();
             filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
@@ -35,6 +35,7 @@ namespace Syncless.CompareAndSync
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
             CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor());
             CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor());
+            return rco;
         }
     }
 }
