@@ -25,7 +25,19 @@ namespace Syncless.Helper
                 {
                     File.Delete(path);
                 }
-                fs = new FileStream(path, FileMode.OpenOrCreate);
+                int tries = 0;
+                while (tries < 5 && fs == null)
+                {
+                    try
+                    {
+                        fs = new FileStream(path, FileMode.OpenOrCreate);
+                        break;
+                    }
+                    catch (Exception)
+                    {
+                        tries++;
+                    }
+                }
                 textWriter = new XmlTextWriter(fs, Encoding.UTF8);
                 textWriter.Formatting = Formatting.Indented;
                 xml.WriteContentTo(textWriter);

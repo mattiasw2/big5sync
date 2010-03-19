@@ -15,7 +15,7 @@ namespace Syncless.Profiling
         public const string RELATIVE_PROFILING_ROOT_SAVE_PATH = "profiling.xml";
 
 
-        #region Singleton/Profile 
+        #region Singleton/Profile
         private static ProfilingLayer _instance;
         public static ProfilingLayer Instance
         {
@@ -60,7 +60,7 @@ namespace Syncless.Profiling
             }
             string relativepath = ProfilingHelper.ExtractRelativePath(path);
             return driveid + ":" + relativepath;
-            
+
         }
         /// <summary>
         /// Convert a Physical address to a Logical address
@@ -68,7 +68,7 @@ namespace Syncless.Profiling
         /// </summary>
         /// <param name="path">The Physical Address to be converted</param>
         /// <returns>The Logical Address</returns>
-        public string ConvertPhysicalToLogical(string path,bool create)
+        public string ConvertPhysicalToLogical(string path, bool create)
         {
             string driveid = ProfilingHelper.ExtractDriveName(path);
             string logicalid = GetLogicalIdFromDrive(driveid);
@@ -82,23 +82,13 @@ namespace Syncless.Profiling
                 {
                     string guid = ProfilingGUIDHelper.GetGUID(driveid);
                     //try to find a mapping
-                    logicalid = _profile.FindLogicalFromGUID(guid);
-                    if (logicalid == null)
-                    {
-                        Debug.Assert(guid != null && !guid.Equals(""));
-                        _profile.CreateMapping(guid, driveid, guid);
-                    }
-                    else
-                    {
-                        _profile.UpdateDrive(guid, driveid);
-                        return logicalid;
-                    }
-                    
+                    _profile.InsertDrive(new DriveInfo(driveid), guid);
+
                     logicalid = guid;
                 }
             }
             string relativepath = ProfilingHelper.ExtractRelativePath(path);
-            return logicalid + ":" + relativepath; 
+            return logicalid + ":" + relativepath;
         }
         /// <summary>
         /// Take in a list of logical address , convert them to physical and return only those that are currently available.
@@ -108,7 +98,7 @@ namespace Syncless.Profiling
         public List<string> ConvertAndFilterToPhysical(List<string> pathList)
         {
             List<string> convertedPathList = new List<string>();
-            
+
             foreach (string path in pathList)
             {
                 string convertedPath = ConvertLogicalToPhysical(path);
@@ -144,9 +134,9 @@ namespace Syncless.Profiling
 
             }
 
-            return new List<string>[2] { convertedPathList, unconvertedPathList }; 
+            return new List<string>[2] { convertedPathList, unconvertedPathList };
         }
-               
+
         /// <summary>
         /// Get the Logical Id for a Drive.
         /// </summary>
@@ -164,7 +154,7 @@ namespace Syncless.Profiling
         /// <param name="name">The name of the drive</param>
         /// <returns></returns>
         public string GetLogicalIdFromDrive(string name)
-        {            
+        {
             Debug.Assert(_profile != null);
             return _profile.FindLogicalFromPhysical(name);
         }
@@ -179,7 +169,7 @@ namespace Syncless.Profiling
             Debug.Assert(_profile != null);
             return _profile.FindPhysicalFromLogical(id);
         }
-        #endregion        
+        #endregion
 
         /// <summary>
         /// Merge a profiling.xml from a path to the current profile.
@@ -188,25 +178,23 @@ namespace Syncless.Profiling
         public void Merge(string path)
         {
             Profile newProfile = ProfilingXMLHelper.LoadProfile(path);
-            try
+
+            if (File.Exists(path))
             {
-                if (File.Exists(path))
-                {
-                    ProfileMerger.Merge(_profile, newProfile);                    
-                }
+                ProfileMerger.Merge(_profile, newProfile);
             }
-            catch (ProfileConflictException pce)
-            {
-                throw pce;
-            }
+
+
         }
         /// <summary>
         /// Save all the profiling xml to all the various Location.
         /// </summary>
         /// <returns>true if the save is complete.</returns>
         public void SaveTo(List<string> savedLocation)
-        {   
-            ProfilingXMLHelper.SaveProfile(_profile,savedLocation);
+        {
+            List<Profile> profileList = new List<Profile>();
+            profileList.Add(_profile);
+            ProfilingXMLHelper.SaveProfile(profileList, savedLocation);
         }
         /// <summary>
         /// Initialize the Profiling Layer.
@@ -227,33 +215,23 @@ namespace Syncless.Profiling
                 Profile profile = ProfilingXMLHelper.CreateDefaultProfile(path);
                 _profile = profile;
                 //Since the profile is newly created , no need to traverse all the drive
-                
             }
             for (int i = 1; i < paths.Count; i++)
             {
-                try
+
+                if (File.Exists(paths[i]))
                 {
-                    if (File.Exists(paths[i]))
-                    {
-                        Profile p = ProfilingXMLHelper.LoadProfile(paths[i]);
-                        ProfileMerger.Merge(_profile,p);
-                    }
-                }
-                catch (ProfileConflictException)
-                {
-                    //Conflict
-                }
-                catch (ProfileNameDifferentException)
-                {
+                    Profile p = ProfilingXMLHelper.LoadProfile(paths[i]);
+                    ProfileMerger.Merge(_profile, p);
                 }
             }
-            
+
             DriveInfo[] driveList = DriveInfo.GetDrives();
-            
+
             foreach (DriveInfo driveinfo in driveList)
             {
                 UpdateDrive(driveinfo);
-            }            
+            }
             return true;
         }
         /// <summary>
@@ -269,7 +247,7 @@ namespace Syncless.Profiling
             {
                 string guid = ProfilingGUIDHelper.ReadGUID(info);
                 string driveid = ProfilingHelper.ExtractDriveName(info.FullName);
-                _profile.UpdateDrive(guid, driveid);
+                _profile.InsertDrive(driveinfo, guid);
                 return true;
             }
             return false;
@@ -281,7 +259,7 @@ namespace Syncless.Profiling
         /// <returns>true if the drive is being removed.</returns>
         public bool RemoveDrive(DriveInfo driveinfo)
         {
-            return _profile.RemoveDrive(ProfilingHelper.ExtractDriveName(driveinfo.Name));
+            return _profile.RemoveDrive(driveinfo);
         }
     }
 }

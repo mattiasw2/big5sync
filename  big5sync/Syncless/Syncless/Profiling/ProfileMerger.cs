@@ -10,41 +10,32 @@ namespace Syncless.Profiling
     {
         public static bool CanMerge(Profile currentProfile,Profile newProfile)
         {
-            try
-            {
-                foreach (ProfileMapping mapping in newProfile.Mappings)
-                {
-                    currentProfile.Contains(mapping);
-                }
-                foreach (ProfileMapping mapping in currentProfile.Mappings)
-                {
-                    newProfile.Contains(mapping);
-                }
-            }
-            catch (ProfileMappingConflictException pmce)
-            {
-                throw new ProfileConflictException(pmce);
-            }
-
             return true;
         }
         public static Profile Merge(Profile currentProfile, Profile newProfile)
         {
-            if (!currentProfile.ProfileName.Equals(newProfile.ProfileName))
+            foreach (ProfileDrive drive in newProfile.ProfileDriveList)
             {
-                throw new ProfileNameDifferentException();
-            }
-            if (CanMerge(currentProfile,newProfile))
-            {
-                foreach (ProfileMapping mapping in newProfile.Mappings)
+                ProfileDrive curDrive = currentProfile.FindProfileDriveFromGUID(drive.Guid);
+                if (curDrive == null)
                 {
-                    if (!currentProfile.Contains(mapping))
+                    currentProfile.AddProfileDrive(drive);
+                }
+                else
+                {
+                    if (drive.DriveName.ToLower().Equals(curDrive.DriveName.ToLower()))
                     {
-                        currentProfile.CreateMapping(mapping);
+                        continue;
+                    }
+                    if (drive.LastUpdated > curDrive.LastUpdated)
+                    {
+                        curDrive.DriveName = drive.DriveName;
                     }
                 }
             }
             return currentProfile;
+
+
         }
     }
 }

@@ -10,176 +10,130 @@ using Syncless.Profiling.Exceptions;
 
 namespace Syncless.Profiling
 {
-    internal class ProfilingXMLHelper
+    internal static class ProfilingXMLHelper
     {
-        #region XML ELEMENT 
-        public const string ELE_PROFILE_ROOT = "profile";
-        public const string ELE_PROFILE_ROOT_NAME = "name";
-        public const string ELE_PROFILE_ROOT_LASTUPDATED = "lastupdated";
+        private const string DEFAULT_NAME = "";
+        private const string ELE_PROFILILING_ROOT = "profiling";
+        
+        private const string ELE_PROFILE = "profile";
+        private const string ELE_PROFILE_NAME = "profilename";
+        private const string ELE_PROFILE_LAST_UPDATED = "last_updated";
 
-        public const string ELE_DRIVE_ROOT = "drive";
-        public const string ELE_DRIVE_LOGICAL = "logical";
-        public const string ELE_DRIVE_GUID = "guid";
-        #endregion
+        private const string ELE_PROFILE_DRIVE = "drive";
+        private const string ELE_PROFILE_DRIVE_NAME = "drivename";
+        private const string ELE_PROFILE_DRIVE_LAST_UPDATED = "last_updated";
+        private const string ELE_PROFILE_DRIVE_GUID = "guid";
+        
+        public static void SaveProfile(List<Profile> profileList ,List<string> location){
+            XmlDocument xmlDoc = new XmlDocument();
 
+            XmlElement profileEle = CreateProfileElement(profileList[0], xmlDoc);
+            xmlDoc.AppendChild(profileEle);
 
-
-        #region Save Profile
-        public static void SaveProfile(Profile profile, List<string> paths)
-        {
-            XmlDocument xml = ConvertToXMLDocument(profile);
-            UpdateLastUpdateTime(xml, DateTime.Now.Ticks);
-            foreach (string path in paths)
+            CommonXmlHelper.SaveXml(xmlDoc, location[0]);
+            for (int i = 1; i < profileList.Count; i++)
             {
-                CommonXmlHelper.SaveXml(xml, path);
+                xmlDoc.AppendChild(CreateProfileElement(profileList[i],xmlDoc));
+            }
+
+            for (int i = 1; i < location.Count; i++)
+            {
+                CommonXmlHelper.SaveXml(xmlDoc, location[i]);
             }
         }
-        
-        #endregion      
-        public static Profile CreateDefaultProfile(string path)
+
+        public static void SaveProfile(Profile profile, string location)
         {
-            Profile profile = new Profile("");
-            XmlDocument xml = ConvertToXMLDocument(profile);
-            FileInfo fileInfo = new FileInfo(path);
-            if (!fileInfo.Exists)
-            {
-                FileStream fs = null;
-                try
-                {
-                    fs = fileInfo.Create();
-                }
-                catch (DirectoryNotFoundException)
-                {
-                    Directory.CreateDirectory(fileInfo.Directory.FullName);
-                    fs = fileInfo.Create();
-                }
-                finally
-                {
-                    if (fs != null)
-                    {
-                        try
-                        {
-                            fs.Close();
-                        }
-                        catch (IOException)
-                        {
+            XmlDocument xmlDoc = new XmlDocument();
 
-                        }
-                    }
-                }
+            XmlElement profileEle = CreateProfileElement(profile, xmlDoc);
+            xmlDoc.AppendChild(profileEle);
+            CommonXmlHelper.SaveXml(xmlDoc, location);
 
-            }
-            CommonXmlHelper.SaveXml(xml, fileInfo.FullName);
-            return profile;
+
+
         }
-       
-        
-        
-        #region convert to profile public methods
+        private static XmlElement CreateProfileElement(Profile profile, XmlDocument doc)
+        {
+            XmlElement profileElement = doc.CreateElement(ELE_PROFILE);
+            profileElement.SetAttribute(ELE_PROFILE_NAME, profile.ProfileName);
+            profileElement.SetAttribute(ELE_PROFILE_LAST_UPDATED, profile.LastUpdatedTime+"");
+            PopulateDrive(profile.ProfileDriveList, profileElement, doc);
+
+            return profileElement;
+
+        }
+
+        private static void PopulateDrive(List<ProfileDrive> driveList, XmlElement profile, XmlDocument doc)
+        {
+            foreach (ProfileDrive drive in driveList)
+            {
+                XmlElement element = doc.CreateElement(ELE_PROFILE_DRIVE);
+                element.SetAttribute(ELE_PROFILE_DRIVE_GUID, drive.Guid);
+                element.SetAttribute(ELE_PROFILE_DRIVE_NAME, drive.DriveName);
+                element.SetAttribute(ELE_PROFILE_DRIVE_LAST_UPDATED, drive.LastUpdated+"");
+
+                profile.AppendChild(element);
+            }
+            
+        }
+
+
+
         public static Profile LoadProfile(string path)
         {
-            XmlDocument profilexml = CommonXmlHelper.LoadXml(path);
-            if (profilexml == null)
+            XmlDocument xmlDoc = CommonXmlHelper.LoadXml(path);
+            if (xmlDoc == null)
             {
-                //TODO
-                throw new FileNotFoundException();
+                return CreateDefaultProfile(path);
             }
-            return ConvertToProfile(profilexml);
+
+            XmlNodeList profileElementList = xmlDoc.GetElementsByTagName(ELE_PROFILE);
+            List<Profile> profileList = new List<Profile>();
+
+            foreach (XmlNode profile in profileElementList)
+            {
+                XmlElement profileElement = profile as XmlElement;
+                profileList.Add(CreateProfile(profileElement));
+            }
+            return profileList[0];
         }
-        private static Profile ConvertToProfile(XmlDocument profilexml)
+        private static Profile CreateProfile(XmlElement profileElement)
         {
-            XmlNodeList list = profilexml.GetElementsByTagName(ELE_PROFILE_ROOT);
-            if (list.Count != 0)
+            string profileName = profileElement.GetAttribute(ELE_PROFILE_NAME);
+            Profile profile = new Profile(profileName);
+            XmlNodeList driveList = profileElement.GetElementsByTagName(ELE_PROFILE_DRIVE);
+            foreach (XmlNode drive in driveList)
             {
-                XmlElement element = (XmlElement)list.Item(0);
-                if (element == null)
+                XmlElement driveElement = drive as XmlElement;
+                if (driveElement != null)
                 {
-                    throw new ProfileLoadException();
+                    profile.AddProfileDrive(CreateProfileDrive(driveElement));
                 }
-                string profilename = element.GetAttribute(ELE_PROFILE_ROOT_NAME);
-                string lastupdate = element.GetAttribute(ELE_PROFILE_ROOT_LASTUPDATED);
-                if (profilename == null || lastupdate == null)
-                {
-                    throw new ProfileLoadException();
-                }
-                long lastUpdatedLong = 0;
-                try
-                {
-                    lastUpdatedLong = long.Parse(lastupdate);
-                }
-                catch (FormatException fe)
-                {
-                    throw new ProfileLoadException(fe);
-                }
-                Profile profile = new Profile(profilename);
-                profile.LastUpdatedTime = lastUpdatedLong;
-                profile = ProcessListing(profile, element);
-                return profile;
             }
-            //TODO need to throw exception here =D
-            throw new ProfileLoadException();
-        }
-        private static Profile ProcessListing(Profile profile, XmlElement root)
-        {
-            XmlNodeList nodeList = root.GetElementsByTagName(ELE_DRIVE_ROOT);
-            foreach (XmlNode node in nodeList)
-            {
-                XmlElement drive = (XmlElement)node;
-                
-                XmlElement logical = (XmlElement)drive.GetElementsByTagName(ELE_DRIVE_LOGICAL).Item(0);
-                
-                XmlElement guid = (XmlElement)drive.GetElementsByTagName(ELE_DRIVE_GUID).Item(0);
-                profile.CreateMapping(logical.InnerText, "", guid.InnerText);
-            }
+
             return profile;
         }
-        #endregion
 
-        #region convert xmldocument private method
-        private static XmlDocument ConvertToXMLDocument(Profile profile)
+        private static ProfileDrive CreateProfileDrive(XmlElement driveElement)
         {
-            XmlDocument profilexml = new XmlDocument();
-            XmlElement root = CreateRoot(profilexml, profile);
-            foreach (ProfileMapping mapping in profile.Mappings)
-            {
-                XmlElement map = CreateElementForMapping(profilexml, mapping);
-                root.AppendChild(map);
-            }
-            profilexml.AppendChild(root);
-            return profilexml;
-        }
-        private static XmlElement CreateRoot(XmlDocument profilexml, Profile profile)
-        {
-            XmlElement root = profilexml.CreateElement(ELE_PROFILE_ROOT);
-            XmlAttribute nameAttr = profilexml.CreateAttribute(ELE_PROFILE_ROOT_NAME);
-            XmlAttribute timeAttr = profilexml.CreateAttribute(ELE_PROFILE_ROOT_LASTUPDATED);
-            nameAttr.Value = profile.ProfileName;
-            timeAttr.Value = profile.LastUpdatedTime + "";
-            root.SetAttributeNode(nameAttr);
-            root.SetAttributeNode(timeAttr);
-            return root;
-        }
-        private static XmlElement CreateElementForMapping(XmlDocument profilexml, ProfileMapping mapping)
-        {
-            XmlElement map = profilexml.CreateElement(ELE_DRIVE_ROOT);
-            XmlElement logical = profilexml.CreateElement(ELE_DRIVE_LOGICAL);
+            string guid = driveElement.GetAttribute(ELE_PROFILE_DRIVE_GUID);
+            string lastUpdatedString = driveElement.GetAttribute(ELE_PROFILE_LAST_UPDATED);
+            long lastUpdated = long.Parse(lastUpdatedString);
+            string driveName = driveElement.GetAttribute(ELE_PROFILE_DRIVE_NAME);
 
-            XmlElement guid = profilexml.CreateElement(ELE_DRIVE_GUID);
-            Debug.Assert(mapping.GUID != null);
-            Debug.Assert(mapping.LogicalAddress != null);
-            logical.InnerText = mapping.LogicalAddress;
-            guid.InnerText = mapping.GUID;
+            ProfileDrive drive = new ProfileDrive(guid, driveName);
+            drive.LastUpdated = lastUpdated;
 
-            map.AppendChild(logical);
-
-            map.AppendChild(guid);
-            return map;
+            return drive;
         }
-        private static void UpdateLastUpdateTime(XmlDocument doc, long date)
+
+        public static Profile CreateDefaultProfile(string path)
         {
-            XmlNode node = doc.SelectSingleNode("//profile//@lastupdated");
-            node.Value = date + "";
+            Profile profile = new Profile(DEFAULT_NAME);
+
+            SaveProfile(profile, path);
+            return profile;
         }
-        #endregion
     }
 }
