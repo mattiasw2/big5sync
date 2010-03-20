@@ -177,11 +177,12 @@ namespace Syncless.Profiling
         /// <param name="path"></param>
         public void Merge(string path)
         {
-            Profile newProfile = ProfilingXMLHelper.LoadProfile(path);
+            
 
             if (File.Exists(path))
             {
-                ProfileMerger.Merge(_profile, newProfile);
+                List<Profile> profileList = ProfilingXMLHelper.LoadProfile(path);
+                ProfileMerger.Merge(_profile, profileList);
             }
 
 
@@ -192,9 +193,9 @@ namespace Syncless.Profiling
         /// <returns>true if the save is complete.</returns>
         public void SaveTo(List<string> savedLocation)
         {
-            List<Profile> profileList = new List<Profile>();
-            profileList.Add(_profile);
-            ProfilingXMLHelper.SaveProfile(profileList, savedLocation);
+            
+            ProfilingXMLHelper.SaveProfile(_profile, savedLocation[0]);
+
         }
         /// <summary>
         /// Initialize the Profiling Layer.
@@ -206,7 +207,7 @@ namespace Syncless.Profiling
             string path = paths[0];//path 0 is the root.
             try
             {
-                Profile p = ProfilingXMLHelper.LoadProfile(path);
+                Profile p = ProfilingXMLHelper.LoadSingleProfile(path);
                 Debug.Assert(p != null);
                 _profile = p;
             }
@@ -221,8 +222,8 @@ namespace Syncless.Profiling
 
                 if (File.Exists(paths[i]))
                 {
-                    Profile p = ProfilingXMLHelper.LoadProfile(paths[i]);
-                    ProfileMerger.Merge(_profile, p);
+                    List<Profile> profileList = ProfilingXMLHelper.LoadProfile(paths[i]);
+                    ProfileMerger.Merge(_profile, profileList);
                 }
             }
 

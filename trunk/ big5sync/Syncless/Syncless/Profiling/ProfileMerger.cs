@@ -10,7 +10,17 @@ namespace Syncless.Profiling
     {
         public static bool CanMerge(Profile currentProfile,Profile newProfile)
         {
-            return true;
+            return currentProfile.ProfileName.ToLower().Equals(newProfile.ProfileName.ToLower());
+        }
+        public static Profile Merge(Profile currentProfile, List<Profile> profileList)
+        {
+            foreach (Profile profile in profileList)
+            {
+                if(profile.ProfileName.ToLower().Equals(currentProfile.ProfileName.ToLower())){
+                    currentProfile  = Merge(currentProfile, profile);
+                }
+            }
+            return currentProfile;
         }
         public static Profile Merge(Profile currentProfile, Profile newProfile)
         {
