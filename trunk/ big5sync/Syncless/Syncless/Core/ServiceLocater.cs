@@ -2,6 +2,7 @@
 using Syncless.Core.Exceptions;
 using Syncless.Helper;
 using Syncless.Logging;
+using Syncless.Notification;
 
 namespace Syncless.Core
 {
@@ -15,7 +16,7 @@ namespace Syncless.Core
                 return SystemLogicLayer.Instance; 
                 //return null;
             }
-        } // SystemLogicLayer.Instance;
+        } 
         public static IMonitorControllerInterface MonitorI
         {
             get { 
@@ -46,6 +47,21 @@ namespace Syncless.Core
                 throw new LoggerNotFoundException(ErrorMessage.LOGGER_NOT_FOUND);
             }
         }
-        
+
+
+        public static INotificationQueue UINotificationQueue()
+        {
+            return SystemLogicLayer.Instance.UiNotification;
+        }
+        public static INotificationQueue LogicLayerNotificationQueue()
+        {
+            return SystemLogicLayer.Instance.SllNotification;
+        }
+        public static INotificationQueue UIPriorityQueue()
+        {
+            return SystemLogicLayer.Instance.UiPriorityNotification;
+        }
+
+
     }
 }

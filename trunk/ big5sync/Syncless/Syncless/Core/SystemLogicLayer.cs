@@ -20,6 +20,7 @@ using Syncless.Filters;
 using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.CompareObject;
+using Syncless.Notification;
 namespace Syncless.Core
 {
     internal class SystemLogicLayer : IUIControllerInterface, IMonitorControllerInterface, ICommandLineControllerInterface
@@ -27,6 +28,10 @@ namespace Syncless.Core
         #region Singleton
         private static SystemLogicLayer _instance;
         private IUIInterface _userInterface;
+        private NotificationQueue _uiNotification;
+        private NotificationQueue _sllNotification;
+        private NotificationQueue _uiPriorityNotification;
+
         public static SystemLogicLayer Instance
         {
             get
@@ -39,9 +44,29 @@ namespace Syncless.Core
                 return _instance;
             }
         }
+
+        public NotificationQueue UiNotification
+        {
+            get { return _uiNotification; }
+        }
+
+        public NotificationQueue SllNotification
+        {
+            get { return _sllNotification; }
+        }
+
+        public NotificationQueue UiPriorityNotification
+        {
+            get { return _uiPriorityNotification; }
+
+        }
+
         private SystemLogicLayer()
         {
             _userInterface = null;
+            _uiNotification = new NotificationQueue();
+            _sllNotification = new NotificationQueue();
+            _uiPriorityNotification = new NotificationQueue();
         }
 
         #endregion
