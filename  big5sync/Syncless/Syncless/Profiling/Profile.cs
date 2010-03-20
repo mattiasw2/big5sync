@@ -147,7 +147,7 @@ namespace Syncless.Profiling
         public ProfileDrive CreateProfileDrive(string guid)
         {
             ProfileDrive drive = new ProfileDrive(guid, DEFAULT_DRIVE_NAME);
-            
+            _fullList.Add(drive);
             
             return drive;
         }
