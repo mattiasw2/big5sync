@@ -8,7 +8,7 @@
        * From User Interface
        * From Window Context Menu
        * By Drag and Drop into *Syncless* Window
-   # Manual/Seamless Mode for !Tag
+   # Manual/Seamless Mode for Tag
        * Manual Sync for Tag.
        * N-Way Sync
        * Seamless Detection of Changes.
