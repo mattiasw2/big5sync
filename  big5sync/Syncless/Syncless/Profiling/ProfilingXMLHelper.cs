@@ -45,6 +45,15 @@ namespace Syncless.Profiling
                 CommonXmlHelper.SaveXml(xmlDoc, location[i]);
             }
         }
+        public static void SaveProfile(Profile profile, string location)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            XmlElement root = xmlDoc.CreateElement(ELE_PROFILING_ROOT);
+            xmlDoc.AppendChild(root);
+            XmlElement profileEle = CreateProfileElement(profile, xmlDoc);
+            root.AppendChild(profileEle);
+            CommonXmlHelper.SaveXml(xmlDoc, location);
+        }
         public static void AppendProfile(Profile profile, List<string> locations)
         {
             foreach (string path in locations)
@@ -77,15 +86,7 @@ namespace Syncless.Profiling
                 }
             }
         }
-        public static void SaveProfile(Profile profile, string location)
-        {
-            XmlDocument xmlDoc = new XmlDocument();
-            XmlElement root = xmlDoc.CreateElement(ELE_PROFILING_ROOT);
-            xmlDoc.AppendChild(root);
-            XmlElement profileEle = CreateProfileElement(profile, xmlDoc);
-            root.AppendChild(profileEle);
-            CommonXmlHelper.SaveXml(xmlDoc, location);
-        }
+        
         private static XmlElement CreateProfileElement(Profile profile, XmlDocument doc)
         {
             XmlElement profileElement = doc.CreateElement(ELE_PROFILE);

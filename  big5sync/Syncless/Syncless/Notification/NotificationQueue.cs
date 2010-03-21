@@ -8,11 +8,11 @@ namespace Syncless.Notification
     public class NotificationQueue : INotificationQueue
     {
         private Queue<AbstractNotification> _notificationQueue;
-        private List<QueueObserver> _observerList;
+        private List<IQueueObserver> _observerList;
         public NotificationQueue()
         {
             _notificationQueue = new Queue<AbstractNotification>();
-            _observerList = new List<QueueObserver>();
+            _observerList = new List<IQueueObserver>();
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -31,7 +31,7 @@ namespace Syncless.Notification
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public AbstractNotification Dequeue(AbstractNotification notification)
+        public AbstractNotification Dequeue()
         {
             if (_notificationQueue.Count == 0)
             {
@@ -43,17 +43,27 @@ namespace Syncless.Notification
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public void AddObserver(QueueObserver obs)
+        public void AddObserver(IQueueObserver obs)
         {
             _observerList.Add(obs);
         }
 
         private void NotifyAll()
         {
-            foreach (QueueObserver obs in _observerList)
+            foreach (IQueueObserver obs in _observerList)
             {
                 obs.Update();
             }
         }
+
+        #region INotificationQueue Members
+
+
+        public bool HasNotification()
+        {
+            return _notificationQueue.Count != 0;
+        }
+
+        #endregion
     }
 }
