@@ -26,7 +26,7 @@ namespace Syncless.Notification
         {
             get { return _failedJob; }
         }
-        public delegate void Update();
+        public delegate void Update(double currentPercentComplete);
         public double PercentComplete
         {
             get
