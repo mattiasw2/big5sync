@@ -762,6 +762,7 @@ namespace Syncless.Core
         {   
             ProfilingLayer.Instance.Merge(path);
             TaggingLayer.Instance.Merge(path);
+            return true;
         }
 
 

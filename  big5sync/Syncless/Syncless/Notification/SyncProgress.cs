@@ -52,7 +52,7 @@ namespace Syncless.Notification
             _completedJob++;
             foreach (Update handler in _eventHandlerList)
             {
-                handler.BeginInvoke(null, null);
+                handler.BeginInvoke(PercentComplete,null, null);
             }
 
         }
@@ -65,7 +65,7 @@ namespace Syncless.Notification
             _failedJob++;
             foreach (Update handler in _eventHandlerList)
             {
-                handler.BeginInvoke(null, null);
+                handler.BeginInvoke(PercentComplete,null, null);
             }
 
         }
