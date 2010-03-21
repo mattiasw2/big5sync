@@ -31,7 +31,7 @@ namespace Syncless.Core
         private NotificationQueue _uiNotification;
         private NotificationQueue _sllNotification;
         private NotificationQueue _uiPriorityNotification;
-
+        private LogicQueueObserver _queueObserver;
         public static SystemLogicLayer Instance
         {
             get
@@ -630,6 +630,7 @@ namespace Syncless.Core
             {
                 DeviceWatcher.Instance.Terminate();
                 MonitorLayer.Instance.Terminate();
+                _queueObserver.Stop();
                 return true;
             }
             catch (Exception e)
@@ -648,7 +649,8 @@ namespace Syncless.Core
             try
             {
                 this._userInterface = inf;
-
+                this._queueObserver = new LogicQueueObserver();
+                _queueObserver.Start();
                 bool init = Initiate();
                 SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return init;
@@ -777,12 +779,12 @@ namespace Syncless.Core
             }
             List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(pathList);
             if (mode)
-            {
-                StartManualSync(tag.TagName);
+            {                
                 foreach (string path in convertedPath)
                 {
                     try
                     {
+                        StartManualSync(tag.TagName);
                         MonitorLayer.Instance.MonitorPath(PathHelper.RemoveTrailingSlash(path));
                     }
                     catch (MonitorPathNotFoundException)
@@ -809,14 +811,15 @@ namespace Syncless.Core
         }
         private bool Initiate()
         {
+            
             SaveLoadHelper.LoadAll(_userInterface.getAppPath());
+            
             List<Tag> tagList = TaggingLayer.Instance.AllTagList;
             foreach (Tag t in tagList)
             {
                 if (t.IsSeamless)
                 {
-                    StartMonitorTag(t, t.IsSeamless);
-                    //MonitorTag(t, t.IsSeamless);
+                    StartMonitorTag(t, t.IsSeamless);                    
                 }
             }
             
@@ -926,5 +929,9 @@ namespace Syncless.Core
         }
         #endregion
 
+
+        #region Threading
+        
+        #endregion
     }
 }

@@ -202,9 +202,10 @@ namespace Syncless.Profiling
         /// </summary>
         /// <param name="path">The root path for the profiling configuration file.</param>
         /// <returns>true if the profile is load.</returns>
+        
         public bool Init(List<string> paths)
         {
-            string path = paths[0];//path 0 is the root.
+            string path = paths[0];
             try
             {
                 Profile p = ProfilingXMLHelper.LoadSingleProfile(path);
@@ -262,5 +263,6 @@ namespace Syncless.Profiling
         {
             return _profile.RemoveDrive(driveinfo);
         }
+
     }
 }

@@ -7,6 +7,8 @@ using Syncless.Helper;
 using Syncless.Tagging.Exceptions;
 using System.Diagnostics;
 using Syncless.Filters;
+using Syncless.Core;
+using Syncless.Notification;
 
 namespace Syncless.Tagging
 {
@@ -328,6 +330,7 @@ namespace Syncless.Tagging
             try
             {
                 Tag tag = _taggingProfile.TagFolder(path, tagname);
+               
                 return tag;
             }
             catch (PathAlreadyExistsException paee)

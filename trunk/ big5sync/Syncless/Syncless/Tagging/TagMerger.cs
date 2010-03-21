@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Syncless.Core;
+using Syncless.Notification;
 namespace Syncless.Tagging
 {
     public static class TagMerger
@@ -47,7 +48,8 @@ namespace Syncless.Tagging
 
             foreach (Tag tag in newTagList)//start monitoring each new tag
             {
-                SystemLogicLayer.Instance.StartMonitorTag(tag, tag.IsDeleted);
+                ServiceLocator.LogicLayerNotificationQueue().Enqueue(new AddTagNotification(tag));
+                //SystemLogicLayer.Instance.StartMonitorTag(tag, tag.IsDeleted);
             }
 
             return updateCount;
@@ -75,7 +77,8 @@ namespace Syncless.Tagging
                     //check the creation date is the same , then delete
                     if (newTag.CreatedDate == current.CreatedDate)
                     {
-                        SystemLogicLayer.Instance.DeleteTag(newTag.TagName);
+                        ServiceLocator.LogicLayerNotificationQueue().Enqueue(new RemoveTagNotification(newTag));
+                        //SystemLogicLayer.Instance.DeleteTag(newTag.TagName);
                         return true;
                     }
                     return false;
@@ -87,7 +90,9 @@ namespace Syncless.Tagging
                 {
                     if (newTag.CreatedDate > current.DeletedDate)
                     {
-                        SystemLogicLayer.Instance.AddTag(newTag);
+                        ServiceLocator.LogicLayerNotificationQueue().Enqueue(new AddTagNotification(newTag));
+                        return true;
+                        //SystemLogicLayer.Instance.AddTag(newTag);
                     }
                 }
                 foreach (TaggedPath newPath in newTag.UnfilteredPathList)
@@ -95,8 +100,8 @@ namespace Syncless.Tagging
                     TaggedPath currentPath = current.FindPath(newPath.PathName, false);
                     if (currentPath == null)
                     {
-                        
-                        SystemLogicLayer.Instance.AddTagPath(current, newPath);
+                        ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorPathNotification(current,newPath));
+                        //SystemLogicLayer.Instance.AddTagPath(current, newPath);
                         current.AddPath(newPath);
                     }
                     else
@@ -110,7 +115,8 @@ namespace Syncless.Tagging
                                 if (newPath.DeletedDate > currentPath.CreatedDate)
                                 {
                                     current.RemovePath(newPath);
-                                    SystemLogicLayer.Instance.RemoveTagPath(current, newPath);
+                                    ServiceLocator.LogicLayerNotificationQueue().Enqueue(new UnMonitorPathNotification(current,newPath));
+                                    //SystemLogicLayer.Instance.RemoveTagPath(current, newPath);
                                 }
                             }
                             else if (!newPath.IsDeleted && currentPath.IsDeleted)
@@ -119,7 +125,8 @@ namespace Syncless.Tagging
                                 {
                                     //a new path is created in the new tag but is deleted in the old tag.
                                     current.AddPath(newPath);
-                                    SystemLogicLayer.Instance.AddTagPath(current, newPath);
+                                    ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorPathNotification(current,newPath));
+                                    //SystemLogicLayer.Instance.AddTagPath(current, newPath);
                                 }
                             }
                         }

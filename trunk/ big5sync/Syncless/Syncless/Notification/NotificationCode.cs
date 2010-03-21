@@ -14,8 +14,17 @@ namespace Syncless.Notification
         #endregion
 
 
+        #region for System Logic Layer
+        public const string MONITOR_PATH_NOTIFICATION = "100";
+        public const string UNMONITOR_PATH_NOTIFICATION = "101";
 
-        
+        public const string ADD_TAG_NOTIFICATION = "110";
+        public const string DEL_TAG_NOTIFICATION = "111";
+
+        #endregion
+
+
+
 
     }
 }

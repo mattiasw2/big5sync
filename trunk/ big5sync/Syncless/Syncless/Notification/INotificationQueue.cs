@@ -5,10 +5,11 @@ using System.Text;
 
 namespace Syncless.Notification
 {
-    public interface INotificationQueue
+    public interface INotificationQueue 
     {
         bool Enqueue(AbstractNotification notification);
-        AbstractNotification Dequeue(AbstractNotification notification);
-
+        AbstractNotification Dequeue();
+        void AddObserver(IQueueObserver obs);
+        bool HasNotification();
     }
 }

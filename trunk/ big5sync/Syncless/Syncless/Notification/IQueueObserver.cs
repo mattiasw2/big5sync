@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Syncless.Notification
 {
-    public interface QueueObserver
+    public interface IQueueObserver
     {
         void Update();
     }

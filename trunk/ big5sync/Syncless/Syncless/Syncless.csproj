@@ -101,7 +101,11 @@
     <Compile Include="Core\ExceptionHandler.cs" />
     <Compile Include="Core\Exceptions\InvalidPathException.cs" />
     <Compile Include="Core\Exceptions\UnhandledException.cs" />
+    <Compile Include="Core\LogicQueueObserver.cs" />
+    <Compile Include="Notification\AddTagNotification.cs" />
     <Compile Include="Notification\CompareCompleteNotification.cs" />
+    <Compile Include="Notification\RemoveTagNotification.cs" />
+    <Compile Include="Notification\UnMonitorPathNotification.cs" />
     <Compile Include="Notification\INotificationQueue.cs" />
     <Compile Include="Core\IUIInterface.cs" />
     <Compile Include="Core\DeviceWatcher.cs" />
@@ -110,6 +114,8 @@
     <Compile Include="Core\IMonitorControllerInterface.cs" />
     <Compile Include="Core\IUIControllerInterface.cs" />
     <Compile Include="Notification\AbstractNotification.cs" />
+    <Compile Include="Notification\MessageNotification.cs" />
+    <Compile Include="Notification\MonitorPathNotification.cs" />
     <Compile Include="Notification\NotificationCode.cs" />
     <Compile Include="Notification\NotificationQueue.cs" />
     <Compile Include="Core\SaveLoadHelper.cs" />
@@ -145,7 +151,7 @@
     <Compile Include="Monitor\DTO\FolderChangeEvent.cs" />
     <Compile Include="Monitor\FileSystemEventProcessor.cs" />
     <Compile Include="Monitor\MonitorLayer.cs" />
-    <Compile Include="Notification\QueueObserver.cs" />
+    <Compile Include="Notification\IQueueObserver.cs" />
     <Compile Include="Notification\SyncCompleteNotification.cs" />
     <Compile Include="Notification\SyncProgress.cs" />
     <Compile Include="Notification\SyncStartNotification.cs" />

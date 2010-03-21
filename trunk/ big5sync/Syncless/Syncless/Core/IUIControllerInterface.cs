@@ -25,8 +25,6 @@ namespace Syncless.Core
 
         bool MonitorTag(string tagname, bool mode);
 
-        //bool SetTagMultiDirectional(string tagname);
-
         bool PrepareForTermination();
         bool Terminate();
 
@@ -43,6 +41,10 @@ namespace Syncless.Core
         RootCompareObject PreviewSync(string tagname);
 
         bool AllowForRemoval(DriveInfo drive);
+
+
+
+        //bool SetTagMultiDirectional(string tagname);
 
         // To be Implemented
 
