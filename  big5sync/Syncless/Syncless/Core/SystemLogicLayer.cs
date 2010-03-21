@@ -757,6 +757,15 @@ namespace Syncless.Core
             }
         }
 
+
+        public bool Merge(string path)
+        {   
+            ProfilingLayer.Instance.Merge(path);
+            TaggingLayer.Instance.Merge(path);
+        }
+
+
+
         #endregion
 
         #region private methods & delegate
@@ -930,8 +939,6 @@ namespace Syncless.Core
         #endregion
 
 
-        #region Threading
         
-        #endregion
     }
 }
