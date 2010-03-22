@@ -10,7 +10,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Ionic.Utils;
 using System.IO;
 using Syncless.Core;
 
@@ -52,6 +51,12 @@ namespace SynclessUI
 
 		private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
 		{
+			Application.Current.Properties["OptionsWindowIsOpened"] = true;
+		}
+
+		private void Window_Unloaded(object sender, System.Windows.RoutedEventArgs e)
+		{
+			Application.Current.Properties["OptionsWindowIsOpened"] = false;
 		}
     }
 }

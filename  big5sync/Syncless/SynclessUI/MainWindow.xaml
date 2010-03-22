@@ -54,7 +54,7 @@
 		</EventTrigger>
 	</Window.Triggers>
     <Grid x:Name="LayoutRoot" Width="700" Drop="LayoutRoot_Drop" AllowDrop="True">
-		<Grid.RowDefinitions>
+        <Grid.RowDefinitions>
 			<RowDefinition Height="20"/>
 			<RowDefinition Height="50"/>
 			<RowDefinition Height="60"/>
@@ -303,6 +303,24 @@
 			<Label x:Name="LblTagCount" Grid.Row="1" Grid.Column="0" Foreground="#FFEEEEEE" Content="[Count]" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,4,0,4" Margin="50,0,2,0" FontSize="13.333" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
 			<Image x:Name="ImgFilter" HorizontalAlignment="Left" Margin="2,0,0,-1" Width="16" Grid.Column="1" Source="Icons/filter.ico" Stretch="Fill" Grid.Row="2" Height="16"/>
 		</Grid>		
-		<!-- Log Panel -->
+      <tb:TaskbarIcon x:Name="TaskbarIcon" IconSource="/Icons/logo.ico" ToolTipText="Syncless" MenuActivation="RightClick" TrayLeftMouseDown="TaskbarIcon_TrayLeftMouseDown">
+        <tb:TaskbarIcon.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Options" x:Name="TaskbarOptionsItem" Click="TaskbarOptionsItem_Click">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="Icons/option.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Open" x:Name="TaskbarOpenItem" Click="TaskbarOpenItem_Click"/>
+                <MenuItem Header="Tag" x:Name="TaskbarTagItem" Click="TaskbarTagItem_Click">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="Icons/tag.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Exit" x:Name="TaskbarExitItem" Click="TaskbarExitItem_Click"/>
+            </ContextMenu>
+        </tb:TaskbarIcon.ContextMenu>
+      </tb:TaskbarIcon>
     </Grid>
 </Window>
