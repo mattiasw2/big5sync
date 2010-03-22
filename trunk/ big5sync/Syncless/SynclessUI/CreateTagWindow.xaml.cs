@@ -45,7 +45,7 @@ namespace SynclessUI
 
                     tagexists = _main.CreateTag(tagName);
 
-                    if (tagexists)
+                    if (!tagexists)
                     {
                         string messageBoxText = "Please specify another tagname.";
                         string caption = "Tag Already Exist";

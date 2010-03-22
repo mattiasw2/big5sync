@@ -49,8 +49,6 @@ namespace SynclessUI
 
         public MainWindow()
         {
-            MinimizeToTray.Enable(this);
-
             InitializeComponent();
             InitializeSyncless();
             InitializeKeyboardShortcuts();
@@ -218,12 +216,14 @@ namespace SynclessUI
                 }
                 else
                 {
+					/*
                     string messageBoxText = "Please select a tag.";
                     string caption = "No Tag Selected";
                     MessageBoxButton button = MessageBoxButton.OK;
                     MessageBoxImage icon = MessageBoxImage.Error;
 
                     MessageBox.Show(messageBoxText, caption, button, icon);
+                    */
                 }
             } catch(UnhandledException) {
                 DisplayUnhandledExceptionMessage();
@@ -548,6 +548,16 @@ namespace SynclessUI
         private void MinimizeWindow()
         {
             this.WindowState = WindowState.Minimized;
+            this.ShowInTaskbar = false;
+        }
+		
+        private void RestoreWindow()
+        {
+            this.ShowInTaskbar = true;
+            this.WindowState = WindowState.Normal;
+            this.Topmost = true;
+			this.Topmost = false;
+			this.Focus();
         }
 
         private void BtnDirection_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -721,12 +731,9 @@ namespace SynclessUI
                         MessageBox.Show(messageBoxText, caption, button, icon);
                     }
                 }
-                catch (Exception e)
+                catch (Syncless.Tagging.Exceptions.TagAlreadyExistsException)
                 {
-                    if (e.InnerException is Syncless.Tagging.Exceptions.TagAlreadyExistsException)
-                    {
-                        return true;
-                    }
+                    return false;
                 }
             }
             catch (UnhandledException)
@@ -734,7 +741,7 @@ namespace SynclessUI
                 DisplayUnhandledExceptionMessage();
             }
 
-            return false;
+            return true;
         }
 
         private void TxtBoxFilterTag_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -774,12 +781,14 @@ namespace SynclessUI
             {
                 if (!ListTaggedPath.HasItems)
                 {
+                    /*
                     string messageBoxText = "There is nothing to untag.";
                     string caption = "Nothing to Untag";
                     MessageBoxButton button = MessageBoxButton.OK;
                     MessageBoxImage icon = MessageBoxImage.Error;
 
                     MessageBox.Show(messageBoxText, caption, button, icon);
+                    */
                 }
                 else
                 {
@@ -887,7 +896,7 @@ namespace SynclessUI
             TagWindow tw = new TagWindow(this, clipath, "");
             if (_firstopen == true)
             {
-                this.WindowState = WindowState.Minimized;
+                MinimizeWindow();
                 _firstopen = false;
             }
         }
@@ -897,7 +906,7 @@ namespace SynclessUI
             UntagWindow tw = new UntagWindow(this, clipath);
             if (_firstopen == true)
             {
-                this.WindowState = WindowState.Minimized;
+                MinimizeWindow();
                 _firstopen = false;
             }
         }
@@ -1063,8 +1072,16 @@ namespace SynclessUI
         }
 
         private void DisplayOptionsWindow() {
-            OptionsWindow ow = new OptionsWindow();
-            ow.ShowDialog();
+            if (Application.Current.Properties["OptionsWindowIsOpened"] == null)
+            {
+                Application.Current.Properties["OptionsWindowIsOpened"] = false;
+            }
+
+            if (!(bool)Application.Current.Properties["OptionsWindowIsOpened"])
+            {
+                OptionsWindow ow = new OptionsWindow();
+                ow.ShowDialog();
+            }
         }
 
         private void OpenSynclessWebpage()
@@ -1180,5 +1197,38 @@ namespace SynclessUI
 
             MessageBox.Show(messageBoxText, caption, button, icon);
         }
+
+        #region Events Handlers for Taskbar Icon Context Menu Items
+
+        private void TaskbarExitItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                this.Close();
+            }
+            catch (InvalidOperationException) { }
+        }
+
+        private void TaskbarOptionsItem_Click(object sender, RoutedEventArgs e)
+        {
+            DisplayOptionsWindow();
+        }
+
+        private void TaskbarTagItem_Click(object sender, RoutedEventArgs e)
+        {
+            TagWindow tw = new TagWindow(this, "", _selectedTag);
+        }
+
+        private void TaskbarOpenItem_Click(object sender, RoutedEventArgs e)
+        {
+			RestoreWindow();
+        }
+
+        private void TaskbarIcon_TrayLeftMouseDown(object sender, System.Windows.RoutedEventArgs e)
+        {
+			RestoreWindow();
+        }
+
+        #endregion
     }
 }
