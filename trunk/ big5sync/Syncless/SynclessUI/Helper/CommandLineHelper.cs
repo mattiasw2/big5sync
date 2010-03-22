@@ -48,6 +48,13 @@ namespace SynclessUI.Helper
 
                 main.CLI_Untag(longPath.ToString());
             }
+            else if (flag.Equals("-CleanMeta"))
+            {
+                StringBuilder longPath = new StringBuilder(255);
+                GetLongPathName(path, longPath, longPath.Capacity);
+
+                main.CLI_Clean(longPath.ToString());
+            }
             else
             {
                 throw new Exception("Unknown Command");

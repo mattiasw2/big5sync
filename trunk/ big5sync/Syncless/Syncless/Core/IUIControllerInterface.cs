@@ -42,7 +42,7 @@ namespace Syncless.Core
 
         bool AllowForRemoval(DriveInfo drive);
 
-
+        int Clean(string path);
 
         //bool SetTagMultiDirectional(string tagname);
 
