@@ -757,6 +757,10 @@ namespace Syncless.Core
             }
         }
 
+        public int Clean(string path)
+        {
+            return Cleaner.CleanSynclessMeta(new DirectoryInfo(path));
+        }
 
         public bool Merge(string path)
         {   

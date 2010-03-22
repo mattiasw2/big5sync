@@ -901,6 +901,12 @@ namespace SynclessUI
                 _firstopen = false;
             }
         }
+        public void CLI_Clean(string clipath)
+        {
+            //TODO 
+            int count = ServiceLocator.GUI.Clean(clipath);
+            MessageBox.Show(count + " metaclear-ed");
+        }
 
         #endregion
 
