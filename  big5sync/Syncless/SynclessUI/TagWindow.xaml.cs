@@ -10,7 +10,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Ionic.Utils;
 using System.IO;
 using Syncless.Core;
 using Syncless.Core.Exceptions;
@@ -62,30 +61,24 @@ namespace SynclessUI
 		
 		private string SelectPath(bool cancelStatus) {
             string path = (string) Application.Current.Properties["folderlastselected"];
+
             path = (System.IO.Directory.Exists(path)) ? path : "";
-			var dlg1 = new Ionic.Utils.FolderBrowserDialogEx
-			{
-				Description = "Select the folder to tag",
-				ShowNewFolderButton = true,
-				ShowEditBox = true,
-			    NewStyle = true,
-                SelectedPath = path,
-				ShowFullPathInEditBox= true,
-                ShowBothFilesAndFolders = false,
-			};
-		
-			var result = dlg1.ShowDialog();
-		
-			if (result == System.Windows.Forms.DialogResult.OK)
-			{
-                path = dlg1.SelectedPath;
+
+            System.Windows.Forms.FolderBrowserDialog browse = new System.Windows.Forms.FolderBrowserDialog();
+            browse.SelectedPath = path;
+            browse.ShowNewFolderButton = true;
+            browse.Description="Select the folder to tag";
+
+            if (browse.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                path = browse.SelectedPath;
                 Application.Current.Properties["folderlastselected"] = path;
                 return path;
-			} else if(result == System.Windows.Forms.DialogResult.Cancel)
-			{
-				cancelstatus = true;
-			}
-	
+            }
+            else {
+                cancelstatus = true;
+                _main.Focus();
+	        }
+
 			return "";
 		}
 
