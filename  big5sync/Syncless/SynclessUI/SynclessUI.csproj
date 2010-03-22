@@ -220,6 +220,7 @@
     <Resource Include="Icons\folder.ico" />
     <Resource Include="Icons\kb.ico" />
     <Resource Include="Icons\minus-8.png" />
+    <Resource Include="Icons\option-tray.ico" />
     <Resource Include="Icons\option.ico" />
     <Resource Include="Icons\plus-8.png" />
     <Resource Include="Icons\logo.ico" />
