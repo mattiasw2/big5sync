@@ -308,11 +308,15 @@
             <ContextMenu>
                 <MenuItem Header="Options" x:Name="TaskbarOptionsItem" Click="TaskbarOptionsItem_Click">
                     <MenuItem.Icon>
-                        <Image Width="16" Height="16" Source="Icons/option.ico"/>
+                        <Image Width="16" Height="16" Source="Icons/option-tray.ico"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem Header="Open" x:Name="TaskbarOpenItem" Click="TaskbarOpenItem_Click"/>
+                <MenuItem Header="Open" x:Name="TaskbarOpenItem" Click="TaskbarOpenItem_Click">
+                    <MenuItem.Icon>
+                        <Image Width="16" Height="16" Source="Icons/logo.ico"/>
+                    </MenuItem.Icon>
+				</MenuItem>
                 <MenuItem Header="Tag" x:Name="TaskbarTagItem" Click="TaskbarTagItem_Click">
                     <MenuItem.Icon>
                         <Image Width="16" Height="16" Source="Icons/tag.ico"/>
