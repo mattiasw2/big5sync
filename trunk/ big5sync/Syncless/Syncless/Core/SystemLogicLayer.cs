@@ -756,12 +756,20 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
-
+        /// <summary>
+        /// Clean the meta data of syncless in a folder.
+        /// </summary>
+        /// <param name="path">the path of the directory</param>
+        /// <returns>number of .syncless removed.</returns>
         public int Clean(string path)
         {
             return Cleaner.CleanSynclessMeta(new DirectoryInfo(path));
         }
-
+        /// <summary>
+        /// Merge a profile from a particular path. Will only merge profile with the same name.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public bool Merge(string path)
         {   
             ProfilingLayer.Instance.Merge(path);
@@ -913,8 +921,8 @@ namespace Syncless.Core
         }
         #endregion
 
-        #region For TagMerger
-        public void AddTagPath(Tag tag, TaggedPath path)
+        #region For Notification
+        internal void AddTagPath(Tag tag, TaggedPath path)
         {
             if (tag.IsSeamless)
             {
@@ -925,7 +933,7 @@ namespace Syncless.Core
                 }
             }
         }
-        public void RemoveTagPath(Tag tag, TaggedPath path)
+        internal void RemoveTagPath(Tag tag, TaggedPath path)
         {
             if (tag.IsSeamless)
             {
@@ -936,10 +944,26 @@ namespace Syncless.Core
                 }
             }
         }
-        public void AddTag(Tag tag)
+        internal void AddTag(Tag tag)
         {
             TaggingLayer.Instance.AddTag(tag);
             StartMonitorTag(tag, tag.IsSeamless);
+        }
+        internal void RemoveTag(Tag tag)
+        {
+            try
+            {
+                Tag t = TaggingLayer.Instance.DeleteTag(tag.TagName);
+            }
+            catch (TagNotFoundException te)
+            {
+                ExceptionHandler.Handle(te);
+            }
+            catch (Exception e)// Handle Unexpected Exception
+            {
+                ExceptionHandler.Handle(e);
+            }
+
         }
         #endregion
 

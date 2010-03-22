@@ -75,7 +75,7 @@ namespace Syncless.CompareAndSync.Visitor
         private void ProcessMetaChangeType(FileCompareObject file, int counter)
         {
             FinalState? changeType = file.FinalState[counter];
-
+            
             if (changeType == null)
             {
                 HandleNullCases(file, counter);

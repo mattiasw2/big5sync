@@ -104,6 +104,7 @@
     <Compile Include="Core\LogicQueueObserver.cs" />
     <Compile Include="Notification\AddTagNotification.cs" />
     <Compile Include="Notification\CompareCompleteNotification.cs" />
+    <Compile Include="Notification\ISyncProgressObserver.cs" />
     <Compile Include="Notification\RemoveTagNotification.cs" />
     <Compile Include="Notification\UnMonitorPathNotification.cs" />
     <Compile Include="Notification\INotificationQueue.cs" />

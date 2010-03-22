@@ -100,7 +100,7 @@ namespace Syncless.Core
                     //Discard
                     return;
                 }
-                _sll.DeleteTag(rmNotification.Tag.TagName);
+                _sll.RemoveTag(rmNotification.Tag);
             }
 
             

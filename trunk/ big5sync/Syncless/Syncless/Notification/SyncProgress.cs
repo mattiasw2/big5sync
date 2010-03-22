@@ -7,7 +7,8 @@ namespace Syncless.Notification
 {
     public class SyncProgress
     {
-        private List<Update> _eventHandlerList;
+        private List<ISyncProgressObserver> _observerList;
+
         private int _totalJob;
 
         public int TotalJob
@@ -15,7 +16,6 @@ namespace Syncless.Notification
             get { return _totalJob; }
         }
         private int _completedJob;
-
         public int CompletedJob
         {
             get { return _completedJob; }
@@ -26,23 +26,17 @@ namespace Syncless.Notification
         {
             get { return _failedJob; }
         }
-        public delegate void Update(double currentPercentComplete);
+
         public double PercentComplete
         {
             get
             {
-                double completed = _completedJob;
+                double completed = _completedJob + _failedJob;
                 double total = _totalJob;
                 return completed / total * 100;
             }
         }
-        public SyncProgress(int total)
-        {
-            _totalJob = total;
-            _failedJob = 0;
-            _completedJob = 0;
-            _eventHandlerList = new List<Update>();
-        }
+
         public void complete()
         {
             if (_completedJob + _failedJob >= _totalJob)
@@ -50,12 +44,14 @@ namespace Syncless.Notification
                 return;
             }
             _completedJob++;
-            foreach (Update handler in _eventHandlerList)
+            foreach (ISyncProgressObserver obs in _observerList)
             {
-                handler.BeginInvoke(PercentComplete,null, null);
+                MethodASync sync = new MethodASync(obs.ProgressChanged);
+                sync.BeginInvoke(null, null);
             }
 
         }
+        public delegate void MethodASync();
         public void fail()
         {
             if (_completedJob + _failedJob >= _totalJob)
@@ -63,27 +59,35 @@ namespace Syncless.Notification
                 return;
             }
             _failedJob++;
-            foreach (Update handler in _eventHandlerList)
+            foreach (ISyncProgressObserver obs in _observerList)
             {
-                handler.BeginInvoke(PercentComplete,null, null);
+                MethodASync sync = new MethodASync(obs.ProgressChanged);
+                sync.BeginInvoke(null, null);
             }
 
         }
-        public void AddChangeHandler(Update handler)
+        public SyncProgress(int total)
         {
-            if (_eventHandlerList.Contains(handler))
+            _totalJob = total;
+            _failedJob = 0;
+            _completedJob = 0;
+            _observerList = new List<ISyncProgressObserver>();
+        }
+
+        public void AddObserver(ISyncProgressObserver obs)
+        {
+            if (_observerList.Contains(obs))
             {
                 return;
             }
-            _eventHandlerList.Add(handler);
+            _observerList.Add(obs);
         }
-        public void RemoveChangeHandler(Update handler)
+        public void RemoveObserver(ISyncProgressObserver obs)
         {
-            if (_eventHandlerList.Contains(handler))
+            if (_observerList.Contains(obs))
             {
-                _eventHandlerList.Remove(handler);
+                _observerList.Add(obs);
             }
         }
-
     }
 }
