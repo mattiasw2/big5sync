@@ -61,7 +61,7 @@ namespace Syncless.Core
                     }
                     catch (Exception e)
                     {
-                        ExceptionHandler.Handle(e);
+                        ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                     }
                 }
             }
