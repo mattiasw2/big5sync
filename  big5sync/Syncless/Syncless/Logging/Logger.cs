@@ -15,6 +15,6 @@ namespace Syncless.Logging
 
         public abstract void Write(object message);
 
-        public void WriteLine(string message){}
+        
     }
 }

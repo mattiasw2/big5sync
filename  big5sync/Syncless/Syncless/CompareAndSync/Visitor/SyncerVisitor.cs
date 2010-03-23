@@ -135,13 +135,13 @@ namespace Syncless.CompareAndSync.Visitor
                         {
                             fco.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
                         }
                         catch (CopyFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
                         }
                     }
                     else
@@ -181,14 +181,14 @@ namespace Syncless.CompareAndSync.Visitor
                         {
                             fco.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
 
                         }
                         catch (DeleteFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
                         }
 
                     }
@@ -227,7 +227,7 @@ namespace Syncless.CompareAndSync.Visitor
                         {
                             fco.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
                         }
                     }
                     else
@@ -263,7 +263,7 @@ namespace Syncless.CompareAndSync.Visitor
                             {
                                 folder.FinalState[i] = FinalState.Error;
                                 //TODO: Throw to notification queue in future
-                                ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
                             }
                         }
                     }
@@ -306,13 +306,13 @@ namespace Syncless.CompareAndSync.Visitor
                         {
                             folder.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
                         }
                         catch (DeleteFolderException e)
                         {
                             folder.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
                         }
                     }
                     else
@@ -352,7 +352,7 @@ namespace Syncless.CompareAndSync.Visitor
                         {
                             folder.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
                         }
                     }
                     else
