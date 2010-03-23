@@ -14,6 +14,7 @@ using System.IO;
 using Syncless.Core;
 using Syncless.Core.Exceptions;
 using Microsoft.Windows.Controls;
+using SynclessUI.Helper;
 
 namespace SynclessUI
 {
@@ -68,6 +69,8 @@ namespace SynclessUI
             browse.SelectedPath = path;
             browse.ShowNewFolderButton = true;
             browse.Description="Select the folder to tag";
+
+            browse.RootFolder = Environment.SpecialFolder.MyComputer;
 
             if (browse.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 path = browse.SelectedPath;
@@ -146,52 +149,27 @@ namespace SynclessUI
                                 }
                                 else
                                 {
-                                    string messageBoxText = "Tag Error Occured. Please Try Again.";
-                                    string caption = "Tag Error";
-                                    MessageBoxButton button = MessageBoxButton.OK;
-                                    MessageBoxImage icon = MessageBoxImage.Error;
-
-                                    MessageBox.Show(messageBoxText, caption, button, icon);
+                                    DialogsHelper.ShowError("Tag Error", "Tag Error Occured. Please Try Again.");
                                 }
                             }
                             catch (Syncless.Tagging.Exceptions.RecursiveDirectoryException)
                             {
-                                string messageBoxText = "Folder could not be tagged as it is a sub-folder of a folder already tagged.";
-                                string caption = "Recursive Directory Error";
-                                MessageBoxButton button = MessageBoxButton.OK;
-                                MessageBoxImage icon = MessageBoxImage.Error;
-
-                                MessageBox.Show(messageBoxText, caption, button, icon);
+                                DialogsHelper.ShowError("Recursive Directory Error", "Folder could not be tagged as it is a sub-folder of a folder already tagged.");
                             }
                             catch (Syncless.Tagging.Exceptions.PathAlreadyExistsException)
                             {
-                                string messageBoxText = "The path you tried to tag is already tagged.";
-                                string caption = "Path Already Exists";
-                                MessageBoxButton button = MessageBoxButton.OK;
-                                MessageBoxImage icon = MessageBoxImage.Error;
-
-                                MessageBox.Show(messageBoxText, caption, button, icon);
+                                DialogsHelper.ShowError("Path Already Exists", "The path you tried to tag is already tagged.");
                             }
                         }
                     }
                     else
                     {
-                        string messageBoxText = "Please select a folder to tag.";
-                        string caption = "Folder Not Selected";
-                        MessageBoxButton button = MessageBoxButton.OK;
-                        MessageBoxImage icon = MessageBoxImage.Error;
-
-                        MessageBox.Show(messageBoxText, caption, button, icon);
+                        DialogsHelper.ShowError("Folder Not Selected", "Please select a folder to tag.");
                     }
                 }
                 else
                 {
-                    string messageBoxText = "Please specify a tagname.";
-                    string caption = "Tagname Empty";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Error;
-
-                    MessageBox.Show(messageBoxText, caption, button, icon);
+                    DialogsHelper.ShowError("Tagname Empty", "Please specify a tagname.");
                 }
             }
             catch (UnhandledException)
