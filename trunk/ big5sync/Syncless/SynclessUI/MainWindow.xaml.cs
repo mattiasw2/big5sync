@@ -21,6 +21,8 @@ using System.Windows.Navigation;
 using System.Diagnostics;
 using System.Windows.Threading;
 using System.Windows.Media.Media3D;
+using Syncless.Notification;
+using SynclessUI.Notification;
 
 namespace SynclessUI
 {
@@ -368,6 +370,10 @@ namespace SynclessUI
 
                     this.Close();
                 }
+                NotificationWatcher watcher = new NotificationWatcher();
+                watcher.Start();
+                PriorityNotificationWatcher watcher2 = new PriorityNotificationWatcher();
+                watcher2.Start();
             }
             catch (UnhandledException)
             {
