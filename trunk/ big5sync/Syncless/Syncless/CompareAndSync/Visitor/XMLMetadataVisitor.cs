@@ -21,11 +21,11 @@ namespace Syncless.CompareAndSync.Visitor
         private const string NODE_HASH = "hash";
         private const string NODE_LAST_MODIFIED = "last_modified";
         private const string NODE_LAST_CREATED = "last_created";
-        private const string FILES = "files";
+        private const string FILES = "file";
         private const string NODE_TODO = "todo";
         private const string NODE_DATE = "date";
         private const string NODE_ACTION = "action";
-        private const string NODE_NEWNAME = "new_names";
+        private const string NODE_NEWNAME = "new_name";
         private static readonly object syncLock = new object();
 
         #region IVisitor Members

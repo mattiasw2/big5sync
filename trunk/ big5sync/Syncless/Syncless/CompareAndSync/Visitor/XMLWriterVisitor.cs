@@ -18,7 +18,7 @@ namespace Syncless.CompareAndSync.Visitor
         private const string XML_NAME = "syncless.xml";
         private const string METADATAPATH = META_DIR + "\\" + XML_NAME;
         private const string FOLDER = "folder";
-        private const string FILES = "files";
+        private const string FILES = "file";
         private const string NAME_OF_FOLDER = "name_of_folder";
         private const string NODE_NAME = "name";
         private const string NODE_SIZE = "size";
@@ -523,7 +523,6 @@ namespace Syncless.CompareAndSync.Visitor
                 newNode.FirstChild.InnerText = folder.NewName;
                 XmlNode todoNode = CreateFolderToDo(parentXmlDoc, folder, counter, "Rename");
                 parentXmlFolderNode.AppendChild(todoNode);
-
                 XmlNode rootNode = parentXmlDoc.SelectSingleNode(XPATH_EXPR);
                 rootNode.AppendChild(newNode);
                 CommonMethods.SaveXML(ref parentXmlDoc, Path.Combine(folder.GetSmartParentPath(counter), METADATAPATH));
@@ -542,7 +541,8 @@ namespace Syncless.CompareAndSync.Visitor
        //         if (node == null)
        //             return;
        //         node.ParentNode.RemoveChild(node);
-                CreateFolderToDo(xmlDoc, folder, counter, "Delete");
+                XmlNode todoNode = CreateFolderToDo(xmlDoc, folder, counter, "Delete");
+                node.AppendChild(todoNode);
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
         }
