@@ -74,7 +74,12 @@ namespace SynclessUI
                 ShowBothFilesAndFolders = false,
             };
 
-            browse.RootFolder = Environment.SpecialFolder.MyComputer;
+            // Fix Vista Bug
+            OperatingSystem os = System.Environment.OSVersion;
+            if (os.Version.Major == 6 && os.Version.Minor == 0)
+            {
+                browse.RootFolder = Environment.SpecialFolder.MyComputer;
+            }
 
             var result = browse.ShowDialog();
 
