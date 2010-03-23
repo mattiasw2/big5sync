@@ -53,34 +53,33 @@ namespace Syncless.CompareAndSync.Visitor
             //3. If the count is 1, we shall proceed to rename
 
             FolderCompareObject f = null;
-            int pos = deletePos[0];
 
-            //for (int i = 0; i < numOfPaths; i++)
-            //{
-            //if (folder.ChangeType[i] == MetaChangeType.Delete)
-            //{
-            f = folder.Parent.GetRenamedFolder(folder.Name, folder.CreationTime[pos], pos);
-
-            if (f != null)
+            for (int i = 0; i < numOfPaths; i++)
             {
-                int counter = 0;
-
-                for (int j = 0; j < f.ChangeType.Length; j++)
+                if (folder.ChangeType[i] == MetaChangeType.Delete)
                 {
-                    if (f.ChangeType[j].HasValue && f.ChangeType[j] == MetaChangeType.New)
-                        counter++;
-                }
+                    f = folder.Parent.GetRenamedFolder(folder.Name, folder.CreationTime[i], i);
 
-                if (counter != 1)
-                {
-                    folder.ChangeType[pos] = null;
-                    return;
-                }
+                    if (f != null)
+                    {
+                        int counter = 0;
 
-                MergeRenamedFolder(folder, f, pos);
+                        for (int j = 0; j < f.ChangeType.Length; j++)
+                        {
+                            if (f.ChangeType[j].HasValue && f.ChangeType[j] == MetaChangeType.New)
+                                counter++;
+                        }
+
+                        if (counter != 1)
+                        {
+                            folder.ChangeType[i] = null;                         
+                            return;
+                        }
+
+                        MergeRenamedFolder(folder, f, i);
+                    }
+                }
             }
-            //}
-            //}
         }
 
         //Merge the renamed folder into the folders with its old name, so that files are all compared.

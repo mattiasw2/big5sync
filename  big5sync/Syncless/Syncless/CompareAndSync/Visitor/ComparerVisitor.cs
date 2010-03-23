@@ -11,22 +11,22 @@ namespace Syncless.CompareAndSync.Visitor
     {
         #region IVisitor Members
 
-        public void Visit(FileCompareObject file, string[] currentPaths)
+        public void Visit(FileCompareObject file, int numOfPaths)
         {
             if (file.Invalid)
                 return;
 
-            DetectFileRename(file, currentPaths);
-            DetectFileRenameAndUpdate(file, currentPaths);
-            CompareFiles(file, currentPaths);
+            DetectFileRename(file, numOfPaths);
+            DetectFileRenameAndUpdate(file, numOfPaths);
+            CompareFiles(file, numOfPaths);
         }
 
-        public void Visit(FolderCompareObject folder, string[] currentPaths)
+        public void Visit(FolderCompareObject folder, int numOfPaths)
         {
             if (folder.Invalid)
                 return;
 
-            CompareFolders(folder, currentPaths);
+            CompareFolders(folder, numOfPaths);
         }
 
         public void Visit(RootCompareObject root)
@@ -38,7 +38,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region Files
 
-        private void DetectFileRenameAndUpdate(FileCompareObject file, string[] currentPaths)
+        private void DetectFileRenameAndUpdate(FileCompareObject file, int numOfPaths)
         {
             //Get a Delete type
             //1. Find something that is New and has the same creation time
@@ -49,7 +49,7 @@ namespace Syncless.CompareAndSync.Visitor
             FileCompareObject f = null;
             List<int> indexes = new List<int>();
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (file.ChangeType[i] == MetaChangeType.Delete)
                     indexes.Add(i);
@@ -86,65 +86,49 @@ namespace Syncless.CompareAndSync.Visitor
 
         }
 
-        private void DetectFileRename(FileCompareObject file, string[] currentPaths)
+        private void DetectFileRename(FileCompareObject file, int numOfPaths)
         {
             FileCompareObject f = null;
             FileCompareObject result = null;
             int resultPos = -1;
             int counter = 0;
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (file.ChangeType[i] == MetaChangeType.New || file.ChangeType[i] == MetaChangeType.Update)
                     return;
             }
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (file.ChangeType[i] == MetaChangeType.Delete)
                 {
-                    //if (file.Todo[i].HasValue && file.Todo[i] == ToDo.Rename)
-                    //{
-                    //    counter++;
-                    //    resultPos = i;
-                    //}
-                    //else
-                    //{
-                        f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);
+                    f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);      
 
-                        if (f != null)
-                        {
-                            counter++;
-                            result = f;
-                            resultPos = i;
-                        }
-                    //}
+                    if (f != null)
+                    {
+                        counter++;
+                        result = f;
+                        resultPos = i;
+                    }
                 }
             }
 
             if (counter == 1)
             {
-                //if (result != null)
-                //{
-                    file.NewName = result.Name;
-                    file.ChangeType[resultPos] = MetaChangeType.Rename;
-                    result.Invalid = true;
-                //}
-                //else
-                //{
-                //    file.NewName = file.TodoNewName[resultPos];
-                //    file.ChangeType[resultPos] = MetaChangeType.Rename;
-                //}
+                file.NewName = result.Name;
+                file.ChangeType[resultPos] = MetaChangeType.Rename;
+                result.Invalid = true;
             }
 
         }
 
-        private void CompareFiles(FileCompareObject file, string[] currentPaths)
+        private void CompareFiles(FileCompareObject file, int numOfPaths)
         {
             //Delete will only occur if all other changes are MetaChangeType.NoChange or null
             List<int> deletePos = new List<int>();
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (file.ChangeType[i] == MetaChangeType.Delete)
                     deletePos.Add(i);
@@ -165,7 +149,7 @@ namespace Syncless.CompareAndSync.Visitor
             //Rename will only occur if all other changes are MetaChangeType.NoChange or null
             int renamePos = -1;
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (file.ChangeType[i] == MetaChangeType.Rename)
                     renamePos = i;
@@ -196,7 +180,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             file.Priority[mostUpdatedPos] = 1;
 
-            for (int i = mostUpdatedPos + 1; i < currentPaths.Length; i++)
+            for (int i = mostUpdatedPos + 1; i < numOfPaths; i++)
             {
                 if (!file.Exists[i])
                 {
@@ -218,7 +202,7 @@ namespace Syncless.CompareAndSync.Visitor
                 }
             }
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (file.Exists[i] && file.Priority[i] != file.Priority[mostUpdatedPos])
                 {
@@ -232,14 +216,14 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region Folders
 
-        private void CompareFolders(FolderCompareObject folder, string[] currentPaths)
+        private void CompareFolders(FolderCompareObject folder, int numOfFiles)
         {
             //Delete will only occur if none of the folders are marked as dirty
             List<int> deletePos = new List<int>();
 
             if (!folder.Dirty)
             {
-                for (int i = 0; i < currentPaths.Length; i++)
+                for (int i = 0; i < numOfFiles; i++)
                 {
                     if (folder.ChangeType[i] == MetaChangeType.Delete)
                         deletePos.Add(i);
@@ -256,7 +240,7 @@ namespace Syncless.CompareAndSync.Visitor
             //Rename will only occur if all other changes are MetaChangeType.NoChange or null
             int renamePos = -1;
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfFiles; i++)
             {
                 if (folder.ChangeType[i] == MetaChangeType.Rename)
                     renamePos = i;
@@ -275,7 +259,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             int mostUpdatedPos = 0;
 
-            for (int i = 0; i < currentPaths.Length; i++)
+            for (int i = 0; i < numOfFiles; i++)
             {
                 if (folder.Exists[i])
                 {
@@ -286,7 +270,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             folder.Priority[mostUpdatedPos] = 1;
 
-            for (int i = mostUpdatedPos + 1; i < currentPaths.Length; i++)
+            for (int i = mostUpdatedPos + 1; i < numOfFiles; i++)
             {
                 if (!folder.Exists[i])
                 {
