@@ -10,7 +10,18 @@ namespace Syncless.CompareAndSync.Visitor
     public class ComparerVisitor : IVisitor
     {
         #region IVisitor Members
+        private int _totalNodes;
 
+        public int TotalNodes
+        {
+            get { return _totalNodes; }
+            set { _totalNodes = value; }
+        }
+        public ComparerVisitor()
+        {
+            _totalNodes = 0;
+
+        }
         public void Visit(FileCompareObject file, int numOfPaths)
         {
             if (file.Invalid)
@@ -19,6 +30,7 @@ namespace Syncless.CompareAndSync.Visitor
             DetectFileRename(file, numOfPaths);
             DetectFileRenameAndUpdate(file, numOfPaths);
             CompareFiles(file, numOfPaths);
+            _totalNodes++;
         }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
@@ -27,11 +39,13 @@ namespace Syncless.CompareAndSync.Visitor
                 return;
 
             CompareFolders(folder, numOfPaths);
+            _totalNodes++;
         }
 
         public void Visit(RootCompareObject root)
         {
             // Do nothing
+            _totalNodes++;
         }
 
         #endregion
