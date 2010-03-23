@@ -134,10 +134,7 @@ namespace Syncless.Tagging
                 else
                 {
                     CurrentTime updated = new CurrentTime();
-                    toRemove.IsDeleted = true;
-                    toRemove.DeletedDate = updated.CurrentTimeLong;
-                    toRemove.LastUpdatedDate = updated.CurrentTimeLong;
-                    toRemove.RemoveAllPaths();
+                    toRemove.Remove(updated.CurrentTimeLong);
                     _lastUpdatedDate = updated.CurrentTimeLong;
                     return toRemove;
                 }
@@ -160,10 +157,7 @@ namespace Syncless.Tagging
                 else
                 {
                     CurrentTime updated = new CurrentTime();
-                    toRemove.IsDeleted = true;
-                    toRemove.DeletedDate = updated.CurrentTimeLong;
-                    toRemove.LastUpdatedDate = updated.CurrentTimeLong;
-                    toRemove.RemoveAllPaths();
+                    toRemove.Remove(updated.CurrentTimeLong);
                     _lastUpdatedDate = updated.CurrentTimeLong;
                     return toRemove;
                 }

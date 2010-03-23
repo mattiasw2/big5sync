@@ -708,7 +708,12 @@ namespace Syncless.Tagging
         /// <returns></returns>
         public void SaveTo(List<string> savedLocation)
         {
-            TaggingXMLHelper.SaveTo(_taggingProfile, savedLocation);
+            TaggingXMLHelper.SaveToLocations(_taggingProfile, savedLocation);
+        }
+
+        public void AppendProfile(List<string> savedLocation)
+        {
+            TaggingXMLHelper.AppendProfile(_taggingProfile, savedLocation);
         }
         #endregion
 
