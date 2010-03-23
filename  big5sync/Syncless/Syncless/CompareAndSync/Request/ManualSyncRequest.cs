@@ -9,6 +9,14 @@ namespace Syncless.CompareAndSync.Request
     public class ManualSyncRequest : ManualRequest
     {
         private bool _notify;
+        private string _tagName;
+
+        public ManualSyncRequest(string[] paths, List<Filter> filters, SyncConfig syncConfig, string tagName, bool notify)
+            : base(paths, filters, syncConfig)
+        {
+            _tagName = tagName;
+            _notify = notify;
+        }
 
         public bool Notify
         {
@@ -16,18 +24,10 @@ namespace Syncless.CompareAndSync.Request
             set { _notify = value; }
         }
 
-        private string _tagname;
-
-        public string Tagname
+        public string TagName
         {
-            get { return _tagname; }
-            set { _tagname = value; }
-        }
-        public ManualSyncRequest(string[] paths, List<Filter> filters,  SyncConfig syncConfig,string tagname,bool notify)
-            : base(paths, filters, syncConfig)
-        {
-            _tagname = tagname;
-            _notify = notify;
+            get { return _tagName; }
+            set { _tagName = value; }
         }
     }
 }

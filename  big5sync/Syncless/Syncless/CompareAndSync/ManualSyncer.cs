@@ -6,6 +6,9 @@ using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Visitor;
 using Syncless.Filters;
+using Syncless.Core;
+using Syncless.Notification.SLLNotification;
+using Syncless.Notification.UINotification;
 
 namespace Syncless.CompareAndSync
 {
@@ -23,7 +26,10 @@ namespace Syncless.CompareAndSync
             CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config));
             CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor());
 
-            //PUT RCO INTO NOTIFICATION QUEUE
+            if (request.Notify)
+                ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
+
+            ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification());
         }
 
         public static RootCompareObject Compare(ManualCompareRequest request)
