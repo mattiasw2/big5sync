@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using System.IO;
 using Syncless.Core;
 using Syncless.Core.Exceptions;
+using SynclessUI.Helper;
 
 namespace SynclessUI
 {
@@ -40,12 +41,8 @@ namespace SynclessUI
                 }
                 else
                 {
-                    string messageBoxText = "The folder you were trying to untag had no tags on it.";
-                    string caption = "No Tags Found";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Error;
+                    DialogsHelper.ShowError("No Tags Found", "The folder you were trying to untag had no tags on it.");
 
-                    MessageBox.Show(messageBoxText, caption, button, icon);
                     this.Close();
                 }
             }
@@ -71,12 +68,7 @@ namespace SynclessUI
                     int result = _main.gui.Untag(t, new DirectoryInfo(TxtBoxPath.Text));
                     if (result != 1)
                     {
-                        string messageBoxText = t + " could not be untagged from " + TxtBoxPath.Text;
-                        string caption = "Untagging Error";
-                        MessageBoxButton button = MessageBoxButton.OK;
-                        MessageBoxImage icon = MessageBoxImage.Error;
-
-                        MessageBox.Show(messageBoxText, caption, button, icon);
+                        DialogsHelper.ShowError("Untagging Error", t + " could not be untagged from " + TxtBoxPath.Text);
                     }
                 }
                 _main.InitializeTagList();

@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Syncless.Core.Exceptions;
+using SynclessUI.Helper;
 
 namespace SynclessUI
 {
@@ -47,12 +48,7 @@ namespace SynclessUI
 
                     if (!tagexists)
                     {
-                        string messageBoxText = "Please specify another tagname.";
-                        string caption = "Tag Already Exist";
-                        MessageBoxButton button = MessageBoxButton.OK;
-                        MessageBoxImage icon = MessageBoxImage.Error;
-
-                        MessageBox.Show(messageBoxText, caption, button, icon);
+                        DialogsHelper.ShowError("Tag Already Exist", "Please specify another tagname.");
                     }
                     else
                     {
@@ -61,12 +57,7 @@ namespace SynclessUI
                 }
                 else
                 {
-                    string messageBoxText = "Please specify a tagname.";
-                    string caption = "Tagname Empty";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Error;
-
-                    MessageBox.Show(messageBoxText, caption, button, icon);
+                    DialogsHelper.ShowError("Tagname Empty", "Please specify a tagname.");
                 }
             }
             catch (UnhandledException)
