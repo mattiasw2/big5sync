@@ -192,28 +192,33 @@ namespace Syncless.CompareAndSync.Visitor
                 XmlDocument todoXML = new XmlDocument();
                 todoXML.Load(path);
                 XmlNode todoNode = todoXML.SelectSingleNode("/todo/file[hash='"+file.MetaHash[counter]+"']");
-                XmlNodeList nodeList = todoNode.ChildNodes;
-                for (int i = 0; i < nodeList.Count; i++)
+                if (todoNode != null)
                 {
-                    XmlNode childNode = nodeList[i];
-                    switch (childNode.Name)
+                    XmlNodeList nodeList = todoNode.ChildNodes;
+                    for (int i = 0; i < nodeList.Count; i++)
                     {
-                        case ACTION :
-                            string action = childNode.InnerText;
-                            if (action.Equals("Delete"))
-                            {
-                                file.ToDoAction[counter] = ToDo.Delete;
-                            }
-                            else
-                            {
-                                file.ToDoAction[counter] = ToDo.Rename;
-                            }
-                            break;
-                        case LAST_UPDATED:
-                            file.ToDoTimestamp[counter] = long.Parse(node.InnerText);
-                            break;
+                        XmlNode childNode = nodeList[i];
+                        switch (childNode.Name)
+                        {
+                            case ACTION:
+                                string action = childNode.InnerText;
+                                if (action.Equals("Delete"))
+                                {
+                                    file.ToDoAction[counter] = ToDo.Delete;
+                                }
+                                else
+                                {
+                                    file.ToDoAction[counter] = ToDo.Rename;
+                                }
+                                break;
+                            case LAST_UPDATED:
+                                file.ToDoTimestamp[counter] = long.Parse(node.InnerText);
+                                break;
+                        }
                     }
                 }
+
+      
             }
 
             file.MetaExists[counter] = true;
