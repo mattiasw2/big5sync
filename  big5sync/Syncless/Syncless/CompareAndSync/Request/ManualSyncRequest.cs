@@ -8,17 +8,9 @@ namespace Syncless.CompareAndSync.Request
 {
     public class ManualSyncRequest : ManualRequest
     {
-        private string[] _unavailablePaths;
-
-        public ManualSyncRequest(string[] paths, string[] unavailablePaths, List<Filter> filters,  SyncConfig syncConfig)
+        public ManualSyncRequest(string[] paths, List<Filter> filters,  SyncConfig syncConfig)
             : base(paths, filters, syncConfig)
         {
-            _unavailablePaths = unavailablePaths;
-        }
-
-        public string[] UnavailablePaths
-        {
-            get { return _unavailablePaths; }
         }
     }
 }
