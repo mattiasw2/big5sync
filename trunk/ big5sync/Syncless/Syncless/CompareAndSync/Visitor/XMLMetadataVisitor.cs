@@ -202,15 +202,15 @@ namespace Syncless.CompareAndSync.Visitor
                             string action = childNode.InnerText;
                             if (action.Equals("Delete"))
                             {
-                                file.Todo[counter] = ToDo.Delete;
+                                file.ToDoAction[counter] = ToDo.Delete;
                             }
                             else
                             {
-                                file.Todo[counter] = ToDo.Rename;
+                                file.ToDoAction[counter] = ToDo.Rename;
                             }
                             break;
                         case LAST_UPDATED:
-                            file.TodoTimestamp[counter] = long.Parse(node.InnerText);
+                            file.ToDoTimestamp[counter] = long.Parse(node.InnerText);
                             break;
                     }
                 }
