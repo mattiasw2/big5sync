@@ -18,10 +18,10 @@ namespace Syncless.Notification.UINotification
             set { _progress = value; }
         }
 
-        public SyncStartNotification(int jobCount)
+        public SyncStartNotification()
             : base("Sync Start Notification", Syncless.Notification.NotificationCode.SYNC_COMPLETE_NOTIFICATION)
         {
-            _progress = new SyncProgress(jobCount);
+            _progress = new SyncProgress();
         }
 
     }

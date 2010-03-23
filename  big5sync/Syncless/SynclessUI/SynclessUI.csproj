@@ -111,6 +111,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Notification\NotificationWatcher.cs" />
+    <Compile Include="Notification\PriorityNotificationWatcher.cs" />
     <Compile Include="ShortcutsWindow.xaml.cs">
       <DependentUpon>ShortcutsWindow.xaml</DependentUpon>
     </Compile>

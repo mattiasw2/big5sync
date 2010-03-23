@@ -303,25 +303,10 @@ namespace Syncless.Core
         /// </summary>
         /// <param name="tagname">tagname of the Tag to Sync</param>
         /// <returns>true if the sync is success.</returns>
+        
         public bool StartManualSync(string tagname)
         {
-            try
-            {
-                Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
-                if (tag == null)
-                {
-                    return false;
-                }
-                ManualSyncDelegate del = new ManualSyncDelegate(StartManualSync);
-                del.BeginInvoke(tag, null, null);
-                //StartManualSync(tag);
-                return true;
-            }
-            catch (Exception e) // Handle Unexpected Exception
-            {
-                ExceptionHandler.Handle(e);
-                throw new UnhandledException(e);
-            }
+            return this.StartManualSync(tagname, false);
         }
         /// <summary>
         /// Delete a tag
@@ -333,7 +318,6 @@ namespace Syncless.Core
             try
             {
                 Tag t = TaggingLayer.Instance.DeleteTag(tagname);
-                //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return t != null;
             }
             catch (TagNotFoundException te)
@@ -792,15 +776,34 @@ namespace Syncless.Core
 
         #region private methods & delegate
         public delegate void MonitorTagDelegate(Tag t, bool isSeamless);
-        public delegate void ManualSyncDelegate(Tag tag);
+        public delegate void ManualSyncDelegate(Tag tag, bool notify);
         public void StartMonitorTag(Tag tag, bool mode)
         {
             MonitorTagDelegate monitordelegate = new MonitorTagDelegate(MonitorTag);
             monitordelegate.BeginInvoke(tag, mode, null, null);
         }
+        private bool StartManualSync(string tagname,bool notify)
+        {
+            try
+            {
+                Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+                if (tag == null)
+                {
+                    return false;
+                }
+                ManualSyncDelegate del = new ManualSyncDelegate(StartManualSync);
+                del.BeginInvoke(tag,notify, null, null);
+                //StartManualSync(tag);
+                return true;
+            }
+            catch (Exception e) // Handle Unexpected Exception
+            {
+                ExceptionHandler.Handle(e);
+                throw new UnhandledException(e);
+            }
+        }
         private void MonitorTag(Tag tag, bool mode)
         {
-
             tag.IsSeamless = mode;
 
             List<string> pathList = new List<string>();
@@ -815,7 +818,7 @@ namespace Syncless.Core
                 {
                     try
                     {
-                        StartManualSync(tag.TagName);
+                        StartManualSync(tag.TagName,true);
                         MonitorLayer.Instance.MonitorPath(PathHelper.RemoveTrailingSlash(path));
                     }
                     catch (MonitorPathNotFoundException)
@@ -866,14 +869,14 @@ namespace Syncless.Core
             view.IsSeamless = t.IsSeamless;
             return view;
         }
-        private void StartManualSync(Tag tag)
+        private void StartManualSync(Tag tag,bool notify)
         {
             List<string> paths = tag.FilteredPathListString;
             List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
             if (filterPaths[0].Count != 0)
             {
                 SyncConfig syncConfig = new SyncConfig(tag.ArchiveName, tag.ArchiveCount, tag.Recycle);
-                ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), tag.Filters, syncConfig);
+                ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), tag.Filters, syncConfig,tag.TagName,notify);
 
                 CompareAndSyncController.Instance.Sync(syncRequest);
             }
@@ -973,6 +976,16 @@ namespace Syncless.Core
                 ExceptionHandler.Handle(e);
             }
 
+        }
+        internal void MonitorTag(string tagname)
+        {
+            Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
+            if (t == null)
+            {
+                //Shouldn't happen
+                return;
+            }
+            StartMonitorTag(t, t.IsSeamless);
         }
         #endregion
 

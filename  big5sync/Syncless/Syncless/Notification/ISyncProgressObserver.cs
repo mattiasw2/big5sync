@@ -9,5 +9,6 @@ namespace Syncless.Notification
     {
         void StateChanged();
         void ProgressChanged();
+        void SyncComplete();
     }
 }

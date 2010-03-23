@@ -101,6 +101,8 @@
     <Compile Include="Core\Exceptions\UnhandledException.cs" />
     <Compile Include="Core\LogicQueueObserver.cs" />
     <Compile Include="Notification\SLLNotification\AddTagNotification.cs" />
+    <Compile Include="Notification\SLLNotification\MonitorTagNotification.cs" />
+    <Compile Include="Notification\SyncState.cs" />
     <Compile Include="Notification\UINotification\CompareCompleteNotification.cs" />
     <Compile Include="Notification\ISyncProgressObserver.cs" />
     <Compile Include="Notification\UINotification\NewProfileNotification.cs" />
