@@ -22,6 +22,10 @@ namespace Syncless.CompareAndSync.Visitor
         private const string NODE_LAST_MODIFIED = "last_modified";
         private const string NODE_LAST_CREATED = "last_created";
         private const string FILES = "files";
+        private const string NODE_TODO = "todo";
+        private const string NODE_DATE = "date";
+        private const string NODE_ACTION = "action";
+        private const string NODE_NEWNAME = "new_names";
         private static readonly object syncLock = new object();
 
         #region IVisitor Members
@@ -183,6 +187,40 @@ namespace Syncless.CompareAndSync.Visitor
                 }
             }
 
+            XmlNode todoNode = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]/todo");
+            if (todoNode != null)
+            {
+                XmlNodeList nodeList = todoNode.ChildNodes;
+                for (int i = 0; i < nodeList.Count; i++)
+                {
+                    XmlNode childNode = nodeList[i];
+                    switch (childNode.Name)
+                    {
+                        case NODE_ACTION :
+                            string action = childNode.InnerText;
+                            if (action.Equals("Delete"))
+                            {
+                                file.Todo[counter] = ToDo.Delete;
+                            }
+                            else
+                            {
+                                file.Todo[counter] = ToDo.Rename;
+                            }
+                            break;
+
+                        case NODE_DATE :
+                            long date = long.Parse(childNode.InnerText);
+                            file.TodoTimestamp[counter] = date;
+                            break;
+                        
+                        case NODE_NEWNAME :
+                            string newName = childNode.InnerText;
+                            file.TodoNewName[counter] = newName;
+                            break;
+                    }
+                }
+            }
+            
             file.MetaExists[counter] = true;
             return file;
 
@@ -432,6 +470,41 @@ namespace Syncless.CompareAndSync.Visitor
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
             if (node == null)
                 return folder;
+
+            XmlNode todoNode = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]/todo");
+            
+            if (todoNode != null)
+            {
+                XmlNodeList nodeList = todoNode.ChildNodes;
+                for (int i = 0; i < nodeList.Count;i++)
+                {
+                    XmlNode childNode = nodeList[i];
+                    switch (childNode.Name)
+                    {
+                        case NODE_ACTION:
+                            string action = childNode.InnerText;
+                            if (action.Equals("Delete"))
+                            {
+                                folder.Todo[counter] = ToDo.Delete;
+                            }
+                            else
+                            {
+                                folder.Todo[counter] = ToDo.Rename;
+                            }
+                            break;
+
+                        case NODE_DATE:
+                            long date = long.Parse(childNode.InnerText);
+                            folder.TodoTimestamp[counter] = date;
+                            break;
+
+                        case NODE_NEWNAME:
+                            string newName = childNode.InnerText;
+                            folder.TodoNewName[counter] = newName;
+                            break;
+                    }
+                }
+            }
 
             folder.MetaExists[counter] = true;
             return folder;
