@@ -53,33 +53,34 @@ namespace Syncless.CompareAndSync.Visitor
             //3. If the count is 1, we shall proceed to rename
 
             FolderCompareObject f = null;
+            int pos = deletePos[0];
 
-            for (int i = 0; i < numOfPaths; i++)
+            //for (int i = 0; i < numOfPaths; i++)
+            //{
+            //if (folder.ChangeType[i] == MetaChangeType.Delete)
+            //{
+            f = folder.Parent.GetRenamedFolder(folder.Name, folder.CreationTime[pos], pos);
+
+            if (f != null)
             {
-                if (folder.ChangeType[i] == MetaChangeType.Delete)
+                int counter = 0;
+
+                for (int j = 0; j < f.ChangeType.Length; j++)
                 {
-                    f = folder.Parent.GetRenamedFolder(folder.Name, folder.CreationTime[i], i);
-
-                    if (f != null)
-                    {
-                        int counter = 0;
-
-                        for (int j = 0; j < f.ChangeType.Length; j++)
-                        {
-                            if (f.ChangeType[j].HasValue && f.ChangeType[j] == MetaChangeType.New)
-                                counter++;
-                        }
-
-                        if (counter != 1)
-                        {
-                            folder.ChangeType[i] = null;                         
-                            return;
-                        }
-
-                        MergeRenamedFolder(folder, f, i);
-                    }
+                    if (f.ChangeType[j].HasValue && f.ChangeType[j] == MetaChangeType.New)
+                        counter++;
                 }
+
+                if (counter != 1)
+                {
+                    folder.ChangeType[pos] = null;
+                    return;
+                }
+
+                MergeRenamedFolder(folder, f, pos);
             }
+            //}
+            //}
         }
 
         //Merge the renamed folder into the folders with its old name, so that files are all compared.
