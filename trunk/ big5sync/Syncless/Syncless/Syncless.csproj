@@ -100,7 +100,10 @@
     <Compile Include="Core\Exceptions\InvalidPathException.cs" />
     <Compile Include="Core\Exceptions\UnhandledException.cs" />
     <Compile Include="Core\LogicQueueObserver.cs" />
+    <Compile Include="Logging\LogCategoryType.cs" />
+    <Compile Include="Logging\LogEventType.cs" />
     <Compile Include="Logging\DebugLogger.cs" />
+    <Compile Include="Logging\LogData.cs" />
     <Compile Include="Logging\LoggerFactory.cs" />
     <Compile Include="Logging\UserLogger.cs" />
     <Compile Include="Notification\SLLNotification\AddTagNotification.cs" />
