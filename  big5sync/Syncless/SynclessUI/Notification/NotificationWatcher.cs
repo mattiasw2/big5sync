@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using Syncless.Notification;
 using System.Threading;
+using Syncless.Core;
+using Syncless.Notification.UINotification;
+using SynclessUI.Notification;
 
-namespace Syncless.Core
+namespace SynclessUI.Notification
 {
     internal class NotificationWatcher : IQueueObserver
     {
@@ -68,8 +71,15 @@ namespace Syncless.Core
         }
 
         private void Handle(AbstractNotification notification)
-        {   
-
+        {
+            if (notification.NotificationCode.Equals( NotificationCode.SYNC_START_NOTIFICATION))
+            {
+                SyncStartNotification ssNotification = notification as SyncStartNotification;
+                if (ssNotification != null)
+                {
+                    SyncProgressWatcher watcher = new SyncProgressWatcher(ssNotification.Progress);
+                }
+            }
         }
 
     }

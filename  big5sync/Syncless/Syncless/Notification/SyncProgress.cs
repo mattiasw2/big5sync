@@ -113,6 +113,7 @@ namespace Syncless.Notification
             {
                 MethodASync sync = new MethodASync(obs.ProgressChanged);
                 sync.BeginInvoke(null, null);
+                //obs.ProgressChanged();
             }
 
         }
@@ -141,6 +142,7 @@ namespace Syncless.Notification
             {
                 MethodASync sync = new MethodASync(obs.ProgressChanged);
                 sync.BeginInvoke(null, null);
+                //obs.ProgressChanged();
             }
 
         }
@@ -175,6 +177,7 @@ namespace Syncless.Notification
                 return false;
             }
             _state = SyncState.ANALYZING;
+            _message = "Analyzing.....";
             TriggerStateChanged();
             return true;
         }
@@ -191,12 +194,14 @@ namespace Syncless.Notification
         }
         public bool ChangeToFinalizing(int jobcount)
         {
-            _syncjobtotal = jobcount;
+            _finalisingJobTotal = jobcount;
             if (_state != SyncState.SYNCHRONIZING)
             {
                 return false;
             }
+
             _state = SyncState.FINALIZING;
+            _message = "Finalizing.....";
             TriggerStateChanged();
             return false;
         }
@@ -206,6 +211,7 @@ namespace Syncless.Notification
             {
                 return false;
             }
+            _message = "Finished.....";
             TriggerStateChanged();
             return true;
         }
@@ -213,8 +219,9 @@ namespace Syncless.Notification
         {
             foreach (ISyncProgressObserver obs in _observerList)
             {
-                MethodASync sync = new MethodASync(obs.StateChanged);
-                sync.BeginInvoke(null, null);
+                //MethodASync sync = new MethodASync(obs.StateChanged);
+                //sync.BeginInvoke(null, null);
+                obs.StateChanged();
             }
         }
     }

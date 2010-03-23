@@ -120,6 +120,7 @@
     <Compile Include="Helper\DialogsHelper.cs" />
     <Compile Include="Notification\NotificationWatcher.cs" />
     <Compile Include="Notification\PriorityNotificationWatcher.cs" />
+    <Compile Include="Notification\SyncProgressWatcher.cs" />
     <Compile Include="ShortcutsWindow.xaml.cs">
       <DependentUpon>ShortcutsWindow.xaml</DependentUpon>
     </Compile>
