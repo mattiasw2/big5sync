@@ -50,6 +50,7 @@ namespace Syncless.CompareAndSync.Visitor
             }
             xmlDoc = null;
             ProcessFileMetaData(file, numOfPaths);
+            ProcessToDo(file, numOfPaths);
         }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
@@ -437,6 +438,19 @@ namespace Syncless.CompareAndSync.Visitor
                 }
                 else
                     file.ChangeType[i] = null;
+            }
+        }
+
+
+        private void ProcessToDo(FileCompareObject file, int numOfPaths)
+        {
+            for (int i = 0; i < numOfPaths; i++)
+            {
+                if (file.ChangeType[i] == null && file.ToDoAction[i].HasValue)
+                {
+                    if (file.ToDoAction[i] == ToDo.Delete)
+                        file.ChangeType[i] = MetaChangeType.Delete;
+                }
             }
         }
 
