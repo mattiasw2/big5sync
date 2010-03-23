@@ -28,6 +28,9 @@ namespace Syncless.CompareAndSync
                 {
                     lock (syncLock)
                     {
+
+                        XmlNode node = xmlDoc.SelectSingleNode("/meta-data");
+                        node.FirstChild.InnerText = DateTime.Now.Ticks.ToString();
                         xmlDoc.Save(xmlPath);
                     }
                     break;
