@@ -27,10 +27,21 @@ namespace Syncless.CompareAndSync.CompareObject
         private bool _invalid;
         private string _newName;
 
-        //ToDo
-        private ToDo?[] _todo;
-        private long[] _todoTimestamp;
-        private string[] _todoNewName;
+        //Todo
+        private ToDo?[] _toDoAction;
+
+        public ToDo?[] ToDoAction
+        {
+            get { return _toDoAction; }
+            set { _toDoAction = value; }
+        }
+        private long[] _toDoTimestamp;
+
+        public long[] ToDoTimestamp
+        {
+            get { return _toDoTimestamp; }
+            set { _toDoTimestamp = value; }
+        }
 
         protected BaseCompareObject(string name, int numOfPaths, FolderCompareObject parent)
         {
@@ -44,10 +55,6 @@ namespace Syncless.CompareAndSync.CompareObject
             _priority = new int[numOfPaths];
             _parent = parent;
             _invalid = false;
-
-            _todo = new ToDo?[numOfPaths];
-            _todoTimestamp = new long[numOfPaths];
-            _todoNewName = new string[numOfPaths];
         }
 
         public string Name
@@ -113,24 +120,6 @@ namespace Syncless.CompareAndSync.CompareObject
         {
             get { return _newName; }
             set { _newName = value; }
-        }
-
-        public ToDo?[] Todo
-        {
-            get { return _todo; }
-            set { _todo = value; }
-        }
-
-        public long[] TodoTimestamp
-        {
-            get { return _todoTimestamp; }
-            set { _todoTimestamp = value; }
-        }
-
-        public string[] TodoNewName
-        {
-            get { return _todoNewName; }
-            set { _todoNewName = value; }
         }
 
         public string GetSmartParentPath(int index)
