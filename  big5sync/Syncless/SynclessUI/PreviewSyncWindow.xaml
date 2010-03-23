@@ -9,10 +9,10 @@
 			<BeginStoryboard x:Name="WindowOnLoaded_BeginStoryboard" Storyboard="{StaticResource WindowOnLoaded}"/>
 		</EventTrigger>
 	</Window.Triggers>
-	<Grid x:Name="LayoutRoot" HorizontalAlignment="Center" VerticalAlignment="Center">
+	<Grid x:Name="LayoutRoot" HorizontalAlignment="Center" VerticalAlignment="Center" Height="400" Width="700">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="20"/>
-			<ColumnDefinition Width="600"/>
+			<ColumnDefinition Width="*"/>
 			<ColumnDefinition Width="20"/>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
@@ -22,7 +22,7 @@
 			<RowDefinition Height="30"/>
 			<RowDefinition Height="20"/>
 		</Grid.RowDefinitions>
-		<Rectangle Grid.Row="0" x:Name="Canvas" RadiusX="10" RadiusY="10" Margin="0,1,0,0" Stroke="Black" Grid.RowSpan="6" Grid.ColumnSpan="3">
+		<Rectangle Grid.Row="0" x:Name="Canvas" RadiusX="10" RadiusY="10" Margin="0,1,0,0" Stroke="Black" Grid.ColumnSpan="3" Grid.RowSpan="6">
 			<Rectangle.Fill>
 				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 					<GradientStop Color="#FF707271" Offset="0"/>
@@ -42,6 +42,12 @@
 			</Button>
 		</StackPanel>
 		<Image x:Name="TagIcon" HorizontalAlignment="Right" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,-25,-25,0" Grid.ColumnSpan="2" Source="Icons/folder.ico"/>
-          <Label HorizontalAlignment="Left" Margin="8,1.555,0,0" Content="Under Construction" Grid.Column="1" Grid.Row="3" Width="152.993" Foreground="White"/>
+        <toolkit:DataGrid ItemsSource="{Binding PreviewSyncData, ElementName=Window}" Margin="5,5,0,0" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="2" CanUserReorderColumns="False" CanUserResizeRows="False" IsReadOnly="True">
+            <toolkit:DataGrid.Columns>
+                <toolkit:DataGridTextColumn Binding="{Binding Path1}" Header="Path1" Width="0.45*" SortMemberPath="Path1" />
+                <toolkit:DataGridTextColumn Binding="{Binding Operation}" Header="Operation" Width="0.1*" SortMemberPath="Operation"/>
+                <toolkit:DataGridTextColumn Header="Path2" Binding="{Binding Path2}" Width="0.45*" SortMemberPath="Path2"/>
+            </toolkit:DataGrid.Columns>
+        </toolkit:DataGrid>
 	</Grid>
 </Window>

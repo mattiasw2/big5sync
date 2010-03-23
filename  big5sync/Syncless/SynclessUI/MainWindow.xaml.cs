@@ -893,12 +893,21 @@ namespace SynclessUI
 
         public void CLI_Tag(string clipath)
         {
-            TagWindow tw = new TagWindow(this, clipath, "");
-            if (_firstopen == true)
+			String tagname = "";
+
+            try
             {
-                MinimizeWindow();
-                _firstopen = false;
+                DirectoryInfo di = new DirectoryInfo(clipath);
+                tagname = di.Name;
             }
+            catch (Exception) { }
+			
+			TagWindow tw = new TagWindow(this, clipath, tagname);
+			if (_firstopen == true)
+			{
+				MinimizeWindow();
+				_firstopen = false;
+			}
         }
 
         public void CLI_Untag(string clipath)
@@ -1096,17 +1105,17 @@ namespace SynclessUI
 
         private void BtnPreview_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+			/*
             string messageBoxText = "This feature will come in a future version of Syncless.";
             string caption = "Feature Not Implemented Yet";
             MessageBoxButton button = MessageBoxButton.OK;
             MessageBoxImage icon = MessageBoxImage.Exclamation;
 
             MessageBox.Show(messageBoxText, caption, button, icon);
-
-            /*
+			*/
+			
             PreviewSyncWindow psw = new PreviewSyncWindow(this, _selectedTag);
             psw.ShowDialog();
-            */
         }
 		
         private List<DriveInfo> GetAllRemovableDrives()
@@ -1159,6 +1168,8 @@ namespace SynclessUI
 
         private void LayoutRoot_Drop(object sender, System.Windows.DragEventArgs e)
         {
+            HideDropIndicator();
+
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
@@ -1230,5 +1241,37 @@ namespace SynclessUI
         }
 
         #endregion
+
+        private void LayoutRoot_DragEnter(object sender, System.Windows.DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+                foreach (string i in foldernames)
+                {
+                    DirectoryInfo folder = new DirectoryInfo(i);
+                    if (folder.Exists)
+                    {
+                        ShowDropIndicator();
+                    }
+                }
+            }
+        }
+
+        private void LayoutRoot_DragLeave(object sender, System.Windows.DragEventArgs e)
+        {
+            HideDropIndicator();
+        }
+
+        private void ShowDropIndicator()
+        {
+            this.DropIndicator.Visibility = System.Windows.Visibility.Visible;
+            this.DropIndicator.Focusable = false;
+        }
+
+        private void HideDropIndicator()
+        {
+            this.DropIndicator.Visibility = System.Windows.Visibility.Hidden;
+        }
     }
 }
