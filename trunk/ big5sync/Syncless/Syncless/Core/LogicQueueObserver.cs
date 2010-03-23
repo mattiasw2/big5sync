@@ -73,46 +73,42 @@ namespace Syncless.Core
             if (notification.NotificationCode.Equals(NotificationCode.MONITOR_PATH_NOTIFICATION))
             {
                 MonitorPathNotification mpNotification = notification as MonitorPathNotification;
-                if (mpNotification == null)
-                {
-                    //Discard , The notificaiton is wrong
+                if (mpNotification == null)//Discard
                     return;
-                }
                 _sll.AddTagPath(mpNotification.TargetTag, mpNotification.TargetPath);
             }
             else if (notification.NotificationCode.Equals(NotificationCode.UNMONITOR_PATH_NOTIFICATION))
             {
                 UnMonitorPathNotification umpNotification = notification as UnMonitorPathNotification;
-                if (umpNotification == null)
-                {
-                    //Discard
+                if (umpNotification == null)//Discard
                     return;
-                }
                 _sll.RemoveTagPath(umpNotification.TargetTag, umpNotification.TargetPath);
             }
             else if (notification.NotificationCode.Equals(NotificationCode.ADD_TAG_NOTIFICATION))
             {
                 AddTagNotification atNotification = notification as AddTagNotification;
-                if (atNotification == null)
-                {
-                    //Discard
+                if (atNotification == null)//Discard
                     return;
-                }
                 _sll.AddTag(atNotification.Tag);
             }
             else if (notification.NotificationCode.Equals(NotificationCode.DEL_TAG_NOTIFICATION))
             {
                 RemoveTagNotification rmNotification = notification as RemoveTagNotification;
-                if (rmNotification == null)
-                {
-                    //Discard
+                if (rmNotification == null)//Discard
                     return;
-                }
+
                 _sll.RemoveTag(rmNotification.Tag);
             }
+            else if (notification.NotificationCode.Equals(NotificationCode.MONITOR_TAG_NOTIFICATION))
+            {
+                MonitorTagNotification mtNotification = notification as MonitorTagNotification;
+                if (mtNotification == null)//Discard
+                    return;
+                _sll.MonitorTag(mtNotification.Tagname);
+            }
 
-            
+
         }
-        
+
     }
 }

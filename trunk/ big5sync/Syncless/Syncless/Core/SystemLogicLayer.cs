@@ -26,12 +26,14 @@ namespace Syncless.Core
     internal class SystemLogicLayer : IUIControllerInterface, IMonitorControllerInterface, ICommandLineControllerInterface
     {
         #region Singleton
+
         private static SystemLogicLayer _instance;
         private IUIInterface _userInterface;
         private NotificationQueue _uiNotification;
         private NotificationQueue _sllNotification;
         private NotificationQueue _uiPriorityNotification;
         private LogicQueueObserver _queueObserver;
+
         public static SystemLogicLayer Instance
         {
             get
@@ -263,16 +265,14 @@ namespace Syncless.Core
                 if (dce.Type == DriveChangeType.DRIVE_IN)
                 {
                     ProfilingLayer.Instance.UpdateDrive(dce.Info);
-                    Merge(dce.Info);                                     
+                    Merge(dce.Info);
                     string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
                     List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logical);
 
                     foreach (Tag t in tagList)
                     {
-                        StartMonitorTag(t, t.IsSeamless);
-                        //MonitorTag(t, t.IsSeamless);
+                        SwitchMonitorTag(t, t.IsSeamless);
                     }
-                    
                 }
                 else
                 {
@@ -285,7 +285,6 @@ namespace Syncless.Core
                 ExceptionHandler.Handle(e);
             }
         }
-
         #endregion
 
         #region Logging
@@ -302,11 +301,10 @@ namespace Syncless.Core
         /// Manually Sync a Tag
         /// </summary>
         /// <param name="tagname">tagname of the Tag to Sync</param>
-        /// <returns>true if the sync is success.</returns>
-        
+        /// <returns>true if the sync is success.</returns>        
         public bool StartManualSync(string tagname)
         {
-            return this.StartManualSync(tagname, false);
+            return this.ManualSync(tagname, false);
         }
         /// <summary>
         /// Delete a tag
@@ -372,17 +370,16 @@ namespace Syncless.Core
                 {
                     throw new InvalidPathException(folder.FullName);
                 }
-
                 Tag tag = null;
-
                 tag = TaggingLayer.Instance.TagFolder(path, tagname);
-
                 if (tag == null)
                 {
                     return null;
                 }
-                MonitorTag(tag.TagName, tag.IsSeamless);
-                //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                if (tag.IsSeamless)
+                {
+                    StartMonitorTag(tag);
+                }
                 return ConvertToTagView(tag);
             }
             catch (RecursiveDirectoryException re)
@@ -458,10 +455,7 @@ namespace Syncless.Core
                 {
                     throw new TagNotFoundException(tagname);
                 }
-
-                StartMonitorTag(tag, mode);
-                //MonitorTag(tag, tag.IsSeamless);
-
+                SwitchMonitorTag(tag, mode);
                 return true;
             }
             catch (TagNotFoundException tge)
@@ -633,8 +627,7 @@ namespace Syncless.Core
             try
             {
                 this._userInterface = inf;
-                this._queueObserver = new LogicQueueObserver();
-                _queueObserver.Start();
+                
                 bool init = Initiate();
                 SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return init;
@@ -755,57 +748,39 @@ namespace Syncless.Core
         /// <param name="path"></param>
         /// <returns></returns>
         public bool Merge(string path)
-        {   
+        {
             ProfilingLayer.Instance.Merge(path);
             TaggingLayer.Instance.Merge(path);
             return true;
         }
-
+        /// <summary>
+        /// Set the profile name
+        /// </summary>
+        /// <param name="profileName">name of the profile</param>
+        /// <returns></returns>
         public bool SetProfileName(string profileName)
         {
             return true;
         }
-
+        /// <summary>
+        /// Get the current profile name
+        /// </summary>
+        /// <returns>Profile name</returns>
         public string GetProfileName()
         {
             return ProfilingLayer.Instance.CurrentProfile.ProfileName;
         }
-
-
         #endregion
 
-        #region private methods & delegate
-        public delegate void MonitorTagDelegate(Tag t, bool isSeamless);
-        public delegate void ManualSyncDelegate(Tag tag, bool notify);
-        public void StartMonitorTag(Tag tag, bool mode)
-        {
-            MonitorTagDelegate monitordelegate = new MonitorTagDelegate(MonitorTag);
-            monitordelegate.BeginInvoke(tag, mode, null, null);
-        }
-        private bool StartManualSync(string tagname,bool notify)
-        {
-            try
-            {
-                Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
-                if (tag == null)
-                {
-                    return false;
-                }
-                ManualSyncDelegate del = new ManualSyncDelegate(StartManualSync);
-                del.BeginInvoke(tag,notify, null, null);
-                //StartManualSync(tag);
-                return true;
-            }
-            catch (Exception e) // Handle Unexpected Exception
-            {
-                ExceptionHandler.Handle(e);
-                throw new UnhandledException(e);
-            }
-        }
-        private void MonitorTag(Tag tag, bool mode)
+        #region private / delegate
+        /// <summary>
+        /// Set the mode of the tag to the mode.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="mode"></param>
+        private void SetTagMode(Tag tag, bool mode)
         {
             tag.IsSeamless = mode;
-
             List<string> pathList = new List<string>();
             foreach (TaggedPath path in tag.FilteredPathList)
             {
@@ -813,17 +788,16 @@ namespace Syncless.Core
             }
             List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(pathList);
             if (mode)
-            {                
+            {
                 foreach (string path in convertedPath)
                 {
                     try
                     {
-                        StartManualSync(tag.TagName,true);
                         MonitorLayer.Instance.MonitorPath(PathHelper.RemoveTrailingSlash(path));
                     }
                     catch (MonitorPathNotFoundException)
                     {
-                        
+
                     }
                 }
             }
@@ -843,23 +817,68 @@ namespace Syncless.Core
 
 
         }
-        private bool Initiate()
+        /// <summary>
+        /// Manual Sync
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="notify"></param>
+        private void ManualSync(Tag tag, bool notify)
         {
-            
-            SaveLoadHelper.LoadAll(_userInterface.getAppPath());
-            
-            List<Tag> tagList = TaggingLayer.Instance.AllTagList;
-            foreach (Tag t in tagList)
+            List<string> paths = tag.FilteredPathListString;
+            List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
+            if (filterPaths[0].Count != 0)
             {
-                if (t.IsSeamless)
-                {
-                    StartMonitorTag(t, t.IsSeamless);                    
-                }
+                SyncConfig syncConfig = new SyncConfig(tag.ArchiveName, tag.ArchiveCount, tag.Recycle);
+                ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), tag.Filters, syncConfig, tag.TagName, notify);
+
+                CompareAndSyncController.Instance.Sync(syncRequest);
             }
-            
-            DeviceWatcher.Instance.ToString(); //Starts watching for Drive Change
+        }
+        /// <summary>
+        /// Manual Sync
+        /// </summary>
+        /// <param name="tagname"></param>
+        /// <param name="notify"></param>
+        /// <returns></returns>
+        private bool ManualSync(string tagname, bool notify)
+        {
+            Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            if (tag == null)
+            {
+                return false;
+            }
+            ManualSync(tag, notify);
             return true;
         }
+        /// <summary>
+        /// Sync the tag then monitor the tag.
+        /// </summary>
+        /// <param name="tag"></param>
+        private void StartMonitorTag(Tag tag)
+        {
+            ManualSync(tag, true);
+        }
+        /// <summary>
+        /// Switch the tag to the mode. Do the respective work.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="mode"></param>
+        private void SwitchMonitorTag(Tag tag, bool mode)
+        {
+            if (mode)
+            {
+                StartMonitorTag(tag);
+            }
+            else
+            {
+                SetTagMode(tag, false);
+            }
+        }
+        /// <summary>
+        /// Convert a Tag to a TagView for UI.
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         private TagView ConvertToTagView(Tag t)
         {
             TagView view = new TagView(t.TagName, t.LastUpdatedDate);
@@ -869,19 +888,10 @@ namespace Syncless.Core
             view.IsSeamless = t.IsSeamless;
             return view;
         }
-        private void StartManualSync(Tag tag,bool notify)
-        {
-            List<string> paths = tag.FilteredPathListString;
-            List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
-            if (filterPaths[0].Count != 0)
-            {
-                SyncConfig syncConfig = new SyncConfig(tag.ArchiveName, tag.ArchiveCount, tag.Recycle);
-                ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), tag.Filters, syncConfig,tag.TagName,notify);
-
-                CompareAndSyncController.Instance.Sync(syncRequest);
-            }
-            
-        }
+        /// <summary>
+        /// Merge a profile from a drive. (use when a drive plug in)
+        /// </summary>
+        /// <param name="drive"></param>
         private void Merge(DriveInfo drive)
         {
             string profilingPath = PathHelper.AddTrailingSlash(drive.RootDirectory.FullName) + ProfilingLayer.RELATIVE_PROFILING_SAVE_PATH;
@@ -889,8 +899,34 @@ namespace Syncless.Core
 
             string taggingPath = PathHelper.AddTrailingSlash(drive.RootDirectory.FullName) + TaggingLayer.RELATIVE_TAGGING_SAVE_PATH;
             TaggingLayer.Instance.Merge(taggingPath);
-
-
+        }
+        /// <summary>
+        /// Initialize
+        /// </summary>
+        /// <returns></returns>
+        private bool Initiate()
+        {
+            try
+            {
+                this._queueObserver = new LogicQueueObserver();
+                _queueObserver.Start();
+                SaveLoadHelper.LoadAll(_userInterface.getAppPath());
+                DeviceWatcher.Instance.ToString(); //Starts watching for Drive Change
+                List<Tag> tagList = TaggingLayer.Instance.AllTagList;
+                foreach (Tag t in tagList)
+                {
+                    if (t.IsSeamless)
+                    {
+                        StartMonitorTag(t);
+                    }
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                ExceptionHandler.Handle(e);
+                return false;
+            }
         }
         /// <summary>
         /// Find a list of paths of files which share the same parent directories as filePath
@@ -934,6 +970,11 @@ namespace Syncless.Core
         #endregion
 
         #region For Notification
+        /// <summary>
+        /// Add a Tag Path ( Notify from Merging )
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="path"></param>
         internal void AddTagPath(Tag tag, TaggedPath path)
         {
             if (tag.IsSeamless)
@@ -945,6 +986,11 @@ namespace Syncless.Core
                 }
             }
         }
+        /// <summary>
+        /// Remove a Tag Path ( Notify from Merging )
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="path"></param>
         internal void RemoveTagPath(Tag tag, TaggedPath path)
         {
             if (tag.IsSeamless)
@@ -956,11 +1002,19 @@ namespace Syncless.Core
                 }
             }
         }
+        /// <summary>
+        /// Add a Tag ( Notify from Merging )
+        /// </summary>
+        /// <param name="tag"></param>
         internal void AddTag(Tag tag)
         {
             TaggingLayer.Instance.AddTag(tag);
-            StartMonitorTag(tag, tag.IsSeamless);
+            SwitchMonitorTag(tag, tag.IsSeamless);
         }
+        /// <summary>
+        /// Remove a Tag ( Notify from Merging )
+        /// </summary>
+        /// <param name="tag"></param>
         internal void RemoveTag(Tag tag)
         {
             try
@@ -977,6 +1031,10 @@ namespace Syncless.Core
             }
 
         }
+        /// <summary>
+        /// Monitor Tag ( From Compare and Sync / Merging )
+        /// </summary>
+        /// <param name="tagname"></param>
         internal void MonitorTag(string tagname)
         {
             Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
@@ -985,11 +1043,11 @@ namespace Syncless.Core
                 //Shouldn't happen
                 return;
             }
-            StartMonitorTag(t, t.IsSeamless);
+            SetTagMode(t, true);
         }
         #endregion
 
 
-        
+
     }
 }

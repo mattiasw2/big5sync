@@ -58,7 +58,7 @@ namespace Syncless.Core
                         AbstractNotification notification = ServiceLocator.UINotificationQueue().Dequeue();
                         Handle(notification);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         //Handle Exception by printing the debug log.
                     }

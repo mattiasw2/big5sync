@@ -22,7 +22,7 @@ namespace Syncless.Helper
                         i.Delete(true);
                         count++;
                     }
-                    catch (IOException e)
+                    catch (IOException)
                     {
                     }
                 }
