@@ -18,7 +18,7 @@ namespace Syncless.CompareAndSync.Visitor
         private const string XML_NAME = "syncless.xml";
         private const string METADATAPATH = META_DIR + "\\" + XML_NAME;
         private const string FOLDER = "folder";
-        private const string FILE = "file";
+        private const string FILES = "files";
         private const string NAME_OF_FOLDER = "name_of_folder";
         private const string NODE_NAME = "name";
         private const string NODE_SIZE = "size";
@@ -27,10 +27,6 @@ namespace Syncless.CompareAndSync.Visitor
         private const string NODE_LAST_CREATED = "last_created";
         private const string XPATH_EXPR = "/meta-data";
         private const string LAST_MODIFIED = "/last_modified";
-        private const string NODE_TODO = "todo";
-        private const string NODE_ACTION = "action";
-        private const string NODE_DATE = "date";
-        private const string NODE_NEWNAME = "new_name";
         private const int FIRST_POSITION = 0;
         //private static readonly object syncLock = new object();
         private string[] pathList;
@@ -79,7 +75,7 @@ namespace Syncless.CompareAndSync.Visitor
         private void ProcessMetaChangeType(FileCompareObject file, int counter)
         {
             FinalState? changeType = file.FinalState[counter];
-            
+
             if (changeType == null)
             {
                 HandleNullCases(file, counter);
@@ -162,7 +158,7 @@ namespace Syncless.CompareAndSync.Visitor
             XmlText lastModifiedText = xmlDoc.CreateTextNode(file.LastWriteTime[counter].ToString());
             XmlText lastCreatedText = xmlDoc.CreateTextNode(file.CreationTime[counter].ToString());
 
-            XmlElement fileElement = xmlDoc.CreateElement(FILE);
+            XmlElement fileElement = xmlDoc.CreateElement(FILES);
             XmlElement hashElement = xmlDoc.CreateElement(NODE_HASH);
             XmlElement nameElement = xmlDoc.CreateElement(NODE_NAME);
             XmlElement sizeElement = xmlDoc.CreateElement(NODE_SIZE);
@@ -183,7 +179,6 @@ namespace Syncless.CompareAndSync.Visitor
 
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR);
             node.AppendChild(fileElement);
-            RemoveTodoFile(xmlDoc, file);
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
         }
 
@@ -196,7 +191,7 @@ namespace Syncless.CompareAndSync.Visitor
             CommonMethods.LoadXML(ref xmlDoc, xmlPath);
 
             int position = GetPropagated(file);
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/" + FILE + "[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
             if (node == null)
             {
                 CreateFileObject(file, counter);
@@ -228,7 +223,7 @@ namespace Syncless.CompareAndSync.Visitor
                     nodes.InnerText = file.CreationTime[counter].ToString();
                 }
             }
-            RemoveTodoFile(xmlDoc, file);
+
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
         }
 
@@ -239,21 +234,14 @@ namespace Syncless.CompareAndSync.Visitor
             CreateFileIfNotExist(file.GetSmartParentPath(counter));
             CommonMethods.LoadXML(ref xmlDoc, xmlPath);
 
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/" + FILE + "[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
             if (node == null)
             {
                 CreateFileObject(file, counter);
                 return;
             }
-      //    node.FirstChild.InnerText = file.NewName;
-            XmlNode newNode = node.Clone();
+            node.FirstChild.InnerText = file.NewName;
 
-            XmlNode todoNode = CreateFileToDo(xmlDoc, file, counter , "Rename" );
-            node.AppendChild(todoNode);
-
-            newNode.FirstChild.InnerText = file.NewName;
-            XmlNode rootNode = xmlDoc.SelectSingleNode(XPATH_EXPR);
-            rootNode.AppendChild(newNode);
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
         }
 
@@ -265,83 +253,13 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 CommonMethods.LoadXML(ref xmlDoc, xmlPath);
 
-                XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/" + FILE + "[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
-                XmlNode childNode = CreateFileToDo(xmlDoc, file, counter, "Delete");
-                node.AppendChild(childNode);
+                XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
+                if (node == null)
+                    return;
+                node.ParentNode.RemoveChild(node);
+
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
-        }
-
-        private XmlNode CreateFileToDo(XmlDocument xmlDoc , FileCompareObject file , int counter , string changeType)
-        {
-            RemoveTodoFile(xmlDoc, file);
-            long now = DateTime.Now.Ticks;
-            XmlText actionText = xmlDoc.CreateTextNode(changeType);
-            XmlText dateText = xmlDoc.CreateTextNode(now.ToString());
-
-            XmlElement todoElement = xmlDoc.CreateElement(NODE_TODO);
-            XmlElement actionElement = xmlDoc.CreateElement(NODE_ACTION);
-            XmlElement dateElement = xmlDoc.CreateElement(NODE_DATE);
-
-            actionElement.AppendChild(actionText);
-            dateElement.AppendChild(dateText);
-
-            todoElement.AppendChild(actionElement);
-            todoElement.AppendChild(dateElement);
-
-            if (changeType.Equals("Rename"))
-            {
-                XmlText renameText = xmlDoc.CreateTextNode(file.NewName);
-                XmlElement renameElement = xmlDoc.CreateElement(NODE_NEWNAME);
-                renameElement.AppendChild(renameText);
-                todoElement.AppendChild(renameElement);
-            }
-
-            return todoElement;
-        }
-
-        private XmlNode CreateFolderToDo(XmlDocument xmlDoc, FolderCompareObject folder, int counter, string changeType)
-        {
-            RemoveTodoFolder(xmlDoc, folder);
-            long now = DateTime.Now.Ticks;
-            XmlText actionText = xmlDoc.CreateTextNode(changeType);
-            XmlText dateText = xmlDoc.CreateTextNode(now.ToString());
-
-            XmlElement todoElement = xmlDoc.CreateElement(NODE_TODO);
-            XmlElement actionElement = xmlDoc.CreateElement(NODE_ACTION);
-            XmlElement dateElement = xmlDoc.CreateElement(NODE_DATE);
-
-            actionElement.AppendChild(actionText);
-            dateElement.AppendChild(dateText);
-
-            todoElement.AppendChild(actionElement);
-            todoElement.AppendChild(dateElement);
-
-            if (changeType.Equals("Rename"))
-            {
-                XmlText renameText = xmlDoc.CreateTextNode(folder.NewName);
-                XmlElement renameElement = xmlDoc.CreateElement(NODE_NEWNAME);
-                renameElement.AppendChild(renameText);
-                todoElement.AppendChild(renameElement);
-            }
-
-            return todoElement;
-        } 
-
-        private void RemoveTodoFile(XmlDocument xmlDoc, FileCompareObject file)
-        {
-            XmlNode todoNode = xmlDoc.SelectSingleNode(XPATH_EXPR + "/" + FILE + "[name=" + CommonMethods.ParseXpathString(file.Name) + "]/todo");
-            if (todoNode == null)
-                return;
-            todoNode.ParentNode.RemoveChild(todoNode);
-        }
-
-        private void RemoveTodoFolder(XmlDocument xmlDoc, FolderCompareObject folder)
-        {
-            XmlNode todoNode = xmlDoc.SelectSingleNode(XPATH_EXPR + "/" + FOLDER + "[name=" + CommonMethods.ParseXpathString(folder.Name) + "]/todo");
-            if (todoNode == null)
-                return;
-            todoNode.ParentNode.RemoveChild(todoNode);
         }
 
         private int GetPropagated(FileCompareObject file)
@@ -371,7 +289,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void DoFileCleanUp(XmlDocument xmlDoc, string name)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/" + FILE + "[name=" + CommonMethods.ParseXpathString(name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files[name=" + CommonMethods.ParseXpathString(name) + "]");
             if (node == null)
                 return;
             node.ParentNode.RemoveChild(node);
@@ -379,7 +297,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void DoFolderCleanUp(XmlDocument xmlDoc, string name)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/" + FOLDER + "[name=" + CommonMethods.ParseXpathString(name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder[name=" + CommonMethods.ParseXpathString(name) + "]");
             if (node == null)
                 return;
             node.ParentNode.RemoveChild(node);
@@ -410,7 +328,7 @@ namespace Syncless.CompareAndSync.Visitor
             }
         }
 
-        private void HandleNullCases(FileCompareObject file , int counter)
+        private void HandleNullCases(FileCompareObject file, int counter)
         {
 
             string fullPath = Path.Combine(file.GetSmartParentPath(counter), file.Name);
@@ -422,11 +340,10 @@ namespace Syncless.CompareAndSync.Visitor
 
             CommonMethods.LoadXML(ref xmlDoc, xmlPath);
 
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/" + FILE + "[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
-//          if (node != null)
-//             node.ParentNode.RemoveChild(node);
-            XmlNode todoNode = CreateFileToDo(xmlDoc, file, counter, "Delete");
-            node.AppendChild(todoNode);
+            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
+            if (node != null)
+                node.ParentNode.RemoveChild(node);
+
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
         }
 
@@ -472,7 +389,6 @@ namespace Syncless.CompareAndSync.Visitor
 
             string subFolderXML = Path.Combine(folder.GetSmartParentPath(counter), folder.Name);
             CreateFileIfNotExist(subFolderXML);
-            RemoveTodoFolder(xmlDoc, folder);
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
         }
 
@@ -486,21 +402,15 @@ namespace Syncless.CompareAndSync.Visitor
 
                 CommonMethods.LoadXML(ref xmlDoc, xmlPath);
 
-                XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/" + FOLDER + "[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
+                XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
                 if (node == null)
                 {
                     CreateFolderObject(folder, counter);
                     return;
                 }
 
-                //node.FirstChild.InnerText = folder.NewName;
-                XmlNode newNode = node;
-                newNode.FirstChild.InnerText = folder.NewName;
-                XmlNode todoNode = CreateFolderToDo(xmlDoc, folder, counter, "Rename");
-                node.AppendChild(todoNode);
+                node.FirstChild.InnerText = folder.NewName;
 
-                XmlNode rootNode = xmlDoc.SelectSingleNode(XPATH_EXPR);
-                rootNode.AppendChild(newNode);
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
             else
@@ -512,19 +422,14 @@ namespace Syncless.CompareAndSync.Visitor
 
                 XmlNode xmlNameNode = newXmlDoc.SelectSingleNode(XPATH_EXPR + "/name");
                 xmlNameNode.InnerText = folder.NewName;
-                //CreateFolderToDo(newXmlDoc, folder, counter, "Rename");
                 CommonMethods.SaveXML(ref newXmlDoc, editOldXML);
 
                 string parentXML = Path.Combine(folder.GetSmartParentPath(counter), METADATAPATH);
                 XmlDocument parentXmlDoc = new XmlDocument();
                 CommonMethods.LoadXML(ref parentXmlDoc, parentXML);
-                XmlNode parentXmlFolderNode = parentXmlDoc.SelectSingleNode(XPATH_EXPR + "/" + FOLDER + "[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
-                XmlNode newNode = parentXmlFolderNode.Clone();
-                newNode.FirstChild.InnerText = folder.NewName;
-                XmlNode todoNode = CreateFolderToDo(parentXmlDoc, folder, counter, "Rename");
-                parentXmlFolderNode.AppendChild(todoNode);
-                XmlNode rootNode = parentXmlDoc.SelectSingleNode(XPATH_EXPR);
-                rootNode.AppendChild(newNode);
+                XmlNode parentXmlFolderNode = parentXmlDoc.SelectSingleNode(XPATH_EXPR + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
+                parentXmlFolderNode.FirstChild.InnerText = folder.NewName;
+
                 CommonMethods.SaveXML(ref parentXmlDoc, Path.Combine(folder.GetSmartParentPath(counter), METADATAPATH));
             }
         }
@@ -537,12 +442,10 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 CommonMethods.LoadXML(ref xmlDoc, xmlPath);
 
-                XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/" + FOLDER + "[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
-       //         if (node == null)
-       //             return;
-       //         node.ParentNode.RemoveChild(node);
-                XmlNode todoNode = CreateFolderToDo(xmlDoc, folder, counter, "Delete");
-                node.AppendChild(todoNode);
+                XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
+                if (node == null)
+                    return;
+                node.ParentNode.RemoveChild(node);
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
         }
