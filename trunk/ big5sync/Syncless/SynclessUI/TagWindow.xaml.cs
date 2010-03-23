@@ -61,28 +61,36 @@ namespace SynclessUI
         }
 		
 		private string SelectPath(bool cancelStatus) {
-            string path = (string) Application.Current.Properties["folderlastselected"];
-
+            string path = (string)Application.Current.Properties["folderlastselected"];
             path = (System.IO.Directory.Exists(path)) ? path : "";
+            var browse = new Ionic.Utils.FolderBrowserDialogEx
+            {
+                Description = "Select the folder to tag",
+                ShowNewFolderButton = true,
+                ShowEditBox = true,
+                NewStyle = true,
+                SelectedPath = path,
+                ShowFullPathInEditBox = true,
+                ShowBothFilesAndFolders = false,
+            };
 
-            System.Windows.Forms.FolderBrowserDialog browse = new System.Windows.Forms.FolderBrowserDialog();
-            browse.SelectedPath = path;
-            browse.ShowNewFolderButton = true;
-            browse.Description="Select the folder to tag";
+            browse.RootFolder = Environment.SpecialFolder.MyComputer;
 
-            browse.RootFolder = Environment.SpecialFolder.Desktop;
+            var result = browse.ShowDialog();
 
-            if (browse.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
                 path = browse.SelectedPath;
                 Application.Current.Properties["folderlastselected"] = path;
                 return path;
             }
-            else {
+            else if (result == System.Windows.Forms.DialogResult.Cancel)
+            {
                 cancelstatus = true;
                 _main.Focus();
-	        }
+            }
 
-			return "";
+            return "";
 		}
 
         private void ProcessPath(string path, string _selectedtag)
