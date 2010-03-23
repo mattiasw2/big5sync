@@ -33,7 +33,7 @@ namespace Syncless.Logging
             {
                 if (userLog == null)
                 {
-                    CreateUserLog();
+                    userLog = LoggerFactory.CreateLogger(ServiceLocator.USER_LOG);
                 }
                 return userLog;
             }
@@ -41,20 +41,10 @@ namespace Syncless.Logging
             {
                 if (debugLog == null)
                 {
-                    CreateDebugLog();
+                    debugLog = LoggerFactory.CreateLogger(ServiceLocator.DEBUG_LOG);
                 }
                 return debugLog;
             }
-        }
-
-        private void CreateUserLog()
-        {
-            userLog = new Logger(ServiceLocator.USER_LOG);
-        }
-
-        private void CreateDebugLog()
-        {
-            debugLog = new Logger(ServiceLocator.DEBUG_LOG);
         }
     }
 }
