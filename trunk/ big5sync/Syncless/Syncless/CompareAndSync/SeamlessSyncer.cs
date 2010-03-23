@@ -244,12 +244,12 @@ namespace Syncless.CompareAndSync
                         catch (ArchiveFolderException e)
                         {
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                         catch (DeleteFolderException e)
                         {
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                     }
                 }

@@ -139,13 +139,13 @@ namespace SynclessUI.Visitor
                         {
                             fco.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                         catch (CopyFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                     }
                     else
@@ -185,14 +185,14 @@ namespace SynclessUI.Visitor
                         {
                             fco.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
 
                         }
                         catch (DeleteFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
 
                     }
@@ -231,7 +231,7 @@ namespace SynclessUI.Visitor
                         {
                             fco.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                     }
                     else
@@ -267,7 +267,7 @@ namespace SynclessUI.Visitor
                             {
                                 folder.FinalState[i] = FinalState.Error;
                                 //TODO: Throw to notification queue in future
-                                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
+                                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                             }
                         }
                     }
@@ -310,13 +310,13 @@ namespace SynclessUI.Visitor
                         {
                             folder.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                         catch (DeleteFolderException e)
                         {
                             folder.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                     }
                     else
@@ -356,7 +356,7 @@ namespace SynclessUI.Visitor
                         {
                             folder.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                     }
                     else
