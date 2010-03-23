@@ -6,15 +6,13 @@ namespace Syncless.Logging
 {
     public abstract class Logger
     {
-        internal ILog log;
+        protected ILog log;
 
         public Logger(string name)
         {
             log = LogManager.GetLogger(name);
         }
-
-        public abstract void Write(object message);
-
         
+        public abstract void Write(object message);
     }
 }
