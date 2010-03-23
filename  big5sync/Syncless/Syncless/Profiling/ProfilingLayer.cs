@@ -8,6 +8,7 @@ using Syncless.Profiling.Exceptions;
 using Syncless.Helper;
 using Syncless.Core;
 using Syncless.Notification;
+using Syncless.Notification.UINotification;
 namespace Syncless.Profiling
 {
     public class ProfilingLayer

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Syncless.Tagging;
 
-namespace Syncless.Notification
+namespace Syncless.Notification.SLLNotification
 {
     public class AddTagNotification : AbstractNotification 
     {

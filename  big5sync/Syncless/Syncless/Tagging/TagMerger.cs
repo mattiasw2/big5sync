@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Syncless.Core;
 using Syncless.Notification;
+using Syncless.Notification.SLLNotification;
 namespace Syncless.Tagging
 {
     public static class TagMerger

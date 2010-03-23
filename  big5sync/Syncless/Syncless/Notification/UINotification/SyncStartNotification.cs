@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Syncless.Notification
+namespace Syncless.Notification.UINotification
 {
     /// <summary>
     /// The Notification to the User Interface that a Sync Request have been accepted and started.
