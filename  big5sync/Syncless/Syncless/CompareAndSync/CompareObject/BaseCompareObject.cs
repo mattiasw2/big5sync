@@ -44,6 +44,10 @@ namespace Syncless.CompareAndSync.CompareObject
             _priority = new int[numOfPaths];
             _parent = parent;
             _invalid = false;
+
+            _todo = new ToDo?[numOfPaths];
+            _todoTimestamp = new long[numOfPaths];
+            _todoNewName = new string[numOfPaths];
         }
 
         public string Name
