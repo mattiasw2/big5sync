@@ -9,13 +9,7 @@ namespace Syncless.Core
     {
         public static void Handle(Exception e)
         {
-            Logger logger = ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG);
-            logger.Write("Unexpected Exception Happened : ");
-            logger.Write(e.Message);
-            logger.Write("----------- Stack Trace -----------");
-            logger.Write(e.StackTrace);
-            logger.Write("-----------------------------------");
-
+            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
         }
     }
 }
