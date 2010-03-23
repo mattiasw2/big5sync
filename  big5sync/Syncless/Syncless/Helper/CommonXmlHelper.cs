@@ -81,12 +81,12 @@ namespace Syncless.Helper
             }
             catch (XmlException xml)
             {
-                Core.ExceptionHandler.Handle(xml);
+                Core.ServiceLocator.GetLogger(Core.ServiceLocator.DEBUG_LOG).Write(xml);
                 return null;
             }
             catch (IOException io)
             {
-                Core.ExceptionHandler.Handle(io);
+                Core.ServiceLocator.GetLogger(Core.ServiceLocator.DEBUG_LOG).Write(io);
                 return null;
             }
             finally

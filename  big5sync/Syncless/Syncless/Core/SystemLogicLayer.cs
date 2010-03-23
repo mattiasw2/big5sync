@@ -154,7 +154,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
             }
         }
         /// <summary>
@@ -215,7 +215,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
             }
         }
         /// <summary>
@@ -251,7 +251,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
             }
         }
         /// <summary>
@@ -282,7 +282,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
             }
         }
         #endregion
@@ -324,7 +324,7 @@ namespace Syncless.Core
             }
             catch (Exception e)// Handle Unexpected Exception
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
 
@@ -348,7 +348,7 @@ namespace Syncless.Core
             }
             catch (Exception e) //Handle Unexpected Exception
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
         }
@@ -392,7 +392,7 @@ namespace Syncless.Core
             }
             catch (Exception e) // Handle Unexpected Exception
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
         }
@@ -435,7 +435,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
         }
@@ -464,7 +464,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
         }
@@ -490,7 +490,7 @@ namespace Syncless.Core
             }
             catch (Exception e)// Handle Unexpected Exception
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
         }
@@ -519,7 +519,7 @@ namespace Syncless.Core
             }
             catch (Exception e)//Handle Unexpected Exception
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
         }
@@ -545,7 +545,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
         }
@@ -574,7 +574,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
 
@@ -593,7 +593,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
         }
@@ -613,7 +613,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
         }
@@ -634,7 +634,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
         }
@@ -682,7 +682,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
         }
@@ -700,7 +700,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
         }
@@ -729,7 +729,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
         }
@@ -924,7 +924,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 return false;
             }
         }
@@ -1023,11 +1023,11 @@ namespace Syncless.Core
             }
             catch (TagNotFoundException te)
             {
-                ExceptionHandler.Handle(te);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(te);
             }
             catch (Exception e)// Handle Unexpected Exception
             {
-                ExceptionHandler.Handle(e);
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
             }
 
         }

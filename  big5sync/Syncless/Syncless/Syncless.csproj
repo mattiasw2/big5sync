@@ -96,7 +96,6 @@
     <Compile Include="CompareAndSync\XMLWriteObject\BaseXMLWriteObject.cs" />
     <Compile Include="Core\Conflict\Conflict.cs" />
     <Compile Include="Core\Conflict\ConflictQueue.cs" />
-    <Compile Include="Core\ExceptionHandler.cs" />
     <Compile Include="Core\Exceptions\InvalidPathException.cs" />
     <Compile Include="Core\Exceptions\UnhandledException.cs" />
     <Compile Include="Core\LogicQueueObserver.cs" />
@@ -122,7 +121,7 @@
     <Compile Include="Core\IMonitorControllerInterface.cs" />
     <Compile Include="Core\IUIControllerInterface.cs" />
     <Compile Include="Notification\AbstractNotification.cs" />
-    <Compile Include="Notification\SLLNotification\MessageNotification.cs" />
+    <Compile Include="Notification\UINotification\MessageNotification.cs" />
     <Compile Include="Notification\SLLNotification\MonitorPathNotification.cs" />
     <Compile Include="Notification\NotificationCode.cs" />
     <Compile Include="Notification\NotificationQueue.cs" />
