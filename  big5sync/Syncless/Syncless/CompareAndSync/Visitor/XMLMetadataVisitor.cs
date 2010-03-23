@@ -15,6 +15,7 @@ namespace Syncless.CompareAndSync.Visitor
         private const string META_DIR = ".syncless";
         private const string XML_NAME = @"\syncless.xml";
         private const string METADATAPATH = META_DIR + @"\syncless.xml";
+        private const string TODOPATH = @".syncless\syncless.xml";
         private const string XPATH_EXPR = "/meta-data";
         private const string NODE_NAME = "name";
         private const string NODE_SIZE = "size";
@@ -22,6 +23,8 @@ namespace Syncless.CompareAndSync.Visitor
         private const string NODE_LAST_MODIFIED = "last_modified";
         private const string NODE_LAST_CREATED = "last_created";
         private const string FILES = "files";
+        private const string ACTION = "action";
+        private const string LAST_UPDATED = "last_updated";
         private static readonly object syncLock = new object();
 
         #region IVisitor Members
@@ -180,6 +183,36 @@ namespace Syncless.CompareAndSync.Visitor
                 else if (childNode.Name.Equals(NODE_LAST_CREATED))
                 {
                     file.MetaCreationTime[counter] = long.Parse(childNode.InnerText);
+                }
+            }
+
+            string path = Path.Combine(file.GetSmartParentPath(counter),TODOPATH);
+            if (File.Exists(path))
+            {
+                XmlDocument todoXML = new XmlDocument();
+                todoXML.Load(path);
+                XmlNode todoNode = todoXML.SelectSingleNode("/todo/file[hash='"+file.MetaHash[counter]+"']");
+                XmlNodeList nodeList = todoNode.ChildNodes;
+                for (int i = 0; i < nodeList.Count; i++)
+                {
+                    XmlNode childNode = nodeList[i];
+                    switch (childNode.Name)
+                    {
+                        case ACTION :
+                            string action = childNode.InnerText;
+                            if (action.Equals("Delete"))
+                            {
+                                file.Todo[counter] = ToDo.Delete;
+                            }
+                            else
+                            {
+                                file.Todo[counter] = ToDo.Rename;
+                            }
+                            break;
+                        case LAST_UPDATED:
+                            file.TodoTimestamp[counter] = long.Parse(node.InnerText);
+                            break;
+                    }
                 }
             }
 
@@ -381,8 +414,6 @@ namespace Syncless.CompareAndSync.Visitor
                     root.AddChild(fco);
             }
         }
-
-
 
         private void ProcessFileMetaData(FileCompareObject file, int numOfPaths)
         {
