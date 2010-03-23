@@ -7,6 +7,7 @@ using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Exceptions;
 using Syncless.Core;
+using Syncless.Notification;
 
 namespace Syncless.CompareAndSync.Visitor
 {
@@ -14,17 +15,22 @@ namespace Syncless.CompareAndSync.Visitor
     {
         #region IVisitor Members
         private SyncConfig _syncConfig;
-
-        public SyncerVisitor(SyncConfig syncConfig)
+        private SyncProgress _syncProgress;
+        public SyncerVisitor(SyncConfig syncConfig,SyncProgress progress)
         {
             _syncConfig = syncConfig;
+            _syncProgress = progress;
         }
 
         public void Visit(FileCompareObject file, int numOfPaths)
         {
+            _syncProgress.Message = "Synchronzing "+file.Name;
             if (file.Invalid)
+            {
+                _syncProgress.fail();
                 return;
-
+            }
+                
             int maxPriorityPos = 0;
             for (int i = 0; i < numOfPaths; i++)
             {
@@ -50,15 +56,19 @@ namespace Syncless.CompareAndSync.Visitor
                         break;
                 }
             }
-
+            _syncProgress.complete();
             //Basic logic: Look for highest priority and propagate it.
 
         }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
+            _syncProgress.Message = "Synchronzing " + folder.Name;
             if (folder.Invalid)
+            {
+                _syncProgress.fail();
                 return;
+            }
 
             int maxPriorityPos = 0;
             for (int i = 0; i < numOfPaths; i++)
@@ -83,11 +93,12 @@ namespace Syncless.CompareAndSync.Visitor
                         break;
                 }
             }
+            _syncProgress.complete();
         }
 
         public void Visit(RootCompareObject root)
         {
-            //Do nothing
+            _syncProgress.complete();//Do nothing
         }
 
         #endregion

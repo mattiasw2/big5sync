@@ -2,7 +2,7 @@
 {
     public enum SyncState
     {
-        STARTED, ANALYZING, SYNCHRONIZING, FINALIZING
+        STARTED, ANALYZING, SYNCHRONIZING, FINALIZING , FINISHED
     }
 
 }

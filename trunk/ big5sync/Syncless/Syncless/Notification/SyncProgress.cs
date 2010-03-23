@@ -16,6 +16,14 @@ namespace Syncless.Notification
             set { _state = value; }
         }
 
+        private string _message;
+
+        public string Message
+        {
+            get { return _message; }
+            set { _message = value; }
+        }
+
         #region Sync
         private int _syncjobtotal;
         public int SyncJobTotal
@@ -192,7 +200,15 @@ namespace Syncless.Notification
             TriggerStateChanged();
             return false;
         }
-
+        public bool ChangeToFinished()
+        {
+            if (_state != SyncState.FINALIZING)
+            {
+                return false;
+            }
+            TriggerStateChanged();
+            return true;
+        }
         private void TriggerStateChanged()
         {
             foreach (ISyncProgressObserver obs in _observerList)
