@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{79C1CBE7-297A-4820-A2D9-BE3507B8EF19}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -87,8 +87,6 @@
     <Compile Include="CompareAndSync\Visitor\ComparerVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\IVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\SyncerVisitor.cs" />
-    <Compile Include="CompareAndSync\Visitor\TodoXMLReader.cs" />
-    <Compile Include="CompareAndSync\Visitor\TodoXMLWriterVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\XMLMetadataVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\XMLWriterVisitor.cs" />
     <Compile Include="CompareAndSync\XMLHelper.cs" />
