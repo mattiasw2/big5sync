@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Syncless.Core.Exceptions;
+using System.Media;
 
 namespace SynclessUI
 {
@@ -29,6 +30,13 @@ namespace SynclessUI
 
             ImgIcon.Source = GetSystemImage(mbimg);
 			DisplayCommandPanel(mbimg);
+
+            /*
+            Uri uri = new Uri(@"pack://application:,,,/Sounds/MorganPage_FightForYou.mp3");
+            SoundPlayer mySound = new SoundPlayer(Application.GetResourceStream(uri).Stream);
+            mySound.LoadAsync();
+            mySound.Stop();
+            */
         }
 		
 		private void DisplayCommandPanel(MessageBoxImage icon) {

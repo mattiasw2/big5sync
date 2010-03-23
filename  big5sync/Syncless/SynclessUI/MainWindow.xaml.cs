@@ -36,6 +36,9 @@ namespace SynclessUI
         private const string BI_DIRECTIONAL = "Bi-Dir..";
         private const string UNI_DIRECTIONAL = "Uni-Dir..";
 
+        private NotificationWatcher notificationWatcher;
+        private PriorityNotificationWatcher priorityNotificationWatcher;
+
         private string _selectedTag
         {
             get { return (string)Application.Current.Properties["SelectedTag"]; }
@@ -187,7 +190,7 @@ namespace SynclessUI
             {
                 if (_selectedTag != null)
                 {
-                    bool result = DialogsHelper.ShowWarning("remove Tag", "Are you sure you want to remove the tag '" + _selectedTag + "'?");
+                    bool result = DialogsHelper.ShowWarning("Remove Tag", "Are you sure you want to remove the tag '" + _selectedTag + "'?");
 
                     if (result)
                     {
@@ -370,10 +373,10 @@ namespace SynclessUI
 
                     this.Close();
                 }
-                NotificationWatcher watcher = new NotificationWatcher();
-                watcher.Start();
-                PriorityNotificationWatcher watcher2 = new PriorityNotificationWatcher();
-                watcher2.Start();
+                notificationWatcher = new NotificationWatcher();
+                notificationWatcher.Start();
+                priorityNotificationWatcher = new PriorityNotificationWatcher();
+                priorityNotificationWatcher.Start();
             }
             catch (UnhandledException)
             {
@@ -753,6 +756,8 @@ namespace SynclessUI
                         {
                             RegistryHelper.RemoveRegistry();
                         }
+                        notificationWatcher.Stop();
+                        priorityNotificationWatcher.Stop();
                     }
                     else
                     {
