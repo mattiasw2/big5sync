@@ -156,6 +156,9 @@
     <Compile Include="CreateTagWindow.xaml.cs">
       <DependentUpon>CreateTagWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Visitor\IVisitor.cs" />
+    <Compile Include="Visitor\SyncUIHelper.cs" />
+    <Compile Include="Visitor\PreviewVisitor.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -216,6 +219,7 @@
     </Resource>
     <Resource Include="Icons\close.ico" />
     <Resource Include="Icons\createtag.ico" />
+    <Resource Include="Icons\dropindicator.ico" />
     <Resource Include="Icons\eject.ico" />
     <Resource Include="Icons\explorer.ico" />
     <Resource Include="Icons\filter.ico" />

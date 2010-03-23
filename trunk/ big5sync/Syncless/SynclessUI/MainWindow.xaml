@@ -53,8 +53,8 @@
 			<BeginStoryboard x:Name="SynclessLogoJumps_BeginStoryboard1" Storyboard="{StaticResource SynclessLogoLands}"/>
 		</EventTrigger>
 	</Window.Triggers>
-    <Grid x:Name="LayoutRoot" Width="700" Drop="LayoutRoot_Drop" AllowDrop="True">
-        <Grid.RowDefinitions>
+    <Grid x:Name="LayoutRoot" Drop="LayoutRoot_Drop" AllowDrop="True" DragEnter="LayoutRoot_DragEnter" DragLeave="LayoutRoot_DragLeave" Width="700">
+		<Grid.RowDefinitions>
 			<RowDefinition Height="20"/>
 			<RowDefinition Height="50"/>
 			<RowDefinition Height="60"/>
@@ -71,16 +71,16 @@
     
 		<!-- Overall Canvas -->
 		<Rectangle Grid.Row="0" Grid.RowSpan="6" x:Name="Canvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.ColumnSpan="5">
-    		<Rectangle.Fill>
-    			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-    				<GradientStop Color="#FF707271" Offset="0"/>
-    				<GradientStop Color="#FF111113" Offset="1"/>
-    				<GradientStop Color="#FF111113" Offset="0.052"/>
-    			</LinearGradientBrush>
-    		</Rectangle.Fill>
-    	</Rectangle>
-    	<TextBlock Grid.Row="0" Margin="0" Padding="5" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Grid.ColumnSpan="5" Cursor="Hand"/>
-    	<!-- MinClose Panel -->
+			<Rectangle.Fill>
+				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+					<GradientStop Color="#FF707271" Offset="0"/>
+					<GradientStop Color="#FF111113" Offset="1"/>
+					<GradientStop Color="#FF111113" Offset="0.052"/>
+				</LinearGradientBrush>
+			</Rectangle.Fill>
+		</Rectangle>
+		<TextBlock Grid.Row="0" Margin="0" Padding="5" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Grid.ColumnSpan="5" Cursor="Hand"/>
+		<!-- MinClose Panel -->
 		<StackPanel x:Name="OptionMinClosePanel" Grid.Row="0" Grid.Column="3" Height="20" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,-5,0" Cursor="Hand" Grid.RowSpan="2">
 			<Image x:Name="BtnShortcuts" Source="Icons/kb.ico" Width="16" Height="16" Margin="0,2.5,3,2.5" Cursor="Hand" ToolTip="List of Keyboard Shortcuts" MouseLeftButtonDown="BtnShortcuts_MouseLeftButtonDown" />
 			<Image x:Name="BtnOptions" Source="Icons/option.ico" Width="15" Height="15" Margin="0,0,3,0" MouseLeftButtonDown="BtnOptions_MouseLeftButtonDown" ToolTip="Syncless Options" Cursor="Hand" />
@@ -89,11 +89,11 @@
 		</StackPanel>
 		<!-- Header Panel -->
 		<StackPanel x:Name="HeaderPanel" Grid.Row="1" Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Top" Height="50" Grid.ColumnSpan="4">
-    		<StackPanel x:Name="SynclessLogoContainer" Margin="0,5,0,0" Orientation="Vertical" MouseEnter="SynclessLogoContainer_MouseEnter">
-    			<Image x:Name="SynclessLogo" Source="Icons/logo.ico" Height="40" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Stretch="Fill" MouseLeftButtonDown="SynclessLogo_MouseLeftButtonDown" Cursor="Hand" ToolTip="Visit Syncless's Google Code Homepage" Width="40"/>
-    			<Ellipse x:Name="LogoHighlight" Stroke="Black" Width="10" Height="3" Fill="White" Visibility="Hidden" Margin="0,-2,0,0"/>
+			<StackPanel x:Name="SynclessLogoContainer" Margin="0,5,0,0" Orientation="Vertical" MouseEnter="SynclessLogoContainer_MouseEnter">
+				<Image x:Name="SynclessLogo" Source="Icons/logo.ico" Height="40" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Stretch="Fill" MouseLeftButtonDown="SynclessLogo_MouseLeftButtonDown" Cursor="Hand" ToolTip="Visit Syncless's Google Code Homepage" Width="40"/>
+				<Ellipse x:Name="LogoHighlight" Stroke="Black" Width="10" Height="3" Fill="White" Visibility="Hidden" Margin="0,-2,0,0"/>
 			</StackPanel>
-    		<Label x:Name="AppTitle" Content="Syncless" Foreground="#FFEEEEEE" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="-10,-5,250,0" FontFamily="Fonts/#BankGothic Md BT"/>		
+			<Label x:Name="AppTitle" Content="Syncless" Foreground="#FFEEEEEE" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="-10,-5,250,0" FontFamily="Fonts/#BankGothic Md BT"/>		
 			<!-- Menubar -->
 			<Menu x:Name="MainMenu" VerticalAlignment="Center" FontSize="13.333" Background="{x:Null}" Margin="0,8,0,0" FontWeight="Bold" HorizontalAlignment="Right" Visibility="Hidden">        
 				<MenuItem Header="_File" Foreground="#FF8799EB">
@@ -144,14 +144,14 @@
 			</Grid.ColumnDefinitions>
 			
 			<!-- Tag Info Canvas -->		
-				<Rectangle x:Name="TagInfoCanvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="4">
-					<Rectangle.Fill>
-						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-							<GradientStop Color="#FF626262" Offset="0"/>
-							<GradientStop Color="#FF20262b" Offset="1"/>
-						</LinearGradientBrush>
-					</Rectangle.Fill>
-				</Rectangle>
+			<Rectangle x:Name="TagInfoCanvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="4">
+				<Rectangle.Fill>
+					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+						<GradientStop Color="#FF626262" Offset="0"/>
+						<GradientStop Color="#FF20262b" Offset="1"/>
+					</LinearGradientBrush>
+				</Rectangle.Fill>
+			</Rectangle>
 			
 			<TextBox IsReadOnly="True" x:Name="TagTitle" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Foreground="#FFEEEEEE" FontSize="16" Text="Select a Tag" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Margin="1,0,10,0" Padding="10,5,0,0" Background="{x:Null}" Width="331" KeyDown="TagTitleOnKeyDownHandler" LostFocus="TagTitle_LostFocus" ToolTip="{Binding Text, ElementName=TagTitle, Mode=Default}" AllowDrop="False"/>
 			
@@ -250,7 +250,7 @@
 				</Button>
 				<Button x:Name="BtnSyncNow" Height="35" Margin="0,0,0,5" Click="BtnSyncNow_Click">
 					<Label x:Name="LblSyncNow" FontFamily="Century Gothic" FontSize="10.667" Content="Sync Now" ToolTip="Start Manual Synchronization"/>
-                </Button>
+				</Button>
 			</StackPanel>
 			<Border x:Name="BdrTaggedPath" Padding="10" Grid.Row="2" Grid.Column="1" BorderBrush="#FF6F6F6F" BorderThickness="1" CornerRadius="5" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,10,0,0">
 				<StackPanel>
@@ -281,14 +281,14 @@
 				<ColumnDefinition Width="10"/>
 			</Grid.ColumnDefinitions>
 
-				<Rectangle x:Name="TagListCanvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="4">
-					<Rectangle.Fill>
-						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-							<GradientStop Color="#FF626262" Offset="0"/>
-							<GradientStop Color="#FF20262b" Offset="1"/>
-						</LinearGradientBrush>
-					</Rectangle.Fill>
-				</Rectangle>
+			<Rectangle x:Name="TagListCanvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="4">
+				<Rectangle.Fill>
+					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+						<GradientStop Color="#FF626262" Offset="0"/>
+						<GradientStop Color="#FF20262b" Offset="1"/>
+					</LinearGradientBrush>
+				</Rectangle.Fill>
+			</Rectangle>
 			<Label x:Name="LblTagList" Grid.Row="1" Grid.Column="0" Foreground="#FFEEEEEE" Content="Tag List" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,4,0,4" Margin="2,0" FontSize="13.333" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
 			<Image x:Name="TagListIcon" Source="Icons/taglist.ico" HorizontalAlignment="Right" Margin="0,-35,-15,0" Width="120" Height="120" VerticalAlignment="Top" Grid.RowSpan="3" d:LayoutOverrides="GridBox" Grid.ColumnSpan="3" Panel.ZIndex="1"/>
 			<TextBox x:Name="TxtBoxFilterTag" Grid.Row="2" Grid.Column="1" Background="#FF666666" Foreground="#FFCCCCCC" FontFamily="Century Gothic" FontSize="10.667" TextChanged="TxtBoxFilterTag_TextChanged" Margin="0" Style="{DynamicResource FilterTextBoxStyle}" Width="195" ToolTip="Type your filter here">
@@ -303,28 +303,29 @@
 			<Label x:Name="LblTagCount" Grid.Row="1" Grid.Column="0" Foreground="#FFEEEEEE" Content="[Count]" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,4,0,4" Margin="50,0,2,0" FontSize="13.333" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
 			<Image x:Name="ImgFilter" HorizontalAlignment="Left" Margin="2,0,0,-1" Width="16" Grid.Column="1" Source="Icons/filter.ico" Stretch="Fill" Grid.Row="2" Height="16"/>
 		</Grid>		
-      <tb:TaskbarIcon x:Name="TaskbarIcon" IconSource="/Icons/logo.ico" ToolTipText="Syncless" MenuActivation="RightClick" TrayLeftMouseDown="TaskbarIcon_TrayLeftMouseDown">
-        <tb:TaskbarIcon.ContextMenu>
-            <ContextMenu>
-                <MenuItem Header="Options" x:Name="TaskbarOptionsItem" Click="TaskbarOptionsItem_Click">
-                    <MenuItem.Icon>
-                        <Image Width="16" Height="16" Source="Icons/option-tray.ico"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator />
-                <MenuItem Header="Open" x:Name="TaskbarOpenItem" Click="TaskbarOpenItem_Click">
-                    <MenuItem.Icon>
-                        <Image Width="16" Height="16" Source="Icons/logo.ico"/>
-                    </MenuItem.Icon>
-				</MenuItem>
-                <MenuItem Header="Tag" x:Name="TaskbarTagItem" Click="TaskbarTagItem_Click">
-                    <MenuItem.Icon>
-                        <Image Width="16" Height="16" Source="Icons/tag.ico"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Exit" x:Name="TaskbarExitItem" Click="TaskbarExitItem_Click"/>
-            </ContextMenu>
-        </tb:TaskbarIcon.ContextMenu>
-      </tb:TaskbarIcon>
-    </Grid>
+		<tb:TaskbarIcon x:Name="TaskbarIcon" IconSource="/Icons/logo.ico" ToolTipText="Syncless" MenuActivation="RightClick" TrayLeftMouseDown="TaskbarIcon_TrayLeftMouseDown">
+			<tb:TaskbarIcon.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="Options" x:Name="TaskbarOptionsItem" Click="TaskbarOptionsItem_Click">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="Icons/option-tray.ico"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					<Separator />
+					<MenuItem Header="Open" x:Name="TaskbarOpenItem" Click="TaskbarOpenItem_Click">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="Icons/logo.ico"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Tag" x:Name="TaskbarTagItem" Click="TaskbarTagItem_Click">
+						<MenuItem.Icon>
+							<Image Width="16" Height="16" Source="Icons/tag.ico"/>
+						</MenuItem.Icon>
+					</MenuItem>
+					<MenuItem Header="Exit" x:Name="TaskbarExitItem" Click="TaskbarExitItem_Click"/>
+				</ContextMenu>
+			</tb:TaskbarIcon.ContextMenu>
+		</tb:TaskbarIcon>
+		<Image x:Name="DropIndicator" Margin="0" Width="224" Grid.RowSpan="5" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.9" Height="224" Panel.ZIndex="1" Source="Icons/dropindicator.ico" Visibility="Hidden"/>
+	</Grid>
 </Window>
