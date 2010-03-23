@@ -35,12 +35,15 @@ namespace SynclessUI
 			switch (icon)
 			{
 				case MessageBoxImage.Error:
+					this.Title = "Error";
 				    this.OkCommandPanel.Visibility = System.Windows.Visibility.Visible;
 					break;
 				case MessageBoxImage.Exclamation:
+					this.Title = "Warning";
 					this.OkCancelCommandPanel.Visibility = System.Windows.Visibility.Visible;
 				    break;
 				case MessageBoxImage.Information:
+					this.Title = "Information";
 					this.OkCommandPanel.Visibility = System.Windows.Visibility.Visible;
 				    break;
 			}
