@@ -44,6 +44,10 @@ namespace Syncless.Core
 
         int Clean(string path);
 
+        bool SetProfileName(string name);
+        string GetProfileName();
+
+
         //bool SetTagMultiDirectional(string tagname);
 
         // To be Implemented

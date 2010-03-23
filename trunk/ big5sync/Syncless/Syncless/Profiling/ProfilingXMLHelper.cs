@@ -12,7 +12,7 @@ namespace Syncless.Profiling
 {
     internal static class ProfilingXMLHelper
     {
-        private const string DEFAULT_NAME = "";
+        public const string DEFAULT_NAME = "";
         private const string ELE_PROFILING_ROOT = "profiling";
 
         private const string ELE_PROFILE = "profile";
@@ -154,6 +154,20 @@ namespace Syncless.Profiling
             XmlElement profileElement = profileElementList[0] as XmlElement;
             return CreateProfile(profileElement);
         }
+        public static Profile LoadSingleProfile(string path, string profileName)
+        {
+            XmlDocument xmlDoc = CommonXmlHelper.LoadXml(path);
+            if (xmlDoc == null)
+            {
+                return null;
+            }
+            XmlNode selectedProfile = xmlDoc.SelectSingleNode(@"\\" + ELE_PROFILE + "[@" + ELE_PROFILE_NAME + "=" + profileName + "]");
+            if(selectedProfile == null){
+                return null;
+            }
+            XmlElement profileElement = selectedProfile as XmlElement;
+            return CreateProfile(profileElement);
+        }
         private static Profile CreateProfile(XmlElement profileElement)
         {
             string profileName = profileElement.GetAttribute(ELE_PROFILE_NAME);
@@ -193,6 +207,6 @@ namespace Syncless.Profiling
             SaveProfile(profile, path);
             return profile;
         }
-        
+                
     }
 }

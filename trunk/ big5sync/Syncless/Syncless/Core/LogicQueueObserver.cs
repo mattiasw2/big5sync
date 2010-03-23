@@ -53,8 +53,15 @@ namespace Syncless.Core
                 }
                 else
                 {
-                    AbstractNotification notification = ServiceLocator.LogicLayerNotificationQueue().Dequeue();
-                    Handle(notification);
+                    try
+                    {
+                        AbstractNotification notification = ServiceLocator.LogicLayerNotificationQueue().Dequeue();
+                        Handle(notification);
+                    }
+                    catch (Exception e)
+                    {
+                        ExceptionHandler.Handle(e);
+                    }
                 }
             }
 

@@ -6,6 +6,8 @@ using System.IO;
 using System.Diagnostics;
 using Syncless.Profiling.Exceptions;
 using Syncless.Helper;
+using Syncless.Core;
+using Syncless.Notification;
 namespace Syncless.Profiling
 {
     public class ProfilingLayer
@@ -177,15 +179,11 @@ namespace Syncless.Profiling
         /// <param name="path"></param>
         public void Merge(string path)
         {
-            
-
             if (File.Exists(path))
             {
                 List<Profile> profileList = ProfilingXMLHelper.LoadProfile(path);
                 ProfileMerger.Merge(_profile, profileList);
             }
-
-
         }
         /// <summary>
         /// Save all the profiling xml to all the various Location.
@@ -193,7 +191,7 @@ namespace Syncless.Profiling
         /// <returns>true if the save is complete.</returns>
         public void SaveTo(List<string> savedLocation)
         {
-            
+
             ProfilingXMLHelper.SaveProfile(_profile, savedLocation[0]);
 
         }
@@ -202,7 +200,7 @@ namespace Syncless.Profiling
         /// </summary>
         /// <param name="path">The root path for the profiling configuration file.</param>
         /// <returns>true if the profile is load.</returns>
-        
+
         public bool Init(List<string> paths)
         {
             string path = paths[0];
@@ -235,6 +233,61 @@ namespace Syncless.Profiling
                 UpdateDrive(driveinfo);
             }
             return true;
+        }
+        /// <summary>
+        /// Load only the default saved location
+        /// </summary>
+        /// <param name="path"></param>
+        public void Init(string path)
+        {
+            try
+            {
+                Profile p = ProfilingXMLHelper.LoadSingleProfile(path);
+                Debug.Assert(p != null);
+                _profile = p;
+                
+            }
+            catch (FileNotFoundException)
+            {
+                Profile profile = ProfilingXMLHelper.CreateDefaultProfile(path);
+                _profile = profile;                
+            }
+            if (_profile.ProfileName.Equals(ProfilingXMLHelper.DEFAULT_NAME))
+            {
+                ServiceLocator.UIPriorityQueue().Enqueue(new NewProfileNotification());
+            }
+            else
+            {
+                SetupDrives();
+            }
+
+
+        }
+        public bool SetProfileName(string name)
+        {   
+            _profile.ProfileName = name;
+            SetupDrives();
+            return true;
+        }
+        private void SetupDrives()
+        {
+            DriveInfo[] drives = DriveInfo.GetDrives();
+            foreach (DriveInfo d in drives)
+            {
+                string guid = d.Name + @"\" + @".syncless\guid.id";
+                if (File.Exists(guid))
+                {
+                    //if drive contain guid.
+                    string profilingxml = d.Name + @"\" + @".syncless\profiling.xml";
+                    if (File.Exists(profilingxml))
+                    {
+                        Profile p = ProfilingXMLHelper.LoadSingleProfile(profilingxml, _profile.ProfileName);
+                        ProfileMerger.Merge(_profile, p);
+                    }
+                }
+                UpdateDrive(d);
+            }
+
         }
         /// <summary>
         /// Update a Drive with it guid and create a mapping in the profile.
