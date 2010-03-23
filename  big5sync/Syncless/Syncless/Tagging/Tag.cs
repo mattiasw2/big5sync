@@ -136,6 +136,14 @@ namespace Syncless.Tagging
             _lastUpdatedDate = lastupdated;
         }
 
+        public void Remove(long updated)
+        {
+            _isDeleted = true;
+            _deletedDate = updated;
+            _lastUpdatedDate = updated;
+            RemoveAllPaths();
+        }
+
         //refactor done
         public bool AddPath(string path, long created)
         {

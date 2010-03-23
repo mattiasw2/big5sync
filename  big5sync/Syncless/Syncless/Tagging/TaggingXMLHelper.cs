@@ -86,13 +86,18 @@ namespace Syncless.Tagging
         #endregion
 
         #region save operations
-        public static void SaveTo(TaggingProfile taggingProfile, List<string> xmlFilePaths)
+        public static void SaveToLocations(TaggingProfile taggingProfile, List<string> xmlFilePaths)
         {
-            XmlDocument xmlDoc = ConvertTaggingProfileToXml(taggingProfile);
             foreach (string path in xmlFilePaths)
             {
-                SaveXml(xmlDoc, path);
+                SaveTo(taggingProfile, path);
             }
+        }
+
+        public static void SaveTo(TaggingProfile taggingProfile, string xmlFilePath)
+        {
+            XmlDocument xmlDoc = ConvertTaggingProfileToXml(taggingProfile);
+            SaveXml(xmlDoc, xmlFilePath);
         }
 
         private static bool SaveXml(XmlDocument xmlDoc, string path)
@@ -139,19 +144,41 @@ namespace Syncless.Tagging
 
         private static XmlDocument ConvertTaggingProfileToXml(TaggingProfile taggingProfile)
         {
-            XmlDocument taggingDataDocument = new XmlDocument();
-            XmlElement taggingElement = taggingDataDocument.CreateElement(ELE_TAGGING_ROOT);
-            XmlElement profileElement = taggingDataDocument.CreateElement(ELE_PROFILE_ROOT);
-            profileElement.SetAttribute(ATTR_PROFILE_NAME, taggingProfile.ProfileName);
-            profileElement.SetAttribute(ATTR_PROFILE_CREATEDDATE, taggingProfile.CreatedDate.ToString());
-            profileElement.SetAttribute(ATTR_PROFILE_LASTUPDATEDDATE, taggingProfile.LastUpdatedDate.ToString());
-            foreach (Tag tag in taggingProfile.TagList)
-            {
-                profileElement.AppendChild(CreateTagElement(taggingDataDocument, tag));
-            }
+            XmlDocument xmldoc = new XmlDocument();
+            XmlElement taggingElement = xmldoc.CreateElement(ELE_TAGGING_ROOT);
+            XmlElement profileElement = CreateTaggingProfileElement(xmldoc, taggingProfile);
             taggingElement.AppendChild(profileElement);
-            taggingDataDocument.AppendChild(taggingElement);
-            return taggingDataDocument;
+            xmldoc.AppendChild(taggingElement);
+            return xmldoc;
+        }
+
+        public static void AppendProfile(TaggingProfile profile, List<string> locations)
+        {
+            foreach (string location in locations)
+            {
+                try
+                {
+                    XmlDocument xmldoc = LoadXml(location);
+                    if (xmldoc == null)
+                    {
+                        SaveTo(profile, location);
+                    }
+                    else
+                    {
+                        XmlElement newProfileElement = CreateTaggingProfileElement(xmldoc, profile);
+                        XmlElement oldProfileElement = (XmlElement) xmldoc.SelectSingleNode(@"//" + ELE_PROFILE_ROOT + "[@" + ATTR_PROFILE_NAME + @"='" + profile.ProfileName + @"']");
+                        if (oldProfileElement != null)
+                        {
+                            xmldoc.SelectSingleNode(@"//" + ELE_TAGGING_ROOT).RemoveChild(oldProfileElement);
+                        }
+                        xmldoc.SelectSingleNode(@"//" + ELE_TAGGING_ROOT).AppendChild(newProfileElement);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                }
+            }
         }
         #endregion
 
@@ -373,6 +400,19 @@ namespace Syncless.Tagging
         #endregion
 
         #region create xml document
+        private static XmlElement CreateTaggingProfileElement(XmlDocument xmldoc, TaggingProfile taggingProfile)
+        {
+            XmlElement profileElement = xmldoc.CreateElement(ELE_PROFILE_ROOT);
+            profileElement.SetAttribute(ATTR_PROFILE_NAME, taggingProfile.ProfileName);
+            profileElement.SetAttribute(ATTR_PROFILE_CREATEDDATE, taggingProfile.CreatedDate.ToString());
+            profileElement.SetAttribute(ATTR_PROFILE_LASTUPDATEDDATE, taggingProfile.LastUpdatedDate.ToString());
+            foreach (Tag tag in taggingProfile.TagList)
+            {
+                profileElement.AppendChild(CreateTagElement(xmldoc, tag));
+            }
+            return profileElement;
+        }
+
         private static XmlElement CreateTagElement(XmlDocument xmlDoc, Tag tag)
         {
             XmlElement tagElement = xmlDoc.CreateElement(ELE_TAG_ROOT);
