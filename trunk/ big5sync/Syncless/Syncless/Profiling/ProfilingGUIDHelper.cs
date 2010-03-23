@@ -69,7 +69,7 @@ namespace Syncless.Profiling
             {
 
             }
-            ServiceLocator.Getlogger(ServiceLocator.USER_LOG).WriteLine("GUID Created at " + path + " .");
+            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write("GUID Created at " + path + " .");
             return guidString;
         }
         

@@ -30,7 +30,7 @@ namespace Syncless.Core
             get { return SystemLogicLayer.Instance; }
         }
                 
-        public static Logger Getlogger(string type)
+        public static Logger GetLogger(string type)
         {
             if (type.Equals(USER_LOG))
             {

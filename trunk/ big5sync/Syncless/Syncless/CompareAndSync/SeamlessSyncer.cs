@@ -88,22 +88,22 @@ namespace Syncless.CompareAndSync
                         catch (ArchiveFileException e)
                         {
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                         catch (DeleteFileException e)
                         {
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                         catch (CopyFileException e)
                         {
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                         catch (MoveFileException e)
                         {
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                     }
                 }
@@ -131,12 +131,12 @@ namespace Syncless.CompareAndSync
                         catch (ArchiveFileException e)
                         {
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                         catch (DeleteFileException e)
                         {
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                     }
                 }
@@ -155,7 +155,7 @@ namespace Syncless.CompareAndSync
             catch (HashFileException e)
             {
                 //TODO: Throw to notification queue in future
-                ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 return true;
             }
         }
@@ -212,12 +212,12 @@ namespace Syncless.CompareAndSync
                     catch (CreateFolderException e)
                     {
                         //TODO: Throw to notification queue in future
-                        ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                        ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                     }
                     catch (MoveFolderException e)
                     {
                         //TODO: Throw to notification queue in future
-                        ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                        ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                     }
                 }
             }
@@ -244,12 +244,12 @@ namespace Syncless.CompareAndSync
                         catch (ArchiveFolderException e)
                         {
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
                         }
                         catch (DeleteFolderException e)
                         {
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.Getlogger(ServiceLocator.DEBUG_LOG).WriteLine(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
                         }
                     }
                 }
