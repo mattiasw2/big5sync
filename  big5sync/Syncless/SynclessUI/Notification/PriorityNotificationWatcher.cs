@@ -59,7 +59,7 @@ namespace SynclessUI.Notification
                         AbstractNotification notification = ServiceLocator.UIPriorityQueue().Dequeue();
                         Handle(notification);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         
                     }

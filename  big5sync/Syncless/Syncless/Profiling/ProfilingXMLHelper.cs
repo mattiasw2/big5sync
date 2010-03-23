@@ -80,7 +80,7 @@ namespace Syncless.Profiling
                         profilingRootNode.AppendChild(profileNode);
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
 
                 }
