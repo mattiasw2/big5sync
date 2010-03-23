@@ -114,6 +114,9 @@
     <Compile Include="ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FolderBrowserDialogEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Helper\DialogsHelper.cs" />
     <Compile Include="Notification\NotificationWatcher.cs" />
     <Compile Include="Notification\PriorityNotificationWatcher.cs" />
