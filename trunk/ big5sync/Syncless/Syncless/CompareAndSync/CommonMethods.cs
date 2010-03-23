@@ -28,9 +28,9 @@ namespace Syncless.CompareAndSync
                 {
                     lock (syncLock)
                     {
-
                         XmlNode node = xmlDoc.SelectSingleNode("/meta-data");
-                        node.FirstChild.InnerText = DateTime.Now.Ticks.ToString();
+                        if (node != null)
+                            node.FirstChild.InnerText = DateTime.Now.Ticks.ToString();
                         xmlDoc.Save(xmlPath);
                     }
                     break;
@@ -434,7 +434,7 @@ namespace Syncless.CompareAndSync
 
             sb.Append(")");
             return sb.ToString();
-        } 
+        }
 
 
     }
