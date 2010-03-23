@@ -70,7 +70,7 @@ namespace SynclessUI
             browse.ShowNewFolderButton = true;
             browse.Description="Select the folder to tag";
 
-            browse.RootFolder = Environment.SpecialFolder.MyComputer;
+            browse.RootFolder = Environment.SpecialFolder.Desktop;
 
             if (browse.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 path = browse.SelectedPath;
