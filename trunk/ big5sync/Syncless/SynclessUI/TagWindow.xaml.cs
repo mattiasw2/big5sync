@@ -195,24 +195,12 @@ namespace SynclessUI
         {
             if (_path.Length > 200)
             {
-                string messageBoxText = "NTFS File System does not handle paths which are 248 characters or more in length properly. \nAre you sure you wish to continue";
-                string caption = "Long Path Name Warning";
-                MessageBoxButton button = MessageBoxButton.OKCancel;
-                MessageBoxImage icon = MessageBoxImage.Warning;
+                bool result = DialogsHelper.ShowWarning("Long Path Name Warning", "NTFS File System does not handle paths which are 248 characters or more in length properly. \nAre you sure you wish to continue");
 
-                MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
-
-                switch (result)
-                {
-                    case MessageBoxResult.OK:
-                        return true;
-                    case MessageBoxResult.No:
-                        return false;
-                }
+                return result;
             }
 
             return true;
-
         }
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
