@@ -21,6 +21,7 @@ namespace Syncless.Notification
         public const string ADD_TAG_NOTIFICATION = "110";
         public const string DEL_TAG_NOTIFICATION = "111";
 
+        public const string NEW_PROFILE_NOTIFICATION = "201";
         #endregion
 
 

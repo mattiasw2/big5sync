@@ -777,6 +777,15 @@ namespace Syncless.Core
             return true;
         }
 
+        public bool SetProfileName(string profileName)
+        {
+            return true;
+        }
+
+        public string GetProfileName()
+        {
+            return ProfilingLayer.Instance.CurrentProfile.ProfileName;
+        }
 
 
         #endregion
