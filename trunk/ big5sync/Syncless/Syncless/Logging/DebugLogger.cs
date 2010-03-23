@@ -7,6 +7,10 @@ namespace Syncless.Logging
 {
     public class DebugLogger : Logger
     {
+
+        private const string linebreak = "--------------------------------------------------------";
+        private const string indent = "\t\t\t";
+
         public DebugLogger()
             : base(ServiceLocator.DEBUG_LOG)
         {
@@ -16,10 +20,8 @@ namespace Syncless.Logging
         {
             Debug.Assert(message is Exception);
             Exception e = message as Exception;
-            string linebreak = "--------------------------------------------------------";
-            string indent = "\t\t\t";
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine("Exception Caught");
+            builder.AppendLine("\tException Caught");
             builder.Append(indent);
             builder.AppendLine(linebreak);
             builder.Append(indent);
