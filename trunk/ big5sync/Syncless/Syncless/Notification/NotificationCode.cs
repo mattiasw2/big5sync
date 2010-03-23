@@ -22,7 +22,7 @@ namespace Syncless.Notification
         public const string ADD_TAG_NOTIFICATION = "110";
         public const string DEL_TAG_NOTIFICATION = "111";
 
-        
+        public const string MONITOR_TAG_NOTIFICATION = "121";
         #endregion
         
     }
