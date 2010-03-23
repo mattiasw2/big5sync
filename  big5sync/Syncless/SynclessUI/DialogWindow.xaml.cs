@@ -15,19 +15,36 @@ using Syncless.Core.Exceptions;
 namespace SynclessUI
 {
     /// <summary>
-    /// Interaction logic for ErrorWindow.xaml
+    /// Interaction logic for DialogWindow.xaml
     /// </summary>
-    public partial class ErrorWindow : Window
+    public partial class DialogWindow : Window
     {
-        public ErrorWindow(string caption, string message)
+        public DialogWindow(string caption, string message, MessageBoxImage mbimg)
         {
             InitializeComponent();
-
+			
+			Application.Current.Properties["DialogWindowChoice"] = false;
             LblCaption.Content = caption;
             TxtBlkMessageBoxText.Text = message;
-			
-			ImgIcon.Source = GetSystemImage(MessageBoxImage.Error);
+
+            ImgIcon.Source = GetSystemImage(mbimg);
+			DisplayCommandPanel(mbimg);
         }
+		
+		private void DisplayCommandPanel(MessageBoxImage icon) {
+			switch (icon)
+			{
+				case MessageBoxImage.Error:
+				    this.OkCommandPanel.Visibility = System.Windows.Visibility.Visible;
+					break;
+				case MessageBoxImage.Exclamation:
+					this.OkCancelCommandPanel.Visibility = System.Windows.Visibility.Visible;
+				    break;
+				case MessageBoxImage.Information:
+					this.OkCommandPanel.Visibility = System.Windows.Visibility.Visible;
+				    break;
+			}
+		}
 		
 		private static ImageSource GetSystemImage(MessageBoxImage icon)
 		{
@@ -36,16 +53,16 @@ namespace SynclessUI
 			{
 				case MessageBoxImage.Error:
 					iconsource = System.Drawing.SystemIcons.Error;
-				break;
+				    break;
 				case MessageBoxImage.Exclamation:
 					iconsource = System.Drawing.SystemIcons.Exclamation;
-				break;
+				    break;
 				case MessageBoxImage.Information:
 					iconsource = System.Drawing.SystemIcons.Information;
-				break;
+				    break;
 				case MessageBoxImage.Question:
 					iconsource = System.Drawing.SystemIcons.Question;
-				break;
+                    break;
 			}
 			if (iconsource == null) return null;
 				else return System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(iconsource.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
@@ -57,9 +74,21 @@ namespace SynclessUI
         	this.DragMove();
         }
 
-        private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void BtnOkCP1_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.Close();
+        	this.Close();
+        }
+		
+        private void BtnOkCP2_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+			Application.Current.Properties["DialogWindowChoice"] = true;
+        	this.Close();
+        }
+		
+        private void BtnCancelCP2_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+			Application.Current.Properties["DialogWindowChoice"] = false;
+        	this.Close();
         }
     }
 }

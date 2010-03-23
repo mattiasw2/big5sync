@@ -111,8 +111,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ErrorWindow.xaml.cs">
-      <DependentUpon>ErrorWindow.xaml</DependentUpon>
+    <Compile Include="DialogWindow.xaml.cs">
+      <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="FolderBrowserDialogEx.cs">
       <SubType>Component</SubType>
@@ -186,7 +186,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="ErrorWindow.xaml">
+    <Page Include="DialogWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

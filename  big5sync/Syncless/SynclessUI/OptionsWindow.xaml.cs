@@ -30,8 +30,6 @@ namespace SynclessUI
 			ChkBoxRegistryIntegration.IsChecked = Properties.Settings.Default.PersistRegistryIntegration;
 		}
 		
-		
-		
         private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
         	this.DragMove();
