@@ -15,7 +15,7 @@ namespace Syncless.Logging
         public override void Write(object message)
         {
             Debug.Assert(message is Exception);
-            Exception e = (Exception)message;
+            Exception e = message as Exception;
             string linebreak = "--------------------------------------------------------";
             string indent = "\t\t\t";
             StringBuilder builder = new StringBuilder();
