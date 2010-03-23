@@ -507,7 +507,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void AppendActionFileTodo(XmlDocument xmlDoc, FileCompareObject file , int counter , string changeType)
         {
-            XmlText hashText = xmlDoc.CreateTextNode(file.Hash[counter]);
+            XmlText hashText = xmlDoc.CreateTextNode(file.MetaHash[counter]);
             XmlText actionText = xmlDoc.CreateTextNode(changeType);
             XmlText lastUpdatedText = xmlDoc.CreateTextNode(DateTime.Now.Ticks.ToString());
 
