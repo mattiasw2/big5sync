@@ -103,13 +103,13 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 if (file.ChangeType[i] == MetaChangeType.Delete)
                 {
-                    if (file.Todo[i].HasValue && file.Todo[i] == ToDo.Rename)
-                    {
-                        counter++;
-                        resultPos = i;
-                    }
-                    else
-                    {
+                    //if (file.Todo[i].HasValue && file.Todo[i] == ToDo.Rename)
+                    //{
+                    //    counter++;
+                    //    resultPos = i;
+                    //}
+                    //else
+                    //{
                         f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);
 
                         if (f != null)
@@ -118,23 +118,23 @@ namespace Syncless.CompareAndSync.Visitor
                             result = f;
                             resultPos = i;
                         }
-                    }
+                    //}
                 }
             }
 
             if (counter == 1)
             {
-                if (result != null)
-                {
+                //if (result != null)
+                //{
                     file.NewName = result.Name;
                     file.ChangeType[resultPos] = MetaChangeType.Rename;
                     result.Invalid = true;
-                }
-                else
-                {
-                    file.NewName = file.TodoNewName[resultPos];
-                    file.ChangeType[resultPos] = MetaChangeType.Rename;
-                }
+                //}
+                //else
+                //{
+                //    file.NewName = file.TodoNewName[resultPos];
+                //    file.ChangeType[resultPos] = MetaChangeType.Rename;
+                //}
             }
 
         }
