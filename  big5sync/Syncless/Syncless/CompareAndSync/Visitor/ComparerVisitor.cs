@@ -52,18 +52,6 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region Files
 
-        private void ProcessTodo(FileCompareObject file, int numOfPaths)
-        {
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                if (file.ChangeType[i] == null && file.ToDoAction[i].HasValue)
-                {
-                    if (file.ToDoAction[i] == ToDo.Delete)
-                        file.ChangeType[i] = MetaChangeType.Delete;
-                }
-            }
-        }
-
         private void DetectFileRenameAndUpdate(FileCompareObject file, int numOfPaths)
         {
             //Get a Delete type
