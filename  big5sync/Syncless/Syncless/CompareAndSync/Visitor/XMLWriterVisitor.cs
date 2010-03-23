@@ -275,7 +275,7 @@ namespace Syncless.CompareAndSync.Visitor
             string todoPath = Path.Combine(parentPath, TODOPATH);
             CreateTodoFile(parentPath);
             CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
-            AppendActionFileTodo(xmlDoc, file, counter, "Delete");
+            AppendActionFileTodo(xmlTodoDoc, file, counter, "Delete");
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
         }
 
