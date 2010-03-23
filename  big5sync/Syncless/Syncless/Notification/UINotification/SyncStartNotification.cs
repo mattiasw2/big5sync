@@ -17,11 +17,19 @@ namespace Syncless.Notification.UINotification
             get { return _progress; }
             set { _progress = value; }
         }
+        private string _tagName;
 
-        public SyncStartNotification()
+        public string TagName
+        {
+            get { return _tagName; }
+            set { _tagName = value; }
+        }
+
+        public SyncStartNotification(string tagName)
             : base("Sync Start Notification", Syncless.Notification.NotificationCode.SYNC_COMPLETE_NOTIFICATION)
         {
             _progress = new SyncProgress();
+            _tagName = tagName;
         }
 
     }

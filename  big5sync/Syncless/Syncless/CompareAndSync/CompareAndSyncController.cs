@@ -6,6 +6,9 @@ using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Visitor;
 using Syncless.Filters;
+using Syncless.Notification.UINotification;
+using Syncless.Notification;
+using Syncless.Core;
 
 namespace Syncless.CompareAndSync
 {
@@ -53,11 +56,22 @@ namespace Syncless.CompareAndSync
         public RootCompareObject SyncFolders(ManualSyncRequest request)
         {
             CreateRootIfNotExist(request.Paths);
+            SyncStartNotification notification = new SyncStartNotification(request.TagName);
+            SyncProgress progress = notification.Progress;
+            ServiceLocator.UINotificationQueue().Enqueue(notification);
             RootCompareObject rco = new RootCompareObject(request.Paths);
+            progress.ChangeToAnalyzing();
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters));
             CompareObjectHelper.PreTraverseFolder(rco, new IgnoreMetaDataVisitor());
-            CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor());
-            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config));
+            ComparerVisitor visitor = new ComparerVisitor();
+            
+            CompareObjectHelper.PostTraverseFolder(rco, visitor);
+            int totalJobs = visitor.TotalNodes;
+            progress.ChangeToSyncing(totalJobs);
+            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config,progress));
+            progress.ChangeToFinalizing(0);
+            progress.ChangeToFinished();
+            ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification());
             return rco;
         }
 
