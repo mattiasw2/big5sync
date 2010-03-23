@@ -103,22 +103,38 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 if (file.ChangeType[i] == MetaChangeType.Delete)
                 {
-                    f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);      
-
-                    if (f != null)
+                    if (file.Todo[i].HasValue && file.Todo[i] == ToDo.Rename)
                     {
                         counter++;
-                        result = f;
                         resultPos = i;
+                    }
+                    else
+                    {
+                        f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);
+
+                        if (f != null)
+                        {
+                            counter++;
+                            result = f;
+                            resultPos = i;
+                        }
                     }
                 }
             }
 
             if (counter == 1)
             {
-                file.NewName = result.Name;
-                file.ChangeType[resultPos] = MetaChangeType.Rename;
-                result.Invalid = true;
+                if (result != null)
+                {
+                    file.NewName = result.Name;
+                    file.ChangeType[resultPos] = MetaChangeType.Rename;
+                    result.Invalid = true;
+                }
+                else
+                {
+                    file.NewName = file.TodoNewName[resultPos];
+                    file.ChangeType[resultPos] = MetaChangeType.Rename;
+                }
             }
 
         }

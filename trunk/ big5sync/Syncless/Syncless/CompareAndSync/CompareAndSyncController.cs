@@ -79,6 +79,7 @@ namespace Syncless.CompareAndSync
         public void PrepareForTermination()
         {
             SeamlessQueueControl.Instance.Dispose();
+            ManualQueueControl.Instance.Dispose();
         }
     }
 }
