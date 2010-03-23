@@ -9,6 +9,7 @@ namespace Syncless.Logging
     {
         SYNC,
         APPEVENT,
-        FSCHANGE
+        FSCHANGE,
+        UNKNOWN
     }
 }
