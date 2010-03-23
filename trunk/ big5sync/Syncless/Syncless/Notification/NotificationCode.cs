@@ -23,9 +23,6 @@ namespace Syncless.Notification
 
         public const string NEW_PROFILE_NOTIFICATION = "201";
         #endregion
-
-
-
-
+        
     }
 }
