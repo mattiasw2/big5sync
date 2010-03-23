@@ -873,7 +873,7 @@ namespace Syncless.Core
             if (filterPaths[0].Count != 0)
             {
                 SyncConfig syncConfig = new SyncConfig(tag.ArchiveName, tag.ArchiveCount, tag.Recycle);
-                ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), filterPaths[1].ToArray(), tag.Filters, syncConfig);
+                ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), tag.Filters, syncConfig);
 
                 CompareAndSyncController.Instance.Sync(syncRequest);
             }
