@@ -14,7 +14,12 @@ namespace Syncless.Logging
         public override void Write(object message)
         {
             Debug.Assert(message is Exception);
-            log.Info(message);
+            Exception e = (Exception)message;
+            log.Info("------------------------------------------------");
+            log.Info(e.GetType().FullName);
+            log.Info("\n");
+            log.Info(e.ToString());
+            log.Info("------------------------------------------------");
         }
     }
 }

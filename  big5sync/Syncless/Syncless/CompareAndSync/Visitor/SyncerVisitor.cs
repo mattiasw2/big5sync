@@ -146,13 +146,13 @@ namespace Syncless.CompareAndSync.Visitor
                         {
                             fco.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                         catch (CopyFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
                             //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e.ToString());
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
                     }
                     else
