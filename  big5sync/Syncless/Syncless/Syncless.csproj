@@ -80,6 +80,10 @@
     <Compile Include="CompareAndSync\Request\ManualRequest.cs" />
     <Compile Include="CompareAndSync\Request\ManualSyncRequest.cs" />
     <Compile Include="CompareAndSync\Request\Request.cs" />
+    <Compile Include="CompareAndSync\Result\CompareConflictResult.cs" />
+    <Compile Include="CompareAndSync\Result\ConflictResult.cs" />
+    <Compile Include="CompareAndSync\Result\Result.cs" />
+    <Compile Include="CompareAndSync\Result\SyncConflictResult.cs" />
     <Compile Include="CompareAndSync\SeamlessQueueControl.cs" />
     <Compile Include="CompareAndSync\SeamlessSyncer.cs" />
     <Compile Include="CompareAndSync\SyncConfig.cs" />
@@ -197,9 +201,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\log4net.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="CompareAndSync\CompareAndSync.cd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Notification\Exceptions\" />
