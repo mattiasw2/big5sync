@@ -261,15 +261,6 @@ namespace Syncless.CompareAndSync.Visitor
                 if (file.ChangeType[posExists] == MetaChangeType.New || file.ChangeType[posExists] == MetaChangeType.Update)
                     file.Parent.Dirty = true;
             }
-
-            //for (int i = 0; i < numOfPaths; i++)
-            //{
-            //    if (file.Exists[i] && file.Priority[i] != file.Priority[mostUpdatedPos])
-            //    {
-            //        file.Parent.Dirty = true;
-            //        break;
-            //    }
-            //}
         }
 
         #endregion
