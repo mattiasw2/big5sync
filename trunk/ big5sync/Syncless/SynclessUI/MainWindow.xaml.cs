@@ -98,13 +98,16 @@ namespace SynclessUI
             }
         }
 
+        /*
         public double SyncProgressPercentage
         { get { 
             if(selectedTag != null)
                 return getSyncProgress(selectedTag).PercentComplete;
-
+            else
+                return get
           } 
         }
+        */
 
         public SyncProgress getSyncProgress(string tagname)
         {
