@@ -131,7 +131,7 @@ namespace Syncless.Core
                 if (!newConnectedDrives.Contains(de.Key))
                 {
                     DriveInfo drive = (DriveInfo)de.Value;
-                    DriveChangeEvent dce = new DriveChangeEvent(DriveChangeType.DRIVE_OUT, drive, drive.Name);
+                    DriveChangeEvent dce = new DriveChangeEvent(DriveChangeType.DRIVE_OUT, drive);
                     ServiceLocator.MonitorI.HandleDriveChange(dce);
                     Console.WriteLine(drive.Name + " removed.");
                 }
