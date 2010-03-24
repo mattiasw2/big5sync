@@ -39,7 +39,7 @@ namespace SynclessUI
         private NotificationWatcher notificationWatcher;
         private PriorityNotificationWatcher priorityNotificationWatcher;
 
-        private string _selectedTag
+        public string _selectedTag
         {
             get { return (string)Application.Current.Properties["SelectedTag"]; }
             set { Application.Current.Properties["SelectedTag"] = value; }
@@ -373,7 +373,7 @@ namespace SynclessUI
 
                     this.Close();
                 }
-                notificationWatcher = new NotificationWatcher();
+                notificationWatcher = new NotificationWatcher(this);
                 notificationWatcher.Start();
                 priorityNotificationWatcher = new PriorityNotificationWatcher();
                 priorityNotificationWatcher.Start();
@@ -600,6 +600,7 @@ namespace SynclessUI
 			BtnSyncMode.SetResourceReference(Control.BackgroundProperty, "ToggleOnBrush");
             LblSyncMode.SetResourceReference(Control.MarginProperty, "ToggleOnMargin");
 			LblSyncMode.SetResourceReference(Control.ForegroundProperty, "ToggleOnForeground");
+            ProgressBarSync.Visibility = System.Windows.Visibility.Hidden;
         }
 
         private void ManualMode()
@@ -611,6 +612,7 @@ namespace SynclessUI
             BtnSyncMode.SetResourceReference(Control.BackgroundProperty, "ToggleOffBrush");
             LblSyncMode.SetResourceReference(Control.MarginProperty, "ToggleOffMargin");
 			LblSyncMode.SetResourceReference(Control.ForegroundProperty, "ToggleOffForeground");
+            ProgressBarSync.Visibility = System.Windows.Visibility.Visible;
         }
 
         private void BtnSyncNow_Click(object sender, System.Windows.RoutedEventArgs e)

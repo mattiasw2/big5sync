@@ -58,7 +58,7 @@
 			<RowDefinition Height="20"/>
 			<RowDefinition Height="50"/>
 			<RowDefinition Height="60"/>
-			<RowDefinition Height="250"/>
+			<RowDefinition Height="*"/>
 			<RowDefinition Height="20"/>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
@@ -128,12 +128,12 @@
 			</StackPanel>
 		</dropShadow:SystemDropShadowChrome>
 		<!-- Tag Info Panel -->
-		<Grid x:Name="TagInfoLayoutRoot" Grid.Row="3" Grid.Column="1" Grid.RowSpan="1" Grid.ColumnSpan="1" Height="250" VerticalAlignment="Top">
+		<Grid x:Name="TagInfoLayoutRoot" Grid.Row="3" Grid.Column="1" Grid.RowSpan="1" Grid.ColumnSpan="1" Height="275" VerticalAlignment="Top">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="20"/>
 				<RowDefinition Height="30"/>
 				<RowDefinition Height="*"/>
-				<RowDefinition Height="25"/>
+				<RowDefinition Height="50"/>
 				<RowDefinition Height="10"/>
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
@@ -159,10 +159,12 @@
 			<Image x:Name="TagIcon" Source="Icons\folder.ico" HorizontalAlignment="Right" Margin="0,0,-5,0" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="3" VerticalAlignment="Top" d:LayoutOverrides="HorizontalMargin" Grid.ColumnSpan="2" Cursor="Hand" ToolTip="Click to Access Tag Details" MouseLeftButtonDown="TagIcon_MouseLeftButtonDown"/>
 			
 			<!-- Tag Status Panel -->
-			<StackPanel x:Name="TagStatusPanel" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Visibility="Hidden">
+			<StackPanel x:Name="TagStatusPanel" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
 				<Label x:Name="LblStatusTitle" FontSize="10.667" FontFamily="Century Gothic" FontWeight="Bold" Content="Status:" Foreground="White"/>
 				<Label x:Name="LblStatusText" FontFamily="Century Gothic" FontSize="10.667" Content="[Status Text]" Foreground="White"/> 
 			</StackPanel>
+			<ProgressBar x:Name="ProgressBarSync" Margin="5,0,0,0" VerticalAlignment="Top" Height="20" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3"/>
+			<Label x:Name="LblProgress" Content="{Binding Value, ElementName=ProgressBarSync, Mode=Default}" ContentStringFormat="{} {0:0.##} %" d:LayoutOverrides="Width, Height" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,-4,0,0"/>
 			
 			<!-- Tag Sync Panel -->
 			<StackPanel x:Name="SyncPanel" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Top" Width="80">
@@ -267,7 +269,7 @@
 		</Grid>
 		
 		<!-- Tag List Info Panel -->
-		<Grid x:Name="TagListLayoutRoot" Grid.Row="3" Grid.Column="3" Grid.RowSpan="1" Grid.ColumnSpan="1" Height="250" VerticalAlignment="Top">
+		<Grid x:Name="TagListLayoutRoot" Grid.Row="3" Grid.Column="3" Grid.RowSpan="1" Grid.ColumnSpan="1" VerticalAlignment="Top">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="20"/>
 				<RowDefinition Height="30"/>
@@ -299,7 +301,7 @@
 						<GradientStop Color="#FF828790" Offset="1"/>
 					</LinearGradientBrush>
 				</TextBox.BorderBrush></TextBox>
-			<ListBox x:Name="ListBoxTag" Margin="0,10,0,0" Grid.Column="1" Grid.Row="3" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White" SelectionChanged="ListBoxTag_SelectionChanged" MaxHeight="155" ItemContainerStyle="{DynamicResource TooltipListBoxItemStyle}" Height="155" Width="195" VerticalAlignment="Top" Style="{DynamicResource TagListBoxStyle}"/>
+			<ListBox x:Name="ListBoxTag" Margin="0,10,0,0" Grid.Column="1" Grid.Row="3" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White" SelectionChanged="ListBoxTag_SelectionChanged" MaxHeight="180" ItemContainerStyle="{DynamicResource TooltipListBoxItemStyle}" Height="180" Width="195" VerticalAlignment="Top" Style="{DynamicResource TagListBoxStyle}"/>
 			<Label x:Name="LblTagCount" Grid.Row="1" Grid.Column="0" Foreground="#FFEEEEEE" Content="[Count]" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,4,0,4" Margin="50,0,2,0" FontSize="13.333" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
 			<Image x:Name="ImgFilter" HorizontalAlignment="Left" Margin="2,0,0,-1" Width="16" Grid.Column="1" Source="Icons/filter.ico" Stretch="Fill" Grid.Row="2" Height="16"/>
 		</Grid>		
@@ -326,6 +328,6 @@
 				</ContextMenu>
 			</tb:TaskbarIcon.ContextMenu>
 		</tb:TaskbarIcon>
-		<Image x:Name="DropIndicator" Margin="0" Width="224" Grid.RowSpan="5" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.9" Height="224" Panel.ZIndex="1" Source="Icons/dropindicator.ico" Visibility="Hidden"/>
+		<Image x:Name="DropIndicator" Margin="0" Width="224" Grid.RowSpan="5" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center" Height="224" Panel.ZIndex="1" Source="Icons/dropindicator.ico" Visibility="Hidden"/>
 	</Grid>
 </Window>
