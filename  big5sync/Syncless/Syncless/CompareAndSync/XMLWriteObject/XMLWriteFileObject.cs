@@ -13,14 +13,14 @@ namespace Syncless.CompareAndSync.XMLWriteObject
         private long _lastModified;       
 
         //Delete
-        public XMLWriteFileObject(string name, string fullPath, MetaChangeType changeType)
-            : base(name, fullPath, changeType)
+        public XMLWriteFileObject(string name, string fullPath, MetaChangeType changeType, long metaUpdated)
+            : base(name, fullPath, changeType, metaUpdated)
         {
         }
 
         //Update, create
-        public XMLWriteFileObject(string name, string fullPath, string hash, long size, long creationTime, long modifiedTime, MetaChangeType changeType)
-            : base(name, fullPath, creationTime, changeType)
+        public XMLWriteFileObject(string name, string fullPath, string hash, long size, long creationTime, long modifiedTime, MetaChangeType changeType, long metaUpdated)
+            : base(name, fullPath, creationTime, changeType, metaUpdated)
         {
             _size = size;
             _hash = hash;
@@ -28,8 +28,8 @@ namespace Syncless.CompareAndSync.XMLWriteObject
         }
 
         //Rename
-        public XMLWriteFileObject(string name, string newName, string fullPath, string hash, long size, long creationTime, long modifiedTime, MetaChangeType changeType)
-            : base(name, newName, fullPath, creationTime, changeType)
+        public XMLWriteFileObject(string name, string newName, string fullPath, string hash, long size, long creationTime, long modifiedTime, MetaChangeType changeType, long metaUpdated)
+            : base(name, newName, fullPath, creationTime, changeType, metaUpdated)
         {
             _size = size;
             _hash = hash;
