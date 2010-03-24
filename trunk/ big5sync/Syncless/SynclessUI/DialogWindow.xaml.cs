@@ -30,6 +30,7 @@ namespace SynclessUI
 
             ImgIcon.Source = GetSystemImage(mbimg);
 			DisplayCommandPanel(mbimg);
+            PlayDialogSound(mbimg);
 
             /*
             Uri uri = new Uri(@"pack://application:,,,/Sounds/MorganPage_FightForYou.mp3");
@@ -56,6 +57,19 @@ namespace SynclessUI
 				    break;
 			}
 		}
+
+        private void PlayDialogSound(MessageBoxImage icon)
+        {
+            switch (icon)
+            {
+                case MessageBoxImage.Error:
+                    SystemSounds.Beep.Play();
+                    break;
+                case MessageBoxImage.Exclamation:
+                    SystemSounds.Exclamation.Play();
+                    break;
+            }
+        }
 		
 		private static ImageSource GetSystemImage(MessageBoxImage icon)
 		{

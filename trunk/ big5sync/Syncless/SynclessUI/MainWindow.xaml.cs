@@ -24,6 +24,7 @@ using System.Windows.Media.Media3D;
 using Syncless.Notification;
 using SynclessUI.Notification;
 using Syncless.Core.View;
+using Hardcodet.Wpf.TaskbarNotification;
 
 namespace SynclessUI
 {
@@ -130,6 +131,7 @@ namespace SynclessUI
             }
 
             this._syncStatusNotificationDictionary[tagname] = message;
+            this.notifyBalloon("Synchronization Started", tagname + " is being synchronized.");
         }
 
         public void notifySyncCompletion(string tagname)
@@ -142,6 +144,7 @@ namespace SynclessUI
             }
 
             this._syncStatusNotificationDictionary[tagname] = message;
+            this.notifyBalloon("Synchronization Completed", tagname + " is now synchronized.");
         }
 
         public double getSyncProgressPercentage(string tagname)
@@ -185,6 +188,11 @@ namespace SynclessUI
             }
 
             ProgressBarSync.Foreground = new SolidColorBrush(Color.FromArgb(255, rcolor, gcolor, bcolor));
+        }
+
+        private void notifyBalloon(string title, string text)
+        {
+            this.TaskbarIcon.ShowBalloonTip(title, text, BalloonIcon.Info);
         }
         
         #region Keyboard Shortcuts
