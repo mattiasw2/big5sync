@@ -521,7 +521,7 @@ namespace SynclessUI
                 if (_syncProgressNotificationDictionary.ContainsKey(tagname))
                 {
                     double percentageComplete= getSyncProgressPercentage(tagname);
-                    setProgressBarColor(progress.PercentComplete);
+                    setProgressBarColor(percentageComplete);
                     string status = getSyncStatus(tagname);
 
                     ProgressBarSync.Value = percentageComplete;
