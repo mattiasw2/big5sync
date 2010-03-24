@@ -7,15 +7,21 @@ using System.Threading;
 using Syncless.Core;
 using Syncless.Notification.UINotification;
 using SynclessUI.Notification;
+using SynclessUI;
 
 namespace SynclessUI.Notification
 {
     internal class NotificationWatcher : IQueueObserver
     {
+        private MainWindow _main;
+
         private const int SLEEP_TIME = 10000;
         private Thread workerThread;
-        public NotificationWatcher()
+        
+        public NotificationWatcher(MainWindow main)
         {
+            _main = main;
+
             ServiceLocator.UINotificationQueue().AddObserver(this);
 
             workerThread = new Thread(Run);
@@ -77,10 +83,9 @@ namespace SynclessUI.Notification
                 SyncStartNotification ssNotification = notification as SyncStartNotification;
                 if (ssNotification != null)
                 {
-                    SyncProgressWatcher watcher = new SyncProgressWatcher(ssNotification.Progress);
+                    SyncProgressWatcher watcher = new SyncProgressWatcher(_main, ssNotification.TagName, ssNotification.Progress);
                 }
             }
         }
-
     }
 }
