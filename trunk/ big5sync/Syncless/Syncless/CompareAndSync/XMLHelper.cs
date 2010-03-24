@@ -169,6 +169,7 @@ namespace Syncless.CompareAndSync
         private static void RenameFile(XMLWriteFileObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
+            XmlNode tempNode = null;
             string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, METADATAPATH);
             CreateFileIfNotExist(xmlWriteObj.FullPath);
             CommonMethods.LoadXML(ref xmlDoc, xmlFilePath);
@@ -176,8 +177,10 @@ namespace Syncless.CompareAndSync
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
             if (node == null)
                 return;
+            tempNode = node.Clone();
             node.FirstChild.InnerText = xmlWriteObj.NewName;
             CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
+            GenerateFileTodo(xmlWriteObj, tempNode);
         }
 
         private static void DeleteFile(XMLWriteFileObject xmlWriteObj)
