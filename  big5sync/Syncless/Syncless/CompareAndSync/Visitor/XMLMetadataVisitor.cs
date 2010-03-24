@@ -485,10 +485,43 @@ namespace Syncless.CompareAndSync.Visitor
         private FolderCompareObject PopulateFolderWithMetaData(XmlDocument xmlDoc, FolderCompareObject folder, int counter)
         {
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
-            if (node == null)
-                return folder;
-
-            folder.MetaExists[counter] = true;
+            if (node != null)
+            {
+                folder.MetaExists[counter] = true;
+            }
+            else
+            {
+                string path = Path.Combine(folder.GetSmartParentPath(counter), TODOPATH);
+                if (File.Exists(path))
+                {
+                    XmlDocument todoXMLDoc = new XmlDocument();
+                    CommonMethods.LoadXML(ref todoXMLDoc, path);
+                    XmlNode todoNode = todoXMLDoc.SelectSingleNode("/" + LAST_KNOWN_STATE + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
+                    if (todoNode != null)
+                    {
+                        XmlNodeList nodeList = todoNode.ChildNodes;
+                        for (int i = 0; i < nodeList.Count; i++)
+                        {
+                            XmlNode childNode = nodeList[i];
+                            switch (childNode.Name)
+                            {
+                                case ACTION:
+                                    string action = childNode.InnerText;
+                                    if (action.Equals("Deleted"))
+                                    {
+                                        folder.ToDoAction[counter] = LastKnownState.Deleted;
+                                    }
+                                    else
+                                    {
+                                        folder.ToDoAction[counter] = LastKnownState.Renamed;
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            
             return folder;
         }
 
