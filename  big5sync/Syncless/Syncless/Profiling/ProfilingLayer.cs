@@ -226,7 +226,10 @@ namespace Syncless.Profiling
         {
 
             ProfilingXMLHelper.SaveProfile(_profile, savedLocation[0]);
-
+            List<string> newLocations = new List<string>();
+            newLocations.AddRange(savedLocation);
+            newLocations.Remove(savedLocation[0]);
+            ProfilingXMLHelper.AppendProfile(_profile, newLocations);
         }
         /// <summary>
         /// Initialize the Profiling Layer.
