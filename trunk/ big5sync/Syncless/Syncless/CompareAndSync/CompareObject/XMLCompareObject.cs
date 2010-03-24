@@ -12,14 +12,16 @@ namespace Syncless.CompareAndSync.CompareObject
         private long createdTime;
         private long lastModifiedTime;
         private string hash;
+        private long lastUpdatedTime;
 
-        public XMLCompareObject(string newName, string newHash, long newSize, long newCreatedTime, long newModifiedTime)
+        public XMLCompareObject(string newName, string newHash, long newSize, long newCreatedTime, long newModifiedTime , long newUpdatedTime)
         {
             size = newSize;
             name = newName;
             hash = newHash;
             createdTime = newCreatedTime;
             lastModifiedTime = newModifiedTime;
+            lastUpdatedTime = newUpdatedTime;
         }
 
         public string Name
@@ -52,6 +54,10 @@ namespace Syncless.CompareAndSync.CompareObject
             set { createdTime = value; }
         }
 
-
+        public long LastUpdatedTime
+        {
+            get { return lastUpdatedTime; }
+            set { lastUpdatedTime = value; }
+        }
     }
 }

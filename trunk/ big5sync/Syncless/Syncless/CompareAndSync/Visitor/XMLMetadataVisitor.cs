@@ -22,6 +22,7 @@ namespace Syncless.CompareAndSync.Visitor
         private const string NODE_HASH = "hash";
         private const string NODE_LAST_MODIFIED = "last_modified";
         private const string NODE_LAST_CREATED = "last_created";
+        private const string NODE_LAST_UPDATED = "last_updated";
         private const string FILES = "files";
         private const string ACTION = "action";
         private const string LAST_UPDATED = "last_updated";
@@ -187,6 +188,11 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         file.MetaCreationTime[counter] = long.Parse(childNode.InnerText);
                     }
+                    else if (childNode.Name.Equals(NODE_LAST_UPDATED))
+                    {
+                        file.MetaUpdated[counter] = long.Parse(childNode.InnerText);
+                    }
+                    
                 }
 
                 file.MetaExists[counter] = true;
@@ -218,11 +224,14 @@ namespace Syncless.CompareAndSync.Visitor
                                         file.ToDoAction[counter] = LastKnownState.Renamed;
                                     }
                                     break;
-                                case LAST_UPDATED:
+                                case NODE_LAST_MODIFIED:
                                     file.MetaLastWriteTime[counter] = long.Parse(childNode.InnerText);
                                     break;
                                 case NODE_HASH:
                                     file.MetaHash[counter] = childNode.InnerText;
+                                    break;
+                                case NODE_LAST_UPDATED:
+                                    file.MetaUpdated[counter] = long.Parse(childNode.InnerText);
                                     break;
                             }
                         }
@@ -240,6 +249,7 @@ namespace Syncless.CompareAndSync.Visitor
             long size = 0;
             long createdTime = 0;
             long modifiedTime = 0;
+            long updatedTime = 0;
 
             List<XMLCompareObject> objectList = new List<XMLCompareObject>();
             XmlNodeList xmlNodeList = xmlDoc.SelectNodes(XPATH_EXPR + "/files");
@@ -268,9 +278,12 @@ namespace Syncless.CompareAndSync.Visitor
                         case NODE_LAST_MODIFIED:
                             modifiedTime = long.Parse(node.InnerText);
                             break;
+                        case NODE_LAST_UPDATED:
+                            updatedTime = long.Parse(node.InnerText);
+                            break;
                     }
                 }
-                objectList.Add(new XMLCompareObject(name, hash, size, createdTime, modifiedTime));
+                objectList.Add(new XMLCompareObject(name, hash, size, createdTime, modifiedTime , updatedTime));
             }
 
             return objectList;
@@ -352,6 +365,7 @@ namespace Syncless.CompareAndSync.Visitor
                 fco.MetaHash[counter] = xmlFileList[i].Hash;
                 fco.MetaLastWriteTime[counter] = xmlFileList[i].LastModifiedTime;
                 fco.MetaLength[counter] = xmlFileList[i].Size;
+                fco.MetaUpdated[counter] = xmlFileList[i].LastUpdatedTime;
                 fco.MetaExists[counter] = true;
 
                 if (o == null)
@@ -398,6 +412,7 @@ namespace Syncless.CompareAndSync.Visitor
                 fco.MetaHash[counter] = xmlFileList[i].Hash;
                 fco.MetaLastWriteTime[counter] = xmlFileList[i].LastModifiedTime;
                 fco.MetaLength[counter] = xmlFileList[i].Size;
+                fco.MetaUpdated[counter] = xmlFileList[i].LastUpdatedTime;
                 fco.MetaExists[counter] = true;
 
                 if (o == null)
@@ -516,6 +531,9 @@ namespace Syncless.CompareAndSync.Visitor
                                     {
                                         folder.ToDoAction[counter] = LastKnownState.Renamed;
                                     }
+                                    break;
+                                case NODE_LAST_UPDATED:
+                                    folder.MetaUpdated[counter] = long.Parse(childNode.InnerText);
                                     break;
                             }
                         }

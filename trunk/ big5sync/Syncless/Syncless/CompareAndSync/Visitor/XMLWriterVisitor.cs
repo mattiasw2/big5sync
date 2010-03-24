@@ -39,6 +39,7 @@ namespace Syncless.CompareAndSync.Visitor
         private const string DELETE = "Delete";
         private const string DELETED = "Deleted";
         private const int FIRST_POSITION = 0;
+        private long dateTime = DateTime.Now.Ticks;
         //private static readonly object syncLock = new object();
         private string[] pathList;
 
@@ -60,6 +61,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(FileCompareObject file, int numOfPaths)
         {
+            
             for (int i = 0; i < numOfPaths; i++) // HANDLE ALL EXCEPT PROPAGATED
             {
                 ProcessMetaChangeType(file, i);
@@ -186,6 +188,7 @@ namespace Syncless.CompareAndSync.Visitor
             XmlText sizeText = xmlDoc.CreateTextNode(file.Length[position].ToString());
             XmlText lastModifiedText = xmlDoc.CreateTextNode(file.LastWriteTime[counter].ToString());
             XmlText lastCreatedText = xmlDoc.CreateTextNode(file.CreationTime[counter].ToString());
+            XmlText lastUpdated = xmlDoc.CreateTextNode(dateTime.ToString());
 
             XmlElement fileElement = xmlDoc.CreateElement(FILES);
             XmlElement hashElement = xmlDoc.CreateElement(NODE_HASH);
@@ -193,18 +196,21 @@ namespace Syncless.CompareAndSync.Visitor
             XmlElement sizeElement = xmlDoc.CreateElement(NODE_SIZE);
             XmlElement lastModifiedElement = xmlDoc.CreateElement(NODE_LAST_MODIFIED);
             XmlElement lastCreatedElement = xmlDoc.CreateElement(NODE_LAST_CREATED);
+            XmlElement lastUpdatedElement = xmlDoc.CreateElement(NODE_LAST_UPDATED);
 
             hashElement.AppendChild(hashText);
             nameElement.AppendChild(nameText);
             sizeElement.AppendChild(sizeText);
             lastModifiedElement.AppendChild(lastModifiedText);
             lastCreatedElement.AppendChild(lastCreatedText);
+            lastUpdatedElement.AppendChild(lastUpdated);
 
             fileElement.AppendChild(nameElement);
             fileElement.AppendChild(sizeElement);
             fileElement.AppendChild(hashElement);
             fileElement.AppendChild(lastModifiedElement);
             fileElement.AppendChild(lastCreatedElement);
+            fileElement.AppendChild(lastUpdatedElement);
 
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR);
             node.AppendChild(fileElement);
@@ -255,6 +261,10 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     nodes.InnerText = file.CreationTime[counter].ToString();
                 }
+                else if (nodes.Name.Equals(NODE_LAST_UPDATED))
+                {
+                    nodes.InnerText = dateTime.ToString();
+                }
             }
 
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
@@ -275,7 +285,7 @@ namespace Syncless.CompareAndSync.Visitor
                 return;
             }
             node.FirstChild.InnerText = file.NewName;
-
+            node.LastChild.InnerText = dateTime.ToString();
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
         }
 
@@ -295,6 +305,7 @@ namespace Syncless.CompareAndSync.Visitor
 
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
+
             GenerateFileTodo(file, counter);
         }
 
@@ -417,12 +428,18 @@ namespace Syncless.CompareAndSync.Visitor
 
             DoFolderCleanUp(xmlDoc, folder.Name);
             XmlText nameText = xmlDoc.CreateTextNode(folder.Name);
-            XmlElement nameOfFolder = xmlDoc.CreateElement(NODE_NAME);
-            XmlElement nameElement = xmlDoc.CreateElement(FOLDER);
-            nameOfFolder.AppendChild(nameText);
-            nameElement.AppendChild(nameOfFolder);
+            XmlText lastUpdatedText = xmlDoc.CreateTextNode(dateTime.ToString());
+            XmlElement nameElement = xmlDoc.CreateElement(NODE_NAME);
+            XmlElement lastUpdatedElement = xmlDoc.CreateElement(NODE_LAST_UPDATED);
+            XmlElement folderElement = xmlDoc.CreateElement(FOLDER);
+
+            nameElement.AppendChild(nameText);
+            lastUpdatedElement.AppendChild(lastUpdatedText);
+            folderElement.AppendChild(nameElement);
+            folderElement.AppendChild(lastUpdatedElement);
+
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR);
-            node.AppendChild(nameElement);
+            node.AppendChild(folderElement);
 
             string subFolderXML = Path.Combine(folder.GetSmartParentPath(counter), folder.Name);
             CreateFileIfNotExist(subFolderXML);
@@ -448,7 +465,7 @@ namespace Syncless.CompareAndSync.Visitor
                 }
 
                 node.FirstChild.InnerText = folder.NewName;
-
+                node.LastChild.InnerText = dateTime.ToString();
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
             else
@@ -467,7 +484,7 @@ namespace Syncless.CompareAndSync.Visitor
                 CommonMethods.LoadXML(ref parentXmlDoc, parentXML);
                 XmlNode parentXmlFolderNode = parentXmlDoc.SelectSingleNode(XPATH_EXPR + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
                 parentXmlFolderNode.FirstChild.InnerText = folder.NewName;
-
+                parentXmlFolderNode.LastChild.InnerText = dateTime.ToString();
                 CommonMethods.SaveXML(ref parentXmlDoc, Path.Combine(folder.GetSmartParentPath(counter), METADATAPATH));
             }
         }
@@ -535,21 +552,25 @@ namespace Syncless.CompareAndSync.Visitor
             XmlText actionText = xmlDoc.CreateTextNode(changeType);
             XmlText lastModifiedText = xmlDoc.CreateTextNode(file.MetaLastWriteTime[counter].ToString());
             XmlText nameText = xmlDoc.CreateTextNode(file.Name);
+            XmlText lastUpdatedText = xmlDoc.CreateTextNode(dateTime.ToString());
 
             XmlElement fileElement = xmlDoc.CreateElement(FILES);
             XmlElement nameElement = xmlDoc.CreateElement(NODE_NAME);
             XmlElement hashElement = xmlDoc.CreateElement(NODE_HASH);
             XmlElement actionElement = xmlDoc.CreateElement(ACTION);
+            XmlElement lastModifiedElement = xmlDoc.CreateElement(NODE_LAST_MODIFIED);
             XmlElement lastUpdatedElement = xmlDoc.CreateElement(NODE_LAST_UPDATED);
 
             hashElement.AppendChild(hashText);
             actionElement.AppendChild(actionText);
-            lastUpdatedElement.AppendChild(lastModifiedText);
+            lastModifiedElement.AppendChild(lastModifiedText);
             nameElement.AppendChild(nameText);
+            lastUpdatedElement.AppendChild(lastUpdatedText);
 
             fileElement.AppendChild(nameElement);
             fileElement.AppendChild(actionElement);
             fileElement.AppendChild(hashElement);
+            fileElement.AppendChild(lastModifiedElement);
             fileElement.AppendChild(lastUpdatedElement);
 
             if (changeType.Equals(RENAME))
@@ -571,16 +592,20 @@ namespace Syncless.CompareAndSync.Visitor
         {
             XmlText nameText = xmlDoc.CreateTextNode(folder.MetaName);
             XmlText action = xmlDoc.CreateTextNode(changeType);
+            XmlText lastUpdatedText = xmlDoc.CreateTextNode(dateTime.ToString());
 
             XmlElement folderElement = xmlDoc.CreateElement(FOLDER);
             XmlElement nameElement = xmlDoc.CreateElement(NODE_NAME);
             XmlElement actionElement = xmlDoc.CreateElement(ACTION);
+            XmlElement lastUpdatedElement = xmlDoc.CreateElement(NODE_LAST_UPDATED);
 
             nameElement.AppendChild(nameText);
             actionElement.AppendChild(action);
+            lastUpdatedElement.AppendChild(lastUpdatedText);
+
             folderElement.AppendChild(nameElement);
             folderElement.AppendChild(actionElement);
-
+            folderElement.AppendChild(lastUpdatedElement);
             XmlNode rootNode = xmlDoc.SelectSingleNode("/" + LAST_KNOWN_STATE);
             rootNode.AppendChild(folderElement);
         }
