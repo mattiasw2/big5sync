@@ -141,11 +141,28 @@ namespace Syncless.CompareAndSync.Visitor
         {
             //Delete will only occur if all other changes are MetaChangeType.NoChange or null
             List<int> deletePos = new List<int>();
-
+            bool stop = false;            
             for (int i = 0; i < numOfPaths; i++)
             {
+                if (stop)
+                    break;
+
                 if (file.ChangeType[i] == MetaChangeType.Delete)
+                {
+                    for (int j = 0; j < numOfPaths; i++)
+                    {
+                        if (file.Exists[j])
+                        {
+                            if (file.MetaUpdated[j] > file.MetaUpdated[i])
+                            {
+                                deletePos.Clear();
+                                stop = true;
+                                break;
+                            }
+                        }
+                    }
                     deletePos.Add(i);
+                }
                 else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null)
                 {
                     deletePos.Clear();
