@@ -13,9 +13,12 @@ namespace Syncless.CompareAndSync
         private List<Thread> threads = new List<Thread>();
         private int threadsToUse = 1;
         private object locker = new object();
-        private Queue<ManualRequest> jobs = new Queue<ManualRequest>();
+        private Queue<ManualSyncRequest> jobs = new Queue<ManualSyncRequest>();
         private EventWaitHandle wh = new AutoResetEvent(false);
         private static ManualQueueControl _instance;
+
+        private string _currJobName;
+        private HashSet<string> _queuedJobs = new HashSet<string>();
 
         private ManualQueueControl()
         {
@@ -45,11 +48,17 @@ namespace Syncless.CompareAndSync
         //    get { return threadsToUse; }
         //}
 
-        public void AddSyncJob(ManualRequest item)
+        public string CurrJob
+        {
+            get { return _currJobName; }
+        }
+
+        public void AddSyncJob(ManualSyncRequest item)
         {
             lock (locker)
             {
                 jobs.Enqueue(item);
+                _queuedJobs.Add(item.TagName);
             }
             wh.Set();
         }
@@ -58,22 +67,23 @@ namespace Syncless.CompareAndSync
         {
             while (true)
             {
-                ManualRequest item = null;
+                ManualSyncRequest item = null;
                 lock (locker)
                 {
                     if (jobs.Count > 0)
                     {
                         item = jobs.Dequeue();
+                        _queuedJobs.Remove(item.TagName);
+                        _currJobName = item.TagName;
+
                         if (item == null)
                             return;
                     }
                 }
                 if (item != null)
                 {
-                    if (item is ManualSyncRequest)
-                        ManualSyncer.Sync(item as ManualSyncRequest);
-                    else
-                        ManualSyncer.Compare(item as ManualCompareRequest);
+                    ManualSyncer.Sync(item);
+                    _currJobName = null;
                 }
                 else
                 {
@@ -85,6 +95,24 @@ namespace Syncless.CompareAndSync
         public bool IsEmpty
         {
             get { return jobs.Count == 0; }
+        }
+
+        public bool IsQueued(string tagName)
+        {
+            if (string.IsNullOrEmpty(_currJobName))
+                return false;
+
+            return _queuedJobs.Contains(tagName);
+        }
+
+        public bool IsSyncing(string tagName)
+        {
+            return tagName.Equals(_currJobName);
+        }
+
+        public bool IsQueuedOrSyncing(string tagName)
+        {
+            return IsQueued(tagName) || IsSyncing(tagName);
         }
 
         public void Dispose()
