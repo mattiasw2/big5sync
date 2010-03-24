@@ -32,7 +32,7 @@ namespace Syncless.CompareAndSync.Visitor
         private const string NODE_LASTNAME = "last_name";
         private const string XPATH_EXPR = "/meta-data";
         private const string LAST_MODIFIED = "/last_modified";
-        private const string TODO = "todo";
+        private const string LAST_KNOWN_STATE = "last_known_state";
         private const string ACTION = "action";
         private const string RENAME = "Rename";
         private const string DELETE = "Delete";
@@ -275,7 +275,7 @@ namespace Syncless.CompareAndSync.Visitor
             string todoPath = Path.Combine(parentPath, TODOPATH);
             CreateTodoFile(parentPath);
             CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
-            AppendActionFileTodo(xmlTodoDoc, file, counter, "Delete");
+            AppendActionFileTodo(xmlTodoDoc, file, counter, "Deleted");
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
         }
 
@@ -498,7 +498,7 @@ namespace Syncless.CompareAndSync.Visitor
             XmlTextWriter writer = new XmlTextWriter(todoXML, null);
             writer.Formatting = Formatting.Indented;
             writer.WriteStartDocument();
-            writer.WriteStartElement(TODO);
+            writer.WriteStartElement(LAST_KNOWN_STATE);
             writer.WriteEndElement();
             writer.WriteEndDocument();
             writer.Flush();
@@ -509,19 +509,23 @@ namespace Syncless.CompareAndSync.Visitor
         {
             XmlText hashText = xmlDoc.CreateTextNode(file.MetaHash[counter]);
             XmlText actionText = xmlDoc.CreateTextNode(changeType);
-            XmlText lastUpdatedText = xmlDoc.CreateTextNode(DateTime.Now.Ticks.ToString());
+            XmlText lastModifiedText = xmlDoc.CreateTextNode(file.MetaLastWriteTime[counter].ToString());
+            XmlText nameText = xmlDoc.CreateTextNode(file.Name);
 
             XmlElement fileElement = xmlDoc.CreateElement(FILES);
+            XmlElement nameElement = xmlDoc.CreateElement(NODE_NAME);
             XmlElement hashElement = xmlDoc.CreateElement(NODE_HASH);
             XmlElement actionElement = xmlDoc.CreateElement(ACTION);
             XmlElement lastUpdatedElement = xmlDoc.CreateElement(NODE_LAST_UPDATED);
 
             hashElement.AppendChild(hashText);
             actionElement.AppendChild(actionText);
-            lastUpdatedElement.AppendChild(lastUpdatedText);
+            lastUpdatedElement.AppendChild(lastModifiedText);
+            nameElement.AppendChild(nameText);
 
-            fileElement.AppendChild(hashElement);
+            fileElement.AppendChild(nameElement);
             fileElement.AppendChild(actionElement);
+            fileElement.AppendChild(hashElement);
             fileElement.AppendChild(lastUpdatedElement);
 
             if (changeType.Equals(RENAME))
@@ -535,13 +539,8 @@ namespace Syncless.CompareAndSync.Visitor
                 fileElement.AppendChild(oldNameElement);
             }
 
-            XmlNode rootNode = xmlDoc.SelectSingleNode("/" + TODO);
+            XmlNode rootNode = xmlDoc.SelectSingleNode("/" + LAST_KNOWN_STATE);
             rootNode.AppendChild(fileElement);
-        }
-
-        private void AppendActionFolderTodo(XmlDocument xmlDoc, FolderCompareObject folder, int counter, string changeType)
-        {
-            
         }
 
         #endregion

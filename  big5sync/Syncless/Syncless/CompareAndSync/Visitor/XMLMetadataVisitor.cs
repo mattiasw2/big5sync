@@ -15,7 +15,7 @@ namespace Syncless.CompareAndSync.Visitor
         private const string META_DIR = ".syncless";
         private const string XML_NAME = @"\syncless.xml";
         private const string METADATAPATH = META_DIR + @"\syncless.xml";
-        private const string TODOPATH = @".syncless\syncless.xml";
+        private const string TODOPATH = @".syncless\todo.xml";
         private const string XPATH_EXPR = "/meta-data";
         private const string NODE_NAME = "name";
         private const string NODE_SIZE = "size";
@@ -25,6 +25,7 @@ namespace Syncless.CompareAndSync.Visitor
         private const string FILES = "files";
         private const string ACTION = "action";
         private const string LAST_UPDATED = "last_updated";
+        private const string LAST_KNOWN_STATE = "last_known_state";
         private static readonly object syncLock = new object();
 
         #region IVisitor Members
@@ -162,69 +163,73 @@ namespace Syncless.CompareAndSync.Visitor
         private FileCompareObject PopulateFileWithMetaData(XmlDocument xmlDoc, FileCompareObject file, int counter)
         {
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
-            if (node == null)
-                return file;
-
-            XmlNodeList childNodeList = node.ChildNodes;
-            for (int i = 0; i < childNodeList.Count; i++)
+            if (node != null)
             {
-                XmlNode childNode = childNodeList[i];
-                if (childNode.Name.Equals(NODE_SIZE))
-                {
-                    file.MetaLength[counter] = long.Parse(childNode.InnerText);
-                }
-                else if (childNode.Name.Equals(NODE_HASH))
-                {
-                    file.MetaHash[counter] = childNode.InnerText;
-                }
-                else if (childNode.Name.Equals(NODE_LAST_MODIFIED))
-                {
-                    file.MetaLastWriteTime[counter] = long.Parse(childNode.InnerText);
-                }
-                else if (childNode.Name.Equals(NODE_LAST_CREATED))
-                {
-                    file.MetaCreationTime[counter] = long.Parse(childNode.InnerText);
-                }
-            }
 
-            string path = Path.Combine(file.GetSmartParentPath(counter),TODOPATH);
-            if (File.Exists(path))
-            {
-                XmlDocument todoXML = new XmlDocument();
-                todoXML.Load(path);
-                XmlNode todoNode = todoXML.SelectSingleNode("/todo/file[hash='"+file.MetaHash[counter]+"']");
-                if (todoNode != null)
+                XmlNodeList childNodeList = node.ChildNodes;
+                for (int i = 0; i < childNodeList.Count; i++)
                 {
-                    XmlNodeList nodeList = todoNode.ChildNodes;
-                    for (int i = 0; i < nodeList.Count; i++)
+                    XmlNode childNode = childNodeList[i];
+                    if (childNode.Name.Equals(NODE_SIZE))
                     {
-                        XmlNode childNode = nodeList[i];
-                        switch (childNode.Name)
-                        {
-                            case ACTION:
-                                string action = childNode.InnerText;
-                                if (action.Equals("Delete"))
-                                {
-                                    file.ToDoAction[counter] = LastKnownState.Deleted;
-                                }
-                                else
-                                {
-                                    file.ToDoAction[counter] = LastKnownState.Renamed;
-                                }
-                                break;
-                            case LAST_UPDATED:
-                                file.ToDoTimestamp[counter] = long.Parse(node.InnerText);
-                                break;
-                        }
+                        file.MetaLength[counter] = long.Parse(childNode.InnerText);
+                    }
+                    else if (childNode.Name.Equals(NODE_HASH))
+                    {
+                        file.MetaHash[counter] = childNode.InnerText;
+                    }
+                    else if (childNode.Name.Equals(NODE_LAST_MODIFIED))
+                    {
+                        file.MetaLastWriteTime[counter] = long.Parse(childNode.InnerText);
+                    }
+                    else if (childNode.Name.Equals(NODE_LAST_CREATED))
+                    {
+                        file.MetaCreationTime[counter] = long.Parse(childNode.InnerText);
                     }
                 }
 
-      
+                file.MetaExists[counter] = true;
+
+            }else
+            {
+                string path = Path.Combine(file.GetSmartParentPath(counter),TODOPATH);
+                if (File.Exists(path))
+                {
+                    XmlDocument todoXMLDoc = new XmlDocument();
+                    CommonMethods.LoadXML(ref todoXMLDoc, path);
+                    XmlNode todoNode = todoXMLDoc.SelectSingleNode("/" + LAST_KNOWN_STATE + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
+                    if (todoNode != null)
+                    {
+                        XmlNodeList nodeList = todoNode.ChildNodes;
+                        for (int i = 0; i < nodeList.Count; i++)
+                        {
+                            XmlNode childNode = nodeList[i];
+                            switch (childNode.Name)
+                            {
+                                case ACTION:
+                                    string action = childNode.InnerText;
+                                    if (action.Equals("Deleted"))
+                                    {
+                                        file.ToDoAction[counter] = LastKnownState.Deleted;
+                                    }
+                                    else
+                                    {
+                                        file.ToDoAction[counter] = LastKnownState.Renamed;
+                                    }
+                                    break;
+                                case LAST_UPDATED:
+                                    file.ToDoLastModified[counter] = long.Parse(childNode.InnerText);
+                                    break;
+                                case NODE_HASH:
+                                    file.ToDoHash[counter] = childNode.InnerText;
+                                    break;
+                            }
+                        }
+                    }
+                }
             }
 
-            file.MetaExists[counter] = true;
             return file;
-
         }
 
         private List<XMLCompareObject> GetAllFilesInXML(XmlDocument xmlDoc)
