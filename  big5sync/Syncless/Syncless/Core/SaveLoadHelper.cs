@@ -12,14 +12,12 @@ namespace Syncless.Core
     {
         public static void SaveAll(string appPath)
         {
-            
             SaveProfiling(appPath);
             SaveTagging(appPath);
         }
 
         public static void LoadAll(string appPath)
         {
-            
             LoadProfiling(appPath);
             LoadTagging(appPath);
         }
@@ -34,17 +32,15 @@ namespace Syncless.Core
             DriveInfo[] drives = DriveInfo.GetDrives();
             foreach (DriveInfo d in drives)
             {
-                if (d.DriveType == DriveType.Removable)
+
+                string guid = d.Name + @"\" + @".syncless\guid.id";
+                if (File.Exists(guid))
                 {
-                    string guid = d.Name + @"\" + @".syncless\guid.id";
-                    if (File.Exists(guid))
+                    //if drive contain guid.
+                    string profilingxml = d.Name + @"\" + @".syncless\tagging.xml";
+                    if (File.Exists(profilingxml))
                     {
-                        //if drive contain guid.
-                        string profilingxml = d.Name + @"\" + @".syncless\tagging.xml";
-                        if (File.Exists(profilingxml))
-                        {
-                            locations.Add(profilingxml);
-                        }
+                        locations.Add(profilingxml);
                     }
                 }
             }
@@ -60,24 +56,23 @@ namespace Syncless.Core
             DriveInfo[] drives = DriveInfo.GetDrives();
             foreach (DriveInfo d in drives)
             {
-                if (d.DriveType == DriveType.Removable)
+
+                string guid = d.Name + @"\" + @".syncless\guid.id";
+                if (File.Exists(guid))
                 {
-                    string guid = d.Name + @"\" + @".syncless\guid.id";
-                    if (File.Exists(guid))
+                    //if drive contain guid.
+                    string profilingxml = d.Name + @"\" + @".syncless\profiling.xml";
+                    if (File.Exists(profilingxml))
                     {
-                        //if drive contain guid.
-                        string profilingxml = d.Name + @"\" + @".syncless\profiling.xml";
-                        if (File.Exists(profilingxml))
-                        {
-                            locations.Add(profilingxml);
-                        }
+                        locations.Add(profilingxml);
                     }
                 }
+
             }
             ProfilingLayer.Instance.Init(locations);
         }
         #endregion
-        
+
         #region private methods for Saving of Tagging and Profiling.
         private static void SaveTagging(string appPath)
         {
@@ -85,19 +80,15 @@ namespace Syncless.Core
             string rootPath = appPath + @"\" + TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH;
 
             savedLocation.Add(rootPath);
-            
+
             DriveInfo[] drives = DriveInfo.GetDrives();
             foreach (DriveInfo d in drives)
             {
-                if (d.DriveType == DriveType.Removable)
+                string guid = d.Name + @"\" + @".syncless\guid.id";
+                if (File.Exists(guid))
                 {
-                    string guid = d.Name + @"\" + @".syncless\guid.id";
-                    if (File.Exists(guid))
-                    {
-
-                        string profilingxml = d.Name + @"\" + @".syncless\tagging.xml";
-                        savedLocation.Add(profilingxml);
-                    }
+                    string profilingxml = d.Name + @"\" + @".syncless\tagging.xml";
+                    savedLocation.Add(profilingxml);
                 }
             }
 
@@ -114,19 +105,15 @@ namespace Syncless.Core
             DriveInfo[] drives = DriveInfo.GetDrives();
             foreach (DriveInfo d in drives)
             {
-                if (d.DriveType == DriveType.Removable)
+
+                string guid = d.Name + @"\" + @".syncless\guid.id";
+                if (File.Exists(guid))
                 {
-                    string guid = d.Name + @"\" + @".syncless\guid.id";
-                    if (File.Exists(guid))
-                    {
-                        
-                        string profilingxml = d.Name + @"\" + @".syncless\profiling.xml";
-                        savedLocation.Add(profilingxml);
-                    }
+
+                    string profilingxml = d.Name + @"\" + @".syncless\profiling.xml";
+                    savedLocation.Add(profilingxml);
                 }
             }
-
-
             ProfilingLayer.Instance.SaveTo(savedLocation);
         }
         #endregion
