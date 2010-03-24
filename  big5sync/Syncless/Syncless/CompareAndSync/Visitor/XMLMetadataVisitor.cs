@@ -75,6 +75,7 @@ namespace Syncless.CompareAndSync.Visitor
                 folder = PopulateFolderWithMetaData(xmlDoc, folder, i);
             }
             ProcessFolderMetaData(folder, numOfPaths);
+            ProcessToDo(folder, numOfPaths);
 
             DirectoryInfo dirInfo = null;
             FileInfo[] fileList = null;
@@ -218,10 +219,10 @@ namespace Syncless.CompareAndSync.Visitor
                                     }
                                     break;
                                 case LAST_UPDATED:
-                                    file.ToDoLastModified[counter] = long.Parse(childNode.InnerText);
+                                    file.MetaLastWriteTime[counter] = long.Parse(childNode.InnerText);
                                     break;
                                 case NODE_HASH:
-                                    file.ToDoHash[counter] = childNode.InnerText;
+                                    file.MetaHash[counter] = childNode.InnerText;
                                     break;
                             }
                         }
@@ -447,14 +448,14 @@ namespace Syncless.CompareAndSync.Visitor
         }
 
 
-        private void ProcessToDo(FileCompareObject file, int numOfPaths)
+        private void ProcessToDo(BaseCompareObject bco, int numOfPaths)
         {
             for (int i = 0; i < numOfPaths; i++)
             {
-                if (file.ChangeType[i] == null && file.ToDoAction[i].HasValue)
+                if (bco.ChangeType[i] == null && bco.ToDoAction[i].HasValue)
                 {
-                    if (file.ToDoAction[i] == LastKnownState.Deleted)
-                        file.ChangeType[i] = MetaChangeType.Delete;
+                    if (bco.ToDoAction[i] == LastKnownState.Deleted)
+                        bco.ChangeType[i] = MetaChangeType.Delete;
                 }
             }
         }
