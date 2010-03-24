@@ -28,14 +28,14 @@ namespace SynclessUI
 		private MainWindow _main;
         private DataTable _previewSyncData;
         
-		public PreviewSyncWindow(MainWindow main, string _selectedtag)
+		public PreviewSyncWindow(MainWindow main, string selectedTag)
         {
 			this.InitializeDataGrid();
             InitializeComponent();
 			
 			_main = main;
 
-            RootCompareObject rco = _main.gui.PreviewSync(_selectedtag);
+            RootCompareObject rco = _main.gui.PreviewSync(selectedTag);
 
             if (rco != null)
             {

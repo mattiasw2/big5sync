@@ -37,14 +37,16 @@ namespace SynclessUI
         private const string BI_DIRECTIONAL = "Bi-Dir..";
         private const string UNI_DIRECTIONAL = "Uni-Dir..";
 
-        private NotificationWatcher notificationWatcher;
-        private PriorityNotificationWatcher priorityNotificationWatcher;
+        private NotificationWatcher _notificationWatcher;
+        private PriorityNotificationWatcher _priorityNotificationWatcher;
 
-        public string _selectedTag
+        public string selectedTag
         {
             get { return (string)Application.Current.Properties["SelectedTag"]; }
             set { Application.Current.Properties["SelectedTag"] = value; }
         }
+
+        private Dictionary<string, SyncProgress> _syncProgressNotificationDictionary;
 
         private string _filter
         {
@@ -60,6 +62,60 @@ namespace SynclessUI
             InitializeKeyboardShortcuts();
         }
 
+        /// <summary>
+        ///     Starts up the system logic layer and initializes it
+        /// </summary>
+        private void InitializeSyncless()
+        {
+            try
+            {
+                _app_path = @System.Reflection.Assembly.GetExecutingAssembly().Location;
+                gui = ServiceLocator.GUI;
+
+                _syncProgressNotificationDictionary = new Dictionary<string, SyncProgress> (StringComparer.OrdinalIgnoreCase);
+
+                if (gui.Initiate(this))
+                {
+                    RegistryHelper.CreateRegistry(_app_path);
+                    InitializeTagInfoPanel();
+                    InitializeTagList();
+                }
+                else
+                {
+                    DialogsHelper.ShowError("Syncless Initialization Error", "Syncless has failed to initialize and will now exit.");
+
+                    this.Close();
+                }
+
+                _notificationWatcher = new NotificationWatcher(this);
+                _notificationWatcher.Start();
+                _priorityNotificationWatcher = new PriorityNotificationWatcher();
+                _priorityNotificationWatcher.Start();
+            }
+            catch (UnhandledException)
+            {
+                DisplayUnhandledExceptionMessage();
+            }
+        }
+
+        public double SyncProgressPercentage
+        { get { 
+            if(selectedTag != null)
+                return getSyncProgress(selectedTag).PercentComplete;
+
+          } 
+        }
+
+        public SyncProgress getSyncProgress(string tagname)
+        {
+            return _syncProgressNotificationDictionary[tagname];
+        }
+
+        public void setSyncProgress(string tagname, SyncProgress sp)
+        {
+            _syncProgressNotificationDictionary[tagname] = sp;
+        }
+        
         #region Keyboard Shortcuts
 
         private void InitializeKeyboardShortcuts() {
@@ -189,13 +245,13 @@ namespace SynclessUI
 
             try
             {
-                if (_selectedTag != null)
+                if (selectedTag != null)
                 {
-                    bool result = DialogsHelper.ShowWarning("Remove Tag", "Are you sure you want to remove the tag '" + _selectedTag + "'?");
+                    bool result = DialogsHelper.ShowWarning("Remove Tag", "Are you sure you want to remove the tag '" + selectedTag + "'?");
 
                     if (result)
                     {
-                        bool success = gui.DeleteTag(_selectedTag);
+                        bool success = gui.DeleteTag(selectedTag);
                         if (success)
                         {
                             InitializeTagList();
@@ -203,7 +259,7 @@ namespace SynclessUI
                         }
                         else
                         {
-                            DialogsHelper.ShowError("Remove Tag Error", "' " + _selectedTag + " ' could not be removed.");
+                            DialogsHelper.ShowError("Remove Tag Error", "' " + selectedTag + " ' could not be removed.");
                         }
                     }
                 }
@@ -228,7 +284,7 @@ namespace SynclessUI
         {
             e.Handled = true;
             //Actual Code
-            TagWindow tw = new TagWindow(this, "", _selectedTag);
+            TagWindow tw = new TagWindow(this, "", selectedTag);
         }
 
         private void TagCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -352,45 +408,14 @@ namespace SynclessUI
 
         #endregion
 
-        /// <summary>
-        ///     Starts up the system logic layer and initializes it
-        /// </summary>
-        private void InitializeSyncless()
-        {
-            try
-            {
-                _app_path = @System.Reflection.Assembly.GetExecutingAssembly().Location;
-                gui = ServiceLocator.GUI;
-
-                if (gui.Initiate(this))
-                {
-                    RegistryHelper.CreateRegistry(_app_path);
-                    InitializeTagInfoPanel();
-                    InitializeTagList();
-                }
-                else
-                {
-                    DialogsHelper.ShowError("Syncless Initialization Error", "Syncless has failed to initialize and will now exit.");
-
-                    this.Close();
-                }
-                notificationWatcher = new NotificationWatcher(this);
-                notificationWatcher.Start();
-                priorityNotificationWatcher = new PriorityNotificationWatcher();
-                priorityNotificationWatcher.Start();
-            }
-            catch (UnhandledException)
-            {
-                DisplayUnhandledExceptionMessage();
-            }
-        }
+        
 
         private void ListBoxTag_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (ListBoxTag.SelectedItem != null)
             {
-                _selectedTag = ListBoxTag.SelectedItem.ToString();
-                ViewTagInfo(_selectedTag);
+                selectedTag = ListBoxTag.SelectedItem.ToString();
+                ViewTagInfo(selectedTag);
             }
         }
 
@@ -447,12 +472,12 @@ namespace SynclessUI
 
                 ListBoxTag.ItemsSource = taglist;
                 LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
-                _selectedTag = (string)ListBoxTag.SelectedItem;
+                selectedTag = (string)ListBoxTag.SelectedItem;
 
                 if (taglist.Count != 0)
                 {
-                    _selectedTag = taglist[0];
-                    SelectTag(_selectedTag);
+                    selectedTag = taglist[0];
+                    SelectTag(selectedTag);
                 }
             }
             catch (UnhandledException)
@@ -565,24 +590,24 @@ namespace SynclessUI
             {
                 if (string.Compare((string)LblSyncMode.Content, "Manual") == 0)
                 {
-                    if (gui.MonitorTag(_selectedTag, true))
+                    if (gui.MonitorTag(selectedTag, true))
                     {
                         SeamlessMode();
                     }
                     else
                     {
-                        DialogsHelper.ShowError("Change Synchronization Mode Error", "' " + _selectedTag + " ' could not be set into Seamless Mode.");
+                        DialogsHelper.ShowError("Change Synchronization Mode Error", "' " + selectedTag + " ' could not be set into Seamless Mode.");
                     }
                 }
                 else
                 {
-                    if (gui.MonitorTag(_selectedTag, false))
+                    if (gui.MonitorTag(selectedTag, false))
                     {
                         ManualMode();
                     }
                     else
                     {
-                        DialogsHelper.ShowError("Change Synchronization Mode Error", "' " + _selectedTag + " ' could not be set into Manual Mode.");
+                        DialogsHelper.ShowError("Change Synchronization Mode Error", "' " + selectedTag + " ' could not be set into Manual Mode.");
                     }
                 }
             }
@@ -620,9 +645,9 @@ namespace SynclessUI
         {
             try
             {
-                if (!gui.StartManualSync(_selectedTag))
+                if (!gui.StartManualSync(selectedTag))
                 {
-                    DialogsHelper.ShowError("Synchronization Error", "'" + _selectedTag + "' could not be synchronized.");
+                    DialogsHelper.ShowError("Synchronization Error", "'" + selectedTag + "' could not be synchronized.");
                 }
             }
             catch (UnhandledException)
@@ -759,8 +784,8 @@ namespace SynclessUI
                         {
                             RegistryHelper.RemoveRegistry();
                         }
-                        notificationWatcher.Stop();
-                        priorityNotificationWatcher.Stop();
+                        _notificationWatcher.Stop();
+                        _priorityNotificationWatcher.Stop();
                     }
                     else
                     {
@@ -855,8 +880,8 @@ namespace SynclessUI
 
         private void TagTitle_LostFocus(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (_selectedTag == TagTitle.Text) return;
-            if (!RenameTag(_selectedTag, TagTitle.Text)) TagTitle.Text = _selectedTag;
+            if (selectedTag == TagTitle.Text) return;
+            if (!RenameTag(selectedTag, TagTitle.Text)) TagTitle.Text = selectedTag;
         }
 
         private void TagTitleOnKeyDownHandler(object sender, KeyEventArgs e)
@@ -914,7 +939,7 @@ namespace SynclessUI
 
         private void RepopulateTagList()
         {
-            string current = _selectedTag;
+            string current = selectedTag;
 
             InitializeTagList();
 
@@ -937,11 +962,11 @@ namespace SynclessUI
                 ListTaggedPath.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                 (Action)(() =>
                 {
-                    if (_selectedTag == null)
+                    if (selectedTag == null)
                     {
                         return;
                     }
-                    TagView tv = gui.GetTag(_selectedTag);
+                    TagView tv = gui.GetTag(selectedTag);
                     if (tv == null)
                     {
                         return;
@@ -967,9 +992,9 @@ namespace SynclessUI
 
         private void ViewTagDetails()
         {
-            if (_selectedTag != null)
+            if (selectedTag != null)
             {
-                TagDetailsWindow tdw = new TagDetailsWindow(_selectedTag, this);
+                TagDetailsWindow tdw = new TagDetailsWindow(selectedTag, this);
                 tdw.ShowDialog();
             }
         }
@@ -1013,7 +1038,7 @@ namespace SynclessUI
             MessageBox.Show(messageBoxText, caption, button, icon);
 			*/
 			
-            PreviewSyncWindow psw = new PreviewSyncWindow(this, _selectedTag);
+            PreviewSyncWindow psw = new PreviewSyncWindow(this, selectedTag);
             psw.ShowDialog();
         }
 		
@@ -1067,7 +1092,7 @@ namespace SynclessUI
                     DirectoryInfo folder = new DirectoryInfo(i);
                     if (folder.Exists)
                     {
-                        TagWindow tw = new TagWindow(this, i, _selectedTag);
+                        TagWindow tw = new TagWindow(this, i, selectedTag);
                     }
                 }
             }
@@ -1111,7 +1136,7 @@ namespace SynclessUI
 
         private void TaskbarTagItem_Click(object sender, RoutedEventArgs e)
         {
-            TagWindow tw = new TagWindow(this, "", _selectedTag);
+            TagWindow tw = new TagWindow(this, "", selectedTag);
         }
 
         private void TaskbarOpenItem_Click(object sender, RoutedEventArgs e)
