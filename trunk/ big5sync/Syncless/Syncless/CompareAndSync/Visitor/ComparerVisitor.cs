@@ -141,7 +141,7 @@ namespace Syncless.CompareAndSync.Visitor
         {
             //Delete will only occur if all other changes are MetaChangeType.NoChange or null
             List<int> deletePos = new List<int>();
-            bool stop = false;            
+            bool stop = false;
             for (int i = 0; i < numOfPaths; i++)
             {
                 if (stop)
@@ -161,7 +161,7 @@ namespace Syncless.CompareAndSync.Visitor
                                 break;
                             }
                         }
-                    }                    
+                    }
                 }
                 else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null)
                 {
@@ -170,35 +170,12 @@ namespace Syncless.CompareAndSync.Visitor
                 }
             }
 
-            //if (deletePos.Count > 0)
-            //{
-            //    string currHash = null;
-
-            //    //Check that all hash are the same
-            //    for (int i = 0; i < numOfPaths; i++)
-            //    {
-            //        if (file.Exists[i])
-            //        {
-            //            if (currHash == null)
-            //                currHash = file.Hash[i];
-            //            else
-            //            {
-            //                if (!currHash.Equals(file.Hash[i]) && file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null)
-            //                {
-            //                    deletePos.Clear();
-            //                    break;
-            //                }
-            //            }
-            //        }
-            //    }
-
             if (deletePos.Count > 0)
             {
                 foreach (int i in deletePos)
                     file.Priority[i] = 1;
                 return;
             }
-            //}
 
             //Rename will only occur if all other changes are MetaChangeType.NoChange or null
             int renamePos = -1;
@@ -256,14 +233,43 @@ namespace Syncless.CompareAndSync.Visitor
                 }
             }
 
+            //When to set parent to dirty? When the priority is not the same for all files?
+            int priority = -1;
+            int numExists = 0;
+            int posExists = -1;
             for (int i = 0; i < numOfPaths; i++)
             {
-                if (/*file.Exists[i] && */file.Priority[i] != file.Priority[mostUpdatedPos])
+                if (file.Exists[i])
                 {
-                    file.Parent.Dirty = true;
-                    break;
+                    numExists++;
+                    posExists = i;
+                    if (priority < 0)
+                        priority = file.Priority[i];
+                    else
+                    {
+                        if (priority != file.Priority[i])
+                        {
+                            file.Parent.Dirty = true;
+                            break;
+                        }
+                    }
                 }
             }
+
+            if (numExists == 1)
+            {
+                if (file.ChangeType[posExists] == MetaChangeType.New || file.ChangeType[posExists] == MetaChangeType.Update)
+                    file.Parent.Dirty = true;
+            }
+
+            //for (int i = 0; i < numOfPaths; i++)
+            //{
+            //    if (file.Exists[i] && file.Priority[i] != file.Priority[mostUpdatedPos])
+            //    {
+            //        file.Parent.Dirty = true;
+            //        break;
+            //    }
+            //}
         }
 
         #endregion
@@ -277,10 +283,34 @@ namespace Syncless.CompareAndSync.Visitor
 
             if (!folder.Dirty)
             {
+                bool stop = false;
                 for (int i = 0; i < numOfFiles; i++)
                 {
+                    if (stop)
+                        break;
+
                     if (folder.ChangeType[i] == MetaChangeType.Delete)
+                    {
                         deletePos.Add(i);
+
+                        for (int j = 0; j < numOfFiles; j++)
+                        {
+                            if (folder.Exists[j])
+                            {
+                                if (folder.MetaUpdated[j] > folder.MetaUpdated[i])
+                                {
+                                    deletePos.Clear();
+                                    stop = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else if (folder.ChangeType[i] != MetaChangeType.NoChange && folder.ChangeType[i] != null)
+                    {
+                        deletePos.Clear();
+                        break;
+                    }
                 }
             }
 

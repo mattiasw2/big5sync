@@ -24,6 +24,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(FileCompareObject file, int numOfPaths)
         {
+            nodesCount++;
             _syncProgress.Message = "Synchronzing "+file.Name;
             if (file.Invalid)
             {
@@ -63,6 +64,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
+            nodesCount++;
             _syncProgress.Message = "Synchronzing " + folder.Name;
             if (folder.Invalid)
             {
@@ -98,12 +100,22 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(RootCompareObject root)
         {
+            nodesCount++;
             _syncProgress.complete();//Do nothing
         }
 
         #endregion
 
         #region File Methods
+
+        private int nodesCount;
+
+        public int NodesCount
+        {
+            get { return nodesCount; }
+            set { nodesCount = value; }
+        }
+
 
         private void CopyFile(FileCompareObject fco, int numOfPaths, int srcFilePos)
         {
