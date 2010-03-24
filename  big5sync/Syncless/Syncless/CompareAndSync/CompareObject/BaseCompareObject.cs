@@ -18,6 +18,7 @@ namespace Syncless.CompareAndSync.CompareObject
         //Meta
         private long[] _metaCreationTime;
         private bool[] _metaExists;
+        private long[] _metaUpdated;
 
         //All       
         private MetaChangeType?[] _changeType;
@@ -38,6 +39,7 @@ namespace Syncless.CompareAndSync.CompareObject
             _finalState = new FinalState?[numOfPaths];
             _metaCreationTime = new long[numOfPaths];
             _metaExists = new bool[numOfPaths];
+            _metaUpdated = new long[numOfPaths];
             _changeType = new MetaChangeType?[numOfPaths];
             _priority = new int[numOfPaths];
             _parent = parent;
@@ -85,6 +87,12 @@ namespace Syncless.CompareAndSync.CompareObject
         {
             get { return _finalState; }
             set { _finalState = value; }
+        }
+
+        public long[] MetaUpdated
+        {
+            get { return _metaUpdated; }
+            set { _metaUpdated = value; }
         }
 
         public int[] Priority
