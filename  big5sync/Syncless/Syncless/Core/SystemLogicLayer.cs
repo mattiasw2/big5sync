@@ -280,6 +280,7 @@ namespace Syncless.Core
                     ProfilingLayer.Instance.RemoveDrive(dce.Info);
                 }
                 _userInterface.DriveChanged();
+                
             }
             catch (Exception e)
             {
@@ -317,6 +318,7 @@ namespace Syncless.Core
             try
             {
                 Tag t = TaggingLayer.Instance.DeleteTag(tagname);
+                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return t != null;
             }
             catch (TagNotFoundException te)
@@ -340,7 +342,7 @@ namespace Syncless.Core
             try
             {
                 Tag t = TaggingLayer.Instance.CreateTag(tagname);
-                //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return ConvertToTagView(t);
             }
             catch (TagAlreadyExistsException te)
@@ -381,6 +383,7 @@ namespace Syncless.Core
                 {
                     StartMonitorTag(tag);
                 }
+                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return ConvertToTagView(tag);
             }
             catch (RecursiveDirectoryException re)
@@ -426,6 +429,7 @@ namespace Syncless.Core
 
                 }
                 //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return count;
 
 
@@ -675,6 +679,7 @@ namespace Syncless.Core
             try
             {
                 TaggingLayer.Instance.UpdateFilter(tagname, filterlist);
+                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return true;
             }
             catch (TagNotFoundException tnfe)
@@ -912,6 +917,7 @@ namespace Syncless.Core
 
             string taggingPath = PathHelper.AddTrailingSlash(drive.RootDirectory.FullName) + TaggingLayer.RELATIVE_TAGGING_SAVE_PATH;
             TaggingLayer.Instance.Merge(taggingPath);
+            SaveLoadHelper.SaveAll(_userInterface.getAppPath());
         }
         /// <summary>
         /// Initialize
