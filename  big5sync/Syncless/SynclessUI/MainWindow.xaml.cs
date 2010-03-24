@@ -23,6 +23,7 @@ using System.Windows.Threading;
 using System.Windows.Media.Media3D;
 using Syncless.Notification;
 using SynclessUI.Notification;
+using Syncless.Core.View;
 
 namespace SynclessUI
 {
