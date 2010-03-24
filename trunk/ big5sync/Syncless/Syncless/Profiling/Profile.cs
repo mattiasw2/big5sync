@@ -139,7 +139,8 @@ namespace Syncless.Profiling
         }
         public bool RemoveDrive(DriveInfo info)
         {
-            ProfileDrive drive = _phyiscalDict[info.Name];
+            string driveLetter = ProfilingHelper.ExtractDriveName(info.Name);
+            ProfileDrive drive = _phyiscalDict[driveLetter];
             if (drive != null)
             {
                 if (_phyiscalDict.ContainsKey(drive.PhysicalId))
@@ -198,15 +199,6 @@ namespace Syncless.Profiling
             }
             return null;
         }
-
-
-
-
-
-
-
-
-
 
 
     }
