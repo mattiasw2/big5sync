@@ -39,12 +39,12 @@ namespace Syncless.CompareAndSync.Visitor
                     deletePos.Add(i);
             }
 
-            if (deletePos.Count != 1)
-            {
-                foreach (int i in deletePos)
-                    folder.ChangeType[i] = null;
-                return;
-            }
+            //if (deletePos.Count != 1)
+            //{
+            //    foreach (int i in deletePos)
+            //        folder.ChangeType[i] = null;
+            //    return;
+            //}
 
 
             //1. If there exists a folder for which meta exists is true and exists is false, it is (aka changeType.delete)
@@ -54,11 +54,11 @@ namespace Syncless.CompareAndSync.Visitor
 
             FolderCompareObject f = null;
 
-            for (int i = 0; i < numOfPaths; i++)
+            for (int i = 0; i < deletePos.Count /*numOfPaths*/; i++)
             {
-                if (folder.ChangeType[i] == MetaChangeType.Delete)
+                if (folder.ChangeType[deletePos[i]] == MetaChangeType.Delete)
                 {
-                    f = folder.Parent.GetRenamedFolder(folder.Name, folder.CreationTime[i], i);
+                    f = folder.Parent.GetRenamedFolder(folder.Name, folder.CreationTime[i], deletePos[i]);
 
                     if (f != null)
                     {
@@ -72,11 +72,11 @@ namespace Syncless.CompareAndSync.Visitor
 
                         if (counter != 1)
                         {
-                            folder.ChangeType[i] = null;                         
+                            folder.ChangeType[deletePos[i]] = null;                         
                             return;
                         }
 
-                        MergeRenamedFolder(folder, f, i);
+                        MergeRenamedFolder(folder, f, deletePos[i]);
                     }
                 }
             }

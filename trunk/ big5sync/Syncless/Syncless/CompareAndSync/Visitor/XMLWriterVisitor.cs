@@ -529,7 +529,7 @@ namespace Syncless.CompareAndSync.Visitor
             writer.Close();
         }
 
-        private void AppendActionFileTodo(XmlDocument xmlDoc, FileCompareObject file , int counter , string changeType)
+        private void AppendActionFileTodo(XmlDocument xmlDoc, FileCompareObject file, int counter, string changeType)
         {
             XmlText hashText = xmlDoc.CreateTextNode(file.MetaHash[counter]);
             XmlText actionText = xmlDoc.CreateTextNode(changeType);
@@ -587,7 +587,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void DeleteFileTodoByName(FileCompareObject file, int counter)
         {
-            string todoXMLPath = Path.Combine(file.GetSmartParentPath(counter),TODOPATH);
+            string todoXMLPath = Path.Combine(file.GetSmartParentPath(counter), TODOPATH);
             if (!File.Exists(todoXMLPath))
                 return;
 
@@ -607,7 +607,8 @@ namespace Syncless.CompareAndSync.Visitor
             XmlDocument todoXMLDoc = new XmlDocument();
             CommonMethods.LoadXML(ref todoXMLDoc, todoXMLPath);
             XmlNode folderNode = todoXMLDoc.SelectSingleNode("/" + LAST_KNOWN_STATE + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
-            folderNode.ParentNode.RemoveChild(folderNode);
+            if (folderNode != null)
+                folderNode.ParentNode.RemoveChild(folderNode);
             CommonMethods.SaveXML(ref todoXMLDoc, todoXMLPath);
         }
 
