@@ -930,7 +930,11 @@ namespace Syncless.Core
             {
                 this._queueObserver = new LogicQueueObserver();
                 _queueObserver.Start();
-                SaveLoadHelper.LoadAll(_userInterface.getAppPath());
+                bool loadSuccess = SaveLoadHelper.LoadAll(_userInterface.getAppPath());
+                if (!loadSuccess)
+                {
+                    return false;
+                }
                 DeviceWatcher.Instance.ToString(); //Starts watching for Drive Change
                 List<Tag> tagList = TaggingLayer.Instance.AllTagList;
                 foreach (Tag t in tagList)

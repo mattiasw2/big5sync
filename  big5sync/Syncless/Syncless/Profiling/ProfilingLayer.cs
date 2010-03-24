@@ -242,7 +242,10 @@ namespace Syncless.Profiling
             try
             {
                 Profile p = ProfilingXMLHelper.LoadSingleProfile(path);
-                Debug.Assert(p != null);
+                if (p == null)
+                {
+                    throw new ProfileLoadException();
+                }
                 _profile = p;
             }
             catch (FileNotFoundException)
@@ -257,6 +260,10 @@ namespace Syncless.Profiling
                 if (File.Exists(paths[i]))
                 {
                     List<Profile> profileList = ProfilingXMLHelper.LoadProfile(paths[i]);
+                    if (profileList == null)
+                    {
+                        continue;
+                    }
                     ProfileMerger.Merge(_profile, profileList);
                 }
             }
@@ -278,7 +285,10 @@ namespace Syncless.Profiling
             try
             {
                 Profile p = ProfilingXMLHelper.LoadSingleProfile(path);
-                Debug.Assert(p != null);
+                if (p == null)
+                {
+                    throw new ProfileLoadException();
+                }
                 _profile = p;
                 
             }
