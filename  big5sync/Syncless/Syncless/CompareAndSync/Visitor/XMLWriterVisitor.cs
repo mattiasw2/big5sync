@@ -594,7 +594,8 @@ namespace Syncless.CompareAndSync.Visitor
             XmlDocument todoXMLDoc = new XmlDocument();
             CommonMethods.LoadXML(ref todoXMLDoc, todoXMLPath);
             XmlNode fileNode = todoXMLDoc.SelectSingleNode("/" + LAST_KNOWN_STATE + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
-            fileNode.ParentNode.RemoveChild(fileNode);
+            if (fileNode != null)
+                fileNode.ParentNode.RemoveChild(fileNode);
             CommonMethods.SaveXML(ref todoXMLDoc, todoXMLPath);
         }
 
