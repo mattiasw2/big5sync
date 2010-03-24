@@ -36,6 +36,7 @@ namespace Syncless.CompareAndSync.Visitor
         private const string ACTION = "action";
         private const string RENAME = "Rename";
         private const string DELETE = "Delete";
+        private const string DELETED = "Deleted";
         private const int FIRST_POSITION = 0;
         //private static readonly object syncLock = new object();
         private string[] pathList;
@@ -155,7 +156,6 @@ namespace Syncless.CompareAndSync.Visitor
         private void CreateFileObject(FileCompareObject file, int counter)
         {
             XmlDocument xmlDoc = new XmlDocument();
-
             string xmlPath = Path.Combine(file.GetSmartParentPath(counter), METADATAPATH);
             CreateFileIfNotExist(file.GetSmartParentPath(counter));
             CommonMethods.LoadXML(ref xmlDoc, xmlPath);
@@ -189,6 +189,10 @@ namespace Syncless.CompareAndSync.Visitor
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR);
             node.AppendChild(fileElement);
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+
+            XmlDocument todoXMLDoc = new XmlDocument();
+            string todoPath = Path.Combine(file.GetSmartParentPath(counter), TODOPATH);
+            DeleteFileTodoByName(file, counter);
         }
 
         private void UpdateFileObject(FileCompareObject file, int counter)
@@ -234,6 +238,7 @@ namespace Syncless.CompareAndSync.Visitor
             }
 
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+            DeleteFileTodoByName(file, counter);
         }
 
         private void RenameFileObject(FileCompareObject file, int counter)
@@ -270,13 +275,7 @@ namespace Syncless.CompareAndSync.Visitor
 
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
-
-            XmlDocument xmlTodoDoc = new XmlDocument();
-            string todoPath = Path.Combine(parentPath, TODOPATH);
-            CreateTodoFile(parentPath);
-            CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
-            AppendActionFileTodo(xmlTodoDoc, file, counter, "Deleted");
-            CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
+            GenerateFileTodo(file, counter);
         }
 
         private int GetPropagated(FileCompareObject file)
@@ -360,8 +359,9 @@ namespace Syncless.CompareAndSync.Visitor
             XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
             if (node != null)
                 node.ParentNode.RemoveChild(node);
-
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+
+            GenerateFileTodo(file, counter);
         }
 
         private void ProcessFolderFinalState(FolderCompareObject folder, int counter)
@@ -407,6 +407,7 @@ namespace Syncless.CompareAndSync.Visitor
             string subFolderXML = Path.Combine(folder.GetSmartParentPath(counter), folder.Name);
             CreateFileIfNotExist(subFolderXML);
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+            DeleteFolderTodoByName(folder, counter);
         }
 
         private void RenameFolderObject(FolderCompareObject folder, int counter)
@@ -458,13 +459,16 @@ namespace Syncless.CompareAndSync.Visitor
             if (File.Exists(xmlPath))
             {
                 CommonMethods.LoadXML(ref xmlDoc, xmlPath);
-
                 XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
                 if (node == null)
                     return;
                 node.ParentNode.RemoveChild(node);
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
+
+            XmlDocument todoXMLDoc = new XmlDocument();
+            string todoXMLPath = Path.Combine(folder.GetSmartParentPath(counter), TODOPATH);
+            GenerateFolderTodo(folder, counter);
         }
 
         private void HandleUnchangedOrPropagatedFolder(FolderCompareObject folder, int counter)
@@ -543,6 +547,71 @@ namespace Syncless.CompareAndSync.Visitor
             rootNode.AppendChild(fileElement);
         }
 
+        private void AppendActionFolderTodo(XmlDocument xmlDoc, FolderCompareObject folder, int counter, string changeType)
+        {
+            XmlText nameText = xmlDoc.CreateTextNode(folder.MetaName);
+            XmlText action = xmlDoc.CreateTextNode(changeType);
+
+            XmlElement folderElement = xmlDoc.CreateElement(FOLDER);
+            XmlElement nameElement = xmlDoc.CreateElement(NODE_NAME);
+            XmlElement actionElement = xmlDoc.CreateElement(ACTION);
+
+            nameElement.AppendChild(nameText);
+            actionElement.AppendChild(action);
+            folderElement.AppendChild(nameElement);
+            folderElement.AppendChild(actionElement);
+
+            XmlNode rootNode = xmlDoc.SelectSingleNode("/" + LAST_KNOWN_STATE);
+            rootNode.AppendChild(folderElement);
+        }
+
+        private void DeleteFileTodoByName(FileCompareObject file, int counter)
+        {
+            string todoXMLPath = Path.Combine(file.GetSmartParentPath(counter),TODOPATH);
+            if (!File.Exists(todoXMLPath))
+                return;
+
+            XmlDocument todoXMLDoc = new XmlDocument();
+            CommonMethods.LoadXML(ref todoXMLDoc, todoXMLPath);
+            XmlNode fileNode = todoXMLDoc.SelectSingleNode("/" + LAST_KNOWN_STATE + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
+            fileNode.ParentNode.RemoveChild(fileNode);
+            CommonMethods.SaveXML(ref todoXMLDoc, todoXMLPath);
+        }
+
+        private void DeleteFolderTodoByName(FolderCompareObject folder, int counter)
+        {
+            string todoXMLPath = Path.Combine(folder.GetSmartParentPath(counter), TODOPATH);
+            if (!File.Exists(todoXMLPath))
+                return;
+
+            XmlDocument todoXMLDoc = new XmlDocument();
+            CommonMethods.LoadXML(ref todoXMLDoc, todoXMLPath);
+            XmlNode folderNode = todoXMLDoc.SelectSingleNode("/" + LAST_KNOWN_STATE + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
+            folderNode.ParentNode.RemoveChild(folderNode);
+            CommonMethods.SaveXML(ref todoXMLDoc, todoXMLPath);
+        }
+
+        private void GenerateFileTodo(FileCompareObject file, int counter)
+        {
+            string parentPath = file.GetSmartParentPath(counter);
+            XmlDocument xmlTodoDoc = new XmlDocument();
+            string todoPath = Path.Combine(parentPath, TODOPATH);
+            CreateTodoFile(parentPath);
+            CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
+            AppendActionFileTodo(xmlTodoDoc, file, counter, DELETED);
+            CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
+        }
+
+        private void GenerateFolderTodo(FolderCompareObject folder, int counter)
+        {
+            string parentPath = folder.GetSmartParentPath(counter);
+            XmlDocument xmlTodoDoc = new XmlDocument();
+            string todoPath = Path.Combine(parentPath, TODOPATH);
+            CreateTodoFile(parentPath);
+            CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
+            AppendActionFolderTodo(xmlTodoDoc, folder, counter, DELETED);
+            CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
+        }
         #endregion
     }
 }
