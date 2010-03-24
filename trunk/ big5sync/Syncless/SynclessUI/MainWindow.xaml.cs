@@ -46,7 +46,7 @@ namespace SynclessUI
             set { Application.Current.Properties["SelectedTag"] = value; }
         }
 
-        private Dictionary<string, SyncProgress> _syncProgressNotificationDictionary;
+        private Dictionary<string, SyncProgress> _syncProgressNotificationDictionary = new Dictionary<string, SyncProgress> (StringComparer.OrdinalIgnoreCase);
 
         private string _filter
         {
@@ -72,8 +72,6 @@ namespace SynclessUI
                 _app_path = @System.Reflection.Assembly.GetExecutingAssembly().Location;
                 gui = ServiceLocator.GUI;
 
-                _syncProgressNotificationDictionary = new Dictionary<string, SyncProgress> (StringComparer.OrdinalIgnoreCase);
-
                 if (gui.Initiate(this))
                 {
                     RegistryHelper.CreateRegistry(_app_path);
@@ -98,16 +96,14 @@ namespace SynclessUI
             }
         }
 
-        /*
         public double SyncProgressPercentage
-        { get { 
-            if(selectedTag != null)
+        { get {
+            if (selectedTag != null)
                 return getSyncProgress(selectedTag).PercentComplete;
             else
-                return get
+                return 0;
           } 
         }
-        */
 
         public SyncProgress getSyncProgress(string tagname)
         {
@@ -630,6 +626,7 @@ namespace SynclessUI
             LblSyncMode.SetResourceReference(Control.MarginProperty, "ToggleOnMargin");
 			LblSyncMode.SetResourceReference(Control.ForegroundProperty, "ToggleOnForeground");
             ProgressBarSync.Visibility = System.Windows.Visibility.Hidden;
+            LblProgress.Visibility = System.Windows.Visibility.Hidden;
         }
 
         private void ManualMode()
@@ -642,6 +639,7 @@ namespace SynclessUI
             LblSyncMode.SetResourceReference(Control.MarginProperty, "ToggleOffMargin");
 			LblSyncMode.SetResourceReference(Control.ForegroundProperty, "ToggleOffForeground");
             ProgressBarSync.Visibility = System.Windows.Visibility.Visible;
+            LblProgress.Visibility = System.Windows.Visibility.Visible;
         }
 
         private void BtnSyncNow_Click(object sender, System.Windows.RoutedEventArgs e)
