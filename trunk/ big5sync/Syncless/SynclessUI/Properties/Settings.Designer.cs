@@ -42,12 +42,12 @@ namespace SynclessUI.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
-        public bool PersistRegistryIntegration {
+        public bool EnableShellIntegration {
             get {
-                return ((bool)(this["PersistRegistryIntegration"]));
+                return ((bool)(this["EnableShellIntegration"]));
             }
             set {
-                this["PersistRegistryIntegration"] = value;
+                this["EnableShellIntegration"] = value;
             }
         }
     }

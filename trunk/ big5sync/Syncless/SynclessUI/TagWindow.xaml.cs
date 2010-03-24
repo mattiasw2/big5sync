@@ -32,12 +32,15 @@ namespace SynclessUI
 		private bool popupclosed = true;
 		
         private string _path;
+        private string _selectedTag;
         
 		public TagWindow(MainWindow main, string path, string tagname)
         {
             InitializeComponent();
 
 			_main = main;
+            _selectedTag = tagname;
+
 			ACBName.IsEnabled = false;
 
             if (path == "")
@@ -48,8 +51,9 @@ namespace SynclessUI
             {
                 _path = path;
             }
+            
 
-            ProcessPath(_path, tagname);
+            ProcessPath(_path, _selectedTag);
 
             if (cancelstatus)
             {
@@ -111,7 +115,15 @@ namespace SynclessUI
                         TxtBoxPath.Text = path;
                         ACBName.IsEnabled = true;
                         ACBName.ItemsSource = _main.gui.GetAllTags();
-                        ACBName.Text = selectedTag;
+                        if (selectedTag == null)
+                        {
+                            ACBName.Text = di.Name;
+                        }
+                        else
+                        {
+                            ACBName.Text = selectedTag;
+                        }
+
                     }
                     else
                     {
@@ -216,8 +228,9 @@ namespace SynclessUI
 
 		private void BtnBrowse_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
+            _selectedTag = ACBName.Text;
             string path = SelectPath(false);
-            ProcessPath(path, "");
+            ProcessPath(path, _selectedTag);
 		}
 
 		/// <summary>

@@ -104,6 +104,7 @@
     <Compile Include="Core\Exceptions\UnhandledException.cs" />
     <Compile Include="Core\LogicQueueObserver.cs" />
     <Compile Include="Core\View\PathGroupView.cs" />
+    <Compile Include="Helper\DriveHelper.cs" />
     <Compile Include="Logging\LogCategoryType.cs" />
     <Compile Include="Logging\LogEventType.cs" />
     <Compile Include="Logging\DebugLogger.cs" />

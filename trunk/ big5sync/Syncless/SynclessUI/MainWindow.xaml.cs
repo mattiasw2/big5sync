@@ -53,8 +53,10 @@ namespace SynclessUI
         {
             get { return TxtBoxFilterTag.Text.Trim(); }
         }
-        private string _app_path;
+        private string _appPath;
         private bool _firstopen = true;
+
+        private bool _closenormally = true;
 
         public MainWindow()
         {
@@ -70,19 +72,25 @@ namespace SynclessUI
         {
             try
             {
-                _app_path = @System.Reflection.Assembly.GetExecutingAssembly().Location;
+                _appPath = @System.Reflection.Assembly.GetExecutingAssembly().Location;
+				Application.Current.Properties["AppPath"] = _appPath;
                 gui = ServiceLocator.GUI;
 
                 if (gui.Initiate(this))
                 {
-                    RegistryHelper.CreateRegistry(_app_path);
+					if (Properties.Settings.Default.EnableShellIntegration == true)
+					{
+						RegistryHelper.CreateRegistry(_appPath);
+					}
+					
                     InitializeTagInfoPanel();
                     InitializeTagList();
                 }
                 else
                 {
                     DialogsHelper.ShowError("Syncless Initialization Error", "Syncless has failed to initialize and will now exit.");
-
+                    _closenormally = false;
+                    
                     this.Close();
                 }
 
@@ -507,7 +515,7 @@ namespace SynclessUI
                 ListTaggedPath.ItemsSource = tv.PathStringList;
 
                 TagIcon.Visibility = System.Windows.Visibility.Visible;
-                //TagStatusPanel.Visibility = System.Windows.Visibility.Visible;
+                TagStatusPanel.Visibility = System.Windows.Visibility.Visible;
                 SyncPanel.Visibility = System.Windows.Visibility.Visible;
                 if (tv.PathStringList.Count == 0)
                 {
@@ -854,34 +862,37 @@ namespace SynclessUI
         {
             try
             {
-                // Prepares the SLL for termination
-                if (gui.PrepareForTermination())
+                if (_closenormally)
                 {
-                    bool result = DialogsHelper.ShowWarning("Exit", "Are you sure you want to exit Syncless?" +
-                        "\nExiting Syncless will disable seamless synchronization.");
-
-                    if (result)
+                    // Prepares the SLL for termination
+                    if (gui.PrepareForTermination())
                     {
-                        // Terminates the SLL and closes the UI
-                        gui.Terminate();
-                        SaveApplicationSettings();
-                        if (Properties.Settings.Default.PersistRegistryIntegration == false)
+                        bool result = DialogsHelper.ShowWarning("Exit", "Are you sure you want to exit Syncless?" +
+                            "\nExiting Syncless will disable seamless synchronization.");
+
+                        if (result)
                         {
-                            RegistryHelper.RemoveRegistry();
+                            // Terminates the SLL and closes the UI
+                            gui.Terminate();
+                            SaveApplicationSettings();
+                            if (Properties.Settings.Default.EnableShellIntegration == false)
+                            {
+                                RegistryHelper.RemoveRegistry();
+                            }
+                            _notificationWatcher.Stop();
+                            _priorityNotificationWatcher.Stop();
                         }
-                        _notificationWatcher.Stop();
-                        _priorityNotificationWatcher.Stop();
+                        else
+                        {
+                            e.Cancel = true;
+                        }
                     }
                     else
                     {
+                        DialogsHelper.ShowError("Syncless Termination Error", "Syncless is not ready for termination. Please try again later.");
+
                         e.Cancel = true;
                     }
-                }
-                else
-                {
-                    DialogsHelper.ShowError("Syncless Termination Error", "Syncless is not ready for termination. Please try again later.");
-
-                    e.Cancel = true;
                 }
             }
             catch (UnhandledException)
@@ -1009,7 +1020,7 @@ namespace SynclessUI
 
         public string getAppPath()
         {
-            return System.IO.Path.GetDirectoryName(_app_path);
+            return System.IO.Path.GetDirectoryName(_appPath);
         }
 
         public void DriveChanged()

@@ -44,7 +44,7 @@
 		<StackPanel x:Name="GeneralOptions" Grid.Column="1" Grid.Row="2">
 			<StackPanel x:Name="RegistryGroup" Orientation="Horizontal">
 				<CheckBox x:Name="ChkBoxRegistryIntegration" VerticalAlignment="Center" />
-				<Label x:Name="RegistryDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Persist Shell Integration Even After Syncless Is Closed"/>
+				<Label x:Name="RegistryDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Enable Shell Integration"/>
 			</StackPanel>
 		</StackPanel>
 	</Grid>
