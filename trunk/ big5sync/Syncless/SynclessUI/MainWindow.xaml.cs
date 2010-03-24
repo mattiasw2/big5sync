@@ -46,7 +46,8 @@ namespace SynclessUI
             set { Application.Current.Properties["SelectedTag"] = value; }
         }
 
-        private Dictionary<string, SyncProgress> _syncProgressNotificationDictionary = new Dictionary<string, SyncProgress> (StringComparer.OrdinalIgnoreCase);
+        private Dictionary<string, double> _syncProgressNotificationDictionary = new Dictionary<string, double> (StringComparer.OrdinalIgnoreCase);
+        private Dictionary<string, string> _syncStatusNotificationDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         private string _filter
         {
@@ -96,23 +97,35 @@ namespace SynclessUI
             }
         }
 
-        public double SyncProgressPercentage
-        { get {
-            if (selectedTag != null)
-                return getSyncProgress(selectedTag).PercentComplete;
-            else
-                return 0;
-          } 
+        public void notifySyncCompletion(string tagname)
+        {
+            String message = "Synchronization Completed at " + DateTime.Now;
+
+            this.LblStatusText.Content = message;
+
+            this._syncStatusNotificationDictionary[tagname] = message;
         }
 
-        public SyncProgress getSyncProgress(string tagname)
+        public double getSyncProgressPercentage(string tagname)
         {
             return _syncProgressNotificationDictionary[tagname];
         }
 
-        public void setSyncProgress(string tagname, SyncProgress sp)
+        public string getSyncStatus(string tagname)
         {
-            _syncProgressNotificationDictionary[tagname] = sp;
+            return _syncStatusNotificationDictionary[tagname];
+        }
+
+        public void setSyncProgress(string tagname, SyncProgress progress)
+        {
+            if (selectedTag == tagname)
+            {
+                ProgressBarSync.SetValue(ProgressBar.ValueProperty, progress.PercentComplete);
+                LblStatusText.Content = progress.Message;
+            }
+
+            _syncProgressNotificationDictionary[tagname] = progress.PercentComplete;
+            _syncStatusNotificationDictionary[tagname] = progress.Message;
         }
         
         #region Keyboard Shortcuts
@@ -452,6 +465,20 @@ namespace SynclessUI
                 else
                 {
                     BdrTaggedPath.Visibility = System.Windows.Visibility.Visible;
+                }
+
+                if (_syncProgressNotificationDictionary.ContainsKey(tagname))
+                {
+                    double percentageComplete= getSyncProgressPercentage(tagname);
+                    string status = getSyncStatus(tagname);
+
+                    ProgressBarSync.Value = percentageComplete;
+                    LblStatusText.Content = status;
+                }
+                else
+                {
+                    ProgressBarSync.Value = 0;
+                    LblStatusText.Content = "";
                 }
             }
             catch (UnhandledException)

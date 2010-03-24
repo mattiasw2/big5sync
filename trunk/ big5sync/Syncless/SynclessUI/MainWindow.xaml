@@ -163,7 +163,7 @@
 				<Label x:Name="LblStatusTitle" FontSize="10.667" FontFamily="Century Gothic" FontWeight="Bold" Content="Status:" Foreground="White"/>
 				<Label x:Name="LblStatusText" FontFamily="Century Gothic" FontSize="10.667" Content="[Status Text]" Foreground="White"/> 
 			</StackPanel>
-			<ProgressBar x:Name="ProgressBarSync" Margin="5,0,0,0" VerticalAlignment="Top" Height="20" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Value="{Binding SyncProgressPercentage, ElementName=Window, Mode=OneWay}"/>
+			<ProgressBar x:Name="ProgressBarSync" Margin="5,0,0,0" VerticalAlignment="Top" Height="20" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" />
 			<Label x:Name="LblProgress" Content="{Binding Value, ElementName=ProgressBarSync, Mode=Default}" ContentStringFormat="{} {0:0.##} %" d:LayoutOverrides="Width, Height" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,-4,0,0"/>
 			
 			<!-- Tag Sync Panel -->
