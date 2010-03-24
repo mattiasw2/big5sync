@@ -117,7 +117,7 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 if (file.ChangeType[i] == MetaChangeType.Delete)
                 {
-                    f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);      
+                    f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);
 
                     if (f != null)
                     {
@@ -153,12 +153,35 @@ namespace Syncless.CompareAndSync.Visitor
                 }
             }
 
+            //if (deletePos.Count > 0)
+            //{
+            //    string currHash = null;
+
+            //    //Check that all hash are the same
+            //    for (int i = 0; i < numOfPaths; i++)
+            //    {
+            //        if (file.Exists[i])
+            //        {
+            //            if (currHash == null)
+            //                currHash = file.Hash[i];
+            //            else
+            //            {
+            //                if (!currHash.Equals(file.Hash[i]) && file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null)
+            //                {
+            //                    deletePos.Clear();
+            //                    break;
+            //                }
+            //            }
+            //        }
+            //    }
+
             if (deletePos.Count > 0)
             {
                 foreach (int i in deletePos)
                     file.Priority[i] = 1;
                 return;
             }
+            //}
 
             //Rename will only occur if all other changes are MetaChangeType.NoChange or null
             int renamePos = -1;
@@ -250,7 +273,7 @@ namespace Syncless.CompareAndSync.Visitor
                     folder.Priority[i] = 1;
                 return;
             }
-            
+
             //Rename will only occur if all other changes are MetaChangeType.NoChange or null
             int renamePos = -1;
 
