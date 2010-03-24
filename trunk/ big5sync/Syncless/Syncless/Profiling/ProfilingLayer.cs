@@ -351,6 +351,9 @@ namespace Syncless.Profiling
         {
             return _profile.RemoveDrive(driveinfo);
         }
-
+        public void SetDriveName(DriveInfo info, string name)
+        {
+            _profile.SetDriveName(info, name);
+        }
     }
 }

@@ -29,25 +29,29 @@ namespace Syncless.Tagging
             //list of tags from the new profile.
             List<Tag> newTagList = new List<Tag>();
             newTagList.AddRange(newProfile.TagList);
+            List<Tag> monitorList = new List<Tag>();
             foreach (Tag newTag in newTagList)//handles the new tag from new profile
             {
                 Tag oldTag = currentProfile.FindTag(newTag.TagName);
                 if (oldTag != null)
                 {
+                    
                     bool merge = MergeTag(oldTag, newTag);
                     if (merge)
                     {
                         updateCount++;
+                        
                     }
                 }
                 else
                 {
                     TaggingLayer.Instance.AddTag(newTag);
+                    monitorList.Add(newTag);
                     updateCount++;
                 }
             }
 
-            foreach (Tag tag in newTagList)//start monitoring each new tag
+            foreach (Tag tag in monitorList)//start monitoring each new tag
             {
                 ServiceLocator.LogicLayerNotificationQueue().Enqueue(new AddTagNotification(tag));
                 //SystemLogicLayer.Instance.StartMonitorTag(tag, tag.IsDeleted);
