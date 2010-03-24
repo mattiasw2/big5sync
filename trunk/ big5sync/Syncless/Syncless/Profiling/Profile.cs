@@ -9,7 +9,6 @@ namespace Syncless.Profiling
     public class Profile
     {
         private const string DEFAULT_DRIVE_NAME = "-";
-        private const string DEFAULT_PROFILE_GROUP = "Ungrouped";
 
 
         /// <summary>
@@ -100,6 +99,14 @@ namespace Syncless.Profiling
             return drive != null ? drive.DriveName : null;
         }
 
+        public void SetDriveName(DriveInfo info, string name)
+        {
+            ProfileDrive drive = FindProfileDriveFromPhyisicalId(info.Name);
+            drive.LastUpdated = DateTime.Now.Ticks;
+            _lastUpdatedTime = DateTime.Now.Ticks;
+            drive.DriveName = name;
+
+        }
         /// <summary>
         /// Update a Particular drive with to its GUID
         /// </summary>
@@ -141,7 +148,6 @@ namespace Syncless.Profiling
                 }
                 if (_logicalDict.ContainsKey(drive.LogicalId))
                 {
-
                     _logicalDict.Remove(drive.LogicalId);
                 }
                 drive.Info = null;
@@ -182,6 +188,13 @@ namespace Syncless.Profiling
                 {
                     return drive;
                 }
+            }
+            return null;
+        }
+        internal ProfileDrive FindProfileDriveFromPhyisicalId(string physicalid)
+        {
+            if(_phyiscalDict.ContainsKey(physicalid)){
+                return _phyiscalDict[physicalid];
             }
             return null;
         }

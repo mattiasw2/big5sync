@@ -224,7 +224,6 @@ namespace Syncless.Profiling
         /// <returns>true if the save is complete.</returns>
         public void SaveTo(List<string> savedLocation)
         {
-
             ProfilingXMLHelper.SaveProfile(_profile, savedLocation[0]);
             List<string> newLocations = new List<string>();
             newLocations.AddRange(savedLocation);
