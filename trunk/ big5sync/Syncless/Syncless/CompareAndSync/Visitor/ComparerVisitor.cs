@@ -218,7 +218,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             for (int i = 0; i < numOfPaths; i++)
             {
-                if (file.Exists[i] && file.Priority[i] != file.Priority[mostUpdatedPos])
+                if (/*file.Exists[i] && */file.Priority[i] != file.Priority[mostUpdatedPos])
                 {
                     file.Parent.Dirty = true;
                     break;
