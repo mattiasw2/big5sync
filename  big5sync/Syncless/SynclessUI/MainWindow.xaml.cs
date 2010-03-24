@@ -321,8 +321,12 @@ namespace SynclessUI
         {
             e.Handled = true;
             //Actual Code
-
-            try
+			
+			RemoveTag();
+        }
+		
+		private void RemoveTag() {
+			try
             {
                 if (selectedTag != null)
                 {
@@ -351,7 +355,8 @@ namespace SynclessUI
             {
                 DisplayUnhandledExceptionMessage();
             }
-        }
+		}
+		
 
         private void RemoveTagCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -997,6 +1002,11 @@ namespace SynclessUI
         }
 
         #endregion
+		
+		private void RemoveTagRightClick_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            RemoveTag();
+        }
 
         #region Tag Info Panel Context Menu
 
