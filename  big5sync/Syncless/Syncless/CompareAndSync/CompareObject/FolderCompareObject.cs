@@ -120,7 +120,12 @@ namespace Syncless.CompareAndSync.CompareObject
         public bool Dirty
         {
             get { return _dirty; }
-            set { _dirty = value; }
+            set
+            {
+                if (Parent != null && value == true)
+                    Parent.Dirty = value;
+                _dirty = value;
+            }
         }
 
         public Dictionary<string, BaseCompareObject> Contents
