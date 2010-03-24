@@ -149,7 +149,8 @@ namespace Syncless.CompareAndSync.Visitor
 
                 if (file.ChangeType[i] == MetaChangeType.Delete)
                 {
-                    for (int j = 0; j < numOfPaths; i++)
+                    deletePos.Add(i);
+                    for (int j = 0; j < numOfPaths; j++)
                     {
                         if (file.Exists[j])
                         {
@@ -160,8 +161,7 @@ namespace Syncless.CompareAndSync.Visitor
                                 break;
                             }
                         }
-                    }
-                    deletePos.Add(i);
+                    }                    
                 }
                 else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null)
                 {
