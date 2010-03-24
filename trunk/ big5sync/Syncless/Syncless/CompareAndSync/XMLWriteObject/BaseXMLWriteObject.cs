@@ -11,22 +11,24 @@ namespace Syncless.CompareAndSync.XMLWriteObject
         private string _name, _fullPath, _newName;
         private long _creationTime;
         private MetaChangeType _changeType;
+        private long _metaUpdated;
 
-        public BaseXMLWriteObject(string name, string fullPath, MetaChangeType changeType)
+        public BaseXMLWriteObject(string name, string fullPath, MetaChangeType changeType, long metaUpdated)
         {
             _name = name;
             _fullPath = fullPath;
             _changeType = changeType;
+            _metaUpdated = metaUpdated;
         }
 
-        public BaseXMLWriteObject(string name, string fullPath, long creationTime, MetaChangeType changeType)
-            : this(name, fullPath, changeType)
+        public BaseXMLWriteObject(string name, string fullPath, long creationTime, MetaChangeType changeType, long metaUpdated)
+            : this(name, fullPath, changeType, metaUpdated)
         {
             _creationTime = creationTime;
         }
 
-        public BaseXMLWriteObject(string name, string newName, string fullPath, long creationTime, MetaChangeType changeType)
-            : this(name, fullPath, creationTime, changeType)
+        public BaseXMLWriteObject(string name, string newName, string fullPath, long creationTime, MetaChangeType changeType, long metaUpdated)
+            : this(name, fullPath, creationTime, changeType, metaUpdated)
         {
             _newName = newName;
         }
@@ -54,6 +56,11 @@ namespace Syncless.CompareAndSync.XMLWriteObject
         public string NewName
         {
             get { return _newName; }
+        }
+
+        public long MetaUpdated
+        {
+            get { return _metaUpdated; }
         }
 
     }
