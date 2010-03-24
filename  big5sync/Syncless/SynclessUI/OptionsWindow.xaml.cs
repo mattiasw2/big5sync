@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
 using Syncless.Core;
+using SynclessUI.Helper;
 
 namespace SynclessUI
 {
@@ -27,7 +28,7 @@ namespace SynclessUI
         }
 		
 		private void InitializeOptions() {
-			ChkBoxRegistryIntegration.IsChecked = Properties.Settings.Default.PersistRegistryIntegration;
+			ChkBoxRegistryIntegration.IsChecked = Properties.Settings.Default.EnableShellIntegration;
 		}
 		
         private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -37,7 +38,19 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-			Properties.Settings.Default.PersistRegistryIntegration = ChkBoxRegistryIntegration.IsChecked.Value; 
+			bool choice = ChkBoxRegistryIntegration.IsChecked.Value;
+			
+			if(choice)
+			{ 
+				string appPath = (string) Application.Current.Properties["AppPath"];
+				
+				RegistryHelper.CreateRegistry(appPath);
+			} else 
+			{
+            	RegistryHelper.RemoveRegistry();
+			}
+			
+			Properties.Settings.Default.EnableShellIntegration = choice;
 			Properties.Settings.Default.Save();
 			this.Close();
         }

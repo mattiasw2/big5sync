@@ -18,28 +18,44 @@ namespace SynclessUI.Helper
 
         public static void CreateRegistryForFolder(string path)
         {
-            RegistryKey tagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\Tag");
+            RegistryKey tagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessTag");
             tagKey.SetValue(null, "Syncless - Tag");
 
-            RegistryKey tagKeyCommand = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\Tag\command");
+            RegistryKey tagKeyCommand = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessTag\command");
             tagKeyCommand.SetValue(null, path + " -TFolder %1");
 
-            RegistryKey untagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\Untag");
+            RegistryKey untagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessUntag");
             untagKey.SetValue(null, "Syncless - Untag");
 
-            RegistryKey untagKeyCommand = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\Untag\command");
+            RegistryKey untagKeyCommand = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessUntag\command");
             untagKeyCommand.SetValue(null, path + " -UTFolder %1");
 
-            RegistryKey cleanKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SClean");
+            RegistryKey cleanKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessClean");
             cleanKey.SetValue(null, "Syncless - Clean");
 
-            RegistryKey cleanKeyCommand = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SClean\command");
+            RegistryKey cleanKeyCommand = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessClean\command");
             cleanKeyCommand.SetValue(null, path + " -CleanMeta %1");
 
             // To be removed
             try
             {
-                Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\Clean");
+                Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\SClean");
+            }
+            catch (ArgumentException)
+            {
+            }
+
+            try
+            {
+                Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\Untag");
+            }
+            catch (ArgumentException)
+            {
+            }
+
+            try
+            {
+                Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\Tag");
             }
             catch (ArgumentException)
             {
@@ -48,9 +64,15 @@ namespace SynclessUI.Helper
         }
         public static void RemoveRegistry()
         {
-            Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\Tag");
-            Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\Untag");
-            Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\SClean");
+            try
+            {
+                Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\SynclessTag");
+                Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\SynclessUntag");
+                Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\SynclessClean");
+            }
+            catch (ArgumentException)
+            {
+            }
         }
     }
 }
