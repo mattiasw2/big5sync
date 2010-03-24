@@ -31,6 +31,9 @@ namespace Syncless.CompareAndSync.CompareObject
             _metaHash = new string[numOfPaths];
             _metaLength = new long[numOfPaths];
             _metaLastWriteTime = new long[numOfPaths];
+
+            _toDoHash = new string[numOfPaths];
+            _toDoLastModified = new long[numOfPaths];
         }
 
         public string[] Hash
