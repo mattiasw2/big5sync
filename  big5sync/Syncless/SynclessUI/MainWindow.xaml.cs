@@ -100,12 +100,15 @@ namespace SynclessUI
         public void notifySyncAnalyzing(string tagname)
         {
             String message = "Analyzing Folders";
+            double percentageComplete = 0;
 
             if (selectedTag == tagname)
             {
                 this.LblStatusText.Content = message;
+                this.ProgressBarSync.Value = percentageComplete;
             }
 
+            this._syncProgressNotificationDictionary[tagname] = percentageComplete;
             this._syncStatusNotificationDictionary[tagname] = message;
         }
 
@@ -151,10 +154,29 @@ namespace SynclessUI
             {
                 ProgressBarSync.SetValue(ProgressBar.ValueProperty, progress.PercentComplete);
                 LblStatusText.Content = progress.Message;
+                setProgressBarColor(progress.PercentComplete);
             }
 
             _syncProgressNotificationDictionary[tagname] = progress.PercentComplete;
             _syncStatusNotificationDictionary[tagname] = progress.Message;
+        }
+
+        private void setProgressBarColor(double percentageComplete)
+        {
+            byte rcolor = 0, gcolor = 0, bcolor = 0;
+
+            if (percentageComplete <= 50)
+            {
+                rcolor = 211;
+                gcolor = (byte) (percentageComplete / 50 * 211);
+            }
+            else
+            {
+                rcolor = (byte) ((100 - percentageComplete) / 50 * 211);
+                gcolor = 211;
+            }
+
+            ProgressBarSync.Foreground = new SolidColorBrush(Color.FromArgb(255, rcolor, gcolor, bcolor));
         }
         
         #region Keyboard Shortcuts
@@ -499,6 +521,7 @@ namespace SynclessUI
                 if (_syncProgressNotificationDictionary.ContainsKey(tagname))
                 {
                     double percentageComplete= getSyncProgressPercentage(tagname);
+                    setProgressBarColor(progress.PercentComplete);
                     string status = getSyncStatus(tagname);
 
                     ProgressBarSync.Value = percentageComplete;

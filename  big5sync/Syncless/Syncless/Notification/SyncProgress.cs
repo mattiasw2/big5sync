@@ -212,7 +212,7 @@ namespace Syncless.Notification
             {
                 return false;
             }
-            _message = "Finished";
+            _message = "Finishing";
             //TriggerStateChanged();
             TriggerSyncComplete();
             return true;
