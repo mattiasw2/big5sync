@@ -40,6 +40,7 @@ namespace SynclessUI.Notification
             {
                 _main.notifySyncStart(_tagName);
             }));
+            StateChanged();
         }
 
         public void StateChanged()
