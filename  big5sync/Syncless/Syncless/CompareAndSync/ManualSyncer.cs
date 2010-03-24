@@ -30,14 +30,14 @@ namespace Syncless.CompareAndSync
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters));
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
             CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor());
-            ComparerVisitor visitor = new ComparerVisitor();
-            CompareObjectHelper.PostTraverseFolder(rco, visitor);
-            int totalJobs = visitor.TotalNodes;
+            ComparerVisitor comparerVisitor = new ComparerVisitor();
+            CompareObjectHelper.PostTraverseFolder(rco, comparerVisitor);
             //Syncing
-            progress.ChangeToSyncing(totalJobs);
-            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config,progress));
+            progress.ChangeToSyncing(comparerVisitor.TotalNodes);
+            SyncerVisitor syncerVisitor = new SyncerVisitor(request.Config,progress);
+            CompareObjectHelper.PreTraverseFolder(rco, syncerVisitor);
             //XML Writer
-            progress.ChangeToFinalizing(totalJobs);
+            progress.ChangeToFinalizing(syncerVisitor.NodesCount);
             CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor(progress));
 
             if (request.Notify)
