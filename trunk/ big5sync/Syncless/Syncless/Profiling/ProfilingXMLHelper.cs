@@ -7,7 +7,7 @@ using System.IO;
 using System.Diagnostics;
 using Syncless.Helper;
 using Syncless.Profiling.Exceptions;
-
+using Syncless.Core;
 namespace Syncless.Profiling
 {
     internal static class ProfilingXMLHelper
@@ -132,7 +132,12 @@ namespace Syncless.Profiling
             foreach (XmlNode profile in profileElementList)
             {
                 XmlElement profileElement = profile as XmlElement;
-                profileList.Add(CreateProfile(profileElement));
+                Profile profileObj = CreateProfile(profileElement);
+                if (profileObj == null)
+                {
+                    return null;
+                }
+                profileList.Add(profileObj);
             }
             return profileList;
         }
@@ -152,7 +157,9 @@ namespace Syncless.Profiling
             XmlNodeList profileElementList = xmlDoc.GetElementsByTagName(ELE_PROFILE);
 
             XmlElement profileElement = profileElementList[0] as XmlElement;
+            
             return CreateProfile(profileElement);
+            
         }
         public static Profile LoadSingleProfile(string path, string profileName)
         {
@@ -178,7 +185,13 @@ namespace Syncless.Profiling
                 XmlElement driveElement = drive as XmlElement;
                 if (driveElement != null)
                 {
-                    profile.AddProfileDrive(CreateProfileDrive(driveElement));
+                    ProfileDrive driveObj = CreateProfileDrive(driveElement);
+                    if (driveObj == null)
+                    {
+                        //Fail Load
+                        return null;
+                    }
+                    profile.AddProfileDrive(driveObj);
                 }
             }
 
@@ -187,15 +200,25 @@ namespace Syncless.Profiling
 
         private static ProfileDrive CreateProfileDrive(XmlElement driveElement)
         {
-            string guid = driveElement.GetAttribute(ELE_PROFILE_DRIVE_GUID);
-            string lastUpdatedString = driveElement.GetAttribute(ELE_PROFILE_LAST_UPDATED);
-            long lastUpdated = long.Parse(lastUpdatedString);
-            string driveName = driveElement.GetAttribute(ELE_PROFILE_DRIVE_NAME);
+            try
+            {
+                string guid = driveElement.GetAttribute(ELE_PROFILE_DRIVE_GUID);
+                string lastUpdatedString = driveElement.GetAttribute(ELE_PROFILE_LAST_UPDATED);
 
-            ProfileDrive drive = new ProfileDrive(guid, driveName);
-            drive.LastUpdated = lastUpdated;
+                long lastUpdated = long.Parse(lastUpdatedString);
 
-            return drive;
+                string driveName = driveElement.GetAttribute(ELE_PROFILE_DRIVE_NAME);
+
+                ProfileDrive drive = new ProfileDrive(guid, driveName);
+                drive.LastUpdated = lastUpdated;
+
+                return drive;
+            }
+            catch (Exception e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(e);
+                return null;
+            }
         }
         #endregion
 

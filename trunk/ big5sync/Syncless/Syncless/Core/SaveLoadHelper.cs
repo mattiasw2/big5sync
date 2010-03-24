@@ -5,21 +5,35 @@ using System.Text;
 using Syncless.Tagging;
 using Syncless.Profiling;
 using System.IO;
+using Syncless.Profiling.Exceptions;
+using Syncless.Logging;
 
 namespace Syncless.Core
 {
     internal class SaveLoadHelper
     {
-        public static void SaveAll(string appPath)
+        public static bool SaveAll(string appPath)
         {
-            SaveProfiling(appPath);
-            SaveTagging(appPath);
+            
+                SaveProfiling(appPath);
+                SaveTagging(appPath);
+                return true;
+            
         }
 
-        public static void LoadAll(string appPath)
+        public static bool LoadAll(string appPath)
         {
-            LoadProfiling(appPath);
-            LoadTagging(appPath);
+            try
+            {
+                LoadProfiling(appPath);
+                LoadTagging(appPath);
+            }
+            catch (ProfileLoadException e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.UNKNOWN, "Profile Load fail"));
+                return false;
+            }
+            return true;
         }
 
         #region private methods for Loading Tagging and Profiling.
