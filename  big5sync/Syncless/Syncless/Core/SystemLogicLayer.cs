@@ -21,6 +21,7 @@ using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.Notification;
+using Syncless.Core.View;
 namespace Syncless.Core
 {
     internal class SystemLogicLayer : IUIControllerInterface, IMonitorControllerInterface, ICommandLineControllerInterface
@@ -882,8 +883,15 @@ namespace Syncless.Core
         private TagView ConvertToTagView(Tag t)
         {
             TagView view = new TagView(t.TagName, t.LastUpdatedDate);
-            List<string> pathList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(t.FilteredPathListString);
-            view.PathStringList = pathList;
+            List<string>[] pathList = ProfilingLayer.Instance.ConvertAndFilter(t.FilteredPathListString);
+            List<string> namedPath = ProfilingLayer.Instance.ConvertAndFilterToNamed(pathList[1]);
+
+            PathGroupView availGrpView = new PathGroupView("Available");
+            availGrpView.PathList = pathList[0];
+            PathGroupView namedGrpView = new PathGroupView("Unavailable");
+            view.GroupList.Add(availGrpView);
+            view.GroupList.Add(namedGrpView);
+            //view.PathStringList = pathList;
             view.Created = t.CreatedDate;
             view.IsSeamless = t.IsSeamless;
             return view;

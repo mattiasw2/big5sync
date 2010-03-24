@@ -203,7 +203,7 @@ namespace Syncless.Notification
             _state = SyncState.FINALIZING;
             _message = "Finalizing.....";
             TriggerStateChanged();
-            return false;
+            return true;
         }
         public bool ChangeToFinished()
         {
@@ -212,16 +212,26 @@ namespace Syncless.Notification
                 return false;
             }
             _message = "Finished.....";
-            TriggerStateChanged();
+            //TriggerStateChanged();
+            TriggerSyncComplete();
             return true;
+        }
+        private void TriggerSyncComplete()
+        {
+            foreach (ISyncProgressObserver obs in _observerList)
+            {
+                MethodASync sync = new MethodASync(obs.SyncComplete);
+                sync.BeginInvoke(null, null);
+                //obs.SyncComplete(); 
+            }
         }
         private void TriggerStateChanged()
         {
             foreach (ISyncProgressObserver obs in _observerList)
             {
-                //MethodASync sync = new MethodASync(obs.StateChanged);
-                //sync.BeginInvoke(null, null);
-                obs.StateChanged();
+                MethodASync sync = new MethodASync(obs.StateChanged);
+                sync.BeginInvoke(null, null);
+                //obs.StateChanged();
             }
         }
     }

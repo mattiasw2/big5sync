@@ -7,6 +7,7 @@ using Syncless.CompareAndSync;
 using System.IO;
 using Syncless.Filters;
 using Syncless.CompareAndSync.CompareObject;
+using Syncless.Core.View;
 namespace Syncless.Core
 {
     public interface IUIControllerInterface

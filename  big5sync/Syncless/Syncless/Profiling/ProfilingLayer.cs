@@ -112,6 +112,38 @@ namespace Syncless.Profiling
             }
             return convertedPathList;
         }
+        public List<string> ConvertAndFilterToNamed(List<string> pathList)
+        {
+            List<string> convertedPathList = new List<string>();
+            foreach (string path in pathList)
+            {
+                string convertedPath = ConvertToNamedPath(path);
+                if (convertedPath != null)
+                {
+                    convertedPathList.Add(convertedPath);
+                }
+            }
+            return convertedPathList;
+        }
+        
+        /// <summary>
+        /// Pass in a logical path.
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public string ConvertToNamedPath(string path)
+        {
+            string logicalid = ProfilingHelper.ExtractDriveName(path);
+            ProfileDrive drive = _profile.FindProfileDriveFromLogicalId(path);
+            if (drive == null)
+            {
+                return null;
+            }
+            string relativepath = ProfilingHelper.ExtractRelativePath(path);
+            return drive.DriveName + ":" + relativepath;
+        }
+
+
         /// <summary>
         /// Take in a list of logical address , convert them to physical and return 2 list of address
         ///   first list are the converted paths
