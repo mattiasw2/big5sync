@@ -118,7 +118,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Helper\DialogsHelper.cs" />
-    <Compile Include="Helper\LogReaderHelper.cs" />
     <Compile Include="Notification\NotificationWatcher.cs" />
     <Compile Include="Notification\PriorityNotificationWatcher.cs" />
     <Compile Include="Notification\SyncProgressWatcher.cs" />

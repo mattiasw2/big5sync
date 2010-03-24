@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Syncless.Logging;
 
-namespace SynclessUI.Helper
+namespace Syncless.Logging
 {
     public class LogReaderHelper
     {
@@ -17,6 +16,10 @@ namespace SynclessUI.Helper
             {
                 string text = streamReader.ReadLine();
                 string[] tokens = text.Split(new char[] { '~' });
+                if (tokens.Length != 4)
+                {
+                    throw new ApplicationException();
+                }
                 string timestamp = tokens[0].Trim();
                 LogEventType logEvent = Convert(tokens[2].Trim());
                 string message = tokens[3].Trim();
