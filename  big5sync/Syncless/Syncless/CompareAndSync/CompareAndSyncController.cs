@@ -95,5 +95,20 @@ namespace Syncless.CompareAndSync
             SeamlessQueueControl.Instance.Dispose();
             ManualQueueControl.Instance.Dispose();
         }
+
+        public bool IsQueued(string tagName)
+        {
+            return ManualQueueControl.Instance.IsQueued(tagName);
+        }
+
+        public bool IsSyncing(string tagName)
+        {
+            return ManualQueueControl.Instance.IsSyncing(tagName);
+        }
+
+        public bool IsQueuedOrSyncing(string tagName)
+        {
+            return ManualQueueControl.Instance.IsQueuedOrSyncing(tagName);
+        }
     }
 }
