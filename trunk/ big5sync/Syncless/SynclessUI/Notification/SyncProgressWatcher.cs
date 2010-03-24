@@ -29,9 +29,30 @@ namespace SynclessUI.Notification
             _tagName = tagName;
             _progress = p;
             _progress.AddObserver(this);
+
+            SyncStart();
         }
+
+        private void SyncStart()
+        {
+            _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+            (Action)(() =>
+            {
+                _main.notifySyncStart(_tagName);
+            }));
+        }
+
         public void StateChanged()
         {
+            if (_progress.State == SyncState.ANALYZING)
+            {
+                _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+               (Action)(() =>
+               {
+                   _main.notifySyncAnalyzing(_tagName);
+               }));
+            }
+
             Console.WriteLine("State Changed (New State : " + _progress.State + ")");   
         }
 

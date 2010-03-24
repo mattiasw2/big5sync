@@ -97,11 +97,38 @@ namespace SynclessUI
             }
         }
 
+        public void notifySyncAnalyzing(string tagname)
+        {
+            String message = "Analyzing Folders";
+
+            if (selectedTag == tagname)
+            {
+                this.LblStatusText.Content = message;
+            }
+
+            this._syncStatusNotificationDictionary[tagname] = message;
+        }
+
+        public void notifySyncStart(string tagname)
+        {
+            String message = "Synchronization Started";
+
+            if (selectedTag == tagname)
+            {
+                this.LblStatusText.Content = message;
+            }
+
+            this._syncStatusNotificationDictionary[tagname] = message;
+        }
+
         public void notifySyncCompletion(string tagname)
         {
-            String message = "Synchronization Completed at " + DateTime.Now;
+            String message = "Synchronization completed at " + DateTime.Now;
 
-            this.LblStatusText.Content = message;
+            if (selectedTag == tagname)
+            {
+                this.LblStatusText.Content = message;
+            }
 
             this._syncStatusNotificationDictionary[tagname] = message;
         }
@@ -113,7 +140,9 @@ namespace SynclessUI
 
         public string getSyncStatus(string tagname)
         {
-            return _syncStatusNotificationDictionary[tagname];
+            string status = _syncStatusNotificationDictionary[tagname];
+
+            return status;
         }
 
         public void setSyncProgress(string tagname, SyncProgress progress)
@@ -673,7 +702,12 @@ namespace SynclessUI
         {
             try
             {
-                if (!gui.StartManualSync(selectedTag))
+                if (gui.StartManualSync(selectedTag))
+                {
+                    string message = "Synchronization request has been queued.";
+                    LblStatusText.Content = message;
+                    this._syncStatusNotificationDictionary[selectedTag] = message;
+                } else 
                 {
                     DialogsHelper.ShowError("Synchronization Error", "'" + selectedTag + "' could not be synchronized.");
                 }
