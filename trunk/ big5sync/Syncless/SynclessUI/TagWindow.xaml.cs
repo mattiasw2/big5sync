@@ -99,7 +99,7 @@ namespace SynclessUI
             return "";
 		}
 
-        private void ProcessPath(string path, string _selectedtag)
+        private void ProcessPath(string path, string selectedTag)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace SynclessUI
                         TxtBoxPath.Text = path;
                         ACBName.IsEnabled = true;
                         ACBName.ItemsSource = _main.gui.GetAllTags();
-                        ACBName.Text = _selectedtag;
+                        ACBName.Text = selectedTag;
                     }
                     else
                     {

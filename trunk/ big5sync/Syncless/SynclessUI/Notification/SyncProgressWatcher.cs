@@ -37,15 +37,19 @@ namespace SynclessUI.Notification
 
         public void ProgressChanged()
         {
+            /*
             _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
             (Action)(() =>
             {
-                if (_main._selectedTag == this._tagName)
+                if (_main.selectedTag == this._tagName)
                 {
                     _main.ProgressBarSync.SetValue(ProgressBar.ValueProperty, _progress.PercentComplete);
                     _main.LblStatusText.Content = _progress.Message;
                 }
             }));
+            */
+
+            _main.setSyncProgress(_tagName, _progress);
             
             Console.WriteLine("Current Percent : "+_progress.PercentComplete + "("+_progress.Message+")");
         }
