@@ -133,6 +133,7 @@ namespace Syncless.CompareAndSync.Visitor
                 file.NewName = result.Name;
                 file.ChangeType[resultPos] = MetaChangeType.Rename;
                 result.Invalid = true;
+                file.Parent.Invalid = true; //Experimental
             }
 
         }
