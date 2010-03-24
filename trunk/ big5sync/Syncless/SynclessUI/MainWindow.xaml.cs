@@ -681,8 +681,8 @@ namespace SynclessUI
 			BtnSyncMode.SetResourceReference(Control.BackgroundProperty, "ToggleOnBrush");
             LblSyncMode.SetResourceReference(Control.MarginProperty, "ToggleOnMargin");
 			LblSyncMode.SetResourceReference(Control.ForegroundProperty, "ToggleOnForeground");
-            ProgressBarSync.Visibility = System.Windows.Visibility.Hidden;
-            LblProgress.Visibility = System.Windows.Visibility.Hidden;
+            //ProgressBarSync.Visibility = System.Windows.Visibility.Hidden;
+            //LblProgress.Visibility = System.Windows.Visibility.Hidden;
         }
 
         private void ManualMode()
