@@ -30,19 +30,6 @@ namespace Syncless.CompareAndSync.CompareObject
         //Todo
         private LastKnownState?[] _toDoAction;
 
-        public LastKnownState?[] ToDoAction
-        {
-            get { return _toDoAction; }
-            set { _toDoAction = value; }
-        }
-        private long[] _toDoTimestamp;
-
-        public long[] ToDoTimestamp
-        {
-            get { return _toDoTimestamp; }
-            set { _toDoTimestamp = value; }
-        }
-
         protected BaseCompareObject(string name, int numOfPaths, FolderCompareObject parent)
         {
             _name = name;
@@ -57,7 +44,6 @@ namespace Syncless.CompareAndSync.CompareObject
             _invalid = false;
 
             _toDoAction = new LastKnownState?[numOfPaths];
-            _toDoTimestamp = new long[numOfPaths];
         }
 
         public string Name
@@ -140,6 +126,12 @@ namespace Syncless.CompareAndSync.CompareObject
                 else
                     return Path.Combine(Parent.GetSmartParentPath(index), Parent.FinalState[index] == Syncless.CompareAndSync.Enum.FinalState.Renamed ? Parent.NewName : Parent.Name);
             }
+        }
+
+        public LastKnownState?[] ToDoAction
+        {
+            get { return _toDoAction; }
+            set { _toDoAction = value; }
         }
 
         //public abstract string GetSmartParentPath(int index);

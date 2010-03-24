@@ -17,6 +17,10 @@ namespace Syncless.CompareAndSync.CompareObject
         private string[] _metaHash;
         private long[] _metaLength, _metaLastWriteTime;
 
+        //Todo
+        private string[] _toDoHash;
+        private long[] _toDoLastModified;
+
         public FileCompareObject(string name, int numOfPaths, FolderCompareObject parent)
             : base(name, numOfPaths, parent)
         {
@@ -63,6 +67,18 @@ namespace Syncless.CompareAndSync.CompareObject
         {
             get { return _metaLastWriteTime; }
             set { _metaLastWriteTime = value; }
+        }
+
+        public string[] ToDoHash
+        {
+            get { return _toDoHash; }
+            set { _toDoHash = value; }
+        }
+
+        public long[] ToDoLastModified
+        {
+            get { return _toDoLastModified; }
+            set { _toDoLastModified = value; }
         }
 
     }
