@@ -15,6 +15,7 @@ using Syncless.Core;
 using Syncless.Core.Exceptions;
 using Microsoft.Windows.Controls;
 using SynclessUI.Helper;
+using Syncless.Core.View;
 
 namespace SynclessUI
 {
