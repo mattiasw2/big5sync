@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Syncless.CompareAndSync.Enum
 {
-    public enum ToDo
+    public enum LastKnownState
     {
-        Rename,
-        Delete
+        Renamed,
+        Deleted
     }
 }

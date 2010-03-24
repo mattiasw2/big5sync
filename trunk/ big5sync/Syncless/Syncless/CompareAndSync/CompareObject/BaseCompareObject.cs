@@ -28,9 +28,9 @@ namespace Syncless.CompareAndSync.CompareObject
         private string _newName;
 
         //Todo
-        private ToDo?[] _toDoAction;
+        private LastKnownState?[] _toDoAction;
 
-        public ToDo?[] ToDoAction
+        public LastKnownState?[] ToDoAction
         {
             get { return _toDoAction; }
             set { _toDoAction = value; }
@@ -56,7 +56,7 @@ namespace Syncless.CompareAndSync.CompareObject
             _parent = parent;
             _invalid = false;
 
-            _toDoAction = new ToDo?[numOfPaths];
+            _toDoAction = new LastKnownState?[numOfPaths];
             _toDoTimestamp = new long[numOfPaths];
         }
 

@@ -205,11 +205,11 @@ namespace Syncless.CompareAndSync.Visitor
                                 string action = childNode.InnerText;
                                 if (action.Equals("Delete"))
                                 {
-                                    file.ToDoAction[counter] = ToDo.Delete;
+                                    file.ToDoAction[counter] = LastKnownState.Deleted;
                                 }
                                 else
                                 {
-                                    file.ToDoAction[counter] = ToDo.Rename;
+                                    file.ToDoAction[counter] = LastKnownState.Renamed;
                                 }
                                 break;
                             case LAST_UPDATED:
@@ -448,7 +448,7 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 if (file.ChangeType[i] == null && file.ToDoAction[i].HasValue)
                 {
-                    if (file.ToDoAction[i] == ToDo.Delete)
+                    if (file.ToDoAction[i] == LastKnownState.Deleted)
                         file.ChangeType[i] = MetaChangeType.Delete;
                 }
             }
