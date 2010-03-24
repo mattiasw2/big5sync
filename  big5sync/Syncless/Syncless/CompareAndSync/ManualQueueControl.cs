@@ -58,7 +58,8 @@ namespace Syncless.CompareAndSync
             lock (locker)
             {
                 jobs.Enqueue(item);
-                _queuedJobs.Add(item.TagName);
+                if (item != null)
+                    _queuedJobs.Add(item.TagName);
             }
             wh.Set();
         }
@@ -73,11 +74,12 @@ namespace Syncless.CompareAndSync
                     if (jobs.Count > 0)
                     {
                         item = jobs.Dequeue();
-                        _queuedJobs.Remove(item.TagName);
-                        _currJobName = item.TagName;
 
                         if (item == null)
                             return;
+
+                        _queuedJobs.Remove(item.TagName);
+                        _currJobName = item.TagName;
                     }
                 }
                 if (item != null)
