@@ -779,7 +779,8 @@ namespace Syncless.Core
 
         public bool SetDriveName(DriveInfo info, string driveName)
         {
-            return true;
+            ProfilingLayer.Instance.SetDriveName(info, driveName);
+            return false;
         }
         #endregion
 
