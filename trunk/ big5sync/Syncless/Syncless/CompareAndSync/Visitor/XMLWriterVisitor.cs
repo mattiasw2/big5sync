@@ -287,6 +287,7 @@ namespace Syncless.CompareAndSync.Visitor
             node.FirstChild.InnerText = file.NewName;
             node.LastChild.InnerText = dateTime.ToString();
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+            GenerateFileTodo(file, counter);
         }
 
         private void DeleteFileObject(FileCompareObject file, int counter)
@@ -467,6 +468,7 @@ namespace Syncless.CompareAndSync.Visitor
                 node.FirstChild.InnerText = folder.NewName;
                 node.LastChild.InnerText = dateTime.ToString();
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+                GenerateFolderTodo(folder, counter);
             }
             else
             {
@@ -486,6 +488,7 @@ namespace Syncless.CompareAndSync.Visitor
                 parentXmlFolderNode.FirstChild.InnerText = folder.NewName;
                 parentXmlFolderNode.LastChild.InnerText = dateTime.ToString();
                 CommonMethods.SaveXML(ref parentXmlDoc, Path.Combine(folder.GetSmartParentPath(counter), METADATAPATH));
+                GenerateFolderTodo(folder, counter);
             }
         }
 
@@ -503,8 +506,6 @@ namespace Syncless.CompareAndSync.Visitor
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
 
-            XmlDocument todoXMLDoc = new XmlDocument();
-            string todoXMLPath = Path.Combine(folder.GetSmartParentPath(counter), TODOPATH);
             GenerateFolderTodo(folder, counter);
         }
 
@@ -572,17 +573,6 @@ namespace Syncless.CompareAndSync.Visitor
             fileElement.AppendChild(hashElement);
             fileElement.AppendChild(lastModifiedElement);
             fileElement.AppendChild(lastUpdatedElement);
-
-            if (changeType.Equals(RENAME))
-            {
-                XmlText lastNameText = xmlDoc.CreateTextNode(file.NewName);
-                XmlElement lastNameElement = xmlDoc.CreateElement(NODE_LASTNAME);
-                XmlElement oldNameElement = xmlDoc.CreateElement(NODE_OLDNAME);
-                lastNameElement.AppendChild(lastNameText);
-                /* ADD THE LIST OF OLD NAMES HERE */
-                fileElement.AppendChild(lastNameElement);
-                fileElement.AppendChild(oldNameElement);
-            }
 
             XmlNode rootNode = xmlDoc.SelectSingleNode("/" + LAST_KNOWN_STATE);
             rootNode.AppendChild(fileElement);
