@@ -6,6 +6,7 @@ using Syncless.CompareAndSync.CompareObject;
 using System.Xml;
 using System.IO;
 using Syncless.CompareAndSync.Enum;
+using Syncless.Notification;
 
 
 namespace Syncless.CompareAndSync.Visitor
@@ -41,12 +42,29 @@ namespace Syncless.CompareAndSync.Visitor
         //private static readonly object syncLock = new object();
         private string[] pathList;
 
+        private SyncProgress _progress;
+
+        public SyncProgress Progress
+        {
+            get { return _progress; }
+        }
+
+        public XMLWriterVisitor(SyncProgress progress)
+        {
+            _progress = progress;
+        }
+
+
+
+
+
         public void Visit(FileCompareObject file, int numOfPaths)
         {
             for (int i = 0; i < numOfPaths; i++) // HANDLE ALL EXCEPT PROPAGATED
             {
                 ProcessMetaChangeType(file, i);
             }
+            _progress.complete();
         }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
@@ -55,11 +73,13 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 ProcessFolderFinalState(folder, i);
             }
+            _progress.complete();
         }
 
         public void Visit(RootCompareObject root)
         {
             pathList = root.Paths;
+            _progress.complete();
         }
 
         private void CreateFileIfNotExist(string path)

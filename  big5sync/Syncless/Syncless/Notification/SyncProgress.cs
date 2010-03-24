@@ -177,7 +177,7 @@ namespace Syncless.Notification
                 return false;
             }
             _state = SyncState.ANALYZING;
-            _message = "Analyzing.....";
+            _message = "Analyzing";
             TriggerStateChanged();
             return true;
         }
@@ -189,6 +189,7 @@ namespace Syncless.Notification
                 return false;
             }
             _state = SyncState.SYNCHRONIZING;
+            _message = "Synchronzing";
             TriggerStateChanged();
             return true;
         }
@@ -201,7 +202,7 @@ namespace Syncless.Notification
             }
 
             _state = SyncState.FINALIZING;
-            _message = "Finalizing.....";
+            _message = "Finalizing";
             TriggerStateChanged();
             return true;
         }
@@ -211,7 +212,7 @@ namespace Syncless.Notification
             {
                 return false;
             }
-            _message = "Finished.....";
+            _message = "Finished";
             //TriggerStateChanged();
             TriggerSyncComplete();
             return true;
