@@ -109,13 +109,13 @@ namespace Syncless.Profiling
         {
             ProfileDrive drive = null;
             string driveLetter = ProfilingHelper.ExtractDriveName(info.Name);
-            if (!_phyiscalDict.TryGetValue(driveLetter ,out drive))
+            if (!_phyiscalDict.TryGetValue(driveLetter, out drive))
             {
                 drive = FindProfileDriveFromGUID(guid);
                 if (drive == null)
                 {
                     drive = CreateProfileDrive(guid);
-                    
+
                 }
                 drive.Info = info;
                 _phyiscalDict[drive.PhysicalId] = drive;
@@ -135,8 +135,15 @@ namespace Syncless.Profiling
             ProfileDrive drive = _phyiscalDict[info.Name];
             if (drive != null)
             {
-                _phyiscalDict.Remove(drive.PhysicalId);
-                _logicalDict.Remove(drive.LogicalId);
+                if (_phyiscalDict.ContainsKey(drive.PhysicalId))
+                {
+                    _phyiscalDict.Remove(drive.PhysicalId);
+                }
+                if (_logicalDict.ContainsKey(drive.LogicalId))
+                {
+
+                    _logicalDict.Remove(drive.LogicalId);
+                }
                 drive.Info = null;
                 return true;
             }
@@ -148,7 +155,7 @@ namespace Syncless.Profiling
         {
             ProfileDrive drive = new ProfileDrive(guid, DEFAULT_DRIVE_NAME);
             _fullList.Add(drive);
-            
+
             return drive;
         }
         internal bool AddProfileDrive(ProfileDrive drive)
@@ -167,7 +174,8 @@ namespace Syncless.Profiling
             }
             return null;
         }
-        internal ProfileDrive FindProfileDriveFromLogicalId(string logicalid){
+        internal ProfileDrive FindProfileDriveFromLogicalId(string logicalid)
+        {
             foreach (ProfileDrive drive in _fullList)
             {
                 if (drive.Guid.Equals(logicalid))
@@ -177,16 +185,16 @@ namespace Syncless.Profiling
             }
             return null;
         }
-        
-        
-
-
-       
-
-        
 
 
 
-        
+
+
+
+
+
+
+
+
     }
 }
