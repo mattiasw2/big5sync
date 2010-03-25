@@ -274,7 +274,6 @@ namespace Syncless.CompareAndSync
         public static void ArchiveFolder(string path, string archiveName, int archiveLimit)
         {
             Debug.Assert(path != null && archiveName != null && archiveLimit >= 0);
-
             DirectoryInfo f = new DirectoryInfo(path);
 
             if (!f.Exists)

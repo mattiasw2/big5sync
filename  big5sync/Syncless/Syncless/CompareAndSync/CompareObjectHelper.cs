@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Visitor;
 
@@ -23,16 +20,14 @@ namespace Syncless.CompareAndSync
         private static void LevelOrderTraverseFolder(RootCompareObject root, int numOfPaths, IVisitor visitor)
         {
             Queue<BaseCompareObject> levelQueue = new Queue<BaseCompareObject>();
-            BaseCompareObject currObj = null;
-            RootCompareObject rt = null;
+            RootCompareObject rt;
             FolderCompareObject folder = null;
-            Dictionary<string, BaseCompareObject>.ValueCollection values = null;
 
             levelQueue.Enqueue(root);
 
             while (levelQueue.Count > 0)
             {
-                currObj = levelQueue.Dequeue();
+                BaseCompareObject currObj = levelQueue.Dequeue();
 
                 if ((rt = currObj as RootCompareObject) != null)
                     visitor.Visit(rt);
@@ -41,6 +36,7 @@ namespace Syncless.CompareAndSync
                 else
                     visitor.Visit(currObj as FileCompareObject, numOfPaths);
 
+                Dictionary<string, BaseCompareObject>.ValueCollection values;
                 if (rt != null)
                 {
                     values = rt.Contents.Values;
@@ -73,9 +69,9 @@ namespace Syncless.CompareAndSync
                 visitor.Visit(root);
 
             Dictionary<string, BaseCompareObject>.ValueCollection values = root.Contents.Values;
-            FolderCompareObject fco = null;
             foreach (BaseCompareObject o in values)
             {
+                FolderCompareObject fco;
                 if ((fco = o as FolderCompareObject) != null)
                     TraverseFolderHelper(fco, root.Paths.Length, visitor, type);
                 else
@@ -92,9 +88,9 @@ namespace Syncless.CompareAndSync
                 visitor.Visit(folder, numOfPaths);
 
             Dictionary<string, BaseCompareObject>.ValueCollection values = folder.Contents.Values;
-            FolderCompareObject fco = null;
             foreach (BaseCompareObject o in values)
             {
+                FolderCompareObject fco;
                 if ((fco = o as FolderCompareObject) != null)
                     TraverseFolderHelper(fco, numOfPaths, visitor, type);
                 else

@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Syncless.CompareAndSync.Enum;
+﻿using Syncless.CompareAndSync.Enum;
 
 namespace Syncless.CompareAndSync.XMLWriteObject
 {
     public abstract class BaseXMLWriteObject
     {
-        private string _name, _fullPath, _newName;
-        private long _creationTime;
-        private MetaChangeType _changeType;
-        private long _metaUpdated;
+        private readonly string _name, _fullPath, _newName;
+        private readonly long _creationTime;
+        private readonly MetaChangeType _changeType;
+        private readonly long _metaUpdated;
 
-        public BaseXMLWriteObject(string name, string fullPath, MetaChangeType changeType, long metaUpdated)
+        protected BaseXMLWriteObject(string name, string fullPath, MetaChangeType changeType, long metaUpdated)
         {
             _name = name;
             _fullPath = fullPath;
@@ -21,13 +17,13 @@ namespace Syncless.CompareAndSync.XMLWriteObject
             _metaUpdated = metaUpdated;
         }
 
-        public BaseXMLWriteObject(string name, string fullPath, long creationTime, MetaChangeType changeType, long metaUpdated)
+        protected BaseXMLWriteObject(string name, string fullPath, long creationTime, MetaChangeType changeType, long metaUpdated)
             : this(name, fullPath, changeType, metaUpdated)
         {
             _creationTime = creationTime;
         }
 
-        public BaseXMLWriteObject(string name, string newName, string fullPath, long creationTime, MetaChangeType changeType, long metaUpdated)
+        protected BaseXMLWriteObject(string name, string newName, string fullPath, long creationTime, MetaChangeType changeType, long metaUpdated)
             : this(name, fullPath, creationTime, changeType, metaUpdated)
         {
             _newName = newName;
