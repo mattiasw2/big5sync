@@ -34,13 +34,13 @@ namespace Syncless.CompareAndSync.Visitor
         private const string XPATH_EXPR = "/meta-data";
         private const string LAST_MODIFIED = "/last_modified";
         private const string LAST_KNOWN_STATE = "last_known_state";
-        private const string ACTION = "action";
+        private const string Action = "action";
         private const string RENAME = "Rename";
         private const string DELETE = "Delete";
         private const string DELETED = "Deleted";
         private const int FIRST_POSITION = 0;
         private long dateTime = DateTime.Now.Ticks;
-        //private static readonly object syncLock = new object();
+        private static readonly object SyncLock = new object();
         private string[] pathList;
 
         private SyncProgress _progress;
@@ -558,7 +558,7 @@ namespace Syncless.CompareAndSync.Visitor
             XmlElement fileElement = xmlDoc.CreateElement(FILES);
             XmlElement nameElement = xmlDoc.CreateElement(NODE_NAME);
             XmlElement hashElement = xmlDoc.CreateElement(NODE_HASH);
-            XmlElement actionElement = xmlDoc.CreateElement(ACTION);
+            XmlElement actionElement = xmlDoc.CreateElement(Action);
             XmlElement lastModifiedElement = xmlDoc.CreateElement(NODE_LAST_MODIFIED);
             XmlElement lastUpdatedElement = xmlDoc.CreateElement(NODE_LAST_UPDATED);
 
@@ -586,7 +586,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             XmlElement folderElement = xmlDoc.CreateElement(FOLDER);
             XmlElement nameElement = xmlDoc.CreateElement(NODE_NAME);
-            XmlElement actionElement = xmlDoc.CreateElement(ACTION);
+            XmlElement actionElement = xmlDoc.CreateElement(Action);
             XmlElement lastUpdatedElement = xmlDoc.CreateElement(NODE_LAST_UPDATED);
 
             nameElement.AppendChild(nameText);
