@@ -583,14 +583,21 @@ namespace SynclessUI
 
                         if (tv != null)
                         {
-                            Gui.Untag(tv.TagName, new DirectoryInfo((string) ListTaggedPath.SelectedValue));
+                            if(tv.IsSyncing)
+                            {
+                                Gui.Untag(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
 
-                            SelectTag(tv.TagName);
+                                SelectTag(tv.TagName);
+                            } else
+                            {
+                                DialogsHelper.ShowError(tv.TagName + " is Synchronizing",
+                                                        "You cannot untag while a tag is synchronizing.");
+                            }
                         }
                         else
                         {
                             DialogsHelper.ShowError("Tag Does Not Exist",
-                                                    "The tag which you tried to untag does not exist");
+                                                    "The tag which you tried to untag does not exist.");
 
                             InitializeTagInfoPanel();
 
@@ -1193,22 +1200,29 @@ namespace SynclessUI
             {
                 if (SelectedTag != null)
                 {
-                    bool result = DialogsHelper.ShowWarning("Remove Tag",
-                                                            "Are you sure you want to remove the tag '" + SelectedTag +
-                                                            "'?");
-
-                    if (result)
+                    if(!Gui.GetTag(SelectedTag).IsSyncing)
                     {
-                        bool success = Gui.DeleteTag(SelectedTag);
-                        if (success)
+                        bool result = DialogsHelper.ShowWarning("Remove Tag",
+                                                                "Are you sure you want to remove the tag '" + SelectedTag +
+                                                                "'?");
+
+                        if (result)
                         {
-                            InitializeTagList();
-                            InitializeTagInfoPanel();
+                            bool success = Gui.DeleteTag(SelectedTag);
+                            if (success)
+                            {
+                                InitializeTagList();
+                                InitializeTagInfoPanel();
+                            }
+                            else
+                            {
+                                DialogsHelper.ShowError("Remove Tag Error", "' " + SelectedTag + " ' could not be removed.");
+                            }
                         }
-                        else
-                        {
-                            DialogsHelper.ShowError("Remove Tag Error", "' " + SelectedTag + " ' could not be removed.");
-                        }
+                    } else
+                    {
+                        DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                                                "You cannot delete a tag while it is synchronizing.");
                     }
                 }
                 else
