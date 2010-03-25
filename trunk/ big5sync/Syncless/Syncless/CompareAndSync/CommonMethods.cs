@@ -58,6 +58,7 @@ namespace Syncless.CompareAndSync
                 {
                     System.Threading.Thread.Sleep(250);
                 }
+                
             }
         }
 
