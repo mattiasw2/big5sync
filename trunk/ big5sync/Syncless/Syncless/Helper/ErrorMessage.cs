@@ -43,5 +43,8 @@ namespace Syncless.Helper
         public const string PATH_NOT_FOUND = "500";
         public const string DRIVE_NOT_FOUND = "501";
         #endregion
+        #region Logging Error Messages (Error Code : 600~699)
+        public const string LOG_FILE_CORRUPTED = "600";
+        #endregion
     }
 }

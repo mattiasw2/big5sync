@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using log4net.Config;
 using Syncless.Core;
 
@@ -45,6 +46,11 @@ namespace Syncless.Logging
                 }
                 return debugLog;
             }
+        }
+
+        public List<LogData> ReadLog()
+        {
+            return LogReaderHelper.ReadLog();
         }
     }
 }

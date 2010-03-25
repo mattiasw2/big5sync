@@ -56,11 +56,7 @@ namespace Syncless.Monitor
         [MethodImpl(MethodImplOptions.Synchronized)]
         public bool MonitorPath(string path)
         {
-            if (File.Exists(path))
-            {
-                return MonitorFile(path);
-            }
-            else if (Directory.Exists(path))
+            if (Directory.Exists(path))
             {
                 return MonitorDirectory(path);
             }
@@ -77,10 +73,6 @@ namespace Syncless.Monitor
             {
                 ExtendedFileSystemWatcher watcher = watchers[i];
                 string watchPath = watcher.Path.ToLower();
-                if (!watcher.Filter.Equals("*.*"))
-                {
-                    watchPath = watchPath + "\\" + watcher.Filter.ToLower();
-                }
                 if (watchPath.Equals(path.ToLower())) // Duplicate directory
                 {
                     return false;
@@ -111,48 +103,6 @@ namespace Syncless.Monitor
                 ExtendedFileSystemWatcher watcher = CreateWatcher(path, "*.*");
                 watchers.Add(watcher);
                 AddRootWatcher(path);
-            }
-            foreach (string mPath in monitoredPaths)
-            {
-                if (mPath.ToLower().Equals(path.ToLower()))
-                {
-                    return false;
-                }
-            }
-            monitoredPaths.Add(path);
-            return true;
-        }
-
-        private bool MonitorFile(string path)
-        {
-            FileInfo file = new FileInfo(path);
-            string pathDirectory = file.DirectoryName.ToLower();
-            bool addToWatcher = true;
-            for (int i = 0; i < watchers.Count; i++)
-            {
-                ExtendedFileSystemWatcher watcher = watchers[i];
-                string watchPath = watcher.Path.ToLower();
-                if (!watcher.Filter.Equals("*.*"))
-                {
-                    watchPath = watchPath + "\\" + watcher.Filter.ToLower();
-                }
-                if (watchPath.Equals(path.ToLower())) // Duplicate file
-                {
-                    return false;
-                }
-                else if (watchPath.StartsWith(pathDirectory)) // Adding a file to a parent or monitored directory or Adding a different file
-                {
-                    if (watchPath.Equals(pathDirectory)) // Adding to a monitored directory
-                    {
-                        addToWatcher = false;
-                        break;
-                    }
-                }
-            }
-            if (addToWatcher)
-            {
-                ExtendedFileSystemWatcher watcher = CreateWatcher(file.DirectoryName, file.Name);
-                watchers.Add(watcher);
             }
             foreach (string mPath in monitoredPaths)
             {
@@ -264,11 +214,7 @@ namespace Syncless.Monitor
         /// <exception cref="Syncless.Monitor.Exception.MonitorPathNotFoundException">Throw when the path is not found.</exception>
         public bool UnMonitorPath(string path)
         {
-            if (File.Exists(path))
-            {
-                return UnMonitorFile(path);
-            }
-            else if (Directory.Exists(path))
+            if (Directory.Exists(path))
             {
                 return UnMonitorDirectory(path);
             }
@@ -299,10 +245,6 @@ namespace Syncless.Monitor
             {
                 ExtendedFileSystemWatcher watcher = watchers[i];
                 string watchPath = watcher.Path.ToLower();
-                if (!watcher.Filter.Equals("*.*"))
-                {
-                    watchPath = watchPath + "\\" + watcher.Filter.ToLower();
-                }
                 if (watchPath.Equals(path.ToLower()))
                 {
                     watcher.Dispose();
@@ -321,40 +263,6 @@ namespace Syncless.Monitor
                 if (mPath.ToLower().StartsWith(path.ToLower()))
                 {
                     MonitorPath(mPath);
-                }
-            }
-            return true;
-        }
-
-        private bool UnMonitorFile(string path)
-        {
-            bool isMonitored = false;
-            for (int i = 0; i < monitoredPaths.Count; i++)
-            {
-                if (monitoredPaths[i].ToLower().Equals(path.ToLower()))
-                {
-                    monitoredPaths.RemoveAt(i);
-                    isMonitored = true;
-                    break;
-                }
-            }
-            if (!isMonitored)
-            {
-                return false;
-            }
-            for (int i = 0; i < watchers.Count; i++)
-            {
-                ExtendedFileSystemWatcher watcher = watchers[i];
-                string watchPath = watcher.Path.ToLower();
-                if (!watcher.Filter.Equals("*.*"))
-                {
-                    watchPath = watchPath + "\\" + watcher.Filter.ToLower();
-                }
-                if (watchPath.Equals(path.ToLower()))
-                {
-                    watcher.Dispose();
-                    watchers.RemoveAt(i);
-                    return true;
                 }
             }
             return true;
@@ -406,11 +314,11 @@ namespace Syncless.Monitor
         /// <exception cref="Syncless.Monitor.Exception.MonitorDriveNotFoundException">Throw when the drive is not found.</exception>
         public int UnMonitorDrive(string driveLetter)
         {
-            DriveInfo drive = new DriveInfo(driveLetter);
+            /*DriveInfo drive = new DriveInfo(driveLetter);
             if (!drive.IsReady)
             {
                 throw new MonitorDriveNotFoundException(ErrorMessage.DRIVE_NOT_FOUND, driveLetter);
-            }
+            }*/
             for (int i = 0; i < watchers.Count; i++)
             {
                 ExtendedFileSystemWatcher watcher = watchers[i];
@@ -490,15 +398,7 @@ namespace Syncless.Monitor
         private void OnDeleted(object source, FileSystemEventArgs e)
         {
             ExtendedFileSystemWatcher watcher = (ExtendedFileSystemWatcher)source;
-            FileSystemEvent fse;
-            if (!watcher.Filter.Equals("*.*"))
-            {
-                fse = new FileSystemEvent(e.FullPath, EventChangeType.DELETED, FileSystemType.FILE);
-            }
-            else
-            {
-                fse = new FileSystemEvent(e.FullPath, watcher.Path);
-            }
+            FileSystemEvent fse = new FileSystemEvent(e.FullPath, watcher.Path);
             FileSystemEventDispatcher.Instance.Enqueue(fse);
         }
 
