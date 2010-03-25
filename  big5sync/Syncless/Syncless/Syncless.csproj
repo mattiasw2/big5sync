@@ -100,6 +100,7 @@
     <Compile Include="Core\Exceptions\UnhandledException.cs" />
     <Compile Include="Core\LogicQueueObserver.cs" />
     <Compile Include="Core\View\PathGroupView.cs" />
+    <Compile Include="Filters\SizeFilter.cs" />
     <Compile Include="Helper\DriveHelper.cs" />
     <Compile Include="Logging\LogFileCorruptedException.cs" />
     <Compile Include="Logging\LogCategoryType.cs" />
