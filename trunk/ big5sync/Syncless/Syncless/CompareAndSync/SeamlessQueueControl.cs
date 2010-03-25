@@ -10,19 +10,19 @@ namespace Syncless.CompareAndSync
     /// </summary>
     public class SeamlessQueueControl : IDisposable
     {
-        private List<Thread> threads = new List<Thread>();
+        private readonly List<Thread> _threads = new List<Thread>();
         private int threadsToUse = 1;
-        private object locker = new object();
-        private Queue<AutoSyncRequest> jobs = new Queue<AutoSyncRequest>();
-        private EventWaitHandle wh = new AutoResetEvent(false);
+        private static readonly object locker = new object();
+        private readonly Queue<AutoSyncRequest> _jobs = new Queue<AutoSyncRequest>();
+        private readonly EventWaitHandle _wh = new AutoResetEvent(false);
         private static SeamlessQueueControl _instance;
 
         private SeamlessQueueControl()
         {
             for (int i = 0; i < threadsToUse; i++)
             {
-                Thread t = new Thread(work);
-                threads.Add(t);
+                Thread t = new Thread(Work);
+                _threads.Add(t);
                 t.Start();
             }
         }
@@ -49,21 +49,21 @@ namespace Syncless.CompareAndSync
         {
             lock (locker)
             {
-                jobs.Enqueue(item);
+                _jobs.Enqueue(item);
             }
-            wh.Set();
+            _wh.Set();
         }
 
-        private void work()
+        private void Work()
         {
             while (true)
             {
                 AutoSyncRequest item = null;
                 lock (locker)
                 {
-                    if (jobs.Count > 0)
+                    if (_jobs.Count > 0)
                     {
-                        item = jobs.Dequeue();
+                        item = _jobs.Dequeue();
                         if (item == null)
                             return;
                     }
@@ -74,26 +74,22 @@ namespace Syncless.CompareAndSync
                 }
                 else
                 {
-                    wh.WaitOne();
+                    _wh.WaitOne();
                 }
             }
         }
 
         public bool IsEmpty
         {
-            get { return jobs.Count == 0; }
+            get { return _jobs.Count == 0; }
         }
 
         public void Dispose()
         {
-            for (int i = 0; i < threads.Count; i++)
-            {
+            for (int i = 0; i < _threads.Count; i++)
                 AddSyncJob(null);
-            }
-            for (int i = 0; i < threads.Count; i++)
-            {
-                threads[i].Join();
-            }
+            for (int i = 0; i < _threads.Count; i++)
+                _threads[i].Join();
         }
     }
 }

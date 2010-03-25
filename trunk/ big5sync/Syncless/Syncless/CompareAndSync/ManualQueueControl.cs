@@ -10,22 +10,22 @@ namespace Syncless.CompareAndSync
     /// </summary>
     public class ManualQueueControl : IDisposable
     {
-        private List<Thread> threads = new List<Thread>();
-        private int threadsToUse = 1;
-        private object locker = new object();
-        private Queue<ManualSyncRequest> jobs = new Queue<ManualSyncRequest>();
-        private EventWaitHandle wh = new AutoResetEvent(false);
+        private readonly List<Thread> _threads = new List<Thread>();
+        private const int threadsToUse = 1;
+        private static readonly object locker = new object();
+        private readonly Queue<ManualSyncRequest> _jobs = new Queue<ManualSyncRequest>();
+        private readonly EventWaitHandle _wh = new AutoResetEvent(false);
         private static ManualQueueControl _instance;
 
         private string _currJobName;
-        private HashSet<string> _queuedJobs = new HashSet<string>();
+        private readonly HashSet<string> _queuedJobs = new HashSet<string>();
 
         private ManualQueueControl()
         {
             for (int i = 0; i < threadsToUse; i++)
             {
-                Thread t = new Thread(work);
-                threads.Add(t);
+                Thread t = new Thread(Work);
+                _threads.Add(t);
                 t.Start();
             }
         }
@@ -57,23 +57,23 @@ namespace Syncless.CompareAndSync
         {
             lock (locker)
             {
-                jobs.Enqueue(item);
+                _jobs.Enqueue(item);
                 if (item != null)
                     _queuedJobs.Add(item.TagName);
             }
-            wh.Set();
+            _wh.Set();
         }
 
-        private void work()
+        private void Work()
         {
             while (true)
             {
                 ManualSyncRequest item = null;
                 lock (locker)
                 {
-                    if (jobs.Count > 0)
+                    if (_jobs.Count > 0)
                     {
-                        item = jobs.Dequeue();
+                        item = _jobs.Dequeue();
 
                         if (item == null)
                             return;
@@ -89,14 +89,14 @@ namespace Syncless.CompareAndSync
                 }
                 else
                 {
-                    wh.WaitOne();
+                    _wh.WaitOne();
                 }
             }
         }
 
         public bool IsEmpty
         {
-            get { return jobs.Count == 0; }
+            get { return _jobs.Count == 0; }
         }
 
         public bool IsQueued(string tagName)
@@ -119,15 +119,10 @@ namespace Syncless.CompareAndSync
 
         public void Dispose()
         {
-            jobs.Clear();
-            for (int i = 0; i < threads.Count; i++)
-            {
+            for (int i = 0; i < _threads.Count; i++)
                 AddSyncJob(null);
-            }
-            for (int i = 0; i < threads.Count; i++)
-            {
-                threads[i].Join();
-            }
+            for (int i = 0; i < _threads.Count; i++)
+                _threads[i].Join();
         }
     }
 }
