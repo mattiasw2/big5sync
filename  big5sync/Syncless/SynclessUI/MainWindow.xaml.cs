@@ -44,6 +44,7 @@ namespace SynclessUI
 
         public IUIControllerInterface Gui;
 
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -168,15 +169,30 @@ namespace SynclessUI
 
         public void SetSyncProgress(string tagname, SyncProgress progress)
         {
+            string notification = _tagStatusNotificationDictionary[tagname];
+
             if (SelectedTag == tagname)
             {
                 ProgressBarSync.SetValue(ProgressBar.ValueProperty, progress.PercentComplete);
-                LblStatusText.Content = progress.Message;
+
+                if (!(notification != null
+                    && notification.StartsWith("Synchronization completed")
+                    && progress.Message == "Finalizing"))
+                {
+                    LblStatusText.Content = progress.Message;
+                }
+
                 SetProgressBarColor(progress.PercentComplete);
             }
 
             _syncProgressNotificationDictionary[tagname] = progress.PercentComplete;
-            _tagStatusNotificationDictionary[tagname] = progress.Message;
+
+            if (!(notification != null
+                && notification.StartsWith("Synchronization completed")
+                && progress.Message == "Finalizing"))
+            {
+                _tagStatusNotificationDictionary[tagname] = progress.Message;
+            }
         }
 
         private void SetProgressBarColor(double percentageComplete)

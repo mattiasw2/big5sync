@@ -10,13 +10,13 @@ using System.Windows;
 
 namespace SynclessUI.Notification
 {
-    internal class SyncProgressWatcher : ISyncProgressObserver
+    public class SyncProgressWatcher : ISyncProgressObserver
     {
         #region ISyncProgressObserver Members
         private MainWindow _main;
         private SyncProgress _progress;
         private string _tagName;
-
+        
         public SyncProgress Progress
         {
             get { return _progress; }
@@ -45,6 +45,7 @@ namespace SynclessUI.Notification
 
         public void StateChanged()
         {
+            
             if (_progress.State == SyncState.ANALYZING)
             {
                 _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
@@ -59,6 +60,7 @@ namespace SynclessUI.Notification
 
         public void ProgressChanged()
         {
+            
             _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
            (Action)(() =>
             {
@@ -72,7 +74,7 @@ namespace SynclessUI.Notification
         {
             Console.WriteLine("Sync Complete");
         }
-
+        
         #endregion
     }
 }

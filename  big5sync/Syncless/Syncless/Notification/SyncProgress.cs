@@ -164,7 +164,7 @@ namespace Syncless.Notification
         {
             if (_observerList.Contains(obs))
             {
-                _observerList.Add(obs);
+                _observerList.Remove(obs);
             }
         }
 
