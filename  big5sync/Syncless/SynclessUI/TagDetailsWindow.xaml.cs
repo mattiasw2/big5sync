@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.IO;
-using Syncless.Core;
 using Syncless.Core.Exceptions;
 using Syncless.Filters;
 
@@ -34,7 +22,7 @@ namespace SynclessUI
                 _main = main;
                 _tagname = tagname;
                 LblTag_Details.Content = "Tag Details for " + _tagname;
-                filters = _main.gui.GetAllFilters(_tagname);
+                filters = _main.Gui.GetAllFilters(_tagname);
                 PopulateFilterStringList(false);
                 TxtBoxPattern.IsEnabled = false;
                 CmbBoxMode.IsEnabled = false;
@@ -95,7 +83,7 @@ namespace SynclessUI
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             try {
-                bool result = _main.gui.UpdateFilterList(_tagname, filters);
+                bool result = _main.Gui.UpdateFilterList(_tagname, filters);
 			    this.Close();
             }
             catch (UnhandledException)

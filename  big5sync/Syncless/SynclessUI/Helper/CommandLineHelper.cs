@@ -38,7 +38,7 @@ namespace SynclessUI.Helper
                 StringBuilder longPath = new StringBuilder(255);
                 GetLongPathName(path, longPath, longPath.Capacity);
 				
-                main.CLI_Tag(longPath.ToString());
+                main.CliTag(longPath.ToString());
             }
             else if (flag.Equals("-UTFolder"))
             {
@@ -46,14 +46,14 @@ namespace SynclessUI.Helper
                 StringBuilder longPath = new StringBuilder(255);
                 GetLongPathName(path, longPath, longPath.Capacity);
 
-                main.CLI_Untag(longPath.ToString());
+                main.CliUntag(longPath.ToString());
             }
             else if (flag.Equals("-CleanMeta"))
             {
                 StringBuilder longPath = new StringBuilder(255);
                 GetLongPathName(path, longPath, longPath.Capacity);
 
-                main.CLI_Clean(longPath.ToString());
+                main.CliClean(longPath.ToString());
             }
             else
             {

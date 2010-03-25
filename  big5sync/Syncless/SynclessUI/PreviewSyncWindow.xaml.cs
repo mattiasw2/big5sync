@@ -1,18 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.IO;
-using Syncless.Core;
-using Microsoft.Windows.Controls;
+﻿using System.Windows;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Visitor;
 using System.Data;
@@ -25,7 +11,7 @@ namespace SynclessUI
     /// </summary>
     public partial class PreviewSyncWindow : Window
     {		
-		private MainWindow _main;
+		private readonly MainWindow _main;
         private DataTable _previewSyncData;
         
 		public PreviewSyncWindow(MainWindow main, string selectedTag)
@@ -35,7 +21,7 @@ namespace SynclessUI
 			
 			_main = main;
 
-            RootCompareObject rco = _main.gui.PreviewSync(selectedTag);
+            RootCompareObject rco = _main.Gui.PreviewSync(selectedTag);
 
             if (rco != null)
             {
