@@ -55,40 +55,24 @@ namespace Syncless.CompareAndSync.Visitor
             _progress = progress;
         }
 
-
-
-
-
         public void Visit(FileCompareObject file, int numOfPaths)
         {
-            bool change = false;
-            foreach (MetaChangeType type in file.ChangeType)
+            for (int i = 0; i < numOfPaths; i++) // HANDLE ALL EXCEPT PROPAGATED
             {
-                if (type == null || type == MetaChangeType.NoChange)
-                {
-                    continue;
-                }
-                change = true;
-                break;
+                ProcessMetaChangeType(file, i);
             }
-            if (change)
-            {
 
-                for (int i = 0; i < numOfPaths; i++) // HANDLE ALL EXCEPT PROPAGATED
-                {
-                    ProcessMetaChangeType(file, i);
-                }
-            }
             _progress.complete();
         }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
-
+            
             for (int i = 0; i < numOfPaths; i++)
             {
                 ProcessFolderFinalState(folder, i);
             }
+            _progress.complete();
         }
 
         public void Visit(RootCompareObject root)
