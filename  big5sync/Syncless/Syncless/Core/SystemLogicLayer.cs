@@ -104,7 +104,7 @@ namespace Syncless.Core
                     {
                         return;
                     }
-                    SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
+                    SyncConfig syncConfig = new SyncConfig("_synclessArchive", 5, true);
                     AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.New, syncConfig);
                     CompareAndSyncController.Instance.Sync(request);
                 }
@@ -126,7 +126,7 @@ namespace Syncless.Core
                     {
                         return;
                     }
-                    SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
+                    SyncConfig syncConfig = new SyncConfig("_synclessArchive", 5, true);
                     AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.Update, syncConfig);
                     CompareAndSyncController.Instance.Sync(request);
                 }
@@ -148,7 +148,7 @@ namespace Syncless.Core
                     {
                         return;
                     }
-                    SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
+                    SyncConfig syncConfig = new SyncConfig("_synclessArchive", 5, true);
 
                     AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, fe.OldPath.DirectoryName, parentList, false, AutoSyncRequestType.Rename, syncConfig);
                     CompareAndSyncController.Instance.Sync(request);
@@ -186,7 +186,7 @@ namespace Syncless.Core
                         return;
                     }
 
-                    SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
+                    SyncConfig syncConfig = new SyncConfig("_synclessArchive", 5, true);
                     AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Parent.FullName, parentList, true, AutoSyncRequestType.New, syncConfig);
                     CompareAndSyncController.Instance.Sync(request);
                 }
@@ -209,7 +209,7 @@ namespace Syncless.Core
                     {
                         return;
                     }
-                    SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
+                    SyncConfig syncConfig = new SyncConfig("_synclessArchive", 5, true); 
                     AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, fe.OldPath.Parent.FullName, parentList, true, AutoSyncRequestType.Rename, syncConfig);
                     CompareAndSyncController.Instance.Sync(request);
                     TaggingLayer.Instance.RenameFolder(logicalAddress, newLogicalAddress);
@@ -246,7 +246,7 @@ namespace Syncless.Core
                     {
                         return;
                     }
-                    SyncConfig syncConfig = new SyncConfig(tag[0].ArchiveName, tag[0].ArchiveCount, tag[0].Recycle);
+                    SyncConfig syncConfig = new SyncConfig("_synclessArchive", 5, true); 
                     AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent.FullName, parentList, AutoSyncRequestType.Delete, syncConfig);
                     CompareAndSyncController.Instance.Sync(request);
                 }
@@ -574,7 +574,7 @@ namespace Syncless.Core
                 List<string>[] filteredPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
                 if (filteredPaths[0].Count != 0)
                 {
-                    SyncConfig syncConfig = new SyncConfig(tag.ArchiveName, tag.ArchiveCount, tag.Recycle);
+                    SyncConfig syncConfig = new SyncConfig("_synclessArchive", 5, true); 
                     ManualCompareRequest request = new ManualCompareRequest(filteredPaths[0].ToArray(), tag.Filters, syncConfig);
                     return CompareAndSyncController.Instance.Compare(request);
                 }
@@ -873,7 +873,7 @@ namespace Syncless.Core
             List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
             if (filterPaths[0].Count != 0)
             {
-                SyncConfig syncConfig = new SyncConfig(tag.ArchiveName, tag.ArchiveCount, tag.Recycle);
+                SyncConfig syncConfig = new SyncConfig("_synclessArchive", 5, true); 
                 ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), tag.Filters, syncConfig, tag.TagName, notify);
 
                 CompareAndSyncController.Instance.Sync(syncRequest);
@@ -1006,7 +1006,7 @@ namespace Syncless.Core
                     continue;
                 }
                 List<Filter> tempFilters = new List<Filter>();
-                tempFilters.Add(new SynclessArchiveFilter(tag.ArchiveName));
+                tempFilters.Add(new SynclessArchiveFilter("_synclessArchive"));
                 tempFilters.AddRange(tag.Filters);
 
                 string appendedPath;

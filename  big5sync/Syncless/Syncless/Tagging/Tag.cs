@@ -101,22 +101,7 @@ namespace Syncless.Tagging
             get { return _config.IsSeamless; }
             set { _config.IsSeamless = value; }
         }
-        public string ArchiveName
-        {
-            get { return _config.ArchiveFolderName; }
-            set { _config.ArchiveFolderName = value; }
-        }
-        public int ArchiveCount
-        {
-            get { return _config.ArchiveCount; }
-            set { _config.ArchiveCount = value; }
-        }
-        public bool Recycle
-        {
-            get { return _config.Recycle; }
-            set { _config.Recycle = value; }
-        }
-
+        
         public Tag(string tagname, long created)
         {
             this._tagName = tagname;
