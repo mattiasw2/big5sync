@@ -8,6 +8,7 @@ using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Exceptions;
 using Syncless.Core;
 using Syncless.CompareAndSync.XMLWriteObject;
+using Syncless.Logging;
 
 namespace Syncless.CompareAndSync
 {
@@ -37,29 +38,48 @@ namespace Syncless.CompareAndSync
         private static void SyncFile(AutoSyncRequest request)
         {
             string sourceFullPath = Path.Combine(request.SourceParent, request.ChangeType == AutoSyncRequestType.Rename ? request.NewName : request.SourceName);
-            FileInfo currFile = null;
+            FileInfo currFile;
 
             if (File.Exists(sourceFullPath))
             {
                 currFile = new FileInfo(sourceFullPath);
-                switch (request.ChangeType)
+                try
                 {
-                    case AutoSyncRequestType.New:
-                        XMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.New, metaUpdated));
-                        break;
-                    case AutoSyncRequestType.Update:
-                        XMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.Update, metaUpdated));
-                        break;
-                    case AutoSyncRequestType.Rename:
-                        XMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName, request.SourceParent, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.Rename, metaUpdated));
-                        break;
+                    switch (request.ChangeType)
+                    {
+                        case AutoSyncRequestType.New:
+                            XMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent,
+                                                                       CommonMethods.CalculateMD5Hash(currFile),
+                                                                       currFile.Length, currFile.CreationTime.Ticks,
+                                                                       currFile.LastWriteTime.Ticks, MetaChangeType.New,
+                                                                       metaUpdated));
+                            break;
+                        case AutoSyncRequestType.Update:
+                            XMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent,
+                                                                       CommonMethods.CalculateMD5Hash(currFile),
+                                                                       currFile.Length, currFile.CreationTime.Ticks,
+                                                                       currFile.LastWriteTime.Ticks,
+                                                                       MetaChangeType.Update, metaUpdated));
+                            break;
+                        case AutoSyncRequestType.Rename:
+                            XMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName,
+                                                                       request.SourceParent,
+                                                                       CommonMethods.CalculateMD5Hash(currFile),
+                                                                       currFile.Length, currFile.CreationTime.Ticks,
+                                                                       currFile.LastWriteTime.Ticks,
+                                                                       MetaChangeType.Rename, metaUpdated));
+                            break;
+                    }
                 }
-
-                string destFullPath = null;
+                catch (HashFileException)
+                {
+                    ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error hashing " + sourceFullPath + "."));
+                    return;
+                }
 
                 foreach (string dest in request.DestinationFolders)
                 {
-                    destFullPath = Path.Combine(dest, request.SourceName);
+                    string destFullPath = Path.Combine(dest, request.SourceName);
                     if (DoSync(sourceFullPath, destFullPath))
                     {
                         try
@@ -113,7 +133,7 @@ namespace Syncless.CompareAndSync
             }
             else if (request.ChangeType == AutoSyncRequestType.Delete)
             {
-                string destFullPath = null, hash = null;
+                string destFullPath = null;
                 XMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent, MetaChangeType.Delete, metaUpdated));
 
                 foreach (string dest in request.DestinationFolders)
@@ -123,7 +143,7 @@ namespace Syncless.CompareAndSync
                     {
                         try
                         {
-                            hash = CommonMethods.CalculateMD5Hash(new FileInfo(destFullPath));
+                            CommonMethods.CalculateMD5Hash(new FileInfo(destFullPath));
                             if (request.Config.ArchiveLimit >= 0)
                                 CommonMethods.ArchiveFile(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
                             if (request.Config.Recycle)

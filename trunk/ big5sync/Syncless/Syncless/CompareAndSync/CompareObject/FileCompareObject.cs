@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Diagnostics;
-
-namespace Syncless.CompareAndSync.CompareObject
+﻿namespace Syncless.CompareAndSync.CompareObject
 {
     public class FileCompareObject : BaseCompareObject
     {

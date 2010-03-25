@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Syncless.CompareAndSync.CompareObject;
 using System.IO;
 using System.Xml;
 using Syncless.CompareAndSync.Enum;
-using System.Diagnostics;
 
 namespace Syncless.CompareAndSync.Visitor
 {

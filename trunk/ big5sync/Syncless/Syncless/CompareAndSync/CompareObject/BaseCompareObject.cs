@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using Syncless.CompareAndSync.Enum;
-using System.IO;
-using System.Diagnostics;
 
 namespace Syncless.CompareAndSync.CompareObject
 {
     public abstract class BaseCompareObject
     {
         //Actual
-        private string _name;
+        private readonly string _name;
         private long[] _creationTime;
         private bool[] _exists;
 
@@ -127,13 +122,9 @@ namespace Syncless.CompareAndSync.CompareObject
             RootCompareObject rco = null;
             if ((rco = Parent as RootCompareObject) != null)
                 return rco.Paths[index];
-            else
-            {
-                if (Parent.ChangeType[index] == MetaChangeType.Rename)
-                    return Path.Combine(Parent.GetSmartParentPath(index), Parent.NewName);
-                else
-                    return Path.Combine(Parent.GetSmartParentPath(index), Parent.FinalState[index] == Syncless.CompareAndSync.Enum.FinalState.Renamed ? Parent.NewName : Parent.Name);
-            }
+            if (Parent.ChangeType[index] == MetaChangeType.Rename)
+                return Path.Combine(Parent.GetSmartParentPath(index), Parent.NewName);
+            return Path.Combine(Parent.GetSmartParentPath(index), Parent.FinalState[index] == Syncless.CompareAndSync.Enum.FinalState.Renamed ? Parent.NewName : Parent.Name);
         }
 
         public LastKnownState?[] ToDoAction
@@ -142,7 +133,5 @@ namespace Syncless.CompareAndSync.CompareObject
             set { _toDoAction = value; }
         }
 
-        //public abstract string GetSmartParentPath(int index);
-        //public abstract string GetFullParentPath(int index);
     }
 }

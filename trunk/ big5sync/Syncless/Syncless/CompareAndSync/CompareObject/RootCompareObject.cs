@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Syncless.CompareAndSync.CompareObject
+﻿namespace Syncless.CompareAndSync.CompareObject
 {
     public class RootCompareObject : FolderCompareObject
     {
-        private string[] _paths;
+        private readonly string[] _paths;
 
         public RootCompareObject(string[] paths)
             : base(null, paths.Length, null)

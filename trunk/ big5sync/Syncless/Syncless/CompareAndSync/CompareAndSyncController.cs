@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Syncless.CompareAndSync.CompareObject;
+﻿using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Visitor;
-using Syncless.Filters;
-using Syncless.Notification.UINotification;
-using Syncless.Notification;
 using Syncless.Core;
+using Syncless.Notification;
+using Syncless.Notification.UINotification;
 
 namespace Syncless.CompareAndSync
 {
