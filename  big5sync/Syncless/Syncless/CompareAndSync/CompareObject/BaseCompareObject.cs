@@ -119,12 +119,12 @@ namespace Syncless.CompareAndSync.CompareObject
             if (Parent == null)
                 return "ROOT"; //Will throw exception in future
 
-            RootCompareObject rco = null;
+            RootCompareObject rco;
             if ((rco = Parent as RootCompareObject) != null)
                 return rco.Paths[index];
             if (Parent.ChangeType[index] == MetaChangeType.Rename)
                 return Path.Combine(Parent.GetSmartParentPath(index), Parent.NewName);
-            return Path.Combine(Parent.GetSmartParentPath(index), Parent.FinalState[index] == Syncless.CompareAndSync.Enum.FinalState.Renamed ? Parent.NewName : Parent.Name);
+            return Path.Combine(Parent.GetSmartParentPath(index), Parent.FinalState[index] == Enum.FinalState.Renamed ? Parent.NewName : Parent.Name);
         }
 
         public LastKnownState?[] ToDoAction
