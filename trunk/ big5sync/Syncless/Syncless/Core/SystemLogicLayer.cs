@@ -782,6 +782,11 @@ namespace Syncless.Core
             ProfilingLayer.Instance.SetDriveName(info, driveName);
             return false;
         }
+
+        public List<LogData> ReadLog()
+        {
+            return LoggingLayer.Instance.ReadLog();
+        }
         #endregion
 
         #region private / delegate
