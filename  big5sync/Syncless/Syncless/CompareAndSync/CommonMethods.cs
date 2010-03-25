@@ -117,6 +117,12 @@ namespace Syncless.CompareAndSync
 
         }
 
+        /// <summary>
+        /// Calculates the MD5 hash of a given FileInfo
+        /// </summary>
+        /// <param name="fileInput">FileInfo object to hash</param>
+        /// <returns>MD5 hash of file</returns>
+        /// <exception cref="Syncless.CompareAndSync.Exceptions.HashFileException"></exception>
         public static string CalculateMD5Hash(FileInfo fileInput)
         {
             if (!fileInput.Exists)

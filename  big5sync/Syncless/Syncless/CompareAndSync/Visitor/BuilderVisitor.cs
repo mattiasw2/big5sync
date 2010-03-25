@@ -6,6 +6,9 @@ using System.IO;
 using System.Diagnostics;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.Filters;
+using Syncless.CompareAndSync.Exceptions;
+using Syncless.Core;
+using Syncless.CompareAndSync.Enum;
 
 namespace Syncless.CompareAndSync.Visitor
 {
@@ -67,15 +70,26 @@ namespace Syncless.CompareAndSync.Visitor
                         if (_filterChain.ApplyFilter(_filter, info.FullName))
                         {
                             BaseCompareObject o = folder.GetChild(info.Name);
-                            FileCompareObject fco = null;
+                            FileCompareObject fco = null;                            
 
                             if (o == null)
                                 fco = new FileCompareObject(info.Name, numOfPaths, folder);
                             else
                                 fco = (FileCompareObject)o;
 
+                            try
+                            {
+                                fco.Hash[index] = CommonMethods.CalculateMD5Hash(info);
+                            }
+                            catch (HashFileException e)
+                            {
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(e);
+                                fco.FinalState[index] = FinalState.Error;
+                                fco.Invalid = true;
+                                continue;
+                            }
+
                             fco.CreationTime[index] = info.CreationTime.Ticks;
-                            fco.Hash[index] = CommonMethods.CalculateMD5Hash(info);
                             fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
                             fco.Length[index] = info.Length;
                             fco.Exists[index] = true;
