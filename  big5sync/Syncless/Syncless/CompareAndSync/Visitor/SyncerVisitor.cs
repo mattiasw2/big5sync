@@ -10,9 +10,10 @@ namespace Syncless.CompareAndSync.Visitor
     public class SyncerVisitor : IVisitor
     {
         #region IVisitor Members
-        private SyncConfig _syncConfig;
-        private SyncProgress _syncProgress;
-        public SyncerVisitor(SyncConfig syncConfig,SyncProgress progress)
+        private readonly SyncConfig _syncConfig;
+        private readonly SyncProgress _syncProgress;
+
+        public SyncerVisitor(SyncConfig syncConfig, SyncProgress progress)
         {
             _syncConfig = syncConfig;
             _syncProgress = progress;
@@ -20,14 +21,14 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(FileCompareObject file, int numOfPaths)
         {
-            nodesCount++;
-            _syncProgress.Message = "Synchronizing "+file.Name;
+            _nodesCount++;
+            _syncProgress.Message = "Synchronizing " + file.Name;
             if (file.Invalid)
             {
                 _syncProgress.fail();
                 return;
             }
-                
+
             int maxPriorityPos = 0;
             for (int i = 0; i < numOfPaths; i++)
             {
@@ -60,7 +61,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
-            nodesCount++;
+            _nodesCount++;
             _syncProgress.Message = "Synchronizing " + folder.Name;
             if (folder.Invalid)
             {
@@ -96,7 +97,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(RootCompareObject root)
         {
-            nodesCount++;
+            _nodesCount++;
             _syncProgress.complete();//Do nothing
         }
 
@@ -104,21 +105,19 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region File Methods
 
-        private int nodesCount;
+        private int _nodesCount;
 
         public int NodesCount
         {
-            get { return nodesCount; }
-            set { nodesCount = value; }
+            get { return _nodesCount; }
+            set { _nodesCount = value; }
         }
 
 
         private void CopyFile(FileCompareObject fco, int numOfPaths, int srcFilePos)
         {
             string src = Path.Combine(fco.GetSmartParentPath(srcFilePos), fco.Name);
-
-            bool fileExists = false;
-            string destFile = null;
+            bool changed = false;
 
             for (int i = 0; i < numOfPaths; i++)
             {
@@ -128,8 +127,8 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            destFile = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
-                            fileExists = File.Exists(destFile);
+                            string destFile = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
+                            bool fileExists = File.Exists(destFile);
 
                             if (fileExists)
                             {
@@ -142,13 +141,11 @@ namespace Syncless.CompareAndSync.Visitor
                             CommonMethods.CopyFile(src, destFile, true);
                             fco.CreationTime[i] = new FileInfo(destFile).CreationTime.Ticks;
                             fco.Exists[i] = true;
-                            if (fileExists)
-                                fco.FinalState[i] = FinalState.Updated;
-                            else
-                                fco.FinalState[i] = FinalState.Created;
+                            fco.FinalState[i] = fileExists ? FinalState.Updated : FinalState.Created;
                             fco.Hash[i] = fco.Hash[srcFilePos];
                             fco.LastWriteTime[i] = fco.LastWriteTime[srcFilePos];
                             fco.Length[i] = fco.LastWriteTime[srcFilePos];
+                            changed = true;
                         }
                         catch (ArchiveFileException e)
                         {
@@ -169,12 +166,12 @@ namespace Syncless.CompareAndSync.Visitor
                     }
                 }
             }
-            fco.FinalState[srcFilePos] = FinalState.Propagated;
+            fco.FinalState[srcFilePos] = changed ? FinalState.Propagated : FinalState.Unchanged;
         }
 
         private void DeleteFile(FileCompareObject fco, int numOfPaths, int srcFilePos)
         {
-            string destFile = null;
+            bool changed = false;
 
             for (int i = 0; i < numOfPaths; i++)
             {
@@ -184,7 +181,7 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         try
                         {
-                            destFile = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
+                            string destFile = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
 
                             if (_syncConfig.ArchiveLimit >= 0)
                                 CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
@@ -195,6 +192,7 @@ namespace Syncless.CompareAndSync.Visitor
 
                             fco.Exists[i] = false;
                             fco.FinalState[i] = FinalState.Deleted;
+                            changed = true;
                         }
                         catch (ArchiveFileException e)
                         {
@@ -217,11 +215,13 @@ namespace Syncless.CompareAndSync.Visitor
                     }
                 }
             }
-            fco.FinalState[srcFilePos] = FinalState.Propagated;
+            fco.FinalState[srcFilePos] = changed ? FinalState.Propagated : FinalState.Unchanged;
         }
 
         private void MoveFile(FileCompareObject fco, int numOfPaths, int srcFilePos)
         {
+            bool changed = false;
+
             for (int i = 0; i < numOfPaths; i++)
             {
                 if (i != srcFilePos)
@@ -240,7 +240,7 @@ namespace Syncless.CompareAndSync.Visitor
                                 CommonMethods.CopyFile(Path.Combine(fco.GetSmartParentPath(srcFilePos), fco.NewName), Path.Combine(fco.GetSmartParentPath(i), fco.NewName), true);
                                 fco.FinalState[i] = FinalState.Created;
                             }
-
+                            changed = true;
                         }
                         catch (MoveFileException e)
                         {
@@ -255,7 +255,7 @@ namespace Syncless.CompareAndSync.Visitor
                     }
                 }
             }
-            fco.FinalState[srcFilePos] = FinalState.Propagated;
+            fco.FinalState[srcFilePos] = changed ? FinalState.Propagated : FinalState.Unchanged;
         }
 
         #endregion
@@ -264,6 +264,8 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void CreateFolder(FolderCompareObject folder, int numOfPaths, int srcFilePos)
         {
+            bool changed = false;
+
             for (int i = 0; i < numOfPaths; i++)
             {
                 if (i != srcFilePos)
@@ -284,6 +286,7 @@ namespace Syncless.CompareAndSync.Visitor
                                 //TODO: Throw to notification queue in future
                                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                             }
+                            changed = true;
                         }
                     }
                     else
@@ -292,23 +295,22 @@ namespace Syncless.CompareAndSync.Visitor
                     }
                 }
             }
-            folder.FinalState[srcFilePos] = FinalState.Propagated;
-
+            folder.FinalState[srcFilePos] = changed ? FinalState.Propagated : FinalState.Unchanged;
         }
 
-        private void DeleteFolder(FolderCompareObject folder, int numOfPaths, int srcFilePos)
+        private void DeleteFolder(FolderCompareObject folder, int numOfPaths, int srcFolderPos)
         {
-            string destFolder = null;
+            bool changed = false;
 
             for (int i = 0; i < numOfPaths; i++)
             {
-                if (i != srcFilePos)
+                if (i != srcFolderPos)
                 {
-                    if (folder.Priority[i] != folder.Priority[srcFilePos])
+                    if (folder.Priority[i] != folder.Priority[srcFolderPos])
                     {
                         try
                         {
-                            destFolder = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
+                            string destFolder = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
 
                             if (_syncConfig.ArchiveLimit >= 0)
                                 CommonMethods.ArchiveFolder(destFolder, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
@@ -320,6 +322,7 @@ namespace Syncless.CompareAndSync.Visitor
                             folder.Exists[i] = false;
                             folder.FinalState[i] = FinalState.Deleted;
                             folder.Contents.Clear(); //Experimental
+                            changed = true;
                         }
                         catch (ArchiveFolderException e)
                         {
@@ -340,11 +343,13 @@ namespace Syncless.CompareAndSync.Visitor
                     }
                 }
             }
-            folder.FinalState[srcFilePos] = FinalState.Propagated;
+            folder.FinalState[srcFolderPos] = changed ? FinalState.Propagated : FinalState.Unchanged;
         }
 
         private void MoveFolder(FolderCompareObject folder, int numOfPaths, int srcFolderPos)
         {
+            bool changed = false;
+
             for (int i = 0; i < numOfPaths; i++)
             {
                 if (i != srcFolderPos)
@@ -366,6 +371,7 @@ namespace Syncless.CompareAndSync.Visitor
                                 folder.FinalState[i] = FinalState.Created;
                             }
 
+                            changed = true;
                         }
                         catch (MoveFolderException e)
                         {
@@ -380,7 +386,7 @@ namespace Syncless.CompareAndSync.Visitor
                     }
                 }
             }
-            folder.FinalState[srcFolderPos] = FinalState.Propagated;
+            folder.FinalState[srcFolderPos] = changed ? FinalState.Propagated : FinalState.Unchanged;
         }
 
         #endregion

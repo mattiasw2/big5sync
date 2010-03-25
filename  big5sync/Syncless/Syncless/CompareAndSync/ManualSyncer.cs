@@ -15,6 +15,12 @@ namespace Syncless.CompareAndSync
     {
         public static void Sync(ManualSyncRequest request)
         {
+            if (request.Paths.Length < 2)
+            {
+                ServiceLocator.UINotificationQueue().Enqueue(new NothingToSyncNotification(request.TagName));
+                return;
+            }
+
             //Started
             SyncStartNotification notification = new SyncStartNotification(request.TagName);
             SyncProgress progress = notification.Progress;
