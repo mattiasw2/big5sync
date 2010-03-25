@@ -9,6 +9,7 @@ using Syncless.Filters;
 using Syncless.CompareAndSync.Exceptions;
 using Syncless.Core;
 using Syncless.CompareAndSync.Enum;
+using Syncless.Logging;
 
 namespace Syncless.CompareAndSync.Visitor
 {
@@ -81,9 +82,9 @@ namespace Syncless.CompareAndSync.Visitor
                             {
                                 fco.Hash[index] = CommonMethods.CalculateMD5Hash(info);
                             }
-                            catch (HashFileException e)
+                            catch (HashFileException)
                             {
-                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(e);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(Logging.LogEventType.FSCHANGE_ERROR, "Error hashing " + Path.Combine(fco.GetSmartParentPath(index), fco.Name + ".")));
                                 fco.FinalState[index] = FinalState.Error;
                                 fco.Invalid = true;
                                 continue;
