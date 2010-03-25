@@ -45,7 +45,7 @@ namespace Syncless.CompareAndSync
 
             //Finished
             progress.ChangeToFinished();
-            ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification());
+            ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification(request.TagName,rco));
         }
 
         public static RootCompareObject Compare(ManualCompareRequest request)

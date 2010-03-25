@@ -14,11 +14,11 @@ namespace Syncless.Core
     {
         public static bool SaveAll(string appPath)
         {
-            
-                SaveProfiling(appPath);
-                SaveTagging(appPath);
-                return true;
-            
+
+            SaveProfiling(appPath);
+            SaveTagging(appPath);
+            return true;
+
         }
 
         public static bool LoadAll(string appPath)
@@ -28,7 +28,7 @@ namespace Syncless.Core
                 LoadProfiling(appPath);
                 LoadTagging(appPath);
             }
-            catch (ProfileLoadException e)
+            catch (ProfileLoadException)
             {
                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.UNKNOWN, "Profile Load fail"));
                 return false;

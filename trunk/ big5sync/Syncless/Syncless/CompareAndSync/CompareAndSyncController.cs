@@ -66,7 +66,7 @@ namespace Syncless.CompareAndSync
             CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config,progress));
             progress.ChangeToFinalizing(0);
             progress.ChangeToFinished();
-            ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification());
+            ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification(request.TagName,rco));
             return rco;
         }
 

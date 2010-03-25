@@ -16,15 +16,15 @@ namespace Syncless.Core
         List<string> GetAllTags();
         List<string> GetTags(DirectoryInfo folder);
 
-        TagView GetTag(String tagname);       
+        TagView GetTag(string tagname);       
 
-        bool DeleteTag(String tagname);
+        bool DeleteTag(string tagname);
 
-        TagView CreateTag(String tagname);
+        TagView CreateTag(string tagname);
         TagView Tag(string tagname, DirectoryInfo folder);
                 
         int Untag(string tagname, DirectoryInfo folder);
-
+        
         bool MonitorTag(string tagname, bool mode);
 
         bool PrepareForTermination();
@@ -32,13 +32,13 @@ namespace Syncless.Core
 
         bool Initiate(IUIInterface inf);
 
-        bool RenameTag(String oldtagname, String newtagname);
+        //bool RenameTag(string oldtagname, string newtagname);
 
-        bool StartManualSync(String tagname);
+        bool StartManualSync(string tagname);
         
-        bool UpdateFilterList(String tagname, List<Filter> filterlist);
+        bool UpdateFilterList(string tagname, List<Filter> filterlist);
 
-        List<Filter> GetAllFilters(String tagname);
+        List<Filter> GetAllFilters(string tagname);
 
         RootCompareObject PreviewSync(string tagname);
 
