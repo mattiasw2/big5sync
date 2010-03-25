@@ -7,6 +7,22 @@ namespace Syncless.CompareAndSync
 {
     public class SyncConfig
     {
+
+        private static SyncConfig _instance;
+        public static SyncConfig Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new SyncConfig("_synclessArchive", 5, true);
+                }
+                return _instance;
+            }
+        }
+
+        
+
         private string _archiveName;
         private int _archiveLimit;
         private bool _recycle;
@@ -17,7 +33,7 @@ namespace Syncless.CompareAndSync
             set { _recycle = value; }
         }
 
-        public SyncConfig(string archiveName, int archiveLimit , bool recycle)
+        private SyncConfig(string archiveName, int archiveLimit , bool recycle)
         {
             _archiveName = archiveName;
             _archiveLimit = archiveLimit;
