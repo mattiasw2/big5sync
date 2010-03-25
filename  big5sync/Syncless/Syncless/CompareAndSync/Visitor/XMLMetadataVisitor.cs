@@ -8,22 +8,22 @@ namespace Syncless.CompareAndSync.Visitor
 {
     public class XMLMetadataVisitor : IVisitor
     {
-        private const string META_DIR = ".syncless";
-        private const string XML_NAME = @"\syncless.xml";
-        private const string METADATAPATH = META_DIR + @"\syncless.xml";
-        private const string TODOPATH = @".syncless\todo.xml";
-        private const string XPATH_EXPR = "/meta-data";
-        private const string NODE_NAME = "name";
-        private const string NODE_SIZE = "size";
-        private const string NODE_HASH = "hash";
-        private const string NODE_LAST_MODIFIED = "last_modified";
-        private const string NODE_LAST_CREATED = "last_created";
-        private const string NODE_LAST_UPDATED = "last_updated";
-        private const string FILES = "files";
-        private const string ACTION = "action";
-        private const string LAST_UPDATED = "last_updated";
-        private const string LAST_KNOWN_STATE = "last_known_state";
-        private static readonly object syncLock = new object();
+        private const string MetaDir = ".syncless";
+        private const string XmlName = @"\syncless.xml";
+        private const string Metadatapath = MetaDir + @"\syncless.xml";
+        private const string Todopath = @".syncless\todo.xml";
+        private const string XpathExpr = "/meta-data";
+        private const string NodeName = "name";
+        private const string NodeSize = "size";
+        private const string NodeHash = "hash";
+        private const string NodeLastModified = "last_modified";
+        private const string NodeLastCreated = "last_created";
+        private const string NodeLastUpdated = "last_updated";
+        private const string Files = "files";
+        private const string Action = "action";
+        private const string LastUpdated = "last_updated";
+        private const string LastKnownState = "last_known_state";
+        private static readonly object SyncLock = new object();
 
         #region IVisitor Members
 
@@ -32,13 +32,13 @@ namespace Syncless.CompareAndSync.Visitor
             XmlDocument xmlDoc = new XmlDocument();
             for (int i = 0; i < numOfPaths; i++)
             {
-                //if (currentPaths[i].Contains(META_DIR))
+                //if (currentPaths[i].Contains(MetaDir))
                 //    continue;
-                string path = Path.Combine(file.GetSmartParentPath(i), METADATAPATH);
+                string path = Path.Combine(file.GetSmartParentPath(i), Metadatapath);
                 if (!File.Exists(path))
                     continue;
 
-                lock (syncLock)
+                lock (SyncLock)
                 {
                     CommonMethods.LoadXML(ref xmlDoc, path);
                 }
@@ -60,11 +60,11 @@ namespace Syncless.CompareAndSync.Visitor
             for (int i = 0; i < numOfPaths; i++)
             {
 
-                string path = Path.Combine(folder.GetSmartParentPath(i), METADATAPATH);
+                string path = Path.Combine(folder.GetSmartParentPath(i), Metadatapath);
                 if (!File.Exists(path))
                     continue;
 
-                lock (syncLock)
+                lock (SyncLock)
                 {
                     CommonMethods.LoadXML(ref xmlDoc, path);
                 }
@@ -75,11 +75,7 @@ namespace Syncless.CompareAndSync.Visitor
             ProcessToDo(folder, numOfPaths);
 
             DirectoryInfo dirInfo = null;
-            FileInfo[] fileList = null;
-            DirectoryInfo[] dirInfoList = null;
             List<XMLCompareObject> xmlObjList = new List<XMLCompareObject>();
-            List<string> xmlFolderList = null;
-            string xmlPath = "";
 
             for (int i = 0; i < numOfPaths; i++)
             {
@@ -89,19 +85,19 @@ namespace Syncless.CompareAndSync.Visitor
                 if (Directory.Exists(path))
                 {
                     dirInfo = new DirectoryInfo(path);
-                    fileList = dirInfo.GetFiles();
-                    dirInfoList = dirInfo.GetDirectories();
-                    xmlPath = Path.Combine(path, METADATAPATH);
+                    FileInfo[] fileList = dirInfo.GetFiles();
+                    DirectoryInfo[] dirInfoList = dirInfo.GetDirectories();
+                    string xmlPath = Path.Combine(path, Metadatapath);
                     if (!File.Exists(xmlPath))
                         continue;
 
-                    lock (syncLock)
+                    lock (SyncLock)
                     {
                         CommonMethods.LoadXML(ref xmlDoc, xmlPath);
                     }
 
                     xmlObjList = GetAllFilesInXML(xmlDoc);
-                    xmlFolderList = GetAllFoldersInXML(xmlDoc);
+                    List<string> xmlFolderList = GetAllFoldersInXML(xmlDoc);
                     RemoveSimilarFiles(xmlObjList, fileList);
                     RemoveSimilarFolders(xmlFolderList, dirInfoList);
                 }
@@ -116,31 +112,26 @@ namespace Syncless.CompareAndSync.Visitor
         public void Visit(RootCompareObject root)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            string xmlPath = "";
             string[] listOfPaths = root.Paths;
             DirectoryInfo di = null;
             List<XMLCompareObject> xmlObjList = null;
-            List<string> folderNames = null;
-
-            FileInfo[] fileInfoList = null;
-            DirectoryInfo[] dirInfoList = null;
 
             for (int i = 0; i < listOfPaths.Length; i++)
             {
-                xmlPath = Path.Combine(listOfPaths[i], METADATAPATH);
+                string xmlPath = Path.Combine(listOfPaths[i], Metadatapath);
                 if (!File.Exists(xmlPath))
                     continue;
 
-                lock (syncLock)
+                lock (SyncLock)
                 {
                     CommonMethods.LoadXML(ref xmlDoc, xmlPath);
                 }
 
                 di = new DirectoryInfo(listOfPaths[i]);
-                fileInfoList = di.GetFiles();
-                dirInfoList = di.GetDirectories();
+                FileInfo[] fileInfoList = di.GetFiles();
+                DirectoryInfo[] dirInfoList = di.GetDirectories();
 
-                folderNames = GetAllFoldersInXML(xmlDoc);
+                List<string> folderNames = GetAllFoldersInXML(xmlDoc);
                 xmlObjList = GetAllFilesInXML(xmlDoc);
 
                 RemoveSimilarFiles(xmlObjList, fileInfoList);
@@ -160,7 +151,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         private FileCompareObject PopulateFileWithMetaData(XmlDocument xmlDoc, FileCompareObject file, int counter)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
             if (node != null)
             {
 
@@ -168,23 +159,23 @@ namespace Syncless.CompareAndSync.Visitor
                 for (int i = 0; i < childNodeList.Count; i++)
                 {
                     XmlNode childNode = childNodeList[i];
-                    if (childNode.Name.Equals(NODE_SIZE))
+                    if (childNode.Name.Equals(NodeSize))
                     {
                         file.MetaLength[counter] = long.Parse(childNode.InnerText);
                     }
-                    else if (childNode.Name.Equals(NODE_HASH))
+                    else if (childNode.Name.Equals(NodeHash))
                     {
                         file.MetaHash[counter] = childNode.InnerText;
                     }
-                    else if (childNode.Name.Equals(NODE_LAST_MODIFIED))
+                    else if (childNode.Name.Equals(NodeLastModified))
                     {
                         file.MetaLastWriteTime[counter] = long.Parse(childNode.InnerText);
                     }
-                    else if (childNode.Name.Equals(NODE_LAST_CREATED))
+                    else if (childNode.Name.Equals(NodeLastCreated))
                     {
                         file.MetaCreationTime[counter] = long.Parse(childNode.InnerText);
                     }
-                    else if (childNode.Name.Equals(NODE_LAST_UPDATED))
+                    else if (childNode.Name.Equals(NodeLastUpdated))
                     {
                         file.MetaUpdated[counter] = long.Parse(childNode.InnerText);
                     }
@@ -195,12 +186,12 @@ namespace Syncless.CompareAndSync.Visitor
 
             }else
             {
-                string path = Path.Combine(file.GetSmartParentPath(counter),TODOPATH);
+                string path = Path.Combine(file.GetSmartParentPath(counter),Todopath);
                 if (File.Exists(path))
                 {
                     XmlDocument todoXMLDoc = new XmlDocument();
                     CommonMethods.LoadXML(ref todoXMLDoc, path);
-                    XmlNode todoNode = todoXMLDoc.SelectSingleNode("/" + LAST_KNOWN_STATE + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
+                    XmlNode todoNode = todoXMLDoc.SelectSingleNode("/" + LastKnownState + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
                     if (todoNode != null)
                     {
                         XmlNodeList nodeList = todoNode.ChildNodes;
@@ -209,24 +200,24 @@ namespace Syncless.CompareAndSync.Visitor
                             XmlNode childNode = nodeList[i];
                             switch (childNode.Name)
                             {
-                                case ACTION:
+                                case Action:
                                     string action = childNode.InnerText;
                                     if (action.Equals("Deleted"))
                                     {
-                                        file.ToDoAction[counter] = LastKnownState.Deleted;
+                                        file.ToDoAction[counter] = Enum.LastKnownState.Deleted;
                                     }
                                     else
                                     {
-                                        file.ToDoAction[counter] = LastKnownState.Renamed;
+                                        file.ToDoAction[counter] = Enum.LastKnownState.Renamed;
                                     }
                                     break;
-                                case NODE_LAST_MODIFIED:
+                                case NodeLastModified:
                                     file.MetaLastWriteTime[counter] = long.Parse(childNode.InnerText);
                                     break;
-                                case NODE_HASH:
+                                case NodeHash:
                                     file.MetaHash[counter] = childNode.InnerText;
                                     break;
-                                case NODE_LAST_UPDATED:
+                                case NodeLastUpdated:
                                     file.MetaUpdated[counter] = long.Parse(childNode.InnerText);
                                     break;
                             }
@@ -248,7 +239,7 @@ namespace Syncless.CompareAndSync.Visitor
             long updatedTime = 0;
 
             List<XMLCompareObject> objectList = new List<XMLCompareObject>();
-            XmlNodeList xmlNodeList = xmlDoc.SelectNodes(XPATH_EXPR + "/files");
+            XmlNodeList xmlNodeList = xmlDoc.SelectNodes(XpathExpr + "/files");
             if (xmlNodeList == null)
                 return objectList;
 
@@ -259,22 +250,22 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     switch (node.Name)
                     {
-                        case NODE_NAME:
+                        case NodeName:
                             name = node.InnerText;
                             break;
-                        case NODE_SIZE:
+                        case NodeSize:
                             size = long.Parse(node.InnerText);
                             break;
-                        case NODE_HASH:
+                        case NodeHash:
                             hash = node.InnerText;
                             break;
-                        case NODE_LAST_CREATED:
+                        case NodeLastCreated:
                             createdTime = long.Parse(node.InnerText);
                             break;
-                        case NODE_LAST_MODIFIED:
+                        case NodeLastModified:
                             modifiedTime = long.Parse(node.InnerText);
                             break;
-                        case NODE_LAST_UPDATED:
+                        case NodeLastUpdated:
                             updatedTime = long.Parse(node.InnerText);
                             break;
                     }
@@ -289,7 +280,7 @@ namespace Syncless.CompareAndSync.Visitor
         {
             List<string> folderList = new List<string>();
 
-            XmlNodeList xmlFolderList = xmlDoc.SelectNodes(XPATH_EXPR + "/folder");
+            XmlNodeList xmlFolderList = xmlDoc.SelectNodes(XpathExpr + "/folder");
             if (xmlFolderList == null)
                 return folderList;
 
@@ -300,7 +291,7 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     switch (node.Name)
                     {
-                        case NODE_NAME:
+                        case NodeName:
                             folderList.Add(node.InnerText);
                             break;
                     }
@@ -465,7 +456,7 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 if (bco.ChangeType[i] == null && bco.ToDoAction[i].HasValue)
                 {
-                    if (bco.ToDoAction[i] == LastKnownState.Deleted)
+                    if (bco.ToDoAction[i] == Enum.LastKnownState.Deleted)
                         bco.ChangeType[i] = MetaChangeType.Delete;
                 }
             }
@@ -479,36 +470,36 @@ namespace Syncless.CompareAndSync.Visitor
         {
             for (int i = 0; i < numOfPaths; i++)
             {
-                string currMetaData = Path.Combine(Path.Combine(folder.GetSmartParentPath(i), folder.Name), METADATAPATH);
+                string currMetaData = Path.Combine(Path.Combine(folder.GetSmartParentPath(i), folder.Name), Metadatapath);
                 if (File.Exists(currMetaData))
                 {
                     XmlDocument xmlDoc = new XmlDocument();
 
-                    lock (syncLock)
+                    lock (SyncLock)
                     {
                         CommonMethods.LoadXML(ref xmlDoc, currMetaData);
                     }
 
-                    folder.MetaName = xmlDoc.SelectSingleNode(XPATH_EXPR + "/name").InnerText;
+                    folder.MetaName = xmlDoc.SelectSingleNode(XpathExpr + "/name").InnerText;
                 }
             }
         }
 
         private FolderCompareObject PopulateFolderWithMetaData(XmlDocument xmlDoc, FolderCompareObject folder, int counter)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XPATH_EXPR + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
             if (node != null)
             {
                 folder.MetaExists[counter] = true;
             }
             else
             {
-                string path = Path.Combine(folder.GetSmartParentPath(counter), TODOPATH);
+                string path = Path.Combine(folder.GetSmartParentPath(counter), Todopath);
                 if (File.Exists(path))
                 {
-                    XmlDocument todoXMLDoc = new XmlDocument();
-                    CommonMethods.LoadXML(ref todoXMLDoc, path);
-                    XmlNode todoNode = todoXMLDoc.SelectSingleNode("/" + LAST_KNOWN_STATE + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
+                    XmlDocument todoXmlDoc = new XmlDocument();
+                    CommonMethods.LoadXML(ref todoXmlDoc, path);
+                    XmlNode todoNode = todoXmlDoc.SelectSingleNode("/" + LastKnownState + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
                     if (todoNode != null)
                     {
                         XmlNodeList nodeList = todoNode.ChildNodes;
@@ -517,18 +508,18 @@ namespace Syncless.CompareAndSync.Visitor
                             XmlNode childNode = nodeList[i];
                             switch (childNode.Name)
                             {
-                                case ACTION:
+                                case Action:
                                     string action = childNode.InnerText;
                                     if (action.Equals("Deleted"))
                                     {
-                                        folder.ToDoAction[counter] = LastKnownState.Deleted;
+                                        folder.ToDoAction[counter] = Enum.LastKnownState.Deleted;
                                     }
                                     else
                                     {
-                                        folder.ToDoAction[counter] = LastKnownState.Renamed;
+                                        folder.ToDoAction[counter] = Enum.LastKnownState.Renamed;
                                     }
                                     break;
-                                case NODE_LAST_UPDATED:
+                                case NodeLastUpdated:
                                     folder.MetaUpdated[counter] = long.Parse(childNode.InnerText);
                                     break;
                             }
