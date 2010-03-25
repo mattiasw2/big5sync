@@ -39,7 +39,7 @@ namespace SynclessUI
         private Dictionary<string, double> _syncProgressNotificationDictionary =
             new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
 
-        private Dictionary<string, string> _syncStatusNotificationDictionary =
+        private Dictionary<string, string> _tagStatusNotificationDictionary =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public IUIControllerInterface Gui;
@@ -115,7 +115,7 @@ namespace SynclessUI
             }
 
             _syncProgressNotificationDictionary[tagname] = percentageComplete;
-            _syncStatusNotificationDictionary[tagname] = message;
+            _tagStatusNotificationDictionary[tagname] = message;
         }
 
         public void NotifySyncStart(string tagname)
@@ -127,7 +127,7 @@ namespace SynclessUI
                 LblStatusText.Content = message;
             }
 
-            _syncStatusNotificationDictionary[tagname] = message;
+            _tagStatusNotificationDictionary[tagname] = message;
             NotifyBalloon("Synchronization Started", tagname + " is being synchronized.");
         }
 
@@ -140,7 +140,7 @@ namespace SynclessUI
                 LblStatusText.Content = message;
             }
 
-            _syncStatusNotificationDictionary[tagname] = message;
+            _tagStatusNotificationDictionary[tagname] = message;
             NotifyBalloon("Synchronization Completed", tagname + " is now synchronized.");
         }
 
@@ -149,9 +149,9 @@ namespace SynclessUI
             return _syncProgressNotificationDictionary[tagname];
         }
 
-        public string GetSyncStatus(string tagname)
+        public string GetTagStatus(string tagname)
         {
-            string status = _syncStatusNotificationDictionary[tagname];
+            string status = _tagStatusNotificationDictionary[tagname];
 
             return status;
         }
@@ -166,7 +166,7 @@ namespace SynclessUI
             }
 
             _syncProgressNotificationDictionary[tagname] = progress.PercentComplete;
-            _syncStatusNotificationDictionary[tagname] = progress.Message;
+            _tagStatusNotificationDictionary[tagname] = progress.Message;
         }
 
         private void SetProgressBarColor(double percentageComplete)
@@ -236,7 +236,7 @@ namespace SynclessUI
                 {
                     double percentageComplete = GetSyncProgressPercentage(tagname);
                     SetProgressBarColor(percentageComplete);
-                    string status = GetSyncStatus(tagname);
+                    string status = GetTagStatus(tagname);
 
                     ProgressBarSync.Value = percentageComplete;
                     LblStatusText.Content = status;
@@ -244,7 +244,13 @@ namespace SynclessUI
                 else
                 {
                     ProgressBarSync.Value = 0;
-                    LblStatusText.Content = "";
+                    
+                    if(_tagStatusNotificationDictionary.ContainsKey(tagname)) {
+                        LblStatusText.Content = GetTagStatus(tagname);
+                    } else
+                    {
+                        LblStatusText.Content = "";
+                    }
                 }
             }
             catch (UnhandledException)
@@ -450,15 +456,22 @@ namespace SynclessUI
             }
             try
             {
-                if (Gui.StartManualSync(SelectedTag))
+                if (Gui.GetTag(SelectedTag).PathStringList.Count > 1)
                 {
-                    const string message = "Synchronization request has been queued.";
-                    LblStatusText.Content = message;
-                    _syncStatusNotificationDictionary[SelectedTag] = message;
-                }
+                    if (Gui.StartManualSync(SelectedTag))
+                    {
+                        const string message = "Synchronization request has been queued.";
+                        LblStatusText.Content = message;
+                        _tagStatusNotificationDictionary[SelectedTag] = message;                        
+                    }
+                    else
+                    {
+                        DialogsHelper.ShowError("Synchronization Error", "'" + SelectedTag + "' could not be synchronized.");
+                    }
+                } 
                 else
                 {
-                    DialogsHelper.ShowError("Synchronization Error", "'" + SelectedTag + "' could not be synchronized.");
+                    DialogsHelper.ShowError("Nothing to Sync", "Please sync only when there are two or more folders to sync.");
                 }
             }
             catch (UnhandledException)
