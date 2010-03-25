@@ -12,6 +12,7 @@ namespace Syncless.Notification
         public const string SYNC_COMPLETE_NOTIFICATION = "002";
         public const string COMPARE_COMPLETE_NOTIFICATION = "003";
         public const string NEW_PROFILE_NOTIFICATION = "201";
+        public const string NOTHING_TO_SYNC_NOTIFICATION = "202";
         #endregion
 
 
