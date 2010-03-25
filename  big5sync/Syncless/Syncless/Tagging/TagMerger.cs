@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Syncless.Core;
-using Syncless.Notification;
 using Syncless.Notification.SLLNotification;
 namespace Syncless.Tagging
 {
