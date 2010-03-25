@@ -129,7 +129,7 @@ namespace Syncless.CompareAndSync.Visitor
                 // ReSharper restore PossibleNullReferenceException
                 file.ChangeType[resultPos] = MetaChangeType.Rename;
                 result.Invalid = true;
-                file.Parent.Invalid = true; //Experimental
+                file.Parent.Dirty = true; //Experimental
             }
 
         }
