@@ -22,6 +22,7 @@ using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.Notification;
 using Syncless.Core.View;
+using System.Runtime.CompilerServices;
 namespace Syncless.Core
 {
     internal class SystemLogicLayer : IUIControllerInterface, IMonitorControllerInterface, ICommandLineControllerInterface
@@ -278,6 +279,7 @@ namespace Syncless.Core
                 else
                 {
                     ProfilingLayer.Instance.RemoveDrive(dce.Info);
+                    MonitorLayer.Instance.UnMonitorDrive(dce.Info.Name);
                 }
                 _userInterface.DriveChanged();
                 
@@ -453,6 +455,10 @@ namespace Syncless.Core
         /// <returns>whether the tag can be changed.</returns>
         public bool MonitorTag(string tagname, bool mode)
         {
+            if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tagname))
+            {
+                return false;
+            }
             try
             {
                 Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
@@ -776,7 +782,12 @@ namespace Syncless.Core
         {
             return ProfilingLayer.Instance.CurrentProfile.ProfileName;
         }
-
+        /// <summary>
+        /// Set the name for a drive.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="driveName"></param>
+        /// <returns></returns>
         public bool SetDriveName(DriveInfo info, string driveName)
         {
             ProfilingLayer.Instance.SetDriveName(info, driveName);
@@ -785,7 +796,19 @@ namespace Syncless.Core
 
         public List<LogData> ReadLog()
         {
-            return LoggingLayer.Instance.ReadLog();
+            try
+            {
+                return LoggingLayer.Instance.ReadLog();
+            }
+            catch (LogFileCorruptedException lfce)
+            {
+                throw lfce;
+            }            
+            catch (Exception e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
         }
         #endregion
 
@@ -839,8 +862,13 @@ namespace Syncless.Core
         /// </summary>
         /// <param name="tag"></param>
         /// <param name="notify"></param>
-        private void ManualSync(Tag tag, bool notify)
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        private bool ManualSync(Tag tag, bool notify)
         {
+            if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tag.TagName))
+            {
+                return false;
+            }
             List<string> paths = tag.FilteredPathListString;
             List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
             if (filterPaths[0].Count != 0)
@@ -850,6 +878,7 @@ namespace Syncless.Core
 
                 CompareAndSyncController.Instance.Sync(syncRequest);
             }
+            return true;
         }
         /// <summary>
         /// Manual Sync
@@ -864,8 +893,8 @@ namespace Syncless.Core
             {
                 return false;
             }
-            ManualSync(tag, notify);
-            return true;
+            return ManualSync(tag, notify);
+            
         }
         /// <summary>
         /// Sync the tag then monitor the tag.
