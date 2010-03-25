@@ -11,18 +11,16 @@ namespace Syncless.Filters
         public const FilterMode EXCLUDE = FilterMode.EXCLUDE;
 
         public static Filter CreateExtensionFilter(string pattern, FilterMode mode)
-        {
-            ExtensionFilter filter = new ExtensionFilter(pattern,mode);
-            return filter;
+        {   
+            return new ExtensionFilter(pattern,mode);
         }
         public static Filter CreateConfigurationFilter()
         {
             return new SynclessConfigFilter();
         }
         public static Filter CreateArchiveFilter(string archiveName)
-        {
-            SynclessArchiveFilter filter = new SynclessArchiveFilter(archiveName);
-            return filter;
+        {   
+            return new SynclessArchiveFilter(archiveName);
         }
     }
 }

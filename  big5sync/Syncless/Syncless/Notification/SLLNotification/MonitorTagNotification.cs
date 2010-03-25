@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Syncless.Notification.SLLNotification
+﻿namespace Syncless.Notification.SLLNotification
 {
     public class MonitorTagNotification :AbstractNotification
     {
