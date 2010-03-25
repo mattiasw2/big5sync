@@ -9,6 +9,7 @@ using System.Diagnostics;
 using Syncless.Filters;
 using Syncless.Core;
 using Syncless.Notification;
+using Syncless.Logging;
 
 namespace Syncless.Tagging
 {
@@ -181,12 +182,11 @@ namespace Syncless.Tagging
             Tag tag = _taggingProfile.AddTag(tagname);
             if (tag != null)
             {
-                TaggingHelper.Logging(LogMessage.TAG_CREATED, tagname);
+                TaggingHelper.Logging(LogEventType.APPEVENT_TAG_CREATED, LogMessage.TAG_CREATED, tagname);
                 return tag;
             }
             else
             {
-                TaggingHelper.Logging(LogMessage.TAG_ALREADY_EXISTS, tagname);
                 throw new TagAlreadyExistsException(tagname);
             }
         }
@@ -231,13 +231,11 @@ namespace Syncless.Tagging
             switch (result)
             {
                 case 0:
-                    TaggingHelper.Logging(LogMessage.TAG_RENAMED, oldname, newname);
+                    //TaggingHelper.Logging(LogMessage.TAG_RENAMED, oldname, newname);
                     break;
                 case 1:
-                    TaggingHelper.Logging(LogMessage.TAG_ALREADY_EXISTS, newname);
                     throw new TagAlreadyExistsException(newname);
                 case 2:
-                    TaggingHelper.Logging(LogMessage.TAG_NOT_FOUND, oldname);
                     throw new TagNotFoundException(oldname);
                 default:
                     break;
@@ -274,12 +272,11 @@ namespace Syncless.Tagging
             Tag toremove = _taggingProfile.DeleteTag(tagname);
             if (toremove != null)
             {
-                TaggingHelper.Logging(LogMessage.TAG_REMOVED, tagname);
+                TaggingHelper.Logging(LogEventType.APPEVENT_TAG_DELETED, LogMessage.TAG_REMOVED, tagname);
                 return toremove;
             }
             else
             {
-                TaggingHelper.Logging(LogMessage.TAG_NOT_FOUND, tagname);
                 throw new TagNotFoundException(tagname);
             }
         }
@@ -330,17 +327,15 @@ namespace Syncless.Tagging
             try
             {
                 Tag tag = _taggingProfile.TagFolder(path, tagname);
-               
+                TaggingHelper.Logging(LogEventType.APPEVENT_FOLDER_TAGGED, LogMessage.FOLDER_TAGGED, path, tagname);
                 return tag;
             }
             catch (PathAlreadyExistsException paee)
             {
-                TaggingHelper.Logging(LogMessage.PATH_ALREADY_EXISTS_IN_TAG, path, tagname);
                 throw paee;
             }
             catch (RecursiveDirectoryException rde)
             {
-                TaggingHelper.Logging(LogMessage.RECURSIVE_DIRECTORY, path);
                 throw rde;
             }
         }
@@ -384,13 +379,11 @@ namespace Syncless.Tagging
             switch (result)
             {
                 case 0:
-                    TaggingHelper.Logging(LogMessage.FOLDER_NOT_UNTAGGED, path, tagname);
                     return 0;
                 case 1:
-                    TaggingHelper.Logging(LogMessage.FOLDER_UNTAGGED, path, tagname);
+                    TaggingHelper.Logging(LogEventType.APPEVENT_FOLDER_UNTAGGED, LogMessage.FOLDER_UNTAGGED, path, tagname);
                     return 1;
                 default: 
-                    TaggingHelper.Logging(LogMessage.TAG_NOT_FOUND, tagname);
                     throw new TagNotFoundException(tagname);
             }
         }
@@ -474,7 +467,6 @@ namespace Syncless.Tagging
         public void RenameFolder(string oldPath, string newPath)
         {
             _taggingProfile.RenameFolder(oldPath, newPath);
-            TaggingHelper.Logging(LogMessage.FOLDER_RENAMED, oldPath, newPath);
         }
 
         /// <summary>
@@ -629,6 +621,11 @@ namespace Syncless.Tagging
         }
 
         //refactor done
+        /// <summary>
+        /// Retrieve all the tags that contain the parent folder paths of the given path
+        /// </summary>
+        /// <param name="path">The path used to retrieve the parent folder paths</param>
+        /// <returns>The list of Tags containing the parent folder paths</returns>
         public List<Tag> RetrieveParentTagByPath(string path)
         {
             List<Tag> parentPathList = new List<Tag>();
