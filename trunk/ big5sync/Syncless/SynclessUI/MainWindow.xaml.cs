@@ -41,6 +41,8 @@ namespace SynclessUI
         private NotificationWatcher _notificationWatcher;
         private PriorityNotificationWatcher _priorityNotificationWatcher;
 
+        private bool _enabled = true;
+
         public string selectedTag
         {
             get { return (string)Application.Current.Properties["SelectedTag"]; }
@@ -522,7 +524,10 @@ namespace SynclessUI
                 else
                 {
                     ManualMode();
+                    _enabled = !tv.Locked;
                 }
+
+                
 
                 LblStatusText.Content = "";
                 ListTaggedPath.ItemsSource = tv.PathStringList;
@@ -685,6 +690,10 @@ namespace SynclessUI
 
         private void BtnSyncMode_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            if (!_enabled)
+            {
+                return;
+            }
             try
             {
                 if (string.Compare((string)LblSyncMode.Content, "Manual") == 0)
@@ -744,6 +753,10 @@ namespace SynclessUI
 
         private void BtnSyncNow_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            if (!_enabled)
+            {
+                return;
+            }
             try
             {
                 if (gui.StartManualSync(selectedTag))
@@ -1143,6 +1156,10 @@ namespace SynclessUI
 
         private void BtnPreview_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            if (!_enabled)
+            {
+                return;
+            }
 			/*
             string messageBoxText = "This feature will come in a future version of Syncless.";
             string caption = "Feature Not Implemented Yet";

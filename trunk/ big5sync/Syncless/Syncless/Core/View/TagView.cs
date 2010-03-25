@@ -60,6 +60,26 @@ namespace Syncless.Core.View
             set { _isSeamless = value; }
         }
 
+        private bool isQueued;
+
+        public bool IsQueued
+        {
+            get { return isQueued; }
+            set { isQueued = value; }
+        }
+        private bool isSyncing;
+
+        public bool IsSyncing
+        {
+            get { return isSyncing; }
+            set { isSyncing = value; }
+        }       
+
+        public bool Locked
+        {
+            get { return (isQueued || isSyncing); }
+        }
+        
         public TagView(string tagname, long created)
         {
             this._tagName = tagname;
