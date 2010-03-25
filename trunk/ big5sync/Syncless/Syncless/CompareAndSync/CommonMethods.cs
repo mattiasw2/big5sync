@@ -445,14 +445,11 @@ namespace Syncless.CompareAndSync
         /// <param name="paths"></param>
         private static void CheckIfSameType(List<string> paths)
         {
-            bool isFile = System.IO.File.Exists(paths[0]);
+            bool isFile = File.Exists(paths[0]);
 
             for (int i = 1; i < paths.Count; i++)
-            {
-                if (isFile != System.IO.File.Exists(paths[i]))
+                if (isFile != File.Exists(paths[i]))
                     throw new IncompatibleTypeException();
-
-            }
         }
 
 
