@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Syncless.Helper;
 
 namespace Syncless.Logging
 {
@@ -18,7 +19,7 @@ namespace Syncless.Logging
                 string[] tokens = text.Split(new char[] { '~' });
                 if (tokens.Length != 4)
                 {
-                    throw new ApplicationException();
+                    throw new LogFileCorruptedException(ErrorMessage.LOG_FILE_CORRUPTED);
                 }
                 string timestamp = tokens[0].Trim();
                 LogEventType logEvent = Convert(tokens[2].Trim());
