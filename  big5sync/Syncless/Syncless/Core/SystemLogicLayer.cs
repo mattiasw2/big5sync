@@ -972,7 +972,7 @@ namespace Syncless.Core
                     return false;
                 }
                 DeviceWatcher.Instance.ToString(); //Starts watching for Drive Change
-                List<Tag> tagList = TaggingLayer.Instance.UnfilteredTagList;
+                List<Tag> tagList = TaggingLayer.Instance.FilteredTagList;
                 foreach (Tag t in tagList)
                 {
                     if (t.IsSeamless)

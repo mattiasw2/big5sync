@@ -7,8 +7,6 @@ namespace Syncless.Notification
 {
     public class SyncProgress
     {
-        private const double DIFF = 1;
-        private double LastSentValue = 0;
         private List<ISyncProgressObserver> _observerList;
         private SyncState _state;
         public SyncState State
@@ -115,7 +113,6 @@ namespace Syncless.Notification
 
         private void InvokeChange()
         {
-            LastSentValue = PercentComplete;
             foreach (ISyncProgressObserver obs in _observerList)
             {
                 MethodASync sync = new MethodASync(obs.ProgressChanged);

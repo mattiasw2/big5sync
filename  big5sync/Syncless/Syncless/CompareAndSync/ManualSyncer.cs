@@ -44,7 +44,6 @@ namespace Syncless.CompareAndSync
                 ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
 
             //Finished
-            progress.ChangeToFinished();
             ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification(request.TagName,rco));
         }
 
