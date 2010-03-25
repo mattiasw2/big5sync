@@ -8,6 +8,7 @@ using System.IO;
 using Syncless.Filters;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.Core.View;
+using Syncless.Logging;
 namespace Syncless.Core
 {
     public interface IUIControllerInterface
@@ -48,6 +49,7 @@ namespace Syncless.Core
         bool SetProfileName(string name);
         string GetProfileName();
 
+        List<LogData> ReadLog();
 
         //bool SetTagMultiDirectional(string tagname);
 
