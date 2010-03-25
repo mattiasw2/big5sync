@@ -49,7 +49,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region Files
 
-        private void DetectFileRenameAndUpdate(FileCompareObject file, int numOfPaths)
+        private static void DetectFileRenameAndUpdate(FileCompareObject file, int numOfPaths)
         {
             //Get a Delete type
             //1. Find something that is New and has the same creation time
@@ -62,7 +62,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             for (int i = 0; i < numOfPaths; i++)
             {
-                if (file.ChangeType[i] == MetaChangeType.Delete)
+                if (file.ChangeType[i].HasValue && file.ChangeType[i] == MetaChangeType.Delete)
                     indexes.Add(i);
                 else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType != null)
                     return;
@@ -71,15 +71,13 @@ namespace Syncless.CompareAndSync.Visitor
             if (indexes.Count < 1)
                 return;
 
-            bool found = true;
-
             for (int i = 0; i < indexes.Count; i++)
             {
                 f = file.Parent.GetSameCreationTime(file.MetaCreationTime[indexes[i]], indexes[i]);
 
                 if (f != null && f.ChangeType[indexes[i]] == MetaChangeType.New)
                 {
-                    found = true;
+                    bool found = true;
                     for (int j = 0; j < f.ChangeType.Length; j++)
                     {
                         if (j != indexes[i] && f.ChangeType[j] != null)
@@ -97,9 +95,8 @@ namespace Syncless.CompareAndSync.Visitor
 
         }
 
-        private void DetectFileRename(FileCompareObject file, int numOfPaths)
+        private static void DetectFileRename(FileCompareObject file, int numOfPaths)
         {
-            FileCompareObject f = null;
             FileCompareObject result = null;
             int resultPos = -1;
             int counter = 0;
@@ -114,7 +111,7 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 if (file.ChangeType[i] == MetaChangeType.Delete)
                 {
-                    f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);
+                    FileCompareObject f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);
 
                     if (f != null)
                     {
@@ -127,7 +124,9 @@ namespace Syncless.CompareAndSync.Visitor
 
             if (counter == 1)
             {
+                // ReSharper disable PossibleNullReferenceException
                 file.NewName = result.Name;
+                // ReSharper restore PossibleNullReferenceException
                 file.ChangeType[resultPos] = MetaChangeType.Rename;
                 result.Invalid = true;
                 file.Parent.Invalid = true; //Experimental
@@ -135,7 +134,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         }
 
-        private void CompareFiles(FileCompareObject file, int numOfPaths)
+        private static void CompareFiles(FileCompareObject file, int numOfPaths)
         {
             //Delete will only occur if all other changes are MetaChangeType.NoChange or null
             List<int> deletePos = new List<int>();
@@ -265,7 +264,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region Folders
 
-        private void CompareFolders(FolderCompareObject folder, int numOfFiles)
+        private static void CompareFolders(FolderCompareObject folder, int numOfFiles)
         {
             //Delete will only occur if none of the folders are marked as dirty
             List<int> deletePos = new List<int>();

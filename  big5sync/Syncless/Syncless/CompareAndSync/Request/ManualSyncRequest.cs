@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Syncless.Filters;
 
 namespace Syncless.CompareAndSync.Request
 {
     public class ManualSyncRequest : ManualRequest
     {
-        private bool _notify;
-        private string _tagName;
+        private readonly bool _notify;
+        private readonly string _tagName;
 
         public ManualSyncRequest(string[] paths, List<Filter> filters, SyncConfig syncConfig, string tagName, bool notify)
             : base(paths, filters, syncConfig)
@@ -21,13 +18,11 @@ namespace Syncless.CompareAndSync.Request
         public bool Notify
         {
             get { return _notify; }
-            set { _notify = value; }
         }
 
         public string TagName
         {
             get { return _tagName; }
-            set { _tagName = value; }
         }
     }
 }

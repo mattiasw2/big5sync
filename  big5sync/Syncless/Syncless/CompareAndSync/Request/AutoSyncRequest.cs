@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Syncless.CompareAndSync.Enum;
 
 namespace Syncless.CompareAndSync.Request
@@ -9,11 +6,11 @@ namespace Syncless.CompareAndSync.Request
     public class AutoSyncRequest : Request
     {
 
-        private string _sourceName, _sourceParent, _oldName;
-        private List<string> _destinations;
-        private AutoSyncRequestType? _requestType;
-        private bool? _isFolder;
-        private SyncConfig _syncConfig;
+        private readonly string _sourceName, _sourceParent, _oldName;
+        private readonly List<string> _destinations;
+        private readonly AutoSyncRequestType? _requestType;
+        private readonly bool? _isFolder;
+        private readonly SyncConfig _syncConfig;
 
         public AutoSyncRequest(string sourceName, string sourceParent, List<string> destinations, AutoSyncRequestType requestType, SyncConfig syncConfig)
         {
@@ -43,13 +40,7 @@ namespace Syncless.CompareAndSync.Request
 
         public string NewName
         {
-            get
-            {
-                if (_requestType == AutoSyncRequestType.Rename)
-                    return _sourceName;
-                else
-                    return null;
-            }
+            get { return _requestType == AutoSyncRequestType.Rename ? _sourceName : null; }
         }
 
         public string OldName

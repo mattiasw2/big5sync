@@ -13,8 +13,8 @@ namespace Syncless.CompareAndSync.Visitor
     {
         #region IVisitor Members
 
-        private List<Filter> _filter;
-        private FilterChain _filterChain;
+        private readonly List<Filter> _filter;
+        private readonly FilterChain _filterChain;
 
         public BuilderVisitor(List<Filter> filter)
         {
@@ -95,10 +95,6 @@ namespace Syncless.CompareAndSync.Visitor
                                 folder.AddChild(fco);
                         }
                     }
-                }
-                else
-                {
-                    //Do nothing
                 }
             }
         }
