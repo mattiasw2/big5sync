@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Diagnostics;
 using Syncless.CompareAndSync.CompareObject;
-using Syncless.Filters;
+using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Exceptions;
 using Syncless.Core;
-using Syncless.CompareAndSync.Enum;
+using Syncless.Filters;
 using Syncless.Logging;
 
 namespace Syncless.CompareAndSync.Visitor
@@ -84,7 +80,7 @@ namespace Syncless.CompareAndSync.Visitor
                             }
                             catch (HashFileException)
                             {
-                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(Logging.LogEventType.FSCHANGE_ERROR, "Error hashing " + Path.Combine(fco.GetSmartParentPath(index), fco.Name + ".")));
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error hashing " + Path.Combine(fco.GetSmartParentPath(index), fco.Name + ".")));
                                 fco.FinalState[index] = FinalState.Error;
                                 fco.Invalid = true;
                                 continue;

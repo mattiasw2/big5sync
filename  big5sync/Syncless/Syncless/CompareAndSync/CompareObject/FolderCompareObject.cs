@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Syncless.CompareAndSync.Enum;
-using System.IO;
-using System.Diagnostics;
 
 namespace Syncless.CompareAndSync.CompareObject
 {
@@ -13,7 +10,7 @@ namespace Syncless.CompareAndSync.CompareObject
         private Dictionary<string, BaseCompareObject> _contents;
         private bool _dirty;
         private string _metaName;
-        private bool[] _useNewName;
+        private readonly bool[] _useNewName;
 
         public FolderCompareObject(string name, int numOfPaths, FolderCompareObject parent)
             : base(name, numOfPaths, parent)
@@ -122,8 +119,9 @@ namespace Syncless.CompareAndSync.CompareObject
             get { return _dirty; }
             set
             {
-                if (Parent != null && value == true)
-                    Parent.Dirty = value;
+
+                if (Parent != null && value != false)
+                    Parent.Dirty = false;
                 _dirty = value;
             }
         }
@@ -142,12 +140,7 @@ namespace Syncless.CompareAndSync.CompareObject
         public void UpdateRename(int posNewName)
         {
             for (int i = 0; i < _useNewName.Length; i++)
-            {
-                if (i != posNewName)
-                    _useNewName[i] = true;
-                else
-                    _useNewName[i] = false;
-            }
+                _useNewName[i] = i != posNewName;
         }
 
     }

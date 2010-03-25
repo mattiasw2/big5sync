@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
-using Syncless.Core;
-using Syncless.CompareAndSync.Exceptions;
+using System.Text;
 using System.Xml;
+using Syncless.CompareAndSync.Exceptions;
 
 namespace Syncless.CompareAndSync
 {
@@ -66,6 +65,13 @@ namespace Syncless.CompareAndSync
 
         #region File Operations
 
+        /// <summary>
+        /// Archives a file
+        /// </summary>
+        /// <param name="path">The fullpath of the file to archive</param>
+        /// <param name="archiveName">The name of the folder to archive to</param>
+        /// <param name="archiveLimit">The number of old copies to keep for the file</param>
+        /// <exception cref="ArchiveFileException"></exception>
         public static void ArchiveFile(string path, string archiveName, int archiveLimit)
         {
             Debug.Assert(path != null && archiveName != null && archiveLimit >= 0);

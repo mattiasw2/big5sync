@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Exceptions;
@@ -25,7 +21,7 @@ namespace Syncless.CompareAndSync.Visitor
         public void Visit(FileCompareObject file, int numOfPaths)
         {
             nodesCount++;
-            _syncProgress.Message = "Synchronzing "+file.Name;
+            _syncProgress.Message = "Synchronizing "+file.Name;
             if (file.Invalid)
             {
                 _syncProgress.fail();
@@ -65,7 +61,7 @@ namespace Syncless.CompareAndSync.Visitor
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
             nodesCount++;
-            _syncProgress.Message = "Synchronzing " + folder.Name;
+            _syncProgress.Message = "Synchronizing " + folder.Name;
             if (folder.Invalid)
             {
                 _syncProgress.fail();
