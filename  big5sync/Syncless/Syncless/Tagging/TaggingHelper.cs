@@ -6,6 +6,7 @@ using System.Xml;
 using System.IO;
 using Syncless.Logging;
 using Syncless.Helper;
+using Syncless.Core;
 
 namespace Syncless.Tagging
 {
@@ -97,10 +98,11 @@ namespace Syncless.Tagging
             return trailingIndex;
         }
 
-        internal static void Logging(string message, params object[] list)
+        internal static void Logging(LogEventType eventType, string message, params object[] list)
         {
             //to call ServiceLocator.GetLogger();
-            Console.WriteLine(string.Format(message, list));
+            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(eventType, string.Format(message, list)));
+            //Console.WriteLine(string.Format(message, list));
         }
     }
 }
