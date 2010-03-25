@@ -73,13 +73,6 @@ namespace Syncless.Tagging
         #region config child - seamless
         private const string ELE_CONFIG_SEAMLESS = "seamless";
         #endregion
-        #region config child - config archive
-        private const string ELE_CONFIG_ARCHIVE_ROOT = "archive";
-        #region config archive attributes
-        private const string ATTR_CONFIG_ARCHIVE_NAME = "name";
-        private const string ATTR_CONFIG_ARCHIVE_COUNT = "count";
-        #endregion
-        #endregion
         #endregion
         #endregion
         #endregion
@@ -286,13 +279,6 @@ namespace Syncless.Tagging
                     tag.Config = CreateTagConfig(tagChild);
                 }
             }
-            //XmlElement foldersElement = (XmlElement)tagElement.GetElementsByTagName(ELE_FOLDER_ROOT).Item(0);
-            //tag.FilteredPathList = CreateFolders(foldersElement);
-            //XmlElement filters = (XmlElement)tagElement.GetElementsByTagName(ELE_FILTER_ROOT).Item(0);
-            //tag.Filters = LoadFilterList(filters);
-            //tag.FiltersUpdated = long.Parse(filters.GetAttribute(ATTR_FILTER_LASTUPDATEDDATE));
-            //XmlElement config = (XmlElement)tagElement.GetElementsByTagName(ELE_CONFIG_ROOT).Item(0);
-            //tag.Config = CreateTagConfig(config);
             return tag;
         }
 
@@ -311,8 +297,6 @@ namespace Syncless.Tagging
         {
             long pathcreated = long.Parse(taggedFolder.GetAttribute(ATTR_TAGGED_FOLDER_CREATEDDATE));
             long pathlastupdated = long.Parse(taggedFolder.GetAttribute(ATTR_TAGGED_FOLDER_LASTUPDATEDDATE));
-            //XmlNodeList pathValues = taggedFolder.ChildNodes;
-            //pathname = pathValues.Item(0).InnerText;
             XmlElement path = (XmlElement)taggedFolder.GetElementsByTagName(ELE_TAGGED_FOLDER_PATH).Item(0);
             string pathname = path.InnerText;
             bool isDeleted = bool.Parse(taggedFolder.GetAttribute(ATTR_TAGGED_FOLDER_ISDELETED));
@@ -384,17 +368,7 @@ namespace Syncless.Tagging
                 {
                     config.IsSeamless = bool.Parse(configChild.InnerText);
                 }
-                else if (configChild.Name.Equals(ELE_CONFIG_ARCHIVE_ROOT))
-                {
-                    config.ArchiveFolderName = configChild.GetAttribute(ATTR_CONFIG_ARCHIVE_NAME);
-                    config.ArchiveCount = int.Parse(configChild.GetAttribute(ATTR_CONFIG_ARCHIVE_COUNT));
-                }
             }
-            //XmlElement seamlessElement = (XmlElement)configNode.GetElementsByTagName(ELE_CONFIG_SEAMLESS).Item(0);
-            //XmlElement archiveElement = (XmlElement)configNode.GetElementsByTagName(ELE_CONFIG_ARCHIVE_ROOT).Item(0);
-            //config.IsSeamless = bool.Parse(seamlessElement.InnerText);
-            //config.ArchiveFolderName = archiveElement.GetAttribute(ATTR_CONFIG_ARCHIVE_NAME);
-            //config.ArchiveCount = int.Parse(archiveElement.GetAttribute(ATTR_CONFIG_ARCHIVE_COUNT));
             return config;
         }
         #endregion
@@ -488,10 +462,6 @@ namespace Syncless.Tagging
             XmlElement seamlessElement = xmlDoc.CreateElement(ELE_CONFIG_SEAMLESS);
             seamlessElement.InnerText = tag.IsSeamless.ToString();
             configElement.AppendChild(seamlessElement);
-            XmlElement archiveElement = xmlDoc.CreateElement(ELE_CONFIG_ARCHIVE_ROOT);
-            archiveElement.SetAttribute(ATTR_CONFIG_ARCHIVE_NAME, config.ArchiveFolderName);
-            archiveElement.SetAttribute(ATTR_CONFIG_ARCHIVE_COUNT, config.ArchiveCount.ToString());
-            configElement.AppendChild(archiveElement);
             return configElement;
         }
         #endregion
