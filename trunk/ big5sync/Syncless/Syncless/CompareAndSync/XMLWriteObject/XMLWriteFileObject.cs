@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Syncless.CompareAndSync.Enum;
+﻿using Syncless.CompareAndSync.Enum;
 
 namespace Syncless.CompareAndSync.XMLWriteObject
 {
     public class XMLWriteFileObject : BaseXMLWriteObject
     {
-        private long _size;
-        private string _hash;
-        private long _lastModified;       
+        private readonly long _size;
+        private readonly string _hash;
+        private readonly long _lastModified;       
 
         //Delete
         public XMLWriteFileObject(string name, string fullPath, MetaChangeType changeType, long metaUpdated)

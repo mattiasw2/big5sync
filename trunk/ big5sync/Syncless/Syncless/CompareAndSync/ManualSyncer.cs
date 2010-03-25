@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Visitor;
-using Syncless.Filters;
 using Syncless.Core;
+using Syncless.Filters;
+using Syncless.Notification;
 using Syncless.Notification.SLLNotification;
 using Syncless.Notification.UINotification;
-using Syncless.Notification;
 
 namespace Syncless.CompareAndSync
 {
@@ -22,7 +20,7 @@ namespace Syncless.CompareAndSync
             SyncStartNotification notification = new SyncStartNotification(request.TagName);
             SyncProgress progress = notification.Progress;
             ServiceLocator.UINotificationQueue().Enqueue(notification);
-            List<Filter> filters = request.Filters.ToList<Filter>();
+            List<Filter> filters = request.Filters.ToList();
             filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
             RootCompareObject rco = new RootCompareObject(request.Paths);
             //Analyzing
@@ -49,7 +47,7 @@ namespace Syncless.CompareAndSync
 
         public static RootCompareObject Compare(ManualCompareRequest request)
         {
-            List<Filter> filters = request.Filters.ToList<Filter>();
+            List<Filter> filters = request.Filters.ToList();
             filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
             RootCompareObject rco = new RootCompareObject(request.Paths);
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters));
