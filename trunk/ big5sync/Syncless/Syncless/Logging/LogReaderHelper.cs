@@ -11,14 +11,23 @@ namespace Syncless.Logging
 
         public static List<LogData> ReadLog()
         {
-            StreamReader streamReader = new StreamReader(USER_LOG_PATH);
             List<LogData> logs = new List<LogData>();
+            StreamReader streamReader;
+            try
+            {
+                streamReader = new StreamReader(USER_LOG_PATH);
+            }
+            catch (FileNotFoundException)
+            {
+                return logs;
+            }
             while (!streamReader.EndOfStream)
             {
                 string text = streamReader.ReadLine();
                 string[] tokens = text.Split(new char[] { '~' });
                 if (tokens.Length != 4)
                 {
+                    streamReader.Close();
                     throw new LogFileCorruptedException(ErrorMessage.LOG_FILE_CORRUPTED);
                 }
                 string timestamp = tokens[0].Trim();
