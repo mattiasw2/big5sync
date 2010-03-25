@@ -1,19 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.IO;
-using Syncless.Core;
 using Syncless.Core.Exceptions;
-using Microsoft.Windows.Controls;
 using SynclessUI.Helper;
 using Syncless.Core.View;
 
@@ -24,12 +15,12 @@ namespace SynclessUI
     /// </summary>
     public partial class TagWindow : Window
     {		
-		private MainWindow _main;
-		private bool cancelstatus = false;
-        private string _tagname {
+		private readonly MainWindow _main;
+		private bool _cancelstatus = false;
+        private string Tagname {
             get { if(ACBName.Text != null) return ACBName.Text.Trim(); else return ""; }
         }
-		private bool popupclosed = true;
+		private bool _popupclosed = true;
 		
         private string _path;
         private string _selectedTag;
@@ -55,7 +46,7 @@ namespace SynclessUI
 
             ProcessPath(_path, _selectedTag);
 
-            if (cancelstatus)
+            if (_cancelstatus)
             {
                 this.Close();
             }
@@ -96,7 +87,7 @@ namespace SynclessUI
             }
             else if (result == System.Windows.Forms.DialogResult.Cancel)
             {
-                cancelstatus = true;
+                _cancelstatus = true;
                 _main.Focus();
             }
 
@@ -114,7 +105,7 @@ namespace SynclessUI
                     {
                         TxtBoxPath.Text = path;
                         ACBName.IsEnabled = true;
-                        ACBName.ItemsSource = _main.gui.GetAllTags();
+                        ACBName.ItemsSource = _main.Gui.GetAllTags();
                         if (selectedTag == null)
                         {
                             ACBName.Text = di.Name;
@@ -151,11 +142,11 @@ namespace SynclessUI
 		private void ProcessTagging() {
             try
             {
-                if (_tagname != "")
+                if (Tagname != "")
                 {
                     if (_path != "")
                     {
-                        _main.CreateTag(_tagname);
+                        _main.CreateTag(Tagname);
 
                         bool tocontinue = this.TriggerLongPathWarning();
 
@@ -165,12 +156,12 @@ namespace SynclessUI
 
                             try
                             {
-                                tv1 = _main.gui.Tag(_tagname, new DirectoryInfo(_path));
+                                tv1 = _main.Gui.Tag(Tagname, new DirectoryInfo(_path));
 
                                 if (tv1 != null)
                                 {
                                     _main.InitializeTagList();
-                                    _main.SelectTag(_tagname);
+                                    _main.SelectTag(Tagname);
                                     this.Close();
                                 }
                                 else
@@ -240,19 +231,19 @@ namespace SynclessUI
 		/// <param name="e"></param>
 		private void Text_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
 		{
-			if(e.Key == Key.Enter && popupclosed == true) {
+			if(e.Key == Key.Enter && _popupclosed == true) {
 				BtnOk.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
 			}
 		}
 
 		private void Popup_Opened(object sender, System.EventArgs e)
 		{
-			popupclosed = false;
+			_popupclosed = false;
 		}
 
 		private void Popup_Closed(object sender, System.EventArgs e)
 		{
-			popupclosed = true;
+			_popupclosed = true;
 		}
     }
 }

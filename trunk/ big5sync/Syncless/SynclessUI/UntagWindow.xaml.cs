@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.IO;
-using Syncless.Core;
 using Syncless.Core.Exceptions;
 using SynclessUI.Helper;
 
@@ -22,7 +11,7 @@ namespace SynclessUI
     /// </summary>
     public partial class UntagWindow : Window
     {		
-		private MainWindow _main;
+		private readonly MainWindow _main;
         
 		public UntagWindow(MainWindow main, string clipath)
         {
@@ -32,7 +21,7 @@ namespace SynclessUI
 
                 _main = main;
 
-                List<string> tagListByFolder = _main.gui.GetTags(new DirectoryInfo(clipath));
+                List<string> tagListByFolder = _main.Gui.GetTags(new DirectoryInfo(clipath));
                 if (tagListByFolder.Count != 0)
                 {
                     TxtBoxPath.Text = clipath;
@@ -65,7 +54,7 @@ namespace SynclessUI
 
                 foreach (string t in taglist.SelectedItems)
                 {
-                    int result = _main.gui.Untag(t, new DirectoryInfo(TxtBoxPath.Text));
+                    int result = _main.Gui.Untag(t, new DirectoryInfo(TxtBoxPath.Text));
                     if (result != 1)
                     {
                         DialogsHelper.ShowError("Untagging Error", t + " could not be untagged from " + TxtBoxPath.Text);

@@ -38,7 +38,7 @@ namespace SynclessUI.Notification
             _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
             (Action)(() =>
             {
-                _main.notifySyncStart(_tagName);
+                _main.NotifySyncStart(_tagName);
             }));
             StateChanged();
         }
@@ -50,7 +50,7 @@ namespace SynclessUI.Notification
                 _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                (Action)(() =>
                {
-                   _main.notifySyncAnalyzing(_tagName);
+                   _main.NotifySyncAnalyzing(_tagName);
                }));
             }
 
@@ -62,7 +62,7 @@ namespace SynclessUI.Notification
             _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
            (Action)(() =>
             {
-                _main.setSyncProgress(_tagName, _progress);
+                _main.SetSyncProgress(_tagName, _progress);
             }));
             
             Console.WriteLine("Current Percent : "+_progress.PercentComplete + "("+_progress.Message+")");
@@ -73,7 +73,7 @@ namespace SynclessUI.Notification
             _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
            (Action)(() =>
            {
-               _main.notifySyncCompletion(_tagName);
+               _main.NotifySyncCompletion(_tagName);
            }));
 
             Console.WriteLine("Sync Complete");
