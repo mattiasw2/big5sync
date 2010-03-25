@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
 using Syncless.Helper;
 using Syncless.Tagging.Exceptions;
 using System.Diagnostics;
 using Syncless.Filters;
-using Syncless.Core;
-using Syncless.Notification;
 using Syncless.Logging;
 
 namespace Syncless.Tagging
@@ -721,7 +716,7 @@ namespace Syncless.Tagging
             Tag tag = GetTag(tagname);
             if (tag != null)
             {
-                if (tag.IsDeleted == true)
+                if (tag.IsDeleted)
                 {
                     if (getdeleted)
                     {

@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
-using System.IO;
 using Syncless.Logging;
 using Syncless.Helper;
 using Syncless.Core;
@@ -100,9 +95,7 @@ namespace Syncless.Tagging
 
         internal static void Logging(LogEventType eventType, string message, params object[] list)
         {
-            //to call ServiceLocator.GetLogger();
             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(eventType, string.Format(message, list)));
-            //Console.WriteLine(string.Format(message, list));
         }
     }
 }
