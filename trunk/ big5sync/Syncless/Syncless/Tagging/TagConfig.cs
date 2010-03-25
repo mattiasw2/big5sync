@@ -13,7 +13,7 @@ namespace Syncless.Tagging
         
         public TagConfig()
         {
-            _isSeamless = true;
+            _isSeamless = false;
         }
     }
 }

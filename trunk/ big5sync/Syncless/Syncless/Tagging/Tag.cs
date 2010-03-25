@@ -91,7 +91,6 @@ namespace Syncless.Tagging
             get { return _config; }
             set { _config = value; }
         }
-
         public bool IsSeamless
         {
             get { return _config.IsSeamless; }
