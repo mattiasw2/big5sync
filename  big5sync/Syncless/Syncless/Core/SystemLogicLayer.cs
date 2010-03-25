@@ -905,6 +905,8 @@ namespace Syncless.Core
             //view.PathStringList = pathList;
             view.Created = t.CreatedDate;
             view.IsSeamless = t.IsSeamless;
+            view.IsQueued = CompareAndSyncController.Instance.IsQueued(t.TagName);
+            view.IsSyncing = CompareAndSyncController.Instance.IsSyncing(t.TagName);
             return view;
         }
         /// <summary>
