@@ -81,17 +81,20 @@ namespace SynclessUI.Notification
                 {
                     SyncProgressWatcher watcher = new SyncProgressWatcher(_main, ssNotification.TagName,
                                                                           ssNotification.Progress);
+                    
                 }
             } else if(notification.NotificationCode.Equals(NotificationCode.SYNC_COMPLETE_NOTIFICATION))
             {
                 SyncCompleteNotification scNotification = notification as SyncCompleteNotification;
                 if(scNotification != null)
                 {
+                    
+                    
                     _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                         (Action)(() =>
                         {
-                        _main.NotifySyncCompletion(scNotification.TagName);
-                    }));
+                            _main.NotifySyncCompletion(scNotification.TagName);
+                        }));
                 }
             }
             else if (notification.NotificationCode.Equals(NotificationCode.NOTHING_TO_SYNC_NOTIFICATION))
