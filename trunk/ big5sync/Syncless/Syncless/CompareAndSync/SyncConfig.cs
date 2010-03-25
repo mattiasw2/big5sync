@@ -1,14 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Syncless.CompareAndSync
+﻿namespace Syncless.CompareAndSync
 {
     public class SyncConfig
     {
 
         private static SyncConfig _instance;
+        private readonly string _archiveName;
+        private readonly int _archiveLimit;
+        private readonly bool _recycle;
+
+        private SyncConfig(string archiveName, int archiveLimit , bool recycle)
+        {
+            _archiveName = archiveName;
+            _archiveLimit = archiveLimit;
+            _recycle = recycle;
+        }
+
         public static SyncConfig Instance
         {
             get
@@ -21,23 +27,9 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        
-
-        private string _archiveName;
-        private int _archiveLimit;
-        private bool _recycle;
-
         public bool Recycle
         {
             get { return _recycle; }
-            set { _recycle = value; }
-        }
-
-        private SyncConfig(string archiveName, int archiveLimit , bool recycle)
-        {
-            _archiveName = archiveName;
-            _archiveLimit = archiveLimit;
-            _recycle = recycle;
         }
 
         public string ArchiveName

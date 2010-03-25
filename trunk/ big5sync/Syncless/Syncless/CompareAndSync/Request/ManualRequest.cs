@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Syncless.Filters;
 
 namespace Syncless.CompareAndSync.Request
 {
     public abstract class ManualRequest : Request
     {
-        private string[] _paths;
-        private List<Filter> _filters;
-        private SyncConfig _syncConfig;
+        private readonly string[] _paths;
+        private readonly List<Filter> _filters;
+        private readonly SyncConfig _syncConfig;
 
-        public ManualRequest(string[] paths, List<Filter> filters, SyncConfig syncConfig)
+        protected ManualRequest(string[] paths, List<Filter> filters, SyncConfig syncConfig)
         {
             _paths = paths;
             _filters = filters;

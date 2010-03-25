@@ -140,13 +140,6 @@ namespace Syncless.CompareAndSync
                 byte[] fileHash = MD5.Create().ComputeHash(fileStream);
                 fileStream.Close();
                 return BitConverter.ToString(fileHash).Replace("-", "");
-
-                //StringBuilder sb = new StringBuilder();
-
-                //for (int i = 0; i < fileHash.Length; i++)
-                //    sb.Append(fileHash[i].ToString("X2"));
-
-                //return sb.ToString();
             }
             catch (UnauthorizedAccessException e)
             {
@@ -162,6 +155,13 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        /// <summary>
+        /// Copys a file from one place to another
+        /// </summary>
+        /// <param name="sourceFile">Fullpath of file to copy</param>
+        /// <param name="destFile">Fullpath of destination file</param>
+        /// <param name="overwrite">Set to true to overwrite a file if it exists</param>
+        /// <exception cref="CopyFileException"></exception>
         public static void CopyFile(string sourceFile, string destFile, bool overwrite)
         {
             Debug.Assert(File.Exists(sourceFile));
@@ -184,6 +184,11 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        /// <summary>
+        /// Deletes a file
+        /// </summary>
+        /// <param name="path">Fullpath of file to delete</param>
+        /// <exception cref="DeleteFileException"></exception>
         public static void DeleteFile(string path)
         {
             try
@@ -204,12 +209,37 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        //TODO: Handle exceptions?
+        /// <summary>
+        /// Deletes a file to recyclebin
+        /// </summary>
+        /// <param name="path">Fullpath of file to delete to recycle bin</param>
+        /// <exception cref="DeleteFileException"></exception>
         public static void DeleteFileToRecycleBin(string path)
         {
-            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+            try
+            {
+                Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(path,
+                                                                   Microsoft.VisualBasic.FileIO.UIOption.
+                                                                       OnlyErrorDialogs,
+                                                                   Microsoft.VisualBasic.FileIO.RecycleOption.
+                                                                       SendToRecycleBin);
+            }
+            catch (FileNotFoundException e)
+            {
+                throw new DeleteFileException(e);
+            }
+            catch (IOException e)
+            {
+                throw new DeleteFileException(e);
+            }
         }
 
+        /// <summary>
+        /// Moves a file from one place to another
+        /// </summary>
+        /// <param name="sourceFile">Fullpath of file to move</param>
+        /// <param name="destFile">Fullpath of destination to move to</param>
+        /// <exception cref="MoveFileException"></exception>
         public static void MoveFile(string sourceFile, string destFile)
         {
             try
@@ -234,6 +264,13 @@ namespace Syncless.CompareAndSync
 
         #region Folder Operations
 
+        /// <summary>
+        /// Archives a folder given the full path of the folder
+        /// </summary>
+        /// <param name="path">Full path of the folder</param>
+        /// <param name="archiveName">Name of folder to archive to</param>
+        /// <param name="archiveLimit">Number of folders to limit</param>
+        /// <exception cref="ArchiveFolderException"></exception>
         public static void ArchiveFolder(string path, string archiveName, int archiveLimit)
         {
             Debug.Assert(path != null && archiveName != null && archiveLimit >= 0);
@@ -290,6 +327,12 @@ namespace Syncless.CompareAndSync
 
         }
 
+        /// <summary>
+        /// Copy folder from source to destination
+        /// </summary>
+        /// <param name="source">Fullpath of source folder</param>
+        /// <param name="destination">Fullpath of destination folder</param>
+        /// <exception cref="CopyFolderException"></exception>
         public static void CopyDirectory(string source, string destination)
         {
             Debug.Assert(Directory.Exists(source));
