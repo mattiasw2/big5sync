@@ -94,6 +94,18 @@ namespace SynclessUI.Notification
                     }));
                 }
             }
+            else if (notification.NotificationCode.Equals(NotificationCode.NOTHING_TO_SYNC_NOTIFICATION))
+            {
+                NothingToSyncNotification ntsNotification = notification as NothingToSyncNotification;
+                if (ntsNotification != null)
+                {
+                    _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                        (Action)(() =>
+                        {
+                            _main.NotifyNothingToSync(ntsNotification.TagName);
+                        }));
+                }
+            }
         }
     }
 }

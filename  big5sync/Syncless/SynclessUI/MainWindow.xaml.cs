@@ -146,6 +146,14 @@ namespace SynclessUI
             NotifyBalloon("Synchronization Completed", tagname + " is now synchronized.");
         }
 
+        public void NotifyNothingToSync(string tagname)
+        {
+            string message = "You need to have at least two folders to synchronize.";
+
+            LblStatusText.Content = message;
+            _tagStatusNotificationDictionary[tagname] = message;
+        }
+
         public double GetSyncProgressPercentage(string tagname)
         {
             return _syncProgressNotificationDictionary[tagname];
@@ -583,7 +591,7 @@ namespace SynclessUI
 
                         if (tv != null)
                         {
-                            if(tv.IsSyncing)
+                            if(!tv.IsSyncing)
                             {
                                 Gui.Untag(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
 
