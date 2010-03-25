@@ -70,12 +70,6 @@ namespace SynclessUI.Notification
 
         public void SyncComplete()
         {
-            _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-           (Action)(() =>
-           {
-               _main.NotifySyncCompletion(_tagName);
-           }));
-
             Console.WriteLine("Sync Complete");
         }
 
