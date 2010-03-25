@@ -52,7 +52,7 @@ namespace Syncless.Tagging
         /// <summary>
         /// Contains a copy of the list of all Tag objects
         /// </summary>
-        public List<Tag> AllTagList
+        public List<Tag> UnfilteredTagList
         {
             get
             {
@@ -65,6 +65,25 @@ namespace Syncless.Tagging
             }
         }
         #endregion
+
+        /// <summary>
+        /// Contains a copy of the list of Tag objects which are not set as deleted
+        /// </summary>
+        public List<Tag> FilteredTagList
+        {
+            get 
+            { 
+                List<Tag> filteredTagList = new List<Tag>();
+                foreach (Tag tag in _taggingProfile.TagList)
+                {
+                    if (!tag.IsDeleted)
+                    {
+                        filteredTagList.Add(tag);
+                    }
+                }
+                return filteredTagList;
+            }
+        }
 
         private TaggingLayer()
         {
@@ -643,6 +662,11 @@ namespace Syncless.Tagging
         }
 
         //refactor done
+        /// <summary>
+        /// Retrieve a list of tagged parent folder paths of the given path
+        /// </summary>
+        /// <param name="path">The path used to retrieve the parent folder paths</param>
+        /// <returns>The list of folder paths</returns>
         public List<string> RetrieveAncestors(string path)
         {
             List<string> ancestors = new List<string>();
@@ -660,6 +684,11 @@ namespace Syncless.Tagging
         }
 
         //refactor done
+        /// <summary>
+        /// Retrieve a list of tagged child folder paths of the given path
+        /// </summary>
+        /// <param name="path">The path used to retrieve the child folder paths</param>
+        /// <returns>The list of child folder paths</returns>
         public List<string> RetrieveDescendants(string path)
         {
             List<string> descendants = new List<string>();
@@ -703,6 +732,11 @@ namespace Syncless.Tagging
             TaggingXMLHelper.SaveToLocations(_taggingProfile, savedLocation);
         }
 
+        /// <summary>
+        /// Append the current profile to tagging.xml saved in the given list of locations
+        /// </summary>
+        /// <param name="savedLocation">The list of locations containing tagging.xml where current profile
+        /// is to be saved to</param>
         public void AppendProfile(List<string> savedLocation)
         {
             TaggingXMLHelper.AppendProfile(_taggingProfile, savedLocation);
