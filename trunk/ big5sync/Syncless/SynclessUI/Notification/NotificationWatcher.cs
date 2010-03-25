@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Syncless.Notification;
 using System.Threading;
+using System.Windows.Threading;
 using Syncless.Core;
+using Syncless.Notification;
 using Syncless.Notification.UINotification;
-using SynclessUI.Notification;
-using SynclessUI;
 
 namespace SynclessUI.Notification
 {
@@ -78,12 +74,24 @@ namespace SynclessUI.Notification
 
         private void Handle(AbstractNotification notification)
         {
-            if (notification.NotificationCode.Equals( NotificationCode.SYNC_START_NOTIFICATION))
+            if (notification.NotificationCode.Equals(NotificationCode.SYNC_START_NOTIFICATION))
             {
                 SyncStartNotification ssNotification = notification as SyncStartNotification;
                 if (ssNotification != null)
                 {
-                    SyncProgressWatcher watcher = new SyncProgressWatcher(_main, ssNotification.TagName, ssNotification.Progress);
+                    SyncProgressWatcher watcher = new SyncProgressWatcher(_main, ssNotification.TagName,
+                                                                          ssNotification.Progress);
+                }
+            } else if(notification.NotificationCode.Equals(NotificationCode.SYNC_COMPLETE_NOTIFICATION))
+            {
+                SyncCompleteNotification scNotification = notification as SyncCompleteNotification;
+                if(scNotification != null)
+                {
+                    _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                        (Action)(() =>
+                        {
+                        _main.NotifySyncCompletion(scNotification.TagName);
+                    }));
                 }
             }
         }

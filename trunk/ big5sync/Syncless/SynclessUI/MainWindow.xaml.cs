@@ -138,6 +138,8 @@ namespace SynclessUI
             if (SelectedTag == tagname)
             {
                 LblStatusText.Content = message;
+                BtnSyncNow.IsEnabled = true;
+                BtnPreview.IsEnabled = true;
             }
 
             _tagStatusNotificationDictionary[tagname] = message;
@@ -446,6 +448,17 @@ namespace SynclessUI
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOffForeground");
             ProgressBarSync.Visibility = Visibility.Visible;
             LblProgress.Visibility = Visibility.Visible;
+			
+            if(_manualSyncEnabled)
+            {
+                BtnSyncNow.IsEnabled = true;
+                BtnPreview.IsEnabled = true;
+            }
+            else
+            {
+                BtnSyncNow.IsEnabled = false;
+                BtnPreview.IsEnabled = false;
+            }
         }
 
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
@@ -462,7 +475,9 @@ namespace SynclessUI
                     {
                         const string message = "Synchronization request has been queued.";
                         LblStatusText.Content = message;
-                        _tagStatusNotificationDictionary[SelectedTag] = message;                        
+                        _tagStatusNotificationDictionary[SelectedTag] = message;
+                        BtnSyncNow.IsEnabled = false;
+                        BtnPreview.IsEnabled = false;
                     }
                     else
                     {
@@ -692,8 +707,15 @@ namespace SynclessUI
             MessageBox.Show(messageBoxText, caption, button, icon);
 			*/
 
-            var psw = new PreviewSyncWindow(this, SelectedTag);
-            psw.ShowDialog();
+            if (Gui.GetTag(SelectedTag).PathStringList.Count > 1)
+            {
+                var psw = new PreviewSyncWindow(this, SelectedTag);
+                psw.ShowDialog();
+            }
+            else
+            {
+                DialogsHelper.ShowError("Nothing to Preview", "Please preview only when there are two or more folders to sync.");
+            }
         }
 
         private List<DriveInfo> GetAllRemovableDrives()
