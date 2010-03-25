@@ -44,6 +44,7 @@ namespace Syncless.CompareAndSync
 
             //XML Writer
             progress.ChangeToFinalizing(syncerVisitor.NodesCount);
+
             CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor(progress));
 
             if (request.Notify)
