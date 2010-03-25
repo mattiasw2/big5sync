@@ -286,8 +286,8 @@ namespace Syncless.CompareAndSync.Visitor
                                 //TODO: Throw to notification queue in future
                                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                             }
-                            changed = true;
                         }
+                        changed = true;
                     }
                     else
                     {
