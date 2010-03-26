@@ -1,8 +1,0 @@
-C:\Users\Wysie\Documents\My Dropbox\Syncless\SynclessSeamlessTester\bin\Debug\SynclessSeamlessTester.exe
-C:\Users\Wysie\Documents\My Dropbox\Syncless\SynclessSeamlessTester\bin\Debug\SynclessSeamlessTester.pdb
-C:\Users\Wysie\Documents\My Dropbox\Syncless\SynclessSeamlessTester\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Wysie\Documents\My Dropbox\Syncless\SynclessSeamlessTester\obj\Debug\SynclessSeamlessTester.FormSeamlessTester.resources
-C:\Users\Wysie\Documents\My Dropbox\Syncless\SynclessSeamlessTester\obj\Debug\SynclessSeamlessTester.Properties.Resources.resources
-C:\Users\Wysie\Documents\My Dropbox\Syncless\SynclessSeamlessTester\obj\Debug\SynclessSeamlessTester.csproj.GenerateResource.Cache
-C:\Users\Wysie\Documents\My Dropbox\Syncless\SynclessSeamlessTester\obj\Debug\SynclessSeamlessTester.exe
-C:\Users\Wysie\Documents\My Dropbox\Syncless\SynclessSeamlessTester\obj\Debug\SynclessSeamlessTester.pdb
