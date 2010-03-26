@@ -15,13 +15,14 @@ namespace Syncless.Core
         private List<PathPair> _createEventPathPair;
         private List<PathPair> _updateEventPathPair;
         private List<PathPair> _renameEventPathPair;
-
+        private List<PathPair> _deleteEventPathPair;
 
         public PathTable()
         {
             _createEventPathPair = new List<PathPair>();
             _updateEventPathPair = new List<PathPair>();
             _renameEventPathPair = new List<PathPair>();
+            _deleteEventPathPair = new List<PathPair>();
         }
 
         public PathPair RemovePathPair(string source, string dest, TableType type)
@@ -33,14 +34,14 @@ namespace Syncless.Core
                 case TableType.Create: usedTable = _createEventPathPair; break;
                 case TableType.Update: usedTable = _updateEventPathPair; break;
                 case TableType.Rename: usedTable = _renameEventPathPair; break;
-
+                case TableType.Delete: usedTable = _deleteEventPathPair; break;
 
             }
             if (usedTable == null)
             {
                 return null;
             }
-            lock (usedTable)
+            lock (this)
             {
                 PathPair pathPair = new PathPair(source, dest);
                 foreach (PathPair pair in usedTable)
@@ -64,14 +65,14 @@ namespace Syncless.Core
                 case TableType.Create: usedTable = _createEventPathPair; break;
                 case TableType.Update: usedTable = _updateEventPathPair; break;
                 case TableType.Rename: usedTable = _renameEventPathPair; break;
-
+                case TableType.Delete: usedTable = _deleteEventPathPair; break;
 
             }
             if (usedTable == null)
             {
                 return false;
             }
-            lock (usedTable)
+            lock (this)
             {
                 PathPair pathPair = new PathPair(source, dest);
                 foreach (PathPair pair in usedTable)
@@ -95,14 +96,14 @@ namespace Syncless.Core
                 case TableType.Create: usedTable = _createEventPathPair; break;
                 case TableType.Update: usedTable = _updateEventPathPair; break;
                 case TableType.Rename: usedTable = _renameEventPathPair; break;
-
+                case TableType.Delete: usedTable = _deleteEventPathPair; break;
 
             }
             if (usedTable == null)
             {
                 return false;
             }
-            lock (usedTable)
+            lock (this)
             {
                 PathPair pathPair = new PathPair(source, dest);
                 if (!Contains(pathPair, type))
@@ -123,6 +124,7 @@ namespace Syncless.Core
                 case TableType.Create: usedTable = _createEventPathPair; break;
                 case TableType.Update: usedTable = _updateEventPathPair; break;
                 case TableType.Rename: usedTable = _renameEventPathPair; break;
+                case TableType.Delete: usedTable = _deleteEventPathPair; break;
             }
             if (usedTable == null)
             {
@@ -137,6 +139,33 @@ namespace Syncless.Core
 
         }
 
+        public void PrintAll()
+        {
+            lock (this)
+            {
+                Console.WriteLine("Create Table : " + _createEventPathPair.Count);
+                foreach (PathPair p in _createEventPathPair)
+                {
+                    Console.WriteLine("Source:"+ p.Source + "Destination:" + p.Dest);
+                }
+                Console.WriteLine("Update Table : " + _createEventPathPair.Count);
+                foreach (PathPair p in _updateEventPathPair)
+                {
+                    Console.WriteLine("Source:" + p.Source + "Destination:" + p.Dest);
+                }
+                Console.WriteLine("Rename Table : " + _createEventPathPair.Count);
+                foreach (PathPair p in _renameEventPathPair)
+                {
+                    Console.WriteLine("Source:" + p.Source + "Destination:" + p.Dest);
+                }
+                Console.WriteLine("Delete Table : " + _createEventPathPair.Count);
+                foreach (PathPair p in _deleteEventPathPair)
+                {
+                    Console.WriteLine("Source:" + p.Source + "Destination:" + p.Dest);
+                }
+
+            }
+        }
     }
     internal class PathPair
     {
@@ -185,7 +214,8 @@ namespace Syncless.Core
         {
             while (true)
             {
-                Console.WriteLine("Entry Count :" + _table.Count);
+                _table.PrintAll();
+                
                 Thread.Sleep(5000);
             }
         }
