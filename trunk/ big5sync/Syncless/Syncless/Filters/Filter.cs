@@ -58,6 +58,12 @@ namespace Syncless.Filters
             }
             return outputList;
         }
+
+        /// <summary>
+        /// Match the a given file path with current filters to check whether to include or exclude the path
+        /// </summary>
+        /// <param name="pattern">The file path to be filtered</param>
+        /// <returns>True if the file path matches the filter, else false</returns>
         public abstract bool Match(string pattern);
 
         public override bool Equals(object obj)
@@ -72,7 +78,7 @@ namespace Syncless.Filters
             {
                 return false;
             }
-            return filter.Mode == _mode;
+            return Equals(filter);
         }
 
         public virtual bool Equals(Filter other)

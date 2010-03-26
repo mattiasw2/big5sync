@@ -340,8 +340,16 @@ namespace Syncless.Tagging
 
         public void UpdateFilter(List<Filter> newFilterList)
         {
+            List<Filter> updatedList = new List<Filter>();
+            foreach (Filter filter in newFilterList)
+            {
+                if (!updatedList.Contains(filter))
+                {
+                    updatedList.Add(filter);
+                }
+            }
             CurrentTime current = new CurrentTime();
-            _filters = newFilterList;
+            _filters = updatedList;
             _filtersUpdatedDate = current.CurrentTimeLong;
             _lastUpdatedDate = current.CurrentTimeLong;
         }
