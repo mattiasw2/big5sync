@@ -170,7 +170,7 @@ namespace SynclessUI
                             }
                             catch (Syncless.Tagging.Exceptions.RecursiveDirectoryException)
                             {
-                                DialogsHelper.ShowError("Recursive Directory Error", "Folder could not be tagged as it is a sub-folder of a folder already tagged.");
+                                DialogsHelper.ShowError("Folder cannot be tagged", "Folder could not be tagged as it is a sub-folder/parent/ancestor of a folder which is already tagged.");
                             }
                             catch (Syncless.Tagging.Exceptions.PathAlreadyExistsException)
                             {

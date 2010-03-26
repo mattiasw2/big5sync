@@ -7,7 +7,7 @@ namespace SynclessUI.Helper
         public static bool IsZipFile(string i)
         {
             FileInfo fi = new FileInfo(i);
-            if (fi.Exists && fi.Extension.ToLower() == "zip")
+            if (fi.Exists && fi.Extension.ToLower() == ".zip")
                 return true;
 
             return false;
