@@ -82,6 +82,7 @@
     </Compile>
     <Compile Include="TestLogic.cs" />
     <Compile Include="TestWorkerClass.cs" />
+    <Compile Include="VerifyWorkerClass.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

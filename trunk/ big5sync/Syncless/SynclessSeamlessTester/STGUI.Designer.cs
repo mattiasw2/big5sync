@@ -268,7 +268,8 @@
             this.textBoxMinWaitTime.Name = "textBoxMinWaitTime";
             this.textBoxMinWaitTime.Size = new System.Drawing.Size(54, 20);
             this.textBoxMinWaitTime.TabIndex = 21;
-            this.textBoxMinWaitTime.Text = "0";
+            this.textBoxMinWaitTime.Text = "1";
+            this.textBoxMinWaitTime.TextChanged += new System.EventHandler(this.textBoxMinWaitTime_TextChanged);
             // 
             // textBoxMaxWaitTime
             // 
