@@ -99,8 +99,7 @@
 		</Storyboard>
 		<Storyboard x:Key="SynclessLogoJumps">
 			<ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="SynclessLogo" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-				<SplineThicknessKeyFrame KeyTime="00:00:00" Value="0"/>
-				<SplineThicknessKeyFrame KeyTime="00:00:00.2000000" Value="0,-5,0,0"/>
+				<SplineThicknessKeyFrame KeyTime="00:00:00.2000000" Value="0,5,0,0"/>
 			</ThicknessAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LogoHighlight" Storyboard.TargetProperty="(UIElement.Opacity)">
 				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
@@ -109,11 +108,34 @@
 		</Storyboard>
 		<Storyboard x:Key="SynclessLogoLands">
 			<ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="SynclessLogo" Storyboard.TargetProperty="(FrameworkElement.Margin)">
-				<SplineThicknessKeyFrame KeyTime="00:00:00" Value="0,-5,0,0"/>
-				<SplineThicknessKeyFrame KeyTime="00:00:00.2000000" Value="0"/>
+				<SplineThicknessKeyFrame KeyTime="00:00:00" Value="0,5,0,0"/>
+				<SplineThicknessKeyFrame KeyTime="00:00:00.2000000" Value="0,10,0,0"/>
+			</ThicknessAnimationUsingKeyFrames>
+			<ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="LogoHighlight" Storyboard.TargetProperty="(FrameworkElement.Margin)">
+				<SplineThicknessKeyFrame KeyTime="00:00:00" Value="0"/>
 			</ThicknessAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LogoHighlight" Storyboard.TargetProperty="(UIElement.Opacity)">
 				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Key="TagDetailsMouseEnter">
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagIcon" Storyboard.TargetProperty="(FrameworkElement.Height)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="80"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="100"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagIcon" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="-10"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Key="TagDetailsMouseLeave">
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagIcon" Storyboard.TargetProperty="(FrameworkElement.Height)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="100"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="80"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagIcon" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="-10"/>
 				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0"/>
 			</DoubleAnimationUsingKeyFrames>
 		</Storyboard>
@@ -126,7 +148,13 @@
 			<BeginStoryboard x:Name="SynclessLogoJumps_BeginStoryboard" Storyboard="{StaticResource SynclessLogoJumps}"/>
 		</EventTrigger>
 		<EventTrigger RoutedEvent="Mouse.MouseLeave" SourceName="SynclessLogoContainer">
-			<BeginStoryboard x:Name="SynclessLogoJumps_BeginStoryboard1" Storyboard="{StaticResource SynclessLogoLands}"/>
+			<BeginStoryboard x:Name="SynclessLogoLands_BeginStoryboard" Storyboard="{StaticResource SynclessLogoLands}"/>
+		</EventTrigger>
+		<EventTrigger RoutedEvent="Mouse.MouseEnter" SourceName="TagIcon">
+			<BeginStoryboard x:Name="TagDetailsMouseEnter_BeginStoryboard" Storyboard="{StaticResource TagDetailsMouseEnter}"/>
+		</EventTrigger>
+		<EventTrigger RoutedEvent="Mouse.MouseLeave" SourceName="TagIcon">
+			<BeginStoryboard x:Name="TagDetailsMouseLeave_BeginStoryboard" Storyboard="{StaticResource TagDetailsMouseLeave}"/>
 		</EventTrigger>
 	</Window.Triggers>
     <Grid x:Name="LayoutRoot" Drop="LayoutRoot_Drop" AllowDrop="True" DragEnter="LayoutRoot_DragEnter" DragLeave="LayoutRoot_DragLeave" Width="700">
@@ -164,41 +192,21 @@
 			<Image x:Name="BtnClose" Source="Icons/close.ico" Width="19" Height="20" Stretch="UniformToFill" d:LayoutOverrides="VerticalMargin" MouseLeftButtonDown="BtnClose_MouseLeftButtonDown" Cursor="Hand" ToolTip="Exit Syncless" />
 		</StackPanel>
 		<!-- Header Panel -->
-		<StackPanel x:Name="HeaderPanel" Grid.Row="1" Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Top" Height="50" Grid.ColumnSpan="4">
-			<StackPanel x:Name="SynclessLogoContainer" Margin="0,5,0,0" Orientation="Vertical" MouseEnter="SynclessLogoContainer_MouseEnter">
-				<Image x:Name="SynclessLogo" Source="Icons/logo.ico" Height="40" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Stretch="Fill" MouseLeftButtonDown="SynclessLogo_MouseLeftButtonDown" Cursor="Hand" ToolTip="Visit Syncless's Google Code Homepage" Width="40"/>
-				<Ellipse x:Name="LogoHighlight" Stroke="Black" Width="10" Height="3" Fill="White" Visibility="Hidden" Margin="0,-2,0,0"/>
+		<StackPanel x:Name="HeaderPanel" Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Top" Grid.ColumnSpan="4" Grid.RowSpan="2">
+			<StackPanel x:Name="SynclessLogoContainer" Margin="0" Orientation="Vertical" MouseEnter="SynclessLogoContainer_MouseEnter">
+				<Image x:Name="SynclessLogo" Source="Icons/completelogo.ico" Height="50" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Stretch="Fill" MouseLeftButtonDown="SynclessLogo_MouseLeftButtonDown" Cursor="Hand" ToolTip="Visit Syncless's Google Code Homepage" Width="50" Margin="0,10,0,0"/>
+				<Ellipse x:Name="LogoHighlight" Stroke="Black" Width="10" Height="3" Fill="White" Visibility="Hidden" Margin="0"/>
 			</StackPanel>
-			<Label x:Name="AppTitle" Content="Syncless" Foreground="#FFEEEEEE" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="-10,-5,250,0" FontFamily="Fonts/#BankGothic Md BT"/>		
+			<Label x:Name="AppTitle" Content="Syncless" Foreground="#FFEEEEEE" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="-15,15,0,0" FontFamily="Fonts/#BankGothic Md BT"/>		
 			<!-- Menubar -->
-			<Menu x:Name="MainMenu" VerticalAlignment="Center" FontSize="13.333" Background="{x:Null}" Margin="0,8,0,0" FontWeight="Bold" HorizontalAlignment="Right" Visibility="Hidden">        
-				<MenuItem Header="_File" Foreground="#FF8799EB">
-					<MenuItem Header="Minimize to System Tray" InputGestureText="Ctrl + M" />
-					<MenuItem Header="Exit" />
-				</MenuItem>
-				<MenuItem Header="_Edit" Foreground="#FF8799EB">
-					<MenuItem Header="Cut" InputGestureText="Ctrl + X"/>
-					<MenuItem Header="Copy" InputGestureText="Ctrl + C"/>
-					<MenuItem Header="Paste" InputGestureText="Ctrl + P"/>
-					<Separator />
-					<MenuItem Header="Find" InputGestureText="Ctrl + F" />
-				</MenuItem>
-				<MenuItem Header="_View" Foreground="#FF8799EB">
-					<MenuItem Header="Options" InputGestureText="Ctrl + O"/>
-					<MenuItem Header="Show log window" />
-				</MenuItem>
-				<MenuItem Header="_Help" Foreground="#FF8799EB">
-					<MenuItem Header="About" />
-				</MenuItem>
-			</Menu>
 		</StackPanel>
 		<!-- ToolBar -->
 		<dropShadow:SystemDropShadowChrome Grid.Row="2" Grid.ColumnSpan="5">
 			<StackPanel  x:Name="ToolBar" OpacityMask="Black" Orientation="Horizontal" VerticalAlignment="Center" Background="#FF626262" Margin="1,0" Height="60"  Width="698">
 				<StackPanel x:Name="BtnCreatePanel" Orientation="Vertical" Margin="20,0,2,0" VerticalAlignment="Bottom"><Button x:Name="BtnCreate" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/createtag.ico" Stretch="Fill" ToolTip="Create Tag"/></Button><Label x:Name="LblCreate" HorizontalAlignment="Center" Content="Create" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
 				<StackPanel x:Name="BtnRemovePanel" Orientation="Vertical" Margin="0,0,5,0" VerticalAlignment="Bottom"><Button x:Name="btnRemove" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/removetag.ico" Stretch="Fill" ToolTip="Remove Tag"/></Button><Label x:Name="LblRemove" HorizontalAlignment="Center" Content="Remove" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE" Background="#00BDBDBD"/></StackPanel>
-				<StackPanel x:Name="BtnTagPanel" Orientation="Vertical" Margin="0,0,11,0" VerticalAlignment="Bottom"><Button x:Name="btnTag" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/tag.ico" Stretch="Fill" ToolTip="Tag Folder"/></Button><Label x:Name="LblTag" HorizontalAlignment="Center" Content="Tag" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
-				<StackPanel x:Name="BtnUntagPanel" Orientation="Vertical" Margin="0,0,11,0" VerticalAlignment="Bottom"><Button x:Name="btnUntag" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/tag.ico" Stretch="Fill" ToolTip="Untag Folder"/></Button><Label x:Name="LblUntag" HorizontalAlignment="Center" Content="Untag" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+				<StackPanel x:Name="BtnTagPanel" Orientation="Vertical" Margin="0,0,11,0" VerticalAlignment="Bottom"><Button x:Name="btnTag" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28" Source="Icons/tag.ico" Stretch="Fill" ToolTip="Tag Folder" Margin="0,-2"/></Button><Label x:Name="LblTag" HorizontalAlignment="Center" Content="Tag" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+				<StackPanel x:Name="BtnUntagPanel" Orientation="Vertical" Margin="0,0,11,0" VerticalAlignment="Bottom"><Button x:Name="btnUntag" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28" Source="Icons/untag.ico" Stretch="Fill" ToolTip="Untag Folder" Margin="0,-2"/></Button><Label x:Name="LblUntag" HorizontalAlignment="Center" Content="Untag" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
 				<StackPanel x:Name="BtnDetailsPanel" Orientation="Vertical" Margin="-2,0,5,0" VerticalAlignment="Bottom"><Button x:Name="BtnDetails" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/details.ico" Stretch="Fill" ToolTip="Tag Details"/></Button><Label x:Name="LblDetails" HorizontalAlignment="Center" Content="Details" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
 				<StackPanel x:Name="BtnUnmonitorPanel" Orientation="Vertical" Margin="-5,0,5,0" VerticalAlignment="Bottom"><Button x:Name="BtnUnmonitor" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/unmonitor.ico" Stretch="Fill" ToolTip="Prepare a Removable Drive for Safety Removal"/></Button><Label x:Name="LblUnmonitor" HorizontalAlignment="Center" Content="Unmonitor" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
 			</StackPanel>
@@ -232,7 +240,16 @@
 			<TextBox IsReadOnly="True" x:Name="TagTitle" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Foreground="#FFEEEEEE" FontSize="16" Text="Select a Tag" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Margin="1,0,10,0" Padding="10,5,0,0" Background="{x:Null}" Width="331" KeyDown="TagTitleOnKeyDownHandler" LostFocus="TagTitle_LostFocus" ToolTip="{Binding Text, ElementName=TagTitle, Mode=Default}" AllowDrop="False" Focusable="False" IsHitTestVisible="False"/>
 			
 			<!-- Tag General Details -->
-			<Image x:Name="TagIcon" Source="Icons/folder.ico" HorizontalAlignment="Right" Margin="0,0,-5,0" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="3" VerticalAlignment="Top" d:LayoutOverrides="HorizontalMargin" Grid.ColumnSpan="2" Cursor="Hand" ToolTip="Click to Access Tag Details" MouseLeftButtonDown="TagIcon_MouseLeftButtonDown"/>
+			<Image x:Name="TagIcon" Source="Icons/folder.ico" HorizontalAlignment="Right" Margin="0,0,-5,0" Grid.Column="1" Height="80" Grid.RowSpan="3" VerticalAlignment="Top" d:LayoutOverrides="HorizontalMargin" Grid.ColumnSpan="2" Cursor="Hand" ToolTip="Click to Access Tag Details" MouseLeftButtonDown="TagIcon_MouseLeftButtonDown" Panel.ZIndex="5" RenderTransformOrigin="0.5,0.5">
+				<Image.RenderTransform>
+					<TransformGroup>
+						<ScaleTransform/>
+						<SkewTransform/>
+						<RotateTransform/>
+						<TranslateTransform/>
+					</TransformGroup>
+				</Image.RenderTransform>
+			</Image>
 			
 			<!-- Tag Status Panel -->
 			<StackPanel x:Name="TagStatusPanel" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Bottom" Grid.ColumnSpan="2">

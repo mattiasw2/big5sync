@@ -231,6 +231,7 @@
       <AutoFill>True</AutoFill>
     </Resource>
     <Resource Include="Icons\close.ico" />
+    <Resource Include="Icons\completelogo.ico" />
     <Resource Include="Icons\createtag.ico" />
     <Resource Include="Icons\dropindicator.ico" />
     <Resource Include="Icons\unmonitor.ico" />
@@ -249,6 +250,7 @@
     <Resource Include="Icons\removetag.ico" />
     <Resource Include="Icons\tag.ico" />
     <Resource Include="Icons\taglist.ico" />
+    <Resource Include="Icons\untag.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
