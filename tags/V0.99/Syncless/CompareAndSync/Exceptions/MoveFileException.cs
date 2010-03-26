@@ -1,0 +1,13 @@
+﻿using System;
+using Syncless.Helper;
+
+namespace Syncless.CompareAndSync.Exceptions
+{
+    public class MoveFileException : ApplicationException
+    {
+        public MoveFileException(Exception innerException)
+            : base(ErrorMessage.CAS_UNABLE_TO_MOVE_FILE_EXCEPTION, innerException)
+        {
+        }
+    }
+}
