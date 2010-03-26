@@ -6,6 +6,7 @@ using System.Xml;
 using System.IO;
 using System.Diagnostics;
 using Syncless.Helper;
+using Syncless.Logging;
 using Syncless.Profiling.Exceptions;
 using Syncless.Core;
 namespace Syncless.Profiling
@@ -216,7 +217,7 @@ namespace Syncless.Profiling
             }
             catch (Exception e)
             {
-                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(e);
+                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.UNKNOWN,"Error Loading Profile"));
                 return null;
             }
         }
