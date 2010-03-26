@@ -302,6 +302,9 @@ namespace SynclessSeamlessTester
         //Averages out to get normal distribution
         private int TimerGenerator()
         {
+            if (_minTime == _maxTime)
+                return _minTime;
+
             Random rand = new Random();
             int time;
 
