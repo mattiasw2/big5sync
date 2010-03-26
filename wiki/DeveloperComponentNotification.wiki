@@ -1,13 +1,12 @@
 #summary Developers' Guide - Component - Notification
+<wiki:toc max_depth = "6">
 
-= Introduction =
+= Overview =
 
-Add your content here.
+= Classes =
 
+= Description of Design =
 
-= Details =
+= Explanation of Algorithms =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= Extending Notification =
