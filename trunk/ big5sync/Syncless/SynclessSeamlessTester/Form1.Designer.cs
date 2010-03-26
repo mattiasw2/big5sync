@@ -44,13 +44,18 @@
             this.buttonDestBrowse = new System.Windows.Forms.Button();
             this.labelDestPath = new System.Windows.Forms.Label();
             this.textBoxDest = new System.Windows.Forms.TextBox();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.buttonCancel = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.buttonClearSource = new System.Windows.Forms.Button();
+            this.buttonClearDest = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxSourcePath
             // 
             this.textBoxSourcePath.Location = new System.Drawing.Point(51, 32);
             this.textBoxSourcePath.Name = "textBoxSourcePath";
-            this.textBoxSourcePath.Size = new System.Drawing.Size(253, 20);
+            this.textBoxSourcePath.Size = new System.Drawing.Size(173, 20);
             this.textBoxSourcePath.TabIndex = 0;
             // 
             // labelBrowseSource
@@ -64,7 +69,7 @@
             // 
             // buttonSourceBrowse
             // 
-            this.buttonSourceBrowse.Location = new System.Drawing.Point(310, 30);
+            this.buttonSourceBrowse.Location = new System.Drawing.Point(230, 30);
             this.buttonSourceBrowse.Name = "buttonSourceBrowse";
             this.buttonSourceBrowse.Size = new System.Drawing.Size(75, 23);
             this.buttonSourceBrowse.TabIndex = 2;
@@ -74,7 +79,7 @@
             // 
             // buttonSourceAdd
             // 
-            this.buttonSourceAdd.Location = new System.Drawing.Point(391, 30);
+            this.buttonSourceAdd.Location = new System.Drawing.Point(311, 30);
             this.buttonSourceAdd.Name = "buttonSourceAdd";
             this.buttonSourceAdd.Size = new System.Drawing.Size(75, 23);
             this.buttonSourceAdd.TabIndex = 3;
@@ -84,15 +89,18 @@
             // 
             // listBoxSourcePaths
             // 
+            this.listBoxSourcePaths.AllowDrop = true;
             this.listBoxSourcePaths.FormattingEnabled = true;
             this.listBoxSourcePaths.Location = new System.Drawing.Point(16, 58);
             this.listBoxSourcePaths.Name = "listBoxSourcePaths";
             this.listBoxSourcePaths.Size = new System.Drawing.Size(450, 147);
             this.listBoxSourcePaths.TabIndex = 4;
+            this.listBoxSourcePaths.DragDrop += new System.Windows.Forms.DragEventHandler(this.listBoxSourcePaths_DragDrop);
+            this.listBoxSourcePaths.DragEnter += new System.Windows.Forms.DragEventHandler(this.listBox_DragEnter);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(162, 458);
+            this.button1.Location = new System.Drawing.Point(81, 456);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(156, 23);
             this.button1.TabIndex = 5;
@@ -138,15 +146,18 @@
             // 
             // listBoxDestPaths
             // 
+            this.listBoxDestPaths.AllowDrop = true;
             this.listBoxDestPaths.FormattingEnabled = true;
             this.listBoxDestPaths.Location = new System.Drawing.Point(16, 272);
             this.listBoxDestPaths.Name = "listBoxDestPaths";
             this.listBoxDestPaths.Size = new System.Drawing.Size(450, 147);
             this.listBoxDestPaths.TabIndex = 13;
+            this.listBoxDestPaths.DragDrop += new System.Windows.Forms.DragEventHandler(this.listBoxDestPaths_DragDrop);
+            this.listBoxDestPaths.DragEnter += new System.Windows.Forms.DragEventHandler(this.listBox_DragEnter);
             // 
             // buttonDestAdd
             // 
-            this.buttonDestAdd.Location = new System.Drawing.Point(391, 244);
+            this.buttonDestAdd.Location = new System.Drawing.Point(311, 243);
             this.buttonDestAdd.Name = "buttonDestAdd";
             this.buttonDestAdd.Size = new System.Drawing.Size(75, 23);
             this.buttonDestAdd.TabIndex = 12;
@@ -156,7 +167,7 @@
             // 
             // buttonDestBrowse
             // 
-            this.buttonDestBrowse.Location = new System.Drawing.Point(310, 244);
+            this.buttonDestBrowse.Location = new System.Drawing.Point(230, 243);
             this.buttonDestBrowse.Name = "buttonDestBrowse";
             this.buttonDestBrowse.Size = new System.Drawing.Size(75, 23);
             this.buttonDestBrowse.TabIndex = 11;
@@ -177,14 +188,65 @@
             // 
             this.textBoxDest.Location = new System.Drawing.Point(51, 246);
             this.textBoxDest.Name = "textBoxDest";
-            this.textBoxDest.Size = new System.Drawing.Size(253, 20);
+            this.textBoxDest.Size = new System.Drawing.Size(173, 20);
             this.textBoxDest.TabIndex = 9;
+            // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.WorkerReportsProgress = true;
+            this.backgroundWorker1.WorkerSupportsCancellation = true;
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+            // 
+            // buttonCancel
+            // 
+            this.buttonCancel.Enabled = false;
+            this.buttonCancel.Location = new System.Drawing.Point(243, 456);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(156, 23);
+            this.buttonCancel.TabIndex = 15;
+            this.buttonCancel.Text = "Cancel Test";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(16, 485);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(450, 23);
+            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.progressBar1.TabIndex = 16;
+            // 
+            // buttonClearSource
+            // 
+            this.buttonClearSource.Location = new System.Drawing.Point(391, 29);
+            this.buttonClearSource.Name = "buttonClearSource";
+            this.buttonClearSource.Size = new System.Drawing.Size(75, 23);
+            this.buttonClearSource.TabIndex = 17;
+            this.buttonClearSource.Text = "Clear";
+            this.buttonClearSource.UseVisualStyleBackColor = true;
+            this.buttonClearSource.Click += new System.EventHandler(this.buttonClearSource_Click);
+            // 
+            // buttonClearDest
+            // 
+            this.buttonClearDest.Location = new System.Drawing.Point(391, 243);
+            this.buttonClearDest.Name = "buttonClearDest";
+            this.buttonClearDest.Size = new System.Drawing.Size(75, 23);
+            this.buttonClearDest.TabIndex = 18;
+            this.buttonClearDest.Text = "Clear";
+            this.buttonClearDest.UseVisualStyleBackColor = true;
+            this.buttonClearDest.Click += new System.EventHandler(this.buttonClearDest_Click);
             // 
             // FormSeamlessTester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(481, 520);
+            this.Controls.Add(this.buttonClearDest);
+            this.Controls.Add(this.buttonClearSource);
+            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.labelDestPaths);
             this.Controls.Add(this.listBoxDestPaths);
             this.Controls.Add(this.buttonDestAdd);
@@ -225,6 +287,11 @@
         private System.Windows.Forms.Button buttonDestBrowse;
         private System.Windows.Forms.Label labelDestPath;
         private System.Windows.Forms.TextBox textBoxDest;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Button buttonClearSource;
+        private System.Windows.Forms.Button buttonClearDest;
     }
 }
 
