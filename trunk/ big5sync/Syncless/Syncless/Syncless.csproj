@@ -98,8 +98,8 @@
     <Compile Include="Core\Conflict\ConflictQueue.cs" />
     <Compile Include="Core\Exceptions\InvalidPathException.cs" />
     <Compile Include="Core\Exceptions\UnhandledException.cs" />
-    <Compile Include="Core\LifeChanging.cs" />
     <Compile Include="Core\LogicQueueObserver.cs" />
+    <Compile Include="Core\PathTable.cs" />
     <Compile Include="Core\View\PathGroupView.cs" />
     <Compile Include="Filters\SizeFilter.cs" />
     <Compile Include="Helper\DriveHelper.cs" />
