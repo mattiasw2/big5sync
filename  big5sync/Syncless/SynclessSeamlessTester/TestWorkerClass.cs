@@ -120,11 +120,11 @@ namespace SynclessSeamlessTester
             string[] fsi = Directory.GetFiles(_destPaths[destIndex], "*", SearchOption.AllDirectories);
             Debug.Assert(fsi != null);
 
-            if (fsi[destIndex].Contains(".syncless") || fsi[destIndex].Contains("_synclessArchive"))
-                return;
-
             try
             {
+                if (fsi[destIndex].Contains(".syncless") || fsi[destIndex].Contains("_synclessArchive"))
+                    return;
+
                 if (File.Exists(fsi[destIndex]))
                     ChangeFileContent(new FileInfo(fsi[destIndex]));
             }
@@ -170,12 +170,12 @@ namespace SynclessSeamlessTester
             Thread.Sleep(1);
             int destFldrIndex = new Random().Next(0, destFolders.Count);
 
-            //Temporary
-            if (sourceObjects[srcObjIndex].Contains(".syncless") || sourceObjects[srcObjIndex].Contains("_synclessArchive") || destFolders[destFldrIndex].Contains(".syncless") || destFolders[destFldrIndex].Contains("_synclessArchive"))
-                return;
-
             try
             {
+                //Temporary
+                if (sourceObjects[srcObjIndex].Contains(".syncless") || sourceObjects[srcObjIndex].Contains("_synclessArchive") || destFolders[destFldrIndex].Contains(".syncless") || destFolders[destFldrIndex].Contains("_synclessArchive"))
+                    return;
+
                 if (File.Exists(sourceObjects[srcObjIndex]))
                     File.Copy(sourceObjects[srcObjIndex],
                               Path.Combine(destFolders[destFldrIndex], new FileInfo(sourceObjects[srcObjIndex]).Name), true);
@@ -214,11 +214,11 @@ namespace SynclessSeamlessTester
 
             int fsiIndex = new Random().Next(0, fsi.Length);
 
-            if (fsi[fsiIndex].Contains(".syncless") || fsi[fsiIndex].Contains("_synclessArchive"))
-                return;
-
             try
             {
+                if (fsi[fsiIndex].Contains(".syncless") || fsi[fsiIndex].Contains("_synclessArchive"))
+                    return;
+
                 if (File.Exists(fsi[fsiIndex]))
                     File.Delete(fsi[fsiIndex]);
                 else if (Directory.Exists(fsi[fsiIndex]))
@@ -249,11 +249,11 @@ namespace SynclessSeamlessTester
 
             int fsiIndex = new Random().Next(0, fsi.Length);
 
-            if (fsi[fsiIndex].Contains(".syncless") || fsi[fsiIndex].Contains("_synclessArchive"))
-                return;
-
             try
             {
+                if (fsi[fsiIndex].Contains(".syncless") || fsi[fsiIndex].Contains("_synclessArchive"))
+                    return;
+
                 if (File.Exists(fsi[fsiIndex]))
                 {
                     File.Move(fsi[fsiIndex],

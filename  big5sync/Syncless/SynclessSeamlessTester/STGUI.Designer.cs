@@ -54,6 +54,7 @@
             this.textBoxMinWaitTime = new System.Windows.Forms.TextBox();
             this.textBoxMaxWaitTime = new System.Windows.Forms.TextBox();
             this.labelInstructions = new System.Windows.Forms.Label();
+            this.labelStatus = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // textBoxSourcePath
@@ -136,9 +137,9 @@
             this.sourcePathsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sourcePathsLabel.Location = new System.Drawing.Point(13, 9);
             this.sourcePathsLabel.Name = "sourcePathsLabel";
-            this.sourcePathsLabel.Size = new System.Drawing.Size(87, 13);
+            this.sourcePathsLabel.Size = new System.Drawing.Size(300, 13);
             this.sourcePathsLabel.TabIndex = 8;
-            this.sourcePathsLabel.Text = "Source Paths:";
+            this.sourcePathsLabel.Text = "Source Paths (Folders To Take Files/Folders From):";
             // 
             // labelDestPaths
             // 
@@ -146,9 +147,9 @@
             this.labelDestPaths.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelDestPaths.Location = new System.Drawing.Point(13, 223);
             this.labelDestPaths.Name = "labelDestPaths";
-            this.labelDestPaths.Size = new System.Drawing.Size(111, 13);
+            this.labelDestPaths.Size = new System.Drawing.Size(402, 13);
             this.labelDestPaths.TabIndex = 14;
-            this.labelDestPaths.Text = "Destination Paths:";
+            this.labelDestPaths.Text = "Destination Paths (Folders Which Are Supposed To Be Kept In Sync):";
             // 
             // listBoxDestPaths
             // 
@@ -288,11 +289,22 @@
             this.labelInstructions.TabIndex = 23;
             this.labelInstructions.Text = "Please enter in seconds:";
             // 
+            // labelStatus
+            // 
+            this.labelStatus.AutoSize = true;
+            this.labelStatus.Location = new System.Drawing.Point(13, 523);
+            this.labelStatus.Name = "labelStatus";
+            this.labelStatus.Size = new System.Drawing.Size(59, 13);
+            this.labelStatus.TabIndex = 24;
+            this.labelStatus.Text = "labelStatus";
+            this.labelStatus.Visible = false;
+            // 
             // FormSeamlessTester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(481, 537);
+            this.ClientSize = new System.Drawing.Size(481, 547);
+            this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.labelInstructions);
             this.Controls.Add(this.textBoxMaxWaitTime);
             this.Controls.Add(this.textBoxMinWaitTime);
@@ -352,6 +364,7 @@
         private System.Windows.Forms.TextBox textBoxMinWaitTime;
         private System.Windows.Forms.TextBox textBoxMaxWaitTime;
         private System.Windows.Forms.Label labelInstructions;
+        private System.Windows.Forms.Label labelStatus;
     }
 }
 
