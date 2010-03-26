@@ -67,6 +67,12 @@ The Filter component provides a set of classes to cater to filtering folders and
 
 To understand more about Filter component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentFilter here].
 
+=== Notification ===
+
+Coming soon.
+
+To understand more about Notification component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentNotification here].
+
 === User Interface ===
 
 The User Interface (UI) component is in charge of handling all interactions between the user and the control layer. It is implemented using WPF for its powerful framework which allows for the creation of clean, professional look-and-feel. It also allows for the true separation of the UI from the System Logic Layer, allowing other developers to create their own UI to interact with our Logic Layer. 
