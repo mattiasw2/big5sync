@@ -138,6 +138,16 @@ namespace Syncless.Core
             get { return _createEventPathPair.Count + _updateEventPathPair.Count + _renameEventPathPair.Count; }
 
         }
+        public void ClearEntry()
+        {
+            lock (this)
+            {
+                _createEventPathPair.Clear();
+                _updateEventPathPair.Clear();
+                _renameEventPathPair.Clear();
+                _deleteEventPathPair.Clear();
+            }
+        }
 
         public void PrintAll()
         {
