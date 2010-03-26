@@ -4,10 +4,11 @@ namespace Syncless.Logging
 {
     public enum LogEventType
     {
-        SYNC_START,
-        SYNC_STOP,
+        SYNC_STARTED,
+        SYNC_STOPPED,
         APPEVENT_DRIVE_ADDED,
         APPEVENT_DRIVE_RENAMED,
+        APPEVENT_PROFILE_LOAD_FAILED,
         APPEVENT_TAG_CREATED,
         APPEVENT_TAG_DELETED,
         APPEVENT_TAG_CONFIG_UPDATED,

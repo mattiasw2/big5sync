@@ -64,8 +64,8 @@ namespace Syncless.Logging
             this.message = message;
             switch (logEvent)
             {
-                case LogEventType.SYNC_START:
-                case LogEventType.SYNC_STOP:
+                case LogEventType.SYNC_STARTED:
+                case LogEventType.SYNC_STOPPED:
                     this.logCategory = LogCategoryType.SYNC;
                     break;
                 case LogEventType.APPEVENT_DRIVE_ADDED:
@@ -97,8 +97,8 @@ namespace Syncless.Logging
             this.message = message;
             switch (logEvent)
             {
-                case LogEventType.SYNC_START:
-                case LogEventType.SYNC_STOP:
+                case LogEventType.SYNC_STARTED:
+                case LogEventType.SYNC_STOPPED:
                     this.logCategory = LogCategoryType.SYNC;
                     break;
                 case LogEventType.APPEVENT_DRIVE_ADDED:

@@ -43,10 +43,11 @@ namespace Syncless.Logging
         {
             switch (type)
             {
-                case "SYNC_START": return LogEventType.SYNC_START;
-                case "SYNC_STOP": return LogEventType.SYNC_STOP;
+                case "SYNC_STARTED": return LogEventType.SYNC_STARTED;
+                case "SYNC_STOPPED": return LogEventType.SYNC_STOPPED;
                 case "APPEVENT_DRIVE_ADDED": return LogEventType.APPEVENT_DRIVE_ADDED;
                 case "APPEVENT_DRIVE_RENAMED": return LogEventType.APPEVENT_DRIVE_RENAMED;
+                case "APPEVENT_PROFILE_LOAD_FAILED": return LogEventType.APPEVENT_PROFILE_LOAD_FAILED;
                 case "APPEVENT_TAG_CREATED": return LogEventType.APPEVENT_TAG_CREATED;
                 case "APPEVENT_TAG_DELETED": return LogEventType.APPEVENT_TAG_DELETED;
                 case "APPEVENT_TAG_CONFIG_UPDATED": return LogEventType.APPEVENT_TAG_CONFIG_UPDATED;
