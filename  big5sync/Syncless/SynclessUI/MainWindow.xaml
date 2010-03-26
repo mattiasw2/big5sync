@@ -146,7 +146,7 @@
 		</Grid.ColumnDefinitions>
     
 		<!-- Overall Canvas -->
-		<Rectangle Grid.Row="0" Grid.RowSpan="6" x:Name="Canvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.ColumnSpan="5">
+		<Rectangle Grid.Row="0" Grid.RowSpan="6" x:Name="Canvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.ColumnSpan="5" MouseLeftButtonDown="Canvas_MouseLeftButtonDown">
 			<Rectangle.Fill>
 				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 					<GradientStop Color="#FF707271" Offset="0"/>
@@ -155,7 +155,7 @@
 				</LinearGradientBrush>
 			</Rectangle.Fill>
 		</Rectangle>
-		<TextBlock Grid.Row="0" Margin="0" Padding="5" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Grid.ColumnSpan="5" Cursor="Hand"/>
+		<TextBlock Grid.Row="0" Margin="0" Padding="5" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Grid.ColumnSpan="5" IsHitTestVisible="False"/>
 		<!-- MinClose Panel -->
 		<StackPanel x:Name="OptionMinClosePanel" Grid.Row="0" Grid.Column="3" Height="20" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,-5,0" Cursor="Hand" Grid.RowSpan="2">
 			<Image x:Name="BtnShortcuts" Source="Icons/kb.ico" Width="16" Height="16" Margin="0,2.5,3,2.5" Cursor="Hand" ToolTip="List of Keyboard Shortcuts" MouseLeftButtonDown="BtnShortcuts_MouseLeftButtonDown" />

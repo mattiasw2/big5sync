@@ -12,11 +12,6 @@ namespace SynclessUI
             InitializeComponent();
         }
 
-        private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-        	this.DragMove();
-        }
-
 		private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
 		{
 			this.Close();

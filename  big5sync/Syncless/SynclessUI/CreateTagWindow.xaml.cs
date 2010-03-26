@@ -19,11 +19,6 @@ namespace SynclessUI
 			_main = main;
         }
 
-        private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-        	this.DragMove();
-        }
-
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             try
@@ -64,6 +59,11 @@ namespace SynclessUI
 		private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
 		{
 			Keyboard.Focus(TxtBoxTagName);
+		}
+
+		private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			this.DragMove();
 		}
     }
 }

@@ -165,7 +165,7 @@
 			<RowDefinition Height="30"/>
 			<RowDefinition Height="20"/>
 		</Grid.RowDefinitions>
-		<Rectangle Grid.Row="0" x:Name="Canvas" RadiusX="10" RadiusY="10" Margin="0,1,0,0" Stroke="Black" Grid.RowSpan="6" Grid.ColumnSpan="4">
+		<Rectangle Grid.Row="0" x:Name="Canvas" RadiusX="10" RadiusY="10" Margin="0,1,0,0" Stroke="Black" Grid.RowSpan="6" Grid.ColumnSpan="4" MouseLeftButtonDown="Canvas_MouseLeftButtonDown">
 			<Rectangle.Fill>
 				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 					<GradientStop Color="#FF707271" Offset="0"/>
@@ -174,7 +174,7 @@
 				</LinearGradientBrush>
 			</Rectangle.Fill>
 		</Rectangle>
-		<TextBlock Grid.Row="0" Margin="0" Padding="5" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Cursor="Hand" Grid.ColumnSpan="3"/>
+		<TextBlock Grid.Row="0" Margin="0" Padding="5" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Grid.ColumnSpan="3" IsHitTestVisible="False"/>
 		<Label x:Name="LblTag_Details" Content="Tag Details" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Height="30" Grid.Row="1" Grid.Column="1" Margin="0"/>
 		<StackPanel x:Name="CommandPanel" Margin="0" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
 			<Button x:Name="BtnOk" IsDefault="True" Margin="0,0,5,0" Click="BtnOk_Click">

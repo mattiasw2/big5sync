@@ -17,11 +17,6 @@ namespace SynclessUI
 		private void InitializeOptions() {
 			ChkBoxRegistryIntegration.IsChecked = Properties.Settings.Default.EnableShellIntegration;
 		}
-		
-        private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-        	this.DragMove();
-        }
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -55,6 +50,11 @@ namespace SynclessUI
 		private void Window_Unloaded(object sender, System.Windows.RoutedEventArgs e)
 		{
 			Application.Current.Properties["OptionsWindowIsOpened"] = false;
+		}
+
+		private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			this.DragMove();
 		}
     }
 }

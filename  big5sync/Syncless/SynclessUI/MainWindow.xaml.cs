@@ -353,16 +353,6 @@ namespace SynclessUI
         }
 
         /// <summary>
-        ///     Makes the title bar draggable and movable
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
-        }
-
-        /// <summary>
         ///     Sets the behavior of the close button
         /// </summary>
         /// <param name="sender"></param>
@@ -840,8 +830,6 @@ namespace SynclessUI
 
         private void LayoutRoot_DragEnter(object sender, DragEventArgs e)
         {
-            
-
             TxtBoxFilterTag.IsHitTestVisible = false;
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -1100,7 +1088,7 @@ namespace SynclessUI
 
             //TODO 
             int count = ServiceLocator.GUI.Clean(clipath);
-            MessageBox.Show(count + " metaclear-ed");
+            DialogsHelper.ShowInformation("Meta-data Cleaned", count + " metaclear-ed");
         }
 
         #endregion
@@ -1459,6 +1447,11 @@ namespace SynclessUI
             {
 				RemoveTag();
 			}
+        }
+
+        private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+        	this.DragMove();
         }
 
         #endregion
