@@ -22,6 +22,7 @@ using Syncless.Core.View;
 using System.Runtime.CompilerServices;
 namespace Syncless.Core
 {
+    
     internal class SystemLogicLayer : IUIControllerInterface, IMonitorControllerInterface, ICommandLineControllerInterface
     {
         #region Singleton
@@ -295,8 +296,7 @@ namespace Syncless.Core
             SendAutoRequest(request);
         }
 
-
-        private void SendAutoRequest(AutoSyncRequest request)
+        private static void SendAutoRequest(AutoSyncRequest request)
         {
             if (request.ChangeType == AutoSyncRequestType.New || request.ChangeType == AutoSyncRequestType.Update)
             {
@@ -308,7 +308,7 @@ namespace Syncless.Core
                     output += "\n" + destination + "\\" + request.SourceName;
                 }
                 output += "\n================================================================";
-                Console.WriteLine(output);
+                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
             }
             else if (request.ChangeType == AutoSyncRequestType.Rename)
             {
@@ -320,7 +320,7 @@ namespace Syncless.Core
                     output += "\n" + destination + "\\" + request.OldName + " =>" + request.NewName;
                 }
                 output += "\n================================================================";
-                Console.WriteLine(output);
+                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
             }else if (request.ChangeType == AutoSyncRequestType.Delete)
             {
                 string output =
@@ -331,7 +331,7 @@ namespace Syncless.Core
                     output += "\n" + destination + "\\" + request.SourceName;
                 }
                 output += "\n================================================================";
-                Console.WriteLine(output);
+                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
             }
 
 

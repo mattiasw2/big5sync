@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Syncless.Core;
 using Syncless.Notification;
 using SynclessUI;
 using System.Windows.Controls;
@@ -67,12 +68,12 @@ namespace SynclessUI.Notification
                 _main.SetSyncProgress(_tagName, _progress);
             }));
             
-            Console.WriteLine("Current Percent : "+_progress.PercentComplete + "("+_progress.Message+")");
+            ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Current Percent : "+_progress.PercentComplete + "("+_progress.Message+")");
         }
 
         public void SyncComplete()
         {
-            Console.WriteLine("Sync Complete");
+            ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Sync Complete");
         }
         
         #endregion
