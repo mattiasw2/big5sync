@@ -826,6 +826,7 @@ namespace SynclessUI
                         }
                     }
             }
+            TxtBoxFilterTag.IsHitTestVisible = true;
         }
 
         private void LayoutRoot_DragEnter(object sender, DragEventArgs e)
