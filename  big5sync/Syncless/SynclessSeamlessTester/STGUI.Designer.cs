@@ -49,6 +49,11 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.buttonClearSource = new System.Windows.Forms.Button();
             this.buttonClearDest = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBoxMinWaitTime = new System.Windows.Forms.TextBox();
+            this.textBoxMaxWaitTime = new System.Windows.Forms.TextBox();
+            this.labelInstructions = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // textBoxSourcePath
@@ -100,7 +105,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(81, 456);
+            this.button1.Location = new System.Drawing.Point(81, 468);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(156, 23);
             this.button1.TabIndex = 5;
@@ -111,18 +116,19 @@
             // labelDuration
             // 
             this.labelDuration.AutoSize = true;
-            this.labelDuration.Location = new System.Drawing.Point(95, 433);
+            this.labelDuration.Location = new System.Drawing.Point(21, 445);
             this.labelDuration.Name = "labelDuration";
-            this.labelDuration.Size = new System.Drawing.Size(137, 13);
+            this.labelDuration.Size = new System.Drawing.Size(86, 13);
             this.labelDuration.TabIndex = 6;
-            this.labelDuration.Text = "Duration to Test (Seconds):";
+            this.labelDuration.Text = "Duration to Test:";
             // 
             // textBoxDuration
             // 
-            this.textBoxDuration.Location = new System.Drawing.Point(238, 430);
+            this.textBoxDuration.Location = new System.Drawing.Point(113, 442);
             this.textBoxDuration.Name = "textBoxDuration";
-            this.textBoxDuration.Size = new System.Drawing.Size(148, 20);
+            this.textBoxDuration.Size = new System.Drawing.Size(54, 20);
             this.textBoxDuration.TabIndex = 7;
+            this.textBoxDuration.Text = "3600";
             // 
             // sourcePathsLabel
             // 
@@ -202,7 +208,7 @@
             // buttonCancel
             // 
             this.buttonCancel.Enabled = false;
-            this.buttonCancel.Location = new System.Drawing.Point(243, 456);
+            this.buttonCancel.Location = new System.Drawing.Point(243, 468);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(156, 23);
             this.buttonCancel.TabIndex = 15;
@@ -212,7 +218,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(16, 485);
+            this.progressBar1.Location = new System.Drawing.Point(16, 497);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(450, 23);
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -238,11 +244,59 @@
             this.buttonClearDest.UseVisualStyleBackColor = true;
             this.buttonClearDest.Click += new System.EventHandler(this.buttonClearDest_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(173, 445);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(81, 13);
+            this.label1.TabIndex = 19;
+            this.label1.Text = "Min. Wait Time:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(319, 445);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(81, 13);
+            this.label2.TabIndex = 20;
+            this.label2.Text = "Min. Wait Time:";
+            // 
+            // textBoxMinWaitTime
+            // 
+            this.textBoxMinWaitTime.Location = new System.Drawing.Point(259, 442);
+            this.textBoxMinWaitTime.Name = "textBoxMinWaitTime";
+            this.textBoxMinWaitTime.Size = new System.Drawing.Size(54, 20);
+            this.textBoxMinWaitTime.TabIndex = 21;
+            this.textBoxMinWaitTime.Text = "0";
+            // 
+            // textBoxMaxWaitTime
+            // 
+            this.textBoxMaxWaitTime.Location = new System.Drawing.Point(406, 442);
+            this.textBoxMaxWaitTime.Name = "textBoxMaxWaitTime";
+            this.textBoxMaxWaitTime.Size = new System.Drawing.Size(54, 20);
+            this.textBoxMaxWaitTime.TabIndex = 22;
+            this.textBoxMaxWaitTime.Text = "60";
+            // 
+            // labelInstructions
+            // 
+            this.labelInstructions.AutoSize = true;
+            this.labelInstructions.Location = new System.Drawing.Point(13, 422);
+            this.labelInstructions.Name = "labelInstructions";
+            this.labelInstructions.Size = new System.Drawing.Size(123, 13);
+            this.labelInstructions.TabIndex = 23;
+            this.labelInstructions.Text = "Please enter in seconds:";
+            // 
             // FormSeamlessTester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(481, 520);
+            this.ClientSize = new System.Drawing.Size(481, 537);
+            this.Controls.Add(this.labelInstructions);
+            this.Controls.Add(this.textBoxMaxWaitTime);
+            this.Controls.Add(this.textBoxMinWaitTime);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonClearDest);
             this.Controls.Add(this.buttonClearSource);
             this.Controls.Add(this.progressBar1);
@@ -292,6 +346,11 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button buttonClearSource;
         private System.Windows.Forms.Button buttonClearDest;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBoxMinWaitTime;
+        private System.Windows.Forms.TextBox textBoxMaxWaitTime;
+        private System.Windows.Forms.Label labelInstructions;
     }
 }
 

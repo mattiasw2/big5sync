@@ -25,7 +25,7 @@ namespace SynclessSeamlessTester
         private const int DELETE = 200, RENAME = 201, UPDATE = 202;
 
         // Max and min time
-        private const int MINTIME = 0, MAXTIME = 5000; //180000;
+        private int _minTime, _maxTime; //180000;
 
         private const string CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-";
 
@@ -41,13 +41,15 @@ namespace SynclessSeamlessTester
         private DateTime _timeToEnd, _timeToStart;
         private TimeSpan _totalTimeNeeded;
 
-        public TestWorkerClass(int duration, List<string> sourcePaths, List<string> destPaths, TestInfo testInfo, BackgroundWorker bgWorker)
+        public TestWorkerClass(int duration, int minTime, int maxTime, List<string> sourcePaths, List<string> destPaths, TestInfo testInfo, BackgroundWorker bgWorker)
         {
             _sourcePaths = sourcePaths;
             _destPaths = destPaths;
             _testInfo = testInfo;
             _duration = duration;
             _bgWorker = bgWorker;
+            _minTime = minTime;
+            _maxTime = maxTime;
             StartTest();
         }
 
@@ -279,16 +281,19 @@ namespace SynclessSeamlessTester
             return new Random().Next(200, 203);
         }
 
+        //Averages out to get normal distribution
         private int TimerGenerator()
         {
             Random rand = new Random();
-            double x = rand.NextDouble() * MAXTIME;
+            double x = rand.NextDouble() * _maxTime;
             Thread.Sleep(1);
-            double y = rand.NextDouble() * MAXTIME;
+            double y = rand.NextDouble() * _maxTime;
+            int time = Convert.ToInt32(x + y);
 
-            return Convert.ToInt32(x + y);
+            if (time >= _minTime)
+                return time;
+            return TimerGenerator();
         }
-
 
         private string RandomString()
         {
