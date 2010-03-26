@@ -29,7 +29,7 @@
 				</LinearGradientBrush>
 			</Rectangle.Fill>
 		</Rectangle>
-		<TextBlock Grid.Row="0" Margin="0" Padding="5" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Cursor="Hand" Grid.ColumnSpan="3"/>
+		<TextBlock Grid.Row="0" Margin="0" Padding="5" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Grid.ColumnSpan="3" IsHitTestVisible="False"/>
 		<Label x:Name="LblShortcutsTitle" Content="Useful Shortcuts" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1"/>
 		<StackPanel  x:Name="ToolBar" OpacityMask="Black" Orientation="Horizontal" Background="#FF626262" Margin="0,40,0,0" Height="60" Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left">
 			<StackPanel x:Name="BtnCreatePanel" Orientation="Vertical" Margin="5,0,2,0" VerticalAlignment="Bottom"><Button x:Name="BtnCreate" Width="40" IsHitTestVisible="False"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/createtag.ico" Stretch="Fill" ToolTip="Create Tag" /></Button><Label x:Name="LblCreate" HorizontalAlignment="Center" Content="Create" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>

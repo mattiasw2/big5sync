@@ -58,11 +58,6 @@ namespace SynclessUI
 
 		public DataTable PreviewSyncData
         { get { return _previewSyncData; } }
-		
-        private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-        	this.DragMove();
-        }
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -73,5 +68,10 @@ namespace SynclessUI
         {
             this.Close();
         }
+
+		private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			this.DragMove();
+		}
     }
 }

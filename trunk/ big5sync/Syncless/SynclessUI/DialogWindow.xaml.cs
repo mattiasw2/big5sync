@@ -83,12 +83,6 @@ namespace SynclessUI
 				else return System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(iconsource.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 		}
 
-
-        private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-        	this.DragMove();
-        }
-
         private void BtnOkCP1_Click(object sender, System.Windows.RoutedEventArgs e)
         {
         	this.Close();
@@ -104,6 +98,11 @@ namespace SynclessUI
         {
 			Application.Current.Properties["DialogWindowChoice"] = false;
         	this.Close();
+        }
+
+        private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+        	this.DragMove();
         }
     }
 }

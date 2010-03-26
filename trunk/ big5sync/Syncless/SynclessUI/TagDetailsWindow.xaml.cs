@@ -74,11 +74,6 @@ namespace SynclessUI
             int index = filters.IndexOf(f);
             ListFilters.SelectedIndex = index;
         }
-		
-        private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-        	this.DragMove();
-        }
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -188,6 +183,11 @@ namespace SynclessUI
                 }
                 PopulateFilterStringList(true);
             }
+        }
+
+        private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+        	this.DragMove();
         }
     }
 }
