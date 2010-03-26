@@ -67,6 +67,7 @@ namespace SynclessSeamlessTester
             {
                 if (_bgWorker.CancellationPending)
                 {
+                    _testInfo.Propagated = true;
                     timer.Stop();
                     return;
                 }
@@ -109,7 +110,7 @@ namespace SynclessSeamlessTester
             double percent = completed.TotalSeconds / _totalTimeNeeded.TotalSeconds * 100;
             Console.WriteLine("PERCENT DONE: " + percent);
 
-            if (!_bgWorker.CancellationPending)
+            if (!_testInfo.Propagated)
                 _bgWorker.ReportProgress(Convert.ToInt32(percent));
         }
 
@@ -119,12 +120,13 @@ namespace SynclessSeamlessTester
             string[] fsi = Directory.GetFiles(_destPaths[destIndex], "*", SearchOption.AllDirectories);
             Debug.Assert(fsi != null);
 
-            int fsiIndex = new Random().Next(0, fsi.Length);
+            if (fsi[destIndex].Contains(".syncless") || fsi[destIndex].Contains("_synclessArchive"))
+                return;
 
             try
             {
-                if (File.Exists(fsi[fsiIndex]))
-                    ChangeFileContent(new FileInfo(fsi[fsiIndex]));
+                if (File.Exists(fsi[destIndex]))
+                    ChangeFileContent(new FileInfo(fsi[destIndex]));
             }
             catch (IndexOutOfRangeException e)
             {
@@ -168,6 +170,10 @@ namespace SynclessSeamlessTester
             Thread.Sleep(1);
             int destFldrIndex = new Random().Next(0, destFolders.Count);
 
+            //Temporary
+            if (sourceObjects[srcObjIndex].Contains(".syncless") || sourceObjects[srcObjIndex].Contains("_synclessArchive") || destFolders[destFldrIndex].Contains(".syncless") || destFolders[destFldrIndex].Contains("_synclessArchive"))
+                return;
+
             try
             {
                 if (File.Exists(sourceObjects[srcObjIndex]))
@@ -194,6 +200,7 @@ namespace SynclessSeamlessTester
         {
             int destIndex = new Random().Next(0, _destPaths.Count);
             string[] fsi = null;
+
             switch (RandomFileOrFolder())
             {
                 case FILE:
@@ -206,6 +213,9 @@ namespace SynclessSeamlessTester
             Debug.Assert(fsi != null);
 
             int fsiIndex = new Random().Next(0, fsi.Length);
+
+            if (fsi[fsiIndex].Contains(".syncless") || fsi[fsiIndex].Contains("_synclessArchive"))
+                return;
 
             try
             {
@@ -225,6 +235,7 @@ namespace SynclessSeamlessTester
         {
             int destIndex = new Random().Next(0, _destPaths.Count);
             string[] fsi = null;
+
             switch (RandomFileOrFolder())
             {
                 case FILE:
@@ -237,6 +248,9 @@ namespace SynclessSeamlessTester
             Debug.Assert(fsi != null);
 
             int fsiIndex = new Random().Next(0, fsi.Length);
+
+            if (fsi[fsiIndex].Contains(".syncless") || fsi[fsiIndex].Contains("_synclessArchive"))
+                return;
 
             try
             {

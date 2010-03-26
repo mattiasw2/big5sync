@@ -130,8 +130,12 @@ namespace SynclessSeamlessTester
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
+            TestInfo info = e.Argument as TestInfo;
             new TestWorkerClass(Convert.ToInt32(textBoxDuration.Text), Convert.ToInt32(textBoxMinWaitTime.Text), Convert.ToInt32(textBoxMaxWaitTime.Text), _sourcePaths, _destPaths,
-                                e.Argument as TestInfo, backgroundWorker1);
+                                info, backgroundWorker1);
+            info.Propagated = true;
+            new VerifyWorkerClass(_destPaths, info, backgroundWorker1);
+            e.Result = info;
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -141,6 +145,7 @@ namespace SynclessSeamlessTester
             progressBar1.Value = 100;
             ToggleAllControls(true);
             this.Cursor = Cursors.Arrow;
+            Console.WriteLine("RESULTS:");
         }
 
         public List<string> AddToSource(string s)
@@ -197,6 +202,19 @@ namespace SynclessSeamlessTester
         {
             _destPaths.Clear();
             listBoxDestPaths.Items.Clear();
+        }
+
+        private void textBoxMinWaitTime_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Convert.ToInt32(textBoxMinWaitTime.Text) < 1)
+                    textBoxMinWaitTime.Text = "1";
+            }
+            catch (Exception)
+            {
+                textBoxMinWaitTime.Text = "1";
+            }
         }
 
     }
