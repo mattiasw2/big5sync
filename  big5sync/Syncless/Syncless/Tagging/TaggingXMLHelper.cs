@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 using System.IO;
 using Syncless.Filters;
+using Syncless.Helper;
+
 namespace Syncless.Tagging
 {
     static class TaggingXMLHelper
@@ -89,50 +90,10 @@ namespace Syncless.Tagging
         public static void SaveTo(TaggingProfile taggingProfile, string xmlFilePath)
         {
             XmlDocument xmlDoc = ConvertTaggingProfileToXml(taggingProfile);
-            SaveXml(xmlDoc, xmlFilePath);
+            CommonXmlHelper.SaveXml(xmlDoc, xmlFilePath);
         }
 
-        private static bool SaveXml(XmlDocument xmlDoc, string path)
-        {
-            XmlTextWriter textWriter = null;
-            FileStream fs = null;
-            FileInfo fileInfo = new FileInfo(path);
-            if (!fileInfo.Directory.Exists)
-            {
-                DirectoryInfo info = Directory.CreateDirectory(fileInfo.Directory.FullName);
-                info.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-            }
-            try
-            {
-                if (File.Exists(path))
-                {
-                    File.Delete(path);
-                }
-                fs = new FileStream(path, FileMode.Create);
-                textWriter = new XmlTextWriter(fs, Encoding.UTF8);
-                textWriter.Formatting = Formatting.Indented;
-                xmlDoc.WriteContentTo(textWriter);
-            }
-            catch (IOException io)
-            {
-                Console.WriteLine(io);
-                return false;
-            }
-            finally
-            {
-                if (textWriter != null)
-                {
-                    try
-                    {
-                        textWriter.Close();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-            }
-            return true;
-        }
+ 
 
         private static XmlDocument ConvertTaggingProfileToXml(TaggingProfile taggingProfile)
         {

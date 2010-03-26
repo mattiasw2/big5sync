@@ -14,7 +14,7 @@ namespace Syncless.Helper
             FileStream fs = null;
 
             FileInfo fileInfo = new FileInfo(path);
-            if (!fileInfo.Directory.Exists)
+            if (fileInfo.Directory!=null && !fileInfo.Directory.Exists)
             {
                 DirectoryInfo info = Directory.CreateDirectory(fileInfo.Directory.FullName);
                 info.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
