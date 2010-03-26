@@ -21,11 +21,27 @@ namespace SynclessUI
 
                 _main = main;
 
-                List<string> tagListByFolder = _main.Gui.GetTags(new DirectoryInfo(clipath));
+                List<string> tagListByFolder = new List<string>();
+                DirectoryInfo di = null;
+                try
+                {
+                    di = new DirectoryInfo(clipath);
+                } catch { }
+
+                if(di != null)
+                {
+                    tagListByFolder = _main.Gui.GetTags(di);
+                }
+                
                 if (tagListByFolder.Count != 0)
                 {
                     TxtBoxPath.Text = clipath;
                     taglist.ItemsSource = tagListByFolder;
+                    if(tagListByFolder.Count == 1)
+                    {
+                        taglist.SelectedIndex = 0;
+                        taglist.Focus();
+                    }
                     this.ShowDialog();
                 }
                 else
@@ -50,7 +66,11 @@ namespace SynclessUI
         {
             try
             {
-                if (taglist.SelectedIndex == -1) return;
+                if (taglist.SelectedIndex == -1)
+                {
+                    DialogsHelper.ShowError("Tag not Selected", "Please select the particular tag to untag the folder from.");
+                    return;
+                }
 
                 foreach (string t in taglist.SelectedItems)
                 {

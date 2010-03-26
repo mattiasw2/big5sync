@@ -53,6 +53,6 @@
 			</TextBox.BorderBrush>
 		</TextBox>
 		<Label x:Name="LblPath" Content="Path:" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0" Grid.Column="1" Grid.Row="2" />
-		<ListBox x:Name="taglist" Margin="0,5,0,0" Grid.Column="2" Grid.Row="3" MinHeight="30" MaxHeight="250" SelectionMode="Multiple"  />
+		<ListBox x:Name="taglist" Margin="0,5,0,0" Grid.Column="2" Grid.Row="3" MinHeight="30" MaxHeight="250" SelectionMode="Multiple"/>
 	</Grid>
 </Window>
