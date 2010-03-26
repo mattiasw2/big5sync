@@ -11,9 +11,17 @@ namespace Syncless.Logging
             {
                 return CreateUserLog();
             }
-            else
+            else if (type.Equals(ServiceLocator.DEBUG_LOG))
             {
                 return CreateDebugLog();
+            }
+            else if (type.Equals(ServiceLocator.DEVELOPER_LOG))
+            {
+                return CreateDeveloperLog();
+            }
+            else
+            {
+                return null;
             }
         }
         
@@ -25,6 +33,11 @@ namespace Syncless.Logging
         private static Logger CreateDebugLog()
         {
             return new DebugLogger();
+        }
+
+        private static Logger CreateDeveloperLog()
+        {
+            return new DeveloperLogger();
         }
     }
 }

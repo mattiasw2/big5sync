@@ -104,7 +104,5 @@ namespace Syncless.Monitor
                 }
             }
         }
-
-        
     }
 }

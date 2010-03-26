@@ -10,6 +10,7 @@ namespace Syncless.Core
     {
         public const string USER_LOG = "user";
         public const string DEBUG_LOG = "debug";
+        public const string DEVELOPER_LOG = "developer";
 
         public static IUIControllerInterface GUI{
             get { 
@@ -32,15 +33,10 @@ namespace Syncless.Core
                 
         public static Logger GetLogger(string type)
         {
-            if (type.Equals(USER_LOG))
+            Logger log = SystemLogicLayer.Instance.GetLogger(type);
+            if (log != null)
             {
-                SystemLogicLayer sll = SystemLogicLayer.Instance;
-                return sll.GetLogger(USER_LOG);
-            }
-            else if (type.Equals(DEBUG_LOG))
-            {
-                SystemLogicLayer sll = SystemLogicLayer.Instance;
-                return sll.GetLogger(DEBUG_LOG);
+                return log;
             }
             else
             {

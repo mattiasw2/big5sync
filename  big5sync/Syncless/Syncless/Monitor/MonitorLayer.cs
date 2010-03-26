@@ -429,7 +429,8 @@ namespace Syncless.Monitor
 
         private void OnError(object source, ErrorEventArgs e)
         {
-            Console.WriteLine(e.GetException().ToString());
+            ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(e.GetException().ToString());
+            //Console.WriteLine(e.GetException().ToString());
         }
         
         private FileSystemWatcher CreateRootWatcher(string path, string filter)
@@ -475,7 +476,8 @@ namespace Syncless.Monitor
 
         private void OnRootError(object source, ErrorEventArgs e)
         {
-            Console.WriteLine(e.GetException().ToString());
+            ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(e.GetException().ToString());
+            //Console.WriteLine(e.GetException().ToString());
         }
     }
 }

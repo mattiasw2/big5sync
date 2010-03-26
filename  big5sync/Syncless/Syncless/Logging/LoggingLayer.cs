@@ -22,6 +22,7 @@ namespace Syncless.Logging
 
         private Logger userLog;
         private Logger debugLog;
+        private Logger developerLog;
 
         private LoggingLayer()
         {
@@ -38,13 +39,25 @@ namespace Syncless.Logging
                 }
                 return userLog;
             }
-            else
+            else if (type.Equals(ServiceLocator.DEBUG_LOG))
             {
                 if (debugLog == null)
                 {
                     debugLog = LoggerFactory.CreateLogger(ServiceLocator.DEBUG_LOG);
                 }
                 return debugLog;
+            }
+            else if (type.Equals(ServiceLocator.DEVELOPER_LOG))
+            {
+                if (developerLog == null)
+                {
+                    developerLog = LoggerFactory.CreateLogger(ServiceLocator.DEVELOPER_LOG);
+                }
+                return developerLog;
+            }
+            else
+            {
+                return null;
             }
         }
 
