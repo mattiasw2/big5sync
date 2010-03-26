@@ -9,6 +9,11 @@
    # User interface
        * Error message for recursive tagging modified
        * Detection of removable drives improved
+       * Keyboard shortcuts are working properly now
+       * All windows will not snap to the border of the screen now
+       * User will be prompted with error message if attempt to tag Recycle Bin through context menu
+       * Windows Vista users can tag folders other than those on Desktop now
+       * The entire main window can be dragged around now
 
 = Changelog for version _0.9_ =
  * First release of *Syncless*.
