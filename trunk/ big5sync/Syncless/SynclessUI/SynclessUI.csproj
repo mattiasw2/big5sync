@@ -117,6 +117,7 @@
     <Compile Include="FolderBrowserDialogEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Helper\FileHelper.cs" />
     <Compile Include="Helper\DialogsHelper.cs" />
     <Compile Include="Notification\NotificationWatcher.cs" />
     <Compile Include="Notification\PriorityNotificationWatcher.cs" />

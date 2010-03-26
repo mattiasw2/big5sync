@@ -685,6 +685,11 @@ namespace SynclessUI
             RemoveTag();
         }
 
+        private void TagRightClick_Click(object sender, RoutedEventArgs e)
+        {
+            var tw = new TagWindow(this, "", SelectedTag);
+        }
+
         private void ViewTagDetails()
         {
             if(SelectedTag != null)
@@ -790,24 +795,6 @@ namespace SynclessUI
             }
         }
 
-        private void LayoutRoot_Drop(object sender, DragEventArgs e)
-        {
-            HideDropIndicator();
-
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                var foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
-                foreach (string i in foldernames)
-                {
-                    var folder = new DirectoryInfo(i);
-                    if (folder.Exists)
-                    {
-                        var tw = new TagWindow(this, i, SelectedTag);
-                    }
-                }
-            }
-        }
-
         private void SynclessLogoContainer_MouseEnter(object sender, MouseEventArgs e)
         {
             LogoHighlight.Visibility = Visibility.Visible;
@@ -829,20 +816,42 @@ namespace SynclessUI
                                     "An unexpected error has occured. \n\nPlease help us by - \n 1. Submitting the debug.log in your Syncless Application Folder to big5.syncless@gmail.com \n 2. Raise it as an issue on our GCPH @ http://code.google.com/p/big5sync/issues/list\n\n Please restart Syncless.");
         }
 
+        private void LayoutRoot_Drop(object sender, DragEventArgs e)
+        {
+            HideDropIndicator();
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+                if (foldernames != null)
+                    foreach (string i in foldernames)
+                    {
+                        var folder = new DirectoryInfo(i);
+                        if (folder.Exists && !FileHelper.IsZipFile(i))
+                        {
+                            var tw = new TagWindow(this, i, SelectedTag);
+                        }
+                    }
+            }
+        }
+
         private void LayoutRoot_DragEnter(object sender, DragEventArgs e)
         {
+            
+
             TxtBoxFilterTag.IsHitTestVisible = false;
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 var foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
-                foreach (string i in foldernames)
-                {
-                    var folder = new DirectoryInfo(i);
-                    if (folder.Exists)
+                if (foldernames != null)
+                    foreach (string i in foldernames)
                     {
-                        ShowDropIndicator();
+                        var folder = new DirectoryInfo(i);
+                        if (folder.Exists && !FileHelper.IsZipFile(i))
+                        {
+                            ShowDropIndicator();
+                        }
                     }
-                }
             }
         }
 
@@ -903,6 +912,11 @@ namespace SynclessUI
         private void OpenInExplorerRightClick_Click(object sender, RoutedEventArgs e)
         {
             OpenFolderInWindowsExplorer();
+        }
+
+        private void UntagRightClick_Click(object sender, RoutedEventArgs e)
+        {
+            Untag();
         }
 
         private void ListTaggedPath_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -1134,7 +1148,6 @@ namespace SynclessUI
             CommandBindings.Add(cb3);
 
             btnUntag.Command = UntagCommand;
-            UntagRightClick.Command = UntagCommand;
 
             var kg3 = new KeyGesture(Key.U, ModifierKeys.Control);
             var ib3 = new InputBinding(UntagCommand, kg3);
@@ -1392,6 +1405,14 @@ namespace SynclessUI
         private void SaveApplicationSettings()
         {
             Settings.Default.Save();
+        }
+
+        private void ListBoxTag_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Back && ListBoxTag.Items.Count > 0)
+            {
+				RemoveTag();
+			}
         }
 
         #endregion

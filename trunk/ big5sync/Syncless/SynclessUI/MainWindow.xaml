@@ -6,6 +6,82 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" 
 	xmlns:tb="http://www.hardcodet.net/taskbar" x:Class="SynclessUI.MainWindow" x:Name="Window" Title="Syncless" Background="Transparent" Icon="Icons/logo.ico" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" WindowStyle="None" Foreground="Transparent" AllowsTransparency="True" Closing="Window_Closing">
 	<Window.Resources>
+		<Style x:Key="ListBoxTagItemStyle" TargetType="{x:Type ListBoxItem}">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+			<Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+			<Setter Property="Padding" Value="2,0,0,0"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type ListBoxItem}">
+						<Border x:Name="Bd" SnapsToDevicePixels="true" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+							<Border.ContextMenu>
+								<ContextMenu>
+<MenuItem x:Name="RemoveTagRightClick" Click="RemoveTagRightClick_Click" Header="Remove"><MenuItem.Icon><Image Width="16" Height="16" Source="Icons/removetag.ico"/></MenuItem.Icon></MenuItem>
+<MenuItem x:Name="TagRightClick" Click="TagRightClick_Click" Header="Tag"><MenuItem.Icon><Image Width="16" Height="16" Source="Icons/tag.ico"/></MenuItem.Icon></MenuItem>
+								</ContextMenu>
+							</Border.ContextMenu>
+							<ContentPresenter x:Name="contentPresenter" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" ToolTip="{Binding Content, ElementName=contentPresenter, Mode=Default}"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsSelected" Value="true">
+								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+								<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+							</Trigger>
+							<MultiTrigger>
+								<MultiTrigger.Conditions>
+									<Condition Property="IsSelected" Value="true"/>
+									<Condition Property="Selector.IsSelectionActive" Value="false"/>
+								</MultiTrigger.Conditions>
+								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+								<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+							</MultiTrigger>
+							<Trigger Property="IsEnabled" Value="false">
+								<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="ListBoxTagPathItemStyle" TargetType="{x:Type ListBoxItem}">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+			<Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+			<Setter Property="Padding" Value="2,0,0,0"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type ListBoxItem}">
+						<Border x:Name="Bd" SnapsToDevicePixels="true" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+							<Border.ContextMenu>
+							<ContextMenu>
+								<MenuItem x:Name="OpenInExplorerRightClick" Header="Open In Windows Explorer" Click="OpenInExplorerRightClick_Click"><MenuItem.Icon><Image Width="16" Height="16" Source="Icons/explorer.ico"/></MenuItem.Icon></MenuItem>
+								<MenuItem x:Name="UntagRightClick" Header="Untag" Click="UntagRightClick_Click"><MenuItem.Icon><Image Source="Icons/tag.ico" Height="16" Width="16"/></MenuItem.Icon></MenuItem>
+							</ContextMenu>
+							</Border.ContextMenu>
+							<ContentPresenter x:Name="contentPresenter" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" ToolTip="{Binding Content, ElementName=contentPresenter, Mode=Default}"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsSelected" Value="true">
+								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+								<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+							</Trigger>
+							<MultiTrigger>
+								<MultiTrigger.Conditions>
+									<Condition Property="IsSelected" Value="true"/>
+									<Condition Property="Selector.IsSelectionActive" Value="false"/>
+								</MultiTrigger.Conditions>
+								<Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+								<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+							</MultiTrigger>
+							<Trigger Property="IsEnabled" Value="false">
+								<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
 		<LinearGradientBrush x:Key="StandardButtonBrush" EndPoint="0.5,1" StartPoint="0.5,0">
 			<GradientStop Color="#FF8FE2FD" Offset="0"/>
 			<GradientStop Color="#FF0AACE2" Offset="1"/>
@@ -256,14 +332,7 @@
 			</StackPanel>
 			<Border x:Name="BdrTaggedPath" Padding="10" Grid.Row="2" Grid.Column="1" BorderBrush="#FF6F6F6F" BorderThickness="1" CornerRadius="5" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,10,0,0">
 				<StackPanel>
-					<ListBox x:Name="ListTaggedPath" MaxHeight="130" MinHeight="20" Width="290" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Style="{DynamicResource ListTaggedPathStyle}" MouseDoubleClick="ListTaggedPath_MouseDoubleClick" Cursor="Hand" ItemContainerStyle="{DynamicResource TooltipListBoxItemStyle}">
-						<ListBox.ContextMenu>
-							<ContextMenu>
-								<MenuItem x:Name="OpenInExplorerRightClick" Header="Open In Windows Explorer" Click="OpenInExplorerRightClick_Click"><MenuItem.Icon><Image Width="16" Height="16" Source="Icons/explorer.ico"/></MenuItem.Icon></MenuItem>
-								<MenuItem x:Name="UntagRightClick" Header="Untag"><MenuItem.Icon><Image Source="Icons/tag.ico" Height="16" Width="16"/></MenuItem.Icon></MenuItem>
-							</ContextMenu>
-						</ListBox.ContextMenu>
-					</ListBox>
+					<ListBox x:Name="ListTaggedPath" MaxHeight="130" MinHeight="20" Width="290" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Style="{DynamicResource ListTaggedPathStyle}" MouseDoubleClick="ListTaggedPath_MouseDoubleClick" Cursor="Hand" ItemContainerStyle="{DynamicResource ListBoxTagPathItemStyle}" />
 				</StackPanel>
 			</Border>
 		</Grid>
@@ -301,12 +370,7 @@
 						<GradientStop Color="#FF828790" Offset="1"/>
 					</LinearGradientBrush>
 				</TextBox.BorderBrush></TextBox>
-			<ListBox x:Name="ListBoxTag" Margin="0,10,0,0" Grid.Column="1" Grid.Row="3" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White" SelectionChanged="ListBoxTag_SelectionChanged" MaxHeight="180" ItemContainerStyle="{DynamicResource TooltipListBoxItemStyle}" Height="180" Width="195" VerticalAlignment="Top" Style="{DynamicResource TagListBoxStyle}">
-				<ListBox.ContextMenu>
-					<ContextMenu>
-						<MenuItem x:Name="RemoveTagRightClick" Click="RemoveTagRightClick_Click" Header="Remove Tag"><MenuItem.Icon><Image Width="16" Height="16" Source="Icons/removetag.ico"/></MenuItem.Icon></MenuItem>
-					</ContextMenu>
-				</ListBox.ContextMenu>
+			<ListBox x:Name="ListBoxTag" Margin="0,10,0,0" Grid.Column="1" Grid.Row="3" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White" SelectionChanged="ListBoxTag_SelectionChanged" MaxHeight="180" ItemContainerStyle="{DynamicResource ListBoxTagItemStyle}" Height="180" Width="195" VerticalAlignment="Top" Style="{DynamicResource TagListBoxStyle}" KeyDown="ListBoxTag_KeyDown">
 			</ListBox>
 			<Label x:Name="LblTagCount" Grid.Row="1" Grid.Column="0" Foreground="#FFEEEEEE" Content="[Count]" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,4,0,4" Margin="50,0,2,0" FontSize="13.333" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
 			<Image x:Name="ImgFilter" HorizontalAlignment="Left" Margin="2,0,0,-1" Width="16" Grid.Column="1" Source="Icons/filter.ico" Stretch="Fill" Grid.Row="2" Height="16"/>
