@@ -86,9 +86,9 @@ namespace Syncless.CompareAndSync
                             {
                                 case AutoSyncRequestType.Update:
                                 case AutoSyncRequestType.New:
-                                    if (request.Config.ArchiveLimit >= 0)
+                                    if (request.Config.ArchiveLimit >= 0 && File.Exists(destFullPath))
                                         CommonMethods.ArchiveFile(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
-                                    if (request.Config.Recycle)
+                                    if (request.Config.Recycle && File.Exists(destFullPath))
                                         CommonMethods.DeleteFileToRecycleBin(destFullPath);
                                     CommonMethods.CopyFile(sourceFullPath, destFullPath, true);
                                     currFile = new FileInfo(destFullPath);
