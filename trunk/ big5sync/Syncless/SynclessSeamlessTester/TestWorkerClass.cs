@@ -27,7 +27,7 @@ namespace SynclessSeamlessTester
         // Max and min time
         private const int MINTIME = 0, MAXTIME = 5000; //180000;
 
-        private const string CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private const string CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-";
 
         private bool fired = true;
 
@@ -96,7 +96,7 @@ namespace SynclessSeamlessTester
                             Rename();
                             break;
                         case UPDATE:
-                            Update()
+                            Update();
                             break;
                     }
 
