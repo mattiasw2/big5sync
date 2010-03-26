@@ -145,7 +145,8 @@ namespace SynclessSeamlessTester
             progressBar1.Value = 100;
             ToggleAllControls(true);
             this.Cursor = Cursors.Arrow;
-            Console.WriteLine("RESULTS:");
+            TestInfo info = e.Result as TestInfo;
+            Console.WriteLine("RESULT: " + (info.Passed ? "PASSED" : "FAILED"));
         }
 
         public List<string> AddToSource(string s)
