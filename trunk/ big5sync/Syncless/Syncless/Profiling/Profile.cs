@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -140,9 +141,10 @@ namespace Syncless.Profiling
         public bool RemoveDrive(DriveInfo info)
         {
             string driveLetter = ProfilingHelper.ExtractDriveName(info.Name);
-            ProfileDrive drive = _phyiscalDict[driveLetter];
-            if (drive != null)
+            ProfileDrive drive = null;
+            if (_phyiscalDict.TryGetValue(driveLetter, out drive))
             {
+                Debug.Assert(drive!=null);
                 if (_phyiscalDict.ContainsKey(drive.PhysicalId))
                 {
                     _phyiscalDict.Remove(drive.PhysicalId);
@@ -154,8 +156,10 @@ namespace Syncless.Profiling
                 drive.Info = null;
                 return true;
             }
-
-            return false;
+            else
+            {
+                return false;
+            }
         }
 
         public ProfileDrive CreateProfileDrive(string guid)
