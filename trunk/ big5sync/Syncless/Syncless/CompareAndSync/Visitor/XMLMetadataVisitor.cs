@@ -19,7 +19,8 @@ namespace Syncless.CompareAndSync.Visitor
         private const string NodeLastModified = "last_modified";
         private const string NodeLastCreated = "last_created";
         private const string NodeLastUpdated = "last_updated";
-        private const string Files = "files";
+        private const string FILE = "file";
+        private const string FOLDER = "folder";
         private const string Action = "action";
         private const string LastUpdated = "last_updated";
         private const string LastKnownState = "last_known_state";
@@ -151,7 +152,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         private FileCompareObject PopulateFileWithMetaData(XmlDocument xmlDoc, FileCompareObject file, int counter)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/" + FILE + "[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
             if (node != null)
             {
 
@@ -191,7 +192,7 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     XmlDocument todoXMLDoc = new XmlDocument();
                     CommonMethods.LoadXML(ref todoXMLDoc, path);
-                    XmlNode todoNode = todoXMLDoc.SelectSingleNode("/" + LastKnownState + "/files[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
+                    XmlNode todoNode = todoXMLDoc.SelectSingleNode("/" + LastKnownState + "/" + FILE + "[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
                     if (todoNode != null)
                     {
                         XmlNodeList nodeList = todoNode.ChildNodes;
@@ -239,7 +240,7 @@ namespace Syncless.CompareAndSync.Visitor
             long updatedTime = 0;
 
             List<XMLCompareObject> objectList = new List<XMLCompareObject>();
-            XmlNodeList xmlNodeList = xmlDoc.SelectNodes(XpathExpr + "/files");
+            XmlNodeList xmlNodeList = xmlDoc.SelectNodes(XpathExpr + "/" + FILE);
             if (xmlNodeList == null)
                 return objectList;
 
@@ -280,7 +281,7 @@ namespace Syncless.CompareAndSync.Visitor
         {
             List<string> folderList = new List<string>();
 
-            XmlNodeList xmlFolderList = xmlDoc.SelectNodes(XpathExpr + "/folder");
+            XmlNodeList xmlFolderList = xmlDoc.SelectNodes(XpathExpr + "/" + FOLDER);
             if (xmlFolderList == null)
                 return folderList;
 
@@ -487,7 +488,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         private FolderCompareObject PopulateFolderWithMetaData(XmlDocument xmlDoc, FolderCompareObject folder, int counter)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/"+ FOLDER + "[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
             if (node != null)
             {
                 folder.MetaExists[counter] = true;
@@ -499,7 +500,7 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     XmlDocument todoXmlDoc = new XmlDocument();
                     CommonMethods.LoadXML(ref todoXmlDoc, path);
-                    XmlNode todoNode = todoXmlDoc.SelectSingleNode("/" + LastKnownState + "/folder[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
+                    XmlNode todoNode = todoXmlDoc.SelectSingleNode("/" + LastKnownState + "/" + FOLDER + "[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
                     if (todoNode != null)
                     {
                         XmlNodeList nodeList = todoNode.ChildNodes;

@@ -58,8 +58,54 @@ namespace Syncless.CompareAndSync
                 {
                     System.Threading.Thread.Sleep(250);
                 }
-                
+                catch(XmlException)
+                {
+                    if(File.Exists(xmlPath))
+                    {
+                        File.Delete(xmlPath);
+                    }
+                    string synclessfolder = @"\.syncless\syncless.xml";
+                    string parentfolder = xmlPath.Replace(synclessfolder, string.Empty);
+                    CreateFileIfNotExist(parentfolder);
+                    xmlDoc.Load(xmlPath);
+                }
             }
+        }
+        
+        public static void CreateFileIfNotExist(string path)
+        {
+            string nodename = "name";
+            string metadir = ".syncless";
+            string metadatapath = @".syncless\syncless.xml";
+            string xmlPath = Path.Combine(path, metadatapath);
+            if (File.Exists(xmlPath))
+                return;
+
+            DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, metadir));
+            di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+            XmlTextWriter writer = new XmlTextWriter(xmlPath, null);
+            writer.Formatting = Formatting.Indented;
+            writer.WriteStartDocument();
+            writer.WriteStartElement("meta-data");
+            writer.WriteElementString("last_modified", (DateTime.Now.Ticks).ToString());
+            writer.WriteElementString(nodename, GetLastFileIndex(path));
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+            writer.Flush();
+            writer.Close();
+        }
+
+        private static string GetLastFileIndex(string filePath)
+        {
+            string[] splitWords = filePath.Split('\\');
+            string folderPath = string.Empty;
+            for (int i = 0; i < splitWords.Length; i++)
+            {
+                if (i == splitWords.Length - 1)
+                    return splitWords[i];
+            }
+
+            return folderPath;
         }
 
         #endregion

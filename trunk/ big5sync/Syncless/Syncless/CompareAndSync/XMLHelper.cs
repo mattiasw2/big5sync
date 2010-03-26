@@ -21,8 +21,8 @@ namespace Syncless.CompareAndSync
         private const string NodeHash = "hash";
         private const string NodeLastModified = "last_modified";
         private const string NodeLastCreated = "last_created";
-        private const string Folder = "folder";
-        private const string Files = "files";
+        private const string FOLDER = "folder";
+        private const string FILE = "file";
         private const string TodoName = "todo.xml";
         private const string Todopath = MetaDir + "\\" + TodoName;
         private const string Deleted = "Deleted";
@@ -33,6 +33,7 @@ namespace Syncless.CompareAndSync
         private static long dateTime = DateTime.Now.Ticks;
         private static readonly object SyncLock = new object();
 
+        #region Main method
         public static void UpdateXML(BaseXMLWriteObject xmlWriteList)
         {
            
@@ -58,34 +59,14 @@ namespace Syncless.CompareAndSync
                      break;
             }
         }
+        #endregion
 
-        private static void CreateFileIfNotExist(string path)
-        {
-            string xmlPath = Path.Combine(path, Metadatapath);
-            if (File.Exists(xmlPath))
-                return;
-
-            lock (SyncLock)
-            {
-                DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, MetaDir));
-                di.Attributes = FileAttributes.Directory |FileAttributes.Hidden;
-                XmlTextWriter writer = new XmlTextWriter(xmlPath, null);
-                writer.Formatting = Formatting.Indented;
-                writer.WriteStartDocument();
-                writer.WriteStartElement("meta-data");
-                writer.WriteElementString("last_modified", (DateTime.Now.Ticks).ToString());
-                writer.WriteElementString(NodeName, GetLastFileIndex(path));
-                writer.WriteEndElement();
-                writer.WriteEndDocument();
-                writer.Flush();
-                writer.Close();
-            }
-        }
+        #region File operations
         private static void CreateFile(XMLWriteFileObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
             string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, Metadatapath);
-            CreateFileIfNotExist(xmlWriteObj.FullPath);
+            CommonMethods.CreateFileIfNotExist(xmlWriteObj.FullPath);
             CommonMethods.LoadXML(ref xmlDoc, xmlFilePath);
 
             DoFileCleanUp(xmlDoc, xmlWriteObj.Name);
@@ -100,7 +81,7 @@ namespace Syncless.CompareAndSync
             XmlElement sizeElement = xmlDoc.CreateElement(NodeSize);
             XmlElement createdTimeElement = xmlDoc.CreateElement(NodeLastCreated);
             XmlElement lastModifiedElement = xmlDoc.CreateElement(NodeLastModified);
-            XmlElement fileElement = xmlDoc.CreateElement(Files);
+            XmlElement fileElement = xmlDoc.CreateElement(FILE);
 
             nameElement.AppendChild(nameText);
             hashElement.AppendChild(hashText);
@@ -124,10 +105,10 @@ namespace Syncless.CompareAndSync
         {
             XmlDocument xmlDoc = new XmlDocument();
             string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, Metadatapath);
-            CreateFileIfNotExist(xmlWriteObj.FullPath);
+            CommonMethods.CreateFileIfNotExist(xmlWriteObj.FullPath);
             CommonMethods.LoadXML(ref xmlDoc, xmlFilePath);
 
-            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/files[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/" +FILE + "[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
             if (node == null)
             {
                 CommonMethods.SaveXML(ref xmlDoc, xmlFilePath); 
@@ -171,10 +152,10 @@ namespace Syncless.CompareAndSync
             XmlDocument xmlDoc = new XmlDocument();
             XmlNode tempNode = null;
             string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, Metadatapath);
-            CreateFileIfNotExist(xmlWriteObj.FullPath);
+            CommonMethods.CreateFileIfNotExist(xmlWriteObj.FullPath);
             CommonMethods.LoadXML(ref xmlDoc, xmlFilePath);
 
-            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/files[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/" + FILE +"[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
             if (node == null)
                 return;
             tempNode = node.Clone();
@@ -191,7 +172,7 @@ namespace Syncless.CompareAndSync
             if (File.Exists(xmlFilePath))
             {
                 CommonMethods.LoadXML(ref xmlDoc, xmlFilePath);
-                XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/files[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
+                XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/" + FILE + "[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
                 if (node == null)
                     return;
                 tempNode = node.Clone();
@@ -201,6 +182,10 @@ namespace Syncless.CompareAndSync
 
             GenerateFileTodo(xmlWriteObj , tempNode);
         }
+
+        #endregion
+
+        #region Misc Operations
 
         private static string GetLastFileIndex(string filePath)
         {
@@ -217,7 +202,7 @@ namespace Syncless.CompareAndSync
 
         private static void DoFileCleanUp(XmlDocument xmlDoc, string name)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/files[name=" + CommonMethods.ParseXpathString(name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/" + FILE + "[name=" + CommonMethods.ParseXpathString(name) + "]");
             if (node == null)
                 return;
             node.ParentNode.RemoveChild(node);
@@ -225,12 +210,14 @@ namespace Syncless.CompareAndSync
 
         private static void DoFolderCleanUp(XmlDocument xmlDoc, string name)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/folder[name=" + CommonMethods.ParseXpathString(name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/" + FOLDER + "[name=" + CommonMethods.ParseXpathString(name) + "]");
             if (node == null)
                 return;
             node.ParentNode.RemoveChild(node);
         }
+        #endregion
 
+        #region Folder State processor
         private static void HandleFolder(BaseXMLWriteObject xmlWriteObj)
         {
             switch (xmlWriteObj.ChangeType)
@@ -246,18 +233,20 @@ namespace Syncless.CompareAndSync
                     break;
             }
         }
+        #endregion
 
+        #region Folder Operations
         private static void CreateFolder(XMLWriteFolderObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
             string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, Metadatapath);
-            CreateFileIfNotExist(xmlWriteObj.FullPath);
+            CommonMethods.CreateFileIfNotExist(xmlWriteObj.FullPath);
             CommonMethods.LoadXML(ref xmlDoc, xmlFilePath);
 
             DoFolderCleanUp(xmlDoc, xmlWriteObj.Name);
             XmlText nameText = xmlDoc.CreateTextNode(xmlWriteObj.Name);
             XmlElement nameOfFolder = xmlDoc.CreateElement(NodeName);
-            XmlElement folder = xmlDoc.CreateElement(Folder);
+            XmlElement folder = xmlDoc.CreateElement(FOLDER);
             nameOfFolder.AppendChild(nameText);
             folder.AppendChild(nameOfFolder);
 
@@ -271,10 +260,10 @@ namespace Syncless.CompareAndSync
         {
             XmlDocument xmlDoc = new XmlDocument();
             string xmlPath = Path.Combine(xmlWriteObj.FullPath , Metadatapath);
-            CreateFileIfNotExist(xmlWriteObj.FullPath);
+            CommonMethods.CreateFileIfNotExist(xmlWriteObj.FullPath);
             CommonMethods.LoadXML(ref xmlDoc, xmlPath);
 
-            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/folder[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/" + FOLDER + "[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
             if (node == null)
                 return;
             node.FirstChild.InnerText = xmlWriteObj.NewName;
@@ -283,7 +272,7 @@ namespace Syncless.CompareAndSync
             XmlDocument subFolderXmlDoc = new XmlDocument();
             string subFolder = Path.Combine(xmlWriteObj.FullPath, xmlWriteObj.NewName);
             string subFolderXmlPath = Path.Combine(subFolder, Metadatapath);
-            CreateFileIfNotExist(subFolder);
+            CommonMethods.CreateFileIfNotExist(subFolder);
             CommonMethods.LoadXML(ref subFolderXmlDoc, subFolderXmlPath);
 
             XmlNode subFolderNode = subFolderXmlDoc.SelectSingleNode(XpathExpr + "/name");
@@ -301,7 +290,7 @@ namespace Syncless.CompareAndSync
             if (File.Exists(xmlFilePath))
             {
                 CommonMethods.LoadXML(ref xmlDoc, xmlFilePath);
-                XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/folder[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
+                XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/" + FOLDER + "[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
                 if (node == null)
                     return;
                 node.ParentNode.RemoveChild(node);
@@ -310,8 +299,10 @@ namespace Syncless.CompareAndSync
 
             GenerateFolderTodo(xmlWriteObj);
         }
+        #endregion
 
-        
+        #region Todo Operations
+
         private static void CreateTodoFile(string path)
         {
             string todoXML = Path.Combine(path, Todopath);
@@ -376,7 +367,7 @@ namespace Syncless.CompareAndSync
             XmlText nameText = xmlDoc.CreateTextNode(xmlWriteObj.Name);
             XmlText lastUpdatedText = xmlDoc.CreateTextNode(dateTime.ToString());
 
-            XmlElement fileElement = xmlDoc.CreateElement(Files);
+            XmlElement fileElement = xmlDoc.CreateElement(FILE);
             XmlElement nameElement = xmlDoc.CreateElement(NodeName);
             XmlElement hashElement = xmlDoc.CreateElement(NodeHash);
             XmlElement actionElement = xmlDoc.CreateElement(Action);
@@ -407,7 +398,7 @@ namespace Syncless.CompareAndSync
 
             XmlDocument todoXmlDoc = new XmlDocument();
             CommonMethods.LoadXML(ref todoXmlDoc, todoXmlPath);
-            XmlNode fileNode = todoXmlDoc.SelectSingleNode("/" + LastKnownState + "/files[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
+            XmlNode fileNode = todoXmlDoc.SelectSingleNode("/" + LastKnownState + "/" +FILE + "[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
             if (fileNode != null)
                 fileNode.ParentNode.RemoveChild(fileNode);
             CommonMethods.SaveXML(ref todoXmlDoc, todoXmlPath);
@@ -419,7 +410,7 @@ namespace Syncless.CompareAndSync
             XmlText action = xmlDoc.CreateTextNode(changeType);
             XmlText lastUpdatedText = xmlDoc.CreateTextNode(dateTime.ToString());
 
-            XmlElement folderElement = xmlDoc.CreateElement(Folder);
+            XmlElement folderElement = xmlDoc.CreateElement(FOLDER);
             XmlElement nameElement = xmlDoc.CreateElement(NodeName);
             XmlElement actionElement = xmlDoc.CreateElement(Action);
             XmlElement lastUpdatedElement = xmlDoc.CreateElement(NodeLastUpdated);
@@ -443,11 +434,12 @@ namespace Syncless.CompareAndSync
 
             XmlDocument todoXmlDoc = new XmlDocument();
             CommonMethods.LoadXML(ref todoXmlDoc, todoXmlPath);
-            XmlNode folderNode = todoXmlDoc.SelectSingleNode("/" + LastKnownState + "/folder[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
+            XmlNode folderNode = todoXmlDoc.SelectSingleNode("/" + LastKnownState + "/" + FOLDER + "[name=" + CommonMethods.ParseXpathString(xmlWriteObj.Name) + "]");
             if (folderNode != null)
                 folderNode.ParentNode.RemoveChild(folderNode);
             CommonMethods.SaveXML(ref todoXmlDoc, todoXmlPath);
         }
 
+        #endregion
     }
 }
