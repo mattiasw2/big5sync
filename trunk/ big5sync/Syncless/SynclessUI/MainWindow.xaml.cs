@@ -782,14 +782,14 @@ namespace SynclessUI
                 var drive = new DriveInfo(driveletter);
                 if (!Gui.AllowForRemoval(drive))
                 {
-                    DialogsHelper.ShowError("Drive Removal Error",
-                                            "Syncless could not prepare " + driveletter + " for removal.");
+                    DialogsHelper.ShowError("Unmonitor Error",
+                                            "Syncless could not unmonitor " + driveletter + " from seamless mode.");
                 }
                 else
                 {
                     DialogsHelper.ShowInformation("Monitoring Stopped for " + driveletter,
-                                                  "Syncless has stopped all monitoring (seamless) operations on " +
-                                                  driveletter + " " + "\nYou may proceed to remove it safely.");
+                                                  "Syncless has stopped all seamless monitoring for " + driveletter + 
+													"\nTagging any folders in this drive will re-activate seamless monitoring.");
                 }
             }
             catch (UnhandledException)
@@ -1211,16 +1211,16 @@ namespace SynclessUI
             var ib4 = new InputBinding(DetailsCommand, kg4);
             InputBindings.Add(ib4);
 
-            // Eject Command
-            var EjectCommand = new RoutedCommand();
+            // Unmonitor Command
+            var UnmonitorCommand = new RoutedCommand();
 
-            var cb5 = new CommandBinding(EjectCommand, EjectCommandExecute, EjectCommandCanExecute);
+            var cb5 = new CommandBinding(UnmonitorCommand, UnmonitorCommandExecute, UnmonitorCommandCanExecute);
             CommandBindings.Add(cb5);
 
-            BtnEject.Command = EjectCommand;
+            BtnUnmonitor.Command = UnmonitorCommand;
 
-            var kg5 = new KeyGesture(Key.E, ModifierKeys.Control);
-            var ib5 = new InputBinding(EjectCommand, kg5);
+            var kg5 = new KeyGesture(Key.I, ModifierKeys.Control);
+            var ib5 = new InputBinding(UnmonitorCommand, kg5);
             InputBindings.Add(ib5);
 
             // Options Command
@@ -1365,7 +1365,7 @@ namespace SynclessUI
             e.Handled = true;
         }
 
-        private void EjectCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        private void UnmonitorCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
             //Actual Code
@@ -1393,7 +1393,7 @@ namespace SynclessUI
             driveMenu.IsOpen = true;
         }
 
-        private void EjectCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void UnmonitorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;

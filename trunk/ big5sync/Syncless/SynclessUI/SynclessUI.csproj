@@ -233,7 +233,7 @@
     <Resource Include="Icons\close.ico" />
     <Resource Include="Icons\createtag.ico" />
     <Resource Include="Icons\dropindicator.ico" />
-    <Resource Include="Icons\eject.ico" />
+    <Resource Include="Icons\unmonitor.ico" />
     <Resource Include="Icons\explorer.ico" />
     <Resource Include="Icons\filter.ico" />
     <Resource Include="Icons\folder.ico" />
