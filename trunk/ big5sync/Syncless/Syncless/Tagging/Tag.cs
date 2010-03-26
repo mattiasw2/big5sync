@@ -19,7 +19,7 @@ namespace Syncless.Tagging
         public string TagName
         {
             get { return _tagName; }
-            set { this._tagName = value; }
+            set { _tagName = value; }
         }
         public long LastUpdatedDate
         {

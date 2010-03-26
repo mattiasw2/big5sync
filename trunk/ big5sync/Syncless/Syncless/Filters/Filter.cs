@@ -60,7 +60,32 @@ namespace Syncless.Filters
         }
         public abstract bool Match(string pattern);
 
-        
+        public override bool Equals(object obj)
+        {
+            
+            Filter filter = obj as Filter;
+            if (filter == null)
+            {
+                return false;
+            }
+            if (filter.GetType() != GetType())
+            {
+                return false;
+            }
+            return filter.Mode == _mode;
+        }
+
+        public virtual bool Equals(Filter other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(other._mode, _mode);
+        }
+
+        public override int GetHashCode()
+        {
+            return _mode.GetHashCode();
+        }
     }
     public enum FilterMode
     {
