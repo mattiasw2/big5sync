@@ -17,8 +17,8 @@ namespace Syncless.Filters
             if(pattern == null){
                 pattern = "";
             }
-            _pattern = pattern;
-            BuildRegex(_pattern);
+            this._pattern = pattern;
+            BuildRegex(_pattern.ToLower());
         }
         private void BuildRegex(string pattern)
         {   
@@ -31,7 +31,25 @@ namespace Syncless.Filters
         }
         public override bool Match(string path)
         {
-            return _regex.Match(path).Success;    
+            return _regex.Match(path.ToLower()).Success;    
         }
+        public override bool Equals(Filter other)
+        {
+            ExtensionFilter filter = other as ExtensionFilter;
+            if (filter == null)
+            {
+                return false;
+            }
+            bool parentEqual = base.Equals(filter);
+            if (parentEqual)
+            {
+                if (!filter.Pattern.Equals(_pattern.ToLower()))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        
     }
 }
