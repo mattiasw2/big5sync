@@ -153,25 +153,25 @@ namespace Syncless.Core
         {
             lock (this)
             {
-                Console.WriteLine("Create Table : " + _createEventPathPair.Count);
+                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Create Table : " + _createEventPathPair.Count);
                 foreach (PathPair p in _createEventPathPair)
                 {
-                    Console.WriteLine("Source:"+ p.Source + "Destination:" + p.Dest);
+                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Source:"+ p.Source + "Destination:" + p.Dest);
                 }
-                Console.WriteLine("Update Table : " + _createEventPathPair.Count);
+                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Update Table : " + _createEventPathPair.Count);
                 foreach (PathPair p in _updateEventPathPair)
                 {
-                    Console.WriteLine("Source:" + p.Source + "Destination:" + p.Dest);
+                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Source:" + p.Source + "Destination:" + p.Dest);
                 }
-                Console.WriteLine("Rename Table : " + _createEventPathPair.Count);
+                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Rename Table : " + _createEventPathPair.Count);
                 foreach (PathPair p in _renameEventPathPair)
                 {
-                    Console.WriteLine("Source:" + p.Source + "Destination:" + p.Dest);
+                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Source:" + p.Source + "Destination:" + p.Dest);
                 }
-                Console.WriteLine("Delete Table : " + _createEventPathPair.Count);
+                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Delete Table : " + _createEventPathPair.Count);
                 foreach (PathPair p in _deleteEventPathPair)
                 {
-                    Console.WriteLine("Source:" + p.Source + "Destination:" + p.Dest);
+                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Source:" + p.Source + "Destination:" + p.Dest);
                 }
 
             }
