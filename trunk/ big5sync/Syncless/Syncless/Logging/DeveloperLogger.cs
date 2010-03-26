@@ -17,7 +17,7 @@ namespace Syncless.Logging
         {
             Debug.Assert(message is String);
             string msg = message as String;
-            log.Info(msg);
+            log.Debug(msg);
         }
     }
 }
