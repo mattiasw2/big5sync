@@ -48,8 +48,8 @@ namespace SynclessSeamlessTester
             _testInfo = testInfo;
             _duration = duration;
             _bgWorker = bgWorker;
-            _minTime = minTime;
-            _maxTime = maxTime;
+            _minTime = minTime * 1000;
+            _maxTime = maxTime * 1000;
             StartTest();
         }
 
@@ -125,6 +125,10 @@ namespace SynclessSeamlessTester
             {
                 if (File.Exists(fsi[fsiIndex]))
                     ChangeFileContent(new FileInfo(fsi[fsiIndex]));
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                Console.WriteLine(e.ToString());
             }
             catch (IOException e)
             {
@@ -288,10 +292,11 @@ namespace SynclessSeamlessTester
             double x = rand.NextDouble() * _maxTime;
             Thread.Sleep(1);
             double y = rand.NextDouble() * _maxTime;
-            int time = Convert.ToInt32(x + y);
+            int time = Convert.ToInt32((x + y) / 2);
 
             if (time >= _minTime)
                 return time;
+
             return TimerGenerator();
         }
 
