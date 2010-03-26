@@ -70,7 +70,7 @@ namespace SynclessSeamlessTester
             try
             {
                 if (listBoxSourcePaths.Items.Count > 0 && listBoxDestPaths.Items.Count > 0 &&
-                    Convert.ToInt32(textBoxDuration.Text) > 0)
+                    Convert.ToInt32(textBoxDuration.Text) > 0 && Convert.ToInt32(textBoxMinWaitTime.Text) >= 0 && Convert.ToInt32(textBoxMaxWaitTime.Text) >= Convert.ToInt32(textBoxMinWaitTime.Text))
                 {
                     button1.Enabled = false;
                     buttonCancel.Enabled = true;
@@ -130,7 +130,7 @@ namespace SynclessSeamlessTester
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            new TestWorkerClass(Convert.ToInt32(textBoxDuration.Text), _sourcePaths, _destPaths,
+            new TestWorkerClass(Convert.ToInt32(textBoxDuration.Text), Convert.ToInt32(textBoxMinWaitTime.Text), Convert.ToInt32(textBoxMaxWaitTime.Text), _sourcePaths, _destPaths,
                                 e.Argument as TestInfo, backgroundWorker1);
         }
 
@@ -178,6 +178,8 @@ namespace SynclessSeamlessTester
             buttonDestAdd.Enabled = enable;
 
             textBoxDuration.Enabled = enable;
+            textBoxMaxWaitTime.Enabled = enable;
+            textBoxMinWaitTime.Enabled = enable;
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
