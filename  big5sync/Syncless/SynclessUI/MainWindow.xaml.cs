@@ -659,6 +659,9 @@ namespace SynclessUI
                             }
                             _notificationWatcher.Stop();
                             _priorityNotificationWatcher.Stop();
+
+                            // Disposes the TaskBarIcon
+                            TaskbarIcon.Dispose();
                         }
                         else
                         {
@@ -1036,6 +1039,8 @@ namespace SynclessUI
             }
             catch (Exception)
             {
+                DialogsHelper.ShowError("Invalid Folder", "You cannot tag this folder.");
+                return;
             }
 
             var tw = new TagWindow(this, clipath, tagname);
@@ -1054,6 +1059,18 @@ namespace SynclessUI
                 return;
             }
 
+            DirectoryInfo di = null;
+
+            try
+            {
+                di = new DirectoryInfo(clipath);
+            }
+            catch (System.ArgumentException)
+            {
+                DialogsHelper.ShowError("Invalid Folder", "You cannot untag this folder.");
+                return;
+            }
+
             var tw = new UntagWindow(this, clipath);
             if (_firstopen == true)
             {
@@ -1067,6 +1084,17 @@ namespace SynclessUI
             if (FileHelper.IsZipFile(clipath))
             {
                 DialogsHelper.ShowError("Cleaning not Allowed", "You cannot clean a zip file.");
+                return;
+            }
+
+            DirectoryInfo di = null;
+
+            try
+            {
+                di = new DirectoryInfo(clipath);
+            } catch(System.ArgumentException)
+            {
+                DialogsHelper.ShowError("Invalid Folder", "You cannot clean this folder.");
                 return;
             }
 

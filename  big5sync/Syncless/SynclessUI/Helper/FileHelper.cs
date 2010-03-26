@@ -6,11 +6,17 @@ namespace SynclessUI.Helper
     {
         public static bool IsZipFile(string i)
         {
-            FileInfo fi = new FileInfo(i);
-            if (fi.Exists && fi.Extension.ToLower() == ".zip")
-                return true;
+            try
+            {
+                FileInfo fi = new FileInfo(i);
+                if (fi.Exists && fi.Extension.ToLower() == ".zip")
+                    return true;
 
-            return false;
+                return false;
+            } catch
+            {
+                return false;
+            }
         }
     }
 }
