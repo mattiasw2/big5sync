@@ -289,15 +289,18 @@ namespace SynclessSeamlessTester
         private int TimerGenerator()
         {
             Random rand = new Random();
-            double x = rand.NextDouble() * _maxTime;
-            Thread.Sleep(1);
-            double y = rand.NextDouble() * _maxTime;
-            int time = Convert.ToInt32((x + y) / 2);
+            int time;
 
-            if (time >= _minTime)
-                return time;
+            do
+            {
+                double x = rand.NextDouble() * _maxTime;
+                Thread.Sleep(1);
+                double y = rand.NextDouble() * _maxTime;
+                time = Convert.ToInt32((x + y) / 2);
+            }
+            while (time < _minTime);
 
-            return TimerGenerator();
+            return time;
         }
 
         private string RandomString()
@@ -325,6 +328,7 @@ namespace SynclessSeamlessTester
                 sw = new StreamWriter(info.FullName, true);
                 sw.WriteLine(RandomString());
                 sw.Flush();
+                Console.WriteLine("UPDATE: " + info.FullName);
             }
             catch (Exception e)
             {
