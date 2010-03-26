@@ -27,6 +27,7 @@
       * [DeveloperComponentMonitor Monitor]
       * [DeveloperComponentLogging Logging]
       * [DeveloperComponentFilter Filter]
+      * [DeveloperComponentNotification Notification]
       * [DeveloperComponentUI User Interface]
     * [DeveloperGuideRecommendations Recommended Resources]
     * [DeveloperGuideReferences References]
