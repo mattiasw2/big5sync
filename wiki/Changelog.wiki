@@ -3,7 +3,8 @@
 = Changelog for version _0.99_ =
  * Feature List
    # Notification
-       * Sync Progress and Queue can now be seen on the User Interface 
+       * Sync Progress and Queue can now be seen on the User Interface
+
  * Bug Fixes/Enhancements
    # User interface
        * Error message for recursive tagging modified
@@ -11,6 +12,7 @@
 
 = Changelog for version _0.9_ =
  * First release of *Syncless*.
+
  * Feature List  
    # Tagging of Folders.
        * From User Interface
