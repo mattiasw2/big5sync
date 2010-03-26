@@ -41,6 +41,7 @@ namespace Syncless.Monitor
         {
             FileSystemEventDispatcher.Instance.Terminate();
             FileSystemEventProcessor.Instance.Terminate();
+            FileSystemEventExecutor.Instance.Terminate();
         }
 
         /// <summary>

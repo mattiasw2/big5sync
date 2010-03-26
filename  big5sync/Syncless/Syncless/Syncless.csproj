@@ -110,6 +110,7 @@
     <Compile Include="Logging\LoggerFactory.cs" />
     <Compile Include="Logging\LogReaderHelper.cs" />
     <Compile Include="Logging\UserLogger.cs" />
+    <Compile Include="Monitor\FileSystemEventExecutor.cs" />
     <Compile Include="Notification\SLLNotification\AddTagNotification.cs" />
     <Compile Include="Notification\SLLNotification\MonitorTagNotification.cs" />
     <Compile Include="Notification\SyncState.cs" />
