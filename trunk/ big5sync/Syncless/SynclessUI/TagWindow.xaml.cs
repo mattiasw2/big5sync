@@ -140,12 +140,13 @@ namespace SynclessUI
                 {
                     if (_path != "" && !FileHelper.IsZipFile(_path))
                     {
-                        _main.CreateTag(Tagname);
+                        bool tocontinue1 = this.TriggerLongPathWarning();
+						bool tocontinue2 = this.TriggerDriveWarning();
 
-                        bool tocontinue = this.TriggerLongPathWarning();
-
-                        if (tocontinue)
+                        if (tocontinue1 && tocontinue2)
                         {
+                            _main.CreateTag(Tagname);
+
                             TagView tv1 = null;
 
                             try
@@ -189,11 +190,24 @@ namespace SynclessUI
             }
 		}
 
+        private bool TriggerDriveWarning()
+        {
+            DriveInfo di = new DriveInfo(_path);
+            if (di.Name == _path)
+            {
+                bool result = DialogsHelper.ShowWarning("Tag Drive Warning", "You are about to tag " + _path  + "\nAre you sure you wish to continue?");
+
+                return result;
+            }
+
+            return true;
+        }
+
         private bool TriggerLongPathWarning()
         {
             if (_path.Length > 200)
             {
-                bool result = DialogsHelper.ShowWarning("Long Path Name Warning", "NTFS File System does not handle paths which are 248 characters or more in length properly. \nAre you sure you wish to continue");
+                bool result = DialogsHelper.ShowWarning("Long Path Name Warning", "NTFS File System does not handle paths which are 248 characters or more in length properly. \nAre you sure you wish to continue?");
 
                 return result;
             }
