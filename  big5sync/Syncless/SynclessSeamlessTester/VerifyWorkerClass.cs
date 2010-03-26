@@ -43,7 +43,7 @@ namespace SynclessSeamlessTester
             var intersectFiles = GetLazyFileList(dest[0]).Intersect(GetLazyFileList(dest[1]), lazyComparer);
 
             if (dest.Count == 2)
-                return (unionFiles.Except(intersectFiles)).ToList();
+                return (unionFiles.Except(intersectFiles, lazyComparer)).ToList();
 
             for (int i = 2; i < dest.Count; i++)
                 unionFiles = unionFiles.Union(GetLazyFileList(dest[i]), lazyComparer);
@@ -51,7 +51,7 @@ namespace SynclessSeamlessTester
             for (int i = 2; i < dest.Count; i++)
                 intersectFiles = intersectFiles.Intersect(GetLazyFileList(dest[i]), lazyComparer);
 
-            return (unionFiles.Except(intersectFiles)).ToList();
+            return (unionFiles.Except(intersectFiles, lazyComparer)).ToList();
         }
 
         private List<LazyFolderCompare> LazyFolderVerifier(List<string> dest)
@@ -65,7 +65,7 @@ namespace SynclessSeamlessTester
             var intersectFolders = GetLazyFolderList(dest[0]).Intersect(GetLazyFolderList(dest[1]), lazyComparer);
 
             if (dest.Count == 2)
-                return (unionFolders.Except(intersectFolders)).ToList();
+                return (unionFolders.Except(intersectFolders, lazyComparer)).ToList();
 
             for (int i = 2; i < dest.Count; i++)
                 unionFolders = unionFolders.Union(GetLazyFolderList(dest[i]), lazyComparer);
@@ -73,7 +73,7 @@ namespace SynclessSeamlessTester
             for (int i = 2; i < dest.Count; i++)
                 intersectFolders = intersectFolders.Intersect(GetLazyFolderList(dest[i]), lazyComparer);
 
-            return (unionFolders.Except(intersectFolders)).ToList();
+            return (unionFolders.Except(intersectFolders, lazyComparer)).ToList();
         }
 
         private List<LazyFileCompare> GetLazyFileList(string path)
@@ -82,7 +82,8 @@ namespace SynclessSeamlessTester
             string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
 
             foreach (string f in files)
-                results.Add(new LazyFileCompare(CalculateMD5Hash(f), GetRelativePath(path, f), f));
+                if (!f.Contains(".syncless") && !f.Contains("_synclessArchive"))
+                    results.Add(new LazyFileCompare(CalculateMD5Hash(f), GetRelativePath(path, f), f));
 
             return results;
         }
@@ -93,7 +94,8 @@ namespace SynclessSeamlessTester
             string[] folders = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
 
             foreach (string f in folders)
-                results.Add(new LazyFolderCompare(GetRelativePath(path, f), f));
+                if (!f.Contains(".syncless") && !f.Contains("_synclessArchive"))
+                    results.Add(new LazyFolderCompare(GetRelativePath(path, f), f));
 
             return results;
         }
