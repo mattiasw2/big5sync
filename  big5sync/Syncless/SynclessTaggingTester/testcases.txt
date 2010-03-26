@@ -1,0 +1,82 @@
+//Create tag
+Case1a @ CreateTag @ Lecture @ Lecture, False, 0, 0, 0
+Case1b @ CreateTag @ Lecture @ TagAlreadyExistsException
+//Tag folder
+Case2a @ TagFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\, Lecture @ Lecture, 1
+Case2b @ TagFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\, Lecture @ PathAlreadyExistsException
+Case2c @ TagFolder @ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\, Lecture @ Lecture, 2
+Case2d @ TagFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Tutorial\, Tutorial @ Tutorial, 1
+Case2e @ TagFolder @ D:\My Homework\NUS\, NUS @ NUS, 1
+Case2f @ TagFolder @ E:\My Homework\NUS\, NUS @ NUS, 2
+Case2g @ TagFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\, Lecture Backup @ Lecture Backup, 1
+Case2h @ TagFolder @ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\, Lecture Backup @ Lecture Backup, 2
+Case2i @ TagFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\, Lecture ToPrint @ Lecture ToPrint, 1
+Case2j @ TagFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\Lecture1\, ForPrint @ ForPrint, 1
+Case2k @ TagFolder @ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\Lecture2\, ForPrint @ ForPrint, 2
+//Untag folder
+Case3a @ UntagFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\ @ 3
+//Tag back folders
+Case3a1 @ TagFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\, Lecture @ Lecture, 2
+Case3a2 @ TagFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\, Lecture Backup @ Lecture Backup, 2
+Case3a3 @ TagFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\, Lecture ToPrint @ Lecture ToPrint, 1
+//Back to untag
+Case3b @ UntagFolder @ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\, Lecture @ 1
+Case3c @ UntagFolder @ D:\My Homework\NUS\SEM2AY0910\CS3230\Lecture\, Lecture @ 0
+Case3d @ UntagFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\, NotExists @ TagNotFoundException
+Case3e @ UntagFolder @ D:\My Homework\NUS\SEM2AY0910\CS3230\Lecture\ @ 0
+//Rename tag
+Case4a @ RenameTag @ Lecture, NUS Lecture @ 
+Case4b @ RenameTag @ Lecture, Lecture 1 @ TagNotFoundException
+Case4c @ RenameTag @ Lecture Backup, NUS Lecture @ TagAlreadyExistsException
+Case4d @ RenameTag @ NUS Lecture, Lecture @ 
+Case4e @ RenameTag @ Lecture, lecture @ TagAlreadyExistsException @ Test that tagname is case insensitive
+//Rename folder
+Case5a @ RenameFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\, D:\My Homework\NUS\SEM2AY0910\CS2106\LectureNotes\ @ 4
+Case5b @ RenameFolder @ D:\My Pictures\, D:\My Photos\ @ 0
+//Rename back
+Case5a1 @ RenameFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\LectureNotes\, D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\ @ 4
+//Find tag
+Case6a @ RetrieveTag @ Lecture @ Not null
+Case6b @ RetrieveTag @ Not Exists @ Null
+//Delete tag
+Case7a @ DeleteTag @ Lecture ToPrint @ True
+Case7b @ DeleteTag @ Not Exists @ TagNotFoundException
+//Retrieve all tags excluding deleted tag
+Case7a1 @ RetrieveAllTags @ False @ 5
+//Retrieve all tags including deleted tag
+Case7a2 @ RetrieveAllTags @ True @ 6
+//Try creating deleted tag
+Case7a3 @ CreateTag @ Lecture ToPrint @ Lecture ToPrint, False, 0, 0, 0
+//Tag back folder to Lecture ToPrint tag
+Case7a4 @ TagFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\, Lecture ToPrint @ Lecture ToPrint, 1
+//Retrieve tag by path
+Case8a @ RetrieveTagByPath @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\ @ Lecture Lecture Backup Lecture ToPrint
+//Retrieve path by id
+Case9a @ RetrievePathByLogicalId @ D @ 6
+Case9b @ RetrievePathByLogicalId @ E @ 1
+Case9c @ RetrievePathByLogicalId @ F @ 0
+//Retrive tag by id
+Case10a @ RetrieveTagByLogicalId @ D @ ForPrint Lecture Lecture Backup Lecture ToPrint NUS Tutorial
+Case10b @ RetrieveTagByLogicalId @ E @ NUS
+Case10c @ RetrieveTagByLogicalId @ F @ 
+//Find similar path for folder
+Case11a @ FindSimilarPathForFolder @ D:\My Homework\NUS\SEM1AY0910\ @ E:\My Homework\NUS\SEM1AY0910\
+Case11b @ FindSimilarPathForFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\Lecture1\Lecture1a\ @ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\Lecture1\Lecture1a\ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\Lecture2\Lecture1a\ E:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\Lecture1\Lecture1a\
+//Retrieve tagged parent tag by path
+Case12a @ RetrieveParentTagByPath @ D:\My Homework\NUS\SEM2AY0910\ @ NUS
+Case12b @ RetrieveParentTagByPath @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\Lecture1 @ Lecture Lecture Backup Lecture ToPrint NUS
+Case12c @ RetrieveParentTagByPath @ D:\My Homework\Nus\SEM2AY0910\CS2105\Lecture\ @ NUS
+//Retrieve ancestors
+Case13a @ RetrieveAncestors @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\Lecture1 @ D:\My Homework\NUS\ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\
+Case13b @ RetrieveAncestors @ D:\My Homework\ @ 
+//Retrieve descendants
+Case14a @ RetrieveDescendants @ D:\My Homework\ @ D:\My Homework\NUS\ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\Lecture1\ D:\My Homework\NUS\SEM2AY0910\CS2106\Tutorial\ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\Lecture2\
+Case14b @ RetrieveDescendants @ D:\my homework\ @ D:\My Homework\NUS\ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\Lecture1\ D:\My Homework\NUS\SEM2AY0910\CS2106\Tutorial\ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\Lecture2\
+//Save to xml
+//Case15a @ SaveToXml @ D:\My Homework\SEM2 AY0910\CS3215\Project\Syncless.Backup\Syncless.TextTester\bin\Debug\tagging1.xml, D:\My Homework\SEM2 AY0910\CS3215\Project\Syncless.Backup\Syncless.TextTester\bin\Debug\tagging2.xml, D:\My Homework\SEM2 AY0910\CS3215\Project\Syncless.Backup\Syncless.TextTester\bin\Debug\tagging3.xml @ 
+//Edit tag
+Case16a @ TagFolder @ F:\My Homework\NUS\, NUS @ NUS, 3
+Case16b @ TagFolder @ G:\My Homework\NUS\, NUS @ NUS, 4
+//Case16c @ SaveToXml @ D:\My Homework\SEM2 AY0910\CS3215\Project\Syncless.Backup\Syncless.TextTester\bin\Debug\tagging1.xml, D:\My Homework\SEM2 AY0910\CS3215\Project\Syncless.Backup\Syncless.TextTester\bin\Debug\tagging2.xml @ 
+//Append profile
+Case17a @ AppendProfile @ D:\My Homework\SEM2 AY0910\CS3215\Project\Syncless.Backup\Syncless.TextTester\bin\Debug\tagging3.xml @ 
