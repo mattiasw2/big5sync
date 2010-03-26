@@ -258,9 +258,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(319, 445);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(81, 13);
+            this.label2.Size = new System.Drawing.Size(84, 13);
             this.label2.TabIndex = 20;
-            this.label2.Text = "Min. Wait Time:";
+            this.label2.Text = "Max. Wait Time:";
             // 
             // textBoxMinWaitTime
             // 
