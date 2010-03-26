@@ -1325,7 +1325,7 @@ namespace SynclessUI
             //Actual Code
             var driveMenu = new ContextMenu();
 
-            List<DriveInfo> removableDrives = GetAllRemovableDrives();
+            List<string> removableDrives = Syncless.Helper.DriveHelper.GetUSBDriveLetters();
             if (removableDrives.Count == 0)
             {
                 var driveMenuItem = new MenuItem();
@@ -1334,10 +1334,10 @@ namespace SynclessUI
             }
             else
             {
-                foreach (DriveInfo di in removableDrives)
+                foreach (string letter in removableDrives)
                 {
                     var driveMenuItem = new MenuItem();
-                    driveMenuItem.Header = di.Name;
+                    driveMenuItem.Header = letter;
                     driveMenuItem.Click += new RoutedEventHandler(driveMenuItem_Click);
                     driveMenu.Items.Add(driveMenuItem);
                 }

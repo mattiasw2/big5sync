@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Management;
 
 namespace Syncless.Helper
@@ -18,15 +15,15 @@ namespace Syncless.Helper
         public static List<string> GetUSBDriveLetters()
         {
             List<string> list = new List<string>();
-            ManagementObjectSearcher DDMgmtObjSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive WHERE InterfaceType='USB'");
+            ManagementObjectSearcher ddMgmtObjSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive WHERE InterfaceType='USB'");
 
-            foreach (ManagementObject DDObj in DDMgmtObjSearcher.Get())
+            foreach (ManagementObject ddObj in ddMgmtObjSearcher.Get())
             {
-                foreach (ManagementObject DPObj in DDObj.GetRelated("Win32_DiskPartition"))
+                foreach (ManagementObject dpObj in ddObj.GetRelated("Win32_DiskPartition"))
                 {
-                    foreach (ManagementObject LDObj in DPObj.GetRelated("Win32_LogicalDisk"))
+                    foreach (ManagementObject ldObj in dpObj.GetRelated("Win32_LogicalDisk"))
                     {
-                        list.Add(LDObj["DeviceID"].ToString());
+                        list.Add(ldObj["DeviceID"].ToString());
                     }
                 }
             }
