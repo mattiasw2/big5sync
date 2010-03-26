@@ -54,18 +54,58 @@ namespace Syncless.Core
         public PathPair RemovePair(string source, string destination)
         {
             PathPair newPair = new PathPair(source,destination);
+            PathPair returnPair = null;
             lock (_lock)
             {
                 foreach (PathPair pair in _pathList)
                 {
                     if (pair.Equals(newPair))
                     {
-                        return pair;
+                        returnPair = pair;
+                        
+                        break;
                     }
                 }
 
             }
-            return null;
+            _pathList.Remove(returnPair);
+            return returnPair;
+        }
+        public PathPair GetPair(string source, string destination)
+        {
+            PathPair newPair = new PathPair(source, destination);
+            PathPair returnPair = null;
+            lock (_lock)
+            {
+                foreach (PathPair pair in _pathList)
+                {
+                    if (pair.Equals(newPair))
+                    {
+                        returnPair = pair;
+                        break;
+                    }
+                }
+
+            }
+            return returnPair;
+        }
+        public bool Contains(string source, string destination)
+        {
+            PathPair newPair = new PathPair(source, destination);
+            bool found = false;
+            lock (_lock)
+            {
+                foreach (PathPair pair in _pathList)
+                {
+                    if (pair.Equals(newPair))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+            }
+            return found;
         }
     }
 
