@@ -65,7 +65,7 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
-	</Style>	
+	</Style>
 
 		<Style x:Key="TooltipListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
 			<Setter Property="Background" Value="Transparent"/>

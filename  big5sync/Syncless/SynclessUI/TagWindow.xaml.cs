@@ -34,7 +34,7 @@ namespace SynclessUI
 
 			ACBName.IsEnabled = false;
 
-            if (path == "")
+            if(path == "")
             {
                 _path = SelectPath(true);
             }
@@ -42,7 +42,6 @@ namespace SynclessUI
             {
                 _path = path;
             }
-            
 
             ProcessPath(_path, _selectedTag);
 
@@ -101,7 +100,7 @@ namespace SynclessUI
                 if (path != "")
                 {
                     DirectoryInfo di = new DirectoryInfo(path);
-                    if (di.Exists)
+                    if (di.Exists && !FileHelper.IsZipFile(path))
                     {
                         TxtBoxPath.Text = path;
                         ACBName.IsEnabled = true;
