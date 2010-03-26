@@ -33,6 +33,7 @@ namespace Syncless.Filters
         {
             return _regex.Match(path.ToLower()).Success;    
         }
+        
         public override bool Equals(Filter other)
         {
             ExtensionFilter filter = other as ExtensionFilter;
