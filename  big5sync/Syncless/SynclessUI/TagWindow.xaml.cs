@@ -143,7 +143,7 @@ namespace SynclessUI
             {
                 if (Tagname != "")
                 {
-                    if (_path != "")
+                    if (_path != "" && !FileHelper.IsZipFile(_path))
                     {
                         _main.CreateTag(Tagname);
 
