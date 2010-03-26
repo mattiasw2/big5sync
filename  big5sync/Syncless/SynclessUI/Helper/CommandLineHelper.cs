@@ -38,6 +38,9 @@ namespace SynclessUI.Helper
                 StringBuilder longPath = new StringBuilder(255);
                 GetLongPathName(path, longPath, longPath.Capacity);
 				
+                if(FileHelper.IsZipFile(longPath.ToString()))
+                    return;
+
                 main.CliTag(longPath.ToString());
             }
             else if (flag.Equals("-UTFolder"))
@@ -46,12 +49,18 @@ namespace SynclessUI.Helper
                 StringBuilder longPath = new StringBuilder(255);
                 GetLongPathName(path, longPath, longPath.Capacity);
 
+                if (FileHelper.IsZipFile(longPath.ToString()))
+                    return;
+
                 main.CliUntag(longPath.ToString());
             }
             else if (flag.Equals("-CleanMeta"))
             {
                 StringBuilder longPath = new StringBuilder(255);
                 GetLongPathName(path, longPath, longPath.Capacity);
+
+                if (FileHelper.IsZipFile(longPath.ToString()))
+                    return;
 
                 main.CliClean(longPath.ToString());
             }
