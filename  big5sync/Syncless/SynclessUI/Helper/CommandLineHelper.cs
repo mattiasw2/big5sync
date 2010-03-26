@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -10,6 +11,7 @@ namespace SynclessUI.Helper
 {
     internal class CommandLineHelper
     {
+        /*
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         private static extern int GetLongPathName(
             [MarshalAs(UnmanagedType.LPTStr)]
@@ -18,6 +20,30 @@ namespace SynclessUI.Helper
         StringBuilder longPath,
             int longPathLength
         );
+        */
+
+        // Credits of http://www.mail-archive.com/dotnet@discuss.develop.com/msg04537.html
+
+        private static string GetLongPathName(string path)
+        {
+            string spath = path;
+
+            string[] elm = spath.Split(
+                new char[]
+                    {
+                        Path.DirectorySeparatorChar,
+                        Path.AltDirectorySeparatorChar
+                    });
+            string lpath = elm[0] + Path.DirectorySeparatorChar;
+            for (int p = 1; p < elm.Length; p++)
+            {
+                string[] npath = Directory.GetFileSystemEntries(lpath, elm[p]);
+                if(npath.Count() != 0)
+                    lpath = npath[0];
+            }
+
+            return lpath;
+        }
 
         #region ProcessCommandLine
 
@@ -26,33 +52,28 @@ namespace SynclessUI.Helper
             string flag = commands[0];
 			
 			// Get full path from array
-			StringBuilder path = new StringBuilder(255);
+            string path = "";
 			
 			for(int i = 1; i < commands.Length; i++) {
-				 path.Append(commands[i] + " ");
+				 path += commands[i] + " ";
 			}
+
+            string longPath = GetLongPathName(path);
 			
             if (flag.Equals("-TFolder"))
             {
                 //Shell Context Menu clicked for Folders ( Tag )
-                StringBuilder longPath = new StringBuilder(255);
-                GetLongPathName(path, longPath, longPath.Capacity);
 
-                main.CliTag(longPath.ToString());
+                main.CliTag(longPath);
             }
             else if (flag.Equals("-UTFolder"))
             {
                 //Shell Context Menu clicked for Folders ( Untag )
-                StringBuilder longPath = new StringBuilder(255);
-                GetLongPathName(path, longPath, longPath.Capacity);
 
-                main.CliUntag(longPath.ToString());
+                main.CliUntag(longPath);
             }
             else if (flag.Equals("-CleanMeta"))
             {
-                StringBuilder longPath = new StringBuilder(255);
-                GetLongPathName(path, longPath, longPath.Capacity);
-
                 main.CliClean(longPath.ToString());
             }
             else

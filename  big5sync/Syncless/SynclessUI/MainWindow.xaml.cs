@@ -944,17 +944,24 @@ namespace SynclessUI
 
         public void TagChanged()
         {
-            RepopulateTagList();
+            RepopulateTagList_ThreadSafe();
         }
 
+        /*
         private void RepopulateTagList()
         {
-            string current = SelectedTag;
+            try
+            {
+                string current = SelectedTag;
 
-            InitializeTagList();
+                InitializeTagList();
 
-            SelectTag(current);
+                SelectTag(current);
+            } catch
+            {
+            }
         }
+        */
 
         private void RepopulateTagList_ThreadSafe()
         {
@@ -991,6 +998,7 @@ namespace SynclessUI
                                                                             ManualMode();
                                                                         }
                                                                         ListTaggedPath.ItemsSource = tv.PathStringList;
+                                                                        BdrTaggedPath.Visibility = tv.PathStringList.Count == 0 ? Visibility.Hidden : Visibility.Visible;
                                                                     }));
             }
             catch (UnhandledException)
