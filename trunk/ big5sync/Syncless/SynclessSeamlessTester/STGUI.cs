@@ -135,15 +135,18 @@ namespace SynclessSeamlessTester
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             TestInfo info = e.Argument as TestInfo;
+            StartPropagating();
             new TestWorkerClass(Convert.ToInt32(textBoxDuration.Text), Convert.ToInt32(textBoxMinWaitTime.Text), Convert.ToInt32(textBoxMaxWaitTime.Text), _sourcePaths, _destPaths,
                                 info, backgroundWorker1);
             info.Propagated = true;
+            StartVerifying();
             new VerifyWorkerClass(_destPaths, info, backgroundWorker1);
             e.Result = info;
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            CompleteTest();
             button1.Enabled = true;
             buttonCancel.Enabled = false;
             progressBar1.Value = 100;
@@ -151,6 +154,48 @@ namespace SynclessSeamlessTester
             this.Cursor = Cursors.Arrow;
             TestInfo info = e.Result as TestInfo;
             Console.WriteLine("RESULT: " + (info.Passed ? "PASSED" : "FAILED"));
+        }
+
+        private void CompleteTest()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(CompleteTest));
+            }
+            else
+            {
+                progressBar1.Style = ProgressBarStyle.Continuous;
+                labelStatus.Visible = true;
+                labelStatus.Text = "Last test completed at " + DateTime.Now;
+            }
+        }
+
+        private void StartVerifying()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(StartVerifying));
+            }
+            else
+            {
+                progressBar1.Style = ProgressBarStyle.Marquee;
+                labelStatus.Visible = true;
+                labelStatus.Text = "Verifying folder contents...";
+            }
+        }
+
+        private void StartPropagating()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(StartPropagating));
+            }
+            else
+            {
+                progressBar1.Style = ProgressBarStyle.Continuous;
+                labelStatus.Visible = true;
+                labelStatus.Text = "Randomly propagating stuff...";
+            }
         }
 
         public List<string> AddToSource(string s)
