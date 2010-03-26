@@ -1023,6 +1023,12 @@ namespace SynclessUI
         {
             string tagname = "";
 
+            if(FileHelper.IsZipFile(clipath))
+            {
+                DialogsHelper.ShowError("Tagging not Allowed", "You cannot tag a zip file.");
+                return;
+            }
+
             try
             {
                 var di = new DirectoryInfo(clipath);
@@ -1042,6 +1048,12 @@ namespace SynclessUI
 
         public void CliUntag(string clipath)
         {
+            if (FileHelper.IsZipFile(clipath))
+            {
+                DialogsHelper.ShowError("Untagging not Allowed", "You cannot tag a zip file.");
+                return;
+            }
+
             var tw = new UntagWindow(this, clipath);
             if (_firstopen == true)
             {
@@ -1052,6 +1064,12 @@ namespace SynclessUI
 
         public void CliClean(string clipath)
         {
+            if (FileHelper.IsZipFile(clipath))
+            {
+                DialogsHelper.ShowError("Cleaning not Allowed", "You cannot clean a zip file.");
+                return;
+            }
+
             //TODO 
             int count = ServiceLocator.GUI.Clean(clipath);
             MessageBox.Show(count + " metaclear-ed");
