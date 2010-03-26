@@ -47,7 +47,7 @@ namespace SynclessSeamlessTester
 
         private void buttonSourceAdd_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists(textBoxSourcePath.Text) && !_destPaths.Contains(textBoxSourcePath.Text))
+            if (Directory.Exists(textBoxSourcePath.Text) && !_sourcePaths.Contains(textBoxDest.Text) && !_destPaths.Contains(textBoxSourcePath.Text))
             {
                 listBoxSourcePaths.Items.Clear();
                 listBoxSourcePaths.Items.AddRange(AddToSource(textBoxSourcePath.Text).ToArray());
@@ -57,7 +57,7 @@ namespace SynclessSeamlessTester
 
         private void buttonDestAdd_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists(textBoxDest.Text) && !_sourcePaths.Contains(textBoxDest.Text))
+            if (Directory.Exists(textBoxDest.Text) && !_sourcePaths.Contains(textBoxDest.Text) && !_destPaths.Contains(textBoxSourcePath.Text))
             {
                 listBoxDestPaths.Items.Clear();
                 listBoxDestPaths.Items.AddRange(AddToDest(textBoxDest.Text).ToArray());
@@ -92,7 +92,7 @@ namespace SynclessSeamlessTester
                 if (foldernames != null)
                     foreach (string i in foldernames)
                     {
-                        if (_destPaths.Contains(i))
+                        if (_sourcePaths.Contains(i) || _destPaths.Contains(i))
                             continue;
                         var folder = new DirectoryInfo(i);
                         if (folder.Exists)
@@ -120,7 +120,7 @@ namespace SynclessSeamlessTester
                 if (foldernames != null)
                     foreach (string i in foldernames)
                     {
-                        if (_sourcePaths.Contains(i))
+                        if (_sourcePaths.Contains(i) || _destPaths.Contains(i))
                             continue;
                         var folder = new DirectoryInfo(i);
                         if (folder.Exists)
