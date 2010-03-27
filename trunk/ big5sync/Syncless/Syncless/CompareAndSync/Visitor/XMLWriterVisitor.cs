@@ -99,6 +99,7 @@ namespace Syncless.CompareAndSync.Visitor
                     RenameFileObject(file, counter);
                     break;
                 case FinalState.Unchanged:
+                    HandleUnchangedOrPropagatedFile(file, counter);
                     break;
                 case FinalState.Propagated:
                     HandleUnchangedOrPropagatedFile(file, counter);
@@ -339,7 +340,7 @@ namespace Syncless.CompareAndSync.Visitor
                     return i;
             }
 
-            return -1; // never happen
+            return 0; // never happen
         }
 
         private int GetPropagated(FolderCompareObject folder)
