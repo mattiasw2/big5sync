@@ -322,6 +322,8 @@ namespace Syncless.CompareAndSync
 
         private static void GenerateFileTodo(XMLWriteFileObject xmlWriteObj , XmlNode deletedNode)
         {
+            if (deletedNode == null)
+                return;
             string fullPath = xmlWriteObj.FullPath;
             XmlDocument xmlTodoDoc = new XmlDocument();
             string todoPath = Path.Combine(fullPath , Todopath);
