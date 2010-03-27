@@ -1346,6 +1346,27 @@ namespace Syncless.Core
 
             return pathList;
         }
+
+        /// <summary>
+        /// Find a list of paths which are tagged but the the physical path no longer exists in filesystem
+        /// </summary>
+        /// <returns>The list of paths which are tagged but no longer exists in filesystem</returns>
+        internal List<string> FindAllDeletedPaths()
+        {
+            List<string> deletedPaths = new List<string>();
+            List<string> allPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(TaggingLayer.Instance.GetAllPaths());
+            foreach (string path in allPaths)
+            {
+                if (!Directory.Exists(path))
+                {
+                    if (!PathHelper.ContainsIgnoreCase(deletedPaths, path))
+                    {
+                        deletedPaths.Add(path); 
+                    }
+                }
+            }
+            return deletedPaths;
+        }
         #endregion
 
         #region For Notification

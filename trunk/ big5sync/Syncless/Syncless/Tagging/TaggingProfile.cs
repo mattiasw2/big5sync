@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Syncless.Tagging.Exceptions;
 using Syncless.Filters;
+using Syncless.Helper;
 
 namespace Syncless.Tagging
 {
@@ -33,6 +34,24 @@ namespace Syncless.Tagging
         {
             get { return _tagList; }
             set { _tagList = value; }
+        }
+        public List<string> AllFilteredTaggedPathList
+        {
+            get
+            {
+                List<string> pathList = new List<string>();
+                foreach (Tag tag in _tagList)
+                {
+                    foreach (TaggedPath path in tag.FilteredPathList)
+                    {
+                        if (!PathHelper.ContainsIgnoreCase(pathList, path.PathName))
+                        {
+                            pathList.Add(path.PathName);
+                        }
+                    }
+                }
+                return pathList;
+            }
         }
 
         public TaggingProfile(long created)

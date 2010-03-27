@@ -105,6 +105,10 @@ namespace SynclessTaggingTester
                 {
                     TestRetrieveDescendants(testcase);
                 }
+                else if (testcase.Method.Equals("GetAllPaths"))
+                {
+                    TestGetAllPaths(testcase);
+                }
                 else if (testcase.Method.Equals("SaveToXml"))
                 {
                     TestSaveToXml(testcase);
@@ -177,6 +181,18 @@ namespace SynclessTaggingTester
             {
                 testcase.Actual = "Exception";
             }
+            testcase.Passed = (testcase.Expected.Equals(testcase.Actual));
+        }
+
+        private void TestGetAllPaths(TestCase testcase)
+        {
+            List<string> pathList = _logic.GetAllPaths();
+            string result = "";
+            foreach (string path in pathList)
+            {
+                result += (path + " ");
+            }
+            testcase.Actual = result.Trim();
             testcase.Passed = (testcase.Expected.Equals(testcase.Actual));
         }
 
