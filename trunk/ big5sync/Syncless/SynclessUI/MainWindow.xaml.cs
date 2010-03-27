@@ -677,10 +677,15 @@ namespace SynclessUI
         {
             RemoveTag();
         }
+		
+        private void DetailsRightClick_Click(object sender, RoutedEventArgs e)
+        {
+            ViewTagDetails();
+        }
 
         private void TagRightClick_Click(object sender, RoutedEventArgs e)
         {
-            var tw = new TagWindow(this, "", SelectedTag);
+            DisplayTagWindow();
         }
 
         private void ViewTagDetails()
@@ -819,10 +824,24 @@ namespace SynclessUI
                 if (foldernames != null)
                     foreach (string i in foldernames)
                     {
-                        var folder = new DirectoryInfo(i);
-                        if (folder.Exists && !FileHelper.IsZipFile(i))
+                        string path = i;
+
+                        // convert potential shortcuts into folders
+                        string shortcutfolderpath = FileHelper.GetShortcutTargetFile(i);
+                        if(shortcutfolderpath != null)
                         {
-                            var tw = new TagWindow(this, i, SelectedTag);
+                            path = shortcutfolderpath;
+                        }
+
+                        // to detect folders
+                        try {
+                            var folder = new DirectoryInfo(path);
+                            if (folder.Exists && !FileHelper.IsZipFile(path))
+                            {
+                                var tw = new TagWindow(this, path, SelectedTag);
+                            }
+                        } catch
+                        {
                         }
                     }
             }
@@ -838,10 +857,26 @@ namespace SynclessUI
                 if (foldernames != null)
                     foreach (string i in foldernames)
                     {
-                        var folder = new DirectoryInfo(i);
-                        if (folder.Exists && !FileHelper.IsZipFile(i))
+                        string path = i;
+
+                        // convert potential shortcuts into folders
+                        string shortcutfolderpath = FileHelper.GetShortcutTargetFile(path);
+                        if (shortcutfolderpath != null)
                         {
-                            ShowDropIndicator();
+                            path = shortcutfolderpath;
+                        }
+
+                        // to detect folders
+                        try
+                        {
+                            var folder = new DirectoryInfo(path);
+                            if (folder.Exists && !FileHelper.IsZipFile(path))
+                            {
+                                ShowDropIndicator();
+                            }
+                        }
+                        catch
+                        {
                         }
                     }
             }
@@ -884,7 +919,12 @@ namespace SynclessUI
 
         private void TaskbarTagItem_Click(object sender, RoutedEventArgs e)
         {
-            var tw = new TagWindow(this, "", SelectedTag);
+            DisplayTagWindow();
+        }
+		
+        private void TaskbarUnmonitorItem_Click(object sender, RoutedEventArgs e)
+        {
+            DisplayUnmonitorContextMenu();
         }
 
         private void TaskbarOpenItem_Click(object sender, RoutedEventArgs e)
@@ -1156,7 +1196,7 @@ namespace SynclessUI
 
             BtnCreate.Command = CreateTagCommand;
 
-            var kg = new KeyGesture(Key.A, ModifierKeys.Control);
+            var kg = new KeyGesture(Key.N, ModifierKeys.Control);
             var ib = new InputBinding(CreateTagCommand, kg);
             InputBindings.Add(ib);
 
@@ -1327,6 +1367,11 @@ namespace SynclessUI
         {
             e.Handled = true;
             //Actual Code
+            DisplayTagWindow();
+        }
+
+        private void DisplayTagWindow()
+        {
             var tw = new TagWindow(this, "", SelectedTag);
         }
 
@@ -1366,6 +1411,11 @@ namespace SynclessUI
         {
             e.Handled = true;
             //Actual Code
+            DisplayUnmonitorContextMenu();
+        }
+
+        private void DisplayUnmonitorContextMenu()
+        {
             var driveMenu = new ContextMenu();
 
             List<string> removableDrives = Syncless.Helper.DriveHelper.GetUSBDriveLetters();

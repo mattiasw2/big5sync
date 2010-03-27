@@ -21,13 +21,6 @@ namespace SynclessUI
             ImgIcon.Source = GetSystemImage(mbimg);
 			DisplayCommandPanel(mbimg);
             PlayDialogSound(mbimg);
-
-            /*
-            Uri uri = new Uri(@"pack://application:,,,/Sounds/MorganPage_FightForYou.mp3");
-            SoundPlayer mySound = new SoundPlayer(Application.GetResourceStream(uri).Stream);
-            mySound.LoadAsync();
-            mySound.Stop();
-            */
         }
 		
 		private void DisplayCommandPanel(MessageBoxImage icon) {

@@ -32,8 +32,8 @@ namespace SynclessUI
                 {
                     tagListByFolder = _main.Gui.GetTags(di);
                 }
-                
-                if (tagListByFolder.Count != 0)
+
+                if (tagListByFolder != null && tagListByFolder.Count != 0)
                 {
                     TxtBoxPath.Text = clipath;
                     taglist.ItemsSource = tagListByFolder;
