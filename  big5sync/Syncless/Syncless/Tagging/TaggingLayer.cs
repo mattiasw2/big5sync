@@ -706,6 +706,15 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
+        /// Get all the tagged paths
+        /// </summary>
+        /// <returns>The list of tagged paths</returns>
+        public List<string> GetAllPaths()
+        {
+            return _taggingProfile.AllFilteredTaggedPathList;
+        }
+
+        /// <summary>
         /// Check if a logicalid exists
         /// </summary>
         /// <param name="logicalid">The logicalid to be checked</param>
