@@ -93,8 +93,6 @@ namespace Syncless.Tagging
             CommonXmlHelper.SaveXml(xmlDoc, xmlFilePath);
         }
 
- 
-
         private static XmlDocument ConvertTaggingProfileToXml(TaggingProfile taggingProfile)
         {
             XmlDocument xmldoc = new XmlDocument();
@@ -111,7 +109,7 @@ namespace Syncless.Tagging
             {
                 try
                 {
-                    XmlDocument xmldoc = LoadXml(location);
+                    XmlDocument xmldoc = CommonXmlHelper.LoadXml(location);
                     if (xmldoc == null)
                     {
                         SaveTo(profile, location);
@@ -139,7 +137,7 @@ namespace Syncless.Tagging
         public static TaggingProfile LoadFrom(string xmlFilePath)
         {
             TaggingProfile taggingProfile = null;
-            XmlDocument xmlDoc = LoadXml(xmlFilePath);
+            XmlDocument xmlDoc = CommonXmlHelper.LoadXml(xmlFilePath);
             if (xmlDoc != null)
             {
                 taggingProfile = ConvertXmlToTaggingProfile(xmlDoc);
@@ -165,36 +163,6 @@ namespace Syncless.Tagging
                 }
             }
             return taggingProfile;
-        }
-
-        private static XmlDocument LoadXml(string path)
-        {
-            FileStream fs = null;
-            try
-            {
-                FileInfo info = new FileInfo(path);
-                if (!info.Exists)
-                {
-                    return null;
-                }
-                fs = info.Open(FileMode.Open);
-                XmlDocument xml = new XmlDocument();
-                xml.Load(fs);
-                return xml;
-            }
-            catch (XmlException xml)
-            {
-                Console.WriteLine(xml);
-                return null;
-            }
-            finally
-            {
-                if (fs != null)
-                {
-                    try { fs.Close(); }
-                    catch (Exception) { }
-                }
-            }
         }
         #endregion
 
