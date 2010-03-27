@@ -14,6 +14,8 @@
        * User will be prompted with error message if attempt to tag Recycle Bin through context menu
        * Windows Vista users can tag folders other than those on Desktop now
        * The entire main window can be dragged around now
+   # Others
+       * User can now clear up all .syncless folders for a tagged folder through context menu
 
  * Documentation
    # Developers' Guide
