@@ -15,6 +15,10 @@
        * Windows Vista users can tag folders other than those on Desktop now
        * The entire main window can be dragged around now
 
+ * Documentation
+   # Developers' Guide
+       * Included a Wiki page to describe how to use the seamless tester
+
 = Changelog for version _0.9_ =
  * First release of *Syncless*.
 
