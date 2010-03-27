@@ -29,6 +29,7 @@
       * [DeveloperComponentFilter Filter]
       * [DeveloperComponentNotification Notification]
       * [DeveloperComponentUI User Interface]
+    * [TestSeamlessSyncerTester Testing Syncless]
     * [DeveloperGuideRecommendations Recommended Resources]
     * [DeveloperGuideReferences References]
   * [KnownIssues09 Known Issues]
