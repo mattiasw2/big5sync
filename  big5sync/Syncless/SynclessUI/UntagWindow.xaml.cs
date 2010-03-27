@@ -53,7 +53,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                _main.DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -66,13 +66,20 @@ namespace SynclessUI
                     DialogsHelper.ShowError("Tag not Selected", "Please select the particular tag to untag the folder from.");
                     return;
                 }
-
+                
                 foreach (string t in taglist.SelectedItems)
                 {
-                    int result = _main.Gui.Untag(t, new DirectoryInfo(TxtBoxPath.Text));
-                    if (result != 1)
+                    if(!_main.Gui.GetTag(t).IsSyncing) {
+                        int result = _main.Gui.Untag(t, new DirectoryInfo(TxtBoxPath.Text));
+                        if (result != 1)
+                        {
+                            DialogsHelper.ShowError("Untagging Error", t + " could not be untagged from " + TxtBoxPath.Text);
+                        }
+                    }
+                    else
                     {
-                        DialogsHelper.ShowError("Untagging Error", t + " could not be untagged from " + TxtBoxPath.Text);
+                        DialogsHelper.ShowError(t + " is Synchronizing",
+                                                "You cannot untag a folder while the tag is synchronizing.");
                     }
                 }
                 _main.InitializeTagList();
@@ -80,7 +87,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                _main.DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 		

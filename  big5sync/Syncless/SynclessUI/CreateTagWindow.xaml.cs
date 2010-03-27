@@ -47,7 +47,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                _main.DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 		

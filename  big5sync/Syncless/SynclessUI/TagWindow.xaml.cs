@@ -124,7 +124,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                _main.DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -151,17 +151,24 @@ namespace SynclessUI
 
                             try
                             {
-                                tv1 = _main.Gui.Tag(Tagname, new DirectoryInfo(_path));
+							    if(!_main.Gui.GetTag(Tagname).IsSyncing) {
+                                    tv1 = _main.Gui.Tag(Tagname, new DirectoryInfo(_path));
 
-                                if (tv1 != null)
-                                {
-                                    _main.InitializeTagList();
-                                    _main.SelectTag(Tagname);
-                                    this.Close();
+                                    if (tv1 != null)
+                                    {
+                                        _main.InitializeTagList();
+                                        _main.SelectTag(Tagname);
+                                        this.Close();
+                                    }
+                                    else
+                                    {
+                                        DialogsHelper.ShowError("Tag Error", "Tag Error Occured. Please Try Again.");
+                                    }
                                 }
                                 else
                                 {
-                                    DialogsHelper.ShowError("Tag Error", "Tag Error Occured. Please Try Again.");
+                                    DialogsHelper.ShowError(Tagname + " is Synchronizing",
+                                                            "You cannot tag a folder while the tag is synchronizing.");
                                 }
                             }
                             catch (Syncless.Tagging.Exceptions.RecursiveDirectoryException)
@@ -186,7 +193,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                _main.DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
 		}
 
