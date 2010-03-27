@@ -100,7 +100,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -141,6 +141,8 @@ namespace SynclessUI
                 LblStatusText.Content = message;
                 BtnSyncNow.IsEnabled = true;
                 BtnPreview.IsEnabled = true;
+                BtnSyncMode.IsEnabled = true;
+                _manualSyncEnabled = true;
             }
 
             _tagStatusNotificationDictionary[tagname] = message;
@@ -281,7 +283,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -306,7 +308,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -324,7 +326,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -348,7 +350,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -407,34 +409,45 @@ namespace SynclessUI
             }
             try
             {
-                if (string.Compare((string) LblSyncMode.Content, "Manual") == 0)
+                if (!Gui.GetTag(SelectedTag).IsSyncing)
                 {
-                    if (Gui.MonitorTag(SelectedTag, true))
+                    if (string.Compare((string) LblSyncMode.Content, "Manual") == 0)
                     {
-                        SeamlessMode();
+                        if (Gui.MonitorTag(SelectedTag, true))
+                        {
+                            const string message = "Synchronization request has been queued.";
+                            LblStatusText.Content = message;
+                            _tagStatusNotificationDictionary[SelectedTag] = message;
+                            SeamlessMode();
+                        }
+                        else
+                        {
+                            DialogsHelper.ShowError("Change Synchronization Mode Error",
+                                                    "' " + SelectedTag + " ' could not be set into Seamless Mode.");
+                        }
                     }
                     else
                     {
-                        DialogsHelper.ShowError("Change Synchronization Mode Error",
-                                                "' " + SelectedTag + " ' could not be set into Seamless Mode.");
+                        if (Gui.MonitorTag(SelectedTag, false))
+                        {
+                            ManualMode();
+                        }
+                        else
+                        {
+                            DialogsHelper.ShowError("Change Synchronization Mode Error",
+                                                    "' " + SelectedTag + " ' could not be set into Manual Mode.");
+                        }
                     }
-                }
-                else
+                } else
                 {
-                    if (Gui.MonitorTag(SelectedTag, false))
-                    {
-                        ManualMode();
-                    }
-                    else
-                    {
-                        DialogsHelper.ShowError("Change Synchronization Mode Error",
-                                                "' " + SelectedTag + " ' could not be set into Manual Mode.");
-                    }
+                    DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                                            "You cannot remove a tag while it is synchronizing.");
                 }
+
             }
             catch (UnhandledException)
             {
-                DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -467,11 +480,13 @@ namespace SynclessUI
             {
                 BtnSyncNow.IsEnabled = true;
                 BtnPreview.IsEnabled = true;
+                BtnSyncMode.IsEnabled = true;
             }
             else
             {
                 BtnSyncNow.IsEnabled = false;
                 BtnPreview.IsEnabled = false;
+                BtnSyncMode.IsEnabled = false;
             }
         }
 
@@ -492,6 +507,7 @@ namespace SynclessUI
                         _tagStatusNotificationDictionary[SelectedTag] = message;
                         BtnSyncNow.IsEnabled = false;
                         BtnPreview.IsEnabled = false;
+                        BtnSyncMode.IsEnabled = false;
                     }
                     else
                     {
@@ -505,7 +521,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -533,7 +549,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
 
             return true;
@@ -566,7 +582,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -587,42 +603,51 @@ namespace SynclessUI
                 }
                 else
                 {
-                    if (ListTaggedPath.SelectedIndex == -1)
+                    if (!Gui.GetTag(SelectedTag).IsSyncing)
                     {
-                        DialogsHelper.ShowError("No Path Selected", "Please select a path to untag.");
-                    }
-                    else
-                    {
-                        TagView tv = Gui.GetTag((string) TagTitle.Text);
-
-                        if (tv != null)
+                        if (ListTaggedPath.SelectedIndex == -1)
                         {
-                            if(!tv.IsSyncing)
-                            {
-                                Gui.Untag(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
-
-                                SelectTag(tv.TagName);
-                            } else
-                            {
-                                DialogsHelper.ShowError(tv.TagName + " is Synchronizing",
-                                                        "You cannot untag while a tag is synchronizing.");
-                            }
+                            DialogsHelper.ShowError("No Path Selected", "Please select a path to untag.");
                         }
                         else
                         {
-                            DialogsHelper.ShowError("Tag Does Not Exist",
-                                                    "The tag which you tried to untag does not exist.");
+                            TagView tv = Gui.GetTag((string)TagTitle.Text);
 
-                            InitializeTagInfoPanel();
+                            if (tv != null)
+                            {
+                                if (!tv.IsSyncing)
+                                {
+                                    Gui.Untag(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
 
-                            return;
+                                    SelectTag(tv.TagName);
+                                }
+                                else
+                                {
+                                    DialogsHelper.ShowError(tv.TagName + " is Synchronizing",
+                                                            "You cannot untag while a tag is synchronizing.");
+                                }
+                            }
+                            else
+                            {
+                                DialogsHelper.ShowError("Tag Does Not Exist",
+                                                        "The tag which you tried to untag does not exist.");
+
+                                InitializeTagInfoPanel();
+
+                                return;
+                            }
                         }
+                    }
+                    else
+                    {
+                        DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                                                "You cannot untag a folder while the tag is synchronizing.");
                     }
                 }
             }
             catch (UnhandledException)
             {
-                DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -669,7 +694,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -692,8 +717,16 @@ namespace SynclessUI
         {
             if(SelectedTag != null)
             {
-                var tdw = new TagDetailsWindow(SelectedTag, this);
-                tdw.ShowDialog();
+                if (!Gui.GetTag(SelectedTag).IsSyncing)
+                {
+                    var tdw = new TagDetailsWindow(SelectedTag, this);
+                    tdw.ShowDialog();
+                }
+                else
+                {
+                    DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                                            "You cannot view tag details while the tag is synchronizing.");
+                }
             }
         }
 
@@ -789,7 +822,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -806,12 +839,6 @@ namespace SynclessUI
         private void TagIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             ViewTagDetails();
-        }
-
-        public void DisplayUnhandledExceptionMessage()
-        {
-            DialogsHelper.ShowError("Unexpected Error",
-                                    "An unexpected error has occured. \n\nPlease help us by - \n 1. Submitting the debug.log in your Syncless Application Folder\\log to big5.syncless@gmail.com \n 2. Raise it as an issue on our GCPH @ http://code.google.com/p/big5sync/issues/list\n\n Please restart Syncless.");
         }
 
         private void LayoutRoot_Drop(object sender, DragEventArgs e)
@@ -1043,7 +1070,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -1328,21 +1355,29 @@ namespace SynclessUI
 
                         if (result)
                         {
-                            bool success = Gui.DeleteTag(SelectedTag);
-                            if (success)
+                            if(!Gui.GetTag(SelectedTag).IsSyncing)
                             {
-                                InitializeTagList();
-                                InitializeTagInfoPanel();
+                                bool success = Gui.DeleteTag(SelectedTag);
+                                if (success)
+                                {
+                                    InitializeTagList();
+                                    InitializeTagInfoPanel();
+                                }
+                                else
+                                {
+                                    DialogsHelper.ShowError("Remove Tag Error", "' " + SelectedTag + " ' could not be removed.");
+                                }
                             }
                             else
                             {
-                                DialogsHelper.ShowError("Remove Tag Error", "' " + SelectedTag + " ' could not be removed.");
+                                DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                                                        "You cannot remove a tag while the tag is synchronizing.");
                             }
                         }
                     } else
                     {
                         DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
-                                                "You cannot delete a tag while it is synchronizing.");
+                                                "You cannot remove a tag while the tag is synchronizing.");
                     }
                 }
                 else
@@ -1352,7 +1387,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -1372,7 +1407,15 @@ namespace SynclessUI
 
         private void DisplayTagWindow()
         {
-            var tw = new TagWindow(this, "", SelectedTag);
+            if (!Gui.GetTag(SelectedTag).IsSyncing)
+            {
+                var tw = new TagWindow(this, "", SelectedTag);
+            }
+            else
+            {
+                DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                                        "You cannot tag a folder while the tag is synchronizing.");
+            }
         }
 
         private void TagCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)

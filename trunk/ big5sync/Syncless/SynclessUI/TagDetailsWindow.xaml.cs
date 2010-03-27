@@ -2,6 +2,7 @@
 using System.Windows;
 using Syncless.Core.Exceptions;
 using Syncless.Filters;
+using SynclessUI.Helper;
 
 namespace SynclessUI
 {
@@ -29,7 +30,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                _main.DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 		
@@ -78,12 +79,19 @@ namespace SynclessUI
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             try {
-                bool result = _main.Gui.UpdateFilterList(_tagname, filters);
-			    this.Close();
+				if(!_main.Gui.GetTag(_tagname).IsSyncing) {
+                    bool result = _main.Gui.UpdateFilterList(_tagname, filters);
+			        this.Close();
+                }
+                else
+                {
+                    DialogsHelper.ShowError(_tagname + " is Synchronizing",
+                                            "You cannot update tag details while the tag is synchronizing.");
+                }
             }
             catch (UnhandledException)
             {
-                _main.DisplayUnhandledExceptionMessage();
+                DialogsHelper.DisplayUnhandledExceptionMessage();
             }
         }
 		

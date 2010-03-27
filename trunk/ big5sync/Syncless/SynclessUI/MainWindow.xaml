@@ -307,11 +307,20 @@
 											<ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" RecognizesAccessKey="True"/>
 										</dropShadow:ButtonChrome>
 										<ControlTemplate.Triggers>
-											<Trigger Property="ToggleButton.IsChecked" Value="true">
-												<Setter Property="RenderPressed" TargetName="Chrome" Value="true"/>
-											</Trigger>
+											<Trigger Property="ToggleButton.IsChecked" Value="true"/>
 											<Trigger Property="IsEnabled" Value="false">
 												<Setter Property="Foreground" Value="#ADADAD"/>
+												<Setter Property="Background">
+													<Setter.Value>
+														<LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5" MappingMode="RelativeToBoundingBox">
+															<GradientStop Color="#FFCDCDCD" Offset="1"/>
+															<GradientStop Color="#FFF82D34"/>
+															<GradientStop Color="#FFF3F3F3" Offset="0.77"/>
+															<GradientStop Color="#FFFC878C" Offset="0.75"/>
+															<GradientStop Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" Offset="0.76"/>
+														</LinearGradientBrush>
+													</Setter.Value>
+												</Setter>
 											</Trigger>
 										</ControlTemplate.Triggers>
 									</ControlTemplate>
