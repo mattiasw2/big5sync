@@ -1,4 +1,4 @@
-#summary Instructions and details on using Syncless - Seamless Tester
+#summary Developers' Guide - Instructions and details on using Syncless - Seamless Tester
 <wiki:toc max_depth="6">
 
 = Introduction =
