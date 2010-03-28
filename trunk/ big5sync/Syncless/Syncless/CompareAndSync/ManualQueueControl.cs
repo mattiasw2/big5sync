@@ -2,6 +2,10 @@
 using System.Threading;
 using System.Collections.Generic;
 using Syncless.CompareAndSync.Request;
+using Syncless.Core;
+using Syncless.Notification;
+using Syncless.Notification.SLLNotification;
+using Syncless.Notification.UINotification;
 
 namespace Syncless.CompareAndSync
 {
@@ -18,6 +22,7 @@ namespace Syncless.CompareAndSync
         private static ManualQueueControl _instance;
         private readonly HashSet<string> _queuedJobsLookup = new HashSet<string>();
         private ManualSyncRequest _currJob;
+        private SyncProgress _currJobProgress;
 
         private ManualQueueControl()
         {
@@ -61,24 +66,37 @@ namespace Syncless.CompareAndSync
             _wh.Set();
         }
 
+
+        //Change to bool instead?
         public void CancelSyncJob(CancelSyncRequest item)
         {
             lock (locker)
             {
-                if (!_queuedJobsLookup.Contains(item.TagName))
+                if (_queuedJobsLookup.Contains(item.TagName))
                 {
                     for (int i = 0; i < _jobs.Count; i++)
                     {
                         if (_jobs[i].TagName == item.TagName)
                         {
                             _jobs.RemoveAt(i);
+                            _queuedJobsLookup.Remove(item.TagName);
+                            ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName));
                             break;
                         }
                     }
                 }
                 else if (_currJob.TagName == item.TagName)
                 {
-                    _currJob.IsCancelled = true;
+                    switch (_currJobProgress.State)
+                    {
+                        case SyncState.Started:
+                        case SyncState.Analyzing:
+                            _currJobProgress.State = SyncState.Cancelled;
+                            break;
+                        default:
+                            //Not cancellable
+                            break;
+                    }
                 }
             }
         }
@@ -109,8 +127,24 @@ namespace Syncless.CompareAndSync
                 }
                 if (_currJob != null)
                 {
-                    ManualSyncer.Sync(_currJob);
-                    _currJob = null;
+                    if (_currJob.Paths.Length < 2)
+                    {
+                        ServiceLocator.UINotificationQueue().Enqueue(new NothingToSyncNotification(_currJob.TagName));
+                        if (_currJob.Notify)
+                            ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(_currJob.TagName));
+                    }
+                    else
+                    {
+                        SyncStartNotification notification = new SyncStartNotification(_currJob.TagName);
+                        _currJobProgress = notification.Progress;
+                        _currJobProgress.State = SyncState.Started;
+                        ServiceLocator.UINotificationQueue().Enqueue(notification);
+                        ManualSyncer.Sync(_currJob, _currJobProgress);
+
+                        //Set both to null
+                        _currJob = null;
+                        _currJobProgress = null;
+                    }
                 }
                 else
                 {
@@ -126,8 +160,8 @@ namespace Syncless.CompareAndSync
 
         public bool IsQueued(string tagName)
         {
-            if (_currJob == null || string.IsNullOrEmpty(_currJob.TagName))
-                return false;
+            //if (_currJob == null || string.IsNullOrEmpty(_currJob.TagName))
+            //    return false;
 
             return _queuedJobsLookup.Contains(tagName);
         }
@@ -144,15 +178,23 @@ namespace Syncless.CompareAndSync
 
         public bool PrepareForTermination()
         {
-            if (IsEmpty)
+            if (IsEmpty && _currJob == null)
             {
                 Dispose();
                 return true;
             }
 
-            //Handle states and determine what state to return. Call Dispose() if possible
-
-
+            _jobs.Clear();
+            if (_currJobProgress != null)
+            {
+                switch (_currJobProgress.State)
+                {
+                    case SyncState.Started:
+                    case SyncState.Analyzing:
+                        _currJobProgress.State = SyncState.Cancelled;
+                        break;
+                }
+            }
             return false;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Visitor;
+using Syncless.Notification;
 
 namespace Syncless.CompareAndSync
 {
@@ -12,12 +13,12 @@ namespace Syncless.CompareAndSync
             Pre
         }
 
-        public static void LevelOrderTraverseFolder(RootCompareObject root, IVisitor visitor)
+        public static void LevelOrderTraverseFolder(RootCompareObject root, IVisitor visitor, SyncProgress syncProgress)
         {
-            LevelOrderTraverseFolder(root, root.Paths.Length, visitor);
+            LevelOrderTraverseFolder(root, root.Paths.Length, visitor, syncProgress);
         }
 
-        private static void LevelOrderTraverseFolder(RootCompareObject root, int numOfPaths, IVisitor visitor)
+        private static void LevelOrderTraverseFolder(RootCompareObject root, int numOfPaths, IVisitor visitor, SyncProgress syncProgress)
         {
             Queue<BaseCompareObject> levelQueue = new Queue<BaseCompareObject>();
             RootCompareObject rt;
@@ -27,6 +28,9 @@ namespace Syncless.CompareAndSync
 
             while (levelQueue.Count > 0)
             {
+                if (syncProgress.State == SyncState.Cancelled)
+                    return;
+
                 BaseCompareObject currObj = levelQueue.Dequeue();
 
                 if ((rt = currObj as RootCompareObject) != null)
@@ -53,18 +57,21 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        public static void PreTraverseFolder(RootCompareObject root, IVisitor visitor)
+        public static void PreTraverseFolder(RootCompareObject root, IVisitor visitor, SyncProgress syncProgress)
         {
-            TraverseFolderHelper(root, visitor, TraverseType.Pre);
+            TraverseFolderHelper(root, visitor, TraverseType.Pre, syncProgress);
         }
 
-        public static void PostTraverseFolder(RootCompareObject root, IVisitor visitor)
+        public static void PostTraverseFolder(RootCompareObject root, IVisitor visitor, SyncProgress syncProgress)
         {
-            TraverseFolderHelper(root, visitor, TraverseType.Post);
+            TraverseFolderHelper(root, visitor, TraverseType.Post, syncProgress);
         }
 
-        private static void TraverseFolderHelper(RootCompareObject root, IVisitor visitor, TraverseType type)
+        private static void TraverseFolderHelper(RootCompareObject root, IVisitor visitor, TraverseType type, SyncProgress syncProgress)
         {
+            if (syncProgress.State == SyncState.Cancelled)
+                return;
+
             if (type == TraverseType.Pre)
                 visitor.Visit(root);
 
@@ -73,7 +80,7 @@ namespace Syncless.CompareAndSync
             {
                 FolderCompareObject fco;
                 if ((fco = o as FolderCompareObject) != null)
-                    TraverseFolderHelper(fco, root.Paths.Length, visitor, type);
+                    TraverseFolderHelper(fco, root.Paths.Length, visitor, type, syncProgress);
                 else
                     visitor.Visit(o as FileCompareObject, root.Paths.Length);
             }
@@ -82,8 +89,11 @@ namespace Syncless.CompareAndSync
                 visitor.Visit(root);
         }
 
-        private static void TraverseFolderHelper(FolderCompareObject folder, int numOfPaths, IVisitor visitor, TraverseType type)
+        private static void TraverseFolderHelper(FolderCompareObject folder, int numOfPaths, IVisitor visitor, TraverseType type, SyncProgress syncProgress)
         {
+            if (syncProgress.State == SyncState.Cancelled)
+                return;
+
             if (type == TraverseType.Pre)
                 visitor.Visit(folder, numOfPaths);
 
@@ -92,7 +102,7 @@ namespace Syncless.CompareAndSync
             {
                 FolderCompareObject fco;
                 if ((fco = o as FolderCompareObject) != null)
-                    TraverseFolderHelper(fco, numOfPaths, visitor, type);
+                    TraverseFolderHelper(fco, numOfPaths, visitor, type, syncProgress);
                 else
                     visitor.Visit(o as FileCompareObject, numOfPaths);
             }
