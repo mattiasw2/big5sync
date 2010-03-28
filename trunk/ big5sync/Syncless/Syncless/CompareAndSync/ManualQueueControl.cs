@@ -13,12 +13,11 @@ namespace Syncless.CompareAndSync
         private readonly List<Thread> _threads = new List<Thread>();
         private const int threadsToUse = 1;
         private static readonly object locker = new object();
-        private readonly Queue<ManualSyncRequest> _jobs = new Queue<ManualSyncRequest>();
+        private readonly List<ManualSyncRequest> _jobs = new List<ManualSyncRequest>();
         private readonly EventWaitHandle _wh = new AutoResetEvent(false);
         private static ManualQueueControl _instance;
-
-        private string _currJobName;
-        private readonly HashSet<string> _queuedJobs = new HashSet<string>();
+        private readonly HashSet<string> _queuedJobsLookup = new HashSet<string>();
+        private ManualSyncRequest _currJob;
 
         private ManualQueueControl()
         {
@@ -48,43 +47,59 @@ namespace Syncless.CompareAndSync
         //    get { return threadsToUse; }
         //}
 
-        public string CurrJob
-        {
-            get { return _currJobName; }
-        }
-
         public void AddSyncJob(ManualSyncRequest item)
         {
             lock (locker)
             {
-                if (item == null || !_queuedJobs.Contains(item.TagName))
+                if (item == null || !_queuedJobsLookup.Contains(item.TagName))
                 {
-                    _jobs.Enqueue(item);
+                    _jobs.Insert(0, item);
                     if (item != null)
-                        _queuedJobs.Add(item.TagName);
+                        _queuedJobsLookup.Add(item.TagName);
                 }
             }
             _wh.Set();
+        }
+
+        public void CancelSyncJob(CancelSyncRequest item)
+        {
+            lock (locker)
+            {
+                if (!_queuedJobsLookup.Contains(item.TagName))
+                {
+                    for (int i = 0; i < _jobs.Count; i++)
+                    {
+                        if (_jobs[i].TagName == item.TagName)
+                        {
+                            _jobs.RemoveAt(i);
+                            break;
+                        }
+                    }
+                }
+                else if (_currJob.TagName == item.TagName)
+                {
+                    _currJob.IsCancelled = true;
+                }
+            }
         }
 
         private void Work()
         {
             while (true)
             {
-                ManualSyncRequest item = null;
                 lock (locker)
                 {
                     if (_jobs.Count > 0)
                     {
                         try
                         {
-                            item = _jobs.Dequeue();
+                            _currJob = _jobs[0];
+                            _jobs.RemoveAt(0);
 
-                            if (item == null)
+                            if (_currJob == null)
                                 return;
 
-                            _queuedJobs.Remove(item.TagName);
-                            _currJobName = item.TagName;
+                            _queuedJobsLookup.Remove(_currJob.TagName);
                         }
                         catch (Exception e)
                         {
@@ -92,10 +107,10 @@ namespace Syncless.CompareAndSync
                         }
                     }
                 }
-                if (item != null)
+                if (_currJob != null)
                 {
-                    ManualSyncer.Sync(item);
-                    _currJobName = null;
+                    ManualSyncer.Sync(_currJob);
+                    _currJob = null;
                 }
                 else
                 {
@@ -111,15 +126,15 @@ namespace Syncless.CompareAndSync
 
         public bool IsQueued(string tagName)
         {
-            if (string.IsNullOrEmpty(_currJobName))
+            if (_currJob == null || string.IsNullOrEmpty(_currJob.TagName))
                 return false;
 
-            return _queuedJobs.Contains(tagName);
+            return _queuedJobsLookup.Contains(tagName);
         }
 
         public bool IsSyncing(string tagName)
         {
-            return tagName.Equals(_currJobName);
+            return _currJob == null? false : tagName.Equals(_currJob.TagName);
         }
 
         public bool IsQueuedOrSyncing(string tagName)

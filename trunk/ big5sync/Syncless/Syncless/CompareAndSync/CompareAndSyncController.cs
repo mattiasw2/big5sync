@@ -75,6 +75,11 @@ namespace Syncless.CompareAndSync
             ManualQueueControl.Instance.AddSyncJob(request);
         }
 
+        public void Cancel(CancelSyncRequest request)
+        {
+            ManualQueueControl.Instance.CancelSyncJob(request);
+        }
+
         public RootCompareObject Compare(ManualCompareRequest request)
         {
             return ManualSyncer.Compare(request);

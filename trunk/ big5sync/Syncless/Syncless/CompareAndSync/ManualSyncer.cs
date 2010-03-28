@@ -22,53 +22,43 @@ namespace Syncless.CompareAndSync
                 return;
             }
 
-            Console.WriteLine("Sync 1");
-
             //Started
             SyncStartNotification notification = new SyncStartNotification(request.TagName);
             SyncProgress progress = notification.Progress;
 
             ServiceLocator.UINotificationQueue().Enqueue(notification);
-            Console.WriteLine("Sync 2");
             List<Filter> filters = request.Filters.ToList();
             filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
             RootCompareObject rco = new RootCompareObject(request.Paths);
-            Console.WriteLine("Sync 3");
 
             //Analyzing
             progress.ChangeToAnalyzing();
+            //if (request.IsCancelled) ;
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters));
-            Console.WriteLine("Sync 4");
+            //if (request.IsCancelled) ;
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
-            Console.WriteLine("Sync 5");
+            //if (request.IsCancelled) ;
             CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor());
-            Console.WriteLine("Sync 6");
+            //if (request.IsCancelled) ;
             ComparerVisitor comparerVisitor = new ComparerVisitor();
-            Console.WriteLine("Sync 7");
             CompareObjectHelper.PostTraverseFolder(rco, comparerVisitor);
-            Console.WriteLine("Sync 8");
+            //if (request.IsCancelled) ;
 
             //Syncing
             progress.ChangeToSyncing(comparerVisitor.TotalNodes);
             SyncerVisitor syncerVisitor = new SyncerVisitor(request.Config,progress);
-            Console.WriteLine("Sync 9");
             CompareObjectHelper.PreTraverseFolder(rco, syncerVisitor);
-            Console.WriteLine("Sync 10");
 
             //XML Writer
             progress.ChangeToFinalizing(syncerVisitor.NodesCount);
 
             CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor(progress));
-            Console.WriteLine("Sync 11");
 
             if (request.Notify)
                 ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
 
-            Console.WriteLine("Sync 12");
-
             //Finished
             ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification(request.TagName,rco));
-            Console.WriteLine("Sync 13");
         }
 
         public static RootCompareObject Compare(ManualCompareRequest request)
