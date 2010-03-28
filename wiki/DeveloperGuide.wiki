@@ -82,6 +82,8 @@ To understand more about User Interface component, please click [http://code.goo
 = Known Issues =
 There are some known issues with V0.9, and they can be found [http://code.google.com/p/big5sync/wiki/KnownIssues09 here].
 
+There are some known issues with V1.0, and they can be found [http://code.google.com/p/big5sync/wiki/KnownIssues10 here].
+
 = Special Cases =
 Syncless aims not to throw any kind of file or folder synchronization, and although it generally works as expected in most cases, there may be some sequence of actions that are handled differently. A list of these special cases can be found [http://code.google.com/p/big5sync/wiki/SpecialCases here].        
 
