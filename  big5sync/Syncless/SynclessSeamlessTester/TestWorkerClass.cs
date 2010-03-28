@@ -31,7 +31,7 @@ namespace SynclessSeamlessTester
 
         private bool fired = true;
 
-        private readonly List<string> _sourcePaths, _destPaths;
+        private readonly List<string> _sourcePaths, _destPaths, _filters;
         private int _duration;
 
         private TestInfo _testInfo;
@@ -42,7 +42,7 @@ namespace SynclessSeamlessTester
         private DateTime _timeToEnd, _timeToStart;
         private TimeSpan _totalTimeNeeded;
 
-        public TestWorkerClass(int duration, int minTime, int maxTime, List<string> sourcePaths, List<string> destPaths, TestInfo testInfo, BackgroundWorker bgWorker, DoWorkEventArgs e)
+        public TestWorkerClass(int duration, int minTime, int maxTime, List<string> sourcePaths, List<string> destPaths, TestInfo testInfo, BackgroundWorker bgWorker, DoWorkEventArgs e, List<string> filters)
         {
             _sourcePaths = sourcePaths;
             _destPaths = destPaths;
@@ -52,6 +52,7 @@ namespace SynclessSeamlessTester
             _minTime = minTime * 1000;
             _maxTime = maxTime * 1000;
             _e = e;
+            _filters = filters;
             StartTest();
         }
 
@@ -82,6 +83,14 @@ namespace SynclessSeamlessTester
                 }
             }
 
+        }
+
+        private bool PassFilter(string s)
+        {
+            foreach (string f in _filters)
+                if (s.Contains(f))
+                    return false;
+            return true;
         }
 
         void timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -124,7 +133,7 @@ namespace SynclessSeamlessTester
 
             try
             {
-                if (fsi[destIndex].Contains(".syncless") || fsi[destIndex].Contains("_synclessArchive"))
+                if (!PassFilter(fsi[destIndex]))
                     return;
 
                 if (File.Exists(fsi[destIndex]))
@@ -175,7 +184,7 @@ namespace SynclessSeamlessTester
             try
             {
                 //Temporary
-                if (sourceObjects[srcObjIndex].Contains(".syncless") || sourceObjects[srcObjIndex].Contains("_synclessArchive") || destFolders[destFldrIndex].Contains(".syncless") || destFolders[destFldrIndex].Contains("_synclessArchive"))
+                if (!PassFilter(sourceObjects[srcObjIndex]) || !PassFilter(destFolders[destFldrIndex]))
                     return;
 
                 if (File.Exists(sourceObjects[srcObjIndex]))
@@ -218,7 +227,7 @@ namespace SynclessSeamlessTester
 
             try
             {
-                if (fsi[fsiIndex].Contains(".syncless") || fsi[fsiIndex].Contains("_synclessArchive"))
+                if (!PassFilter(fsi[fsiIndex]))
                     return;
 
                 if (File.Exists(fsi[fsiIndex]))
@@ -253,7 +262,7 @@ namespace SynclessSeamlessTester
 
             try
             {
-                if (fsi[fsiIndex].Contains(".syncless") || fsi[fsiIndex].Contains("_synclessArchive"))
+                if (!PassFilter(fsi[fsiIndex]))
                     return;
 
                 if (File.Exists(fsi[fsiIndex]))
