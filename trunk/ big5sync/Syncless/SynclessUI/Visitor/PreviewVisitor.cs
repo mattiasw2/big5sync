@@ -16,10 +16,18 @@ namespace SynclessUI.Visitor
     {
         #region IVisitor Members
         private DataTable _syncData;
+        public const string Source = "source";
+        public const string Dest = "destination";
+        public const string Operation = "operation";
 
+        private const string CopyConstant = "Copy";
+        private const string DeleteConstant = "Delete";
+        private const string UpdateConstant = "Update";
+        private const string RenameConstant = "Rename";
         public PreviewVisitor(DataTable syncData)
         {
-            SyncData = syncData;
+            _syncData = syncData;
+
         }
 
         public DataTable SyncData
@@ -30,11 +38,6 @@ namespace SynclessUI.Visitor
 
         public void Visit(FileCompareObject file, int numOfPaths)
         {
-            
-
-
-
-
             if (file.Invalid)
                 return;
 
@@ -51,10 +54,11 @@ namespace SynclessUI.Visitor
                 string operation = "";
                 switch (file.ChangeType[maxPriorityPos])
                 {
-                    case MetaChangeType.New: operation = "Copy"; break;
-                    case MetaChangeType.Delete: operation = "Delete"; break;
-                    case MetaChangeType.Rename: operation = "Rename"; break;
-                    case MetaChangeType.Update: operation = "Update"; break;
+                    case MetaChangeType.New: operation = CopyConstant; break;
+                    case MetaChangeType.Delete: operation = DeleteConstant; break;
+                    case MetaChangeType.Rename: operation = RenameConstant; break;
+                    case MetaChangeType.Update: operation = UpdateConstant; break;
+                    case MetaChangeType.NoChange: operation = CopyConstant; break;
                 }
 
                 for (int i = 0; i < file.Priority.Length; i++)
@@ -62,10 +66,12 @@ namespace SynclessUI.Visitor
                     if (i != maxPriorityPos && file.Priority[i]!=file.Priority[maxPriorityPos])
                     {
                         var row = SyncData.NewRow();
-                        row["Path1"] = Path.Combine(file.GetSmartParentPath(maxPriorityPos), file.Name);
-                        row["Operation"] = operation;
-                        row["Path2"] = Path.Combine(file.GetSmartParentPath(i), file.Name);
+                        row[Source] = Path.Combine(file.GetSmartParentPath(maxPriorityPos), file.Name);
+                        row[Operation] = operation;
+                        row[Dest] = Path.Combine(file.GetSmartParentPath(i), file.Name);
                         SyncData.Rows.Add(row);
+                        SyncData.AcceptChanges();
+
                     }
                 }
 
@@ -93,9 +99,9 @@ namespace SynclessUI.Visitor
                 string operation = "";
                 switch (folder.ChangeType[maxPriorityPos])
                 {
-                    case MetaChangeType.New: operation = "Copy"; break;
-                    case MetaChangeType.Delete: operation = "Delete"; break;
-                    case MetaChangeType.Rename: operation = "Rename"; break;
+                    case MetaChangeType.New: operation = CopyConstant; break;
+                    case MetaChangeType.Delete: operation = DeleteConstant; break;
+                    case MetaChangeType.Rename: operation = RenameConstant; break;
                 }
 
                 for (int i = 0; i < folder.Priority.Length; i++)
@@ -103,9 +109,10 @@ namespace SynclessUI.Visitor
                     if (i != maxPriorityPos && folder.Priority[i] != folder.Priority[maxPriorityPos])
                     {
                         var row = SyncData.NewRow();
-                        row["Path1"] = Path.Combine(folder.GetSmartParentPath(maxPriorityPos), folder.Name);
-                        row["Operation"] = operation;
-                        row["Path2"] = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
+                        row[Source] = Path.Combine(folder.GetSmartParentPath(maxPriorityPos), folder.Name);
+                        row[Operation] = operation;
+                        row[Dest] = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
+                        _syncData.Rows.Add(row);
                     }
                 }
 
