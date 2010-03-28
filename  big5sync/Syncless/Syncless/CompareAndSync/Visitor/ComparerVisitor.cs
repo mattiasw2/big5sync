@@ -264,7 +264,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region Folders
 
-        private static void CompareFolders(FolderCompareObject folder, int numOfFiles)
+        private static void CompareFolders(FolderCompareObject folder, int numOfPaths)
         {
             //Delete will only occur if none of the folders are marked as dirty
             List<int> deletePos = new List<int>();
@@ -272,7 +272,7 @@ namespace Syncless.CompareAndSync.Visitor
             if (!folder.Dirty)
             {
                 bool stop = false;
-                for (int i = 0; i < numOfFiles; i++)
+                for (int i = 0; i < numOfPaths; i++)
                 {
                     if (stop)
                         break;
@@ -281,7 +281,7 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         deletePos.Add(i);
 
-                        for (int j = 0; j < numOfFiles; j++)
+                        for (int j = 0; j < numOfPaths; j++)
                         {
                             if (folder.Exists[j])
                             {
@@ -312,7 +312,7 @@ namespace Syncless.CompareAndSync.Visitor
             //Rename will only occur if all other changes are MetaChangeType.NoChange or null
             int renamePos = -1;
 
-            for (int i = 0; i < numOfFiles; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (folder.ChangeType[i] == MetaChangeType.Rename)
                     renamePos = i;
@@ -331,7 +331,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             int mostUpdatedPos = 0;
 
-            for (int i = 0; i < numOfFiles; i++)
+            for (int i = 0; i < numOfPaths; i++)
             {
                 if (folder.Exists[i])
                 {
@@ -342,7 +342,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             folder.Priority[mostUpdatedPos] = 1;
 
-            for (int i = mostUpdatedPos + 1; i < numOfFiles; i++)
+            for (int i = mostUpdatedPos + 1; i < numOfPaths; i++)
             {
                 if (!folder.Exists[i])
                 {
@@ -355,6 +355,31 @@ namespace Syncless.CompareAndSync.Visitor
                 }
             }
 
+            //EXP
+            int priority = -1;
+            int numExists = 0;
+            int posExists = -1;
+            for (int i = 0; i < numOfPaths; i++)
+            {
+                if (folder.Exists[i])
+                {
+                    numExists++;
+                    posExists = i;
+                    if (priority < 0)
+                        priority = folder.Priority[i];
+                    else
+                    {
+                        if (priority != folder.Priority[i])
+                        {
+                            folder.Parent.Dirty = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (numExists == 1 && folder.ChangeType[posExists] == MetaChangeType.New)
+                folder.Parent.Dirty = true;
         }
 
         #endregion
