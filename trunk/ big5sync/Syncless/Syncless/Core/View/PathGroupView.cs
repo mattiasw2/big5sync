@@ -7,7 +7,7 @@ namespace Syncless.Core.View
 {
     public class PathGroupView
     {
-        private List<string> _pathList;
+        private List<PathView> _pathList;
         private string _name;
 
         public string Name
@@ -15,19 +15,35 @@ namespace Syncless.Core.View
             get { return _name; }
             set { _name = value; }
         }
-        public List<string> PathList
+        public List<PathView> PathList
         {
             get { return _pathList; }
             set { _pathList = value; }
         }
+        public List<string> PathListString
+        {
+            get
+            {
+                List<string> pathListString = new List<string>();
+                foreach (PathView p in _pathList)
+                {
+                    pathListString.Add((p.Path));
+                }
+                return pathListString;
+            }
+        }
 
-        public PathGroupView(string name)
+            public PathGroupView(string name)
         {
             _name = name;
-            _pathList = new List<string>();
+            _pathList = new List<PathView>();
         }
 
         public void AddPath(string path)
+        {
+            _pathList.Add(new PathView(path));
+        }
+        public void AddPath(PathView path)
         {
             _pathList.Add(path);
         }

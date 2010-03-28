@@ -32,6 +32,7 @@ namespace Syncless.Core
 
         private DeviceWatcher()
         {
+            //try statement
             connectedDrives = RetrieveAllDrives();
             AddInsertUSBHandler();
             AddRemoveUSBHandler();

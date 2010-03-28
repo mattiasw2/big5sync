@@ -39,7 +39,7 @@ namespace Syncless.CompareAndSync.Request
         }
 
         public string NewName
-        {
+        {   //not safe to return null , just return source names
             get { return _requestType == AutoSyncRequestType.Rename ? _sourceName : null; }
         }
 

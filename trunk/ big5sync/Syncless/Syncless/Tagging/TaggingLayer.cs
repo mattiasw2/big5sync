@@ -252,6 +252,7 @@ namespace Syncless.Tagging
                 case 2:
                     throw new TagNotFoundException(oldname);
                 default:
+                    //assertion
                     break;
             }
         }
@@ -559,6 +560,7 @@ namespace Syncless.Tagging
             {
                 foreach (TaggedPath path in tag.FilteredPathList)
                 {
+                    //try && conditions
                     if (path.LogicalDriveId.Equals(logicalid))
                     {
                         if (!PathHelper.ContainsIgnoreCase(pathList, path.PathName))
