@@ -52,10 +52,11 @@ namespace Syncless.Notification
         {
             foreach (IQueueObserver obs in _observerList)
             {
-                obs.Update();
+                UpdateDelegate upDelegate = new UpdateDelegate(obs.Update);
+                upDelegate.BeginInvoke(null, null);
             }
         }
-
+        private delegate void UpdateDelegate();
         #region INotificationQueue Members
 
 
