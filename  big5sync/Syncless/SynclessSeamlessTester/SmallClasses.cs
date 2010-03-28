@@ -5,7 +5,8 @@ namespace SynclessSeamlessTester
 {
     public class TestInfo
     {
-        private bool _compared, _pass, _propagated;
+        private bool _compared, _propagated;
+        private bool? _pass;
         private List<LazyFileCompare> _fileResults;
         private List<LazyFolderCompare> _folderResults;
 
@@ -15,7 +16,7 @@ namespace SynclessSeamlessTester
             set { _compared = value; }
         }
 
-        public bool Passed
+        public bool? Passed
         {
             get { return _pass; }
             set { _pass = value; }
@@ -76,6 +77,17 @@ namespace SynclessSeamlessTester
         {
             get { return _hash; }
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("----- FILE -----");
+            sb.AppendLine("Relative Name: " + RelativeName);
+            sb.AppendLine("Full Path: " + FullPath);
+            sb.AppendLine("Hash: " + Hash);
+            sb.Append("----------------");
+            return sb.ToString();
+        }
     }
 
     public class LazyFolderCompare : LazyObjectCompare
@@ -84,6 +96,16 @@ namespace SynclessSeamlessTester
         public LazyFolderCompare(string relativeName, string fullPath)
             : base(relativeName, fullPath)
         {
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("----- FOLDER -----");
+            sb.AppendLine("Relative Name: " + RelativeName);
+            sb.AppendLine("Full Path: " + FullPath);
+            sb.Append("----------------");
+            return sb.ToString();
         }
     }
 }

@@ -306,6 +306,7 @@
             // textBoxLog
             // 
             this.textBoxLog.BackColor = System.Drawing.Color.White;
+            this.textBoxLog.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxLog.Location = new System.Drawing.Point(493, 29);
             this.textBoxLog.Multiline = true;
             this.textBoxLog.Name = "textBoxLog";
@@ -322,6 +323,7 @@
             this.buttonClearLogs.TabIndex = 26;
             this.buttonClearLogs.Text = "Clear Logs";
             this.buttonClearLogs.UseVisualStyleBackColor = true;
+            this.buttonClearLogs.Click += new System.EventHandler(this.buttonClearLogs_Click);
             // 
             // labelLogs
             // 
@@ -378,6 +380,8 @@
             this.Controls.Add(this.buttonSourceBrowse);
             this.Controls.Add(this.labelBrowseSource);
             this.Controls.Add(this.textBoxSourcePath);
+            this.MaximumSize = new System.Drawing.Size(935, 585);
+            this.MinimumSize = new System.Drawing.Size(935, 585);
             this.Name = "FormSeamlessTester";
             this.Text = "Syncless - Seamless Tester";
             this.ResumeLayout(false);

@@ -267,12 +267,39 @@ namespace SynclessSeamlessTester
                 CompleteTest();
                 ToggleAllControls(Action.Complete);
                 TestInfo info = e.Result as TestInfo;
-                if (info.Compared)
-                    Console.WriteLine("RESULT: " + (info.Passed ? "PASSED" : "FAILED"));
+                if (info.Passed.HasValue)
+                {
+                    ProcessVerifierResults(info);
+                    Console.WriteLine("RESULT: " + ((bool)info.Passed ? "PASSED" : "FAILED"));
+                }
             }
         }
 
         #endregion
+
+        private void ProcessVerifierResults(TestInfo info)
+        {
+            AppendLog("----- START OF VERIFICATION -----");
+            AppendLog(DateTime.Now.ToString());
+            if (info.Passed.HasValue)
+                AppendLog("RESULTS: " + ((bool)info.Passed ? "PASSED." : "FAILED"));
+
+            if (!(bool)info.Passed)
+            {
+                foreach (LazyFileCompare file in info.FileResults)
+                    AppendLog(file.ToString());
+
+                foreach (LazyFolderCompare folder in info.FolderResults)
+                    AppendLog(folder.ToString());
+            }
+            AppendLog("----- END OF VERIFICATION -----");
+            AppendLog(string.Empty);
+        }
+
+        private void AppendLog(string msg)
+        {
+            textBoxLog.AppendText(string.Format("{0}\r\n", msg));
+        }
 
         #region Progress Changes
 
@@ -335,6 +362,11 @@ namespace SynclessSeamlessTester
         }
 
         #endregion
+
+        private void buttonClearLogs_Click(object sender, EventArgs e)
+        {
+            textBoxLog.Clear();
+        }
 
     }
 }
