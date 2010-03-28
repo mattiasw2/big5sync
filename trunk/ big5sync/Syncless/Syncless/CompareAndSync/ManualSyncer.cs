@@ -19,6 +19,8 @@ namespace Syncless.CompareAndSync
             if (request.Paths.Length < 2)
             {
                 ServiceLocator.UINotificationQueue().Enqueue(new NothingToSyncNotification(request.TagName));
+                if (request.Notify)
+                    ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
                 return;
             }
 

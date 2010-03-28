@@ -16,16 +16,16 @@ namespace Syncless.Core
         List<string> GetAllTags();
         List<string> GetTags(DirectoryInfo folder);
 
-        TagView GetTag(string tagname);       
+        TagView GetTag(string tagName);       
 
-        bool DeleteTag(string tagname);
+        bool DeleteTag(string tagName);
 
-        TagView CreateTag(string tagname);
-        TagView Tag(string tagname, DirectoryInfo folder);
+        TagView CreateTag(string tagName);
+        TagView Tag(string tagName, DirectoryInfo folder);
                 
-        int Untag(string tagname, DirectoryInfo folder);
+        int Untag(string tagName, DirectoryInfo folder);
         
-        bool MonitorTag(string tagname, bool mode);
+        bool MonitorTag(string tagName, bool mode);
 
         bool PrepareForTermination();
         bool Terminate();
@@ -34,13 +34,15 @@ namespace Syncless.Core
 
         //bool RenameTag(string oldtagname, string newtagname);
 
-        bool StartManualSync(string tagname);
+        bool StartManualSync(string tagName);
+        bool CancelManualSync(string tagName);
+
         
-        bool UpdateFilterList(string tagname, List<Filter> filterlist);
+        bool UpdateFilterList(string tagName, List<Filter> filterlist);
 
-        List<Filter> GetAllFilters(string tagname);
+        List<Filter> GetAllFilters(string tagName);
 
-        RootCompareObject PreviewSync(string tagname);
+        RootCompareObject PreviewSync(string tagName);
 
         bool AllowForRemoval(DriveInfo drive);
 
@@ -51,7 +53,7 @@ namespace Syncless.Core
 
         List<LogData> ReadLog();
 
-        //bool SetTagMultiDirectional(string tagname);
+        //bool SetTagMultiDirectional(string tagName);
 
         // To be Implemented
 
