@@ -27,14 +27,14 @@ namespace Syncless.Monitor
         private List<ExtendedFileSystemWatcher> watchers;
         private List<string> monitoredPaths;
         private List<FileSystemWatcher> rootWatchers;
-        private Hashtable rootsAndParent;
+        private Dictionary<string, List<string>> rootsAndParent;
         
         private MonitorLayer()
         {
             watchers = new List<ExtendedFileSystemWatcher>();
             monitoredPaths = new List<string>();
             rootWatchers = new List<FileSystemWatcher>();
-            rootsAndParent = new Hashtable();
+            rootsAndParent = new Dictionary<string, List<string>>();
         }
 
         public void Terminate()
@@ -103,7 +103,7 @@ namespace Syncless.Monitor
             {
                 ExtendedFileSystemWatcher watcher = CreateWatcher(path, "*.*");
                 watchers.Add(watcher);
-                AddRootWatcher(path);
+                MonitorRootDirectory(path);
             }
             foreach (string mPath in monitoredPaths)
             {
@@ -116,7 +116,7 @@ namespace Syncless.Monitor
             return true;
         }
 
-        private void AddRootWatcher(string path)
+        private void MonitorRootDirectory(string path)
         {
             DirectoryInfo directory = new DirectoryInfo(path);
             if(directory.Root.FullName.ToLower().Equals(path.ToLower())) // Root is excluded
@@ -134,8 +134,6 @@ namespace Syncless.Monitor
                 rootsAndParent.Remove(path);
                 return ;
             }
-
-
             List<string> transferedPath = null;
             for (int i = 0; i < rootWatchers.Count; i++)
             {
@@ -152,12 +150,11 @@ namespace Syncless.Monitor
 
             bool noRootWatcher = true;
             string parent = directory.Parent.FullName;
-            foreach (DictionaryEntry de in rootsAndParent)
+            foreach (KeyValuePair<string, List<string>> kvp in rootsAndParent)
             {
-                if (((string)de.Key).ToLower().Equals(parent.ToLower()))
+                if (kvp.Key.ToLower().Equals(parent.ToLower()))
                 {
-                    List<string> paths = (List<string>)de.Value;
-                    paths.Add(path);
+                    kvp.Value.Add(path);
                     noRootWatcher = false;
                     break;
                 }
@@ -222,7 +219,7 @@ namespace Syncless.Monitor
                 {
                     watcher.Dispose();
                     watchers.RemoveAt(i);
-                    RemoveRootWatcher(path);
+                    UnMonitorRootDirectory(path);
                     unMonitored = true;
                     break;
                 }
@@ -241,16 +238,16 @@ namespace Syncless.Monitor
             return true;
         }
 
-        private void RemoveRootWatcher(string path)
+        private void UnMonitorRootDirectory(string path)
         {
             DirectoryInfo directory = new DirectoryInfo(path);
             string parent = directory.Parent.FullName;
             bool remove = false;
-            foreach (DictionaryEntry de in rootsAndParent)
+            foreach (KeyValuePair<string, List<string>> kvp in rootsAndParent)
             {
-                if (((string)de.Key).ToLower().Equals(parent))
+                if (kvp.Key.ToLower().Equals(parent))
                 {
-                    List<string> folders = (List<string>)de.Value;
+                    List<string> folders = kvp.Value;
                     if (folders.Count == 1)
                     {
                         remove = true;
@@ -287,11 +284,6 @@ namespace Syncless.Monitor
         /// <exception cref="Syncless.Monitor.Exception.MonitorDriveNotFoundException">Throw when the drive is not found.</exception>
         public int UnMonitorDrive(string driveLetter)
         {
-            /*DriveInfo drive = new DriveInfo(driveLetter);
-            if (!drive.IsReady)
-            {
-                throw new MonitorDriveNotFoundException(ErrorMessage.DRIVE_NOT_FOUND, driveLetter);
-            }*/
             for (int i = 0; i < watchers.Count; i++)
             {
                 ExtendedFileSystemWatcher watcher = watchers[i];
@@ -421,7 +413,8 @@ namespace Syncless.Monitor
         {
             FileSystemWatcher watcher = (FileSystemWatcher) source;
             List<string> folders = (List<string>)rootsAndParent[watcher.Path];
-            foreach(string folder in folders) {
+            foreach (string folder in folders)
+            {
                 if (e.FullPath.Equals(folder))
                 {
                     FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.DELETED, FileSystemType.FOLDER);
