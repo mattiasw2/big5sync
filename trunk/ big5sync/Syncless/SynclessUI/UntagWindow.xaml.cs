@@ -55,7 +55,7 @@ namespace SynclessUI
                 {
                     DialogsHelper.ShowError("No Tags Found", "The folder you were trying to untag had no tags on it.");
 
-                    FormFadeOut.Begin();
+                    CloseWindow();
                 }
             }
             catch (UnhandledException)
@@ -96,7 +96,7 @@ namespace SynclessUI
                     }
                 }
                 _main.SelectTag(lasttagged);
-                FormFadeOut.Begin();
+                CloseWindow();
             }
             catch (UnhandledException)
             {
@@ -106,12 +106,16 @@ namespace SynclessUI
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            FormFadeOut.Begin();
+            CloseWindow();
         }
 
 		private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 			this.DragMove();
+		}
+		
+		private void CloseWindow() {
+            FormFadeOut.Begin();
 		}
 		
         private void FormFadeOut_Completed(object sender, EventArgs e)

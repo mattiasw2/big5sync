@@ -17,11 +17,15 @@ namespace SynclessUI
 
 		private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
 		{
-            FormFadeOut.Begin();
+            CloseWindow();
 		}
 
 		private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
+            CloseWindow();
+		}
+		
+		private void CloseWindow() {
             FormFadeOut.Begin();
 		}
 
