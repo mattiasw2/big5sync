@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Request;
@@ -24,7 +25,9 @@ namespace Syncless.CompareAndSync
             //Started
             SyncStartNotification notification = new SyncStartNotification(request.TagName);
             SyncProgress progress = notification.Progress;
+
             ServiceLocator.UINotificationQueue().Enqueue(notification);
+
             List<Filter> filters = request.Filters.ToList();
             filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
             RootCompareObject rco = new RootCompareObject(request.Paths);

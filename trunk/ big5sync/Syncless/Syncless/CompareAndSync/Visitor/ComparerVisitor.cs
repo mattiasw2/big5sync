@@ -279,7 +279,7 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 if (folder.ChangeType[i] == MetaChangeType.Rename)
                     renamePos = i;
-                else if (folder.ChangeType[i] != MetaChangeType.NoChange && folder.ChangeType[i] != null)
+                else if (folder.ChangeType[i] != MetaChangeType.NoChange && folder.ChangeType[i] != MetaChangeType.Delete && folder.ChangeType[i] != null)
                 {
                     renamePos = -1;
                     break;
