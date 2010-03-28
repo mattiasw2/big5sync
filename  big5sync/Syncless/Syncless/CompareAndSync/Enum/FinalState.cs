@@ -8,6 +8,7 @@
         Renamed,
         Propagated,
         Unchanged,
-        Error
+        Error,
+        Conflict
     }
 }
