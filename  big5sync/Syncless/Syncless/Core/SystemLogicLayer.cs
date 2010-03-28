@@ -933,7 +933,10 @@ namespace Syncless.Core
             try
             {
                 SaveLoadHelper.SaveAll(_userInterface.getAppPath());
-                CompareAndSyncController.Instance.PrepareForTermination();
+                if (!CompareAndSyncController.Instance.PrepareForTermination())
+                {
+                    return false;
+                }
                 return true;
             }
             catch (Exception e)

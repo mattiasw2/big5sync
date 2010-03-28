@@ -90,10 +90,16 @@ namespace Syncless.CompareAndSync
             SeamlessQueueControl.Instance.AddSyncJob(request);
         }
 
-        public void PrepareForTermination()
+        public bool PrepareForTermination()
         {
-            SeamlessQueueControl.Instance.Dispose();
-            ManualQueueControl.Instance.Dispose();
+            if (!SeamlessQueueControl.Instance.IsEmpty || !ManualQueueControl.Instance.IsEmpty)
+                return false;
+            else
+            {
+                SeamlessQueueControl.Instance.Dispose();
+                ManualQueueControl.Instance.Dispose();
+                return true;
+            }
         }
 
         public bool IsQueued(string tagName)
