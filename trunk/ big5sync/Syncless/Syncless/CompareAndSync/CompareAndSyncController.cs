@@ -59,14 +59,14 @@ namespace Syncless.CompareAndSync
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters));
             CompareObjectHelper.PreTraverseFolder(rco, new IgnoreMetaDataVisitor());
             ComparerVisitor visitor = new ComparerVisitor();
-            
+
             CompareObjectHelper.PostTraverseFolder(rco, visitor);
             int totalJobs = visitor.TotalNodes;
             progress.ChangeToSyncing(totalJobs);
-            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config,progress));
+            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config, progress));
             progress.ChangeToFinalizing(0);
             progress.ChangeToFinished();
-            ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification(request.TagName,rco));
+            ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification(request.TagName, rco));
             return rco;
         }
 
@@ -92,14 +92,8 @@ namespace Syncless.CompareAndSync
 
         public bool PrepareForTermination()
         {
-            if (!SeamlessQueueControl.Instance.IsEmpty || !ManualQueueControl.Instance.IsEmpty)
-                return false;
-            else
-            {
-                SeamlessQueueControl.Instance.Dispose();
-                ManualQueueControl.Instance.Dispose();
-                return true;
-            }
+            return (ManualQueueControl.Instance.PrepareForTermination() &&
+                    SeamlessQueueControl.Instance.PrepareForTermination());
         }
 
         public bool IsQueued(string tagName)

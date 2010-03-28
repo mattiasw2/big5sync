@@ -84,6 +84,20 @@ namespace Syncless.CompareAndSync
             get { return _jobs.Count == 0; }
         }
 
+        public bool PrepareForTermination()
+        {
+            if (IsEmpty)
+            {
+                Dispose();
+                return true;
+            }
+
+            //Handle states and determine what state to return. Call Dispose() if possible
+
+
+            return false;
+        }
+
         public void Dispose()
         {
             for (int i = 0; i < _threads.Count; i++)

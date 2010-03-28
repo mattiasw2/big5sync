@@ -134,7 +134,7 @@ namespace Syncless.CompareAndSync
 
         public bool IsSyncing(string tagName)
         {
-            return _currJob == null? false : tagName.Equals(_currJob.TagName);
+            return _currJob == null ? false : tagName.Equals(_currJob.TagName);
         }
 
         public bool IsQueuedOrSyncing(string tagName)
@@ -142,8 +142,23 @@ namespace Syncless.CompareAndSync
             return IsQueued(tagName) || IsSyncing(tagName);
         }
 
+        public bool PrepareForTermination()
+        {
+            if (IsEmpty)
+            {
+                Dispose();
+                return true;
+            }
+
+            //Handle states and determine what state to return. Call Dispose() if possible
+
+
+            return false;
+        }
+
         public void Dispose()
         {
+
             for (int i = 0; i < _threads.Count; i++)
                 AddSyncJob(null);
             for (int i = 0; i < _threads.Count; i++)
