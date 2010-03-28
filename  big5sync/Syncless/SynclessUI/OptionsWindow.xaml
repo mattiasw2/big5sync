@@ -39,7 +39,11 @@
 		<StackPanel x:Name="GeneralOptions" Grid.Column="1" Grid.Row="2">
 			<StackPanel x:Name="RegistryGroup" Orientation="Horizontal">
 				<CheckBox x:Name="ChkBoxRegistryIntegration" VerticalAlignment="Center" />
-				<Label x:Name="RegistryDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Enable Shell Integration"/>
+				<Label x:Name="RegistryDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Enable shell integration"/>
+			</StackPanel>
+			<StackPanel x:Name="MinimizeToTrayGroup" Orientation="Horizontal">
+				<CheckBox x:Name="ChkBoxMinimizeToTray" VerticalAlignment="Center" />
+				<Label x:Name="MinimizeDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="When minimizing, minimize To tray"/>
 			</StackPanel>
 		</StackPanel>
 	</Grid>
