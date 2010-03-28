@@ -75,7 +75,7 @@ namespace Syncless.Core.View
             set { isSyncing = value; }
         }       
 
-        public bool Locked
+        public bool IsLocked
         {
             get { return (isQueued || isSyncing); }
         }
