@@ -57,9 +57,12 @@ namespace Syncless.CompareAndSync
         {
             lock (locker)
             {
-                _jobs.Enqueue(item);
-                if (item != null)
-                    _queuedJobs.Add(item.TagName);
+                if (item == null || !_queuedJobs.Contains(item.TagName))
+                {
+                    _jobs.Enqueue(item);
+                    if (item != null)
+                        _queuedJobs.Add(item.TagName);
+                }
             }
             _wh.Set();
         }
