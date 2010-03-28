@@ -30,7 +30,7 @@ namespace Syncless.Core.View
                 List<string> pathList = new List<string>();
                 foreach (PathGroupView grp in _groupList)
                 {
-                    pathList.AddRange(grp.PathList);
+                    pathList.AddRange(grp.PathListString);
                 }
                 return pathList;
             }

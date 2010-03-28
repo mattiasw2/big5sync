@@ -1,4 +1,4 @@
-﻿#define DEBUG
+﻿#define DEBUGPATH
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,7 +22,7 @@ using Syncless.Core.View;
 using System.Runtime.CompilerServices;
 namespace Syncless.Core
 {
-    
+
     internal class SystemLogicLayer : IUIControllerInterface, IMonitorControllerInterface, ICommandLineControllerInterface
     {
         #region Singleton
@@ -120,7 +120,7 @@ namespace Syncless.Core
         {
             //Find the logical Address for the old path
             //Do not create the logical address if not found.
-            string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.OldPath.FullName, false);
+            string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(fe.NewPath.FullName, false);
             //Get all the tag that contains this logicalAddress inside the tag.
             List<Tag> tag = TaggingLayer.Instance.RetrieveParentTagByPath(logicalAddress);
             //If tag count is 0 return as there is nothing to process.
@@ -298,11 +298,11 @@ namespace Syncless.Core
 
         private static void SendAutoRequest(AutoSyncRequest request)
         {
+#if DEBUG
             if (request.ChangeType == AutoSyncRequestType.New || request.ChangeType == AutoSyncRequestType.Update)
             {
                 string output =
-                    "=====================================================\nAuto Request sent : \nName of File : " + "(" + (request.ChangeType == AutoSyncRequestType.New ? "New" : "Update") + ")" +
-                    request.SourceName + "\nSource : " + request.SourceParent + request.SourceName + "\nDestination:";
+                    string.Format("=====================================================\nAuto Request sent : \nName of File : ({0}){1}\nSource : {2}{3}\nDestination:", (request.ChangeType == AutoSyncRequestType.New ? "New" : "Update"), request.SourceName, request.SourceParent, request.SourceName);
                 foreach (string destination in request.DestinationFolders)
                 {
                     output += "\n" + destination + "\\" + request.SourceName;
@@ -313,19 +313,18 @@ namespace Syncless.Core
             else if (request.ChangeType == AutoSyncRequestType.Rename)
             {
                 string output =
-                    "=====================================================\nAuto Request sent : \nName of File : " + "(Renamed)" +
-                    request.OldName + "\\\\" + request.NewName + "\nSource : " + request.SourceParent + request.OldName + "---" + request.NewName + "\nDestination:";
+                    string.Format("=====================================================\nAuto Request sent : \nName of File : (Renamed){0}\\\\{1}\nSource : {2}{3}---{4}\nDestination:", request.OldName, request.NewName, request.SourceParent, request.OldName, request.NewName);
                 foreach (string destination in request.DestinationFolders)
                 {
                     output += "\n" + destination + "\\" + request.OldName + " =>" + request.NewName;
                 }
                 output += "\n================================================================";
                 ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
-            }else if (request.ChangeType == AutoSyncRequestType.Delete)
+            }
+            else if (request.ChangeType == AutoSyncRequestType.Delete)
             {
                 string output =
-                    "=====================================================\nAuto Request sent : \nName of File : " + "(Delete)" +
-                    request.SourceName + "\nSource : " + request.SourceParent + request.SourceName + "\nDestination:";
+                    string.Format("=====================================================\nAuto Request sent : \nName of File : (Delete){0}\nSource : {1}{2}\nDestination:", request.SourceName, request.SourceParent, request.SourceName);
                 foreach (string destination in request.DestinationFolders)
                 {
                     output += "\n" + destination + "\\" + request.SourceName;
@@ -333,7 +332,7 @@ namespace Syncless.Core
                 output += "\n================================================================";
                 ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
             }
-
+#endif
 
             CompareAndSyncController.Instance.Sync(request);
         }
@@ -428,58 +427,58 @@ namespace Syncless.Core
             //Get all the tag that contains this logicalAddress inside the tag.
             List<Tag> tag = TaggingLayer.Instance.RetrieveParentTagByPath(logicalAddress);
             //If tag count is 0 return as there is nothing to process.
-            if (tag.Count == 0) //
+            if (tag.Count != 0) //
             {
-                return;
-            }
-            //Find the similiar paths for the logical Path
-            //The return is physical address
-            List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
-            convertedList.Remove(fe.OldPath.FullName);
 
-            //////// Massive Path Table Code /////////////
-            for (int i = 0; i < convertedList.Count; i++)
-            {
-                string dest = convertedList[i];
-                if (_pathTable.JustPop(fe.OldPath.FullName, dest, TableType.Rename))
+
+                //Find the similiar paths for the logical Path
+                //The return is physical address
+                List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
+                convertedList.Remove(fe.OldPath.FullName);
+
+                //////// Massive Path Table Code /////////////
+                for (int i = 0; i < convertedList.Count; i++)
                 {
-                    convertedList.Remove(dest);
-                    i--;
-                    continue;
+                    string dest = convertedList[i];
+                    if (_pathTable.JustPop(fe.OldPath.FullName, dest, TableType.Rename))
+                    {
+                        convertedList.Remove(dest);
+                        i--;
+                        continue;
+                    }
+                }
+                ///////////////// For each Path in the converted List ///////////////////
+                ///////////////////////////////// Create a entry such that source = convertedPath and destination is the original Path ///////////
+                ///////////////////////For each other path , create a Source + dest pair //////////
+                ///////////////// Create an additional Path Entry for each of the Siblings ////////////////
+                for (int i = 0; i < convertedList.Count; i++)
+                {
+                    _pathTable.AddPathPair(convertedList[i], fe.OldPath.FullName, TableType.Rename);
+                    for (int j = i + 1; j < convertedList.Count; j++)
+                    {
+                        _pathTable.AddPathPair(convertedList[i], convertedList[j], TableType.Rename);
+                        _pathTable.AddPathPair(convertedList[j], convertedList[i], TableType.Rename);
+                    }
+                }
+                ///////// End of Path Table Code ////////////////
+                //For each path in the convertedList , extract the parent Path.
+                List<string> parentList = new List<string>();
+                foreach (string path in convertedList)
+                {
+                    FileInfo info = new FileInfo(PathHelper.RemoveTrailingSlash(path));
+                    string parent = info.Directory == null ? "" : info.Directory.FullName;
+                    parentList.Add(parent);
+                }
+                //If the parent list if empty , it means that there is nothing to sync and thus return.
+                if (parentList.Count != 0)
+                {
+                    AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, fe.OldPath.Parent.FullName,
+                                                                 parentList, true, AutoSyncRequestType.Rename,
+                                                                 SyncConfig.Instance);
+                    SendAutoRequest(request);
                 }
             }
-            ///////////////// For each Path in the converted List ///////////////////
-            ///////////////////////////////// Create a entry such that source = convertedPath and destination is the original Path ///////////
-            ///////////////////////For each other path , create a Source + dest pair //////////
-            ///////////////// Create an additional Path Entry for each of the Siblings ////////////////
-            for (int i = 0; i < convertedList.Count; i++)
-            {
-                _pathTable.AddPathPair(convertedList[i], fe.OldPath.FullName, TableType.Rename);
-                for (int j = i + 1; j < convertedList.Count; j++)
-                {
-                    _pathTable.AddPathPair(convertedList[i], convertedList[j], TableType.Rename);
-                    _pathTable.AddPathPair(convertedList[j], convertedList[i], TableType.Rename);
-                }
-            }
-            ///////// End of Path Table Code ////////////////
-            //For each path in the convertedList , extract the parent Path.
-            List<string> parentList = new List<string>();
-            foreach (string path in convertedList)
-            {
-                FileInfo info = new FileInfo(PathHelper.RemoveTrailingSlash(path));
-                string parent = info.Directory == null ? "" : info.Directory.FullName;
-                parentList.Add(parent);
-            }
-            //If the parent list if empty , it means that there is nothing to sync and thus return.
-            if (parentList.Count == 0)
-            {
-                return;
-            }
 
-            AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, fe.OldPath.Parent.FullName,
-                                                          parentList, true, AutoSyncRequestType.Rename,
-                                                          SyncConfig.Instance);
-            SendAutoRequest(request);
             TaggingLayer.Instance.RenameFolder(logicalAddress, newLogicalAddress);
         }
 
@@ -1247,11 +1246,29 @@ namespace Syncless.Core
             List<string> namedPath = ProfilingLayer.Instance.ConvertAndFilterToNamed(pathList[1]);
 
             PathGroupView availGrpView = new PathGroupView("Available");
-            availGrpView.PathList = pathList[0];
-            PathGroupView namedGrpView = new PathGroupView("Unavailable");
+            List<PathView> pathViewList = new List<PathView>();
+            foreach (string path in pathList[0])
+            {
+                PathView p = new PathView(path);
+                if (!Directory.Exists(path))
+                {
+                    p.IsMissing = false;
+                }
+                pathViewList.Add(p);
+            }
+            availGrpView.PathList = pathViewList;
+            PathGroupView unavailableList = new PathGroupView("Unavailable");
+            pathViewList = new List<PathView>();
+            foreach (string path in namedPath)
+            {
+                PathView p = new PathView(path);
+                p.IsAvailable = false;
+                pathViewList.Add(p);
+
+            }
             view.GroupList.Add(availGrpView);
-            view.GroupList.Add(namedGrpView);
-            //view.PathStringList = pathList;
+            view.GroupList.Add(unavailableList);
+
             view.Created = t.CreatedDate;
             view.IsSeamless = t.IsSeamless;
             view.IsQueued = CompareAndSyncController.Instance.IsQueued(t.TagName);
@@ -1346,7 +1363,6 @@ namespace Syncless.Core
 
             return pathList;
         }
-
         /// <summary>
         /// Find a list of paths which are tagged but the the physical path no longer exists in filesystem
         /// </summary>
@@ -1361,7 +1377,7 @@ namespace Syncless.Core
                 {
                     if (!PathHelper.ContainsIgnoreCase(deletedPaths, path))
                     {
-                        deletedPaths.Add(path); 
+                        deletedPaths.Add(path);
                     }
                 }
             }
@@ -1444,6 +1460,7 @@ namespace Syncless.Core
                 return;
             }
             SetTagMode(t, true);
+            _userInterface.TagChanged();
         }
         #endregion
 
