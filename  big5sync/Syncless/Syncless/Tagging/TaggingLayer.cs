@@ -596,6 +596,11 @@ namespace Syncless.Tagging
         //refactor done
         /// <summary>
         /// Find a list of paths of folders or sub-folders which share the same Tag as folderPath
+        /// Example: TagA - D:\A\, E:\B\C\
+        ///          TagB - D:\A\, F:\D\E\G\
+        ///          TagC - E:\G\, F:\H\
+        ///          Given path D:\A\H\J\
+        ///          Should return E:\B\C\H\J\ from TagA, F:\D\E\G\H\J\ from TagB
         /// </summary>
         /// <param name="folderPath">The path to search</param>
         /// <returns>The list of similar paths</returns>
