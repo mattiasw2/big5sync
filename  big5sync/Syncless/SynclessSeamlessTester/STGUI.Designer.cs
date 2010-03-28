@@ -33,7 +33,7 @@
             this.buttonSourceBrowse = new System.Windows.Forms.Button();
             this.buttonSourceAdd = new System.Windows.Forms.Button();
             this.listBoxSourcePaths = new System.Windows.Forms.ListBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonPropagate = new System.Windows.Forms.Button();
             this.labelDuration = new System.Windows.Forms.Label();
             this.textBoxDuration = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
@@ -85,7 +85,7 @@
             this.buttonSourceBrowse.TabIndex = 2;
             this.buttonSourceBrowse.Text = "Browse";
             this.buttonSourceBrowse.UseVisualStyleBackColor = true;
-            this.buttonSourceBrowse.Click += new System.EventHandler(this.buttonBrowse_Click);
+            this.buttonSourceBrowse.Click += new System.EventHandler(this.buttonSourceBrowse_Click);
             // 
             // buttonSourceAdd
             // 
@@ -108,15 +108,15 @@
             this.listBoxSourcePaths.DragDrop += new System.Windows.Forms.DragEventHandler(this.listBoxSourcePaths_DragDrop);
             this.listBoxSourcePaths.DragEnter += new System.Windows.Forms.DragEventHandler(this.listBox_DragEnter);
             // 
-            // button1
+            // buttonPropagate
             // 
-            this.button1.Location = new System.Drawing.Point(16, 468);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(120, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Start Test";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buttonPropagate.Location = new System.Drawing.Point(16, 468);
+            this.buttonPropagate.Name = "buttonPropagate";
+            this.buttonPropagate.Size = new System.Drawing.Size(120, 23);
+            this.buttonPropagate.TabIndex = 5;
+            this.buttonPropagate.Text = "Propagate";
+            this.buttonPropagate.UseVisualStyleBackColor = true;
+            this.buttonPropagate.Click += new System.EventHandler(this.buttonPropagate_Click);
             // 
             // labelDuration
             // 
@@ -341,11 +341,13 @@
             this.buttonCompare.TabIndex = 28;
             this.buttonCompare.Text = "Verify";
             this.buttonCompare.UseVisualStyleBackColor = true;
+            this.buttonCompare.Click += new System.EventHandler(this.buttonCompare_Click);
             // 
             // FormSeamlessTester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(919, 547);
             this.Controls.Add(this.buttonCompare);
             this.Controls.Add(this.labelLogs);
@@ -370,7 +372,7 @@
             this.Controls.Add(this.sourcePathsLabel);
             this.Controls.Add(this.textBoxDuration);
             this.Controls.Add(this.labelDuration);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonPropagate);
             this.Controls.Add(this.listBoxSourcePaths);
             this.Controls.Add(this.buttonSourceAdd);
             this.Controls.Add(this.buttonSourceBrowse);
@@ -390,7 +392,7 @@
         private System.Windows.Forms.Button buttonSourceBrowse;
         private System.Windows.Forms.Button buttonSourceAdd;
         private System.Windows.Forms.ListBox listBoxSourcePaths;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonPropagate;
         private System.Windows.Forms.Label labelDuration;
         private System.Windows.Forms.TextBox textBoxDuration;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;

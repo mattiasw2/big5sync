@@ -37,11 +37,12 @@ namespace SynclessSeamlessTester
         private TestInfo _testInfo;
 
         private BackgroundWorker _bgWorker;
+        private DoWorkEventArgs _e;
 
         private DateTime _timeToEnd, _timeToStart;
         private TimeSpan _totalTimeNeeded;
 
-        public TestWorkerClass(int duration, int minTime, int maxTime, List<string> sourcePaths, List<string> destPaths, TestInfo testInfo, BackgroundWorker bgWorker)
+        public TestWorkerClass(int duration, int minTime, int maxTime, List<string> sourcePaths, List<string> destPaths, TestInfo testInfo, BackgroundWorker bgWorker, DoWorkEventArgs e)
         {
             _sourcePaths = sourcePaths;
             _destPaths = destPaths;
@@ -50,6 +51,7 @@ namespace SynclessSeamlessTester
             _bgWorker = bgWorker;
             _minTime = minTime * 1000;
             _maxTime = maxTime * 1000;
+            _e = e;
             StartTest();
         }
 
@@ -67,7 +69,7 @@ namespace SynclessSeamlessTester
             {
                 if (_bgWorker.CancellationPending)
                 {
-                    _testInfo.Propagated = true;
+                    _e.Cancel = true;
                     timer.Stop();
                     return;
                 }

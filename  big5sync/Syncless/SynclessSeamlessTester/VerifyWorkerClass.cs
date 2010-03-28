@@ -10,15 +10,15 @@ namespace SynclessSeamlessTester
 {
     public class VerifyWorkerClass
     {
-        private List<LazyFileCompare> _fileResults;
-        private List<LazyFolderCompare> _folderResults;
         private TestInfo _testInfo;
         private BackgroundWorker _bgWorker;
+        private DoWorkEventArgs _e;
 
-        public VerifyWorkerClass(List<string> dest, TestInfo testInfo, BackgroundWorker bgWorker)
+        public VerifyWorkerClass(List<string> dest, TestInfo testInfo, BackgroundWorker bgWorker, DoWorkEventArgs e)
         {
             _testInfo = testInfo;
             _bgWorker = bgWorker;
+            _e = e;
             LazyComparer(dest);
         }
 
@@ -46,10 +46,20 @@ namespace SynclessSeamlessTester
                 return (unionFiles.Except(intersectFiles, lazyComparer)).ToList();
 
             for (int i = 2; i < dest.Count; i++)
-                unionFiles = unionFiles.Union(GetLazyFileList(dest[i]), lazyComparer);
+            {
+                if (_bgWorker.CancellationPending)
+                    _e.Cancel = true;
+                else
+                    unionFiles = unionFiles.Union(GetLazyFileList(dest[i]), lazyComparer);
+            }
 
             for (int i = 2; i < dest.Count; i++)
-                intersectFiles = intersectFiles.Intersect(GetLazyFileList(dest[i]), lazyComparer);
+            {
+                if (_bgWorker.CancellationPending)
+                    _e.Cancel = true;
+                else
+                    intersectFiles = intersectFiles.Intersect(GetLazyFileList(dest[i]), lazyComparer);
+            }
 
             return (unionFiles.Except(intersectFiles, lazyComparer)).ToList();
         }
@@ -68,10 +78,20 @@ namespace SynclessSeamlessTester
                 return (unionFolders.Except(intersectFolders, lazyComparer)).ToList();
 
             for (int i = 2; i < dest.Count; i++)
-                unionFolders = unionFolders.Union(GetLazyFolderList(dest[i]), lazyComparer);
+            {
+                if (_bgWorker.CancellationPending)
+                    _e.Cancel = true;
+                else
+                    unionFolders = unionFolders.Union(GetLazyFolderList(dest[i]), lazyComparer);
+            }
 
             for (int i = 2; i < dest.Count; i++)
-                intersectFolders = intersectFolders.Intersect(GetLazyFolderList(dest[i]), lazyComparer);
+            {
+                if (_bgWorker.CancellationPending)
+                    _e.Cancel = true;
+                else
+                    intersectFolders = intersectFolders.Intersect(GetLazyFolderList(dest[i]), lazyComparer);
+            }
 
             return (unionFolders.Except(intersectFolders, lazyComparer)).ToList();
         }
