@@ -99,7 +99,7 @@ namespace SynclessUI
                 if (path != "")
                 {
                     DirectoryInfo di = new DirectoryInfo(path);
-                    if (di.Exists && !FileHelper.IsZipFile(path))
+                    if (di.Exists && !FileHelper.IsFile(path))
                     {
                         TxtBoxPath.Text = path;
                         ACBName.IsEnabled = true;
@@ -137,7 +137,7 @@ namespace SynclessUI
             {
                 if (Tagname != "")
                 {
-                    if (_path != "" && !FileHelper.IsZipFile(_path))
+                    if (_path != "" && !FileHelper.IsFile(_path))
                     {
                         bool tocontinue1 = this.TriggerLongPathWarning();
 						bool tocontinue2 = this.TriggerDriveWarning();

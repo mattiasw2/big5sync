@@ -863,7 +863,7 @@ namespace SynclessUI
                         // to detect folders
                         try {
                             var folder = new DirectoryInfo(path);
-                            if (folder.Exists && !FileHelper.IsZipFile(path))
+                            if (folder.Exists && !FileHelper.IsFile(path))
                             {
                                 var tw = new TagWindow(this, path, SelectedTag);
                             }
@@ -897,7 +897,7 @@ namespace SynclessUI
                         try
                         {
                             var folder = new DirectoryInfo(path);
-                            if (folder.Exists && !FileHelper.IsZipFile(path))
+                            if (folder.Exists && !FileHelper.IsFile(path))
                             {
                                 ShowDropIndicator();
                             }
@@ -1090,9 +1090,9 @@ namespace SynclessUI
         {
             string tagname = "";
 
-            if(FileHelper.IsZipFile(clipath))
+            if(FileHelper.IsFile(clipath))
             {
-                DialogsHelper.ShowError("Tagging not Allowed", "You cannot tag a zip file.");
+                DialogsHelper.ShowError("Tagging not Allowed", "You cannot tag a file.");
                 return;
             }
 
@@ -1117,9 +1117,9 @@ namespace SynclessUI
 
         public void CliUntag(string clipath)
         {
-            if (FileHelper.IsZipFile(clipath))
+            if (FileHelper.IsFile(clipath))
             {
-                DialogsHelper.ShowError("Untagging not Allowed", "You cannot tag a zip file.");
+                DialogsHelper.ShowError("Untagging not Allowed", "You cannot tag a file.");
                 return;
             }
 
@@ -1145,9 +1145,9 @@ namespace SynclessUI
 
         public void CliClean(string clipath)
         {
-            if (FileHelper.IsZipFile(clipath))
+            if (FileHelper.IsFile(clipath))
             {
-                DialogsHelper.ShowError("Cleaning not Allowed", "You cannot clean a zip file.");
+                DialogsHelper.ShowError("Cleaning not Allowed", "You cannot clean a file.");
                 return;
             }
 
