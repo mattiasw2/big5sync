@@ -773,6 +773,12 @@ namespace SynclessUI
                 }
             }
         }
+		
+        private void DisplayLogWindow()
+        {
+            var lw = new LogsWindow(this);
+            lw.ShowDialog();
+        }
 
         private void BtnOptions_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -1357,6 +1363,18 @@ namespace SynclessUI
             var kg8 = new KeyGesture(Key.S, ModifierKeys.Control);
             var ib8 = new InputBinding(ShortcutsCommand, kg8);
             InputBindings.Add(ib8);
+			
+            // Log Command
+            var LogCommand = new RoutedCommand();
+
+            var cb9 = new CommandBinding(LogCommand, LogCommandExecute, LogCommandCanExecute);
+            CommandBindings.Add(cb9);
+
+            BtnLog.Command = LogCommand;
+
+            var kg9 = new KeyGesture(Key.L, ModifierKeys.Control);
+            var ib9 = new InputBinding(LogCommand, kg9);
+            InputBindings.Add(ib9);
         }
 
         private void CreateTagCommandExecute(object sender, ExecutedRoutedEventArgs e)
@@ -1478,6 +1496,19 @@ namespace SynclessUI
         }
 
         private void DetailsCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+            e.Handled = true;
+        }
+		
+        private void LogCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            e.Handled = true;
+            //Actual Code
+            DisplayLogWindow();
+        }
+
+        private void LogCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;
