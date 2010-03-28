@@ -1270,9 +1270,22 @@ namespace Syncless.Core
             view.GroupList.Add(unavailableList);
 
             view.Created = t.CreatedDate;
-            view.IsSeamless = t.IsSeamless;
+
+
             view.IsQueued = CompareAndSyncController.Instance.IsQueued(t.TagName);
             view.IsSyncing = CompareAndSyncController.Instance.IsSyncing(t.TagName);
+
+            if (t.IsSeamless)
+            {
+                view.TagState = TagState.Seamless;
+            }
+            else
+            {
+                if (view.IsLocked)
+                {
+                    view.TagState = TagState.Switching;
+                }
+            }
             return view;
         }
         /// <summary>

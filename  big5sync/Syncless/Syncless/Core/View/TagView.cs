@@ -52,12 +52,11 @@ namespace Syncless.Core.View
             set { _created = value; }
         }
 
-        protected bool _isSeamless;
+        private TagState _tagState;
 
         public bool IsSeamless
         {
-            get { return _isSeamless; }
-            set { _isSeamless = value; }
+            get { return TagState == TagState.Seamless; }
         }
 
         private bool isQueued;
@@ -79,13 +78,19 @@ namespace Syncless.Core.View
         {
             get { return (isQueued || isSyncing); }
         }
-        
+
+        public TagState TagState
+        {
+            get { return _tagState; }
+            set { _tagState = value; }
+        }
+
         public TagView(string tagname, long created)
         {
             this._tagName = tagname;
             this._created = created;
             this._lastupdated = created;
-            this._isSeamless = false;
+            this._tagState = TagState.Seamless;
             this._groupList = new List<PathGroupView>();
         }
         
