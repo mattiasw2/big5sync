@@ -412,7 +412,8 @@ namespace SynclessUI
         private void MinimizeWindow()
         {
             WindowState = WindowState.Minimized;
-            ShowInTaskbar = false;
+            if(Properties.Settings.Default.MinimizeToTray)
+                ShowInTaskbar = false;
         }
 
         private void RestoreWindow()
