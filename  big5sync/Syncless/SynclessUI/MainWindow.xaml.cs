@@ -133,7 +133,7 @@ namespace SynclessUI
 
         public void NotifySyncCompletion(string tagname)
         {
-            string message = "Synchronization completed at " + DateTime.Now;
+            string message = "Synchronization Completed at " + DateTime.Now;
 
             if (SelectedTag == tagname)
             {
@@ -150,7 +150,7 @@ namespace SynclessUI
 
         public void NotifyNothingToSync(string tagname)
         {
-            string message = "You have nothing to synchronize.";
+            string message = "Nothing to Synchronize";
 
             if (SelectedTag == tagname)
             {
@@ -186,7 +186,9 @@ namespace SynclessUI
                 ProgressBarSync.SetValue(ProgressBar.ValueProperty, progress.PercentComplete);
 
                 if (!(notification != null
-                    && notification.StartsWith("Synchronization completed")
+                    && (notification.StartsWith("Synchronization Completed")
+                    || notification.StartsWith("Please Wait")
+                    || notification.StartsWith("Nothing to Synchronize"))
                     && progress.Message == "Finalizing"))
                 {
                     LblStatusText.Content = progress.Message;
@@ -198,7 +200,7 @@ namespace SynclessUI
             _syncProgressNotificationDictionary[tagname] = progress.PercentComplete;
 
             if (!(notification != null
-                && notification.StartsWith("Synchronization completed")
+                && notification.StartsWith("Synchronization Completed")
                 && progress.Message == "Finalizing"))
             {
                 _tagStatusNotificationDictionary[tagname] = progress.Message;
@@ -253,13 +255,16 @@ namespace SynclessUI
                 switch (tv.TagState)
                 {
                     case TagState.Switching:
+                        Console.WriteLine("Viewing: Switching");
                         SwitchingMode();
                         break;
                     case TagState.Seamless:
+                        Console.WriteLine("Viewing: Seamless");
                         SeamlessMode();
                         break;
                     case TagState.Manual:
                         _manualSyncEnabled = !tv.IsLocked;
+                        Console.WriteLine("Viewing: Manual");
                         ManualMode();
                         break;
                 }
@@ -425,16 +430,17 @@ namespace SynclessUI
 
             try
             {
-                if (!Gui.GetTag(SelectedTag).IsLocked)
+                if (!Gui.GetTag(SelectedTag).IsLocked  || _tagStatusNotificationDictionary[SelectedTag] == "Finalizing")
                 {
                     if (string.Compare((string) LblSyncMode.Content, "Manual") == 0)
                     {
                         if (Gui.MonitorTag(SelectedTag, true))
                         {
-                            const string message = "Switching to Seamless Mode.";
+                            const string message = "Please Wait";
                             LblStatusText.Content = message;
                             _tagStatusNotificationDictionary[SelectedTag] = message;
                             SwitchingMode();
+                            Console.WriteLine("User -> Switching");
                         }
                         else
                         {
@@ -446,9 +452,6 @@ namespace SynclessUI
                     {
                         if (Gui.MonitorTag(SelectedTag, false))
                         {
-                            const string message = "Switched to Manual Mode.";
-                            LblStatusText.Content = message;
-                            _tagStatusNotificationDictionary[SelectedTag] = message;
                             ManualMode();
                         }
                         else
@@ -480,7 +483,7 @@ namespace SynclessUI
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOnForeground");
             //ProgressBarSync.Visibility = System.Windows.Visibility.Hidden;
             //LblProgress.Visibility = System.Windows.Visibility.Hidden;
-            Console.WriteLine("Seamless Mode");
+            Console.WriteLine("In Seamless Mode");
         }
 
         private void SwitchingMode()
@@ -494,7 +497,7 @@ namespace SynclessUI
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOffForeground");
             ProgressBarSync.Visibility = Visibility.Visible;
             LblProgress.Visibility = Visibility.Visible;
-            Console.WriteLine("Switching Mode");
+            Console.WriteLine("In Switching Mode");
         }
 
         private void ManualMode()
@@ -521,7 +524,7 @@ namespace SynclessUI
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOffForeground");
             ProgressBarSync.Visibility = Visibility.Visible;
             LblProgress.Visibility = Visibility.Visible;
-            Console.WriteLine("Manual Mode");
+            Console.WriteLine("In Manual Mode");
         }
 
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
@@ -1092,13 +1095,16 @@ namespace SynclessUI
                                                                         switch (tv.TagState)
                                                                         {
                                                                             case TagState.Switching:
+                                                                                Console.WriteLine("Tag Changed: Switching");
                                                                                 SwitchingMode();
                                                                                 break;
                                                                             case TagState.Seamless:
+                                                                                Console.WriteLine("Tag Changed: Seamless");
                                                                                 SeamlessMode();
                                                                                 break;
                                                                             case TagState.Manual:
                                                                                 _manualSyncEnabled = !tv.IsLocked;
+                                                                                Console.WriteLine("Tag Changed: Manual");
                                                                                 ManualMode();
                                                                                 break;
                                                                         }
