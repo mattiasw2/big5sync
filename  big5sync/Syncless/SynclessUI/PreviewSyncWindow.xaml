@@ -3,12 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Name="Window" x:Class="SynclessUI.PreviewSyncWindow"
-    Title="Preview Sync" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}" Width="800" Height="700" WindowStartupLocation="CenterScreen" Icon="Icons/logo.ico" ResizeMode="NoResize">
-	<Window.Triggers>
-		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
-			<BeginStoryboard x:Name="WindowOnLoaded_BeginStoryboard" Storyboard="{StaticResource WindowOnLoaded}"/>
-		</EventTrigger>
-	</Window.Triggers>
+    Title="Preview Sync" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}" WindowStartupLocation="CenterScreen" Icon="Icons/logo.ico" ResizeMode="CanMinimize">
 	<Grid x:Name="LayoutRoot" HorizontalAlignment="Center" VerticalAlignment="Center" Height="400" Width="700">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="20"/>
@@ -50,4 +45,32 @@
             </toolkit:DataGrid.Columns>
         </toolkit:DataGrid>
 	</Grid>
+	
+	<Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard Name="FormFade">
+                    <DoubleAnimation Name="FormFadeAnimation"
+                                            Storyboard.TargetName="Window"
+                                            Storyboard.TargetProperty="(Window.Opacity)"
+                                            From="0.0" To="0.95" Duration="00:00:00.3"
+                                            AutoReverse="False" RepeatBehavior="1x"
+                                         />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+		
+        <EventTrigger RoutedEvent="Window.Unloaded">
+            <BeginStoryboard>
+                <Storyboard Name="FormFadeOut" Completed="FormFadeOut_Completed">
+                    <DoubleAnimation Name="FormFadeOutAnimation"
+                                            Storyboard.TargetName="Window"
+                                            Storyboard.TargetProperty="(Window.Opacity)"
+                                            From="0.95" To="0.0" Duration="00:00:00.3"
+                                            AutoReverse="False" RepeatBehavior="1x"
+                                         />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+	</Window.Triggers>
 </Window>

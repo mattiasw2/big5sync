@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace SynclessUI
 {
@@ -14,17 +17,17 @@ namespace SynclessUI
 
 		private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
 		{
-			this.Close();
+            FormFadeOut.Begin();
 		}
 
 		private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
-			this.Close();
+            FormFadeOut.Begin();
 		}
 
-		private void LayoutRoot_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-		{
-			this.Close();
-		}
+        private void FormFadeOut_Completed(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

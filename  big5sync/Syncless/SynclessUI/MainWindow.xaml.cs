@@ -30,7 +30,6 @@ namespace SynclessUI
         private const string UNI_DIRECTIONAL = "Uni-Dir..";
         private string _appPath;
         private bool _closenormally = true;
-        private bool _firstopen = true;
         private bool _manualSyncEnabled = true;
 
         private NotificationWatcher _notificationWatcher;
@@ -193,7 +192,7 @@ namespace SynclessUI
                     LblStatusText.Content = progress.Message;
                 }
 
-                SetProgressBarColor(progress.PercentComplete);
+               SetProgressBarColor(progress.PercentComplete);
             }
 
             _syncProgressNotificationDictionary[tagname] = progress.PercentComplete;
@@ -225,7 +224,7 @@ namespace SynclessUI
             ProgressBarSync.Foreground = new SolidColorBrush(Color.FromArgb(255, rcolor, gcolor, bcolor));
         }
 
-        private void NotifyBalloon(string title, string text)
+        public void NotifyBalloon(string title, string text)
         {
             TaskbarIcon.ShowBalloonTip(title, text, BalloonIcon.Info);
         }
@@ -508,17 +507,20 @@ namespace SynclessUI
             {
                 if (Gui.GetTag(SelectedTag).PathStringList.Count > 1)
                 {
+                    BtnSyncNow.IsEnabled = false;
+                    BtnPreview.IsEnabled = false;
+                    BtnSyncMode.IsEnabled = false;
                     if (Gui.StartManualSync(SelectedTag))
                     {
                         const string message = "Synchronization request has been queued.";
                         LblStatusText.Content = message;
                         _tagStatusNotificationDictionary[SelectedTag] = message;
-                        BtnSyncNow.IsEnabled = false;
-                        BtnPreview.IsEnabled = false;
-                        BtnSyncMode.IsEnabled = false;
                     }
                     else
                     {
+                        BtnSyncNow.IsEnabled = true;
+                        BtnPreview.IsEnabled = true;
+                        BtnSyncMode.IsEnabled = true;
                         DialogsHelper.ShowError("Synchronization Error", "'" + SelectedTag + "' could not be synchronized.");
                     }
                 } 
@@ -873,7 +875,7 @@ namespace SynclessUI
                             var folder = new DirectoryInfo(path);
                             if (folder.Exists && !FileHelper.IsFile(path))
                             {
-                                var tw = new TagWindow(this, path, SelectedTag);
+                                var tw = new TagWindow(this, path, SelectedTag, false);
                             }
                         } catch
                         {
@@ -1115,16 +1117,12 @@ namespace SynclessUI
                 return;
             }
 
-            var tw = new TagWindow(this, clipath, tagname);
-            if (_firstopen == true)
-            {
-                MinimizeWindow();
-                _firstopen = false;
-            }
+            var tw = new TagWindow(this, clipath, tagname, true);
         }
 
         public void CliUntag(string clipath)
         {
+            System.Windows.WindowState currentWindowState = this.WindowState;
             if (FileHelper.IsFile(clipath))
             {
                 DialogsHelper.ShowError("Untagging not Allowed", "You cannot tag a file.");
@@ -1143,12 +1141,7 @@ namespace SynclessUI
                 return;
             }
 
-            var tw = new UntagWindow(this, clipath);
-            if (_firstopen == true)
-            {
-                MinimizeWindow();
-                _firstopen = false;
-            }
+            var tw = new UntagWindow(this, clipath, true);
         }
 
         public void CliClean(string clipath)
@@ -1417,7 +1410,7 @@ namespace SynclessUI
         {
             if (!Gui.GetTag(SelectedTag).IsLocked)
             {
-                var tw = new TagWindow(this, "", SelectedTag);
+                var tw = new TagWindow(this, "", SelectedTag, false);
             }
             else
             {

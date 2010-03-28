@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Media;
@@ -78,24 +79,29 @@ namespace SynclessUI
 
         private void BtnOkCP1_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-        	this.Close();
+        	FormFadeOut.Begin();
         }
 		
         private void BtnOkCP2_Click(object sender, System.Windows.RoutedEventArgs e)
         {
 			Application.Current.Properties["DialogWindowChoice"] = true;
-        	this.Close();
+        	FormFadeOut.Begin();
         }
 		
         private void BtnCancelCP2_Click(object sender, System.Windows.RoutedEventArgs e)
         {
 			Application.Current.Properties["DialogWindowChoice"] = false;
-        	this.Close();
+        	FormFadeOut.Begin();
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
         	this.DragMove();
+        }
+		
+        private void FormFadeOut_Completed(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

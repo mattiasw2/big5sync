@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using Syncless.Core.Exceptions;
 using SynclessUI.Helper;
@@ -37,7 +38,7 @@ namespace SynclessUI
                     }
                     else
                     {
-                        this.Close();
+                        FormFadeOut.Begin();
                     }
                 }
                 else
@@ -53,7 +54,7 @@ namespace SynclessUI
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-        	this.Close();
+        	FormFadeOut.Begin();
         }
 
 		private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -65,5 +66,10 @@ namespace SynclessUI
 		{
 			this.DragMove();
 		}
+		
+        private void FormFadeOut_Completed(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

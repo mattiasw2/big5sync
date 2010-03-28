@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using Syncless.Core.Exceptions;
 using Syncless.Filters;
@@ -81,7 +82,7 @@ namespace SynclessUI
             try {
 				if(!_main.Gui.GetTag(_tagname).IsLocked) {
                     bool result = _main.Gui.UpdateFilterList(_tagname, filters);
-			        this.Close();
+			        FormFadeOut.Begin();
                 }
                 else
                 {
@@ -97,7 +98,7 @@ namespace SynclessUI
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.Close();
+            FormFadeOut.Begin();
         }
 
 		private void BtnAddFilter_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -196,6 +197,11 @@ namespace SynclessUI
         private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
         	this.DragMove();
+        }
+		
+        private void FormFadeOut_Completed(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

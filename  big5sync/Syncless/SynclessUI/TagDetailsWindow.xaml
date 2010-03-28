@@ -4,12 +4,7 @@
 	xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Name="Window"
 	x:Class="SynclessUI.TagDetailsWindow"
-    Title="Tag Details" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}" WindowStartupLocation="CenterScreen" Icon="Icons/logo.ico" mc:Ignorable="d" Opacity="0.95" ResizeMode="NoResize">
-	<Window.Triggers>
-		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
-			<BeginStoryboard x:Name="WindowOnLoaded_BeginStoryboard" Storyboard="{StaticResource WindowOnLoaded}"/>
-		</EventTrigger>
-	</Window.Triggers>
+    Title="Tag Details" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}" WindowStartupLocation="CenterScreen" Icon="Icons/logo.ico" mc:Ignorable="d" Opacity="0.95" ResizeMode="CanMinimize">
     <Window.Resources>
         <SolidColorBrush x:Key="TabButtonForeground" Color="#FFFFFFFF"/>
         <SolidColorBrush x:Key="TabButtonBorder" Color="#FF666666"/>
@@ -255,5 +250,31 @@
 	<!-- End of Central Pane -->
 	
 	</Grid>
-	
+	<Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard Name="FormFade">
+                    <DoubleAnimation Name="FormFadeAnimation"
+                                            Storyboard.TargetName="Window"
+                                            Storyboard.TargetProperty="(Window.Opacity)"
+                                            From="0.0" To="0.95" Duration="00:00:00.3"
+                                            AutoReverse="False" RepeatBehavior="1x"
+                                         />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+		
+        <EventTrigger RoutedEvent="Window.Unloaded">
+            <BeginStoryboard>
+                <Storyboard Name="FormFadeOut" Completed="FormFadeOut_Completed">
+                    <DoubleAnimation Name="FormFadeOutAnimation"
+                                            Storyboard.TargetName="Window"
+                                            Storyboard.TargetProperty="(Window.Opacity)"
+                                            From="0.95" To="0.0" Duration="00:00:00.3"
+                                            AutoReverse="False" RepeatBehavior="1x"
+                                         />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+	</Window.Triggers>
 </Window>
