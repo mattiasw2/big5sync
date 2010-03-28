@@ -134,10 +134,9 @@ namespace Syncless.Monitor
                 rootsAndParent.Remove(path);
                 return ;
             }
-            string parent = directory.Parent.FullName;
-            FileSystemWatcher newRootWatcher;
-            List<string> folders;
-            bool related = false;
+
+
+            List<string> transferedPath = null;
             for (int i = 0; i < rootWatchers.Count; i++)
             {
                 FileSystemWatcher rootWatcher = rootWatchers[i];
@@ -146,59 +145,32 @@ namespace Syncless.Monitor
                 {
                     rootWatcher.Dispose();
                     rootWatchers.RemoveAt(i);
+                    transferedPath = (List<string>)rootsAndParent[rootWatcher.Path];
                     rootsAndParent.Remove(rootWatcher.Path);
-                    
-                    newRootWatcher = CreateRootWatcher(parent, "*.*");
-                    rootWatchers.Add(newRootWatcher);
-                    folders = new List<string>();
-                    folders.Add(path);
-                    rootsAndParent.Add(parent, folders);
-                    related = true;
-                }
-                else if (rootWatchPath.Equals(parent.ToLower())) // Same root
-                {
-                    foreach (DictionaryEntry de in rootsAndParent)
-                    {
-                        if (((string)de.Key).ToLower().Equals(parent))
-                        {
-                            ((List<string>)de.Value).Add(path);
-                        }
-                    }
-                    related = true;
-                }
-                else if (rootWatchPath.StartsWith(parent.ToLower())) // Remove all child root watcher
-                {
-                    DirectoryInfo newDirectory = new DirectoryInfo(parent);
-                    DirectoryInfo existingDirectory = new DirectoryInfo(rootWatchPath);
-                    bool isChild = false;
-                    if (newDirectory.Root.FullName.ToLower().Equals(newDirectory.FullName.ToLower()))
-                    {
-                        isChild = true;
-                    }
-                    else if (!newDirectory.Parent.FullName.ToLower().Equals(existingDirectory.Parent.FullName.ToLower())) // Adding a child directory
-                    {
-                        isChild = true;
-                    }
-                    if (isChild)
-                    {
-                        rootWatcher.Dispose();
-                        rootWatchers.RemoveAt(i);
-                        rootsAndParent.Remove(rootWatcher.Path);
-
-                        newRootWatcher = CreateRootWatcher(parent, "*.*");
-                        rootWatchers.Add(newRootWatcher);
-                        folders = new List<string>();
-                        folders.Add(path);
-                        rootsAndParent.Add(parent, folders);
-                        related = true;
-                    }
                 }
             }
-            if (!related)
+
+            bool noRootWatcher = true;
+            string parent = directory.Parent.FullName;
+            foreach (DictionaryEntry de in rootsAndParent)
             {
-                newRootWatcher = CreateRootWatcher(parent, "*.*");
+                if (((string)de.Key).ToLower().Equals(parent.ToLower()))
+                {
+                    List<string> paths = (List<string>)de.Value;
+                    paths.Add(path);
+                    noRootWatcher = false;
+                    break;
+                }
+            }
+            if (noRootWatcher)
+            {
+                FileSystemWatcher newRootWatcher = CreateRootWatcher(parent, "*.*");
                 rootWatchers.Add(newRootWatcher);
-                folders = new List<string>();
+                List<string> folders = new List<string>();
+                if (transferedPath != null)
+                {
+                    folders.AddRange(transferedPath);
+                }
                 folders.Add(path);
                 rootsAndParent.Add(parent, folders);
             }
