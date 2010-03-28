@@ -47,7 +47,7 @@
 			<Button x:Name="BtnOk" Margin="0,0,5,0" Height="28" Click="BtnOk_Click" IsDefault="True">
 				<Label x:Name="LblOk" FontFamily="Century Gothic" FontSize="9.333" Content="Create"/>
 			</Button>
-			<Button x:Name="BtnCancel" Margin="0" Height="28" Width="50" Click="BtnCancel_Click" IsCancel="True">
+			<Button x:Name="BtnCancel" Margin="0" Height="28" Click="BtnCancel_Click" IsCancel="True">
 				<Label x:Name="LblCancel" FontFamily="Century Gothic" FontSize="9.333" Content="Cancel"/>
 			</Button>
 		</StackPanel>
