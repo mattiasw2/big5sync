@@ -25,6 +25,8 @@ namespace Syncless.Notification
         public const string DEL_TAG_NOTIFICATION = "111";
 
         public const string MONITOR_TAG_NOTIFICATION = "121";
+
+        public const string TAGGED_PATH_DELETED_NOTIFICATION = "130";
         #endregion
         
     }
