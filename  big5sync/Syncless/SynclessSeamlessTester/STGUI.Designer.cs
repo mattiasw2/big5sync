@@ -59,6 +59,7 @@
             this.buttonClearLogs = new System.Windows.Forms.Button();
             this.labelLogs = new System.Windows.Forms.Label();
             this.buttonCompare = new System.Windows.Forms.Button();
+            this.buttonSaveLog = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxSourcePath
@@ -141,9 +142,9 @@
             this.sourcePathsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sourcePathsLabel.Location = new System.Drawing.Point(13, 9);
             this.sourcePathsLabel.Name = "sourcePathsLabel";
-            this.sourcePathsLabel.Size = new System.Drawing.Size(300, 13);
+            this.sourcePathsLabel.Size = new System.Drawing.Size(71, 13);
             this.sourcePathsLabel.TabIndex = 8;
-            this.sourcePathsLabel.Text = "Source Paths (Folders To Take Files/Folders From):";
+            this.sourcePathsLabel.Text = "Repository:";
             // 
             // labelDestPaths
             // 
@@ -151,9 +152,9 @@
             this.labelDestPaths.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelDestPaths.Location = new System.Drawing.Point(13, 223);
             this.labelDestPaths.Name = "labelDestPaths";
-            this.labelDestPaths.Size = new System.Drawing.Size(402, 13);
+            this.labelDestPaths.Size = new System.Drawing.Size(84, 13);
             this.labelDestPaths.TabIndex = 14;
-            this.labelDestPaths.Text = "Destination Paths (Folders Which Are Supposed To Be Kept In Sync):";
+            this.labelDestPaths.Text = "Sync Folders:";
             // 
             // listBoxDestPaths
             // 
@@ -305,8 +306,9 @@
             // 
             // textBoxLog
             // 
-            this.textBoxLog.BackColor = System.Drawing.Color.White;
+            this.textBoxLog.BackColor = System.Drawing.Color.Black;
             this.textBoxLog.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxLog.ForeColor = System.Drawing.Color.White;
             this.textBoxLog.Location = new System.Drawing.Point(493, 29);
             this.textBoxLog.Multiline = true;
             this.textBoxLog.Name = "textBoxLog";
@@ -317,9 +319,9 @@
             // 
             // buttonClearLogs
             // 
-            this.buttonClearLogs.Location = new System.Drawing.Point(622, 497);
+            this.buttonClearLogs.Location = new System.Drawing.Point(714, 497);
             this.buttonClearLogs.Name = "buttonClearLogs";
-            this.buttonClearLogs.Size = new System.Drawing.Size(156, 23);
+            this.buttonClearLogs.Size = new System.Drawing.Size(193, 23);
             this.buttonClearLogs.TabIndex = 26;
             this.buttonClearLogs.Text = "Clear Logs";
             this.buttonClearLogs.UseVisualStyleBackColor = true;
@@ -345,12 +347,23 @@
             this.buttonCompare.UseVisualStyleBackColor = true;
             this.buttonCompare.Click += new System.EventHandler(this.buttonCompare_Click);
             // 
+            // buttonSaveLog
+            // 
+            this.buttonSaveLog.Location = new System.Drawing.Point(493, 497);
+            this.buttonSaveLog.Name = "buttonSaveLog";
+            this.buttonSaveLog.Size = new System.Drawing.Size(193, 23);
+            this.buttonSaveLog.TabIndex = 29;
+            this.buttonSaveLog.Text = "Save Log";
+            this.buttonSaveLog.UseVisualStyleBackColor = true;
+            this.buttonSaveLog.Click += new System.EventHandler(this.buttonSaveLog_Click);
+            // 
             // FormSeamlessTester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(919, 547);
+            this.Controls.Add(this.buttonSaveLog);
             this.Controls.Add(this.buttonCompare);
             this.Controls.Add(this.labelLogs);
             this.Controls.Add(this.buttonClearLogs);
@@ -422,6 +435,7 @@
         private System.Windows.Forms.Button buttonClearLogs;
         private System.Windows.Forms.Label labelLogs;
         private System.Windows.Forms.Button buttonCompare;
+        private System.Windows.Forms.Button buttonSaveLog;
     }
 }
 
