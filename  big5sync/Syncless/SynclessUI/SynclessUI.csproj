@@ -115,6 +115,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LogsWindow.xaml.cs">
+      <DependentUpon>LogsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
@@ -189,6 +192,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="LogsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="DialogWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -235,6 +242,7 @@
     <Resource Include="Icons\completelogo.ico" />
     <Resource Include="Icons\createtag.ico" />
     <Resource Include="Icons\dropindicator.ico" />
+    <Resource Include="Icons\log.ico" />
     <Resource Include="Icons\unmonitor.ico" />
     <Resource Include="Icons\filter.ico" />
     <Resource Include="Icons\folder.ico" />

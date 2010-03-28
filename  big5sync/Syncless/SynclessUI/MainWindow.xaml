@@ -90,13 +90,209 @@
 			<GradientStop Color="#FF8FE2FD" Offset="0.5"/>
 		</LinearGradientBrush>
 		<Storyboard x:Key="MainWindowOnLoaded">
-			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="{x:Null}" Storyboard.TargetProperty="(UIElement.Opacity)">
-				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:00.2500000" Value="1"/>
-			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LogoHighlight" Storyboard.TargetProperty="(UIElement.Opacity)">
 				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
 				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="OptionMinClosePanel" Storyboard.TargetProperty="(UIElement.Visibility)">
+				<DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HeaderPanel" Storyboard.TargetProperty="(UIElement.Visibility)">
+				<DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:00.7000000" Value="{x:Static Visibility.Visible}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:00.9000000" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagInfoLayoutRoot" Storyboard.TargetProperty="(UIElement.Visibility)">
+				<DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:01.8000000" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagListLayoutRoot" Storyboard.TargetProperty="(UIElement.Visibility)">
+				<DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:02.9000000" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Canvas" Storyboard.TargetProperty="(FrameworkElement.Height)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.7000000" Value="425"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HeaderPanel" Storyboard.TargetProperty="(FrameworkElement.Width)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="262"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.7000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.9000000" Value="262"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnCreatePanel" Storyboard.TargetProperty="(UIElement.Visibility)">
+				<DiscreteObjectKeyFrame KeyTime="00:00:00.4000000" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:01" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnRemovePanel" Storyboard.TargetProperty="(UIElement.Visibility)">
+				<DiscreteObjectKeyFrame KeyTime="00:00:00.4000000" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:01.1000000" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnTagPanel" Storyboard.TargetProperty="(UIElement.Visibility)">
+				<DiscreteObjectKeyFrame KeyTime="00:00:00.4000000" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:01.2000000" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnUntagPanel" Storyboard.TargetProperty="(UIElement.Visibility)">
+				<DiscreteObjectKeyFrame KeyTime="00:00:00.4000000" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:01.3000000" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnDetailsPanel" Storyboard.TargetProperty="(UIElement.Visibility)">
+				<DiscreteObjectKeyFrame KeyTime="00:00:00.4000000" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:01.4000000" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnLogPanel" Storyboard.TargetProperty="(UIElement.Visibility)">
+				<DiscreteObjectKeyFrame KeyTime="00:00:00.4000000" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:01.5000000" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnUnmonitorPanel" Storyboard.TargetProperty="(UIElement.Visibility)">
+				<DiscreteObjectKeyFrame KeyTime="00:00:00.4000000" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:01.6000000" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ToolBar" Storyboard.TargetProperty="(FrameworkElement.Height)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.8000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01" Value="60"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ToolBar" Storyboard.TargetProperty="(UIElement.Visibility)">
+				<DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:00.7000000" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnCreatePanel" Storyboard.TargetProperty="(FrameworkElement.Height)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="50"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnRemovePanel" Storyboard.TargetProperty="(FrameworkElement.Height)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="50"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnTagPanel" Storyboard.TargetProperty="(FrameworkElement.Height)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="50"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnUntagPanel" Storyboard.TargetProperty="(FrameworkElement.Height)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="50"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnDetailsPanel" Storyboard.TargetProperty="(FrameworkElement.Height)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="50"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnLogPanel" Storyboard.TargetProperty="(FrameworkElement.Height)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="50"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnUnmonitorPanel" Storyboard.TargetProperty="(FrameworkElement.Height)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="50"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagInfoCanvas" Storyboard.TargetProperty="(FrameworkElement.Height)">
+				<SplineDoubleKeyFrame KeyTime="00:00:01.8000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.1000000" Value="255"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagTitle" Storyboard.TargetProperty="(UIElement.Visibility)">
+				<DiscreteObjectKeyFrame KeyTime="00:00:01.8000000" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:02.1000000" Value="{x:Static Visibility.Visible}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:02.3000000" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagTitle" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:01.8000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.1000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.3000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagIcon" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:01.8000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.2000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.4000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagStatusPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:01.8000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.7000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.9000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ProgressBarSync" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:01.8000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.5000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.7000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LblProgress" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:01.8000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.6000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.8000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="SyncPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:01.8000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.4000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.6000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BdrTaggedPath" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:01.8000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.3000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.5000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LblTagList" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:02.9000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.2000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.4000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagListIcon" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:02.9000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.3000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.5000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TxtBoxFilterTag" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:02.9000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.4000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.6000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ListBoxTag" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:02.9000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.5000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.7000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LblTagCount" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:02.9000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.2000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.4000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ImgFilter" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:02.9000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.4000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.6000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagListCanvas" Storyboard.TargetProperty="(FrameworkElement.Height)">
+				<SplineDoubleKeyFrame KeyTime="00:00:02.9000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.2000000" Value="255"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnCreatePanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01.2000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnRemovePanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01.1000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01.3000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnTagPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01.2000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01.4000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnUntagPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01.3000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01.5000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnDetailsPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01.4000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01.6000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnLogPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01.5000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01.7000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnUnmonitorPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01.6000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01.8000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="OptionMinClosePanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.7000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.9000000" Value="1"/>
 			</DoubleAnimationUsingKeyFrames>
 		</Storyboard>
 		<Storyboard x:Key="SynclessLogoJumps">
@@ -176,7 +372,7 @@
 		</Grid.ColumnDefinitions>
     
 		<!-- Overall Canvas -->
-		<Rectangle Grid.Row="0" Grid.RowSpan="6" x:Name="Canvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.ColumnSpan="5" MouseLeftButtonDown="Canvas_MouseLeftButtonDown">
+		<Rectangle Grid.Row="0" Grid.RowSpan="6" x:Name="Canvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.ColumnSpan="5" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" Height="425">
 			<Rectangle.Fill>
 				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 					<GradientStop Color="#FF707271" Offset="0"/>
@@ -194,7 +390,7 @@
 			<Image x:Name="BtnClose" Source="Icons/close.ico" Width="19" Height="20" Stretch="UniformToFill" d:LayoutOverrides="VerticalMargin" MouseLeftButtonDown="BtnClose_MouseLeftButtonDown" Cursor="Hand" ToolTip="Exit Syncless" />
 		</StackPanel>
 		<!-- Header Panel -->
-		<StackPanel x:Name="HeaderPanel" Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Top" Grid.ColumnSpan="4" Grid.RowSpan="2">
+		<StackPanel x:Name="HeaderPanel" Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Top" Grid.ColumnSpan="4" Grid.RowSpan="2" HorizontalAlignment="Left" Height="67" Width="262">
 			<StackPanel x:Name="SynclessLogoContainer" Margin="0" Orientation="Vertical" MouseEnter="SynclessLogoContainer_MouseEnter">
 				<Image x:Name="SynclessLogo" Source="Icons/completelogo.ico" Height="50" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Stretch="Fill" MouseLeftButtonDown="SynclessLogo_MouseLeftButtonDown" Cursor="Hand" ToolTip="Visit Syncless's Google Code Homepage" Width="50" Margin="0,10,0,0"/>
 				<Ellipse x:Name="LogoHighlight" Stroke="Black" Width="10" Height="3" Fill="White" Visibility="Hidden" Margin="0"/>
@@ -202,17 +398,16 @@
 			<Label x:Name="AppTitle" Content="Syncless" Foreground="#FFEEEEEE" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="-15,15,0,0" FontFamily="Fonts/#BankGothic Md BT"/>		
 			<!-- Menubar -->
 		</StackPanel>
+		<StackPanel  x:Name="ToolBar" OpacityMask="Black" Orientation="Horizontal" VerticalAlignment="Center" Background="#FF626262" Margin="1,0" Height="60"  Width="698" Grid.ColumnSpan="5" Grid.Row="2">
+			<StackPanel x:Name="BtnCreatePanel" Orientation="Vertical" Margin="20,10,0,0" VerticalAlignment="Top" Height="50"><Button x:Name="BtnCreate" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/createtag.ico" Stretch="Fill" ToolTip="Create Tag"/></Button><Label x:Name="LblCreate" HorizontalAlignment="Center" Content="Create" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+			<StackPanel x:Name="BtnRemovePanel" Orientation="Vertical" Margin="2,10,0,0" VerticalAlignment="Top" Height="50"><Button x:Name="btnRemove" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/removetag.ico" Stretch="Fill" ToolTip="Remove Tag"/></Button><Label x:Name="LblRemove" HorizontalAlignment="Center" Content="Remove" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE" Background="#00BDBDBD"/></StackPanel>
+			<StackPanel x:Name="BtnTagPanel" Orientation="Vertical" Margin="5,10,0,0" VerticalAlignment="Top" Height="50"><Button x:Name="btnTag" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28" Source="Icons/tag.ico" Stretch="Fill" ToolTip="Tag Folder" Margin="0,-2"/></Button><Label x:Name="LblTag" HorizontalAlignment="Center" Content="Tag" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+			<StackPanel x:Name="BtnUntagPanel" Orientation="Vertical" Margin="11,10,0,0" VerticalAlignment="Top" Height="50"><Button x:Name="btnUntag" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28" Source="Icons/untag.ico" Stretch="Fill" ToolTip="Untag Folder" Margin="0,-2"/></Button><Label x:Name="LblUntag" HorizontalAlignment="Center" Content="Untag" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+			<StackPanel x:Name="BtnDetailsPanel" Orientation="Vertical" Margin="9,10,0,0" VerticalAlignment="Top" Height="50"><Button x:Name="BtnDetails" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/details.ico" Stretch="Fill" ToolTip="Tag Details"/></Button><Label x:Name="LblDetails" HorizontalAlignment="Center" Content="Details" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+			<StackPanel x:Name="BtnLogPanel" Orientation="Vertical" Margin="10,10,0,0" VerticalAlignment="Top" Height="50"><Button x:Name="BtnLog" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/log.ico" Stretch="Fill" ToolTip="Log Window"/></Button><Label x:Name="LblLog" HorizontalAlignment="Center" Content="Log" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+			<StackPanel x:Name="BtnUnmonitorPanel" Orientation="Vertical" Margin="1,10,0,0" VerticalAlignment="Top" Height="50"><Button x:Name="BtnUnmonitor" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/unmonitor.ico" Stretch="Fill" ToolTip="Prepare a Removable Drive for Safety Removal"/></Button><Label x:Name="LblUnmonitor" HorizontalAlignment="Center" Content="Unmonitor" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
+		</StackPanel>
 		<!-- ToolBar -->
-		<dropShadow:SystemDropShadowChrome Grid.Row="2" Grid.ColumnSpan="5">
-			<StackPanel  x:Name="ToolBar" OpacityMask="Black" Orientation="Horizontal" VerticalAlignment="Center" Background="#FF626262" Margin="1,0" Height="60"  Width="698">
-				<StackPanel x:Name="BtnCreatePanel" Orientation="Vertical" Margin="20,0,2,0" VerticalAlignment="Bottom"><Button x:Name="BtnCreate" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/createtag.ico" Stretch="Fill" ToolTip="Create Tag"/></Button><Label x:Name="LblCreate" HorizontalAlignment="Center" Content="Create" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
-				<StackPanel x:Name="BtnRemovePanel" Orientation="Vertical" Margin="0,0,5,0" VerticalAlignment="Bottom"><Button x:Name="btnRemove" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/removetag.ico" Stretch="Fill" ToolTip="Remove Tag"/></Button><Label x:Name="LblRemove" HorizontalAlignment="Center" Content="Remove" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE" Background="#00BDBDBD"/></StackPanel>
-				<StackPanel x:Name="BtnTagPanel" Orientation="Vertical" Margin="0,0,11,0" VerticalAlignment="Bottom"><Button x:Name="btnTag" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28" Source="Icons/tag.ico" Stretch="Fill" ToolTip="Tag Folder" Margin="0,-2"/></Button><Label x:Name="LblTag" HorizontalAlignment="Center" Content="Tag" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
-				<StackPanel x:Name="BtnUntagPanel" Orientation="Vertical" Margin="0,0,11,0" VerticalAlignment="Bottom"><Button x:Name="btnUntag" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="28" Height="28" Source="Icons/untag.ico" Stretch="Fill" ToolTip="Untag Folder" Margin="0,-2"/></Button><Label x:Name="LblUntag" HorizontalAlignment="Center" Content="Untag" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
-				<StackPanel x:Name="BtnDetailsPanel" Orientation="Vertical" Margin="-2,0,5,0" VerticalAlignment="Bottom"><Button x:Name="BtnDetails" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/details.ico" Stretch="Fill" ToolTip="Tag Details"/></Button><Label x:Name="LblDetails" HorizontalAlignment="Center" Content="Details" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
-				<StackPanel x:Name="BtnUnmonitorPanel" Orientation="Vertical" Margin="-5,0,5,0" VerticalAlignment="Bottom"><Button x:Name="BtnUnmonitor" Width="40"><Image HorizontalAlignment="Left" VerticalAlignment="Top" Width="24" Height="24" Source="Icons/unmonitor.ico" Stretch="Fill" ToolTip="Prepare a Removable Drive for Safety Removal"/></Button><Label x:Name="LblUnmonitor" HorizontalAlignment="Center" Content="Unmonitor" Margin="0,-3,0,0" FontFamily="Century Gothic" FontSize="10.667" Foreground="#FFEEEEEE"/></StackPanel>
-			</StackPanel>
-		</dropShadow:SystemDropShadowChrome>
 		<!-- Tag Info Panel -->
 		<Grid x:Name="TagInfoLayoutRoot" Grid.Row="3" Grid.Column="1" Grid.RowSpan="1" Grid.ColumnSpan="1" Height="275" VerticalAlignment="Center">
 			<Grid.RowDefinitions>
@@ -230,7 +425,7 @@
 			</Grid.ColumnDefinitions>
 			
 			<!-- Tag Info Canvas -->		
-			<Rectangle x:Name="TagInfoCanvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="4">
+			<Rectangle x:Name="TagInfoCanvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="4" Height="255">
 				<Rectangle.Fill>
 					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 						<GradientStop Color="#FF626262" Offset="0"/>
@@ -252,16 +447,11 @@
 					</TransformGroup>
 				</Image.RenderTransform>
 			</Image>
-			
-			<!-- Tag Status Panel -->
-			<StackPanel x:Name="TagStatusPanel" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
-				<Label x:Name="LblStatusTitle" FontSize="10.667" FontFamily="Century Gothic" FontWeight="Bold" Content="Status:" Foreground="White"/>
-				<Label x:Name="LblStatusText" FontFamily="Century Gothic" FontSize="10.667" Content="[Status Text]" Foreground="White"/> 
-			</StackPanel>
-			<ProgressBar x:Name="ProgressBarSync" Margin="5,0,0,0" VerticalAlignment="Top" Height="20" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Width="397.4" Foreground="#FF00D300" />
-			<Label x:Name="LblProgress" Content="{Binding Value, ElementName=ProgressBarSync, Mode=Default}" ContentStringFormat="{} {0:0.##} %" d:LayoutOverrides="Width, Height" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,-3,0,0" FontFamily="Century Gothic" FontWeight="Bold"/>
-			
-			<!-- Tag Sync Panel -->
+			<Border x:Name="BdrTaggedPath" Padding="10" Grid.Row="2" Grid.Column="1" BorderBrush="#FF6F6F6F" BorderThickness="1" CornerRadius="5" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,10,0,0">
+				<StackPanel>
+					<ListBox x:Name="ListTaggedPath" MaxHeight="130" MinHeight="20" Width="290" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Style="{DynamicResource ListTaggedPathStyle}" MouseDoubleClick="ListTaggedPath_MouseDoubleClick" Cursor="Hand" ItemContainerStyle="{DynamicResource ListBoxTagPathItemStyle}" />
+				</StackPanel>
+			</Border>
 			<StackPanel x:Name="SyncPanel" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Right" Margin="0,30,0,0" VerticalAlignment="Top" Width="80">
 				<Button x:Name="BtnDirection" Height="28" Margin="0,0,0,5" Click="BtnDirection_Click" Visibility="Collapsed">
 					<Button.Background>
@@ -358,11 +548,16 @@
 					<Label x:Name="LblSyncNow" FontFamily="Century Gothic" FontSize="10.667" Content="Sync Now" ToolTip="Start Manual Synchronization"/>
 				</Button>
 			</StackPanel>
-			<Border x:Name="BdrTaggedPath" Padding="10" Grid.Row="2" Grid.Column="1" BorderBrush="#FF6F6F6F" BorderThickness="1" CornerRadius="5" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,10,0,0">
-				<StackPanel>
-					<ListBox x:Name="ListTaggedPath" MaxHeight="130" MinHeight="20" Width="290" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Style="{DynamicResource ListTaggedPathStyle}" MouseDoubleClick="ListTaggedPath_MouseDoubleClick" Cursor="Hand" ItemContainerStyle="{DynamicResource ListBoxTagPathItemStyle}" />
-				</StackPanel>
-			</Border>
+			<ProgressBar x:Name="ProgressBarSync" Margin="5,0,0,0" VerticalAlignment="Top" Height="20" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Width="397.4" Foreground="#FF00D300" />
+			<Label x:Name="LblProgress" Content="{Binding Value, ElementName=ProgressBarSync, Mode=Default}" ContentStringFormat=" {0:0.##} %" d:LayoutOverrides="Width, Height" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,-3,0,0" FontFamily="Century Gothic" FontWeight="Bold"/>
+			
+			<!-- Tag Status Panel -->
+			<StackPanel x:Name="TagStatusPanel" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
+				<Label x:Name="LblStatusTitle" FontSize="10.667" FontFamily="Century Gothic" FontWeight="Bold" Content="Status:" Foreground="White"/>
+				<Label x:Name="LblStatusText" FontFamily="Century Gothic" FontSize="10.667" Content="[Status Text]" Foreground="White"/> 
+			</StackPanel>
+			
+			<!-- Tag Sync Panel -->
 		</Grid>
 		
 		<!-- Tag List Info Panel -->
@@ -380,7 +575,7 @@
 				<ColumnDefinition Width="10"/>
 			</Grid.ColumnDefinitions>
 
-			<Rectangle x:Name="TagListCanvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="4">
+			<Rectangle x:Name="TagListCanvas" RadiusX="10" RadiusY="10" Stroke="Black" Grid.Row="1" Grid.ColumnSpan="3" Grid.RowSpan="4" Height="255">
 				<Rectangle.Fill>
 					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 						<GradientStop Color="#FF626262" Offset="0"/>
@@ -389,6 +584,7 @@
 				</Rectangle.Fill>
 			</Rectangle>
 			<Label x:Name="LblTagList" Grid.Row="1" Grid.Column="0" Foreground="#FFEEEEEE" Content="Tag List" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,4,0,4" Margin="2,0" FontSize="13.333" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
+			<Label x:Name="LblTagCount" Grid.Row="1" Grid.Column="0" Foreground="#FFEEEEEE" Content="[Count]" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,4,0,4" Margin="50,0,2,0" FontSize="13.333" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
 			<Image x:Name="TagListIcon" Source="Icons/taglist.ico" HorizontalAlignment="Right" Margin="0,-35,-15,0" Width="120" Height="120" VerticalAlignment="Top" Grid.RowSpan="3" d:LayoutOverrides="GridBox" Grid.ColumnSpan="3" Panel.ZIndex="1"/>
 			<TextBox x:Name="TxtBoxFilterTag" Grid.Row="2" Grid.Column="1" Background="#FF666666" Foreground="#FFCCCCCC" FontFamily="Century Gothic" FontSize="10.667" TextChanged="TxtBoxFilterTag_TextChanged" Margin="0" Style="{DynamicResource FilterTextBoxStyle}" Width="195" ToolTip="Type your filter here">
 				<TextBox.BorderBrush>
@@ -398,10 +594,8 @@
 						<GradientStop Color="#FF828790" Offset="1"/>
 					</LinearGradientBrush>
 				</TextBox.BorderBrush></TextBox>
-			<ListBox x:Name="ListBoxTag" Margin="0,10,0,0" Grid.Column="1" Grid.Row="3" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White" SelectionChanged="ListBoxTag_SelectionChanged" MaxHeight="180" ItemContainerStyle="{DynamicResource ListBoxTagItemStyle}" Height="180" Width="195" VerticalAlignment="Top" Style="{DynamicResource TagListBoxStyle}" KeyDown="ListBoxTag_KeyDown">
-			</ListBox>
-			<Label x:Name="LblTagCount" Grid.Row="1" Grid.Column="0" Foreground="#FFEEEEEE" Content="[Count]" FontFamily="Century Gothic" BorderBrush="#FF6f6f6f" BorderThickness="0,0,0,1" Padding="10,4,0,4" Margin="50,0,2,0" FontSize="13.333" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
 			<Image x:Name="ImgFilter" HorizontalAlignment="Left" Margin="2,0,0,-1" Width="16" Grid.Column="1" Source="Icons/filter.ico" Stretch="Fill" Grid.Row="2" Height="16"/>
+			<ListBox x:Name="ListBoxTag" Margin="0,10,0,0" Grid.Column="1" Grid.Row="3" FontFamily="Century Gothic" FontSize="13.333" Background="#FF666666" Foreground="White" SelectionChanged="ListBoxTag_SelectionChanged" MaxHeight="180" ItemContainerStyle="{DynamicResource ListBoxTagItemStyle}" Height="180" Width="195" VerticalAlignment="Top" Style="{DynamicResource TagListBoxStyle}" KeyDown="ListBoxTag_KeyDown"/>
 		</Grid>		
 		<tb:TaskbarIcon x:Name="TaskbarIcon" IconSource="/Icons/logo.ico" ToolTipText="Syncless" MenuActivation="RightClick" TrayLeftMouseDown="TaskbarIcon_TrayLeftMouseDown">
 			<tb:TaskbarIcon.ContextMenu>
