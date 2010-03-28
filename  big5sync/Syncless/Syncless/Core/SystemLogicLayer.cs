@@ -625,11 +625,19 @@ namespace Syncless.Core
 
         public bool CancelManualSync(string tagName)
         {
-            if (!CompareAndSyncController.Instance.IsQueuedOrSyncing(tagName))
+            try
             {
-                return false;
+                if (!CompareAndSyncController.Instance.IsQueuedOrSyncing(tagName))
+                {
+                    return false;
+                }
+                CompareAndSyncController.Instance.Cancel(new CancelSyncRequest(tagName));
             }
-
+            catch (Exception e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
             return true;
         }
 
@@ -1497,7 +1505,15 @@ namespace Syncless.Core
         }
         #endregion
 
-
-
+        internal void Untag(List<string> pathList)
+        {
+            
+            foreach (string path in pathList)
+            {
+                string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(path,false);
+                TaggingLayer.Instance.UntagFolder(convertedPath);
+            }
+            _userInterface.TagChanged();
+        }
     }
 }
