@@ -9,6 +9,7 @@ namespace Syncless.Notification
     {
         private List<ISyncProgressObserver> _observerList;
         private SyncState _state;
+
         public SyncState State
         {
             get { return _state; }
@@ -67,17 +68,17 @@ namespace Syncless.Notification
         {
             get
             {
-                if (_state == SyncState.ANALYZING)
+                if (_state == SyncState.Analyzing)
                 {
                     return 0;
                 }
-                else if (_state == SyncState.SYNCHRONIZING)
+                else if (_state == SyncState.Synchronizing)
                 {
                     double completed = _syncCompletedJobs + _syncFailedJobs;
                     double total = _syncjobtotal;
                     return completed / total * 100.0;
                 }
-                else if (_state == SyncState.FINALIZING)
+                else if (_state == SyncState.Finalizing)
                 {
                     double completed = _finalisingCompletedJobs;
                     double total = _finalisingJobTotal;
@@ -91,14 +92,14 @@ namespace Syncless.Notification
         {
             switch (_state)
             {
-                case SyncState.SYNCHRONIZING:
+                case SyncState.Synchronizing:
                     if (_syncCompletedJobs + _syncFailedJobs >= _syncjobtotal)
                     {
                         return;
                     }
                     _syncCompletedJobs++;
                     break;
-                case SyncState.FINALIZING:
+                case SyncState.Finalizing:
                     if (_finalisingCompletedJobs + _finalisingFailedJobs >= _finalisingJobTotal)
                     {
                         return;
@@ -125,14 +126,14 @@ namespace Syncless.Notification
         {
             switch (_state)
             {
-                case SyncState.SYNCHRONIZING:
+                case SyncState.Synchronizing:
                     if (_syncCompletedJobs + _syncFailedJobs >= _syncjobtotal)
                     {
                         return;
                     }
                     _syncFailedJobs++;
                     break;
-                case SyncState.FINALIZING:
+                case SyncState.Finalizing:
                     if (_finalisingCompletedJobs + _finalisingFailedJobs >= _finalisingJobTotal)
                     {
                         return;
@@ -170,11 +171,11 @@ namespace Syncless.Notification
 
         public bool ChangeToAnalyzing()
         {
-            if (_state != SyncState.STARTED)
+            if (_state != SyncState.Started)
             {
                 return false;
             }
-            _state = SyncState.ANALYZING;
+            _state = SyncState.Analyzing;
             _message = "Analyzing";
             TriggerStateChanged();
             return true;
@@ -182,11 +183,11 @@ namespace Syncless.Notification
         public bool ChangeToSyncing(int jobcount)
         {
             _syncjobtotal = jobcount;
-            if (_state != SyncState.ANALYZING)
+            if (_state != SyncState.Analyzing)
             {
                 return false;
             }
-            _state = SyncState.SYNCHRONIZING;
+            _state = SyncState.Synchronizing;
             _message = "Synchronzing";
             TriggerStateChanged();
             return true;
@@ -194,19 +195,19 @@ namespace Syncless.Notification
         public bool ChangeToFinalizing(int jobcount)
         {
             _finalisingJobTotal = jobcount;
-            if (_state != SyncState.SYNCHRONIZING)
+            if (_state != SyncState.Synchronizing)
             {
                 return false;
             }
 
-            _state = SyncState.FINALIZING;
+            _state = SyncState.Finalizing;
             _message = "Finalizing";
             TriggerStateChanged();
             return true;
         }
         public bool ChangeToFinished()
         {
-            if (_state != SyncState.FINALIZING)
+            if (_state != SyncState.Finalizing)
             {
                 return false;
             }

@@ -16,6 +16,7 @@ namespace Syncless.CompareAndSync
         private readonly Queue<AutoSyncRequest> _jobs = new Queue<AutoSyncRequest>();
         private readonly EventWaitHandle _wh = new AutoResetEvent(false);
         private static SeamlessQueueControl _instance;
+        private AutoSyncRequest _currJob;
 
         private SeamlessQueueControl()
         {
@@ -58,19 +59,19 @@ namespace Syncless.CompareAndSync
         {
             while (true)
             {
-                AutoSyncRequest item = null;
                 lock (locker)
                 {
                     if (_jobs.Count > 0)
                     {
-                        item = _jobs.Dequeue();
-                        if (item == null)
+                        _currJob = _jobs.Dequeue();
+                        if (_currJob == null)
                             return;
                     }
                 }
-                if (item != null)
+                if (_currJob != null)
                 {
-                    SeamlessSyncer.Sync(item);
+                    SeamlessSyncer.Sync(_currJob);
+                    _currJob = null;
                 }
                 else
                 {
@@ -86,15 +87,12 @@ namespace Syncless.CompareAndSync
 
         public bool PrepareForTermination()
         {
-            if (IsEmpty)
+            if (IsEmpty && _currJob == null)
             {
                 Dispose();
                 return true;
             }
-
-            //Handle states and determine what state to return. Call Dispose() if possible
-
-
+            _jobs.Clear();
             return false;
         }
 

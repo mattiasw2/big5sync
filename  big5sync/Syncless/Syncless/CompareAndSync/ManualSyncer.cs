@@ -14,53 +14,62 @@ namespace Syncless.CompareAndSync
 {
     public static class ManualSyncer
     {
-        public static void Sync(ManualSyncRequest request)
+        public static void Sync(ManualSyncRequest request, SyncProgress progress)
         {
-            if (request.Paths.Length < 2)
-            {
-                ServiceLocator.UINotificationQueue().Enqueue(new NothingToSyncNotification(request.TagName));
-                if (request.Notify)
-                    ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
-                return;
-            }
+            //if (request.Paths.Length < 2)
+            //{
+            //    ServiceLocator.UINotificationQueue().Enqueue(new NothingToSyncNotification(request.TagName));
+            //    if (request.Notify)
+            //        ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
+            //    return;
+            //}
 
             //Started
-            SyncStartNotification notification = new SyncStartNotification(request.TagName);
-            SyncProgress progress = notification.Progress;
+            //SyncStartNotification notification = new SyncStartNotification(request.TagName);
+            //SyncProgress progress = notification.Progress;
 
-            ServiceLocator.UINotificationQueue().Enqueue(notification);
+            //ServiceLocator.UINotificationQueue().Enqueue(notification);
+
             List<Filter> filters = request.Filters.ToList();
             filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
             RootCompareObject rco = new RootCompareObject(request.Paths);
 
             //Analyzing
             progress.ChangeToAnalyzing();
-            //if (request.IsCancelled) ;
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters));
-            //if (request.IsCancelled) ;
-            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
-            //if (request.IsCancelled) ;
-            CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor());
-            //if (request.IsCancelled) ;
+            if (progress.State == SyncState.Cancelled)
+                ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName));
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters), progress);
+            if (progress.State == SyncState.Cancelled)
+                ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName));
+            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), progress);
+            if (progress.State == SyncState.Cancelled)
+                ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName));
+            CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor(), progress);
+            if (progress.State == SyncState.Cancelled)
+                ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName));
             ComparerVisitor comparerVisitor = new ComparerVisitor();
-            CompareObjectHelper.PostTraverseFolder(rco, comparerVisitor);
-            //if (request.IsCancelled) ;
+            CompareObjectHelper.PostTraverseFolder(rco, comparerVisitor, progress);
+            if (progress.State == SyncState.Cancelled)
+                ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName));
 
-            //Syncing
-            progress.ChangeToSyncing(comparerVisitor.TotalNodes);
-            SyncerVisitor syncerVisitor = new SyncerVisitor(request.Config,progress);
-            CompareObjectHelper.PreTraverseFolder(rco, syncerVisitor);
+            if (progress.State != SyncState.Cancelled)
+            {
+                //Syncing
+                progress.ChangeToSyncing(comparerVisitor.TotalNodes);
+                SyncerVisitor syncerVisitor = new SyncerVisitor(request.Config, progress);
+                CompareObjectHelper.PreTraverseFolder(rco, syncerVisitor, progress);
 
-            //XML Writer
-            progress.ChangeToFinalizing(syncerVisitor.NodesCount);
+                //XML Writer
+                progress.ChangeToFinalizing(syncerVisitor.NodesCount);
 
-            CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor(progress));
+                CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor(progress), progress);
 
-            if (request.Notify)
-                ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
+                if (request.Notify)
+                    ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
 
-            //Finished
-            ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification(request.TagName,rco));
+                //Finished
+                ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification(request.TagName, rco));
+            }
         }
 
         public static RootCompareObject Compare(ManualCompareRequest request)
@@ -68,10 +77,10 @@ namespace Syncless.CompareAndSync
             List<Filter> filters = request.Filters.ToList();
             filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
             RootCompareObject rco = new RootCompareObject(request.Paths);
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters));
-            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor());
-            CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor());
-            CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor());
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters), null);
+            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), null);
+            CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor(), null);
+            CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor(), null);
             return rco;
         }
     }

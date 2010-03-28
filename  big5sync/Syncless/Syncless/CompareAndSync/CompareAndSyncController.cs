@@ -56,14 +56,14 @@ namespace Syncless.CompareAndSync
             ServiceLocator.UINotificationQueue().Enqueue(notification);
             RootCompareObject rco = new RootCompareObject(request.Paths);
             progress.ChangeToAnalyzing();
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters));
-            CompareObjectHelper.PreTraverseFolder(rco, new IgnoreMetaDataVisitor());
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters), progress);
+            CompareObjectHelper.PreTraverseFolder(rco, new IgnoreMetaDataVisitor(), progress);
             ComparerVisitor visitor = new ComparerVisitor();
 
-            CompareObjectHelper.PostTraverseFolder(rco, visitor);
+            CompareObjectHelper.PostTraverseFolder(rco, visitor, progress);
             int totalJobs = visitor.TotalNodes;
             progress.ChangeToSyncing(totalJobs);
-            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config, progress));
+            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config, progress), progress);
             progress.ChangeToFinalizing(0);
             progress.ChangeToFinished();
             ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification(request.TagName, rco));

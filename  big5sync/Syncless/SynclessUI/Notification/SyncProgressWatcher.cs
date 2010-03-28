@@ -44,7 +44,7 @@ namespace SynclessUI.Notification
 
         public void StateChanged()
         { 
-            if (_progress.State == SyncState.ANALYZING)
+            if (_progress.State == SyncState.Analyzing)
             {
                 _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                (Action)(() =>
