@@ -17,42 +17,27 @@ namespace SynclessUI
         
 		public PreviewSyncWindow(MainWindow main, string selectedTag)
         {
-			this.InitializeDataGrid();
-            InitializeComponent();
+            
 			
 			_main = main;
-
-            RootCompareObject rco = _main.Gui.PreviewSync(selectedTag);
-
-            if (rco != null)
-            {
-                // SyncUIHelper.TraverseFolderHelper(rco, new SyncerVisitor(request.Config, _previewSyncData));
-            }
-        }
-		
-		private void InitializeDataGrid() {
             _previewSyncData = new DataTable();
             _previewSyncData.Columns.Add(new DataColumn("Path1", typeof(string)));
             _previewSyncData.Columns.Add(new DataColumn("Operation", typeof(string)));
             _previewSyncData.Columns.Add(new DataColumn("Path2", typeof(string)));
 
-            var row = _previewSyncData.NewRow();
-            _previewSyncData.Rows.Add(row);
-			row["Path1"] = "World Of Warcraft";
-			row["Operation"] = "Blizzard";
-			row["Path2"] = "Blizzard";
+            RootCompareObject rco = _main.Gui.PreviewSync(selectedTag);
+            PreviewVisitor visitor = new PreviewVisitor(_previewSyncData);
+            if (rco != null)
+            {
 
-            row = _previewSyncData.NewRow();
-            _previewSyncData.Rows.Add(row);
-			row["Path1"] = "Halo 3";
-			row["Operation"] = "Bungie";
-			row["Path2"] = "Microsoft";
+                SyncUIHelper.TraverseFolderHelper(rco, visitor);
+            }
+            _previewSyncData = visitor.SyncData;
+            this.InitializeDataGrid();
 
-            row = _previewSyncData.NewRow();
-            _previewSyncData.Rows.Add(row);
-			row["Path1"] = "Gears Of War";
-			row["Operation"] = "Epic";
-			row["Path2"] = "Microsoft";
+        }
+		
+		private void InitializeDataGrid() {
 		
 			InitializeComponent();
 		}
