@@ -17,7 +17,6 @@ namespace SynclessUI.Notification
         private MainWindow _main;
         private SyncProgress _progress;
         private string _tagName;
-        
         public SyncProgress Progress
         {
             get { return _progress; }
@@ -30,7 +29,6 @@ namespace SynclessUI.Notification
             _tagName = tagName;
             _progress = p;
             _progress.AddObserver(this);
-
             SyncStart();
         }
 
@@ -45,8 +43,7 @@ namespace SynclessUI.Notification
         }
 
         public void StateChanged()
-        {
-            
+        { 
             if (_progress.State == SyncState.ANALYZING)
             {
                 _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
@@ -58,7 +55,6 @@ namespace SynclessUI.Notification
 
             Console.WriteLine("State Changed (New State : " + _progress.State + ")");   
         }
-
         public void ProgressChanged()
         {
             
