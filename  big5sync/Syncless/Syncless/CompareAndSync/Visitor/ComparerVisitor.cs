@@ -136,6 +136,26 @@ namespace Syncless.CompareAndSync.Visitor
 
         private static void CompareFiles(FileCompareObject file, int numOfPaths)
         {
+            //Rename will only occur if all other changes are MetaChangeType.NoChange or null
+            int renamePos = -1;
+
+            for (int i = 0; i < numOfPaths; i++)
+            {
+                if (file.ChangeType[i] == MetaChangeType.Rename)
+                    renamePos = i;
+                else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null)
+                {
+                    renamePos = -1;
+                    break;
+                }
+            }
+
+            if (renamePos > -1)
+            {
+                file.Priority[renamePos] = 1;
+                return;
+            }
+
             //Delete will only occur if all other changes are MetaChangeType.NoChange or null
             List<int> deletePos = new List<int>();
             bool stop = false;
@@ -171,26 +191,6 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 foreach (int i in deletePos)
                     file.Priority[i] = 1;
-                return;
-            }
-
-            //Rename will only occur if all other changes are MetaChangeType.NoChange or null
-            int renamePos = -1;
-
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                if (file.ChangeType[i] == MetaChangeType.Rename)
-                    renamePos = i;
-                else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null)
-                {
-                    renamePos = -1;
-                    break;
-                }
-            }
-
-            if (renamePos > -1)
-            {
-                file.Priority[renamePos] = 1;
                 return;
             }
 
@@ -272,6 +272,26 @@ namespace Syncless.CompareAndSync.Visitor
 
         private static void CompareFolders(FolderCompareObject folder, int numOfPaths)
         {
+            //Rename will only occur if all other changes are MetaChangeType.NoChange or null
+            int renamePos = -1;
+
+            for (int i = 0; i < numOfPaths; i++)
+            {
+                if (folder.ChangeType[i] == MetaChangeType.Rename)
+                    renamePos = i;
+                else if (folder.ChangeType[i] != MetaChangeType.NoChange && folder.ChangeType[i] != null)
+                {
+                    renamePos = -1;
+                    break;
+                }
+            }
+
+            if (renamePos > -1)
+            {
+                folder.Priority[renamePos] = 1;
+                return;
+            }
+
             //Delete will only occur if none of the folders are marked as dirty
             List<int> deletePos = new List<int>();
 
@@ -312,26 +332,6 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 foreach (int i in deletePos)
                     folder.Priority[i] = 1;
-                return;
-            }
-
-            //Rename will only occur if all other changes are MetaChangeType.NoChange or null
-            int renamePos = -1;
-
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                if (folder.ChangeType[i] == MetaChangeType.Rename)
-                    renamePos = i;
-                else if (folder.ChangeType[i] != MetaChangeType.NoChange && folder.ChangeType[i] != null)
-                {
-                    renamePos = -1;
-                    break;
-                }
-            }
-
-            if (renamePos > -1)
-            {
-                folder.Priority[renamePos] = 1;
                 return;
             }
 
