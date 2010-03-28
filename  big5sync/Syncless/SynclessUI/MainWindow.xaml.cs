@@ -1545,7 +1545,7 @@ namespace SynclessUI
 
         private void ListBoxTag_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key == Key.Back && ListBoxTag.Items.Count > 0)
+            if (e.Key == Key.Delete && ListBoxTag.Items.Count > 0)
             {
 				RemoveTag();
 			}

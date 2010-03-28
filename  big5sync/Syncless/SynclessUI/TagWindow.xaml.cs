@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+﻿using System.Collections.Generic;
 using System.IO;
-using Syncless.Core.Exceptions;
-using SynclessUI.Helper;
-using Syncless.Core.View;
+using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Input;
 using Ookii.Dialogs.Wpf;
+using Syncless.Core.Exceptions;
+using Syncless.Core.View;
+using SynclessUI.Helper;
+using Button = System.Windows.Controls.Button;
 
 namespace SynclessUI
 {
@@ -25,7 +25,9 @@ namespace SynclessUI
 		
         private string _path;
         private string _selectedTag;
-        private VistaFolderBrowserDialog folderDialog = new VistaFolderBrowserDialog();
+        private VistaFolderBrowserDialog vistafolderDialog = new VistaFolderBrowserDialog();
+        private FolderBrowserDialog _ofd = new FolderBrowserDialog();
+        private const string DialogDescription = "Please select a folder to tag.";
         
 		public TagWindow(MainWindow main, string path, string tagname)
         {
@@ -33,43 +35,61 @@ namespace SynclessUI
 
 			_main = main;
             _selectedTag = tagname;
+            
+            InitializeFolderDialogs();
 
-            // Initialize folderDialog
-            folderDialog.Description = "Please select a folder to tag.";
-            folderDialog.UseDescriptionForTitle = true; // This applies to the Vista style dialog only, not the old dialog.
-            folderDialog.ShowNewFolderButton = true;
+		    ACBName.IsEnabled = false;
 
-			ACBName.IsEnabled = false;
+            _path = path == "" ? SelectPath() : path;
 
-            if(path == "")
-            {
-                _path = SelectPath(true);
-            }
-            else
-            {
-                _path = path;
-            }
-
-            ProcessPath(_path, _selectedTag);
-
-            if (_cancelstatus)
-            {
-                this.Close();
-            }
-            else
-            {
-                this.ShowDialog();
-            }
-        }
-		
-		private string SelectPath(bool cancelStatus) {
-		    if((bool) folderDialog.ShowDialog())
+		    if (_cancelstatus)
 		    {
-		        return folderDialog.SelectedPath;
+		        this.Close();
 		    }
+		    else
+		    {
+                ProcessPath(_path, _selectedTag);
+		        this.ShowDialog();
+		    }
+        }
 
-		    _cancelstatus = true;
-		    return "";
+        private void InitializeFolderDialogs()
+        {
+            vistafolderDialog.Description = DialogDescription;
+            vistafolderDialog.UseDescriptionForTitle = true; // This applies to the Vista style dialog only, not the old dialog.
+            vistafolderDialog.ShowNewFolderButton = true;
+            _ofd.Description = DialogDescription;
+            _ofd.ShowNewFolderButton = true;
+        }
+
+        private string SelectPath() {
+		    string path = "";
+
+            if(VistaFolderBrowserDialog.IsVistaFolderDialogSupported)
+            {
+                if ((bool)vistafolderDialog.ShowDialog())
+                {
+                    path = vistafolderDialog.SelectedPath;
+                } else
+                {
+                    _cancelstatus = true;
+                }
+
+            } else
+            {
+                DialogResult result = _ofd.ShowDialog();
+
+                if(result == System.Windows.Forms.DialogResult.OK)
+                {
+                    path = _ofd.SelectedPath;
+                }
+                else
+                {
+                    _cancelstatus = true;
+                }
+            }
+
+		    return path;
 		}
 
         private void ProcessPath(string path, string selectedTag)
@@ -214,7 +234,7 @@ namespace SynclessUI
 		private void BtnBrowse_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
             _selectedTag = ACBName.Text;
-            string path = SelectPath(false);
+            string path = SelectPath();
             ProcessPath(path, _selectedTag);
 		}
 
