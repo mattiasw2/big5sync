@@ -38,8 +38,12 @@ namespace SynclessUI.Helper
             for (int p = 1; p < elm.Length; p++)
             {
                 string[] npath = Directory.GetFileSystemEntries(lpath, elm[p]);
-                if(npath.Count() != 0)
+                if (npath.Count() != 0)
                     lpath = npath[0];
+            }
+
+            if (lpath == "\\") {
+                lpath = "";
             }
 
             return lpath;
