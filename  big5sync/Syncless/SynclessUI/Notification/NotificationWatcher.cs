@@ -95,11 +95,8 @@ namespace SynclessUI.Notification
                         (Action)(() =>
                         {
                             _main.NotifySyncCompletion(scNotification.TagName);
-<<<<<<< .mine
+                            _main.TagChanged();
                             Console.WriteLine("Sync Complete: Calling Tag Changed");
-                            //_main.TagChanged();
-=======
->>>>>>> .r1495
                         }));
                 }
             }
