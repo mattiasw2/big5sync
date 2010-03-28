@@ -124,7 +124,6 @@ namespace Syncless.Tagging
             RemoveAllPaths();
         }
 
-        //refactor done
         public bool AddPath(string path, long created)
         {
             TaggedPath p = FindPath(path, false);
@@ -152,7 +151,6 @@ namespace Syncless.Tagging
             }
         }
 
-        //refactor done
         public bool AddPath(TaggedPath path)
         {
             TaggedPath p = FindPath(path.PathName, false);
@@ -178,7 +176,6 @@ namespace Syncless.Tagging
             }
         }
 
-        //refactor done
         public void RenamePath(string oldPath, string newPath, long updated)
         {
             foreach (TaggedPath p in _pathList)
@@ -195,7 +192,6 @@ namespace Syncless.Tagging
             }
         }
         
-        //refactor done
         public bool RemovePath(string path, long lastupdated)
         {
             foreach (TaggedPath p in _pathList)
@@ -217,7 +213,6 @@ namespace Syncless.Tagging
             return false;
         }
 
-        //refactor done
         public bool RemovePath(TaggedPath path)
         {
             foreach (TaggedPath p in _pathList)
@@ -250,8 +245,11 @@ namespace Syncless.Tagging
             _lastUpdatedDate = TaggingHelper.GetCurrentTime();
         }
 
-        //path is the parent path
-        //refactor done
+        /// <summary>
+        /// Return true if this tag contains a path whose parent is the given path
+        /// </summary>
+        /// <param name="path">The path to find the children path</param>
+        /// <returns>True if tag contains child path, else false</returns>
         public bool ContainsParent(string path)
         {
             foreach (TaggedPath p in _pathList)
@@ -264,7 +262,11 @@ namespace Syncless.Tagging
             return false;
         }
 
-        //refactor done
+        /// <summary>
+        /// Check if this tag contains the given path regardless of whether it is set as deleted or not
+        /// </summary>
+        /// <param name="path">The path to find</param>
+        /// <returns>True if tag contains the given path</returns>
         public bool ContainsIgnoreDeleted(string path)
         {
             foreach (TaggedPath p in _pathList)
@@ -277,7 +279,11 @@ namespace Syncless.Tagging
             return false;
         }
 
-        //refactor done
+        /// <summary>
+        /// Check if this tag contains the given path, only if it is not set as deleted
+        /// </summary>
+        /// <param name="path">The path to find</param>
+        /// <returns>True if tag contains the given path</returns>
         public bool Contains(string path)
         {
             foreach (TaggedPath p in _pathList)
@@ -297,22 +303,26 @@ namespace Syncless.Tagging
             return false;
         }
 
-        //refactor done
+        /// <summary>
+        /// Extract the trailing path from the path tagged to this tag
+        /// Example: tag contains D:\A\B\C
+        ///          Given the path is D:\A\B\C\E\F\G\
+        ///          Return E\F\G\
+        /// </summary>
+        /// <param name="path">The child path</param>
+        /// <param name="isFolder">Indicates whether the path is a folder path or file path</param>
+        /// <returns>The trailing end of the given path</returns>
         public string CreateTrailingPath(string path, bool isFolder)
         {
             string[] pathTokens = path.Trim().Split('\\');
-            //string[] pathTokens = TaggingHelper.TrimEnd(path.Split('\\'));
             string logicalid = TaggingHelper.GetLogicalID(path);
             foreach (TaggedPath p in _pathList)
             {
                 if (PathHelper.StartsWithIgnoreCase(path, p.PathName))
-                //if (path.StartsWith((p.PathName)))
                 {
                     if (!PathHelper.EqualsIgnoreCase(path, p.PathName))
-                    //if (!path.Equals((p.PathName)))
                     {
                         string[] pTokens = p.PathName.Trim().Split('\\');
-                        //string[] pTokens = TaggingHelper.TrimEnd(p.PathName.Split('\\'));
                         int trailingIndex = TaggingHelper.Match(pathTokens, pTokens);
                         if (trailingIndex > 0)
                         {
@@ -369,7 +379,6 @@ namespace Syncless.Tagging
             }
         }
 
-        //refactor done
         public TaggedPath FindPath(string path, bool filtered)
         {
             foreach (TaggedPath p in _pathList)
@@ -391,7 +400,11 @@ namespace Syncless.Tagging
             return FindPath(path, true);
         }
 
-        //refactor done
+        /// <summary>
+        /// Find the list of paths which are the ancestors of the given path
+        /// </summary>
+        /// <param name="path">The path whose ancestors are to be retrieved</param>
+        /// <returns>The list of ancestors' paths</returns>
         public List<string> FindAncestors(string path)
         {
             List<string> ancestors = new List<string>();
@@ -411,7 +424,11 @@ namespace Syncless.Tagging
             return ancestors;
         }
 
-        //refactor done
+        /// <summary>
+        /// Find the list of paths which are the descendants of the given path
+        /// </summary>
+        /// <param name="path">The path whose descendants are to be retrieved</param>
+        /// <returns>The list of descendants' paths</returns>
         public List<string> FindDescendants(string path)
         {
             List<string> descendants = new List<string>();

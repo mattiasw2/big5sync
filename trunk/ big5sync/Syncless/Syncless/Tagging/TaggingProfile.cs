@@ -343,6 +343,11 @@ namespace Syncless.Tagging
             return tagList;
         }
 
+        /// <summary>
+        /// Check if this tagging profile contains the given tag, only if it is not set as deleted
+        /// </summary>
+        /// <param name="path">The name of the tag to find</param>
+        /// <returns>True if tagging profile contains the given tag</returns>
         public bool Contains(string tagname)
         {
             foreach (Tag tag in _tagList)
@@ -362,6 +367,12 @@ namespace Syncless.Tagging
             return false;
         }
 
+        /// <summary>
+        /// Check if this tagging profile contains the given tag regardless of whether it is set as 
+        /// deleted or not
+        /// </summary>
+        /// <param name="path">The name of the tag to find</param>
+        /// <returns>True if tagging profile contains the given tag</returns>
         public bool ContainsIgnoreDeleted(string tagname)
         {
             foreach (Tag tag in _tagList)
