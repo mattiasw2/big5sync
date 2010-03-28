@@ -73,13 +73,20 @@ namespace Syncless.CompareAndSync
                 {
                     if (_jobs.Count > 0)
                     {
-                        item = _jobs.Dequeue();
+                        try
+                        {
+                            item = _jobs.Dequeue();
 
-                        if (item == null)
-                            return;
+                            if (item == null)
+                                return;
 
-                        _queuedJobs.Remove(item.TagName);
-                        _currJobName = item.TagName;
+                            _queuedJobs.Remove(item.TagName);
+                            _currJobName = item.TagName;
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.ToString());
+                        }
                     }
                 }
                 if (item != null)
