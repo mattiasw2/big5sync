@@ -15,7 +15,7 @@
        * The entire main window can be dragged around now
    # Monitor
        * Detection of removable drives improved
-   # CompareAndSync
+   # !CompareAndSync
        * Improved seamless synchronization
    # Others
        * User can now clear up all .syncless folders for a tagged folder through context menu
