@@ -95,8 +95,6 @@ namespace SynclessUI.Notification
                         (Action)(() =>
                         {
                             _main.NotifySyncCompletion(scNotification.TagName);
-                            Console.WriteLine("Sync Complete: Calling Tag Changed");
-                            _main.TagChanged();
                         }));
                 }
             }
@@ -109,7 +107,6 @@ namespace SynclessUI.Notification
                         (Action)(() =>
                         {
                             _main.NotifyNothingToSync(ntsNotification.TagName);
-                            Console.WriteLine("Nothing to Sync: Calling Tag Changed");
                         }));
                 }
             }

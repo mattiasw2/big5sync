@@ -124,7 +124,6 @@
     <Compile Include="Notification\UINotification\CancelSyncNotification.cs" />
     <Compile Include="Notification\UINotification\CompareCompleteNotification.cs" />
     <Compile Include="Notification\ISyncProgressObserver.cs" />
-    <Compile Include="Notification\UINotification\FolderFilter.cs" />
     <Compile Include="Notification\UINotification\NewProfileNotification.cs" />
     <Compile Include="Notification\SLLNotification\RemoveTagNotification.cs" />
     <Compile Include="Notification\SLLNotification\UnMonitorPathNotification.cs" />
