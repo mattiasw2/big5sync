@@ -152,14 +152,17 @@ namespace SynclessSeamlessTester
 
         private void buttonCompare_Click(object sender, EventArgs e)
         {
-            if (_testInfo == null)
+            if (listBoxDestPaths.Items.Count > 0)
             {
-                _testInfo = new TestInfo();
-                _testInfo.Propagated = true;
-            }
+                if (_testInfo == null)
+                {
+                    _testInfo = new TestInfo();
+                    _testInfo.Propagated = true;
+                }
 
-            backgroundWorker1.RunWorkerAsync(_testInfo);
-            Cursor = Cursors.WaitCursor;
+                backgroundWorker1.RunWorkerAsync(_testInfo);
+                Cursor = Cursors.WaitCursor;
+            }
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -366,6 +369,21 @@ namespace SynclessSeamlessTester
         private void buttonClearLogs_Click(object sender, EventArgs e)
         {
             textBoxLog.Clear();
+        }
+
+        private void buttonSaveLog_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Title = "Save file as...";
+            dialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            dialog.RestoreDirectory = true;
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                StreamWriter sw = new StreamWriter(dialog.FileName);
+                sw.WriteLine(textBoxLog.Text);
+                sw.Close();
+            }
         }
 
     }
