@@ -150,7 +150,7 @@ namespace SynclessUI
 
                             try
                             {
-							    if(!_main.Gui.GetTag(Tagname).IsSyncing) {
+							    if(!_main.Gui.GetTag(Tagname).IsLocked) {
                                     tv1 = _main.Gui.Tag(Tagname, new DirectoryInfo(_path));
 
                                     if (tv1 != null)

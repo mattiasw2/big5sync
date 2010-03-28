@@ -79,7 +79,7 @@ namespace SynclessUI
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             try {
-				if(!_main.Gui.GetTag(_tagname).IsSyncing) {
+				if(!_main.Gui.GetTag(_tagname).IsLocked) {
                     bool result = _main.Gui.UpdateFilterList(_tagname, filters);
 			        this.Close();
                 }

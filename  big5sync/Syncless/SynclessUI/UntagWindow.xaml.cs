@@ -69,7 +69,7 @@ namespace SynclessUI
                 
                 foreach (string t in taglist.SelectedItems)
                 {
-                    if(!_main.Gui.GetTag(t).IsSyncing) {
+                    if(!_main.Gui.GetTag(t).IsLocked) {
                         int result = _main.Gui.Untag(t, new DirectoryInfo(TxtBoxPath.Text));
                         if (result != 1)
                         {

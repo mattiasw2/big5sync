@@ -151,7 +151,16 @@ namespace SynclessUI
 
         public void NotifyNothingToSync(string tagname)
         {
-            string message = "You need to have at least two folders to synchronize.";
+            string message = "You have nothing to synchronize.";
+
+            if (SelectedTag == tagname)
+            {
+                LblStatusText.Content = message;
+                BtnSyncNow.IsEnabled = true;
+                BtnPreview.IsEnabled = true;
+                BtnSyncMode.IsEnabled = true;
+                _manualSyncEnabled = true;
+            }
 
             LblStatusText.Content = message;
             _tagStatusNotificationDictionary[tagname] = message;
@@ -248,7 +257,7 @@ namespace SynclessUI
                 }
                 else
                 {
-                    _manualSyncEnabled = !tv.Locked;
+                    _manualSyncEnabled = !tv.IsLocked;
                     ManualMode();
                 }
 
@@ -409,7 +418,7 @@ namespace SynclessUI
             }
             try
             {
-                if (!Gui.GetTag(SelectedTag).IsSyncing)
+                if (!Gui.GetTag(SelectedTag).IsLocked)
                 {
                     if (string.Compare((string) LblSyncMode.Content, "Manual") == 0)
                     {
@@ -443,7 +452,6 @@ namespace SynclessUI
                     DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
                                             "You cannot change the synchronization mode while it is synchronizing.");
                 }
-
             }
             catch (UnhandledException)
             {
@@ -603,7 +611,7 @@ namespace SynclessUI
                 }
                 else
                 {
-                    if (!Gui.GetTag(SelectedTag).IsSyncing)
+                    if (!Gui.GetTag(SelectedTag).IsLocked)
                     {
                         if (ListTaggedPath.SelectedIndex == -1)
                         {
@@ -615,7 +623,7 @@ namespace SynclessUI
 
                             if (tv != null)
                             {
-                                if (!tv.IsSyncing)
+                                if (!tv.IsLocked)
                                 {
                                     Gui.Untag(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
 
@@ -717,7 +725,7 @@ namespace SynclessUI
         {
             if(SelectedTag != null)
             {
-                if (!Gui.GetTag(SelectedTag).IsSyncing)
+                if (!Gui.GetTag(SelectedTag).IsLocked)
                 {
                     var tdw = new TagDetailsWindow(SelectedTag, this);
                     tdw.ShowDialog();
@@ -1347,7 +1355,7 @@ namespace SynclessUI
             {
                 if (SelectedTag != null)
                 {
-                    if(!Gui.GetTag(SelectedTag).IsSyncing)
+                    if(!Gui.GetTag(SelectedTag).IsLocked)
                     {
                         bool result = DialogsHelper.ShowWarning("Remove Tag",
                                                                 "Are you sure you want to remove the tag '" + SelectedTag +
@@ -1355,7 +1363,7 @@ namespace SynclessUI
 
                         if (result)
                         {
-                            if(!Gui.GetTag(SelectedTag).IsSyncing)
+                            if(!Gui.GetTag(SelectedTag).IsLocked)
                             {
                                 bool success = Gui.DeleteTag(SelectedTag);
                                 if (success)
@@ -1407,7 +1415,7 @@ namespace SynclessUI
 
         private void DisplayTagWindow()
         {
-            if (!Gui.GetTag(SelectedTag).IsSyncing)
+            if (!Gui.GetTag(SelectedTag).IsLocked)
             {
                 var tw = new TagWindow(this, "", SelectedTag);
             }
