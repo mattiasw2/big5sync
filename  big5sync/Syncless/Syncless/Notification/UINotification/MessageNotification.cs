@@ -8,7 +8,7 @@ namespace Syncless.Notification.SLLNotification
     public class MessageNotification :AbstractNotification 
     {
         public MessageNotification(string message)
-            : base(message, "201")
+            : base(message, Notification.NotificationCode.MessageNotification)
         {
         }
     }

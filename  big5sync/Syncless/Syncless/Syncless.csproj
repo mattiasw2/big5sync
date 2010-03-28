@@ -97,6 +97,7 @@
     <Compile Include="CompareAndSync\XMLWriteObject\BaseXMLWriteObject.cs" />
     <Compile Include="Core\Conflict\Conflict.cs" />
     <Compile Include="Core\Conflict\ConflictQueue.cs" />
+    <Compile Include="Core\DeletedTaggedPathWatcher.cs" />
     <Compile Include="Core\Exceptions\InvalidPathException.cs" />
     <Compile Include="Core\Exceptions\UnhandledException.cs" />
     <Compile Include="Core\LogicQueueObserver.cs" />
@@ -118,9 +119,11 @@
     <Compile Include="Monitor\FileSystemEventExecutor.cs" />
     <Compile Include="Notification\SLLNotification\AddTagNotification.cs" />
     <Compile Include="Notification\SLLNotification\MonitorTagNotification.cs" />
+    <Compile Include="Notification\SLLNotification\TaggedPathDeletedNotification.cs" />
     <Compile Include="Notification\SyncState.cs" />
     <Compile Include="Notification\UINotification\CompareCompleteNotification.cs" />
     <Compile Include="Notification\ISyncProgressObserver.cs" />
+    <Compile Include="Notification\UINotification\FolderFilter.cs" />
     <Compile Include="Notification\UINotification\NewProfileNotification.cs" />
     <Compile Include="Notification\SLLNotification\RemoveTagNotification.cs" />
     <Compile Include="Notification\SLLNotification\UnMonitorPathNotification.cs" />

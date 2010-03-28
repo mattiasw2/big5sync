@@ -8,7 +8,7 @@ namespace Syncless.Notification
     public abstract class AbstractNotification
     {
         private string _name;
-        private string _notificationCode;        
+        private NotificationCode _notificationCode;        
         private Guid _notificationid;
         /// <summary>
         /// The notification id in string.
@@ -21,7 +21,7 @@ namespace Syncless.Notification
         /// Notification Code , the Type of notification.
         /// Should be implemented by Sub-classes for the Queue Observer.
         /// </summary>
-        public string NotificationCode
+        public NotificationCode NotificationCode
         {
             get { return _notificationCode; }
             set { _notificationCode = value; }
@@ -34,7 +34,7 @@ namespace Syncless.Notification
             get { return _name; }
             set { _name = value; }
         }
-        public AbstractNotification(string name, string notificationCode)
+        public AbstractNotification(string name, NotificationCode notificationCode)
         {
             this._name = name;
             this._notificationCode = notificationCode;

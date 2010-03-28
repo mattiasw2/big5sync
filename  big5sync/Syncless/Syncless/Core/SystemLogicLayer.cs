@@ -77,9 +77,10 @@ namespace Syncless.Core
         #endregion
 
         #region PathTable
-
         private PathTable _pathTable;
         private PathTableReader _reader;
+        private DeletedTaggedPathWatcher _deletedTaggedPathWatcher;
+
         #endregion
 
         #region IMonitorControllerInterface
@@ -621,6 +622,17 @@ namespace Syncless.Core
         {
             return this.ManualSync(tagname, false);
         }
+
+        public bool CancelManualSync(string tagName)
+        {
+            if (!CompareAndSyncController.Instance.IsQueuedOrSyncing(tagName))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Delete a tag
         /// </summary>
@@ -935,6 +947,7 @@ namespace Syncless.Core
                 MonitorLayer.Instance.Terminate();
                 _queueObserver.Stop();
                 _reader.Stop();
+                _deletedTaggedPathWatcher.Stop();
                 return true;
             }
             catch (Exception e)
@@ -1185,7 +1198,6 @@ namespace Syncless.Core
         {
             if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tag.TagName))
             {
-                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Hi"); 
                 return false;
             }
             List<string> paths = tag.FilteredPathListString;
@@ -1333,6 +1345,8 @@ namespace Syncless.Core
                         StartMonitorTag(t);
                     }
                 }
+                _deletedTaggedPathWatcher = new DeletedTaggedPathWatcher();
+                _deletedTaggedPathWatcher.Start();
                 return true;
             }
             catch (Exception e)

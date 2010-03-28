@@ -30,13 +30,25 @@ namespace Syncless.Core
         {
             while (true)
             {
-                List<string> deletedPaths = SystemLogicLayer.Instance.FindAllDeletedPaths();
-                if (deletedPaths.Count > 0)
+                try
                 {
-                    ServiceLocator.LogicLayerNotificationQueue().Enqueue(new TaggedPathDeletedNotification(deletedPaths));
-                }
+                    List<string> deletedPaths = SystemLogicLayer.Instance.FindAllDeletedPaths();
+                    if (deletedPaths.Count > 0)
+                    {
+                        ServiceLocator.LogicLayerNotificationQueue().Enqueue(new TaggedPathDeletedNotification(deletedPaths));
+                    }
 
-                Thread.Sleep(3000);
+
+                    Thread.Sleep(30000);
+                }
+                catch (ThreadInterruptedException)
+                {
+
+                }
+                catch (ThreadAbortException)
+                {
+                    return;
+                }
             }
         }
     }
