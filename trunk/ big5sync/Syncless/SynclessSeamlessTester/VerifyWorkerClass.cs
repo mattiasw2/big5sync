@@ -13,12 +13,14 @@ namespace SynclessSeamlessTester
         private TestInfo _testInfo;
         private BackgroundWorker _bgWorker;
         private DoWorkEventArgs _e;
+        private List<string> _filters;
 
-        public VerifyWorkerClass(List<string> dest, TestInfo testInfo, BackgroundWorker bgWorker, DoWorkEventArgs e)
+        public VerifyWorkerClass(List<string> dest, TestInfo testInfo, BackgroundWorker bgWorker, DoWorkEventArgs e, List<string> filters)
         {
             _testInfo = testInfo;
             _bgWorker = bgWorker;
             _e = e;
+            _filters = filters;
             LazyComparer(dest);
         }
 
@@ -102,7 +104,7 @@ namespace SynclessSeamlessTester
             string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
 
             foreach (string f in files)
-                if (!f.Contains(".syncless") && !f.Contains("_synclessArchive"))
+                if (PassFilter(f))
                     results.Add(new LazyFileCompare(CalculateMD5Hash(f), GetRelativePath(path, f), f));
 
             return results;
@@ -114,7 +116,7 @@ namespace SynclessSeamlessTester
             string[] folders = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
 
             foreach (string f in folders)
-                if (!f.Contains(".syncless") && !f.Contains("_synclessArchive"))
+                if (PassFilter(f))
                     results.Add(new LazyFolderCompare(GetRelativePath(path, f), f));
 
             return results;
@@ -127,6 +129,14 @@ namespace SynclessSeamlessTester
             result = result.TrimEnd(' ', '\\');
             result = result.TrimStart(' ', '\\');
             return result;
+        }
+
+        private bool PassFilter(string s)
+        {
+            foreach (string f in _filters)
+                if (s.Contains(f))
+                    return false;
+            return true;
         }
 
         public static string CalculateMD5Hash(string fullPath)

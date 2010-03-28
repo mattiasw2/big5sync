@@ -12,7 +12,7 @@ namespace SynclessSeamlessTester
 {
     public partial class FormSeamlessTester : Form
     {
-        private List<string> _sourcePaths, _destPaths;
+        private List<string> _sourcePaths, _destPaths, _filters;
         private TestInfo _testInfo;
 
         private enum Action
@@ -33,6 +33,10 @@ namespace SynclessSeamlessTester
         {
             _sourcePaths = new List<string>();
             _destPaths = new List<string>();
+            _filters = new List<string>();
+            _filters.Add(".syncless");
+            _filters.Add("_synclessArchive");
+            listBoxFilter.Items.AddRange(_filters.ToArray());
         }
 
         private void buttonSourceBrowse_Click(object sender, EventArgs e)
@@ -186,6 +190,7 @@ namespace SynclessSeamlessTester
 
         public List<string> AddToSource(string s)
         {
+            _testInfo = null;
             _sourcePaths.Add(s);
             return _sourcePaths;
         }
@@ -195,6 +200,13 @@ namespace SynclessSeamlessTester
             _testInfo = null;
             _destPaths.Add(s);
             return _destPaths;
+        }
+
+        public List<string> AddToFilter(string s)
+        {
+            _testInfo = null;
+            _filters.Add(s);
+            return _filters;
         }
 
         private void ToggleAllControls(Action action)
@@ -245,13 +257,13 @@ namespace SynclessSeamlessTester
                 StartPropagating();
                 new TestWorkerClass(Convert.ToInt32(textBoxDuration.Text), Convert.ToInt32(textBoxMinWaitTime.Text),
                                     Convert.ToInt32(textBoxMaxWaitTime.Text), _sourcePaths, _destPaths,
-                                    info, backgroundWorker1, e);
+                                    info, backgroundWorker1, e, _filters);
                 info.Propagated = true;
             }
             if (info.Propagated)
             {
                 StartVerifying();
-                new VerifyWorkerClass(_destPaths, info, backgroundWorker1, e);
+                new VerifyWorkerClass(_destPaths, info, backgroundWorker1, e, _filters);
                 e.Result = info;
             }
         }
@@ -384,6 +396,22 @@ namespace SynclessSeamlessTester
                 sw.WriteLine(textBoxLog.Text);
                 sw.Close();
             }
+        }
+
+        private void buttonFilterAdd_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBoxFilter.Text) && !_filters.Contains(textBoxFilter.Text))
+            {
+                listBoxFilter.Items.Clear();
+                listBoxFilter.Items.AddRange(AddToFilter(textBoxFilter.Text).ToArray());
+                textBoxFilter.Clear();
+            }
+        }
+
+        private void buttonFilterClear_Click(object sender, EventArgs e)
+        {
+            _filters.Clear();
+            listBoxFilter.Items.Clear();
         }
 
     }
