@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Management;
 using System.Threading;
@@ -25,26 +25,32 @@ namespace Syncless.Core
                 return _instance;
             }
         }
-        private Hashtable connectedDrives;
+        private Dictionary<string, DriveInfo> connectedDrives;
         private ManagementEventWatcher insertUSBWatcher;
         private ManagementEventWatcher removeUSBWatcher;
         private const int DELAY_TIME = 10000;
 
         private DeviceWatcher()
         {
-            //try statement
             connectedDrives = RetrieveAllDrives();
-            AddInsertUSBHandler();
-            AddRemoveUSBHandler();
+            try
+            {
+                AddInsertUSBHandler();
+                AddRemoveUSBHandler();
+            }
+            catch (Exception e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+            }
         }
 
         /// <summary>
         /// Retrieve all fixed and removable connected drives.
         /// </summary>
         /// <returns></returns>
-        private Hashtable RetrieveAllDrives()
+        private Dictionary<string, DriveInfo> RetrieveAllDrives()
         {
-            Hashtable drives = new Hashtable();
+            Dictionary<string, DriveInfo> drives = new Dictionary<string, DriveInfo>();
             foreach (DriveInfo driveInfo in DriveInfo.GetDrives())
             {
                 if (driveInfo.DriveType == DriveType.Fixed || driveInfo.DriveType == DriveType.Removable)
@@ -84,15 +90,16 @@ namespace Syncless.Core
         private void USBInserted(object sender, EventArrivedEventArgs e)
         {
             Thread.Sleep(DELAY_TIME);
-            Hashtable newConnectedDrives = RetrieveAllDrives();
-            foreach (DictionaryEntry de in newConnectedDrives)
+            Dictionary<string, DriveInfo> newConnectedDrives = RetrieveAllDrives();
+            foreach (KeyValuePair<string, DriveInfo> kvp in newConnectedDrives)
             {
-                if (!connectedDrives.Contains(de.Key))
+                if (!connectedDrives.ContainsKey(kvp.Key))
                 {
-                    DriveInfo drive = (DriveInfo)de.Value;
+                    DriveInfo drive = kvp.Value;
                     DriveChangeEvent dce = new DriveChangeEvent(DriveChangeType.DRIVE_IN, drive);
                     ServiceLocator.MonitorI.HandleDriveChange(dce);
-                    Console.WriteLine(drive.Name + " inserted.");
+                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(drive.Name + " inserted.");
+                    //Console.WriteLine(drive.Name + " inserted.");
                 }
             }
             connectedDrives = newConnectedDrives;
@@ -126,15 +133,16 @@ namespace Syncless.Core
 
         private void USBRemoved(object sender, EventArrivedEventArgs e)
         {
-            Hashtable newConnectedDrives = RetrieveAllDrives();
-            foreach (DictionaryEntry de in connectedDrives)
+            Dictionary<string, DriveInfo> newConnectedDrives = RetrieveAllDrives();
+            foreach (KeyValuePair<string, DriveInfo> kvp in connectedDrives)
             {
-                if (!newConnectedDrives.Contains(de.Key))
+                if (!newConnectedDrives.ContainsKey(kvp.Key))
                 {
-                    DriveInfo drive = (DriveInfo)de.Value;
+                    DriveInfo drive = kvp.Value;
                     DriveChangeEvent dce = new DriveChangeEvent(DriveChangeType.DRIVE_OUT, drive);
                     ServiceLocator.MonitorI.HandleDriveChange(dce);
-                    Console.WriteLine(drive.Name + " removed.");
+                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(drive.Name + " removed.");
+                    //Console.WriteLine(drive.Name + " removed.");
                 }
             }
             connectedDrives = newConnectedDrives;
