@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Input;
 using SynclessUI.Helper;
 
 namespace SynclessUI
@@ -33,14 +34,14 @@ namespace SynclessUI
             	RegistryHelper.RemoveRegistry();
 			}
 
-            FormFadeOut.Begin();			
+            CloseWindow();
 			Properties.Settings.Default.EnableShellIntegration = choice;
 			Properties.Settings.Default.Save();
         }
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            FormFadeOut.Begin();
+            CloseWindow();
         }
 
 		private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -56,6 +57,10 @@ namespace SynclessUI
 		private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 			this.DragMove();
+		}
+		
+		private void CloseWindow() {
+            FormFadeOut.Begin();
 		}
 		
         private void FormFadeOut_Completed(object sender, EventArgs e)

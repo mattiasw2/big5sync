@@ -82,7 +82,7 @@ namespace SynclessUI
             try {
 				if(!_main.Gui.GetTag(_tagname).IsLocked) {
                     bool result = _main.Gui.UpdateFilterList(_tagname, filters);
-			        FormFadeOut.Begin();
+			        CloseWindow();
                 }
                 else
                 {
@@ -98,7 +98,7 @@ namespace SynclessUI
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            FormFadeOut.Begin();
+            CloseWindow();
         }
 
 		private void BtnAddFilter_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -198,6 +198,10 @@ namespace SynclessUI
         {
         	this.DragMove();
         }
+		
+		private void CloseWindow() {
+            FormFadeOut.Begin();
+		}
 		
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {

@@ -250,14 +250,18 @@ namespace SynclessUI
                 TagTitle.Text = tagname;
                 // tag.direction not implemented yet
 
-                if (tv.IsSeamless)
+                switch (tv.TagState)
                 {
-                    SeamlessMode();
-                }
-                else
-                {
-                    _manualSyncEnabled = !tv.IsLocked;
-                    ManualMode();
+                    case TagState.Switching:
+                        SwitchingMode();
+                        break;
+                    case TagState.Seamless:
+                        SeamlessMode();
+                        break;
+                    case TagState.Manual:
+                        _manualSyncEnabled = !tv.IsLocked;
+                        ManualMode();
+                        break;
                 }
 
                 LblStatusText.Content = "";
@@ -411,10 +415,14 @@ namespace SynclessUI
 
         private void BtnSyncMode_Click(object sender, RoutedEventArgs e)
         {
+            /*
+            // Guard
             if (!_manualSyncEnabled)
             {
                 return;
             }
+            */
+
             try
             {
                 if (!Gui.GetTag(SelectedTag).IsLocked)
@@ -423,27 +431,30 @@ namespace SynclessUI
                     {
                         if (Gui.MonitorTag(SelectedTag, true))
                         {
-                            const string message = "Synchronization request has been queued.";
+                            const string message = "Switching to Seamless Mode.";
                             LblStatusText.Content = message;
                             _tagStatusNotificationDictionary[SelectedTag] = message;
-                            SeamlessMode();
+                            SwitchingMode();
                         }
                         else
                         {
                             DialogsHelper.ShowError("Change Synchronization Mode Error",
-                                                    "' " + SelectedTag + " ' could not be set into Seamless Mode.");
+                                                    "' " + SelectedTag + " ' could not be switched to Seamless Mode.");
                         }
                     }
-                    else
+                    else if (string.Compare((string)LblSyncMode.Content, "Seamless") == 0)
                     {
                         if (Gui.MonitorTag(SelectedTag, false))
                         {
+                            const string message = "Switched to Manual Mode.";
+                            LblStatusText.Content = message;
+                            _tagStatusNotificationDictionary[SelectedTag] = message;
                             ManualMode();
                         }
                         else
                         {
                             DialogsHelper.ShowError("Change Synchronization Mode Error",
-                                                    "' " + SelectedTag + " ' could not be set into Manual Mode.");
+                                                    "' " + SelectedTag + " ' could not be switched to Manual Mode.");
                         }
                     }
                 } else
@@ -469,20 +480,25 @@ namespace SynclessUI
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOnForeground");
             //ProgressBarSync.Visibility = System.Windows.Visibility.Hidden;
             //LblProgress.Visibility = System.Windows.Visibility.Hidden;
+            Console.WriteLine("Seamless Mode");
         }
 
-        private void ManualMode()
+        private void SwitchingMode()
         {
-            LblSyncMode.Content = "Manual";
-            BtnSyncMode.ToolTip = "Switch to Seamless Synchronization Mode";
-            BtnPreview.Visibility = Visibility.Visible;
-            BtnSyncNow.Visibility = Visibility.Visible;
+            LblSyncMode.Content = "Switching";
+            BtnSyncMode.ToolTip = "Please Wait";
+            BtnPreview.Visibility = Visibility.Hidden;
+            BtnSyncNow.Visibility = Visibility.Hidden;
             BtnSyncMode.SetResourceReference(BackgroundProperty, "ToggleOffBrush");
             LblSyncMode.SetResourceReference(MarginProperty, "ToggleOffMargin");
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOffForeground");
             ProgressBarSync.Visibility = Visibility.Visible;
             LblProgress.Visibility = Visibility.Visible;
-			
+            Console.WriteLine("Switching Mode");
+        }
+
+        private void ManualMode()
+        {
             if(_manualSyncEnabled)
             {
                 BtnSyncNow.IsEnabled = true;
@@ -495,6 +511,17 @@ namespace SynclessUI
                 BtnPreview.IsEnabled = false;
                 BtnSyncMode.IsEnabled = false;
             }
+
+            LblSyncMode.Content = "Manual";
+            BtnSyncMode.ToolTip = "Switch to Seamless Synchronization Mode";
+            BtnPreview.Visibility = Visibility.Visible;
+            BtnSyncNow.Visibility = Visibility.Visible;
+            BtnSyncMode.SetResourceReference(BackgroundProperty, "ToggleOffBrush");
+            LblSyncMode.SetResourceReference(MarginProperty, "ToggleOffMargin");
+            LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOffForeground");
+            ProgressBarSync.Visibility = Visibility.Visible;
+            LblProgress.Visibility = Visibility.Visible;
+            Console.WriteLine("Manual Mode");
         }
 
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
@@ -1062,17 +1089,18 @@ namespace SynclessUI
                                                                             return;
                                                                         }
                                                                         TagView tv = Gui.GetTag(SelectedTag);
-                                                                        if (tv == null)
+                                                                        switch (tv.TagState)
                                                                         {
-                                                                            return;
-                                                                        }
-                                                                        if (tv.IsSeamless)
-                                                                        {
-                                                                            SeamlessMode();
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            ManualMode();
+                                                                            case TagState.Switching:
+                                                                                SwitchingMode();
+                                                                                break;
+                                                                            case TagState.Seamless:
+                                                                                SeamlessMode();
+                                                                                break;
+                                                                            case TagState.Manual:
+                                                                                _manualSyncEnabled = !tv.IsLocked;
+                                                                                ManualMode();
+                                                                                break;
                                                                         }
                                                                         ListTaggedPath.ItemsSource = tv.PathStringList;
                                                                         BdrTaggedPath.Visibility = tv.PathStringList.Count == 0 ? Visibility.Hidden : Visibility.Visible;
@@ -1408,15 +1436,7 @@ namespace SynclessUI
 
         private void DisplayTagWindow()
         {
-            if (!Gui.GetTag(SelectedTag).IsLocked)
-            {
-                var tw = new TagWindow(this, "", SelectedTag, false);
-            }
-            else
-            {
-                DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
-                                        "You cannot tag a folder while the tag is synchronizing.");
-            }
+            var tw = new TagWindow(this, "", SelectedTag, false);
         }
 
         private void TagCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)

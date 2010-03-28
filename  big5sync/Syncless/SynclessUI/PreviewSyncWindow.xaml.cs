@@ -62,17 +62,21 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-			FormFadeOut.Begin();
+			CloseWindow();
         }
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            FormFadeOut.Begin();
+            CloseWindow();
         }
 
 		private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 			this.DragMove();
+		}
+		
+		private void CloseWindow() {
+            FormFadeOut.Begin();
 		}
 		
         private void FormFadeOut_Completed(object sender, EventArgs e)

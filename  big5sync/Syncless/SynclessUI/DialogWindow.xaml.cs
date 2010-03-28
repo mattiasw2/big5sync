@@ -79,25 +79,29 @@ namespace SynclessUI
 
         private void BtnOkCP1_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-        	FormFadeOut.Begin();
+        	CloseWindow();
         }
 		
         private void BtnOkCP2_Click(object sender, System.Windows.RoutedEventArgs e)
         {
 			Application.Current.Properties["DialogWindowChoice"] = true;
-        	FormFadeOut.Begin();
+        	CloseWindow();
         }
 		
         private void BtnCancelCP2_Click(object sender, System.Windows.RoutedEventArgs e)
         {
 			Application.Current.Properties["DialogWindowChoice"] = false;
-        	FormFadeOut.Begin();
+        	CloseWindow();
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
         	this.DragMove();
         }
+		
+		private void CloseWindow() {
+            FormFadeOut.Begin();
+		}
 		
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
