@@ -7,6 +7,7 @@ using System.IO;
 using Syncless.Core.Exceptions;
 using SynclessUI.Helper;
 using Syncless.Core.View;
+using Ookii.Dialogs.Wpf;
 
 namespace SynclessUI
 {
@@ -24,6 +25,7 @@ namespace SynclessUI
 		
         private string _path;
         private string _selectedTag;
+        private VistaFolderBrowserDialog folderDialog = new VistaFolderBrowserDialog();
         
 		public TagWindow(MainWindow main, string path, string tagname)
         {
@@ -31,6 +33,11 @@ namespace SynclessUI
 
 			_main = main;
             _selectedTag = tagname;
+
+            // Initialize folderDialog
+            folderDialog.Description = "Please select a folder to tag.";
+            folderDialog.UseDescriptionForTitle = true; // This applies to the Vista style dialog only, not the old dialog.
+            folderDialog.ShowNewFolderButton = true;
 
 			ACBName.IsEnabled = false;
 
@@ -56,41 +63,13 @@ namespace SynclessUI
         }
 		
 		private string SelectPath(bool cancelStatus) {
-            string path = (string)Application.Current.Properties["folderlastselected"];
-            path = (System.IO.Directory.Exists(path)) ? path : "";
-            var browse = new Ionic.Utils.FolderBrowserDialogEx
-            {
-                Description = "Select the folder to tag",
-                ShowNewFolderButton = true,
-                ShowEditBox = true,
-                NewStyle = true,
-                SelectedPath = path,
-                ShowFullPathInEditBox = true,
-                ShowBothFilesAndFolders = false,
-            };
+		    if((bool) folderDialog.ShowDialog())
+		    {
+		        return folderDialog.SelectedPath;
+		    }
 
-            // Fix Vista Bug
-            OperatingSystem os = System.Environment.OSVersion;
-            if (os.Version.Major == 6 && os.Version.Minor == 0)
-            {
-                browse.RootFolder = Environment.SpecialFolder.MyComputer;
-            }
-
-            var result = browse.ShowDialog();
-
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                path = browse.SelectedPath;
-                Application.Current.Properties["folderlastselected"] = path;
-                return path;
-            }
-            else if (result == System.Windows.Forms.DialogResult.Cancel)
-            {
-                _cancelstatus = true;
-                _main.Focus();
-            }
-
-            return "";
+		    _cancelstatus = true;
+		    return "";
 		}
 
         private void ProcessPath(string path, string selectedTag)
