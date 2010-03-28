@@ -97,3 +97,6 @@ To understand more about using the tester, please click [http://code.google.com/
 
 = References =
 Throughout the development of this project, we referred to codes and solutions found in various places. All credits and references are given [DeveloperGuideReferences here].
+
+= Glossary =
+Syncless uses a few terms which may not be common in other synchronizations tools. For definitions of these terms, please check them out [http://code.google.com/p/big5sync/wiki/SynclessGlossary here].
