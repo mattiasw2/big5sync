@@ -214,7 +214,7 @@ namespace Syncless.Core
         public void Start()
         {
             _reader = new Thread(Run);
-            _reader.Start();
+            //_reader.Start();
         }
         public void Stop()
         {

@@ -298,6 +298,7 @@ namespace Syncless.Core
 
         private static void SendAutoRequest(AutoSyncRequest request)
         {
+            /*
 #if DEBUG
             if (request.ChangeType == AutoSyncRequestType.New || request.ChangeType == AutoSyncRequestType.Update)
             {
@@ -333,7 +334,7 @@ namespace Syncless.Core
                 ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
             }
 #endif
-
+            */
             CompareAndSyncController.Instance.Sync(request);
         }
 
@@ -1184,6 +1185,7 @@ namespace Syncless.Core
         {
             if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tag.TagName))
             {
+                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Hi"); 
                 return false;
             }
             List<string> paths = tag.FilteredPathListString;
@@ -1284,6 +1286,10 @@ namespace Syncless.Core
                 if (view.IsLocked)
                 {
                     view.TagState = TagState.Switching;
+                }
+                else
+                {
+                    view.TagState = TagState.Manual;
                 }
             }
             return view;
