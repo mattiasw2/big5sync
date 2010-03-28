@@ -420,13 +420,12 @@ namespace SynclessUI
 
         private void BtnSyncMode_Click(object sender, RoutedEventArgs e)
         {
-            /*
-            // Guard
             if (!_manualSyncEnabled)
             {
+                DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                             "You cannot change the synchronization modewhile it is synchronizing.");
                 return;
             }
-            */
 
             try
             {
@@ -502,19 +501,6 @@ namespace SynclessUI
 
         private void ManualMode()
         {
-            if(_manualSyncEnabled)
-            {
-                BtnSyncNow.IsEnabled = true;
-                BtnPreview.IsEnabled = true;
-                BtnSyncMode.IsEnabled = true;
-            }
-            else
-            {
-                BtnSyncNow.IsEnabled = false;
-                BtnPreview.IsEnabled = false;
-                BtnSyncMode.IsEnabled = false;
-            }
-
             LblSyncMode.Content = "Manual";
             BtnSyncMode.ToolTip = "Switch to Seamless Synchronization Mode";
             BtnPreview.Visibility = Visibility.Visible;
@@ -531,15 +517,18 @@ namespace SynclessUI
         {
             if (!_manualSyncEnabled)
             {
+                DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                             "You cannot carry out another synchronization operation while it is synchronizing.");
                 return;
             }
+
             try
             {
                 if (Gui.GetTag(SelectedTag).PathStringList.Count > 1)
                 {
-                    BtnSyncNow.IsEnabled = false;
-                    BtnPreview.IsEnabled = false;
-                    BtnSyncMode.IsEnabled = false;
+                    //BtnSyncNow.IsEnabled = false;
+                    //BtnPreview.IsEnabled = false;
+                    //BtnSyncMode.IsEnabled = false;
                     if (Gui.StartManualSync(SelectedTag))
                     {
                         const string message = "Synchronization request has been queued.";
@@ -548,9 +537,9 @@ namespace SynclessUI
                     }
                     else
                     {
-                        BtnSyncNow.IsEnabled = true;
-                        BtnPreview.IsEnabled = true;
-                        BtnSyncMode.IsEnabled = true;
+                        //BtnSyncNow.IsEnabled = true;
+                        //BtnPreview.IsEnabled = true;
+                        //BtnSyncMode.IsEnabled = true;
                         DialogsHelper.ShowError("Synchronization Error", "'" + SelectedTag + "' could not be synchronized.");
                     }
                 } 
@@ -803,6 +792,8 @@ namespace SynclessUI
         {
             if (!_manualSyncEnabled)
             {
+                DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                                            "You cannot preview while it is synchronizing.");
                 return;
             }
             /*
