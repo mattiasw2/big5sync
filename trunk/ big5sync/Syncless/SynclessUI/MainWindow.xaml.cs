@@ -441,7 +441,7 @@ namespace SynclessUI
                 } else
                 {
                     DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
-                                            "You cannot remove a tag while it is synchronizing.");
+                                            "You cannot change the synchronization mode while it is synchronizing.");
                 }
 
             }
