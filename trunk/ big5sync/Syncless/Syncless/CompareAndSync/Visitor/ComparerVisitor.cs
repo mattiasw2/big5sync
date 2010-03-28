@@ -223,6 +223,12 @@ namespace Syncless.CompareAndSync.Visitor
                         file.Priority[i] = file.Priority[mostUpdatedPos] + 1;
                         mostUpdatedPos = i;
                     }
+                    else if (file.LastWriteTime[i] == file.LastWriteTime[mostUpdatedPos])
+                    {
+                        //Conflict :(
+                        file.Priority[i] = file.Priority[mostUpdatedPos] - 1;
+                        file.FinalState[i] = FinalState.Conflict;
+                    }
                 }
                 else
                 {
@@ -355,31 +361,6 @@ namespace Syncless.CompareAndSync.Visitor
                 }
             }
 
-            //EXP
-            int priority = -1;
-            int numExists = 0;
-            int posExists = -1;
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                if (folder.Exists[i])
-                {
-                    numExists++;
-                    posExists = i;
-                    if (priority < 0)
-                        priority = folder.Priority[i];
-                    else
-                    {
-                        if (priority != folder.Priority[i])
-                        {
-                            folder.Parent.Dirty = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (numExists == 1 && folder.ChangeType[posExists] == MetaChangeType.New)
-                folder.Parent.Dirty = true;
         }
 
         #endregion
