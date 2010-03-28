@@ -233,13 +233,14 @@ namespace Syncless.CompareAndSync.Visitor
                             if (File.Exists(Path.Combine(fco.GetSmartParentPath(i), fco.Name)))
                             {
                                 CommonMethods.MoveFile(Path.Combine(fco.GetSmartParentPath(i), fco.Name), Path.Combine(fco.GetSmartParentPath(i), fco.NewName));
-                                fco.FinalState[i] = FinalState.Renamed;
+                                //fco.FinalState[i] = FinalState.Renamed;
                             }
                             else
                             {
                                 CommonMethods.CopyFile(Path.Combine(fco.GetSmartParentPath(srcFilePos), fco.NewName), Path.Combine(fco.GetSmartParentPath(i), fco.NewName), true);
-                                fco.FinalState[i] = FinalState.Created;
+                                //fco.FinalState[i] = FinalState.Created;
                             }
+                            fco.FinalState[i] = FinalState.Renamed;
                             changed = true;
                         }
                         catch (MoveFileException e)
