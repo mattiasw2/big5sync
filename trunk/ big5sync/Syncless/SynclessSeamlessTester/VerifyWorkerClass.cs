@@ -158,18 +158,5 @@ namespace SynclessSeamlessTester
                 return fi.RelativeName.ToLower().GetHashCode();
             }
         }
-
-        private class LazyObjectComparer : IEqualityComparer<LazyObjectCompare>
-        {
-            public bool Equals(LazyObjectCompare f1, LazyObjectCompare f2)
-            {
-                return (f1.RelativeName == f2.RelativeName);
-            }
-
-            public int GetHashCode(LazyObjectCompare fi)
-            {
-                return fi.RelativeName.ToLower().GetHashCode();
-            }
-        }
     }
 }

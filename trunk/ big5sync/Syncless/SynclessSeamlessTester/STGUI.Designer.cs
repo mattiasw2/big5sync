@@ -58,6 +58,7 @@
             this.textBoxLog = new System.Windows.Forms.TextBox();
             this.buttonClearLogs = new System.Windows.Forms.Button();
             this.labelLogs = new System.Windows.Forms.Label();
+            this.buttonCompare = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxSourcePath
@@ -109,9 +110,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(81, 468);
+            this.button1.Location = new System.Drawing.Point(16, 468);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(156, 23);
+            this.button1.Size = new System.Drawing.Size(120, 23);
             this.button1.TabIndex = 5;
             this.button1.Text = "Start Test";
             this.button1.UseVisualStyleBackColor = true;
@@ -212,9 +213,9 @@
             // buttonCancel
             // 
             this.buttonCancel.Enabled = false;
-            this.buttonCancel.Location = new System.Drawing.Point(243, 468);
+            this.buttonCancel.Location = new System.Drawing.Point(346, 468);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(156, 23);
+            this.buttonCancel.Size = new System.Drawing.Size(120, 23);
             this.buttonCancel.TabIndex = 15;
             this.buttonCancel.Text = "Cancel Test";
             this.buttonCancel.UseVisualStyleBackColor = true;
@@ -332,11 +333,21 @@
             this.labelLogs.TabIndex = 27;
             this.labelLogs.Text = "Logs:";
             // 
+            // buttonCompare
+            // 
+            this.buttonCompare.Location = new System.Drawing.Point(185, 468);
+            this.buttonCompare.Name = "buttonCompare";
+            this.buttonCompare.Size = new System.Drawing.Size(120, 23);
+            this.buttonCompare.TabIndex = 28;
+            this.buttonCompare.Text = "Verify";
+            this.buttonCompare.UseVisualStyleBackColor = true;
+            // 
             // FormSeamlessTester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(919, 547);
+            this.Controls.Add(this.buttonCompare);
             this.Controls.Add(this.labelLogs);
             this.Controls.Add(this.buttonClearLogs);
             this.Controls.Add(this.textBoxLog);
@@ -404,6 +415,7 @@
         private System.Windows.Forms.TextBox textBoxLog;
         private System.Windows.Forms.Button buttonClearLogs;
         private System.Windows.Forms.Label labelLogs;
+        private System.Windows.Forms.Button buttonCompare;
     }
 }
 
