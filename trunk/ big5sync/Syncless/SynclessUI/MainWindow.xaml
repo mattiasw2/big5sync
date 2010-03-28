@@ -4,7 +4,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:dropShadow="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" 
-	xmlns:tb="http://www.hardcodet.net/taskbar" x:Class="SynclessUI.MainWindow" x:Name="Window" Title="Syncless" Background="Transparent" Icon="Icons/logo.ico" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" WindowStyle="None" Foreground="Transparent" AllowsTransparency="True" Closing="Window_Closing">
+	xmlns:tb="http://www.hardcodet.net/taskbar" x:Class="SynclessUI.MainWindow" x:Name="Window" Title="Syncless" Background="Transparent" Icon="Icons/logo.ico" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" Foreground="Transparent" Closing="Window_Closing" WindowStyle="None" AllowsTransparency="True">
 	<Window.Resources>
 		<Style x:Key="ListBoxTagItemStyle" TargetType="{x:Type ListBoxItem}">
 			<Setter Property="Background" Value="Transparent"/>
@@ -124,7 +124,7 @@
 		<Storyboard x:Key="TagDetailsMouseEnter">
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagIcon" Storyboard.TargetProperty="(FrameworkElement.Height)">
 				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="80"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="100"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="85"/>
 			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagIcon" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
 				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
@@ -133,7 +133,7 @@
 		</Storyboard>
 		<Storyboard x:Key="TagDetailsMouseLeave">
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagIcon" Storyboard.TargetProperty="(FrameworkElement.Height)">
-				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="100"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="85"/>
 				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="80"/>
 			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagIcon" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
@@ -214,7 +214,7 @@
 			</StackPanel>
 		</dropShadow:SystemDropShadowChrome>
 		<!-- Tag Info Panel -->
-		<Grid x:Name="TagInfoLayoutRoot" Grid.Row="3" Grid.Column="1" Grid.RowSpan="1" Grid.ColumnSpan="1" Height="275" VerticalAlignment="Top">
+		<Grid x:Name="TagInfoLayoutRoot" Grid.Row="3" Grid.Column="1" Grid.RowSpan="1" Grid.ColumnSpan="1" Height="275" VerticalAlignment="Center">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="20"/>
 				<RowDefinition Height="30"/>

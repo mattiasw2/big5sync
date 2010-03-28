@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
@@ -28,13 +29,15 @@ namespace SynclessUI
         private VistaFolderBrowserDialog vistafolderDialog = new VistaFolderBrowserDialog();
         private FolderBrowserDialog _ofd = new FolderBrowserDialog();
         private const string DialogDescription = "Please select a folder to tag.";
+        private bool _notifyUser;
         
-		public TagWindow(MainWindow main, string path, string tagname)
+		public TagWindow(MainWindow main, string path, string tagname, bool notifyUser)
         {
             InitializeComponent();
 
 			_main = main;
             _selectedTag = tagname;
+		    _notifyUser = notifyUser;
             
             InitializeFolderDialogs();
 
@@ -44,7 +47,7 @@ namespace SynclessUI
 
 		    if (_cancelstatus)
 		    {
-		        this.Close();
+		        FormFadeOut.Begin();
 		    }
 		    else
 		    {
@@ -157,7 +160,9 @@ namespace SynclessUI
                                     {
                                         _main.InitializeTagList();
                                         _main.SelectTag(Tagname);
-                                        this.Close();
+                                        if (_notifyUser)
+                                            _main.NotifyBalloon("Tagging Successful", _path + " has been tagged to " + Tagname);
+                                        FormFadeOut.Begin();
                                     }
                                     else
                                     {
@@ -223,7 +228,7 @@ namespace SynclessUI
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.Close();
+            FormFadeOut.Begin();
         }
 
 		private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -264,5 +269,10 @@ namespace SynclessUI
 		{
 			this.DragMove();
 		}
+		
+        private void FormFadeOut_Completed(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

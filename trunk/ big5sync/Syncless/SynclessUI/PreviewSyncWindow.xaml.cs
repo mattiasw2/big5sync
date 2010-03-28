@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Visitor;
 using System.Data;
@@ -61,17 +62,22 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-			this.Close();
+			FormFadeOut.Begin();
         }
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.Close();
+            FormFadeOut.Begin();
         }
 
 		private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 			this.DragMove();
 		}
+		
+        private void FormFadeOut_Completed(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

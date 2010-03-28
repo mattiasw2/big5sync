@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using SynclessUI.Helper;
 
 namespace SynclessUI
@@ -31,15 +32,15 @@ namespace SynclessUI
 			{
             	RegistryHelper.RemoveRegistry();
 			}
-			
+
+            FormFadeOut.Begin();			
 			Properties.Settings.Default.EnableShellIntegration = choice;
 			Properties.Settings.Default.Save();
-			this.Close();
         }
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.Close();
+            FormFadeOut.Begin();
         }
 
 		private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -56,5 +57,10 @@ namespace SynclessUI
 		{
 			this.DragMove();
 		}
+		
+        private void FormFadeOut_Completed(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

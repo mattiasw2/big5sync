@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.IO;
 using Syncless.Core.Exceptions;
@@ -12,14 +13,20 @@ namespace SynclessUI
     public partial class UntagWindow : Window
     {		
 		private readonly MainWindow _main;
+        private bool _notifyUser;
+        private string Path
+        {
+            get { return TxtBoxPath.Text; }
+        }
         
-		public UntagWindow(MainWindow main, string clipath)
+		public UntagWindow(MainWindow main, string clipath, bool notifyUser)
         {
             try
             {
                 InitializeComponent();
 
                 _main = main;
+                _notifyUser = notifyUser;
 
                 List<string> tagListByFolder = new List<string>();
                 DirectoryInfo di = null;
@@ -48,7 +55,7 @@ namespace SynclessUI
                 {
                     DialogsHelper.ShowError("No Tags Found", "The folder you were trying to untag had no tags on it.");
 
-                    this.Close();
+                    FormFadeOut.Begin();
                 }
             }
             catch (UnhandledException)
@@ -61,6 +68,7 @@ namespace SynclessUI
         {
             try
             {
+                string lasttagged = "";
                 if (taglist.SelectedIndex == -1)
                 {
                     DialogsHelper.ShowError("Tag not Selected", "Please select the particular tag to untag the folder from.");
@@ -70,10 +78,15 @@ namespace SynclessUI
                 foreach (string t in taglist.SelectedItems)
                 {
                     if(!_main.Gui.GetTag(t).IsLocked) {
-                        int result = _main.Gui.Untag(t, new DirectoryInfo(TxtBoxPath.Text));
+                        int result = _main.Gui.Untag(t, new DirectoryInfo(Path));
+                        lasttagged = t;
                         if (result != 1)
                         {
-                            DialogsHelper.ShowError("Untagging Error", t + " could not be untagged from " + TxtBoxPath.Text);
+                            DialogsHelper.ShowError("Untagging Error", t + " could not be untagged from " + Path);
+                        } else
+                        {
+                            if(_notifyUser)
+                                _main.NotifyBalloon("Untagging Successful", Path + " has been untagged from " + t);
                         }
                     }
                     else
@@ -82,8 +95,8 @@ namespace SynclessUI
                                                 "You cannot untag a folder while the tag is synchronizing.");
                     }
                 }
-                _main.InitializeTagList();
-                this.Close();
+                _main.SelectTag(lasttagged);
+                FormFadeOut.Begin();
             }
             catch (UnhandledException)
             {
@@ -93,12 +106,17 @@ namespace SynclessUI
 		
 		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.Close();
+            FormFadeOut.Begin();
         }
 
 		private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
 		{
 			this.DragMove();
 		}
+		
+        private void FormFadeOut_Completed(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
