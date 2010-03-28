@@ -4,12 +4,12 @@ namespace SynclessUI.Helper
 {
     public static class FileHelper
     {
-        public static bool IsZipFile(string i)
+        public static bool IsFile(string path)
         {
             try
             {
-                FileInfo fi = new FileInfo(i);
-                if (fi.Exists && fi.Extension.ToLower() == ".zip")
+                FileInfo fi = new FileInfo(path);
+                if(fi.Exists)
                     return true;
 
                 return false;
