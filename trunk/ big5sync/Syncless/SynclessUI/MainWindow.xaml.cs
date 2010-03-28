@@ -18,6 +18,7 @@ using Syncless.Tagging.Exceptions;
 using SynclessUI.Helper;
 using SynclessUI.Notification;
 using SynclessUI.Properties;
+using System.Media;
 
 namespace SynclessUI
 {
@@ -172,10 +173,23 @@ namespace SynclessUI
 
         public string GetTagStatus(string tagname)
         {
-            string status = _tagStatusNotificationDictionary[tagname];
+            try {
+                string status = _tagStatusNotificationDictionary[tagname];
 
-            return status;
+                return status;
+            } catch
+            {
+                return "";
+            }
         }
+
+        /*
+         * notification.StartsWith("Synchronization Completed")
+                    || notification == "Please Wait"
+                    || notification == "Nothing to Synchronize"
+                    || notification == "Analyzing Folders"
+                    || notification == "Synchronization request has been queued"
+         */
 
         public void SetSyncProgress(string tagname, SyncProgress progress)
         {
@@ -187,8 +201,11 @@ namespace SynclessUI
 
                 if (!(notification != null
                     && (notification.StartsWith("Synchronization Completed")
-                    || notification.StartsWith("Please Wait")
-                    || notification.StartsWith("Nothing to Synchronize"))
+                    || notification == "Please Wait"
+                    || notification == "Nothing to Synchronize"
+                    || notification == "Analyzing Folders"
+                    || notification == "Synchronization request has been queued"
+                    || notification.StartsWith("Starting"))
                     && progress.Message == "Finalizing"))
                 {
                     LblStatusText.Content = progress.Message;
@@ -228,6 +245,7 @@ namespace SynclessUI
 
         public void NotifyBalloon(string title, string text)
         {
+            SystemSounds.Exclamation.Play();
             TaskbarIcon.ShowBalloonTip(title, text, BalloonIcon.Info);
         }
 
@@ -423,18 +441,19 @@ namespace SynclessUI
             if (!_manualSyncEnabled)
             {
                 DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
-                             "You cannot change the synchronization modewhile it is synchronizing.");
+                             "You cannot change the synchronization mode while it is synchronizing.");
                 return;
             }
 
             try
             {
-                if (!Gui.GetTag(SelectedTag).IsLocked  || _tagStatusNotificationDictionary[SelectedTag] == "Finalizing")
+                if (!Gui.GetTag(SelectedTag).IsLocked  && !(GetTagStatus(SelectedTag) == "Finalizing"))
                 {
                     if (string.Compare((string) LblSyncMode.Content, "Manual") == 0)
                     {
                         if (Gui.MonitorTag(SelectedTag, true))
                         {
+                            ProgressBarSync.Value = 0;
                             const string message = "Please Wait";
                             LblStatusText.Content = message;
                             _tagStatusNotificationDictionary[SelectedTag] = message;
@@ -515,7 +534,7 @@ namespace SynclessUI
 
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
         {
-            if (!_manualSyncEnabled)
+            if (!_manualSyncEnabled || Gui.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
             {
                 DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
                              "You cannot carry out another synchronization operation while it is synchronizing.");
@@ -526,20 +545,15 @@ namespace SynclessUI
             {
                 if (Gui.GetTag(SelectedTag).PathStringList.Count > 1)
                 {
-                    //BtnSyncNow.IsEnabled = false;
-                    //BtnPreview.IsEnabled = false;
-                    //BtnSyncMode.IsEnabled = false;
                     if (Gui.StartManualSync(SelectedTag))
                     {
-                        const string message = "Synchronization request has been queued.";
+                        const string message = "Synchronization request has been queued";
                         LblStatusText.Content = message;
                         _tagStatusNotificationDictionary[SelectedTag] = message;
+                        ProgressBarSync.Value = 0;
                     }
                     else
                     {
-                        //BtnSyncNow.IsEnabled = true;
-                        //BtnPreview.IsEnabled = true;
-                        //BtnSyncMode.IsEnabled = true;
                         DialogsHelper.ShowError("Synchronization Error", "'" + SelectedTag + "' could not be synchronized.");
                     }
                 } 
@@ -790,7 +804,7 @@ namespace SynclessUI
 
         private void BtnPreview_Click(object sender, RoutedEventArgs e)
         {
-            if (!_manualSyncEnabled)
+            if (!_manualSyncEnabled || Gui.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
             {
                 DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
                                             "You cannot preview while it is synchronizing.");
