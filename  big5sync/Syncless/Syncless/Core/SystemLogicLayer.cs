@@ -767,6 +767,7 @@ namespace Syncless.Core
                 }
                 //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                CleanMetaData(folder);
                 return count;
 
 
@@ -781,6 +782,27 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
+
+        private void CleanMetaData(DirectoryInfo folder)
+        {
+            string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, false);
+            if (convertedPath == null || convertedPath.Equals("")) return;
+            // See if there is any tag still contain this folder.
+            List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(convertedPath);
+
+            if(tagList.Count>0)return; //Still have tag contain the folder , do not attempt to clean.
+
+            List<string> parentPaths = TaggingLayer.Instance.RetrieveAncestors(convertedPath);
+            if(parentPaths.Count!=0)return;//Parent still tagged. Do not clean.
+            
+            List<string> childPaths = TaggingLayer.Instance.RetrieveDescendants(convertedPath);
+            List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(childPaths);
+
+            Cleaner.CleanSynclessMeta(folder,convertedList);
+
+
+        }
+
         /// <summary>
         /// Set the monitor mode for a tag
         /// </summary>

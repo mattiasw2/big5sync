@@ -470,7 +470,7 @@ namespace Syncless.Tagging
         public List<string> RetrieveDescendants(string path)
         {
             List<string> descendants = new List<string>();
-            foreach (Tag tag in _taggingProfile.TagList)
+            foreach (Tag tag in FilteredTagList)
             {
                 foreach (string found in tag.FindDescendants(path))
                 {
