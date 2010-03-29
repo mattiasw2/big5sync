@@ -228,6 +228,7 @@ namespace Syncless.CompareAndSync.Visitor
                         //Conflict
                         file.Priority[i] = file.Priority[mostUpdatedPos] - 1;
                         file.FinalState[i] = FinalState.Conflict;
+                        file.ConflictPositions.Add(i);
                     }
                 }
                 else

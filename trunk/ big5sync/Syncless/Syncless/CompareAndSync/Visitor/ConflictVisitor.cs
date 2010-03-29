@@ -50,6 +50,7 @@ namespace Syncless.CompareAndSync.Visitor
             try
             {
                 CommonMethods.CopyFile(src, dest, true);
+                fco.FinalState[fileIndex] = null; //Set back to null
             }
             catch (CopyFileException e)
             {

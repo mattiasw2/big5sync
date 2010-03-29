@@ -40,6 +40,8 @@ namespace Syncless.CompareAndSync
 
             if (progress.State != SyncState.Cancelled)
             {
+                CompareObjectHelper.PreTraverseFolder(rco, new ConflictVisitor(request.Config), progress);
+
                 //Syncing
                 progress.ChangeToSyncing(comparerVisitor.TotalNodes);
                 SyncerVisitor syncerVisitor = new SyncerVisitor(request.Config, progress);
