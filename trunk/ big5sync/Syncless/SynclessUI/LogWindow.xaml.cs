@@ -18,9 +18,7 @@ namespace SynclessUI
         
 		public LogWindow(MainWindow main)
         {
-            InitializeComponent();
-			
-			_main = main;
+            _main = main;
 		    bool encounteredError = false;
             
             try
@@ -38,30 +36,27 @@ namespace SynclessUI
                 DialogsHelper.DisplayUnhandledExceptionMessage();
             }
 
-            if (encounteredError)
+            if (!encounteredError)
             {
-                CloseWindow();
-            }
-            else
-            {
+                InitializeComponent();
                 this.ShowDialog();
-            }
+            } 
         }
 
         private void PopulateLogData(List<LogData> log)
         {
             _LogData = new DataTable();
-            _LogData.Columns.Add(new DataColumn("category", typeof(string)));
-            _LogData.Columns.Add(new DataColumn("eventtype", typeof(string)));
-            _LogData.Columns.Add(new DataColumn("message", typeof(string)));
-            _LogData.Columns.Add(new DataColumn("timestamp", typeof(string)));
-            
+            _LogData.Columns.Add(new DataColumn("Category", typeof(string)));
+            _LogData.Columns.Add(new DataColumn("Event Type", typeof(string)));
+            _LogData.Columns.Add(new DataColumn("Message", typeof(string)));
+            _LogData.Columns.Add(new DataColumn("Timestamp", typeof(string)));
+
             foreach (LogData l in log)
             {
                 LogEventType @event = l.LogEvent;
 
                 var row = _LogData.NewRow();
-                _LogData.Rows.Add(row);
+               
 
                 string category = "";
                 string eventType = "";
@@ -134,17 +129,22 @@ namespace SynclessUI
                         break;
                 }
 
-                row["category"] = category;
-                row["eventtype"] = eventType;
-                row["message"] = l.Message;
-                row["timestamp"] = l.Timestamp;
+                row["Category"] = category;
+                row["Event Type"] = eventType;
+                row["Message"] = l.Message;
+                row["Timestamp"] = l.Timestamp;
+
+                _LogData.Rows.Add(row);
             }
         }
 
-        private DataTable LogData()
+        public DataTable LogData
         {
-            return _LogData;
-        } 
+            get
+            {
+                return _LogData;
+            }
+        }
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
