@@ -760,7 +760,7 @@ namespace SynclessUI
                         }
                         else
                         {
-                            DialogsHelper.ShowInformation("Processing Current Job", "Tag your Mother");
+                            //DialogsHelper.ShowInformation("Processing Current Job", "Tag your Mother");
                             Thread terminateThread = new Thread(Gui.Terminate);
                             terminateThread.Start();
                             terminateThread.Join();
