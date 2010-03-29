@@ -16,20 +16,6 @@ namespace Syncless.CompareAndSync
     {
         public static void Sync(ManualSyncRequest request, SyncProgress progress)
         {
-            //if (request.Paths.Length < 2)
-            //{
-            //    ServiceLocator.UINotificationQueue().Enqueue(new NothingToSyncNotification(request.TagName));
-            //    if (request.Notify)
-            //        ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
-            //    return;
-            //}
-
-            //Started
-            //SyncStartNotification notification = new SyncStartNotification(request.TagName);
-            //SyncProgress progress = notification.Progress;
-
-            //ServiceLocator.UINotificationQueue().Enqueue(notification);
-
             List<Filter> filters = request.Filters.ToList();
             filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
             RootCompareObject rco = new RootCompareObject(request.Paths);

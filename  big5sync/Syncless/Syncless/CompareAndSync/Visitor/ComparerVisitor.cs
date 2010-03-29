@@ -225,7 +225,7 @@ namespace Syncless.CompareAndSync.Visitor
                     }
                     else if (file.LastWriteTime[i] == file.LastWriteTime[mostUpdatedPos])
                     {
-                        //Conflict :(
+                        //Conflict
                         file.Priority[i] = file.Priority[mostUpdatedPos] - 1;
                         file.FinalState[i] = FinalState.Conflict;
                     }
