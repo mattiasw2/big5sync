@@ -76,12 +76,12 @@ namespace Syncless.Tagging
             return false;
         }
 
-        internal static int Match(string[] pathTokens, string[] pTokens)
+        internal static int Match(string[] childPathTokens, string[] parentPathTokens)
         {
             int trailingIndex = 0;
-            for (int i = 0; i < pTokens.Length; i++)
+            for (int i = 0; i < parentPathTokens.Length; i++)
             {
-                if (pTokens[i].Equals(pathTokens[i]))
+                if (parentPathTokens[i].Equals(childPathTokens[i]))
                 {
                     trailingIndex++;
                 }

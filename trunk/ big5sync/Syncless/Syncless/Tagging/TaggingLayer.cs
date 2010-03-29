@@ -276,9 +276,9 @@ namespace Syncless.Tagging
         /// </summary>
         /// <param name="oldPath">The original path of the folder</param>
         /// <param name="newPath">The new path of the folder</param>
-        public void RenameFolder(string oldPath, string newPath)
+        public int RenameFolder(string oldPath, string newPath)
         {
-            _taggingProfile.RenameFolder(oldPath, newPath);
+            return _taggingProfile.RenameFolder(oldPath, newPath);
         }
 
         /// <summary>

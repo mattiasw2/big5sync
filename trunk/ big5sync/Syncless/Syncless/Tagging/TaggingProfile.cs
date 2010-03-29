@@ -267,8 +267,9 @@ namespace Syncless.Tagging
             return noOfPath;
         }
 
-        public void RenameFolder(string oldpath, string newpath)
+        public int RenameFolder(string oldpath, string newpath)
         {
+            int renamedCount = 0;
             foreach (Tag tag in _tagList)
             {
                 if (tag.ContainsParent(oldpath))
@@ -276,11 +277,12 @@ namespace Syncless.Tagging
                     if (!tag.ContainsParent(newpath))
                     {
                         CurrentTime current = new CurrentTime();
-                        tag.RenamePath(oldpath, newpath, current.CurrentTimeLong);
+                        renamedCount += tag.RenamePath(oldpath, newpath, current.CurrentTimeLong);
                         _lastUpdatedDate = current.CurrentTimeLong;
                     }
                 }
             }
+            return renamedCount;
         }
 
         public bool UpdateFilter(string tagname, List<Filter> newFilterList)
