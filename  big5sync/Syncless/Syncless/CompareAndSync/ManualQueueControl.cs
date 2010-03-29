@@ -133,6 +133,8 @@ namespace Syncless.CompareAndSync
                         ServiceLocator.UINotificationQueue().Enqueue(new NothingToSyncNotification(_currJob.TagName));
                         if (_currJob.Notify)
                             ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(_currJob.TagName));
+                        _currJobProgress = null;
+                        _currJob = null;
                     }
                     else
                     {
