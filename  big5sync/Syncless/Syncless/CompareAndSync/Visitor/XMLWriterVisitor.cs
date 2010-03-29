@@ -379,6 +379,11 @@ namespace Syncless.CompareAndSync.Visitor
 
             FinalState?[] finalStateList = folder.FinalState;
             FinalState? changeType = finalStateList[counter];
+            if (changeType == null)
+            {
+                HandleNullFolderCases(folder, counter);
+                return;
+            }
             switch (changeType)
             {
                 case FinalState.Created:
@@ -389,6 +394,9 @@ namespace Syncless.CompareAndSync.Visitor
                     break;
                 case FinalState.Renamed:
                     RenameFolderObject(folder, counter);
+                    break;
+                case FinalState.Unchanged:
+                    HandleUnchangedOrPropagatedFolder(folder, counter);
                     break;
                 case FinalState.Propagated:
                     HandleUnchangedOrPropagatedFolder(folder, counter);
@@ -507,6 +515,27 @@ namespace Syncless.CompareAndSync.Visitor
                     DeleteFolderObject(folder, counter);
             }
         }
+
+        private void HandleNullFolderCases(FolderCompareObject folder , int counter)
+        {
+
+            string fullPath = Path.Combine(folder.GetSmartParentPath(counter), folder.Name);
+            if (Directory.Exists(fullPath))
+                return;
+
+            XmlDocument xmlDoc = new XmlDocument();
+            string xmlPath = Path.Combine(folder.GetSmartParentPath(counter), Metadatapath);
+
+            CommonMethods.LoadXML(ref xmlDoc, xmlPath);
+
+            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/" + FOLDER + "[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
+            if (node != null)
+                node.ParentNode.RemoveChild(node);
+            CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+
+            GenerateFolderTodo(folder, counter);
+        }
+
         #endregion
 
         #region Todo Operations
@@ -561,7 +590,13 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void AppendActionFolderTodo(XmlDocument xmlDoc, FolderCompareObject folder, int counter, string changeType)
         {
-            XmlText nameText = xmlDoc.CreateTextNode(folder.MetaName);
+            string name = string.Empty;
+            if (folder.MetaName != null)
+                name = folder.MetaName;
+            else
+                name = folder.Name;
+
+            XmlText nameText = xmlDoc.CreateTextNode(name);
             XmlText action = xmlDoc.CreateTextNode(changeType);
             XmlText lastUpdatedText = xmlDoc.CreateTextNode(dateTime.ToString());
 
