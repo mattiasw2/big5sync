@@ -181,7 +181,6 @@ namespace Syncless.Monitor
         /// </summary>
         /// <param name="path">The Path to be monitored</param>
         /// <returns>Boolean stating if the monitor can be stopped</returns>
-        /// <exception cref="Syncless.Monitor.Exception.MonitorPathNotFoundException">Throw when the path is not found.</exception>
         public bool UnMonitorPath(string path)
         {
             if (Directory.Exists(path))
@@ -190,7 +189,7 @@ namespace Syncless.Monitor
             }
             else
             {
-                throw new MonitorPathNotFoundException(ErrorMessage.PATH_NOT_FOUND, path);
+                return false;
             }
         }
 

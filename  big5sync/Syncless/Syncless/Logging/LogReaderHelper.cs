@@ -8,10 +8,11 @@ namespace Syncless.Logging
     public class LogReaderHelper
     {
         private const string USER_LOG_PATH = @"log\user.log";
+        private const int MAX_LOG = 100;
 
         public static List<LogData> ReadLog()
         {
-            List<LogData> logs = new List<LogData>();
+            List<LogData> logs = new List<LogData>(MAX_LOG);
             StreamReader streamReader;
             try
             {
@@ -33,6 +34,10 @@ namespace Syncless.Logging
                 string timestamp = tokens[0].Trim();
                 LogEventType logEvent = Convert(tokens[2].Trim());
                 string message = tokens[3].Trim();
+                if (logs.Count > MAX_LOG)
+                {
+                    logs.RemoveAt(0);
+                }
                 logs.Add(new LogData(timestamp, logEvent, message));
             }
             streamReader.Close();
