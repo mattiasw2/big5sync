@@ -5,8 +5,6 @@
 
 = Overview =
 
-The *Notification* component provides a set of classes to send event notifications internally and as a feedback to the user. Such events may include initiating a synchronization process, monitoring/unmonitoring of a tag, adding/removing a tag and many more. All notifications are enqueued for further actions by the relevant components for internal operations and for the *User Interface* component to provide corresponding feedback to the user.
-
 = Classes =
 
 = Description of Design =
