@@ -807,8 +807,7 @@ namespace SynclessUI
 		
         private void DisplayLogWindow()
         {
-            // var lw = new LogsWindow(this);
-            // lw.ShowDialog();
+            var lw = new LogWindow(this);
         }
 
         private void BtnOptions_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
