@@ -1060,9 +1060,10 @@ namespace Syncless.Core
         {
             try
             {
+                
+                CompareAndSyncController.Instance.Terminate();
                 DeviceWatcher.Instance.Terminate();
                 MonitorLayer.Instance.Terminate();
-                CompareAndSyncController.Instance.Terminate();
                 _queueObserver.Stop();
                 _reader.Stop();
                 _deletedTaggedPathWatcher.Stop();
