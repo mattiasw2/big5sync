@@ -9,7 +9,7 @@ The *Notification* component provides a low coupling medium for the control laye
 
 = Classes =
 
-The main important classes for Notification include *!NotificationQueue* and *INotificationQueue*. Many notification is implemented in both UI and *System Logic Layer*. At UI layer, it needs to implement watchers to watch all notifications which belong to the Notification.UINotification namespace.
+The main important classes for Notification include `!NotificationQueue` and `INotificationQueue`. Many notification is implemented in both UI and *System Logic Layer*. At UI layer, it needs to implement watchers to watch all notifications which belong to the `Notification.UINotification` namespace.
 
 = Description of Design =
 
@@ -17,4 +17,4 @@ The notification layer makes use of observer pattern to notify its watchers to r
 
 = Extending Notification =
 
-To include more notifications, developers can add more enumerators to the *!NotificationCode* enumeration and extend the *!AbstractNotification* class.
+To include more notifications, developers can add more enumerators to the `!NotificationCode` enumeration and extend the `!AbstractNotification` class.
