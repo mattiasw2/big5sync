@@ -8,6 +8,7 @@ using Syncless.Tagging;
 using Syncless.Tagging.Exceptions;
 using System.Threading;
 using Syncless.Helper;
+using System.Text.RegularExpressions;
 
 namespace SynclessTaggingTester
 {
@@ -117,6 +118,10 @@ namespace SynclessTaggingTester
                 {
                     TestAppendProfile(testcase);
                 }
+                else if (testcase.Method.Equals("TestFolderFilter"))
+                {
+                    TestFolderFilter(testcase);
+                }
                 else if (testcase.Method.Equals("DeleteTag"))
                 {
                     TestDeleteTag(testcase);
@@ -138,6 +143,60 @@ namespace SynclessTaggingTester
             }
             sw.Close();
             ofs.Close();
+        }
+
+        private void TestFolderFilter(TestCase testcase)
+        {
+            string[] parameters = testcase.Parameters.Split(',');
+            string[] paths = parameters[0].Trim().Split(' ');
+            string pattern = parameters[1].Trim();
+            if (pattern.StartsWith("*") && pattern.EndsWith("*"))
+            {
+                //contain pattern
+                pattern = pattern.Trim('*');
+                pattern = Regex.Escape(pattern);
+                pattern = @"\S[A-Za-z:]*(" + pattern;
+                pattern = pattern + @")\S[A-Za-z]*";
+            }
+            else if (!pattern.StartsWith("*") && pattern.EndsWith("*"))
+            {
+                //startswith pattern only
+                pattern = pattern.Trim('*');
+                pattern = Regex.Escape(pattern);
+                pattern = @"\b(" + pattern;
+                pattern = pattern + @")\S*";
+            }
+            else if (pattern.StartsWith("*") && !pattern.EndsWith("*"))
+            {
+                //endswith pattern only
+                pattern = pattern.Trim('*');
+                pattern = Regex.Escape(pattern);
+                pattern = @"\S*(" + pattern;
+                pattern = pattern + @")\b";
+            }
+            else
+            {
+                //invalid filter pattern
+
+            }
+            List<string> filteredPaths = new List<string>();
+            foreach (string path in paths)
+            {
+                Match match = Regex.Match(path, pattern);
+                if (match.Success)
+                {
+                    filteredPaths.Add(match.Value);
+                }
+            }
+            //string path = @"C:\A\B\C\E\F\ C:\A\ C:\D\ D:\B\ E:\F\ G:\H\B\";
+            //string pattern = @"C:\A\*";
+            string result = "";
+            foreach (string filteredPath in filteredPaths)
+            {
+                result += (filteredPath + " ");
+            }
+            testcase.Actual = result.Trim();
+            testcase.Passed = (testcase.Expected.Equals(testcase.Actual));
         }
 
         private void TestAppendProfile(TestCase testcase)
@@ -188,6 +247,7 @@ namespace SynclessTaggingTester
         {
             List<string> pathList = _logic.GetAllPaths();
             string result = "";
+            pathList.Sort();
             foreach (string path in pathList)
             {
                 result += (path + " ");
@@ -294,6 +354,11 @@ namespace SynclessTaggingTester
         {
             string logicalid = testcase.Parameters;
             List<string> pathlist = _logic.RetrievePathByLogicalId(logicalid);
+            string result = "";
+            foreach (string path in pathlist)
+            {
+                result += (path + " ");
+            }
             testcase.Actual = pathlist.Count.ToString();
             testcase.Passed = (testcase.Expected.Equals(testcase.Actual));
         }
@@ -338,19 +403,22 @@ namespace SynclessTaggingTester
             string[] parameters = testcase.Parameters.Split(',');
             string oldpath = parameters[0].Trim();
             string newpath = parameters[1].Trim();
-            List<string> renamedpathlist = new List<string>();
-            _logic.RenameFolder(oldpath, newpath);
-            foreach (Tag tag in _logic.TagList)
-            {
-                foreach (string path in tag.FilteredPathListString)
-                {
-                    if (PathHelper.AddTrailingSlash(path).StartsWith(PathHelper.AddTrailingSlash(newpath)))
-                    {
-                        renamedpathlist.Add(path);
-                    }
-                }
-            }
-            testcase.Actual = renamedpathlist.Count.ToString();
+            int renamedCount = _logic.RenameFolder(oldpath, newpath);
+            //List<string> renamedpathlist = new List<string>();
+            //foreach (string p in _logic.GetAllPaths())
+            //{
+            //    if (p.StartsWith(newpath))
+            //    {
+            //        renamedpathlist.Add(p);
+            //    }
+            //}
+            //renamedpathlist.Sort();
+            //string result = "";
+            //foreach (string renamed in renamedpathlist)
+            //{
+            //    result += (renamed + " ");
+            //}
+            testcase.Actual = renamedCount.ToString();
             testcase.Passed = (testcase.Expected.Equals(testcase.Actual));
         }
 

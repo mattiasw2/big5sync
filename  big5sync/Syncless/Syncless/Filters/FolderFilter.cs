@@ -11,8 +11,8 @@ namespace Syncless.Filters
         private string _pattern;
         public string Pattern
         {
-            get;
-            set;
+            get { return _pattern; }
+            set { _pattern = value; }
         }
         public FolderFilter(string pattern, FilterMode mode)
             : base(mode)

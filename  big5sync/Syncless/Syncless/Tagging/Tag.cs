@@ -176,20 +176,40 @@ namespace Syncless.Tagging
             }
         }
 
-        public void RenamePath(string oldPath, string newPath, long updated)
+        public int RenamePath(string oldPath, string newPath, long updated)
         {
-            foreach (TaggedPath p in _pathList)
+            List<TaggedPath> newTaggedPathList = new List<TaggedPath>();
+            foreach (TaggedPath p in FilteredPathList)
             {
                 if (PathHelper.StartsWithIgnoreCase(p.PathName, oldPath))
                 {
-                    p.Replace(oldPath, newPath);
+                    p.Remove(updated);
+                    string combinedPath = p.PathName.Replace(oldPath, newPath);
+                    TaggedPath newTaggedPath = new TaggedPath(combinedPath, updated);
+                    if (!newTaggedPathList.Contains(newTaggedPath))
+                    {
+                        newTaggedPathList.Add(newTaggedPath);
+                    }
                 }
-                else if (PathHelper.EqualsIgnoreCase(p.PathName, oldPath))
+                //else if (PathHelper.EqualsIgnoreCase(p.PathName, oldPath))
+                //{
+                //    p.Remove(updated);
+                //    TaggedPath newTaggedPath = new TaggedPath(newPath, updated);
+                //    if (!newTaggedPathList.Contains(newTaggedPath))
+                //    {
+                //        newTaggedPathList.Add(newTaggedPath);
+                //    }
+                //}
+            }
+            if (newTaggedPathList.Count > 0)
+            {
+                foreach (TaggedPath toAdd in newTaggedPathList)
                 {
-                    p.PathName = newPath;
+                    _pathList.Add(toAdd);
                 }
                 _lastUpdatedDate = updated;
             }
+            return newTaggedPathList.Count;
         }
         
         public bool RemovePath(string path, long lastupdated)
@@ -237,12 +257,12 @@ namespace Syncless.Tagging
 
         public void RemoveAllPaths()
         {
+            long deletedDate = TaggingHelper.GetCurrentTime();
             foreach (TaggedPath p in _pathList)
             {
-                p.IsDeleted = true;
-                p.DeletedDate = TaggingHelper.GetCurrentTime();
+                p.Remove(deletedDate);
             }
-            _lastUpdatedDate = TaggingHelper.GetCurrentTime();
+            _lastUpdatedDate = deletedDate;
         }
 
         /// <summary>
@@ -251,6 +271,24 @@ namespace Syncless.Tagging
         /// <param name="path">The path to find the children path</param>
         /// <returns>True if tag contains child path, else false</returns>
         public bool ContainsParent(string path)
+        {
+            foreach (TaggedPath p in FilteredPathList)
+            {
+                if (PathHelper.StartsWithIgnoreCase(p.PathName, path))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Return true if this tag contains a path whose parent is the given path, regardless of whether
+        /// the path is set as deleted or not
+        /// </summary>
+        /// <param name="path">The path to find the children path</param>
+        /// <returns>True if tag contains child path, else false</returns>
+        public bool ContainsParentIgnoreDeleted(string path)
         {
             foreach (TaggedPath p in _pathList)
             {
@@ -286,18 +324,19 @@ namespace Syncless.Tagging
         /// <returns>True if tag contains the given path</returns>
         public bool Contains(string path)
         {
-            foreach (TaggedPath p in _pathList)
+            foreach (TaggedPath p in FilteredPathList)
             {
                 if (PathHelper.EqualsIgnoreCase(p.PathName, path))
                 {
-                    if (p.IsDeleted)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        return true;
-                    }
+                    return true;
+                    //if (p.IsDeleted)
+                    //{
+                    //    return false;
+                    //}
+                    //else
+                    //{
+                    //    return true;
+                    //}
                 }
             }
             return false;
@@ -316,7 +355,7 @@ namespace Syncless.Tagging
         {
             string[] pathTokens = path.Trim().Split('\\');
             string logicalid = TaggingHelper.GetLogicalID(path);
-            foreach (TaggedPath p in _pathList)
+            foreach (TaggedPath p in FilteredPathList)
             {
                 if (PathHelper.StartsWithIgnoreCase(path, p.PathName))
                 {
@@ -326,10 +365,6 @@ namespace Syncless.Tagging
                         int trailingIndex = TaggingHelper.Match(pathTokens, pTokens);
                         if (trailingIndex > 0)
                         {
-                            if (isFolder)
-                            {
-                                return PathHelper.AddTrailingSlash(TaggingHelper.CreatePath(trailingIndex, pathTokens));
-                            }
                             return TaggingHelper.CreatePath(trailingIndex, pathTokens);
                         }
                     }
@@ -408,7 +443,7 @@ namespace Syncless.Tagging
         public List<string> FindAncestors(string path)
         {
             List<string> ancestors = new List<string>();
-            foreach (TaggedPath p in _pathList)
+            foreach (TaggedPath p in FilteredPathList)
             {
                 if (PathHelper.StartsWithIgnoreCase(path, p.PathName))
                 {
@@ -432,7 +467,7 @@ namespace Syncless.Tagging
         public List<string> FindDescendants(string path)
         {
             List<string> descendants = new List<string>();
-            foreach (TaggedPath p in _pathList)
+            foreach (TaggedPath p in FilteredPathList)
             {
                 if (PathHelper.StartsWithIgnoreCase(p.PathName, path))
                 {
