@@ -43,7 +43,7 @@
 			</StackPanel>
 			<StackPanel x:Name="EnableAnimationGroup" Orientation="Horizontal">
 				<CheckBox x:Name="ChkBoxEnableAnimation" VerticalAlignment="Center" />
-				<Label x:Name="EnableAnimationDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Enable Window Animation on Startup/Exit"/>
+				<Label x:Name="EnableAnimationDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Enable Window Animation on Application Start/Exit"/>
 			</StackPanel>
 			<StackPanel x:Name="EnableTrayNotification" Orientation="Horizontal">
 				<CheckBox x:Name="ChkBoxEnableTrayNotification" VerticalAlignment="Center" />
