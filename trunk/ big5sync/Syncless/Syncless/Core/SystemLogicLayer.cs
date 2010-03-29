@@ -485,10 +485,17 @@ namespace Syncless.Core
                                                                  SyncConfig.Instance);
                     SendAutoRequest(request);
                 }
+            } 
+            List<Tag> preRenameTagList = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
+            if (preRenameTagList.Count != 0)
+            {
+                TaggingLayer.Instance.RenameFolder(logicalAddress, newLogicalAddress);
+                MonitorLayer.Instance.UnMonitorPath(fe.OldPath.FullName);
+                MonitorLayer.Instance.MonitorPath(fe.NewPath.FullName);
+                _userInterface.TagChanged();
             }
 
-            TaggingLayer.Instance.RenameFolder(logicalAddress, newLogicalAddress);
-            _userInterface.TagChanged();
+            
         }
 
         /// <summary>
