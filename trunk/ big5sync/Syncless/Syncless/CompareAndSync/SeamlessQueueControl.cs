@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Collections.Generic;
 using Syncless.CompareAndSync.Request;
@@ -48,6 +49,7 @@ namespace Syncless.CompareAndSync
 
         public void AddSyncJob(AutoSyncRequest item)
         {
+            Debug.Assert(locker != null);
             lock (locker)
             {
                 _jobs.Enqueue(item);
@@ -88,18 +90,37 @@ namespace Syncless.CompareAndSync
         public bool PrepareForTermination()
         {
             if (IsEmpty && _currJob == null)
-            {
-                Dispose();
                 return true;
-            }
-            _jobs.Clear();
             return false;
+        }
+
+        public void Terminate()
+        {
+            if (IsEmpty && _currJob == null)
+                Dispose();
+            else
+            {
+                // Clear all jobs
+                _jobs.Clear();
+
+                while (_currJob != null)
+                {
+                    //Busy waiting
+                }
+                Dispose();
+            }
         }
 
         public void Dispose()
         {
             for (int i = 0; i < _threads.Count; i++)
-                AddSyncJob(null);
+            {
+                lock (locker)
+                {
+                    _jobs.Enqueue(null);
+                }
+                _wh.Set();
+            }
             for (int i = 0; i < _threads.Count; i++)
                 _threads[i].Join();
         }

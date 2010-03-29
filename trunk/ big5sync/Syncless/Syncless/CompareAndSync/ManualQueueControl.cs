@@ -202,7 +202,7 @@ namespace Syncless.CompareAndSync
                 _jobs.Clear();
                 _queuedJobsLookup.Clear();
 
-                if (_currJobProgress != null)
+                if (_currJobProgress != null && _currJob != null)
                 {
                     switch (_currJobProgress.State)
                     {
