@@ -74,6 +74,7 @@
     <Compile Include="CompareAndSync\Exceptions\SynclessIOException.cs" />
     <Compile Include="CompareAndSync\ManualQueueControl.cs" />
     <Compile Include="CompareAndSync\ManualSyncer.cs" />
+    <Compile Include="CompareAndSync\Visitor\ConflictVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\FolderRenameVisitor.cs" />
     <Compile Include="CompareAndSync\Visitor\IgnoreMetaDataVisitor.cs" />
     <Compile Include="CompareAndSync\Request\AutoSyncRequest.cs" />
