@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Collections.Generic;
 using Syncless.CompareAndSync.Request;
@@ -54,13 +55,13 @@ namespace Syncless.CompareAndSync
 
         public void AddSyncJob(ManualSyncRequest item)
         {
+            Debug.Assert(item != null);
             lock (locker)
             {
-                if (item == null || !_queuedJobsLookup.Contains(item.TagName))
+                if (!_queuedJobsLookup.Contains(item.TagName))
                 {
                     _jobs.Insert(0, item);
-                    if (item != null)
-                        _queuedJobsLookup.Add(item.TagName);
+                    _queuedJobsLookup.Add(item.TagName);
                 }
             }
             _wh.Set();
@@ -179,30 +180,57 @@ namespace Syncless.CompareAndSync
         public bool PrepareForTermination()
         {
             if (IsEmpty && _currJob == null)
-            {
-                Dispose();
                 return true;
-            }
-
-            _jobs.Clear();
-            if (_currJobProgress != null)
-            {
-                switch (_currJobProgress.State)
-                {
-                    case SyncState.Started:
-                    case SyncState.Analyzing:
-                        _currJobProgress.State = SyncState.Cancelled;
-                        break;
-                }
-            }
             return false;
+        }
+
+        public void Terminate()
+        {
+            if (IsEmpty && _currJob == null)
+                Dispose();
+            //else if (IsEmpty && _currJob != null)
+            //{
+
+            //}
+            //else if (!IsEmpty && _currJob == null)
+            //{
+
+            //}
+            else
+            {
+                // Clear all jobs
+                _jobs.Clear();
+                _queuedJobsLookup.Clear();
+
+                if (_currJobProgress != null)
+                {
+                    switch (_currJobProgress.State)
+                    {
+                        case SyncState.Started:
+                        case SyncState.Analyzing:
+                            _currJobProgress.State = SyncState.Cancelled;
+                            break;
+                    }
+                }
+
+                while (_currJobProgress != null)
+                {
+                    //Busy waiting
+                }
+                Dispose();
+            }
         }
 
         public void Dispose()
         {
-
             for (int i = 0; i < _threads.Count; i++)
-                AddSyncJob(null);
+            {
+                lock (locker)
+                {
+                    _jobs.Insert(0, null);
+                }
+                _wh.Set();
+            }
             for (int i = 0; i < _threads.Count; i++)
                 _threads[i].Join();
         }
