@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Syncless.Notification
 {
@@ -9,7 +10,9 @@ namespace Syncless.Notification
     {
         private List<ISyncProgressObserver> _observerList;
         private SyncState _state;
-
+        private bool _notify;
+        private bool _completed;
+        private Thread _worker;
         public SyncState State
         {
             get { return _state; }
@@ -114,11 +117,10 @@ namespace Syncless.Notification
 
         private void InvokeChange()
         {
-            foreach (ISyncProgressObserver obs in _observerList)
+            if(!_notify)
             {
-                MethodASync sync = new MethodASync(obs.ProgressChanged);
-                sync.BeginInvoke(null, null);
-                //obs.ProgressChanged();
+                _notify= true;
+                _worker.Interrupt();
             }
         }
         public delegate void MethodASync();
@@ -151,6 +153,10 @@ namespace Syncless.Notification
             _syncFailedJobs = 0;
             _syncCompletedJobs = 0;
             _observerList = new List<ISyncProgressObserver>();
+            _notify = false;
+            _completed = false;
+            _worker = new Thread(Notifier);
+            _worker.Start();
         }
 
         public void AddObserver(ISyncProgressObserver obs)
@@ -211,6 +217,7 @@ namespace Syncless.Notification
             {
                 return false;
             }
+            _completed = true;
             _message = "Finishing";
             //_state = SyncState.Finished;
             //TriggerStateChanged();
@@ -235,6 +242,44 @@ namespace Syncless.Notification
                 //obs.StateChanged();
             }
         }
+
+
+
+
+        #region thread
+        private void Notifier()
+        {
+            while (!_completed)
+            {
+                try
+                {
+                    if (_notify)
+                    {
+                        _notify = false;
+                        foreach (ISyncProgressObserver obs in _observerList)
+                        {
+                            obs.ProgressChanged();
+                        }
+
+                    }
+                    Thread.Sleep(10000);
+                }
+                catch (ThreadInterruptedException)
+                {
+                }
+                catch (ThreadAbortException)
+                {
+                }
+            }
+            //DO a final State Change
+            foreach (ISyncProgressObserver obs in _observerList)
+            {
+                obs.ProgressChanged();
+            }
+            
+        }
+
+        #endregion
     }
 
 }
