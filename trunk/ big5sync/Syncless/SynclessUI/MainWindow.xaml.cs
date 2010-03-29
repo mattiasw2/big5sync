@@ -215,14 +215,6 @@ namespace SynclessUI
             }
         }
 
-        /*
-         * notification.StartsWith("Synchronization Completed")
-                    || notification == "Please Wait"
-                    || notification == "Nothing to Synchronize"
-                    || notification == "Analyzing Folders"
-                    || notification == "Synchronization request has been queued"
-         */
-
         public void SetSyncProgress(string tagname, SyncProgress progress)
         {
             string notification = _tagStatusNotificationDictionary[tagname];
@@ -231,17 +223,7 @@ namespace SynclessUI
             {
                 ProgressBarSync.SetValue(ProgressBar.ValueProperty, progress.PercentComplete);
 
-                if (!(notification != null
-                    && (notification.StartsWith("Synchronization Completed")
-                    || notification == "Please Wait"
-                    || notification == "Nothing to Synchronize"
-                    || notification == "Analyzing Folders"
-                    || notification == "Synchronization request has been queued"
-                    || notification.StartsWith("Starting"))
-                    && progress.Message == "Finalizing"))
-                {
-                    LblStatusText.Content = progress.Message;
-                }
+                LblStatusText.Content = progress.Message;
 
                 SetProgressBarColor(progress.PercentComplete);
             }
@@ -249,8 +231,7 @@ namespace SynclessUI
             _syncProgressNotificationDictionary[tagname] = progress.PercentComplete;
 
             if (!(notification != null
-                && notification.StartsWith("Synchronization Completed")
-                && progress.Message == "Finalizing"))
+                && notification.StartsWith("Synchronization Completed")))
             {
                 _tagStatusNotificationDictionary[tagname] = progress.Message;
             }
@@ -598,7 +579,7 @@ namespace SynclessUI
                 }
                 else
                 {
-                    DialogsHelper.ShowError("Nothing to Sync", "Please sync only when there are two or more folders to sync.");
+                    DialogsHelper.ShowError("Nothing to Synchronize", "You can only synchronize when there are two or more folders.");
                 }
             }
             catch (UnhandledException)
@@ -918,7 +899,7 @@ namespace SynclessUI
             }
             else
             {
-                DialogsHelper.ShowError("Nothing to Preview", "Please preview only when there are two or more folders to sync.");
+                DialogsHelper.ShowError("Nothing to Preview", "You can only preview only when there are two or more folders.");
             }
         }
 
