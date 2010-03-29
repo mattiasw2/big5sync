@@ -153,6 +153,7 @@ namespace Syncless.CompareAndSync.Visitor
             if (renamePos > -1)
             {
                 file.Priority[renamePos] = 1;
+                file.SourcePosition = renamePos;
                 return;
             }
 
@@ -189,6 +190,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             if (deletePos.Count > 0)
             {
+                file.SourcePosition = deletePos[0];
                 foreach (int i in deletePos)
                     file.Priority[i] = 1;
                 return;
@@ -236,6 +238,8 @@ namespace Syncless.CompareAndSync.Visitor
                     file.Priority[i] = file.Priority[mostUpdatedPos];
                 }
             }
+
+            file.SourcePosition = mostUpdatedPos;
 
             //When to set parent to dirty? When the priority is not the same for all files?
             int priority = -1;
@@ -331,6 +335,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             if (deletePos.Count > 0)
             {
+                folder.SourcePosition = deletePos[0];
                 foreach (int i in deletePos)
                     folder.Priority[i] = 1;
                 return;
@@ -356,12 +361,10 @@ namespace Syncless.CompareAndSync.Visitor
                     folder.Priority[i] = -1;
                     continue;
                 }
-                else
-                {
-                    folder.Priority[i] = folder.Priority[mostUpdatedPos];
-                }
+                folder.Priority[i] = folder.Priority[mostUpdatedPos];
             }
 
+            folder.SourcePosition = mostUpdatedPos;
         }
 
         #endregion

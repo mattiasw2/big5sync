@@ -26,6 +26,9 @@ namespace Syncless.CompareAndSync.CompareObject
         //Todo
         private LastKnownState?[] _toDoAction;
 
+        //Optimization
+        private int _sourcePosition;
+
         protected BaseCompareObject(string name, int numOfPaths, FolderCompareObject parent)
         {
             _name = name;
@@ -131,6 +134,12 @@ namespace Syncless.CompareAndSync.CompareObject
         {
             get { return _toDoAction; }
             set { _toDoAction = value; }
+        }
+
+        public int SourcePosition
+        {
+            get { return _sourcePosition; }
+            set { _sourcePosition = value; }
         }
 
     }
