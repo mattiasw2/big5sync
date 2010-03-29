@@ -1261,7 +1261,7 @@ namespace Syncless.Core
         }
         #endregion
 
-        #region private / delegate
+        #region private /internal / delegate
         /// <summary>
         /// Set the mode of the tag to the mode.
         /// </summary>
@@ -1534,9 +1534,24 @@ namespace Syncless.Core
             }
             return deletedPaths;
         }
+        /// <summary>
+        /// Find and Clean all the deleted Paths.
+        /// </summary>
+        private void FindAndCleanDeletedPaths()
+        {
+            List<string> deletedPaths = FindAllDeletedPaths();
+            foreach (string paths in deletedPaths)
+            {
+                string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(paths, false);
+                if (convertedPath != null)
+                {
+                    TaggingLayer.Instance.UntagFolder(convertedPath);
+                }
+            }
+        }
         #endregion
 
-        #region For Notification
+        #region For Notification // SideThread
         /// <summary>
         /// Add a Tag Path ( Notify from Merging )
         /// </summary>
@@ -1613,30 +1628,22 @@ namespace Syncless.Core
             SetTagMode(t, true);
             _userInterface.TagChanged();
         }
-        #endregion
-
-        private void FindAndCleanDeletedPaths()
-        {
-            List<string> deletedPaths = FindAllDeletedPaths();
-            foreach (string paths in deletedPaths)
-            {
-                string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(paths, false);
-                if (convertedPath != null)
-                {
-                    TaggingLayer.Instance.UntagFolder(convertedPath);
-                }
-            }
-        }
-
+        /// <summary>
+        /// Inform The Tagging Layer to untag a particular path as it is no longer available.
+        /// </summary>
+        /// <param name="pathList"></param>
         internal void Untag(List<string> pathList)
         {
-            
             foreach (string path in pathList)
             {
-                string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(path,false);
+                string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(path, false);
                 TaggingLayer.Instance.UntagFolder(convertedPath);
             }
             _userInterface.TagChanged();
         }
+        #endregion
+       
+
+        
     }
 }
