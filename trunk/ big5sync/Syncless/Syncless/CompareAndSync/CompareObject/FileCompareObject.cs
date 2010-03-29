@@ -13,7 +13,6 @@ namespace Syncless.CompareAndSync.CompareObject
         private long[] _metaLength, _metaLastWriteTime;
 
         //Optimization
-        private int _sourcePosition;
         private List<int> _conflictPos;
 
         public FileCompareObject(string name, int numOfPaths, FolderCompareObject parent)
@@ -73,12 +72,6 @@ namespace Syncless.CompareAndSync.CompareObject
                 return _conflictPos;
             }
             set { _conflictPos = value; }
-        }
-
-        public int SourcePosition
-        {
-            get { return _sourcePosition; }
-            set { _sourcePosition = value; }
         }
 
     }

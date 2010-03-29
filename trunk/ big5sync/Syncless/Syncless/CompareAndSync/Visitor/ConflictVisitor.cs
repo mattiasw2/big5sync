@@ -50,6 +50,7 @@ namespace Syncless.CompareAndSync.Visitor
             try
             {
                 CommonMethods.CopyFile(src, dest, true);
+                CommonMethods.DeleteFile(src);
                 fco.FinalState[fileIndex] = null; //Set back to null
             }
             catch (CopyFileException e)
@@ -57,6 +58,10 @@ namespace Syncless.CompareAndSync.Visitor
                 fco.FinalState[fileIndex] = FinalState.Error;
                 //TODO: Throw to notification queue in future
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+            }
+            catch (DeleteFileException e)
+            {
+                ;
             }
         }
     }

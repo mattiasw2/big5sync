@@ -29,12 +29,14 @@ namespace Syncless.CompareAndSync.Visitor
                 return;
             }
 
-            int maxPriorityPos = 0;
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                if (file.Priority[i] > file.Priority[maxPriorityPos])
-                    maxPriorityPos = i;
-            }
+            //int maxPriorityPos = 0;
+            //for (int i = 0; i < numOfPaths; i++)
+            //{
+            //    if (file.Priority[i] > file.Priority[maxPriorityPos])
+            //        maxPriorityPos = i;
+            //}
+
+            int maxPriorityPos = file.SourcePosition;
 
             if (file.Priority[maxPriorityPos] > 0)
             {
@@ -56,7 +58,6 @@ namespace Syncless.CompareAndSync.Visitor
             }
             _syncProgress.complete();
             //Basic logic: Look for highest priority and propagate it.
-
         }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
@@ -69,12 +70,14 @@ namespace Syncless.CompareAndSync.Visitor
                 return;
             }
 
-            int maxPriorityPos = 0;
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                if (folder.Priority[i] > folder.Priority[maxPriorityPos])
-                    maxPriorityPos = i;
-            }
+            //int maxPriorityPos = 0;
+            //for (int i = 0; i < numOfPaths; i++)
+            //{
+            //    if (folder.Priority[i] > folder.Priority[maxPriorityPos])
+            //        maxPriorityPos = i;
+            //}
+
+            int maxPriorityPos = folder.SourcePosition;
 
             if (folder.Priority[maxPriorityPos] > 0)
             {
