@@ -853,7 +853,9 @@ namespace Syncless.Core
                 }
                 //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 SaveLoadHelper.SaveAll(_userInterface.getAppPath());
-                CleanMetaData(folder);
+                //CleanMetaData(folder);
+                CleanMetaDataDelegate del = new CleanMetaDataDelegate(CleanMetaData);
+                del.BeginInvoke(folder, null, null);
                 return count;
 
 
@@ -868,7 +870,7 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
-
+        private delegate void CleanMetaDataDelegate(DirectoryInfo info);
         private void CleanMetaData(DirectoryInfo folder)
         {
             string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, false);
