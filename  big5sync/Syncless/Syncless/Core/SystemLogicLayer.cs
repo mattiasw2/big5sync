@@ -1056,7 +1056,7 @@ namespace Syncless.Core
         /// This is to kill the threads created and release the resources.
         /// </summary>
         /// <returns>true if the program successfully terminated , false if it can't be terminated.</returns>
-        public bool Terminate()
+        public void Terminate()
         {
             try
             {
@@ -1067,7 +1067,6 @@ namespace Syncless.Core
                 _queueObserver.Stop();
                 _reader.Stop();
                 _deletedTaggedPathWatcher.Stop();
-                return true;
             }
             catch (Exception e)
             {
