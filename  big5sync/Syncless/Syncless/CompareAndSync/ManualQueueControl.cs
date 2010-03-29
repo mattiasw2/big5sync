@@ -81,7 +81,7 @@ namespace Syncless.CompareAndSync
                         {
                             _jobs.RemoveAt(i);
                             _queuedJobsLookup.Remove(item.TagName);
-                            ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName));
+                            ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName, true));
                             break;
                         }
                     }
@@ -93,9 +93,10 @@ namespace Syncless.CompareAndSync
                         case SyncState.Started:
                         case SyncState.Analyzing:
                             _currJobProgress.State = SyncState.Cancelled;
+                            ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName, true));
                             break;
                         default:
-                            //Not cancellable
+                            ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName, false));
                             break;
                     }
                 }

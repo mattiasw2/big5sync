@@ -22,21 +22,21 @@ namespace Syncless.CompareAndSync
 
             //Analyzing
             progress.ChangeToAnalyzing();
-            if (progress.State == SyncState.Cancelled)
-                ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName));
+            //if (progress.State == SyncState.Cancelled)
+            //    ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters), progress);
-            if (progress.State == SyncState.Cancelled)
-                ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName));
+            //if (progress.State == SyncState.Cancelled)
+            //    ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), progress);
-            if (progress.State == SyncState.Cancelled)
-                ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName));
+            //if (progress.State == SyncState.Cancelled)
+            //    ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
             CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor(), progress);
-            if (progress.State == SyncState.Cancelled)
-                ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName));
+            //if (progress.State == SyncState.Cancelled)
+            //    ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
             ComparerVisitor comparerVisitor = new ComparerVisitor();
             CompareObjectHelper.PostTraverseFolder(rco, comparerVisitor, progress);
-            if (progress.State == SyncState.Cancelled)
-                ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName));
+            //if (progress.State == SyncState.Cancelled)
+            //    ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
 
             if (progress.State != SyncState.Cancelled)
             {
