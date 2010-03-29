@@ -26,10 +26,6 @@ namespace Syncless.Logging
             {
                 return logCategory;
             }
-            set
-            {
-                logCategory = value;
-            }
         }
 
         private LogEventType logEvent;
@@ -42,6 +38,7 @@ namespace Syncless.Logging
             set
             {
                 logEvent = value;
+                logCategory = MapEventToCategory(logEvent);
             }
         }
 
@@ -62,32 +59,7 @@ namespace Syncless.Logging
         {
             this.logEvent = logEvent;
             this.message = message;
-            switch (logEvent)
-            {
-                case LogEventType.SYNC_STARTED:
-                case LogEventType.SYNC_STOPPED:
-                    this.logCategory = LogCategoryType.SYNC;
-                    break;
-                case LogEventType.APPEVENT_DRIVE_ADDED:
-                case LogEventType.APPEVENT_DRIVE_RENAMED:
-                case LogEventType.APPEVENT_TAG_CREATED:
-                case LogEventType.APPEVENT_TAG_DELETED:
-                case LogEventType.APPEVENT_TAG_CONFIG_UPDATED:
-                case LogEventType.APPEVENT_FOLDER_TAGGED:
-                case LogEventType.APPEVENT_FOLDER_UNTAGGED:
-                    this.logCategory = LogCategoryType.APPEVENT;
-                    break;
-                case LogEventType.FSCHANGE_CREATED:
-                case LogEventType.FSCHANGE_MODIFIED:
-                case LogEventType.FSCHANGE_DELETED:
-                case LogEventType.FSCHANGE_RENAMED:
-                case LogEventType.FSCHANGE_ERROR:
-                    this.logCategory = LogCategoryType.FSCHANGE;
-                    break;
-                default:
-                    this.logCategory = LogCategoryType.UNKNOWN;
-                    break;
-            }
+            this.logCategory = MapEventToCategory(logEvent);
         }
 
         public LogData(string timestamp, LogEventType logEvent, string message)
@@ -95,31 +67,28 @@ namespace Syncless.Logging
             this.timestamp = timestamp;
             this.logEvent = logEvent;
             this.message = message;
-            switch (logEvent)
+            this.logCategory = MapEventToCategory(logEvent);
+        }
+
+        private LogCategoryType MapEventToCategory(LogEventType type)
+        {
+            switch (type)
             {
                 case LogEventType.SYNC_STARTED:
-                case LogEventType.SYNC_STOPPED:
-                    this.logCategory = LogCategoryType.SYNC;
-                    break;
+                case LogEventType.SYNC_STOPPED: return LogCategoryType.SYNC;
                 case LogEventType.APPEVENT_DRIVE_ADDED:
                 case LogEventType.APPEVENT_DRIVE_RENAMED:
                 case LogEventType.APPEVENT_TAG_CREATED:
                 case LogEventType.APPEVENT_TAG_DELETED:
                 case LogEventType.APPEVENT_TAG_CONFIG_UPDATED:
                 case LogEventType.APPEVENT_FOLDER_TAGGED:
-                case LogEventType.APPEVENT_FOLDER_UNTAGGED:
-                    this.logCategory = LogCategoryType.APPEVENT;
-                    break;
+                case LogEventType.APPEVENT_FOLDER_UNTAGGED: return LogCategoryType.APPEVENT;
                 case LogEventType.FSCHANGE_CREATED:
                 case LogEventType.FSCHANGE_MODIFIED:
                 case LogEventType.FSCHANGE_DELETED:
                 case LogEventType.FSCHANGE_RENAMED:
-                case LogEventType.FSCHANGE_ERROR:
-                    this.logCategory = LogCategoryType.FSCHANGE;
-                    break;
-                default:
-                    this.logCategory = LogCategoryType.UNKNOWN;
-                    break;
+                case LogEventType.FSCHANGE_ERROR: return LogCategoryType.FSCHANGE;
+                default: return LogCategoryType.UNKNOWN;
             }
         }
     }
