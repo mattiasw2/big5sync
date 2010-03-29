@@ -6,6 +6,7 @@ using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Visitor;
 using Syncless.Core;
 using Syncless.Filters;
+using Syncless.Logging;
 using Syncless.Notification;
 using Syncless.Notification.SLLNotification;
 using Syncless.Notification.UINotification;
@@ -16,27 +17,19 @@ namespace Syncless.CompareAndSync
     {
         public static void Sync(ManualSyncRequest request, SyncProgress progress)
         {
+            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STARTED, "Started Manual Sync for " + request.TagName));
+
             List<Filter> filters = request.Filters.ToList();
             filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
             RootCompareObject rco = new RootCompareObject(request.Paths);
 
             //Analyzing
             progress.ChangeToAnalyzing();
-            //if (progress.State == SyncState.Cancelled)
-            //    ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters), progress);
-            //if (progress.State == SyncState.Cancelled)
-            //    ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), progress);
-            //if (progress.State == SyncState.Cancelled)
-            //    ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
             CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor(), progress);
-            //if (progress.State == SyncState.Cancelled)
-            //    ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
             ComparerVisitor comparerVisitor = new ComparerVisitor();
             CompareObjectHelper.PostTraverseFolder(rco, comparerVisitor, progress);
-            //if (progress.State == SyncState.Cancelled)
-            //    ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
 
             if (progress.State != SyncState.Cancelled)
             {
@@ -57,7 +50,14 @@ namespace Syncless.CompareAndSync
 
                 //Finished
                 ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification(request.TagName, rco));
+                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STOPPED,
+                                                                                    "Completed Manual Sync for " +
+                                                                                    request.TagName));
             }
+            else
+                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STOPPED,
+                                                                                    "Cancelled Manual Sync for " +
+                                                                                    request.TagName));
         }
 
         public static RootCompareObject Compare(ManualCompareRequest request)
