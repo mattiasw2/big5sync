@@ -276,8 +276,11 @@ namespace Syncless.Notification
                 }
             }
             //DO a final State Change
-            
-            
+
+            foreach (ISyncProgressObserver obs in _observerList)
+            {
+                obs.ProgressChanged();
+            }
         }
 
         #endregion
