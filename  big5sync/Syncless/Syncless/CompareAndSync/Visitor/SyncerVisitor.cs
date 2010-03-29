@@ -364,14 +364,14 @@ namespace Syncless.CompareAndSync.Visitor
                             if (Directory.Exists(oldFolderName))
                             {
                                 CommonMethods.MoveFolder(oldFolderName, Path.Combine(folder.GetSmartParentPath(i), folder.NewName));
-                                folder.FinalState[i] = FinalState.Renamed;
+                                //folder.FinalState[i] = FinalState.Renamed;
                             }
                             else
                             {
                                 CommonMethods.CopyDirectory(Path.Combine(folder.GetSmartParentPath(srcFolderPos), folder.NewName), Path.Combine(folder.GetSmartParentPath(i), folder.NewName));
-                                folder.FinalState[i] = FinalState.Created;
+                                //folder.FinalState[i] = FinalState.Created;
                             }
-
+                            folder.FinalState[i] = FinalState.Renamed;
                             changed = true;
                         }
                         catch (MoveFolderException e)
