@@ -1,4 +1,6 @@
-﻿namespace Syncless.CompareAndSync.CompareObject
+﻿using System.Collections.Generic;
+
+namespace Syncless.CompareAndSync.CompareObject
 {
     public class FileCompareObject : BaseCompareObject
     {
@@ -9,6 +11,10 @@
         //Meta file
         private string[] _metaHash;
         private long[] _metaLength, _metaLastWriteTime;
+
+        //Optimization
+        private int _sourcePosition;
+        private List<int> _conflictPos;
 
         public FileCompareObject(string name, int numOfPaths, FolderCompareObject parent)
             : base(name, numOfPaths, parent)
@@ -56,6 +62,23 @@
         {
             get { return _metaLastWriteTime; }
             set { _metaLastWriteTime = value; }
+        }
+
+        public List<int> ConflictPositions
+        {
+            get
+            {
+                if (_conflictPos == null)
+                    _conflictPos = new List<int>();
+                return _conflictPos;
+            }
+            set { _conflictPos = value; }
+        }
+
+        public int SourcePosition
+        {
+            get { return _sourcePosition; }
+            set { _sourcePosition = value; }
         }
 
     }

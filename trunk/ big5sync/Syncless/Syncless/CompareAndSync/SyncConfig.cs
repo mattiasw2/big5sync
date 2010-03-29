@@ -7,12 +7,14 @@
         private readonly string _archiveName;
         private readonly int _archiveLimit;
         private readonly bool _recycle;
+        private string _conflictDir;
 
-        private SyncConfig(string archiveName, int archiveLimit , bool recycle)
+        private SyncConfig(string archiveName, int archiveLimit, bool recycle)
         {
             _archiveName = archiveName;
             _archiveLimit = archiveLimit;
             _recycle = recycle;
+            _conflictDir = "_synclessConflict";
         }
 
         public static SyncConfig Instance
@@ -40,6 +42,11 @@
         public int ArchiveLimit
         {
             get { return _archiveLimit; }
+        }
+
+        public string ConflictDir
+        {
+            get { return _conflictDir; }
         }
     }
 }
