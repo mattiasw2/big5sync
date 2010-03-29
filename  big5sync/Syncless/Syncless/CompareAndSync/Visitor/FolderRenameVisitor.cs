@@ -105,6 +105,7 @@ namespace Syncless.CompareAndSync.Visitor
                         actualFldrObj.Exists[pos] = renamedFolder.Exists[pos];
                         actualFldrObj.MetaCreationTime[pos] = renamedFolder.MetaCreationTime[pos];
                         actualFldrObj.MetaExists[pos] = renamedFolder.MetaExists[pos];
+                        actualFldrObj.MetaUpdated[pos] = renamedFolder.MetaUpdated[pos];
                         MergeRenamedFolder(actualFldrObj, renamedFolderObj, pos);
                     }
                     else
@@ -122,6 +123,7 @@ namespace Syncless.CompareAndSync.Visitor
                         actualFileObj.MetaLastWriteTime[pos] = renamedFileObj.MetaLastWriteTime[pos];
                         actualFileObj.MetaLength[pos] = renamedFileObj.MetaLength[pos];
                         actualFileObj.ChangeType[pos] = renamedFileObj.ChangeType[pos];
+                        actualFileObj.MetaUpdated[pos] = renamedFileObj.MetaUpdated[pos];
                     }
                 }
                 else
