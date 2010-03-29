@@ -551,7 +551,7 @@ namespace Syncless.Core
         }
         private void HandleGenericDelete(DeleteChangeEvent dce)
         {
-
+            MonitorLayer.Instance.UnMonitorPath(dce.Path.FullName);
             //Find the logical Address for the old path
             //Do not create the logical address if not found.
             string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(dce.Path.FullName, false);
