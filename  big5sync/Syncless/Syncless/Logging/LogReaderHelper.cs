@@ -7,41 +7,65 @@ namespace Syncless.Logging
 {
     public class LogReaderHelper
     {
-        private const string USER_LOG_PATH = @"log\user.log";
-        private const int MAX_LOG = 100;
+        private const string USER_LOG_PATH = @"log\user.log.1";
+        private const string USER_LOG_BACKUP_PATH = @"log\user.log";
+        private const int MAX_LOG = 1000;
 
         public static List<LogData> ReadLog()
         {
-            List<LogData> logs = new List<LogData>(MAX_LOG);
-            StreamReader streamReader;
+            List<LogData> logs = new List<LogData>();
+            StreamReader streamReader = null;
+            try
+            {
+                streamReader = new StreamReader(USER_LOG_BACKUP_PATH);
+                ReadFromPath(streamReader, logs);
+            }
+            catch (FileNotFoundException)
+            { }
+            finally
+            {
+                if (streamReader != null)
+                {
+                    streamReader.Close();
+                }
+            }
+            
             try
             {
                 streamReader = new StreamReader(USER_LOG_PATH);
+                ReadFromPath(streamReader, logs);
             }
             catch (FileNotFoundException)
+            { }
+            finally
             {
-                return logs;
+                if (streamReader != null)
+                {
+                    streamReader.Close();
+                }
             }
+            return logs;
+        }
+
+        private static void ReadFromPath(StreamReader streamReader, List<LogData> logs)
+        {
             while (!streamReader.EndOfStream)
             {
                 string text = streamReader.ReadLine();
                 string[] tokens = text.Split(new char[] { '~' });
                 if (tokens.Length != 4)
                 {
-                    streamReader.Close();
                     throw new LogFileCorruptedException(ErrorMessage.LOG_FILE_CORRUPTED);
                 }
                 string timestamp = tokens[0].Trim();
                 LogEventType logEvent = Convert(tokens[2].Trim());
                 string message = tokens[3].Trim();
-                if (logs.Count > MAX_LOG)
+                if (logs.Count == MAX_LOG)
                 {
                     logs.RemoveAt(0);
                 }
                 logs.Add(new LogData(timestamp, logEvent, message));
             }
-            streamReader.Close();
-            return logs;
         }
 
         private static LogEventType Convert(string type)
