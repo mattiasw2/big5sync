@@ -5,10 +5,16 @@
 
 = Overview =
 
+The Notification Component provides a low coupling medium for the the controller layer to pass information to the user interface. It also allow the lower facade layer to pass information to the Main Core layer.
+
 = Classes =
+
+The main important class for Notification is the *NotificationQueue* and *INotificationQueue*. 
 
 = Description of Design =
 
-= Explanation of Algorithms =
+The notification layer follows a combination of Message Bus Design Pattern and Producer/Consumer. Both UI and SystemLogicLayer will have a notification watcher which will watch for notification. 
 
 = Extending Notification =
+
+To extend more notification, developer will have to add more enum to *NotificationCode* and extend from the *AbstractNotification* object. 
