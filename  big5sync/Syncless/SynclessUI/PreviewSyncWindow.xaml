@@ -39,9 +39,9 @@
 		<Image x:Name="TagIcon" HorizontalAlignment="Right" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,-25,-25,0" Grid.ColumnSpan="2" Source="Icons/folder.ico"/>
         <toolkit:DataGrid Name="Data" ItemsSource="{Binding PreviewSyncData, ElementName=Window}" Margin="5,5,0,0" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="2" CanUserReorderColumns="False" CanUserResizeRows="False" IsReadOnly="True">
             <toolkit:DataGrid.Columns>
-                <toolkit:DataGridTextColumn Binding="{Binding source}" Header="Path1" Width="0.45*" SortMemberPath="Path1" />
+                <toolkit:DataGridTextColumn Binding="{Binding source}" Header="Source" Width="0.45*" SortMemberPath="Path1" />
                 <toolkit:DataGridTextColumn Binding="{Binding operation}" Header="Operation" Width="0.1*" SortMemberPath="Operation"/>
-                <toolkit:DataGridTextColumn Header="Path2" Binding="{Binding destination}" Width="0.45*" SortMemberPath="Path2"/>
+                <toolkit:DataGridTextColumn Header="Destination" Binding="{Binding destination}" Width="0.45*" SortMemberPath="Path2"/>
             </toolkit:DataGrid.Columns>
         </toolkit:DataGrid>
 	</Grid>
