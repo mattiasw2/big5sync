@@ -35,6 +35,10 @@ Case5a @ RenameFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\, D:\My Hom
 Case5b @ RenameFolder @ D:\My Pictures\, D:\My Photos\ @ 0
 //Rename back
 Case5a1 @ RenameFolder @ D:\My Homework\NUS\SEM2AY0910\CS2106\LectureNotes\, D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\ @ 4
+//Rename folder
+Case5c @ RenameFolder @ D:\My Homework\NUS\SEM2AY0910\, D:\My Homework\NUS\SEM2\AY0910\ @ 7
+//Rename back
+Case5d @ RenameFolder @ D:\My Homework\NUS\SEM2\AY0910\, D:\My Homework\NUS\SEM2AY0910\ @ 7
 //Find tag
 Case6a @ RetrieveTag @ Lecture @ Not null
 Case6b @ RetrieveTag @ Not Exists @ Null
@@ -73,10 +77,12 @@ Case13b @ RetrieveAncestors @ D:\My Homework\ @
 Case14a @ RetrieveDescendants @ D:\My Homework\ @ D:\My Homework\NUS\ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\Lecture1\ D:\My Homework\NUS\SEM2AY0910\CS2106\Tutorial\ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\Lecture2\
 Case14b @ RetrieveDescendants @ D:\my homework\ @ D:\My Homework\NUS\ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\Lecture1\ D:\My Homework\NUS\SEM2AY0910\CS2106\Tutorial\ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\Lecture2\
 //Save to xml
-//Case15a @ SaveToXml @ D:\My Homework\SEM2 AY0910\CS3215\Project\Syncless.Backup\Syncless.TextTester\bin\Debug\tagging1.xml, D:\My Homework\SEM2 AY0910\CS3215\Project\Syncless.Backup\Syncless.TextTester\bin\Debug\tagging2.xml, D:\My Homework\SEM2 AY0910\CS3215\Project\Syncless.Backup\Syncless.TextTester\bin\Debug\tagging3.xml @ 
+Case15a @ SaveToXml @ tagging1.xml, tagging2.xml, tagging3.xml @ 
 //Edit tag
 Case16a @ TagFolder @ F:\My Homework\NUS\, NUS @ NUS, 3
 Case16b @ TagFolder @ G:\My Homework\NUS\, NUS @ NUS, 4
-//Case16c @ SaveToXml @ D:\My Homework\SEM2 AY0910\CS3215\Project\Syncless.Backup\Syncless.TextTester\bin\Debug\tagging1.xml, D:\My Homework\SEM2 AY0910\CS3215\Project\Syncless.Backup\Syncless.TextTester\bin\Debug\tagging2.xml @ 
+Case16c @ SaveToXml @ tagging1.xml, tagging2.xml @ 
 //Append profile
-Case17a @ AppendProfile @ D:\My Homework\SEM2 AY0910\CS3215\Project\Syncless.Backup\Syncless.TextTester\bin\Debug\tagging3.xml @ 
+Case17a @ AppendProfile @ tagging3.xml @ 
+//Get all paths
+Case18a @ GetAllPaths @ @ D:\My Homework\NUS\ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\ D:\My Homework\NUS\SEM2AY0910\CS2106\Lecture\Lecture1\ D:\My Homework\NUS\SEM2AY0910\CS2106\Tutorial\ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\ D:\My Homework\NUS\SEM2AY0910\CS3215\Lecture\Lecture2\ E:\My Homework\NUS\ F:\My Homework\NUS\ G:\My Homework\NUS\
