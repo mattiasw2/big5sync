@@ -92,19 +92,8 @@ namespace Syncless.CompareAndSync
 
         public bool PrepareForTermination()
         {
-            //Temporary code
-            bool close = ManualQueueControl.Instance.PrepareForTermination() &&
-                         SeamlessQueueControl.Instance.PrepareForTermination();
-            if (close)
-            {
-                SeamlessQueueControl.Instance.Dispose();
-                ManualQueueControl.Instance.Dispose();
-            }
-
-            return close;
-
-            //return (ManualQueueControl.Instance.PrepareForTermination() &&
-            //        SeamlessQueueControl.Instance.PrepareForTermination());
+            return (ManualQueueControl.Instance.PrepareForTermination() &&
+                    SeamlessQueueControl.Instance.PrepareForTermination());
         }
 
         public void Terminate()
