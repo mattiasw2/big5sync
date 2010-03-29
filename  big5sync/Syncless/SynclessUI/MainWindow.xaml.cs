@@ -749,7 +749,7 @@ namespace SynclessUI
                         {
                             // Terminates the SLL and closes the UI
                             Gui.Terminate();
-                            TerminateNow();
+                            TerminateNow(true);
                         }
                         else
                         {
@@ -811,10 +811,10 @@ namespace SynclessUI
                 terminationWindow.CloseWindow();
             }));
             
-            TerminateNow();
+            TerminateNow(false);
         }
 
-        private void TerminateNow()
+        private void TerminateNow(bool showAnimation)
         {
             SaveApplicationSettings();
             if (Settings.Default.EnableShellIntegration == false)
@@ -824,7 +824,8 @@ namespace SynclessUI
             _notificationWatcher.Stop();
             _priorityNotificationWatcher.Stop();
 
-            DisplayUnloadingAnimation();
+            if(showAnimation)
+                DisplayUnloadingAnimation();
         }
 
         private void RemoveTagRightClick_Click(object sender, RoutedEventArgs e)
