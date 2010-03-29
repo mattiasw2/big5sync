@@ -5,7 +5,7 @@
 
 = Overview =
 
-The *Notification* component provides a low coupling medium for the controller layer to pass information to the *User Interface*. It also allows the lower facade layer to pass information to the Main Logic layer.
+The *Notification* component provides a low coupling medium for the control layer to pass information to the *User Interface*. It also allows the lower facade layer to pass information to the Logic layer.
 
 = Classes =
 
