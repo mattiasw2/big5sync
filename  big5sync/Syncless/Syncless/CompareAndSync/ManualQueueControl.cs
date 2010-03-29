@@ -67,7 +67,6 @@ namespace Syncless.CompareAndSync
             _wh.Set();
         }
 
-
         //Change to bool instead?
         public void CancelSyncJob(CancelSyncRequest item)
         {
