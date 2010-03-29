@@ -9,11 +9,11 @@ The Notification Component provides a low coupling medium for the the controller
 
 = Classes =
 
-The main important class for Notification is the *NotificationQueue* and *INotificationQueue*. 
+The main important class for Notification is the *NotificationQueue* and *INotificationQueue*. Many notification is implemented in both UI and SLL layer. For user interface developer, the developer need to implement watcher to watch all the notification belonging to the Notification.UINotification namespace.
 
 = Description of Design =
 
-The notification layer follows a combination of Message Bus Design Pattern and Producer/Consumer. Both UI and SystemLogicLayer will have a notification watcher which will watch for notification. 
+The notification layer make used observer pattern to notify its watcher to resume their thread if new notification is added to the queue. 
 
 = Extending Notification =
 
