@@ -617,6 +617,7 @@ namespace Syncless.Core
             AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance);
             SendAutoRequest(request);
             FindAndCleanDeletedPaths();
+            _userInterface.TagChanged();
         }
 
         private void HandleRootFolderDeleteEvent(FolderChangeEvent dce)
@@ -683,6 +684,7 @@ namespace Syncless.Core
             AutoSyncRequest request = new AutoSyncRequest(dce.OldPath.Name, dce.OldPath.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance);
             SendAutoRequest(request);
             FindAndCleanDeletedPaths();
+            _userInterface.TagChanged();
         }
 
         #endregion
