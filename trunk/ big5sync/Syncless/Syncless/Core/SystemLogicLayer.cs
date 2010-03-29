@@ -978,6 +978,7 @@ namespace Syncless.Core
             {
                 DeviceWatcher.Instance.Terminate();
                 MonitorLayer.Instance.Terminate();
+                CompareAndSyncController.Instance.Terminate();
                 _queueObserver.Stop();
                 _reader.Stop();
                 _deletedTaggedPathWatcher.Stop();
