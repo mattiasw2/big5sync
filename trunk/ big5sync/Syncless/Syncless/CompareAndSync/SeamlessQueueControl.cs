@@ -101,12 +101,15 @@ namespace Syncless.CompareAndSync
             else
             {
                 // Clear all jobs
-                _jobs.Clear();
-
-                while (_currJob != null)
+                lock (locker)
                 {
-                    //Busy waiting
+                    _jobs.Clear();
                 }
+
+                //while (_currJob != null)
+                //{
+                //    //Busy waiting
+                //}
                 Dispose();
             }
         }
