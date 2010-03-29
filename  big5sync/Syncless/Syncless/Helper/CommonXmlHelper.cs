@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.IO;
+using System.Threading;
 namespace Syncless.Helper
 {
     public static class CommonXmlHelper
@@ -36,7 +37,12 @@ namespace Syncless.Helper
                     catch (Exception)
                     {
                         tries++;
+                        Thread.Sleep(1000);
                     }
+                }
+                if (fs == null)
+                {
+                    throw new IOException();
                 }
                 textWriter = new XmlTextWriter(fs, Encoding.UTF8);
                 textWriter.Formatting = Formatting.Indented;
@@ -45,6 +51,7 @@ namespace Syncless.Helper
             catch (IOException io)
             {
                 //TODO : Error Log
+                //TODO : Throw to SLL
                 Console.WriteLine(io.StackTrace);
             }
             finally
