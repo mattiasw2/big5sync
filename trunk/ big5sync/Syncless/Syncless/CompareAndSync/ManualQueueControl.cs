@@ -204,7 +204,6 @@ namespace Syncless.CompareAndSync
                             break;
                     }
                 }
-
                 while (_currJobProgress != null)
                 {
                     //Busy waiting
