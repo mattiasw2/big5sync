@@ -528,6 +528,17 @@ namespace Syncless.Tagging
         {
             TaggingXMLHelper.AppendProfile(_taggingProfile, savedLocation);
         }
+
+        #region for Merger
+        /// <summary>
+        /// Add a Tag to the current tagging profile. Used for merging Tag objects from several tagging profiles.
+        /// </summary>
+        /// <param name="tag">The Tag to be added.</param>
+        public void AddTag(Tag tag)
+        {
+            _taggingProfile.AddTag(tag);
+        }
+        #endregion
         #endregion
 
         #region private methods implementations
@@ -575,14 +586,6 @@ namespace Syncless.Tagging
             }
             return tag;
         }
-
-        #region for Merger
-        public void AddTag(Tag tag)
-        {
-            _taggingProfile.AddTag(tag);
-            
-        }
-        #endregion
 
         private Tag GetTag(string tagname)
         {
