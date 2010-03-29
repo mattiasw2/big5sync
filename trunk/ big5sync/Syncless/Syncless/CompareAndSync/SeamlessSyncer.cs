@@ -16,6 +16,8 @@ namespace Syncless.CompareAndSync
 
         public static void Sync(AutoSyncRequest request)
         {
+            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STARTED, "Started Auto Sync for " + request.SourceName));
+
             _metaUpdated = DateTime.Now.Ticks;
             bool? isFolder = request.IsFolder;
             bool isFldr;
@@ -29,6 +31,8 @@ namespace Syncless.CompareAndSync
                 SyncFolder(request);
             else
                 SyncFile(request);
+
+            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STOPPED, "Completed Auto Sync for " + request.SourceName));
         }
 
         #region Files
