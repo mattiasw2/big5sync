@@ -86,7 +86,7 @@ namespace Syncless.CompareAndSync
                         }
                     }
                 }
-                else if (_currJob.TagName == item.TagName)
+                else if (_currJob!= null && _currJob.TagName == item.TagName)
                 {
                     switch (_currJobProgress.State)
                     {
@@ -161,9 +161,6 @@ namespace Syncless.CompareAndSync
 
         public bool IsQueued(string tagName)
         {
-            //if (_currJob == null || string.IsNullOrEmpty(_currJob.TagName))
-            //    return false;
-
             return _queuedJobsLookup.Contains(tagName);
         }
 
@@ -188,14 +185,6 @@ namespace Syncless.CompareAndSync
         {
             if (IsEmpty && _currJob == null)
                 Dispose();
-            //else if (IsEmpty && _currJob != null)
-            //{
-
-            //}
-            //else if (!IsEmpty && _currJob == null)
-            //{
-
-            //}
             else
             {
                 // Clear all jobs
