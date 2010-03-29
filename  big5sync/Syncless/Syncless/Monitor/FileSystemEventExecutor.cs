@@ -9,6 +9,9 @@ namespace Syncless.Monitor
 {
     public class FileSystemEventExecutor
     {
+        private const int CLEAR_PATH_TABLE_TIME = 30;
+        private const int FILE_BUSY_TIME = 1000;
+
         private static FileSystemEventExecutor _instance;
         public static FileSystemEventExecutor Instance
         {
@@ -23,12 +26,14 @@ namespace Syncless.Monitor
         }
 
         private List<FileSystemEvent> queue;
+        private DateTime timer;
         private Thread executorThread;
         private EventWaitHandle waitHandle;
 
         private FileSystemEventExecutor()
         {
             queue = new List<FileSystemEvent>();
+            timer = DateTime.Now;
             waitHandle = new AutoResetEvent(true);
         }
 
@@ -54,6 +59,7 @@ namespace Syncless.Monitor
             }
             else if (executorThread.ThreadState == ThreadState.WaitSleepJoin)
             {
+                ClearPathTable();
                 waitHandle.Set();
             }
         }
@@ -95,7 +101,7 @@ namespace Syncless.Monitor
                     FileSystemEvent fse = Peek(index);
                     if (fse == null)
                     {
-                        Thread.Sleep(1000);
+                        Thread.Sleep(FILE_BUSY_TIME);
                         index = 0;
                         continue;
                     }
@@ -130,6 +136,7 @@ namespace Syncless.Monitor
                         index++;
                         continue;
                     }
+
                     switch (fse.FileSystemType)
                     {
                         case FileSystemType.FILE:
@@ -149,6 +156,7 @@ namespace Syncless.Monitor
                 }
                 else
                 {
+                    timer = DateTime.Now;
                     waitHandle.WaitOne();
                 }
             }
@@ -228,6 +236,15 @@ namespace Syncless.Monitor
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void ClearPathTable()
+        {
+            TimeSpan idleTime = new TimeSpan(DateTime.Now.ToBinary() - timer.ToBinary());
+            if (idleTime.TotalSeconds >= CLEAR_PATH_TABLE_TIME)
+            {
+                ServiceLocator.MonitorI.ClearPathHash();
             }
         }
     }
