@@ -45,6 +45,8 @@ namespace Syncless.CompareAndSync
 
                 CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor(progress), progress);
 
+                progress.ChangeToFinished();
+
                 if (request.Notify)
                     ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
 
