@@ -91,10 +91,20 @@ namespace Syncless.CompareAndSync
                                 case AutoSyncRequestType.Update:
                                 case AutoSyncRequestType.New:
                                     if (request.Config.ArchiveLimit >= 0 && File.Exists(destFullPath))
+                                    {
                                         CommonMethods.ArchiveFile(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
+                                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "File archived " + destFullPath));
+                                    }
                                     if (request.Config.Recycle && File.Exists(destFullPath))
+                                    {
                                         CommonMethods.DeleteFileToRecycleBin(destFullPath);
+                                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "File deleted to recycle bin " + destFullPath));
+                                    }
                                     CommonMethods.CopyFile(sourceFullPath, destFullPath, true);
+                                    if (File.Exists(destFullPath))
+                                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_MODIFIED, "File updated from " + sourceFullPath + " to " + destFullPath));
+                                    else
+                                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "File copied from " + sourceFullPath + " to " + destFullPath));
                                     currFile = new FileInfo(destFullPath);
                                     XMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, request.ChangeType == AutoSyncRequestType.New ? MetaChangeType.New : MetaChangeType.Update, _metaUpdated));
                                     break;
@@ -102,9 +112,13 @@ namespace Syncless.CompareAndSync
                                     string oldFullPath = Path.Combine(dest, request.OldName);
                                     string newFullPath = Path.Combine(dest, request.NewName);
                                     if (!File.Exists(oldFullPath))
+                                    {
                                         CommonMethods.CopyFile(sourceFullPath, newFullPath, true);
+                                    }
                                     else
+                                    {
                                         CommonMethods.MoveFile(oldFullPath, newFullPath);
+                                    }
                                     currFile = new FileInfo(newFullPath);
                                     XMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName, dest, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.Rename, _metaUpdated));
                                     break;
@@ -112,23 +126,19 @@ namespace Syncless.CompareAndSync
                         }
                         catch (ArchiveFileException)
                         {
-                            //TODO: Throw to notification queue in future
-                            //ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving file " + destFullPath));
                         }
                         catch (DeleteFileException)
                         {
-                            //TODO: Throw to notification queue in future
-                            //ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error deleting file " + destFullPath));
                         }
                         catch (CopyFileException)
                         {
-                            //TODO: Throw to notification queue in future
-                            //ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error copying file from " + sourceFullPath + " to " + destFullPath));
                         }
                         catch (MoveFileException)
                         {
-                            //TODO: Throw to notification queue in future
-                            //ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error renaming file from " + sourceFullPath + " to " + destFullPath));
                         }
                     }
                 }
@@ -146,22 +156,29 @@ namespace Syncless.CompareAndSync
                         {
                             CommonMethods.CalculateMD5Hash(new FileInfo(destFullPath));
                             if (request.Config.ArchiveLimit >= 0)
+                            {
                                 CommonMethods.ArchiveFile(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "File archived " + destFullPath));
+                            }
                             if (request.Config.Recycle)
+                            {
                                 CommonMethods.DeleteFileToRecycleBin(destFullPath);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "File deleted to recycle bin " + destFullPath));
+                            }
                             else
+                            {
                                 CommonMethods.DeleteFile(destFullPath);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "File deleted " + destFullPath));
+                            }
                             XMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, MetaChangeType.Delete, _metaUpdated));
                         }
                         catch (ArchiveFileException e)
                         {
-                            //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving file " + destFullPath));
                         }
                         catch (DeleteFileException e)
                         {
-                            //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error deleting file " + destFullPath));
                         }
                     }
                 }
@@ -179,8 +196,6 @@ namespace Syncless.CompareAndSync
             }
             catch (HashFileException e)
             {
-                //TODO: Throw to notification queue in future
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 return true;
             }
         }
@@ -209,6 +224,8 @@ namespace Syncless.CompareAndSync
                 foreach (string dest in request.DestinationFolders)
                 {
                     string destFullPath = Path.Combine(dest, request.SourceName);
+                    string oldFullPath = string.Empty;
+                    string newFullPath = string.Empty;
 
                     try
                     {
@@ -216,15 +233,17 @@ namespace Syncless.CompareAndSync
                         {
                             case AutoSyncRequestType.New:
                                 CommonMethods.CreateFolder(destFullPath);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "Folder created " + destFullPath));
                                 currFolder = new DirectoryInfo(destFullPath);
                                 XMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, dest, currFolder.CreationTime.Ticks, MetaChangeType.New, _metaUpdated));
                                 break;
                             case AutoSyncRequestType.Rename:
-                                string oldFullPath = Path.Combine(dest, request.OldName);
-                                string newFullPath = Path.Combine(dest, request.NewName);
+                                oldFullPath = Path.Combine(dest, request.OldName);
+                                newFullPath = Path.Combine(dest, request.NewName);
                                 if (!Directory.Exists(newFullPath))
                                 {
                                     CommonMethods.MoveFolder(oldFullPath, newFullPath);
+                                    ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "Folder renamed from " + oldFullPath + " to " + newFullPath));
                                     currFolder = new DirectoryInfo(newFullPath);
                                     XMLHelper.UpdateXML(new XMLWriteFolderObject(request.OldName, request.NewName, dest, currFolder.CreationTime.Ticks, MetaChangeType.Rename, _metaUpdated));
                                 }
@@ -233,13 +252,11 @@ namespace Syncless.CompareAndSync
                     }
                     catch (CreateFolderException e)
                     {
-                        //TODO: Throw to notification queue in future
-                        ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error creating folder " + destFullPath));
                     }
                     catch (MoveFolderException e)
                     {
-                        //TODO: Throw to notification queue in future
-                        ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error renaming folder from " + oldFullPath + " to " + newFullPath));
                     }
                 }
             }
@@ -255,22 +272,29 @@ namespace Syncless.CompareAndSync
                         try
                         {
                             if (request.Config.ArchiveLimit >= 0)
+                            {
                                 CommonMethods.ArchiveFolder(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "Folder archived " + destFullPath));
+                            }
                             if (request.Config.Recycle)
+                            {
                                 CommonMethods.DeleteFolderToRecycleBin(destFullPath);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "Folder deleted to recycle bin " + destFullPath));
+                            }
                             else
+                            {
                                 CommonMethods.DeleteFolder(destFullPath, true);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "Folder deleted " + destFullPath));
+                            }
                             XMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, dest, MetaChangeType.Delete, _metaUpdated));
                         }
                         catch (ArchiveFolderException e)
                         {
-                            //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving folder " + destFullPath));
                         }
                         catch (DeleteFolderException e)
                         {
-                            //TODO: Throw to notification queue in future
-                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error deleting folder " + destFullPath));
                         }
                     }
                 }
