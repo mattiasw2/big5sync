@@ -24,6 +24,13 @@ namespace Syncless.Logging
             }
             catch (FileNotFoundException)
             { }
+            catch (LogFileCorruptedException e)
+            {
+                streamReader.Close();
+                fs.Close();
+                File.Delete(USER_LOG_BACKUP_PATH);
+                throw e;
+            }
             finally
             {
                 if (streamReader != null)
@@ -44,6 +51,13 @@ namespace Syncless.Logging
             }
             catch (FileNotFoundException)
             { }
+            catch (LogFileCorruptedException e)
+            {
+                streamReader.Close();
+                fs.Close();
+                File.Delete(USER_LOG_BACKUP_PATH);
+                throw e;
+            }
             finally
             {
                 if (streamReader != null)
