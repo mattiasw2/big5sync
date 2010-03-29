@@ -20,10 +20,10 @@ namespace SynclessUI.Visitor
         public const string Dest = "destination";
         public const string Operation = "operation";
 
-        private const string CopyConstant = "Copy";
-        private const string DeleteConstant = "Delete";
-        private const string UpdateConstant = "Update";
-        private const string RenameConstant = "Rename";
+        private const string CopyConstant = "++";
+        private const string DeleteConstant = "--";
+        private const string UpdateConstant = "-=>";
+        private const string RenameConstant = "--++";
         public PreviewVisitor(DataTable syncData)
         {
             _syncData = syncData;

@@ -69,7 +69,7 @@ namespace Syncless.CompareAndSync
 
         private static void TraverseFolderHelper(RootCompareObject root, IVisitor visitor, TraverseType type, SyncProgress syncProgress)
         {
-            if (syncProgress.State == SyncState.Cancelled)
+            if (syncProgress!=null && syncProgress.State == SyncState.Cancelled)
                 return;
 
             if (type == TraverseType.Pre)
@@ -78,7 +78,7 @@ namespace Syncless.CompareAndSync
             Dictionary<string, BaseCompareObject>.ValueCollection values = root.Contents.Values;
             foreach (BaseCompareObject o in values)
             {
-                if (syncProgress.State == SyncState.Cancelled)
+                if (syncProgress != null && syncProgress.State == SyncState.Cancelled)
                     return;
 
                 FolderCompareObject fco;
@@ -94,7 +94,7 @@ namespace Syncless.CompareAndSync
 
         private static void TraverseFolderHelper(FolderCompareObject folder, int numOfPaths, IVisitor visitor, TraverseType type, SyncProgress syncProgress)
         {
-            if (syncProgress.State == SyncState.Cancelled)
+            if (syncProgress != null && syncProgress.State == SyncState.Cancelled)
                 return;
 
             if (type == TraverseType.Pre)
@@ -103,7 +103,7 @@ namespace Syncless.CompareAndSync
             Dictionary<string, BaseCompareObject>.ValueCollection values = folder.Contents.Values;
             foreach (BaseCompareObject o in values)
             {
-                if (syncProgress.State == SyncState.Cancelled)
+                if (syncProgress != null && syncProgress.State == SyncState.Cancelled)
                     return;
 
                 FolderCompareObject fco;

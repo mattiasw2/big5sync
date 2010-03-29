@@ -361,6 +361,10 @@ namespace Syncless.Core
                 {
                     HandleFolderRenameEvent(fe);
                 }
+                else if (fe.Event == EventChangeType.DELETED)
+                {
+                    HandleRootFolderDeleteEvent(fe);
+                }
             }
             catch (Exception e)
             {
@@ -615,6 +619,71 @@ namespace Syncless.Core
             FindAndCleanDeletedPaths();
         }
 
+        private void HandleRootFolderDeleteEvent(FolderChangeEvent dce)
+        {
+            MonitorLayer.Instance.UnMonitorPath(dce.OldPath.FullName);
+            //Find the logical Address for the old path
+            //Do not create the logical address if not found.
+            string logicalAddress = ProfilingLayer.Instance.ConvertPhysicalToLogical(dce.OldPath.FullName, false);
+            //Get all the tag that contains this logicalAddress inside the tag.
+
+            List<Tag> tag = TaggingLayer.Instance.RetrieveParentTagByPath(logicalAddress);
+            //If tag count is 0 return as there is nothing to process.
+            if (tag.Count == 0)
+            {
+                return;
+            }
+            //Find the similiar paths for the logical Path
+            //The return is physical address
+            List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
+            convertedList.Remove(dce.OldPath.FullName);
+
+            //////// Massive Path Table Code /////////////
+            for (int i = 0; i < convertedList.Count; i++)
+            {
+                string dest = convertedList[i];
+                if (_pathTable.JustPop(dce.OldPath.FullName, dest, TableType.Delete))
+                {
+                    convertedList.Remove(dest);
+                    i--;
+                    continue;
+                }
+            }
+            ///////////////// For each Path in the converted List ///////////////////
+            ///////////////////////////////// Create a entry such that source = convertedPath and destination is the original Path ///////////
+            ///////////////////////For each other path , create a Source + dest pair //////////
+            ///////////////// Create an additional Path Entry for each of the Siblings ////////////////
+            for (int i = 0; i < convertedList.Count; i++)
+            {
+                _pathTable.AddPathPair(convertedList[i], dce.OldPath.FullName, TableType.Delete);
+                for (int j = i + 1; j < convertedList.Count; j++)
+                {
+                    _pathTable.AddPathPair(convertedList[i], convertedList[j], TableType.Delete);
+                    _pathTable.AddPathPair(convertedList[j], convertedList[i], TableType.Delete);
+                }
+            }
+            ///////// End of Path Table Code ////////////////
+            //For each path in the convertedList , extract the parent Path.
+
+
+            List<string> parentList = new List<string>();
+            foreach (string path in convertedList)
+            {
+                FileInfo info = new FileInfo(PathHelper.RemoveTrailingSlash(path));
+                string parent = info.Directory == null ? "" : info.Directory.FullName;
+                parentList.Add(parent);
+            }
+            //If the parent list if empty , it means that there is nothing to sync and thus return.
+            if (parentList.Count == 0)
+            {
+                return;
+            }
+            //Create the request and Send it.
+
+            AutoSyncRequest request = new AutoSyncRequest(dce.OldPath.Name, dce.OldPath.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance);
+            SendAutoRequest(request);
+            FindAndCleanDeletedPaths();
+        }
 
         #endregion
 
