@@ -121,7 +121,7 @@ namespace Syncless.Monitor
                                 continue;
                             }
                         }
-                        else if (fse.FileSystemType == FileSystemType.FOLDER)
+                        else if (fse.FileSystemType == FileSystemType.FOLDER && fse.EventType != EventChangeType.DELETED)
                         {
                             if (!Directory.Exists(fse.Path))
                             {
