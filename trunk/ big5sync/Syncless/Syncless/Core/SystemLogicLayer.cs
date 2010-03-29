@@ -84,6 +84,12 @@ namespace Syncless.Core
         #endregion
 
         #region IMonitorControllerInterface
+
+        public void ClearPathHash()
+        {
+            _pathTable.ClearEntry();
+        }
+
         /// <summary>
         /// Handling File Change
         /// </summary>
@@ -482,6 +488,7 @@ namespace Syncless.Core
             }
 
             TaggingLayer.Instance.RenameFolder(logicalAddress, newLogicalAddress);
+            _userInterface.TagChanged();
         }
 
         /// <summary>
@@ -598,8 +605,9 @@ namespace Syncless.Core
 
             AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance);
             SendAutoRequest(request);
-
+            FindAndCleanDeletedPaths();
         }
+
 
         #endregion
 
@@ -1530,6 +1538,19 @@ namespace Syncless.Core
             _userInterface.TagChanged();
         }
         #endregion
+
+        private void FindAndCleanDeletedPaths()
+        {
+            List<string> deletedPaths = FindAllDeletedPaths();
+            foreach (string paths in deletedPaths)
+            {
+                string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(paths, false);
+                if (convertedPath != null)
+                {
+                    TaggingLayer.Instance.UntagFolder(convertedPath);
+                }
+            }
+        }
 
         internal void Untag(List<string> pathList)
         {
