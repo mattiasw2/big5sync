@@ -97,6 +97,7 @@ namespace Syncless.Logging
                 case "FSCHANGE_MODIFIED": return LogEventType.FSCHANGE_MODIFIED;
                 case "FSCHANGE_DELETED": return LogEventType.FSCHANGE_DELETED;
                 case "FSCHANGE_RENAMED": return LogEventType.FSCHANGE_RENAMED;
+                case "FSCHANGE_ARCHIVED": return LogEventType.FSCHANGE_ARCHIVED;
                 case "FSCHANGE_ERROR": return LogEventType.FSCHANGE_ERROR;
                 default: return LogEventType.UNKNOWN;
             }
