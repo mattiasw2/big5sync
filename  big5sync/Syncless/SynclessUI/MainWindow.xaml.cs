@@ -71,6 +71,23 @@ namespace SynclessUI
                 loading.Begin();
             }
 		}
+		
+		private void DisplayUnloadingAnimation() {
+            if (Properties.Settings.Default.EnableAnimation)
+            {
+				Storyboard unloading = (Storyboard) this.Resources["MainWindowUnloaded"];
+				unloading.Begin();
+				
+				DateTime dateTime = DateTime.Now;
+				
+				while (DateTime.Now < dateTime.AddMilliseconds(1000))
+				{
+					this.Dispatcher.Invoke(DispatcherPriority.Background,
+					
+					(DispatcherOperationCallback)delegate(object unused) { return null; }, null);
+				}
+            }
+		}
 
         /// <summary>
         ///     Starts up the system logic layer and initializes it
@@ -733,6 +750,8 @@ namespace SynclessUI
 
                             // Disposes the TaskBarIcon
                             TaskbarIcon.Dispose();
+							
+							DisplayUnloadingAnimation();
                         }
                         else
                         {
@@ -1437,7 +1456,6 @@ namespace SynclessUI
                                 else
                                 {
                                     DialogsHelper.ShowError("Remove Tag Error", "' " + SelectedTag + " ' could not be removed.");
-									this.Close();
                                 }
                             }
                             else
