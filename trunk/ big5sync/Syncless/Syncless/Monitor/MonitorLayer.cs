@@ -33,7 +33,7 @@ namespace Syncless.Monitor
             watchers = new List<ExtendedFileSystemWatcher>();
             monitoredPaths = new List<string>();
             rootWatchers = new List<FileSystemWatcher>();
-            rootsAndParent = new Dictionary<string, List<string>>();
+            rootsAndParent = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
         }
 
         public void Terminate()
@@ -133,6 +133,7 @@ namespace Syncless.Monitor
                 rootsAndParent.Remove(path);
                 return ;
             }
+
             List<string> transferedPath = null;
             for (int i = 0; i < rootWatchers.Count; i++)
             {
@@ -151,7 +152,7 @@ namespace Syncless.Monitor
             string parent = directory.Parent.FullName;
             foreach (KeyValuePair<string, List<string>> kvp in rootsAndParent)
             {
-                if (kvp.Key.ToLower().Equals(parent.ToLower()))
+                if (kvp.Key.ToLower().Equals(parent.ToLower())) // Same Root
                 {
                     kvp.Value.Add(path);
                     noRootWatcher = false;
@@ -410,8 +411,8 @@ namespace Syncless.Monitor
 
         private void OnRootDeleted(object source, FileSystemEventArgs e)
         {
-            FileSystemWatcher watcher = (FileSystemWatcher) source;
-            List<string> folders = (List<string>)rootsAndParent[watcher.Path];
+            FileSystemWatcher watcher = (FileSystemWatcher)source;
+            List<string> folders = rootsAndParent[watcher.Path];
             foreach (string folder in folders)
             {
                 if (e.FullPath.Equals(folder))
@@ -426,7 +427,7 @@ namespace Syncless.Monitor
         private void OnRootRenamed(object source, RenamedEventArgs e)
         {
             FileSystemWatcher watcher = (FileSystemWatcher)source;
-            List<string> folders = (List<string>)rootsAndParent[watcher.Path];
+            List<string> folders = rootsAndParent[watcher.Path];
             foreach (string folder in folders)
             {
                 if (e.OldFullPath.Equals(folder))

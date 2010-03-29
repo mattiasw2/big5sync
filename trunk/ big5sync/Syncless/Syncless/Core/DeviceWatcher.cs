@@ -50,7 +50,7 @@ namespace Syncless.Core
         /// <returns></returns>
         private Dictionary<string, DriveInfo> RetrieveAllDrives()
         {
-            Dictionary<string, DriveInfo> drives = new Dictionary<string, DriveInfo>();
+            Dictionary<string, DriveInfo> drives = new Dictionary<string, DriveInfo>(StringComparer.OrdinalIgnoreCase);
             foreach (DriveInfo driveInfo in DriveInfo.GetDrives())
             {
                 if (driveInfo.DriveType == DriveType.Fixed || driveInfo.DriveType == DriveType.Removable)
