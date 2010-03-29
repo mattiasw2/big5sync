@@ -760,10 +760,14 @@ namespace SynclessUI
                     }
                     else
                     {
-                        DialogsHelper.ShowError("Syncless Termination Error",
-                                                "Syncless is not ready for termination. Please try again later.");
+                        bool result = DialogsHelper.ShowWarning("Exit",
+                                                "Are you sure you want to exit Syncless?" +
+                                                "\nAll current synchronization operations will be completed and any unfinished synchronization operations will be removed.");
 
-                        e.Cancel = true;
+                        if(!result)
+                        {
+                            e.Cancel = true;
+                        }
                     }
                 }
             }
