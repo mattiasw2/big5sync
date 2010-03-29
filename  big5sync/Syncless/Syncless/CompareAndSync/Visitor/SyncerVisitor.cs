@@ -136,12 +136,23 @@ namespace Syncless.CompareAndSync.Visitor
                             if (fileExists)
                             {
                                 if (_syncConfig.ArchiveLimit >= 0)
+                                {
                                     CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
+                                    ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "File archived " + destFile));
+                                }
                                 if (_syncConfig.Recycle)
+                                {
                                     CommonMethods.DeleteFileToRecycleBin(destFile);
+                                    ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "File deleted to recycle bin " + destFile));
+                                }
                             }
 
                             CommonMethods.CopyFile(src, destFile, true);
+                            if (fileExists)
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_MODIFIED, "File updated from " + src + " to " + destFile));
+                            else
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "File copied from " + src + " to " + destFile));
+
                             fco.CreationTime[i] = new FileInfo(destFile).CreationTime.Ticks;
                             fco.Exists[i] = true;
                             fco.FinalState[i] = fileExists ? FinalState.Updated : FinalState.Created;
@@ -153,15 +164,15 @@ namespace Syncless.CompareAndSync.Visitor
                         catch (ArchiveFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "Error archiving file " + destFile));
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving file " + destFile));
                         }
                         catch (CopyFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
                             if (fileExists)
-                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_MODIFIED, "Error updating file from " + src + " to " + destFile));
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error updating file from " + src + " to " + destFile));
                             else
-                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "Error copying file from " + src + " to " + destFile));
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error copying file from " + src + " to " + destFile));
                         }
                     }
                     else
@@ -187,11 +198,20 @@ namespace Syncless.CompareAndSync.Visitor
                         try
                         {
                             if (_syncConfig.ArchiveLimit >= 0)
+                            {
                                 CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "File archived " + destFile));
+                            }
                             if (_syncConfig.Recycle)
+                            {
                                 CommonMethods.DeleteFileToRecycleBin(destFile);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "File deleted to recycle bin " + destFile));
+                            }
                             else
+                            {
                                 CommonMethods.DeleteFile(destFile);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "File deleted " + destFile));
+                            }
 
                             fco.Exists[i] = false;
                             fco.FinalState[i] = FinalState.Deleted;
@@ -200,12 +220,12 @@ namespace Syncless.CompareAndSync.Visitor
                         catch (ArchiveFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "Error archiving file " + destFile));
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving file " + destFile));
                         }
                         catch (DeleteFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "Error deleting file " + destFile));
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error deleting file " + destFile));
                         }
                     }
                     else
@@ -236,11 +256,13 @@ namespace Syncless.CompareAndSync.Visitor
                             if (File.Exists(oldName))
                             {
                                 CommonMethods.MoveFile(oldName, newName);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_RENAMED, "File renamed from " + oldName + " to " + newName));
                                 //fco.FinalState[i] = FinalState.Renamed;
                             }
                             else
                             {
                                 CommonMethods.CopyFile(srcName, newName, true);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "File copied from " + oldName + " to " + newName));
                                 //fco.FinalState[i] = FinalState.Created;
                             }
                             fco.FinalState[i] = FinalState.Renamed;
@@ -249,12 +271,12 @@ namespace Syncless.CompareAndSync.Visitor
                         catch (MoveFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_RENAMED, "Error renaming file from " + oldName + " to " + newName));
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error renaming file from " + oldName + " to " + newName));
                         }
                         catch (CopyFileException e)
                         {
                             fco.FinalState[i] = FinalState.Error;
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "Error copying file from " + srcName + " to " + newName));
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error copying file from " + srcName + " to " + newName));
                         }
                     }
                     else
@@ -286,13 +308,14 @@ namespace Syncless.CompareAndSync.Visitor
                             try
                             {
                                 CommonMethods.CreateFolder(folderToCreate);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "Folder created " + folderToCreate));
                                 folder.Exists[i] = true;
                                 folder.FinalState[i] = FinalState.Created;
                             }
                             catch (CreateFolderException e)
                             {
                                 folder.FinalState[i] = FinalState.Error;
-                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "Error creating folder " + folderToCreate));
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error creating folder " + folderToCreate));
                             }
                         }
                         changed = true;
@@ -321,11 +344,20 @@ namespace Syncless.CompareAndSync.Visitor
                         try
                         {
                             if (_syncConfig.ArchiveLimit >= 0)
+                            {
                                 CommonMethods.ArchiveFolder(destFolder, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "Folder archived " + destFolder));
+                            }
                             if (_syncConfig.Recycle)
+                            {
                                 CommonMethods.DeleteFolderToRecycleBin(destFolder);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "Folder deleted to recycle bin " + destFolder));
+                            }
                             else
+                            {
                                 CommonMethods.DeleteFolder(destFolder, true);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "Folder deleted " + destFolder));
+                            }
 
                             folder.Exists[i] = false;
                             folder.FinalState[i] = FinalState.Deleted;
@@ -335,12 +367,12 @@ namespace Syncless.CompareAndSync.Visitor
                         catch (ArchiveFolderException e)
                         {
                             folder.FinalState[i] = FinalState.Error;
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "Error archiving folder " + destFolder));
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving folder " + destFolder));
                         }
                         catch (DeleteFolderException e)
                         {
                             folder.FinalState[i] = FinalState.Error;
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "Error deleting folder " + destFolder));
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error deleting folder " + destFolder));
                         }
                     }
                     else
@@ -371,11 +403,13 @@ namespace Syncless.CompareAndSync.Visitor
                             if (Directory.Exists(oldFolderName))
                             {
                                 CommonMethods.MoveFolder(oldFolderName, newFolderName);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_RENAMED, "Folder renamed from " + oldFolderName + " to " + newFolderName));
                                 //folder.FinalState[i] = FinalState.Renamed;
                             }
                             else
                             {
                                 CommonMethods.CopyDirectory(srcFolderName, newFolderName);
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "Folder copied from " + srcFolderName + " to " + newFolderName));
                                 //folder.FinalState[i] = FinalState.Created;
                             }
                             folder.FinalState[i] = FinalState.Renamed;
@@ -384,12 +418,12 @@ namespace Syncless.CompareAndSync.Visitor
                         catch (MoveFolderException e)
                         {
                             folder.FinalState[i] = FinalState.Error;
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_RENAMED, "Error renaming folder from " + oldFolderName + " to " + newFolderName));
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error renaming folder from " + oldFolderName + " to " + newFolderName));
                         }
                         catch (CopyFolderException e)
                         {
                             folder.FinalState[i] = FinalState.Error;
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "Error copying folder: " + srcFolderName + " to " + newFolderName));
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error copying folder: " + srcFolderName + " to " + newFolderName));
                         }
                     }
                     else
