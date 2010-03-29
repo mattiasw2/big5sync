@@ -10,7 +10,7 @@ namespace Syncless.Notification
     {
         private List<ISyncProgressObserver> _observerList;
         private SyncState _state;
-        private bool _notify;
+        private bool _notifyProgressChange;
         private bool _completed;
         private Thread _worker;
         public SyncState State
@@ -117,9 +117,9 @@ namespace Syncless.Notification
 
         private void InvokeChange()
         {
-            if(!_notify)
+            if(!_notifyProgressChange)
             {
-                _notify= true;
+                _notifyProgressChange= true;
                 _worker.Interrupt();
             }
         }
@@ -153,7 +153,7 @@ namespace Syncless.Notification
             _syncFailedJobs = 0;
             _syncCompletedJobs = 0;
             _observerList = new List<ISyncProgressObserver>();
-            _notify = false;
+            _notifyProgressChange = false;
             _completed = false;
             _worker = new Thread(Notifier);
             _worker.Start();
@@ -253,9 +253,9 @@ namespace Syncless.Notification
             {
                 try
                 {
-                    if (_notify)
+                    if (_notifyProgressChange)
                     {
-                        _notify = false;
+                        _notifyProgressChange = false;
                         foreach (ISyncProgressObserver obs in _observerList)
                         {
                             obs.ProgressChanged();
@@ -269,13 +269,14 @@ namespace Syncless.Notification
                 }
                 catch (ThreadAbortException)
                 {
+                    foreach (ISyncProgressObserver obs in _observerList)
+                    {
+                        obs.ProgressChanged();
+                    }
                 }
             }
             //DO a final State Change
-            foreach (ISyncProgressObserver obs in _observerList)
-            {
-                obs.ProgressChanged();
-            }
+            
             
         }
 
