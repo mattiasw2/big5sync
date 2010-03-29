@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -740,18 +741,7 @@ namespace SynclessUI
                         {
                             // Terminates the SLL and closes the UI
                             Gui.Terminate();
-                            SaveApplicationSettings();
-                            if (Settings.Default.EnableShellIntegration == false)
-                            {
-                                RegistryHelper.RemoveRegistry();
-                            }
-                            _notificationWatcher.Stop();
-                            _priorityNotificationWatcher.Stop();
-
-                            // Disposes the TaskBarIcon
-                            TaskbarIcon.Dispose();
-							
-							DisplayUnloadingAnimation();
+                            TerminateNow();
                         }
                         else
                         {
@@ -764,9 +754,17 @@ namespace SynclessUI
                                                 "Are you sure you want to exit Syncless?" +
                                                 "\nAll current synchronization operations will be completed and any unfinished synchronization operations will be removed.");
 
-                        if(!result)
+                        if (!result)
                         {
                             e.Cancel = true;
+                        }
+                        else
+                        {
+                            DialogsHelper.ShowInformation("Processing Current Job", "Tag your Mother");
+                            Thread terminateThread = new Thread(Gui.Terminate);
+                            terminateThread.Start();
+                            terminateThread.Join();
+                            TerminateNow();
                         }
                     }
                 }
@@ -775,6 +773,22 @@ namespace SynclessUI
             {
                 DialogsHelper.DisplayUnhandledExceptionMessage();
             }
+        }
+        
+        private void TerminateNow()
+        {
+            SaveApplicationSettings();
+            if (Settings.Default.EnableShellIntegration == false)
+            {
+                RegistryHelper.RemoveRegistry();
+            }
+            _notificationWatcher.Stop();
+            _priorityNotificationWatcher.Stop();
+
+            // Disposes the TaskBarIcon
+            TaskbarIcon.Dispose();
+
+            DisplayUnloadingAnimation();
         }
 
         private void RemoveTagRightClick_Click(object sender, RoutedEventArgs e)

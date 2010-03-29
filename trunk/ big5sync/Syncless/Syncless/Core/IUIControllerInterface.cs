@@ -28,7 +28,7 @@ namespace Syncless.Core
         bool MonitorTag(string tagName, bool mode);
 
         bool PrepareForTermination();
-        bool Terminate();
+        void Terminate();
 
         bool Initiate(IUIInterface inf);
 
