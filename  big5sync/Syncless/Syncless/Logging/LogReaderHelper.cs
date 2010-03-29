@@ -46,7 +46,7 @@ namespace Syncless.Logging
             catch (LogFileCorruptedException e)
             {
                 streamReader.Close();
-                File.Delete(USER_LOG_BACKUP_PATH);
+                File.Delete(USER_LOG_PATH);
                 throw e;
             }
             finally
