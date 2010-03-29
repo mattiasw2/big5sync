@@ -13,5 +13,6 @@ namespace Syncless.Core
         void HandleFolderChange(FolderChangeEvent fe);
         void HandleDriveChange(DriveChangeEvent dce);
         void HandleDeleteChange(DeleteChangeEvent dce);
+        void ClearPathHash();
     }
 }
