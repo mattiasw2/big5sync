@@ -79,17 +79,20 @@ namespace SynclessUI
 
         private void BtnOkCP1_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+			BtnOkCP1.IsEnabled = false;
         	CloseWindow();
         }
 		
         private void BtnOkCP2_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+			BtnOkCP2.IsEnabled = false;
 			Application.Current.Properties["DialogWindowChoice"] = true;
         	CloseWindow();
         }
 		
         private void BtnCancelCP2_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+			BtnCancelCP2.IsEnabled = false;
 			Application.Current.Properties["DialogWindowChoice"] = false;
         	CloseWindow();
         }

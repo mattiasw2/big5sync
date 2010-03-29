@@ -132,10 +132,7 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-			ProcessTagging();
-        }
-		
-		private void ProcessTagging() {
+			BtnOk.IsEnabled = false;
             try
             {
                 if (Tagname != "")
@@ -167,39 +164,46 @@ namespace SynclessUI
                                     else
                                     {
                                         DialogsHelper.ShowError("Tag Error", "Tag Error Occured. Please Try Again.");
+										BtnOk.IsEnabled = true;
                                     }
                                 }
                                 else
                                 {
                                     DialogsHelper.ShowError(Tagname + " is Synchronizing",
                                                             "You cannot tag a folder while the tag is synchronizing.");
+									BtnOk.IsEnabled = true;
                                 }
                             }
                             catch (Syncless.Tagging.Exceptions.RecursiveDirectoryException)
                             {
                                 DialogsHelper.ShowError("Folder cannot be tagged", "Folder could not be tagged as it is a sub-folder/parent/ancestor of a folder which is already tagged.");
-                            }
+                            	BtnOk.IsEnabled = true;
+							}
                             catch (Syncless.Tagging.Exceptions.PathAlreadyExistsException)
                             {
                                 DialogsHelper.ShowError("Path Already Exists", "The path you tried to tag is already tagged.");
+								BtnOk.IsEnabled = true;
                             }
                         }
                     }
                     else
                     {
                         DialogsHelper.ShowError("Folder Not Selected", "Please select a folder to tag.");
+						BtnOk.IsEnabled = true;
                     }
                 }
                 else
                 {
                     DialogsHelper.ShowError("Tagname Empty", "Please specify a tagname.");
+					BtnOk.IsEnabled = true;
                 }
             }
             catch (UnhandledException)
             {
                 DialogsHelper.DisplayUnhandledExceptionMessage();
+				CloseWindow();
             }
-		}
+        }
 
         private bool TriggerDriveWarning()
         {

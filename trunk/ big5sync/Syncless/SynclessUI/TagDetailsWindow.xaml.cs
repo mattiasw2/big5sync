@@ -79,6 +79,7 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+			BtnOk.IsEnabled = false;
             try {
 				if(!_main.Gui.GetTag(_tagname).IsLocked) {
                     bool result = _main.Gui.UpdateFilterList(_tagname, filters);
@@ -86,6 +87,7 @@ namespace SynclessUI
                 }
                 else
                 {
+					BtnOk.IsEnabled = true;
                     DialogsHelper.ShowError(_tagname + " is Synchronizing",
                                             "You cannot update tag details while the tag is synchronizing.");
                 }
@@ -93,6 +95,7 @@ namespace SynclessUI
             catch (UnhandledException)
             {
                 DialogsHelper.DisplayUnhandledExceptionMessage();
+				CloseWindow();
             }
         }
 		

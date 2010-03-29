@@ -19,10 +19,13 @@ namespace SynclessUI
 		private void InitializeOptions() {
 			ChkBoxRegistryIntegration.IsChecked = Properties.Settings.Default.EnableShellIntegration;
             ChkBoxMinimizeToTray.IsChecked = Properties.Settings.Default.MinimizeToTray;
+			ChkBoxEnableAnimation.IsChecked = Properties.Settings.Default.EnableAnimation;
+			ChkBoxEnableTrayNotification.IsChecked = Properties.Settings.Default.EnableTrayNotification;
 		}
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+			BtnOk.IsEnabled = false;
 			bool choice = ChkBoxRegistryIntegration.IsChecked.Value;
 			
 			if(choice)
@@ -38,6 +41,8 @@ namespace SynclessUI
             CloseWindow();
 			Properties.Settings.Default.EnableShellIntegration = choice;
             Properties.Settings.Default.MinimizeToTray = (bool) ChkBoxMinimizeToTray.IsChecked;
+			Properties.Settings.Default.EnableAnimation = (bool) ChkBoxEnableAnimation.IsChecked;
+			Properties.Settings.Default.EnableTrayNotification = (bool) ChkBoxEnableTrayNotification.IsChecked;
 			Properties.Settings.Default.Save();
         }
 		

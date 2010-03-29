@@ -19,6 +19,7 @@ using SynclessUI.Helper;
 using SynclessUI.Notification;
 using SynclessUI.Properties;
 using System.Media;
+using System.Windows.Media.Animation;
 
 namespace SynclessUI
 {
@@ -62,6 +63,14 @@ namespace SynclessUI
         {
             get { return TxtBoxFilterTag.Text.Trim(); }
         }
+		
+		private void DisplayLoadingAnimation() {
+            if (Properties.Settings.Default.EnableAnimation)
+            {
+                Storyboard loading = (Storyboard) this.Resources["MainWindowOnLoaded"];
+                loading.Begin();
+            }
+		}
 
         /// <summary>
         ///     Starts up the system logic layer and initializes it
@@ -70,6 +79,7 @@ namespace SynclessUI
         {
             try
             {
+                DisplayLoadingAnimation();
                 _appPath = Assembly.GetExecutingAssembly().Location;
                 Application.Current.Properties["AppPath"] = _appPath;
                 Gui = ServiceLocator.GUI;
@@ -245,8 +255,10 @@ namespace SynclessUI
 
         public void NotifyBalloon(string title, string text)
         {
-            SystemSounds.Exclamation.Play();
-            TaskbarIcon.ShowBalloonTip(title, text, BalloonIcon.Info);
+			if(Properties.Settings.Default.EnableTrayNotification) {
+				SystemSounds.Exclamation.Play();
+				TaskbarIcon.ShowBalloonTip(title, text, BalloonIcon.Info);
+			}
         }
 
         private void ListBoxTag_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -776,8 +788,8 @@ namespace SynclessUI
 		
         private void DisplayLogWindow()
         {
-            var lw = new LogsWindow(this);
-            lw.ShowDialog();
+            // var lw = new LogsWindow(this);
+            // lw.ShowDialog();
         }
 
         private void BtnOptions_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -1401,7 +1413,7 @@ namespace SynclessUI
         }
 
         private void RemoveTag()
-        {
+        {			
             try
             {
                 if (SelectedTag != null)
@@ -1425,6 +1437,7 @@ namespace SynclessUI
                                 else
                                 {
                                     DialogsHelper.ShowError("Remove Tag Error", "' " + SelectedTag + " ' could not be removed.");
+									this.Close();
                                 }
                             }
                             else

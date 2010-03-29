@@ -66,12 +66,14 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+			BtnOk.IsEnabled = false;
             try
             {
                 string lasttagged = "";
                 if (taglist.SelectedIndex == -1)
                 {
                     DialogsHelper.ShowError("Tag not Selected", "Please select the particular tag to untag the folder from.");
+					BtnOk.IsEnabled = true;
                     return;
                 }
                 
@@ -93,6 +95,7 @@ namespace SynclessUI
                     {
                         DialogsHelper.ShowError(t + " is Synchronizing",
                                                 "You cannot untag a folder while the tag is synchronizing.");
+						BtnOk.IsEnabled = true;
                     }
                 }
                 _main.SelectTag(lasttagged);
@@ -101,6 +104,7 @@ namespace SynclessUI
             catch (UnhandledException)
             {
                 DialogsHelper.DisplayUnhandledExceptionMessage();
+				CloseWindow();
             }
         }
 		

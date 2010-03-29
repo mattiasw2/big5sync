@@ -22,6 +22,7 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+			BtnOk.IsEnabled = false;
             try
             {
                 string tagName = TxtBoxTagName.Text.Trim();
@@ -35,6 +36,7 @@ namespace SynclessUI
                     if (!tagexists)
                     {
                         DialogsHelper.ShowError("Tag Already Exist", "Please specify another tagname.");
+						BtnOk.IsEnabled = true;
                     }
                     else
                     {
@@ -43,12 +45,15 @@ namespace SynclessUI
                 }
                 else
                 {
+					
                     DialogsHelper.ShowError("Tagname Empty", "Please specify a tagname.");
+					BtnOk.IsEnabled = true;
                 }
             }
             catch (UnhandledException)
             {
                 DialogsHelper.DisplayUnhandledExceptionMessage();
+				CloseWindow();
             }
         }
 		
