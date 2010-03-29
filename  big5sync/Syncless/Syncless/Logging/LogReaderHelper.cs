@@ -14,16 +14,19 @@ namespace Syncless.Logging
         public static List<LogData> ReadLog()
         {
             List<LogData> logs = new List<LogData>();
+            FileStream fs = null;
             StreamReader streamReader = null;
             try
             {
-                streamReader = new StreamReader(USER_LOG_BACKUP_PATH);
+                fs = new FileStream(USER_LOG_BACKUP_PATH, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                streamReader = new StreamReader(fs);
                 ReadFromPath(streamReader, logs);
             }
             catch (FileNotFoundException)
             { }
             catch (LogFileCorruptedException e)
             {
+                fs.Close();
                 streamReader.Close();
                 File.Delete(USER_LOG_BACKUP_PATH);
                 throw e;
@@ -34,17 +37,23 @@ namespace Syncless.Logging
                 {
                     streamReader.Close();
                 }
+                if (fs != null)
+                {
+                    fs.Close();
+                }
             }
             
             try
             {
-                streamReader = new StreamReader(USER_LOG_PATH);
+                fs = new FileStream(USER_LOG_PATH, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                streamReader = new StreamReader(fs);
                 ReadFromPath(streamReader, logs);
             }
             catch (FileNotFoundException)
             { }
             catch (LogFileCorruptedException e)
             {
+                fs.Close();
                 streamReader.Close();
                 File.Delete(USER_LOG_PATH);
                 throw e;
@@ -54,6 +63,10 @@ namespace Syncless.Logging
                 if (streamReader != null)
                 {
                     streamReader.Close();
+                }
+                if (fs != null)
+                {
+                    fs.Close();
                 }
             }
             return logs;

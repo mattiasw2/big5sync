@@ -26,7 +26,7 @@ namespace Syncless.Logging
 
         private LoggingLayer()
         {
-            XmlConfigurator.Configure();
+           XmlConfigurator.Configure();
         }
 
         public Logger GetLogger(string type)
