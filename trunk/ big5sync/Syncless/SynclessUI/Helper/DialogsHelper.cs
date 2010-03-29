@@ -28,6 +28,13 @@ namespace SynclessUI.Helper
             return (bool) Application.Current.Properties["DialogWindowChoice"];
         }
 
+        public static DialogWindow ShowTermination(string caption, string message)
+        {
+            DialogWindow dw = new DialogWindow(caption, message, MessageBoxImage.None);
+            dw.Show();
+			return dw;
+        }
+
         public static void DisplayUnhandledExceptionMessage()
         {
             DialogsHelper.ShowError("Unexpected Error",

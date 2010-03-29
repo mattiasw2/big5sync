@@ -752,7 +752,8 @@ namespace SynclessUI
                     {
                         bool result = DialogsHelper.ShowWarning("Exit",
                                                 "Are you sure you want to exit Syncless?" +
-                                                "\nAll current synchronization operations will be completed and any unfinished synchronization operations will be removed.");
+                                                "\nAll current synchronization operations will be completed and" +
+                                                 "\n any unfinished synchronization operations will be removed.");
 
                         if (!result)
                         {
@@ -760,10 +761,13 @@ namespace SynclessUI
                         }
                         else
                         {
-                            //DialogsHelper.ShowInformation("Processing Current Job", "Tag your Mother");
+                            DialogWindow terminationWindow = DialogsHelper.ShowTermination("Termination in Progress", "Please wait for the current synchronization to complete.");
                             Thread terminateThread = new Thread(Gui.Terminate);
                             terminateThread.Start();
+                            Thread.Sleep(5000);
                             terminateThread.Join();
+							terminationWindow.CannotBeClosed = false;
+							terminationWindow.CloseWindow();
                             TerminateNow();
                         }
                     }
@@ -784,9 +788,6 @@ namespace SynclessUI
             }
             _notificationWatcher.Stop();
             _priorityNotificationWatcher.Stop();
-
-            // Disposes the TaskBarIcon
-            TaskbarIcon.Dispose();
 
             DisplayUnloadingAnimation();
         }

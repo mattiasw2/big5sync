@@ -11,10 +11,15 @@ namespace SynclessUI
     /// </summary>
     public partial class DialogWindow : Window
     {
+		
+        public bool CannotBeClosed {
+			get; set;
+		}
+
         public DialogWindow(string caption, string message, MessageBoxImage mbimg)
         {
             InitializeComponent();
-			
+			CannotBeClosed = false;
 			Application.Current.Properties["DialogWindowChoice"] = false;
             LblCaption.Content = caption;
             TxtBlkMessageBoxText.Text = message;
@@ -39,10 +44,16 @@ namespace SynclessUI
 					this.Title = "Information";
 					this.OkCommandPanel.Visibility = System.Windows.Visibility.Visible;
 				    break;
+                case MessageBoxImage.None:
+					CannotBeClosed = true;
+                    this.Title = "Termination In Progress";
+					this.ProgressBarTermination.IsEnabled = true;
+					this.ProgressBarTermination.Visibility = System.Windows.Visibility.Visible;
+                    break;
 			}
 		}
 
-        private void PlayDialogSound(MessageBoxImage icon)
+        private static void PlayDialogSound(MessageBoxImage icon)
         {
             switch (icon)
             {
@@ -71,6 +82,9 @@ namespace SynclessUI
 				    break;
 				case MessageBoxImage.Question:
 					iconsource = System.Drawing.SystemIcons.Question;
+                    break;
+                case MessageBoxImage.None:
+                    iconsource = System.Drawing.SystemIcons.Application;
                     break;
 			}
 			if (iconsource == null) return null;
@@ -102,13 +116,19 @@ namespace SynclessUI
         	this.DragMove();
         }
 		
-		private void CloseWindow() {
+		public void CloseWindow() {
             FormFadeOut.Begin();
 		}
 		
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+        	if(CannotBeClosed)
+				e.Cancel = true;
         }
     }
 }
