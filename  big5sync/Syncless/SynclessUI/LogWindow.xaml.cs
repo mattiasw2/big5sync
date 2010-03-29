@@ -27,7 +27,6 @@ namespace SynclessUI
                 PopulateLogData(log);
             }  catch (LogFileCorruptedException)
             {
-                encounteredError = true;
                 DialogsHelper.ShowError("Log File Corrupted", "Stored log files have been corrupted and will be deleted.");
             }
             catch (UnhandledException)
