@@ -115,14 +115,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LogWindow.xaml.cs">
-      <DependentUpon>LogWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helper\FileHelper.cs" />
     <Compile Include="Helper\DialogsHelper.cs" />
+    <Compile Include="LogWindow.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>LogWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Notification\NotificationWatcher.cs" />
     <Compile Include="Notification\PriorityNotificationWatcher.cs" />
     <Compile Include="Notification\SyncProgressWatcher.cs" />
@@ -192,11 +193,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="LogWindow.xaml">
+    <Page Include="DialogWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DialogWindow.xaml">
+    <Page Include="LogWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
