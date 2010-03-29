@@ -191,8 +191,11 @@ namespace Syncless.CompareAndSync
             else
             {
                 // Clear all jobs
-                _jobs.Clear();
-                _queuedJobsLookup.Clear();
+                lock (locker)
+                {
+                    _jobs.Clear();
+                    _queuedJobsLookup.Clear();
+                }
 
                 if (_currJobProgress != null && _currJob != null)
                 {
@@ -204,10 +207,10 @@ namespace Syncless.CompareAndSync
                             break;
                     }
                 }
-                while (_currJobProgress != null)
-                {
-                    //Busy waiting
-                }
+                //while (_currJobProgress != null)
+                //{
+                //    //Busy waiting
+                //}
                 Dispose();
             }
         }
