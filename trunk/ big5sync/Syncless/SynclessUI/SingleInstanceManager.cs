@@ -28,8 +28,21 @@ namespace SynclessUI
             App = new SynclessApplication();
             App.Run();
 
+            /* YC: Sorry for editing your code, was testing out threading stuff
+            Thread t = new Thread(StartUIThread);
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+            t.Join();*/
+
             return false;
         }
+
+        /* YC
+        public void StartUIThread()
+        {
+            App = new SynclessApplication();
+            App.Run();
+        }*/
 
         protected override void OnStartupNextInstance(
           StartupNextInstanceEventArgs eventArgs)
