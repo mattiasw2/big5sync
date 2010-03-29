@@ -96,6 +96,12 @@ namespace Syncless.CompareAndSync
                     SeamlessQueueControl.Instance.PrepareForTermination());
         }
 
+        public void Terminate()
+        {
+            ManualQueueControl.Instance.Terminate();
+            SeamlessQueueControl.Instance.Terminate();
+        }
+
         public bool IsQueued(string tagName)
         {
             return ManualQueueControl.Instance.IsQueued(tagName);
