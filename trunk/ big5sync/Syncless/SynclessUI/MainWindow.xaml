@@ -344,9 +344,6 @@
 			</DoubleAnimationUsingKeyFrames>
 		</Storyboard>
 		<Storyboard x:Key="MainWindowUnloaded">
-			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TitleBar" Storyboard.TargetProperty="(UIElement.Opacity)">
-				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0"/>
-			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="OptionMinClosePanel" Storyboard.TargetProperty="(UIElement.Opacity)">
 				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0"/>
 			</DoubleAnimationUsingKeyFrames>
@@ -418,7 +415,6 @@
 				</LinearGradientBrush>
 			</Rectangle.Fill>
 		</Rectangle>
-		<TextBlock Grid.Row="0" Margin="0" Padding="5" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Grid.ColumnSpan="5" IsHitTestVisible="False"/>
 		<!-- MinClose Panel -->
 		<StackPanel x:Name="OptionMinClosePanel" Grid.Row="0" Grid.Column="3" Height="20" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,-5,0" Cursor="Hand" Grid.RowSpan="2">
 			<Image x:Name="BtnShortcuts" Source="Icons/kb.ico" Width="16" Height="16" Margin="0,2.5,3,2.5" Cursor="Hand" ToolTip="List of Keyboard Shortcuts" MouseLeftButtonDown="BtnShortcuts_MouseLeftButtonDown" />
