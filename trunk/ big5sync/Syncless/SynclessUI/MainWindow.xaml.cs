@@ -170,7 +170,7 @@ namespace SynclessUI
             if (SelectedTag == tagname)
             {
                 LblStatusText.Content = message;
-                LblSyncNow.Content = "Sync Now";
+
                 BtnSyncNow.IsEnabled = true;
                 BtnPreview.IsEnabled = true;
                 BtnSyncMode.IsEnabled = true;
@@ -311,7 +311,7 @@ namespace SynclessUI
                 TagIcon.Visibility = Visibility.Visible;
                 TagStatusPanel.Visibility = Visibility.Visible;
                 SyncPanel.Visibility = Visibility.Visible;
-                BdrTaggedPath.Visibility = tv.PathStringList.Count == 0 ? Visibility.Hidden : Visibility.Visible;'
+                BdrTaggedPath.Visibility = tv.PathStringList.Count == 0 ? Visibility.Hidden : Visibility.Visible;
 
                 if (_syncProgressNotificationDictionary.ContainsKey(tagname))
                 {
