@@ -16,6 +16,11 @@ namespace Syncless.Notification
         private bool _notifyProgressChange;
         private bool _completed;
         private Thread _worker;
+        public string TagName
+        {
+            get;
+            set;
+        }
         private readonly EventWaitHandle _wh = new AutoResetEvent(false);
 
         public SyncState State
@@ -126,7 +131,7 @@ namespace Syncless.Notification
             _state = SyncState.Cancelled;
             if (_worker != null)
             {
-                _worker.Abort();
+                _wh.Set();
             }
         }
 
