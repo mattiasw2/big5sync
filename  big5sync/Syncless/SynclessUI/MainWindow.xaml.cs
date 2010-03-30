@@ -555,38 +555,64 @@ namespace SynclessUI
 
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
         {
+            if(LblSyncNow.Content.Equals("Sync Now"))
+            {
+                BtnSyncNow.IsHitTestVisible = false;
+                
+                try
+                {
+                    if (Gui.GetTag(SelectedTag).PathStringList.Count > 1)
+                    {
+                        if (Gui.StartManualSync(SelectedTag))
+                        {
+                            LblSyncNow.Content = "Cancel Sync";
+                            const string message = "Synchronization request has been queued";
+                            LblStatusText.Content = message;
+                            _tagStatusNotificationDictionary[SelectedTag] = message;
+                            ProgressBarSync.Value = 0;
+                        }
+                        else
+                        {
+                            DialogHelper.ShowError("Synchronization Error", "'" + SelectedTag + "' could not be synchronized.");
+                            LblSyncNow.Content = "Sync Now";
+                        }
+                    }
+                    else
+                    {
+                        DialogHelper.ShowError("Nothing to Synchronize", "You can only synchronize when there are two or more folders.");
+                        LblSyncNow.Content = "Sync Now";
+                    }
+                }
+                catch (UnhandledException)
+                {
+                    DialogHelper.DisplayUnhandledExceptionMessage();
+                }    
+
+                BtnSyncNow.IsHitTestVisible = true;
+            } else
+            {
+                BtnSyncNow.IsHitTestVisible = false;
+                bool success = Gui.CancelManualSync(SelectedTag);
+                if(success)
+                {
+                    LblSyncNow.Content = "Sync Now";
+                    BtnSyncNow.IsHitTestVisible = true;
+                } else
+                {
+                    DialogHelper.ShowError("Unable to Cancel", "Please wait until synchronization is complete.");
+                    BtnSyncNow.IsHitTestVisible = true;
+                }
+            }
+
+/*
+
             if (!_manualSyncEnabled || Gui.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
             {
                 DialogHelper.ShowError(SelectedTag + " is Synchronizing",
                              "You cannot carry out another synchronization operation while it is synchronizing.");
                 return;
             }
-
-            try
-            {
-                if (Gui.GetTag(SelectedTag).PathStringList.Count > 1)
-                {
-                    if (Gui.StartManualSync(SelectedTag))
-                    {
-                        const string message = "Synchronization request has been queued";
-                        LblStatusText.Content = message;
-                        _tagStatusNotificationDictionary[SelectedTag] = message;
-                        ProgressBarSync.Value = 0;
-                    }
-                    else
-                    {
-                        DialogHelper.ShowError("Synchronization Error", "'" + SelectedTag + "' could not be synchronized.");
-                    }
-                }
-                else
-                {
-                    DialogHelper.ShowError("Nothing to Synchronize", "You can only synchronize when there are two or more folders.");
-                }
-            }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage();
-            }
+ */
         }
 
         public bool CreateTag(string tagName)
