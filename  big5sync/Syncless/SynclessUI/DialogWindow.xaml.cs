@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Media;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -16,6 +17,8 @@ namespace SynclessUI
     /// </summary>
     public partial class DialogWindow : Window
     {
+        private bool _closingAnimationNotCompleted = true;
+
         public DialogWindow(string caption, string message, DialogType dt)
         {
             InitializeComponent();
@@ -97,21 +100,21 @@ namespace SynclessUI
         private void BtnOkCP1_Click(object sender, RoutedEventArgs e)
         {
             BtnOkCP1.IsEnabled = false;
-            CloseWindow();
+            Close();
         }
 
         private void BtnOkCP2_Click(object sender, RoutedEventArgs e)
         {
             BtnOkCP2.IsEnabled = false;
             Application.Current.Properties["DialogWindowChoice"] = true;
-            CloseWindow();
+            Close();
         }
 
         private void BtnCancelCP2_Click(object sender, RoutedEventArgs e)
         {
             BtnCancelCP2.IsEnabled = false;
             Application.Current.Properties["DialogWindowChoice"] = false;
-            CloseWindow();
+            Close();
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -119,13 +122,9 @@ namespace SynclessUI
             DragMove();
         }
 
-        public void CloseWindow()
-        {
-            FormFadeOut.Begin();
-        }
-
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
+            _closingAnimationNotCompleted = false;
             Close();
         }
 
@@ -133,6 +132,14 @@ namespace SynclessUI
         {
             if (CannotBeClosed)
                 e.Cancel = true;
+
+            if (_closingAnimationNotCompleted)
+            {
+                BtnOkCP1.IsCancel = false;
+                BtnCancelCP2.IsCancel = false;
+                e.Cancel = true;
+                FormFadeOut.Begin();
+            }
         }
     }
 }

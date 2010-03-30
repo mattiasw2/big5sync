@@ -11,6 +11,7 @@ namespace SynclessUI
     /// </summary>
     public partial class CreateTagWindow : Window
     {
+        private bool _closingAnimationNotCompleted = true;
         private MainWindow _main;
 
         public CreateTagWindow(MainWindow main)
@@ -40,7 +41,7 @@ namespace SynclessUI
                     }
                     else
                     {
-                        CloseWindow();
+                        Close();
                     }
                 }
                 else
@@ -52,13 +53,13 @@ namespace SynclessUI
             catch (UnhandledException)
             {
                 DialogHelper.DisplayUnhandledExceptionMessage();
-                CloseWindow();
+                Close();
             }
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            CloseWindow();
+            Close();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -71,14 +72,20 @@ namespace SynclessUI
             DragMove();
         }
 
-        private void CloseWindow()
-        {
-            FormFadeOut.Begin();
-        }
-
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
+            _closingAnimationNotCompleted = false;
             Close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_closingAnimationNotCompleted)
+            {
+                BtnCancel.IsCancel = false;
+                e.Cancel = true;
+                FormFadeOut.Begin();
+            }
         }
     }
 }

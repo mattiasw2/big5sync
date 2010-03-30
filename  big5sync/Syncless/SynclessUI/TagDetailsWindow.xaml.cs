@@ -17,6 +17,7 @@ namespace SynclessUI
         private MainWindow _main;
         private string _tagname;
         private List<Filter> filters;
+        private bool _closingAnimationNotCompleted = true;
 
         public TagDetailsWindow(string tagname, MainWindow main)
         {
@@ -91,7 +92,7 @@ namespace SynclessUI
                 if (!_main.Gui.GetTag(_tagname).IsLocked)
                 {
                     bool result = _main.Gui.UpdateFilterList(_tagname, filters);
-                    CloseWindow();
+                    Close();
                 }
                 else
                 {
@@ -103,13 +104,13 @@ namespace SynclessUI
             catch (UnhandledException)
             {
                 DialogHelper.DisplayUnhandledExceptionMessage();
-                CloseWindow();
+                Close();
             }
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            CloseWindow();
+            Close();
         }
 
         private void BtnAddFilter_Click(object sender, RoutedEventArgs e)
@@ -211,14 +212,20 @@ namespace SynclessUI
             DragMove();
         }
 
-        private void CloseWindow()
-        {
-            FormFadeOut.Begin();
-        }
-
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
+            _closingAnimationNotCompleted = false;
             Close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_closingAnimationNotCompleted)
+            {
+                BtnCancel.IsCancel = false;
+                e.Cancel = true;
+                FormFadeOut.Begin();
+            }
         }
     }
 }

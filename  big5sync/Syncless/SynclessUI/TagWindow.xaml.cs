@@ -23,6 +23,7 @@ namespace SynclessUI
         private readonly MainWindow _main;
         private bool _cancelstatus = false;
         private bool _notifyUser;
+        private bool _closingAnimationNotCompleted = true;
         private FolderBrowserDialog _ofd = new FolderBrowserDialog();
 
         private string _path;
@@ -46,7 +47,7 @@ namespace SynclessUI
 
             if (_cancelstatus)
             {
-                CloseWindow();
+                Close();
             }
             else
             {
@@ -171,7 +172,7 @@ namespace SynclessUI
                                         if (_notifyUser)
                                             _main.NotifyBalloon("Tagging Successful",
                                                                 _path + " has been tagged to " + Tagname);
-                                        CloseWindow();
+                                        Close();
                                     }
                                     else
                                     {
@@ -215,7 +216,7 @@ namespace SynclessUI
             catch (UnhandledException)
             {
                 DialogHelper.DisplayUnhandledExceptionMessage();
-                CloseWindow();
+                Close();
             }
         }
 
@@ -249,7 +250,7 @@ namespace SynclessUI
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            CloseWindow();
+            Close();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -292,14 +293,20 @@ namespace SynclessUI
             DragMove();
         }
 
-        private void CloseWindow()
-        {
-            FormFadeOut.Begin();
-        }
-
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
+            _closingAnimationNotCompleted = false;
             Close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_closingAnimationNotCompleted)
+            {
+                BtnCancel.IsCancel = false;
+                e.Cancel = true;
+                FormFadeOut.Begin();
+            }
         }
     }
 }

@@ -16,6 +16,7 @@ namespace SynclessUI
     {
         private DataTable _LogData;
         private MainWindow _main;
+        private bool _closingAnimationNotCompleted = true;
 
         public LogWindow(MainWindow main)
         {
@@ -152,12 +153,12 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
-            CloseWindow();
+            Close();
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            CloseWindow();
+            Close();
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -165,21 +166,20 @@ namespace SynclessUI
             DragMove();
         }
 
-        private void CloseWindow()
-        {
-            FormFadeOut.Begin();
-        }
-
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
+            _closingAnimationNotCompleted = false;
             Close();
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {   
+            if (_closingAnimationNotCompleted)
             {
-                CloseWindow();
+                BtnOk.IsCancel = false;
+				this.IsHitTestVisible = false;
+                e.Cancel = true;
+                FormFadeOut.Begin();
             }
         }
     }

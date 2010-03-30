@@ -20,6 +20,7 @@ namespace SynclessUI
         private readonly string _selectedTag;
         private BackgroundWorker previewWorker;
         private RootCompareObject rco;
+        private bool _closingAnimationNotCompleted = true;
 
         public PreviewSyncWindow(MainWindow main, string selectedTag)
         {
@@ -104,12 +105,12 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
-            CloseWindow();
+            Close();
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            CloseWindow();
+            Close();
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -117,21 +118,27 @@ namespace SynclessUI
             DragMove();
         }
 
-        private void CloseWindow()
-        {
-            FormFadeOut.Begin();
-        }
-
-        private void FormFadeOut_Completed(object sender, EventArgs e)
-        {
-            Close();
-        }
-
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
 
             e.Handled = true;
+        }
+
+        private void FormFadeOut_Completed(object sender, EventArgs e)
+        {
+            _closingAnimationNotCompleted = false;
+            Close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_closingAnimationNotCompleted)
+            {
+                BtnCancel.IsCancel = false;
+                e.Cancel = true;
+                FormFadeOut.Begin();
+            }
         }
 
         #region Nested type: PreviewSyncDelegate
