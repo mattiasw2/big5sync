@@ -115,6 +115,15 @@ namespace Syncless.Notification
 
         }
 
+        public void Cancel()
+        {
+            _state = SyncState.Cancelled;
+            if (_worker != null)
+            {
+                _worker.Abort();
+            }
+        }
+
         private void InvokeChange()
         {
             if(!_notifyProgressChange)
@@ -242,9 +251,6 @@ namespace Syncless.Notification
                 //obs.StateChanged();
             }
         }
-
-
-
 
         #region thread
         private void Notifier()

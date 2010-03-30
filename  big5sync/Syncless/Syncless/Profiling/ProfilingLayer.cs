@@ -11,7 +11,7 @@ using Syncless.Notification;
 using Syncless.Notification.UINotification;
 namespace Syncless.Profiling
 {
-    public class ProfilingLayer
+    internal class ProfilingLayer
     {
         public const string RELATIVE_PROFILING_SAVE_PATH = ".syncless\\profiling.xml";
         public const string RELATIVE_GUID_SAVE_PATH = ".syncless\\guid.id";
