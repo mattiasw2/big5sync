@@ -14,6 +14,7 @@ namespace Syncless.Notification
         private List<ISyncProgressObserver> _observerList;
         private SyncState _state;
         private bool _notifyProgressChange;
+        private bool _notifyStateChange;
         private bool _completed;
         private Thread _worker;
         public string TagName
@@ -26,15 +27,12 @@ namespace Syncless.Notification
         public SyncState State
         {
             get { return _state; }
-            set { _state = value; }
         }
-
-        private string _message;
 
         public string Message
         {
-            get { return _message; }
-            set { _message = value; }
+            get;
+            set;
         }
 
         #region Sync
@@ -86,17 +84,21 @@ namespace Syncless.Notification
                 {
                     return 0;
                 }
-                else if (_state == SyncState.Synchronizing)
+                if (_state == SyncState.Synchronizing)
                 {
                     double completed = _syncCompletedJobs + _syncFailedJobs;
                     double total = _syncjobtotal;
                     return completed / total * 100.0;
                 }
-                else if (_state == SyncState.Finalizing)
+                if (_state == SyncState.Finalizing)
                 {
                     double completed = _finalisingCompletedJobs;
                     double total = _finalisingJobTotal;
                     return completed / total * 100.0;
+                }
+                if (_state == SyncState.Finished)
+                {
+                    return 100;
                 }
                 return 0;
             }
@@ -123,28 +125,8 @@ namespace Syncless.Notification
                 default: return;
             }
             InvokeChange();
-
         }
 
-        public void Cancel()
-        {
-            _state = SyncState.Cancelled;
-            if (_worker != null)
-            {
-                _wh.Set();
-            }
-        }
-
-        private void InvokeChange()
-        {
-            if(!_notifyProgressChange)
-            {
-                _notifyProgressChange= true;
-                //_worker.Interrupt();
-                _wh.Set();
-            }
-        }
-        public delegate void MethodASync();
         public void fail()
         {
             switch (_state)
@@ -168,14 +150,42 @@ namespace Syncless.Notification
             InvokeChange();
 
         }
-        public SyncProgress()
+
+        public void Cancel()
         {
+            _state = SyncState.Cancelled;
+            if (_worker != null)
+            {
+                _wh.Set();
+            }
+        }
+
+        public bool IsCancel
+        {
+            get { return _state == SyncState.Cancelled; }
+        }
+
+            private void InvokeChange()
+        {
+            if (!_notifyProgressChange)
+            {
+                _notifyProgressChange = true;
+                //_worker.Interrupt();
+                _wh.Set();
+            }
+        }
+        
+        public SyncProgress(string tagName)
+        {
+            _state = SyncState.Started;
             _syncjobtotal = 0;
             _syncFailedJobs = 0;
             _syncCompletedJobs = 0;
             _observerList = new List<ISyncProgressObserver>();
             _notifyProgressChange = false;
+            _notifyStateChange = false;
             _completed = false;
+            TagName = tagName;
             _worker = new Thread(Notifier);
             _worker.Start();
         }
@@ -203,8 +213,10 @@ namespace Syncless.Notification
                 return false;
             }
             _state = SyncState.Analyzing;
-            _message = "Analyzing";
+            
             TriggerStateChanged();
+            
+            _wh.Set();
             return true;
         }
         public bool ChangeToSyncing(int jobcount)
@@ -215,8 +227,10 @@ namespace Syncless.Notification
                 return false;
             }
             _state = SyncState.Synchronizing;
-            _message = "Synchronzing";
+            
             TriggerStateChanged();
+            
+            _wh.Set();
             return true;
         }
         public bool ChangeToFinalizing(int jobcount)
@@ -228,83 +242,76 @@ namespace Syncless.Notification
             }
 
             _state = SyncState.Finalizing;
-            _message = "Finalizing";
+            
             TriggerStateChanged();
+            
+            _wh.Set();
             return true;
         }
         public bool ChangeToFinished(AbstractNotification notification)
         {
-            _notification = notification;
+            
             if (_state != SyncState.Finalizing)
             {
                 return false;
             }
+            _notification = notification;
             _completed = true;
-            _message = "Finishing";
-            //_state = SyncState.Finished;
-            //TriggerStateChanged();
+            _state = SyncState.Finished;
             TriggerSyncComplete();
             ServiceLocator.UINotificationQueue().Enqueue(notification);
             return true;
         }
         private void TriggerSyncComplete()
         {
-            foreach (ISyncProgressObserver obs in _observerList)
+            if (!_notifyStateChange)
             {
-                //MethodASync sync = new MethodASync(obs.SyncComplete);
-                //sync.BeginInvoke(null, null);
-                obs.SyncComplete(); 
+                _notifyStateChange = true;
             }
+            _wh.Set();
         }
         private void TriggerStateChanged()
         {
-            foreach (ISyncProgressObserver obs in _observerList)
+            if (!_notifyStateChange)
             {
-                //MethodASync sync = new MethodASync(obs.StateChanged);
-                //sync.BeginInvoke(null, null);
-                obs.StateChanged();
+                _notifyStateChange = true;
             }
+            _wh.Set();
         }
 
         #region thread
         private void Notifier()
         {
-            while (!_completed)
+            while (!_completed && _state != SyncState.Cancelled)
             {
-                try
+                if (_notifyStateChange)
                 {
-                    if (_notifyProgressChange)
+                    _notifyStateChange = false;
+                    foreach (ISyncProgressObserver obs in _observerList)
                     {
-                        _notifyProgressChange = false;
-                        foreach (ISyncProgressObserver obs in _observerList)
-                        {
-                            obs.ProgressChanged();
-                        }
-                        continue;
-
+                        obs.StateChanged();
                     }
-                    //Thread.Sleep(10000);
-                    _wh.WaitOne();
+                    continue;
                 }
-                catch (ThreadInterruptedException)
+                if (_notifyProgressChange)
                 {
-                }
-                catch (ThreadAbortException)
-                {
+                    _notifyProgressChange = false;
                     foreach (ISyncProgressObserver obs in _observerList)
                     {
                         obs.ProgressChanged();
                     }
+
+                }
+                else
+                {
+                    _wh.WaitOne();
                 }
             }
-            //DO a final State Change
 
             foreach (ISyncProgressObserver obs in _observerList)
             {
-                obs.ProgressChanged();
+                obs.SyncComplete();
             }
-
-            ServiceLocator.UINotificationQueue().Enqueue(_notification);
         }
 
         #endregion

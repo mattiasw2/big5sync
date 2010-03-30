@@ -145,7 +145,6 @@ namespace Syncless.CompareAndSync
                     {
                         SyncStartNotification notification = new SyncStartNotification(_currJob.TagName);
                         _currJobProgress = notification.Progress;
-                        _currJobProgress.State = SyncState.Started;
                         ServiceLocator.UINotificationQueue().Enqueue(notification);
                         ManualSyncer.Sync(_currJob, _currJobProgress);
 

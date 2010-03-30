@@ -45,9 +45,14 @@ namespace SynclessUI
 
         public SyncProgressWatcher Watcher
         {
-            get; set;
-        } 
-
+            get;
+            set;
+        }
+        public SyncProgress Progress
+        {
+            get;
+            set;
+        }
         public IUIControllerInterface Gui;
 
 
@@ -138,137 +143,7 @@ namespace SynclessUI
             }
         }
 
-        public void NotifySyncAnalyzing(string tagname)
-        {
-            const string message = "Analyzing Folders";
-            const double percentageComplete = 0;
 
-            if (SelectedTag == tagname)
-            {
-                LblStatusText.Content = message;
-                ProgressBarSync.Value = percentageComplete;
-            }
-
-            _syncProgressNotificationDictionary[tagname] = percentageComplete;
-            _tagStatusNotificationDictionary[tagname] = message;
-        }
-
-        public void NotifySynchronization(string tagname)
-        {
-            if (SelectedTag == tagname)
-            {
-                BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
-            }
-        }
-
-        public void NotifySyncStart(string tagname)
-        {
-            const string message = "Synchronization Started";
-
-            if (SelectedTag == tagname)
-            {
-                LblStatusText.Content = message;
-            }
-
-            _tagStatusNotificationDictionary[tagname] = message;
-            NotifyBalloon("Synchronization Started", tagname + " is being synchronized.");
-        }
-
-        public void NotifySyncCompletion(string tagname)
-        {
-            string message = "Synchronization Completed at " + DateTime.Now;
-
-            if (SelectedTag == tagname)
-            {
-                LblStatusText.Content = message;
-
-                BtnSyncNow.IsEnabled = true;
-                BtnPreview.IsEnabled = true;
-                BtnSyncMode.IsEnabled = true;
-                _manualSyncEnabled = true;
-            }
-
-            BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
-            _tagStatusNotificationDictionary[tagname] = message;
-            NotifyBalloon("Synchronization Completed", tagname + " is now synchronized.");
-        }
-
-        public void NotifyNothingToSync(string tagname)
-        {
-            string message = "Nothing to Synchronize";
-
-            if (SelectedTag == tagname)
-            {
-                LblStatusText.Content = message;
-                BtnSyncNow.IsEnabled = true;
-                BtnPreview.IsEnabled = true;
-                BtnSyncMode.IsEnabled = true;
-                _manualSyncEnabled = true;
-            }
-
-            LblStatusText.Content = message;
-            _tagStatusNotificationDictionary[tagname] = message;
-        }
-
-        public double GetSyncProgressPercentage(string tagname)
-        {
-            return _syncProgressNotificationDictionary[tagname];
-        }
-
-        public string GetTagStatus(string tagname)
-        {
-            try
-            {
-                string status = _tagStatusNotificationDictionary[tagname];
-
-                return status;
-            }
-            catch
-            {
-                return "";
-            }
-        }
-
-        public void SetSyncProgress(string tagname, SyncProgress progress)
-        {
-            string notification = _tagStatusNotificationDictionary[tagname];
-
-            if (SelectedTag == tagname)
-            {
-                ProgressBarSync.SetValue(ProgressBar.ValueProperty, progress.PercentComplete);
-
-                LblStatusText.Content = progress.Message;
-
-                SetProgressBarColor(progress.PercentComplete);
-            }
-
-            _syncProgressNotificationDictionary[tagname] = progress.PercentComplete;
-
-            if (!(notification != null
-                && notification.StartsWith("Synchronization Completed")))
-            {
-                _tagStatusNotificationDictionary[tagname] = progress.Message;
-            }
-        }
-
-        private void SetProgressBarColor(double percentageComplete)
-        {
-            byte rcolor = 0, gcolor = 0;
-            const byte bcolor = 0;
-
-            if (percentageComplete <= 50)
-            {
-                rcolor = 211;
-                gcolor = (byte)(percentageComplete / 50 * 211);
-            }
-            else
-            {
-                rcolor = (byte)((100 - percentageComplete) / 50 * 211);
-                gcolor = 211;
-            }
-
-            ProgressBarSync.Foreground = new SolidColorBrush(Color.FromArgb(255, rcolor, gcolor, bcolor));
-        }
 
         public void NotifyBalloon(string title, string text)
         {
@@ -317,17 +192,19 @@ namespace SynclessUI
                         break;
                 }
 
-                if(tv.IsLocked)
+                if (tv.IsLocked)
                 {
-                    if(Watcher != null && Watcher.Progress.State == SyncState.Analyzing)
+                    if (Watcher != null && Watcher.Progress.State == SyncState.Analyzing)
                     {
                         BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
                         CancelButtonMode();
-                    } else
+                    }
+                    else
                     {
                         BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
                     }
-                } else
+                }
+                else
                 {
                     SyncButtonMode();
                     BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
@@ -596,10 +473,10 @@ namespace SynclessUI
 
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
         {
-            if(LblSyncNow.Content.Equals("Sync Now"))
+            if (LblSyncNow.Content.Equals("Sync Now"))
             {
                 BtnSyncNow.IsHitTestVisible = false;
-                
+
                 try
                 {
                     if (Gui.GetTag(SelectedTag).PathStringList.Count > 1)
@@ -627,35 +504,37 @@ namespace SynclessUI
                 catch (UnhandledException)
                 {
                     DialogHelper.DisplayUnhandledExceptionMessage();
-                }    
+                }
 
                 BtnSyncNow.IsHitTestVisible = true;
-            } else
+            }
+            else
             {
                 BtnSyncNow.IsHitTestVisible = false;
                 bool success = Gui.CancelManualSync(SelectedTag);
-                if(success)
+                if (success)
                 {
                     SyncButtonMode();
                     string message = "Synchronization Cancelled.";
                     LblStatusText.Content = message;
                     _tagStatusNotificationDictionary[SelectedTag] = message;
                     BtnSyncNow.IsHitTestVisible = true;
-                } else
+                }
+                else
                 {
                     DialogHelper.ShowError("Unable to Cancel", "Please wait until synchronization is complete.");
                     BtnSyncNow.IsHitTestVisible = true;
                 }
             }
 
-/*
-            if (!_manualSyncEnabled || Gui.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
-            {
-                DialogHelper.ShowError(SelectedTag + " is Synchronizing",
-                             "You cannot carry out another synchronization operation while it is synchronizing.");
-                return;
-            }
- */
+            /*
+                        if (!_manualSyncEnabled || Gui.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
+                        {
+                            DialogHelper.ShowError(SelectedTag + " is Synchronizing",
+                                         "You cannot carry out another synchronization operation while it is synchronizing.");
+                            return;
+                        }
+             */
         }
 
         public bool CreateTag(string tagName)
@@ -846,11 +725,12 @@ namespace SynclessUI
         private void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             DialogWindow terminationWindow = e.Result as DialogWindow;
-            terminationWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() => {
+            terminationWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
+            {
                 terminationWindow.CannotBeClosed = false;
                 terminationWindow.CloseWindow();
             }));
-            
+
             TerminateNow(false);
         }
 
@@ -864,7 +744,7 @@ namespace SynclessUI
             _notificationWatcher.Stop();
             _priorityNotificationWatcher.Stop();
 
-            if(showAnimation)
+            if (showAnimation)
                 DisplayUnloadingAnimation();
         }
 
@@ -1764,6 +1644,158 @@ namespace SynclessUI
         public void NotifyAutoSyncComplete(string path)
         {
             NotifyBalloon("Synchronization Completed", path + " is now synchronized.");
+        }
+
+        #region Progress Notification
+
+        public void ProgressNotifySyncStart()
+        {
+            const string message = "Synchronization Started";
+
+            if (SelectedTag == Progress.TagName)
+            {
+                LblStatusText.Content = message;
+            }
+
+            _tagStatusNotificationDictionary[Progress.TagName] = message;
+            NotifyBalloon("Synchronization Started", Progress.TagName + " is being synchronized.");
+        }
+
+        public void ProgressNotifyAnalyzing()
+        {
+            const string message = "Analyzing Folders";
+            const double percentageComplete = 0;
+            string tagname = Progress.TagName;
+            if (SelectedTag == tagname)
+            {
+                LblStatusText.Content = message;
+                ProgressBarSync.Value = percentageComplete;
+            }
+
+            _syncProgressNotificationDictionary[tagname] = percentageComplete;
+            _tagStatusNotificationDictionary[tagname] = message;
+        }
+
+        public void ProgressNotifySynchronizing()
+        {
+            if (SelectedTag == Progress.TagName)
+            {
+                BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
+            }
+        }
+
+        public void ProgressNotifyFinalizing()
+        {
+
+        }
+
+        public void ProgressNotifySyncComplete()
+        {
+            string message = "Synchronization Completed at " + DateTime.Now;
+            double percentageComplete = Progress.PercentComplete;
+            if (SelectedTag == Progress.TagName)
+            {
+                LblStatusText.Content = message;
+                ProgressBarSync.Value = percentageComplete;
+                BtnSyncNow.IsEnabled = true;
+                BtnPreview.IsEnabled = true;
+                BtnSyncMode.IsEnabled = true;
+                _manualSyncEnabled = true;
+            }
+
+            BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
+            _tagStatusNotificationDictionary[Progress.TagName] = message;
+            _syncProgressNotificationDictionary[Progress.TagName] = percentageComplete;
+            NotifyBalloon("Synchronization Completed", Progress.TagName + " is now synchronized.");
+        }
+
+        public void ProgressNotifyChange()
+        {
+            string message = "";
+            switch (Progress.State)
+            {
+                case SyncState.Synchronizing: message = "Sychronizing " + Progress.Message;
+                    break;
+
+                case SyncState.Finalizing: message = "Finalizing";
+                    break;
+
+            }
+
+            double percentageComplete = Progress.PercentComplete;
+            string tagname = Progress.TagName;
+            if (SelectedTag == tagname)
+            {
+                LblStatusText.Content = message;
+                ProgressBarSync.Value = percentageComplete;
+            }
+            SetProgressBarColor(percentageComplete);
+            _syncProgressNotificationDictionary[tagname] = percentageComplete;
+            _tagStatusNotificationDictionary[tagname] = message;
+
+        }
+        #endregion
+
+
+
+        public void NotifyNothingToSync(string tagname)
+        {
+            string message = "Nothing to Synchronize";
+
+            if (SelectedTag == tagname)
+            {
+                LblStatusText.Content = message;
+                BtnSyncNow.IsEnabled = true;
+                BtnPreview.IsEnabled = true;
+                BtnSyncMode.IsEnabled = true;
+                _manualSyncEnabled = true;
+            }
+
+            LblStatusText.Content = message;
+            _tagStatusNotificationDictionary[tagname] = message;
+        }
+
+        public double GetSyncProgressPercentage(string tagname)
+        {
+            return Progress.TagName == tagname ? Progress.PercentComplete : _syncProgressNotificationDictionary[tagname];
+        }
+
+        public string GetTagStatus(string tagname)
+        {
+            try
+            {
+                string status = _tagStatusNotificationDictionary[tagname];
+
+                return status;
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        public void SetSyncProgress(string tagname, SyncProgress progress)
+        {
+
+        }
+
+        private void SetProgressBarColor(double percentageComplete)
+        {
+            byte rcolor = 0, gcolor = 0;
+            const byte bcolor = 0;
+
+            if (percentageComplete <= 50)
+            {
+                rcolor = 211;
+                gcolor = (byte)(percentageComplete / 50 * 211);
+            }
+            else
+            {
+                rcolor = (byte)((100 - percentageComplete) / 50 * 211);
+                gcolor = 211;
+            }
+
+            ProgressBarSync.Foreground = new SolidColorBrush(Color.FromArgb(255, rcolor, gcolor, bcolor));
         }
     }
 }

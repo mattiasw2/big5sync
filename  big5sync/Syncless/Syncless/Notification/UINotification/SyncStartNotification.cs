@@ -28,7 +28,8 @@ namespace Syncless.Notification.UINotification
         public SyncStartNotification(string tagName)
             : base("Sync Start Notification", Syncless.Notification.NotificationCode.SYNC_START_NOTIFICATION)
         {
-            _progress = new SyncProgress();
+            _progress = new SyncProgress(tagName);
+            
             _tagName = tagName;
         }
 
