@@ -140,6 +140,8 @@ namespace SynclessUI
                 row["Event Type"] = eventType;
                 row["Message"] = l.Message;
                 row["Timestamp"] = l.Timestamp;
+
+                _LogData.Rows.Add(row);
             }
         }
 
