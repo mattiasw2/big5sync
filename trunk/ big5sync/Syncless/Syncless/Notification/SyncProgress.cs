@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Syncless.CompareAndSync.CompareObject;
+using Syncless.Core;
+using Syncless.Notification.UINotification;
 
 namespace Syncless.Notification
 {
@@ -49,6 +52,7 @@ namespace Syncless.Notification
         private int _finalisingJobTotal;
         private int _finalisingCompletedJobs;
         private int _finalisingFailedJobs;
+        private AbstractNotification _notification;
 
         public int FinalisingJobTotal
         {
@@ -220,8 +224,9 @@ namespace Syncless.Notification
             TriggerStateChanged();
             return true;
         }
-        public bool ChangeToFinished()
+        public bool ChangeToFinished(AbstractNotification notification)
         {
+            _notification = notification;
             if (_state != SyncState.Finalizing)
             {
                 return false;
@@ -287,6 +292,8 @@ namespace Syncless.Notification
             {
                 obs.ProgressChanged();
             }
+
+            ServiceLocator.UINotificationQueue().Enqueue(_notification);
         }
 
         #endregion
