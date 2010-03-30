@@ -7,8 +7,8 @@ namespace Syncless.Logging
 {
     public class LogReaderHelper
     {
-        private const string USER_LOG_PATH = @"log\user.log.1";
-        private const string USER_LOG_BACKUP_PATH = @"log\user.log";
+        private const string USER_LOG_PATH = @"log\user.log";
+        private const string USER_LOG_BACKUP_PATH = @"log\user.log.1";
         private const int MAX_LOG = 1000;
 
         public static List<LogData> ReadLog()
@@ -55,7 +55,7 @@ namespace Syncless.Logging
             {
                 streamReader.Close();
                 fs.Close();
-                File.Delete(USER_LOG_BACKUP_PATH);
+                File.Delete(USER_LOG_PATH);
                 throw e;
             }
             finally
@@ -69,6 +69,7 @@ namespace Syncless.Logging
                     fs.Close();
                 }
             }
+            logs.Reverse();
             return logs;
         }
 
