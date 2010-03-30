@@ -721,11 +721,8 @@ namespace SynclessUI
             var terminationWindow = e.Result as DialogWindow;
             terminationWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action) (() =>
                                                                                               {
-                                                                                                  terminationWindow.
-                                                                                                      CannotBeClosed =
-                                                                                                      false;
-                                                                                                  terminationWindow.
-                                                                                                      CloseWindow();
+                                                                                                  terminationWindow.CannotBeClosed = false;
+                                                                                                  terminationWindow.Close();
                                                                                               }));
 
             TerminateNow(false);

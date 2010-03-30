@@ -11,6 +11,8 @@ namespace SynclessUI
     /// </summary>
     public partial class OptionsWindow : Window
     {
+        private bool _closingAnimationNotCompleted = true;
+
         public OptionsWindow()
         {
             InitializeComponent();
@@ -41,7 +43,7 @@ namespace SynclessUI
                 RegistryHelper.RemoveRegistry();
             }
 
-            CloseWindow();
+            Close();
             Settings.Default.EnableShellIntegration = choice;
             Settings.Default.MinimizeToTray = (bool) ChkBoxMinimizeToTray.IsChecked;
             Settings.Default.EnableAnimation = (bool) ChkBoxEnableAnimation.IsChecked;
@@ -51,7 +53,7 @@ namespace SynclessUI
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            CloseWindow();
+            Close();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -69,14 +71,20 @@ namespace SynclessUI
             DragMove();
         }
 
-        private void CloseWindow()
-        {
-            FormFadeOut.Begin();
-        }
-
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
+            _closingAnimationNotCompleted = false;
             Close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_closingAnimationNotCompleted)
+            {
+                BtnCancel.IsCancel = false;
+                e.Cancel = true;
+                FormFadeOut.Begin();
+            }
         }
     }
 }

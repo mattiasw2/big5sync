@@ -15,6 +15,7 @@ namespace SynclessUI
     {
         private readonly MainWindow _main;
         private bool _notifyUser;
+        private bool _closingAnimationNotCompleted = true;
 
         public UntagWindow(MainWindow main, string clipath, bool notifyUser)
         {
@@ -55,7 +56,7 @@ namespace SynclessUI
                 {
                     DialogHelper.ShowError("No Tags Found", "The folder you were trying to untag had no tags on it.");
 
-                    CloseWindow();
+                    Close();
                 }
             }
             catch (UnhandledException)
@@ -107,18 +108,18 @@ namespace SynclessUI
                     }
                 }
                 _main.SelectTag(lasttagged);
-                CloseWindow();
+                Close();
             }
             catch (UnhandledException)
             {
                 DialogHelper.DisplayUnhandledExceptionMessage();
-                CloseWindow();
+                Close();
             }
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            CloseWindow();
+            Close();
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -126,14 +127,20 @@ namespace SynclessUI
             DragMove();
         }
 
-        private void CloseWindow()
-        {
-            FormFadeOut.Begin();
-        }
-
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
+            _closingAnimationNotCompleted = false;
             Close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_closingAnimationNotCompleted)
+            {
+                BtnCancel.IsCancel = false;
+                e.Cancel = true;
+                FormFadeOut.Begin();
+            }
         }
     }
 }
