@@ -11,23 +11,23 @@ The *Notification* component provides a low coupling medium for the control laye
 
 The main important classes for Notification include `NotificationQueue` and `INotificationQueue`. Many notification is implemented in both UI and *System Logic Layer*. At UI layer, it needs to implement watchers to watch all notifications which belong to the `Notification.UINotification` namespace.
 
-==Notification that is currently Implemented(User Interface)==
- #  `AutoSyncCompleteNotification` - Inform the User Interface that an auto Sync request is completed.
- #  `NothingToSyncNotification` - Inform the User Interface that there is Nothing to Sync
- #  `SyncCompleteNotification` - Inform the User Interface that the Sync is complete.
- #  `SyncStartNotification` - Inform the User Interface that the Sync is started.
+== Notification that is currently Implemented(User Interface) ==
+ #  `AutoSyncCompleteNotification` - informs the User Interface that a seamless synchronization request is completed.
+ #  `NothingToSyncNotification` - informs the User Interface that there is nothing to synchronize.
+ #  `SyncCompleteNotification` - informs the User Interface that the synchronization is completed.
+ #  `SyncStartNotification` - informs the User Interface that the synchronization is started.
 
-==Notification that is currently Implemented(Logic Layer)==
- #  `AddTagNotification` - Inform the Logic Layer to add a Tag. Use during Merging of Tagging Profile.
- #  `MonitorPathNotification` - Inform the Logic Layer to start Monitoring a path. Call after switching from manual to seamless.
- #  `MonitorTagNotification` - Inform the Logic Layer to start Monitoring a Tag. Use during Merging of Tag.
- #  `RemoveTagNotification` - Inform the Logic Layer to Remove a Tag. Use during removing of a tag.
- #  `TaggedPathDeletedNotification` - Inform the Logic Layer that a TaggedPath is Deleted. Using during merging of Tagging Profile.
- #  `UnMonitorPathNotification` - Inform the Logic Layer to start UnMonitor a path. Call after switching from manual to seamless.
+== Notification that is currently Implemented(Logic Layer) ==
+ #  `AddTagNotification` - informs the Logic Layer to add a tag. Used during merging of tagging profiles.
+ #  `MonitorPathNotification` - informs the Logic Layer to start monitoring a path. Called after switching from manual to seamless mode.
+ #  `MonitorTagNotification` - informs the Logic Layer to start monitoring a tag. Used during merging of tags.
+ #  `RemoveTagNotification` - informs the Logic Layer to remove a tag. Used during removing of a tag.
+ #  `TaggedPathDeletedNotification` - informs the Logic Layer that a tagged path is deleted. Used during merging of tagging profiles.
+ #  `UnMonitorPathNotification` - informs the Logic Layer to start unmonitoring a path. Called after switching from manual to seamless mode.
 
 = Description of Design =
 
-The notification layer makes use of observer pattern to notify its watchers to resume their threads if new notification is added to the queue. 
+The Notification component makes use of the observer pattern to notify its watchers to resume their threads if new notification is added to the queue. 
 
 = Extending Notification =
 
