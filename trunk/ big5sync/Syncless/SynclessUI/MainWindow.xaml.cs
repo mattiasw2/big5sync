@@ -1090,6 +1090,7 @@ namespace SynclessUI
             {
                 LblStatusText.Content = message;
                 ProgressBarSync.Value = percentageComplete;
+                SetProgressBarColor(percentageComplete);
                 BtnSyncNow.IsEnabled = true;
                 BtnPreview.IsEnabled = true;
                 BtnSyncMode.IsEnabled = true;
