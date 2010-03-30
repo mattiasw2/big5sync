@@ -149,11 +149,11 @@ namespace Syncless.CompareAndSync.Visitor
         private void MergeOneLevelDown(FolderCompareObject actualFolder, FolderCompareObject renamedFolder, int pos)
         {
             Dictionary<string, BaseCompareObject>.KeyCollection renamedFolderContents = renamedFolder.Contents.Keys;
-            BaseCompareObject o = null;
-            FolderCompareObject actualFldrObj = null;
-            FolderCompareObject renamedFolderObj = null;
-            FileCompareObject actualFileObj = null;
-            FileCompareObject renamedFileObj = null;
+            BaseCompareObject o;
+            FolderCompareObject actualFldrObj;
+            FolderCompareObject renamedFolderObj;
+            FileCompareObject actualFileObj;
+            FileCompareObject renamedFileObj;
 
             foreach (string name in renamedFolderContents)
             {
@@ -169,7 +169,7 @@ namespace Syncless.CompareAndSync.Visitor
                         actualFldrObj.MetaCreationTime[pos] = renamedFolderObj.MetaCreationTime[pos];
                         actualFldrObj.MetaExists[pos] = renamedFolderObj.MetaExists[pos];
                         actualFldrObj.MetaUpdated[pos] = renamedFolderObj.MetaUpdated[pos];
-                        MergeOneLevelDown(actualFolder, renamedFolder, pos);
+                        MergeOneLevelDown(actualFldrObj, renamedFolderObj, pos);
                     }
                     else
                     {
