@@ -56,11 +56,11 @@
 		<TextBlock Grid.Row="0" Margin="0" Padding="5" x:Name="TitleBar" Height="20" VerticalAlignment="Top" Grid.ColumnSpan="3" IsHitTestVisible="False"/>
 		<Label x:Name="LblLogWindow" Content="Synchronization Logs" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1"/>
 		<StackPanel x:Name="CommandPanel" Margin="0,10,0,0" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="30">
-			<Button x:Name="BtnOk" Margin="0,0,5,0" Height="28" Click="BtnOk_Click" IsDefault="True">
+			<Button x:Name="BtnOk" Margin="0" Height="28" Click="BtnOk_Click" IsDefault="True">
 				<Label x:Name="LblOk" FontFamily="Century Gothic" FontSize="9.333" Content="Close"/>
 			</Button>
 		</StackPanel>
-		<toolkit:DataGrid ItemsSource="{Binding LogData, ElementName=Window}" Margin="5,5,5,0" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="2" CanUserReorderColumns="False" CanUserResizeRows="False" IsReadOnly="True" FontFamily="Century Gothic" MinHeight="100" MinWidth="700" Height="Auto" Width="Auto" MaxHeight="300" MaxWidth="700" RowBackground="#FF666666" AlternatingRowBackground="#FF555555" HorizontalGridLinesBrush="#FF828790" VerticalGridLinesBrush="#FF828790">
+		<toolkit:DataGrid ItemsSource="{Binding LogData, ElementName=Window}" Margin="5,5,0,0" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="2" CanUserReorderColumns="False" CanUserResizeRows="False" IsReadOnly="True" MinHeight="100" MinWidth="700" Height="Auto" Width="Auto" MaxHeight="300" MaxWidth="700" RowBackground="#FF666666" AlternatingRowBackground="#FF555555" HorizontalGridLinesBrush="#FF828790" VerticalGridLinesBrush="#FF828790" FontFamily="Century Gothic">
 			<toolkit:DataGrid.Columns>
 				<toolkit:DataGridTextColumn Binding="{Binding Timestamp}" Header="Timestamp" IsReadOnly="True" Foreground="White"/>
 				<toolkit:DataGridTextColumn Binding="{Binding Category}" Header="Category" IsReadOnly="True" Foreground="White"/>
@@ -68,12 +68,11 @@
 				<toolkit:DataGridTemplateColumn Header="Message"  IsReadOnly="True" Width="*" SortMemberPath="Message">
 			        <toolkit:DataGridTemplateColumn.CellTemplate>
 			            <DataTemplate>
-			                <TextBlock Text="{Binding Message}" Foreground="White" TextWrapping="Wrap"/>
+			                <TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding Message}" />
 			            </DataTemplate>
 			        </toolkit:DataGridTemplateColumn.CellTemplate>
 				</toolkit:DataGridTemplateColumn>
 			</toolkit:DataGrid.Columns>
 		</toolkit:DataGrid>
-		<TextBlock HorizontalAlignment="Left" Margin="186,-95,0,0" VerticalAlignment="Top" Grid.Column="1" Text="TextBlock" TextWrapping="Wrap"/>
 	</Grid>
 </Window>
