@@ -431,6 +431,7 @@ namespace Syncless.CompareAndSync.Visitor
             string subFolderXML = Path.Combine(folder.GetSmartParentPath(counter), folder.Name);
             CommonMethods.CreateFileIfNotExist(subFolderXML);
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+            ModifyFolderName(folder, folder.GetSmartParentPath(counter));
             DeleteFolderTodoByName(folder, counter);
         }
 
@@ -498,7 +499,7 @@ namespace Syncless.CompareAndSync.Visitor
         private void HandleUnchangedOrPropagatedFolder(FolderCompareObject folder, int counter)
         {
             string name = Path.Combine(folder.GetSmartParentPath(counter), folder.Name);
-            if (Directory.Exists(name)) //CREATE 
+            if (Directory.Exists(name)) //CREATE OR RENAME
             {
                 bool metaExist = folder.MetaExists[counter];
                 bool folderExist = folder.Exists[counter];
@@ -534,6 +535,27 @@ namespace Syncless.CompareAndSync.Visitor
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
 
             GenerateFolderTodo(folder, counter);
+        }
+        
+        private void ModifyFolderName(FolderCompareObject folder, string subFolderPath)
+        {
+            string name = string.Empty;
+            if(folder.NewName!=null)
+            {
+                name = folder.NewName;
+            }
+            else
+            {
+                name = folder.Name;
+            }
+
+            string xmlPath = Path.Combine(Path.Combine(subFolderPath,folder.Name),Metadatapath);
+            XmlDocument subFolderDoc = new XmlDocument();
+            CommonMethods.LoadXML(ref subFolderDoc , xmlPath);
+
+            XmlNode xmlNameNode = subFolderDoc.SelectSingleNode(XpathExpr + "/name");
+            xmlNameNode.InnerText = name;
+            CommonMethods.SaveXML(ref subFolderDoc , xmlPath);
         }
 
         #endregion
