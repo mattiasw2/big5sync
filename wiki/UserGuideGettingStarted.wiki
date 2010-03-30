@@ -155,13 +155,13 @@ To save time and increase productivity, refer to the list of keyboard shortcuts.
 
 = Ending Note =
 
-Please report any bugs you find at http://code.google.com/p/big5sync/issues/list, thank you! You may wish to take a look at http://code.google.com/p/big5sync/wiki/KnownIssues09 for the known bugs in version 0.9. You may also contact us at *_big5.syncless@gmail.com_*.
+Please report any bugs you find at http://code.google.com/p/big5sync/issues/list, thank you! You may wish to take a look at http://code.google.com/p/big5sync/wiki/KnownIssues10 for the known bugs in version 1.0. You may also contact us at *_big5.syncless@gmail.com_*.
 
 You can also view a video of the quick run-through of the features:
 
 <wiki:video url="http://www.youtube.com/watch?v=i30Q2U7ceWs"/>
 
-Interested in what's coming after version 0.9? Take a look [http://code.google.com/p/big5sync/wiki/ComingSoon here]!
+Interested in what's coming after version 1.0? Take a look [http://code.google.com/p/big5sync/wiki/ComingSoon here]!
 
 Are you a developer? Interested to further improve Syncless? Have a [http://code.google.com/p/big5sync/wiki/DeveloperGuide look]!
 
