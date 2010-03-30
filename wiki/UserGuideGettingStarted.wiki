@@ -54,15 +54,14 @@ http://big5sync.googlecode.com/files/Main_Window_Overview.jpg
 
 You have folders on your computer and thumbdrive that you wish to synchronize automatically without putting too much effort in doing it. Now is the time to use Syncless to help you organise them by using tags.
 
-
 == Step 1: Tag Folders ==
 
 To synchronize 2 or more folders together, you must first tag them with the same name. This tagging process can be initiated in multiple ways.
 
-=== 1. We will tag both the folder on the computer and on the thumbdrive from Windows Explorer. ===
+=== Multiple ways of tagging a folder ===
 
     * Tagging from Syncless (Can also use the keyboard shortcut equivalent Ctrl-T, refer to [UserGuideGettingStarted#Misc:_Keyboard_Shortcuts keyboard shortcuts] for a complete list of shortcuts)
-    (will include screen shot)
+    http://big5sync.googlecode.com/files/Tag_From_Syncless.jpg
 
     * Drag-and-Drop folder(s) on the Main Window
     http://big5sync.googlecode.com/files/drag-and-drop-and-tag.png
