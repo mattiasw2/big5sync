@@ -719,14 +719,13 @@ namespace Syncless.Core
                 {
                     return false;
                 }
-                CompareAndSyncController.Instance.Cancel(new CancelSyncRequest(tagName));
+                return CompareAndSyncController.Instance.Cancel(new CancelSyncRequest(tagName));
             }
             catch (Exception e)
             {
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
-            return true;
         }
 
         /// <summary>
@@ -1327,6 +1326,7 @@ namespace Syncless.Core
         [MethodImpl(MethodImplOptions.Synchronized)]
         private bool ManualSync(Tag tag, bool notify)
         {
+            FindAndCleanDeletedPaths();
             if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tag.TagName))
             {
                 return false;
