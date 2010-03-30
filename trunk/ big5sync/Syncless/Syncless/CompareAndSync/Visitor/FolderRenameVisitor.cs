@@ -49,31 +49,36 @@ namespace Syncless.CompareAndSync.Visitor
             //2. We check all folders which has the same meta name but different name as the non-existent folder
             //3. If the count is 1, we shall proceed to rename
 
-            FolderCompareObject f = null;
-
             for (int i = 0; i < deletePos.Count /*numOfPaths*/; i++)
             {
                 if (folder.ChangeType[deletePos[i]] == MetaChangeType.Delete)
                 {
-                    f = folder.Parent.GetRenamedFolder(folder.Name, folder.CreationTime[i], deletePos[i]);
+                    int renameCount;
+                    FolderCompareObject f = folder.Parent.GetRenamedFolder(folder.Name, folder.CreationTime[i], deletePos[i], out renameCount);
 
                     if (f != null)
                     {
-                        int counter = 0;
+                        //int counter = 0;
 
-                        for (int j = 0; j < f.ChangeType.Length; j++)
-                        {
-                            if (f.ChangeType[j].HasValue && f.ChangeType[j] == MetaChangeType.New)
-                                counter++;
-                        }
+                        //for (int j = 0; j < f.ChangeType.Length; j++)
+                        //{
+                        //    if (f.ChangeType[j].HasValue && f.ChangeType[j] == MetaChangeType.New)
+                        //        counter++;
+                        //}
 
-                        if (counter != 1)
-                        {
-                            folder.ChangeType[deletePos[i]] = null;                         
-                            return;
-                        }
+                        //if (counter != 1)
+                        //{
+                            //folder.ChangeType[deletePos[i]] = null;                         
+                            //return;
+                        //}
 
                         MergeRenamedFolder(folder, f, deletePos[i]);
+                    }
+                    if (renameCount > 1)
+                    {
+                        for (int j = 0; j < deletePos.Count /*numOfPaths*/; j++)
+                            folder.ChangeType[deletePos[j]] = null;
+                        return;
                     }
                 }
             }

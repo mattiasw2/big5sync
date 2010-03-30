@@ -48,7 +48,7 @@ namespace Syncless.CompareAndSync.CompareObject
         }
 
         //TODO: Shift this method to ComparerVisitor
-        public FolderCompareObject GetRenamedFolder(string name, long creationTime, int pos)
+        public FolderCompareObject GetRenamedFolder(string name, long creationTime, int pos, out int renameCount)
         {
             Dictionary<string, BaseCompareObject>.ValueCollection objects = _contents.Values;
             FolderCompareObject f = null, result = null;
@@ -65,6 +65,8 @@ namespace Syncless.CompareAndSync.CompareObject
                     }
                 }
             }
+
+            renameCount = counter;
 
             return counter == 1 ? result : null;
         }
