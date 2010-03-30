@@ -1507,6 +1507,7 @@ namespace Syncless.Core
                 }
                 DeviceWatcher.Instance.ToString(); //Starts watching for Drive Change
                 List<Tag> tagList = TaggingLayer.Instance.FilteredTagList;
+                FindAndCleanDeletedPaths();
                 foreach (Tag t in tagList)
                 {
                     if (t.IsSeamless)
