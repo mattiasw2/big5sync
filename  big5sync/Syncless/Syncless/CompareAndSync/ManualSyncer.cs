@@ -44,26 +44,21 @@ namespace Syncless.CompareAndSync
                 progress.ChangeToFinalizing(syncerVisitor.NodesCount);
 
                 CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor(progress), progress);
-
-                progress.ChangeToFinished();
+                AbstractNotification notification = new SyncCompleteNotification(request.TagName, rco);
+                progress.ChangeToFinished(notification);
 
                 if (request.Notify)
                     ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
 
                 //Finished
-                ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification(request.TagName, rco));
+                
                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STOPPED,
-                                                                                    "Completed Manual Sync for " +
-                                                                                    request.TagName));
+                                                                                "Completed Manual Sync for " +
+                                                                                request.TagName));
             }
             else
             {
-                progress.ChangeToFinished();
 
-                if (request.Notify)
-                    ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
-
-                ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification(request.TagName, rco));
                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STOPPED,
                                                                                     "Cancelled Manual Sync for " +
                                                                                     request.TagName));
