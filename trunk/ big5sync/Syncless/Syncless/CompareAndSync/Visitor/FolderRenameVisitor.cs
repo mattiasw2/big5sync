@@ -100,13 +100,13 @@ namespace Syncless.CompareAndSync.Visitor
                     if ((actualFldrObj = o as FolderCompareObject) != null)
                     {
                         renamedFolderObj = renamedFolder.Contents[name] as FolderCompareObject;
-                        actualFldrObj.ChangeType[pos] = renamedFolder.ChangeType[pos];
-                        actualFldrObj.CreationTime[pos] = renamedFolder.CreationTime[pos];
-                        actualFldrObj.Exists[pos] = renamedFolder.Exists[pos];
-                        actualFldrObj.MetaCreationTime[pos] = renamedFolder.MetaCreationTime[pos];
-                        actualFldrObj.MetaExists[pos] = renamedFolder.MetaExists[pos];
-                        actualFldrObj.MetaUpdated[pos] = renamedFolder.MetaUpdated[pos];
-                        MergeRenamedFolder(actualFldrObj, renamedFolderObj, pos);
+                        actualFldrObj.ChangeType[pos] = renamedFolderObj.ChangeType[pos];
+                        actualFldrObj.CreationTime[pos] = renamedFolderObj.CreationTime[pos];
+                        actualFldrObj.Exists[pos] = renamedFolderObj.Exists[pos];
+                        actualFldrObj.MetaCreationTime[pos] = renamedFolderObj.MetaCreationTime[pos];
+                        actualFldrObj.MetaExists[pos] = renamedFolderObj.MetaExists[pos];
+                        actualFldrObj.MetaUpdated[pos] = renamedFolderObj.MetaUpdated[pos];
+                        //MergeRenamedFolder(actualFldrObj, renamedFolderObj, pos);
                     }
                     else
                     {
