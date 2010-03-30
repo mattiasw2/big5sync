@@ -57,9 +57,17 @@ namespace Syncless.CompareAndSync
                                                                                     request.TagName));
             }
             else
+            {
+                progress.ChangeToFinished();
+
+                if (request.Notify)
+                    ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
+
+                ServiceLocator.UINotificationQueue().Enqueue(new SyncCompleteNotification(request.TagName, rco));
                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STOPPED,
                                                                                     "Cancelled Manual Sync for " +
                                                                                     request.TagName));
+            }
         }
 
         public static RootCompareObject Compare(ManualCompareRequest request)
