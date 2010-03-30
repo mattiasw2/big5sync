@@ -78,7 +78,9 @@ namespace Syncless.Core.View
         {
             get { return (isQueued || isSyncing); }
         }
-
+        
+        
+        
         public TagState TagState
         {
             get { return _tagState; }

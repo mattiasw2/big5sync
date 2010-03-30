@@ -307,7 +307,7 @@ namespace Syncless.Core
 
         private static void SendAutoRequest(AutoSyncRequest request)
         {
-            /*
+            
 #if DEBUG
             if (request.ChangeType == AutoSyncRequestType.New || request.ChangeType == AutoSyncRequestType.Update)
             {
@@ -343,7 +343,7 @@ namespace Syncless.Core
                 ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
             }
 #endif
-            */
+            
             CompareAndSyncController.Instance.Sync(request);
         }
 
@@ -743,6 +743,8 @@ namespace Syncless.Core
             {
                 Tag t = TaggingLayer.Instance.DeleteTag(tagname);
                 SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                DeleteTagCleanDelegate cleanDel = new DeleteTagCleanDelegate(DeleteTagClean);
+                cleanDel.BeginInvoke(t, null, null);
                 return t != null;
             }
             catch (TagNotFoundException te)
@@ -756,6 +758,19 @@ namespace Syncless.Core
             }
 
         }
+        public delegate void DeleteTagCleanDelegate(Tag t);
+        public void DeleteTagClean(Tag t)
+        {
+            foreach (string path in t.FilteredPathListString)
+            {
+                string convertedPath = ProfilingLayer.Instance.ConvertLogicalToPhysical(path);
+                if (Directory.Exists(convertedPath))
+                {
+                    CleanMetaData(new DirectoryInfo(convertedPath));
+                }
+            }
+        }
+
         /// <summary>
         /// Create a Tag.
         /// </summary>
@@ -874,6 +889,7 @@ namespace Syncless.Core
         private delegate void CleanMetaDataDelegate(DirectoryInfo info);
         private void CleanMetaData(DirectoryInfo folder)
         {
+            if (!folder.Exists) return;
             string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, false);
             if (convertedPath == null || convertedPath.Equals("")) return;
             // See if there is any tag still contain this folder.
@@ -888,8 +904,6 @@ namespace Syncless.Core
             List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(childPaths);
 
             Cleaner.CleanSynclessMeta(folder,convertedList);
-
-
         }
 
         /// <summary>

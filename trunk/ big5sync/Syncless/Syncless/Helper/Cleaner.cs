@@ -31,6 +31,7 @@ namespace Syncless.Helper
         }
         public static int CleanSynclessMeta(DirectoryInfo info, List<string> childPaths)
         {
+            if (!info.Exists) return 0;
             DirectoryInfo[] infos = info.GetDirectories("*", SearchOption.AllDirectories);
             int count = 0;
             foreach (DirectoryInfo i in infos)
