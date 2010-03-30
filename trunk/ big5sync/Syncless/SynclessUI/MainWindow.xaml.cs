@@ -305,6 +305,14 @@ namespace SynclessUI
                         break;
                 }
 
+                if(tv.IsLocked)
+                {
+                    CancelButtonMode();
+                } else
+                {
+                    SyncButtonMode();
+                }
+
                 LblStatusText.Content = "";
                 ListTaggedPath.ItemsSource = tv.PathStringList;
 
@@ -554,6 +562,18 @@ namespace SynclessUI
             Console.WriteLine("In Manual Mode");
         }
 
+        private void CancelButtonMode()
+        {
+            LblSyncNow.Content = "Cancel Sync";
+            LblSyncNow.ToolTip = "Cancel Current Synchronization";
+        }
+
+        private void SyncButtonMode()
+        {
+            LblSyncNow.Content = "Sync Now";
+            LblSyncNow.ToolTip = "Start Manual Synchronization";
+        }
+
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
         {
             if(LblSyncNow.Content.Equals("Sync Now"))
@@ -566,7 +586,7 @@ namespace SynclessUI
                     {
                         if (Gui.StartManualSync(SelectedTag))
                         {
-                            LblSyncNow.Content = "Cancel Sync";
+                            CancelButtonMode();
                             const string message = "Synchronization request has been queued";
                             LblStatusText.Content = message;
                             _tagStatusNotificationDictionary[SelectedTag] = message;
@@ -575,13 +595,13 @@ namespace SynclessUI
                         else
                         {
                             DialogHelper.ShowError("Synchronization Error", "'" + SelectedTag + "' could not be synchronized.");
-                            LblSyncNow.Content = "Sync Now";
+                            SyncButtonMode();
                         }
                     }
                     else
                     {
                         DialogHelper.ShowError("Nothing to Synchronize", "You can only synchronize when there are two or more folders.");
-                        LblSyncNow.Content = "Sync Now";
+                        SyncButtonMode();
                     }
                 }
                 catch (UnhandledException)
@@ -596,7 +616,10 @@ namespace SynclessUI
                 bool success = Gui.CancelManualSync(SelectedTag);
                 if(success)
                 {
-                    LblSyncNow.Content = "Sync Now";
+                    SyncButtonMode();
+                    string message = "Synchronization Cancelled.";
+                    LblStatusText.Content = message;
+                    _tagStatusNotificationDictionary[SelectedTag] = message;
                     BtnSyncNow.IsHitTestVisible = true;
                 } else
                 {
@@ -1204,6 +1227,16 @@ namespace SynclessUI
                                                                                 ManualMode();
                                                                                 break;
                                                                         }
+
+                                                                        if (tv.IsLocked)
+                                                                        {
+                                                                            CancelButtonMode();
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            SyncButtonMode();
+                                                                        }
+
                                                                         ListTaggedPath.ItemsSource = tv.PathStringList;
                                                                         BdrTaggedPath.Visibility = tv.PathStringList.Count == 0 ? Visibility.Hidden : Visibility.Visible;
                                                                     }));
