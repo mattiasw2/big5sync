@@ -4,7 +4,7 @@
 	xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Name="Window" x:Class="SynclessUI.PreviewSyncWindow"
     Title="Preview Sync" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}" WindowStartupLocation="CenterScreen" Icon="Icons/logo.ico" ResizeMode="CanMinimize">
-	<Grid x:Name="LayoutRoot" HorizontalAlignment="Center" VerticalAlignment="Center" Height="400" Width="700">
+	<Grid x:Name="LayoutRoot" HorizontalAlignment="Center" VerticalAlignment="Center">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="20"/>
 			<ColumnDefinition Width="*"/>
@@ -36,11 +36,31 @@
 			</Button>
 		</StackPanel>
 		<Image x:Name="TagIcon" HorizontalAlignment="Right" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,-25,-25,0" Grid.ColumnSpan="2" Source="Icons/folder.ico"/>
-        <toolkit:DataGrid Name="Data" ItemsSource="{Binding PreviewSyncData, ElementName=Window}" Margin="5,5,0,0" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="2" CanUserReorderColumns="False" CanUserResizeRows="False" IsReadOnly="True" FontFamily="Century Gothic" FontSize="10.667" Background="#FF666666">
+        <toolkit:DataGrid ItemsSource="{Binding PreviewSyncData, ElementName=Window}" Margin="5,5,0,0" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="2" IsReadOnly="True" FontFamily="Century Gothic" MinHeight="100" MinWidth="700" Height="Auto" Width="Auto" MaxHeight="300" MaxWidth="700" RowBackground="#FF666666" AlternatingRowBackground="#FF555555" HorizontalGridLinesBrush="#FF828790" VerticalGridLinesBrush="#FF828790" CanUserResizeRows="False">
             <toolkit:DataGrid.Columns>
-                <toolkit:DataGridTextColumn Binding="{Binding source}" Header="Source" Width="0.45*" SortMemberPath="Source" />
-                <toolkit:DataGridTextColumn Binding="{Binding operation}" Header="Operation" Width="0.1*" SortMemberPath="Operation"/>
-                <toolkit:DataGridTextColumn Header="Destination" Binding="{Binding destination}" Width="0.45*" SortMemberPath="Destination"/>
+                <toolkit:DataGridTemplateColumn Header="Source" IsReadOnly="True" Width="0.45*" SortMemberPath="source">
+                    <toolkit:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+							<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="{Binding source}"><TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding source}"/>
+							</Hyperlink>
+                            </TextBlock>
+                        </DataTemplate>
+                    </toolkit:DataGridTemplateColumn.CellTemplate>
+                </toolkit:DataGridTemplateColumn>
+                
+                <toolkit:DataGridTextColumn Binding="{Binding operation}" Header="Operation" Width="0.1*" SortMemberPath="Operation" Foreground="White"/>
+				
+                <toolkit:DataGridTemplateColumn Header="Destination" IsReadOnly="True" Width="0.45*" SortMemberPath="destination">
+			        <toolkit:DataGridTemplateColumn.CellTemplate>
+			            <DataTemplate>
+                            <TextBlock>
+							<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="{Binding source}"><TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding destination}" />
+							</Hyperlink>
+                            </TextBlock>
+			            </DataTemplate>
+			        </toolkit:DataGridTemplateColumn.CellTemplate>
+				</toolkit:DataGridTemplateColumn>
             </toolkit:DataGrid.Columns>
         </toolkit:DataGrid>
 	</Grid>

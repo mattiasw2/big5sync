@@ -192,24 +192,6 @@ namespace SynclessUI
                         break;
                 }
 
-                if (tv.IsLocked)
-                {
-                    if (Watcher != null && Watcher.Progress.State == SyncState.Analyzing)
-                    {
-                        BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
-                        CancelButtonMode();
-                    }
-                    else
-                    {
-                        BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
-                    }
-                }
-                else
-                {
-                    SyncButtonMode();
-                    BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
-                }
-
                 LblStatusText.Content = "";
                 ListTaggedPath.ItemsSource = tv.PathStringList;
 
@@ -450,13 +432,32 @@ namespace SynclessUI
             LblSyncMode.Content = "Manual";
             BtnSyncMode.ToolTip = "Switch to Seamless Synchronization Mode";
             BtnPreview.Visibility = Visibility.Visible;
-            BtnSyncNow.Visibility = Visibility.Visible;
             BtnSyncMode.SetResourceReference(BackgroundProperty, "ToggleOffBrush");
             LblSyncMode.SetResourceReference(MarginProperty, "ToggleOffMargin");
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOffForeground");
             ProgressBarSync.Visibility = Visibility.Visible;
             LblProgress.Visibility = Visibility.Visible;
             Console.WriteLine("In Manual Mode");
+
+            TagView tv = Gui.GetTag(SelectedTag);
+
+            if (tv.IsLocked)
+            {
+                if (Progress.TagName == SelectedTag && Progress.State == SyncState.Analyzing)
+                {
+                    BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
+                    CancelButtonMode();
+                }
+                else
+                {
+                    BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
+                }
+            }
+            else
+            {
+                SyncButtonMode();
+                BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
+            }
         }
 
         private void CancelButtonMode()
@@ -1065,31 +1066,15 @@ namespace SynclessUI
 
         public void DriveChanged()
         {
-            RepopulateTagList_ThreadSafe();
+            UpdateAllTags_ThreadSafe();
         }
 
         public void TagChanged()
         {
-            RepopulateTagList_ThreadSafe();
+            UpdateAllTags_ThreadSafe();
         }
 
-        /*
-        private void RepopulateTagList()
-        {
-            try
-            {
-                string current = SelectedTag;
-
-                InitializeTagList();
-
-                SelectTag(current);
-            } catch
-            {
-            }
-        }
-        */
-
-        private void RepopulateTagList_ThreadSafe()
+        private void UpdateAllTags_ThreadSafe()
         {
             try
             {
@@ -1126,15 +1111,6 @@ namespace SynclessUI
                                                                                 Console.WriteLine("Tag Changed: Manual");
                                                                                 ManualMode();
                                                                                 break;
-                                                                        }
-
-                                                                        if (tv.IsLocked)
-                                                                        {
-                                                                            CancelButtonMode();
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            SyncButtonMode();
                                                                         }
 
                                                                         ListTaggedPath.ItemsSource = tv.PathStringList;
