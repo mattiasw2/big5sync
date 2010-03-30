@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Syncless.CompareAndSync.CompareObject;
+using Syncless.CompareAndSync.Exceptions;
 using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Visitor;
 using Syncless.Core;
@@ -34,6 +36,7 @@ namespace Syncless.CompareAndSync
 
             if (progress.State != SyncState.Cancelled)
             {
+                HandleBuildConflicts(typeConflicts, request.Config);
                 CompareObjectHelper.PreTraverseFolder(rco, new ConflictVisitor(request.Config), progress);
 
                 //Syncing
@@ -52,7 +55,6 @@ namespace Syncless.CompareAndSync
                     ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
 
                 //Finished
-                
                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STOPPED,
                                                                                 "Completed Manual Sync for " +
                                                                                 request.TagName));
@@ -77,6 +79,57 @@ namespace Syncless.CompareAndSync
             CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor(), null);
             CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor(), null);
             return rco;
+        }
+
+        private static void HandleBuildConflicts(List<string> typeConflicts, SyncConfig config)
+        {
+            foreach (string s in typeConflicts)
+            {
+                if (Directory.Exists(s))
+                {
+                    DirectoryInfo info = new DirectoryInfo(s);
+                    string conflictPath = Path.Combine(info.Parent.FullName, config.ConflictDir);
+                    if (!Directory.Exists(conflictPath))
+                        Directory.CreateDirectory(conflictPath);
+                    string dest = Path.Combine(conflictPath, info.Name);
+
+                    try
+                    {
+                        CommonMethods.CopyDirectory(s, dest);
+                        CommonMethods.DeleteFolder(s, true);
+                    }
+                    catch (CopyFolderException e)
+                    {
+                        ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                    }
+                    catch (DeleteFolderException e)
+                    {
+                        ;
+                    }
+                }
+                else if (File.Exists(s))
+                {
+                    FileInfo info = new FileInfo(s);
+                    string conflictPath = Path.Combine(info.DirectoryName, config.ConflictDir);
+                    if (!Directory.Exists(conflictPath))
+                        Directory.CreateDirectory(conflictPath);
+                    string dest = Path.Combine(conflictPath, info.Name);
+
+                    try
+                    {
+                        CommonMethods.CopyFile(s, dest, true);
+                        CommonMethods.DeleteFile(s);
+                    }
+                    catch (CopyFileException e)
+                    {
+                        ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                    }
+                    catch (DeleteFileException e)
+                    {
+                        ;
+                    }
+                }
+            }
         }
     }
 }
