@@ -16,13 +16,13 @@ namespace Syncless.CompareAndSync.Visitor
 
         private readonly List<Filter> _filter;
         private readonly FilterChain _filterChain;
-        private readonly List<string> _buildConflicts;
+        private readonly List<string> _typeConflicts;
 
-        public BuilderVisitor(List<Filter> filter, List<string> buildConflicts)
+        public BuilderVisitor(List<Filter> filter, List<string> typeConflicts)
         {
             _filter = filter;
             _filterChain = new FilterChain();
-            _buildConflicts = buildConflicts;
+            _typeConflicts = typeConflicts;
         }
 
         public void Visit(FileCompareObject file, int numOfPaths)
@@ -62,6 +62,7 @@ namespace Syncless.CompareAndSync.Visitor
                                 }
                                 catch (InvalidCastException e)
                                 {
+                                    _typeConflicts.Add(info.FullName);
                                     folder.RemoveChild(info.Name); //Remove file object
                                     fco = new FolderCompareObject(info.Name, numOfPaths, folder);
                                     conflict = true;
@@ -82,7 +83,8 @@ namespace Syncless.CompareAndSync.Visitor
                         if (_filterChain.ApplyFilter(_filter, info.FullName))
                         {
                             BaseCompareObject o = folder.GetChild(info.Name);
-                            FileCompareObject fco = null;                            
+                            FileCompareObject fco = null;
+                            bool conflict = false;
 
                             if (o == null)
                                 fco = new FileCompareObject(info.Name, numOfPaths, folder);
@@ -94,30 +96,36 @@ namespace Syncless.CompareAndSync.Visitor
                                 }
                                 catch (InvalidCastException e)
                                 {
-                                    //Add to conflict list
+                                    _typeConflicts.Add(info.FullName);
+                                    conflict = true;
                                 }
                             }
 
-
-                            try
+                            if (!conflict)
                             {
-                                fco.Hash[index] = CommonMethods.CalculateMD5Hash(info);
-                            }
-                            catch (HashFileException)
-                            {
-                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error hashing " + Path.Combine(fco.GetSmartParentPath(index), fco.Name + ".")));
-                                fco.FinalState[index] = FinalState.Error;
-                                fco.Invalid = true;
-                                continue;
-                            }
+                                try
+                                {
+                                    fco.Hash[index] = CommonMethods.CalculateMD5Hash(info);
+                                }
+                                catch (HashFileException)
+                                {
+                                    ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(
+                                        new LogData(LogEventType.FSCHANGE_ERROR,
+                                                    "Error hashing " +
+                                                    Path.Combine(fco.GetSmartParentPath(index), fco.Name + ".")));
+                                    fco.FinalState[index] = FinalState.Error;
+                                    fco.Invalid = true;
+                                    continue;
+                                }
 
-                            fco.CreationTime[index] = info.CreationTime.Ticks;
-                            fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
-                            fco.Length[index] = info.Length;
-                            fco.Exists[index] = true;
+                                fco.CreationTime[index] = info.CreationTime.Ticks;
+                                fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
+                                fco.Length[index] = info.Length;
+                                fco.Exists[index] = true;
 
-                            if (o == null)
-                                folder.AddChild(fco);
+                                if (o == null)
+                                    folder.AddChild(fco);
+                            }
                         }
                     }
                 }
