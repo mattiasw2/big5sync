@@ -31,7 +31,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 		
@@ -88,13 +88,13 @@ namespace SynclessUI
                 else
                 {
 					BtnOk.IsEnabled = true;
-                    DialogsHelper.ShowError(_tagname + " is Synchronizing",
+                    DialogHelper.ShowError(_tagname + " is Synchronizing",
                                             "You cannot update tag details while the tag is synchronizing.");
                 }
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
 				CloseWindow();
             }
         }
