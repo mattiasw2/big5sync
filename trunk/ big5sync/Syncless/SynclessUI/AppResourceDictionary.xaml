@@ -3,6 +3,35 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" xmlns:Microsoft_Windows_Themes_Aero="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
 	xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic">
 	<SolidColorBrush x:Key="ListBorder" Color="#828790"/>
+	<Style TargetType="{x:Type Hyperlink}">
+		 <Setter Property="TextDecorations">
+		 <Setter.Value>
+		   <TextDecorationCollection>
+		     <TextDecoration Location="Underline" />
+				<TextDecoration PenThicknessUnit="FontRecommended">
+		         <TextDecoration.Pen>
+		           <Pen Thickness="1.0">
+		            <Pen.Brush>
+		               <LinearGradientBrush Opacity="1"
+		                 StartPoint="0,0"  EndPoint="1,1">
+		                 <LinearGradientBrush.GradientStops>
+		                   <GradientStop Color="White" Offset="0" />
+		                   <GradientStop Color="White" Offset="1" />
+		                 </LinearGradientBrush.GradientStops>
+		               </LinearGradientBrush>
+		             </Pen.Brush>
+		          </Pen>
+		        </TextDecoration.Pen>
+		      </TextDecoration>
+		  </TextDecorationCollection>
+		 </Setter.Value>
+		</Setter>
+		<Style.Triggers>
+			<Trigger Property="IsMouseOver" Value="False">
+				<Setter Property="TextBlock.TextDecorations" Value="{x:Null}" />
+			</Trigger>
+		</Style.Triggers>
+	</Style>
 	<Style x:Key="ListTaggedPathStyle" TargetType="{x:Type ListBox}">
 		<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource ListBorder}"/>
