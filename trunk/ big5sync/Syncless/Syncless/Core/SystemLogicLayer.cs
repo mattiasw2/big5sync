@@ -853,7 +853,7 @@ namespace Syncless.Core
                 }
                 //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 SaveLoadHelper.SaveAll(_userInterface.getAppPath());
-                //CleanMetaData(folder);
+                //CleanMetaData
                 CleanMetaDataDelegate del = new CleanMetaDataDelegate(CleanMetaData);
                 del.BeginInvoke(folder, null, null);
                 return count;

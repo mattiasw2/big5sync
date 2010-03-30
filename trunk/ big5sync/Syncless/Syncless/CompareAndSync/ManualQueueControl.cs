@@ -91,7 +91,7 @@ namespace Syncless.CompareAndSync
                     {
                         case SyncState.Started:
                         case SyncState.Analyzing:
-                            _currJobProgress.State = SyncState.Cancelled;
+                            _currJobProgress.Cancel();
                             ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName, true));
                             break;
                         default:
@@ -202,7 +202,7 @@ namespace Syncless.CompareAndSync
                     {
                         case SyncState.Started:
                         case SyncState.Analyzing:
-                            _currJobProgress.State = SyncState.Cancelled;
+                            _currJobProgress.Cancel();
                             break;
                     }
                 }
