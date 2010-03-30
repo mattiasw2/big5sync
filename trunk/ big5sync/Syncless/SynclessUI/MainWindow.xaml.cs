@@ -15,6 +15,7 @@ using Syncless.Core;
 using Syncless.Core.Exceptions;
 using Syncless.Core.View;
 using Syncless.Notification;
+using Syncless.Notification.UINotification;
 using Syncless.Tagging.Exceptions;
 using SynclessUI.Helper;
 using SynclessUI.Notification;
@@ -1691,5 +1692,10 @@ namespace SynclessUI
         }
 
         #endregion
+
+        public void NotifyAutoSyncComplete(string path)
+        {
+            NotifyBalloon("Synchronization Completed", path + " is now synchronized.");
+        }
     }
 }
