@@ -307,7 +307,7 @@ namespace Syncless.Core
 
         private static void SendAutoRequest(AutoSyncRequest request)
         {
-            
+            /*
 #if DEBUG
             if (request.ChangeType == AutoSyncRequestType.New || request.ChangeType == AutoSyncRequestType.Update)
             {
@@ -343,7 +343,7 @@ namespace Syncless.Core
                 ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
             }
 #endif
-            
+            */
             CompareAndSyncController.Instance.Sync(request);
         }
 
