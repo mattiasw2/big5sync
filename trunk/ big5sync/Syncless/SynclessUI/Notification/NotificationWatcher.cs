@@ -13,6 +13,7 @@ namespace SynclessUI.Notification
 
         private const int SLEEP_TIME = 10000;
         private Thread workerThread;
+        private readonly EventWaitHandle _wh = new AutoResetEvent(false);
         
         public NotificationWatcher(MainWindow main)
         {
@@ -24,7 +25,8 @@ namespace SynclessUI.Notification
         }
         public void Update()
         {
-            workerThread.Interrupt();
+            _wh.Set();
+            //workerThread.Interrupt();
         }
         public delegate void RunDel();
 
@@ -44,7 +46,8 @@ namespace SynclessUI.Notification
                 {
                     try
                     {
-                        Thread.Sleep(SLEEP_TIME);
+                        _wh.WaitOne();
+                        //Thread.Sleep(SLEEP_TIME);
                         continue;
                     }
                     catch (ThreadInterruptedException)
