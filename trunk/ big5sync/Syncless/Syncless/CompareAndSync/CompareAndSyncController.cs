@@ -1,4 +1,5 @@
-﻿using Syncless.CompareAndSync.CompareObject;
+﻿using System.Collections.Generic;
+using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Visitor;
 using Syncless.Core;
@@ -29,34 +30,19 @@ namespace Syncless.CompareAndSync
         }
 
         /// <summary>
-        /// Temporary method to handle non-existent folders until we handle deletion of tagged folders
-        /// </summary>
-        /// <param name="paths"></param>
-        private void CreateRootIfNotExist(string[] paths)
-        {
-            foreach (string path in paths)
-            {
-                if (!System.IO.Directory.Exists(path))
-                {
-                    System.IO.Directory.CreateDirectory(path);
-                }
-            }
-        }
-
-        /// <summary>
         /// Sync a list of folders, without tagging or writing to metadata (if it exists)
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
         public RootCompareObject SyncFolders(ManualSyncRequest request)
         {
-            CreateRootIfNotExist(request.Paths);
             SyncStartNotification notification = new SyncStartNotification(request.TagName);
             SyncProgress progress = notification.Progress;
             ServiceLocator.UINotificationQueue().Enqueue(notification);
             RootCompareObject rco = new RootCompareObject(request.Paths);
             progress.ChangeToAnalyzing();
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters), progress);
+            List<string> buildConflicts = new List<string>();
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters, buildConflicts), progress);
             CompareObjectHelper.PreTraverseFolder(rco, new IgnoreMetaDataVisitor(), progress);
             ComparerVisitor visitor = new ComparerVisitor();
 
@@ -75,9 +61,9 @@ namespace Syncless.CompareAndSync
             ManualQueueControl.Instance.AddSyncJob(request);
         }
 
-        public void Cancel(CancelSyncRequest request)
+        public bool Cancel(CancelSyncRequest request)
         {
-            ManualQueueControl.Instance.CancelSyncJob(request);
+            return ManualQueueControl.Instance.CancelSyncJob(request);
         }
 
         public RootCompareObject Compare(ManualCompareRequest request)

@@ -6,6 +6,7 @@ using Syncless.CompareAndSync.Exceptions;
 using Syncless.Core;
 using Syncless.Filters;
 using Syncless.Logging;
+using System;
 
 namespace Syncless.CompareAndSync.Visitor
 {
@@ -15,11 +16,13 @@ namespace Syncless.CompareAndSync.Visitor
 
         private readonly List<Filter> _filter;
         private readonly FilterChain _filterChain;
+        private readonly List<string> _buildConflicts;
 
-        public BuilderVisitor(List<Filter> filter)
+        public BuilderVisitor(List<Filter> filter, List<string> buildConflicts)
         {
             _filter = filter;
             _filterChain = new FilterChain();
+            _buildConflicts = buildConflicts;
         }
 
         public void Visit(FileCompareObject file, int numOfPaths)
@@ -46,17 +49,29 @@ namespace Syncless.CompareAndSync.Visitor
                         if (_filterChain.ApplyFilter(_filter, info.FullName))
                         {
                             BaseCompareObject o = folder.GetChild(info.Name);
-                            FolderCompareObject fco = null;
+                            FolderCompareObject fco;
+                            bool conflict = false;
 
                             if (o == null)
                                 fco = new FolderCompareObject(info.Name, numOfPaths, folder);
                             else
-                                fco = (FolderCompareObject)o;
+                            {
+                                try
+                                {
+                                    fco = (FolderCompareObject)o;
+                                }
+                                catch (InvalidCastException e)
+                                {
+                                    folder.RemoveChild(info.Name); //Remove file object
+                                    fco = new FolderCompareObject(info.Name, numOfPaths, folder);
+                                    conflict = true;
+                                }
+                            }
 
                             fco.CreationTime[index] = info.CreationTime.Ticks;
                             fco.Exists[index] = true;
 
-                            if (o == null)
+                            if (o == null || conflict)
                                 folder.AddChild(fco);
                         }
                     }
@@ -72,7 +87,17 @@ namespace Syncless.CompareAndSync.Visitor
                             if (o == null)
                                 fco = new FileCompareObject(info.Name, numOfPaths, folder);
                             else
-                                fco = (FileCompareObject)o;
+                            {
+                                try
+                                {
+                                    fco = (FileCompareObject)o;
+                                }
+                                catch (InvalidCastException e)
+                                {
+                                    //Add to conflict list
+                                }
+                            }
+
 
                             try
                             {

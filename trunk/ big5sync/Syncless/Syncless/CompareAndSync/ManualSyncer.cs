@@ -25,7 +25,8 @@ namespace Syncless.CompareAndSync
 
             //Analyzing
             progress.ChangeToAnalyzing();
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters), progress);
+            List<string> buildConflicts = new List<string>();
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters, buildConflicts), progress);
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), progress);
             CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor(), progress);
             ComparerVisitor comparerVisitor = new ComparerVisitor();
@@ -70,7 +71,8 @@ namespace Syncless.CompareAndSync
             List<Filter> filters = request.Filters.ToList();
             filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
             RootCompareObject rco = new RootCompareObject(request.Paths);
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters), null);
+            List<string> buildConflicts = new List<string>();
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters, buildConflicts), null);
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), null);
             CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor(), null);
             CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor(), null);
