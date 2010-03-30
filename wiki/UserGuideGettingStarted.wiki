@@ -77,13 +77,13 @@ After tagging the folders, you may view the details under the tag information pa
 == 3. Synchronize the folders ==
     http://big5sync.googlecode.com/files/Sync_Complete.jpg
 
-After you have tagged the required folders, click on the *Sync Now* button. Syncless will take care of the rest and keep them in sync.
+After you have tagged the required folders, click on the *Sync Now* button. Syncless will take care of the rest and keep the folders in sync.
 
-== 4. Switch to Manual Mode ==
+== 4. Switch to Seamless Mode ==
 
-http://big5sync.googlecode.com/files/switch-manual-mode.png
+http://big5sync.googlecode.com/files/Switching_To_Seamless.jpg
 
-Switching to manual modes is a simple matter of pressing the button. After switching, additional operations in manual synchronization such as 'Preview of Manual Synchronization' (Not Implemented in UI yet) and 'Starting Manual Synchronization' will be displayed.
+Switching to seamless modes is a simple matter of pressing the button. After clicking the synchronization mode button, Syncless will automatically perform a synchronization. After which, it will monitor any changes in the tagged folders and keep them in sync without you having to do it manually.
 
 
 == Step 3: Prepare Removable Drive for Removal ==
