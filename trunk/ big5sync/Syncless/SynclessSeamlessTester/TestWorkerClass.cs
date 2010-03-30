@@ -321,17 +321,20 @@ namespace SynclessSeamlessTester
 
         private int RandomSourceOrDest()
         {
-            return new Random().Next(1, 3);
+            int i = RandomNumberGenerator.GetRandomInt(1, 2);
+            return i == -1 ? new Random().Next(1, 3) : i;
         }
 
         private int RandomFileOrFolder()
         {
-            return new Random().Next(3, 5);
+            int i = RandomNumberGenerator.GetRandomInt(3, 4);
+            return i == -1 ? new Random().Next(3, 5) : i;
         }
 
         private int RandomDestAction()
         {
-            return new Random().Next(200, 203);
+            int i = RandomNumberGenerator.GetRandomInt(200, 202);
+            return i == -1 ? new Random().Next(200, 203) : i;
         }
 
         //Averages out to get normal distribution
