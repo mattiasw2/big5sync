@@ -19,6 +19,7 @@ namespace Syncless.Logging
         FSCHANGE_DELETED,
         FSCHANGE_RENAMED,
         FSCHANGE_ARCHIVED,
+        FSCHANGE_CONFLICT,
         FSCHANGE_ERROR,
         UNKNOWN
     }
