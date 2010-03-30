@@ -41,8 +41,9 @@ namespace SynclessSeamlessTester
 
         private DateTime _timeToEnd, _timeToStart;
         private TimeSpan _totalTimeNeeded;
+        private bool _burstMode;
 
-        public TestWorkerClass(int duration, int minTime, int maxTime, List<string> sourcePaths, List<string> destPaths, TestInfo testInfo, BackgroundWorker bgWorker, DoWorkEventArgs e, List<string> filters)
+        public TestWorkerClass(int duration, int minTime, int maxTime, List<string> sourcePaths, List<string> destPaths, TestInfo testInfo, BackgroundWorker bgWorker, DoWorkEventArgs e, List<string> filters, bool burstMode)
         {
             _sourcePaths = sourcePaths;
             _destPaths = destPaths;
@@ -50,9 +51,10 @@ namespace SynclessSeamlessTester
             _duration = duration;
             _bgWorker = bgWorker;
             _minTime = minTime * 1000;
-            _maxTime = maxTime * 1000;
+            _maxTime = burstMode ? maxTime : maxTime * 1000;
             _e = e;
             _filters = filters;
+            _burstMode = burstMode;
             StartTest();
         }
 
@@ -77,10 +79,18 @@ namespace SynclessSeamlessTester
 
                 if (fired)
                 {
-                    timer.Interval = TimerGenerator();
+                    if (_burstMode)
+                    {
+                        timer.Interval = _minTime;
+                    }
+                    else
+                    {
+                        timer.Interval = TimerGenerator();
+                    }
                     timer.Start();
                     fired = false;
                 }
+
             }
 
         }
@@ -94,6 +104,20 @@ namespace SynclessSeamlessTester
         }
 
         void timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (_burstMode)
+            {
+                for (int i = 0; i < _maxTime; i++)
+                {
+                    Thread.Sleep(500);
+                    DoAction();
+                }
+            }
+            else
+                DoAction();
+        }
+
+        private void DoAction()
         {
             switch (RandomSourceOrDest())
             {
