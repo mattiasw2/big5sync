@@ -86,13 +86,15 @@ http://big5sync.googlecode.com/files/Switching_To_Seamless.jpg
 Switching to seamless modes is a simple matter of pressing the button. After clicking the synchronization mode button, Syncless will automatically perform a synchronization. After which, it will monitor any changes in the tagged folders and keep them in sync without you having to do it manually.
 
 
-== Step 3: Prepare Removable Drive for Removal ==
+== 5. Prepare Removable Drive for Removal ==
 
-http://big5sync.googlecode.com/files/eject-removable-drives.png
+http://big5sync.googlecode.com/files/Unmonitor_Drive.jpg
 
-You can access this from the Toolbar > Eject or by using its keyboard shortcut equivalent (Ctrl-E)
+You can access this from the Toolbar > Unmonitor or by using its keyboard shortcut equivalent (Ctrl-I)
 
-Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be *stopped* (only seamless operations will be stopped so far) and thus allow the removable drive to be safely removed. Currently, the "Eject" button only tells Syncless to stop monitoring the removable drive selected, and you still have to use the "Safely Remove" in Windows. Future versions of Syncless will help to safely remove the drive as well.
+Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be *stopped* (only seamless operations will be stopped so far) and thus allow the removable drive to be safely removed.
+
+== You can start using Syncless now! ==
 
 With the successful operation of synchronization, you have now completed the full Syncless tutorial. Continue on to see other major features in Syncless.
 
