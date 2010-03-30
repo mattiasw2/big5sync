@@ -70,7 +70,7 @@ To synchronize 2 or more folders together, you must first tag them with the same
     http://big5sync.googlecode.com/files/Tag_From_Context_Menu.jpg
 
 === 2. Viewing the tag after Tagging ===
-    http://big5sync.googlecode.com/files/viewing-tag.png
+    http://big5sync.googlecode.com/files/Tag_Info_Panel.jpg
 
 === 3. Tagging is complete and synchronization begins ===
     http://big5sync.googlecode.com/files/tagging-complete.png
