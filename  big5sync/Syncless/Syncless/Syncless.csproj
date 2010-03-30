@@ -123,6 +123,7 @@
     <Compile Include="Notification\SLLNotification\MonitorTagNotification.cs" />
     <Compile Include="Notification\SLLNotification\TaggedPathDeletedNotification.cs" />
     <Compile Include="Notification\SyncState.cs" />
+    <Compile Include="Notification\UINotification\AutoSyncCompleteNotification.cs" />
     <Compile Include="Notification\UINotification\CancelSyncNotification.cs" />
     <Compile Include="Notification\UINotification\CompareCompleteNotification.cs" />
     <Compile Include="Notification\ISyncProgressObserver.cs" />
