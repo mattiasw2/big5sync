@@ -65,7 +65,7 @@
 				<toolkit:DataGridTextColumn Binding="{Binding Timestamp}" Header="Timestamp" IsReadOnly="True" Foreground="White"/>
 				<toolkit:DataGridTextColumn Binding="{Binding Category}" Header="Category" IsReadOnly="True" Foreground="White"/>
 				<toolkit:DataGridTextColumn Binding="{Binding Event Type}" Header="Event Type" IsReadOnly="True" Foreground="White"/>
-				<toolkit:DataGridTemplateColumn Header="Message"  IsReadOnly="True" Width="*" SortMemberPath="Message">
+				<toolkit:DataGridTemplateColumn Header="Message" IsReadOnly="True" Width="*" SortMemberPath="Message">
 			        <toolkit:DataGridTemplateColumn.CellTemplate>
 			            <DataTemplate>
 			                <TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding Message}" />
