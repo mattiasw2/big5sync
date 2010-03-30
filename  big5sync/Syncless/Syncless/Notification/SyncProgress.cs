@@ -16,6 +16,8 @@ namespace Syncless.Notification
         private bool _notifyProgressChange;
         private bool _completed;
         private Thread _worker;
+        private readonly EventWaitHandle _wh = new AutoResetEvent(false);
+
         public SyncState State
         {
             get { return _state; }
@@ -133,7 +135,8 @@ namespace Syncless.Notification
             if(!_notifyProgressChange)
             {
                 _notifyProgressChange= true;
-                _worker.Interrupt();
+                //_worker.Interrupt();
+                _wh.Set();
             }
         }
         public delegate void MethodASync();
@@ -236,24 +239,25 @@ namespace Syncless.Notification
             //_state = SyncState.Finished;
             //TriggerStateChanged();
             TriggerSyncComplete();
+            ServiceLocator.UINotificationQueue().Enqueue(notification);
             return true;
         }
         private void TriggerSyncComplete()
         {
             foreach (ISyncProgressObserver obs in _observerList)
             {
-                MethodASync sync = new MethodASync(obs.SyncComplete);
-                sync.BeginInvoke(null, null);
-                //obs.SyncComplete(); 
+                //MethodASync sync = new MethodASync(obs.SyncComplete);
+                //sync.BeginInvoke(null, null);
+                obs.SyncComplete(); 
             }
         }
         private void TriggerStateChanged()
         {
             foreach (ISyncProgressObserver obs in _observerList)
             {
-                MethodASync sync = new MethodASync(obs.StateChanged);
-                sync.BeginInvoke(null, null);
-                //obs.StateChanged();
+                //MethodASync sync = new MethodASync(obs.StateChanged);
+                //sync.BeginInvoke(null, null);
+                obs.StateChanged();
             }
         }
 
@@ -271,9 +275,11 @@ namespace Syncless.Notification
                         {
                             obs.ProgressChanged();
                         }
+                        continue;
 
                     }
-                    Thread.Sleep(10000);
+                    //Thread.Sleep(10000);
+                    _wh.WaitOne();
                 }
                 catch (ThreadInterruptedException)
                 {
