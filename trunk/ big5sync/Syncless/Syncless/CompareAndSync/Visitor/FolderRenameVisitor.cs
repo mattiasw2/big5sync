@@ -112,7 +112,7 @@ namespace Syncless.CompareAndSync.Visitor
                         actualFldrObj.MetaExists[pos] = renamedFolderObj.MetaExists[pos];
                         actualFldrObj.MetaUpdated[pos] = renamedFolderObj.MetaUpdated[pos];
                         actualFldrObj.NewName = renamedFolderObj.NewName;
-                        //MergeRenamedFolder(actualFldrObj, renamedFolderObj, pos);
+                        MergeOneLevelDown(actualFldrObj, renamedFolderObj, pos);
                     }
                     else
                     {
@@ -140,6 +140,61 @@ namespace Syncless.CompareAndSync.Visitor
 
             actualFolder.UpdateRename(pos);
             actualFolder.ChangeType[pos] = MetaChangeType.Rename;
+            //actualFolder.Parent.Dirty = true; //EXP
+            renamedFolder.Contents = new Dictionary<string, BaseCompareObject>();
+            renamedFolder.Invalid = true;
+        }
+
+        //Merge the renamed folder into the folders with its old name, so that files are all compared.
+        private void MergeOneLevelDown(FolderCompareObject actualFolder, FolderCompareObject renamedFolder, int pos)
+        {
+            Dictionary<string, BaseCompareObject>.KeyCollection renamedFolderContents = renamedFolder.Contents.Keys;
+            BaseCompareObject o = null;
+            FolderCompareObject actualFldrObj = null;
+            FolderCompareObject renamedFolderObj = null;
+            FileCompareObject actualFileObj = null;
+            FileCompareObject renamedFileObj = null;
+
+            foreach (string name in renamedFolderContents)
+            {
+                if (actualFolder.Contents.TryGetValue(name, out o))
+                {
+
+                    if ((actualFldrObj = o as FolderCompareObject) != null)
+                    {
+                        renamedFolderObj = renamedFolder.Contents[name] as FolderCompareObject;
+                        actualFldrObj.ChangeType[pos] = renamedFolderObj.ChangeType[pos];
+                        actualFldrObj.CreationTime[pos] = renamedFolderObj.CreationTime[pos];
+                        actualFldrObj.Exists[pos] = renamedFolderObj.Exists[pos];
+                        actualFldrObj.MetaCreationTime[pos] = renamedFolderObj.MetaCreationTime[pos];
+                        actualFldrObj.MetaExists[pos] = renamedFolderObj.MetaExists[pos];
+                        actualFldrObj.MetaUpdated[pos] = renamedFolderObj.MetaUpdated[pos];
+                        MergeOneLevelDown(actualFolder, renamedFolder, pos);
+                    }
+                    else
+                    {
+                        actualFileObj = o as FileCompareObject;
+                        renamedFileObj = renamedFolder.Contents[name] as FileCompareObject;
+                        actualFileObj.CreationTime[pos] = renamedFileObj.CreationTime[pos];
+                        actualFileObj.Exists[pos] = renamedFileObj.Exists[pos];
+                        actualFileObj.Hash[pos] = renamedFileObj.Hash[pos];
+                        actualFileObj.LastWriteTime[pos] = renamedFileObj.LastWriteTime[pos];
+                        actualFileObj.Length[pos] = renamedFileObj.Length[pos];
+                        actualFileObj.MetaCreationTime[pos] = renamedFileObj.MetaCreationTime[pos];
+                        actualFileObj.MetaExists[pos] = renamedFileObj.MetaExists[pos];
+                        actualFileObj.MetaHash[pos] = renamedFileObj.MetaHash[pos];
+                        actualFileObj.MetaLastWriteTime[pos] = renamedFileObj.MetaLastWriteTime[pos];
+                        actualFileObj.MetaLength[pos] = renamedFileObj.MetaLength[pos];
+                        actualFileObj.ChangeType[pos] = renamedFileObj.ChangeType[pos];
+                        actualFileObj.MetaUpdated[pos] = renamedFileObj.MetaUpdated[pos];
+                    }
+                }
+                else
+                {
+                    actualFolder.AddChild(renamedFolder.Contents[name]);
+                }
+            }
+
             //actualFolder.Parent.Dirty = true; //EXP
             renamedFolder.Contents = new Dictionary<string, BaseCompareObject>();
             renamedFolder.Invalid = true;
