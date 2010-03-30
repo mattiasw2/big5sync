@@ -294,6 +294,7 @@ namespace Syncless.CompareAndSync.Visitor
             if (renamePos > -1)
             {
                 folder.Priority[renamePos] = 1;
+                folder.SourcePosition = renamePos;
                 return;
             }
 
