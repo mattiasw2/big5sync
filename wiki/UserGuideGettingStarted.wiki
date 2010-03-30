@@ -61,7 +61,7 @@ To synchronize 2 or more folders together, you must first tag them with the same
 === Multiple ways of tagging a folder ===
 
     * Tagging from Syncless (Can also use the keyboard shortcut equivalent Ctrl-T, refer to [UserGuideGettingStarted#Misc:_Keyboard_Shortcuts keyboard shortcuts] for a complete list of shortcuts)
-    http://big5sync.googlecode.com/files/Tag_From_Syncless.jpg
+    
 
     * Drag-and-Drop folder(s) on the Main Window
     http://big5sync.googlecode.com/files/drag-and-drop-and-tag.png
