@@ -10,19 +10,19 @@ namespace SynclessUI
     /// Interaction logic for CreateTagWindow.xaml
     /// </summary>
     public partial class CreateTagWindow : Window
-    {		
-		private MainWindow _main;
-        
-		public CreateTagWindow(MainWindow main)
+    {
+        private MainWindow _main;
+
+        public CreateTagWindow(MainWindow main)
         {
             InitializeComponent();
-			
-			_main = main;
+
+            _main = main;
         }
 
-        private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
-			BtnOk.IsEnabled = false;
+            BtnOk.IsEnabled = false;
             try
             {
                 string tagName = TxtBoxTagName.Text.Trim();
@@ -36,7 +36,7 @@ namespace SynclessUI
                     if (!tagexists)
                     {
                         DialogHelper.ShowError("Tag Already Exist", "Please specify another tagname.");
-						BtnOk.IsEnabled = true;
+                        BtnOk.IsEnabled = true;
                     }
                     else
                     {
@@ -45,40 +45,40 @@ namespace SynclessUI
                 }
                 else
                 {
-					
                     DialogHelper.ShowError("Tagname Empty", "Please specify a tagname.");
-					BtnOk.IsEnabled = true;
+                    BtnOk.IsEnabled = true;
                 }
             }
             catch (UnhandledException)
             {
                 DialogHelper.DisplayUnhandledExceptionMessage();
-				CloseWindow();
+                CloseWindow();
             }
         }
-		
-		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
+
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-        	CloseWindow();
+            CloseWindow();
         }
 
-		private void Window_Loaded(object sender, System.Windows.RoutedEventArgs e)
-		{
-			Keyboard.Focus(TxtBoxTagName);
-		}
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Keyboard.Focus(TxtBoxTagName);
+        }
 
-		private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-		{
-			this.DragMove();
-		}
-		
-		private void CloseWindow() {
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        private void CloseWindow()
+        {
             FormFadeOut.Begin();
-		}
-		
+        }
+
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }

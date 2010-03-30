@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Media.Animation;
-using System.Windows.Threading;
+using System.Windows.Input;
 
 namespace SynclessUI
 {
@@ -10,28 +9,29 @@ namespace SynclessUI
     /// </summary>
     public partial class ShortcutsWindow : Window
     {
-		public ShortcutsWindow()
+        public ShortcutsWindow()
         {
             InitializeComponent();
         }
 
-		private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-		{
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
             CloseWindow();
-		}
+        }
 
-		private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-		{
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
             CloseWindow();
-		}
-		
-		private void CloseWindow() {
+        }
+
+        private void CloseWindow()
+        {
             FormFadeOut.Begin();
-		}
+        }
 
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }

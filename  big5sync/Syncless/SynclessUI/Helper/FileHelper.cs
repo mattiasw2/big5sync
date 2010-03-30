@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Shell32;
 
 namespace SynclessUI.Helper
 {
@@ -8,12 +9,13 @@ namespace SynclessUI.Helper
         {
             try
             {
-                FileInfo fi = new FileInfo(path);
-                if(fi.Exists)
+                var fi = new FileInfo(path);
+                if (fi.Exists)
                     return true;
 
                 return false;
-            } catch
+            }
+            catch
             {
                 return false;
             }
@@ -23,20 +25,20 @@ namespace SynclessUI.Helper
 
         public static string GetShortcutTargetFile(string shortcutFilename)
         {
-            string extension = System.IO.Path.GetExtension(shortcutFilename);
+            string extension = Path.GetExtension(shortcutFilename);
 
-            if(extension.ToLower() == ".lnk")
+            if (extension.ToLower() == ".lnk")
             {
-                string pathOnly = System.IO.Path.GetDirectoryName(shortcutFilename);
-                string filenameOnly = System.IO.Path.GetFileName(shortcutFilename);
+                string pathOnly = Path.GetDirectoryName(shortcutFilename);
+                string filenameOnly = Path.GetFileName(shortcutFilename);
 
-                Shell32.Shell shell = new Shell32.ShellClass();
-                Shell32.Folder folder = shell.NameSpace(pathOnly);
-                Shell32.FolderItem folderItem = folder.ParseName(filenameOnly);
+                Shell shell = new ShellClass();
+                Folder folder = shell.NameSpace(pathOnly);
+                FolderItem folderItem = folder.ParseName(filenameOnly);
                 if (folderItem != null)
                 {
-                    Shell32.ShellLinkObject link =
-                (Shell32.ShellLinkObject)folderItem.GetLink;
+                    var link =
+                        (ShellLinkObject) folderItem.GetLink;
                     return link.Path;
                 }
             }

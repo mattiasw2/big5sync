@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
-using Syncless.Logging;
 using Syncless.Core.Exceptions;
+using Syncless.Logging;
 using SynclessUI.Helper;
 
 namespace SynclessUI
@@ -14,20 +13,21 @@ namespace SynclessUI
     /// Interaction logic for LogWindow.xaml
     /// </summary>
     public partial class LogWindow : Window
-    {		
-		private MainWindow _main;
+    {
         private DataTable _LogData;
-        
-		public LogWindow(MainWindow main)
+        private MainWindow _main;
+
+        public LogWindow(MainWindow main)
         {
             _main = main;
-		    bool encounteredError = false;
-            
+            bool encounteredError = false;
+
             try
             {
                 List<LogData> log = _main.Gui.ReadLog();
                 PopulateLogData(log);
-            }  catch (LogFileCorruptedException)
+            }
+            catch (LogFileCorruptedException)
             {
                 DialogHelper.ShowError("Log File Corrupted", "Stored log files have been corrupted and will be deleted.");
             }
@@ -40,29 +40,34 @@ namespace SynclessUI
             if (!encounteredError)
             {
                 InitializeComponent();
-                this.ShowDialog();
+                ShowDialog();
             }
+        }
+
+        public DataTable LogData
+        {
+            get { return _LogData; }
         }
 
         private void PopulateLogData(List<LogData> log)
         {
             _LogData = new DataTable();
-            _LogData.Columns.Add(new DataColumn("Category", typeof(string)));
-            _LogData.Columns.Add(new DataColumn("Event Type", typeof(string)));
-            _LogData.Columns.Add(new DataColumn("Message", typeof(string)));
-            _LogData.Columns.Add(new DataColumn("Timestamp", typeof(string)));
+            _LogData.Columns.Add(new DataColumn("Category", typeof (string)));
+            _LogData.Columns.Add(new DataColumn("Event Type", typeof (string)));
+            _LogData.Columns.Add(new DataColumn("Message", typeof (string)));
+            _LogData.Columns.Add(new DataColumn("Timestamp", typeof (string)));
 
             foreach (LogData l in log)
             {
                 LogEventType @event = l.LogEvent;
 
-                var row = _LogData.NewRow();
-               
+                DataRow row = _LogData.NewRow();
+
 
                 string category = "";
                 string eventType = "";
 
-                switch(l.LogCategory)
+                switch (l.LogCategory)
                 {
                     case LogCategoryType.APPEVENT:
                         category = "Application";
@@ -78,7 +83,7 @@ namespace SynclessUI
                         break;
                 }
 
-                switch(l.LogEvent)
+                switch (l.LogEvent)
                 {
                     case LogEventType.SYNC_STARTED:
                         eventType = "Sync Started";
@@ -145,44 +150,37 @@ namespace SynclessUI
             }
         }
 
-        public DataTable LogData
+        private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
-            get
-            {
-                return _LogData;
-            }
+            CloseWindow();
         }
 
-        private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-			CloseWindow();
-        }
-		
-		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-        	CloseWindow();
+            CloseWindow();
         }
 
-		private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-		{
-			this.DragMove();
-		}
-		
-		private void CloseWindow() {
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        private void CloseWindow()
+        {
             FormFadeOut.Begin();
-		}
-		
+        }
+
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
-        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-        	if(e.Key == Key.Escape)
-        	{
-        	    CloseWindow();
-        	}
+            if (e.Key == Key.Escape)
+            {
+                CloseWindow();
+            }
         }
     }
 }

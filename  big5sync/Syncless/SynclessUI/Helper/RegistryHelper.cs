@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
+
 namespace SynclessUI.Helper
 {
     internal static class RegistryHelper
@@ -24,7 +21,8 @@ namespace SynclessUI.Helper
 
             try
             {
-                RegistryKey tagKeyCommand = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessTag\command");
+                RegistryKey tagKeyCommand =
+                    Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessTag\command");
                 tagKeyCommand.SetValue(null, path + " -TFolder %1");
             }
             catch
@@ -42,7 +40,8 @@ namespace SynclessUI.Helper
 
             try
             {
-                RegistryKey untagKeyCommand = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessUntag\command");
+                RegistryKey untagKeyCommand =
+                    Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessUntag\command");
                 untagKeyCommand.SetValue(null, path + " -UTFolder %1");
             }
             catch
@@ -60,7 +59,8 @@ namespace SynclessUI.Helper
 
             try
             {
-                RegistryKey cleanKeyCommand = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessClean\command");
+                RegistryKey cleanKeyCommand =
+                    Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessClean\command");
                 cleanKeyCommand.SetValue(null, path + " -CleanMeta %1");
             }
             catch
@@ -89,7 +89,8 @@ namespace SynclessUI.Helper
             try
             {
                 Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\SynclessClean");
-            } catch
+            }
+            catch
             {
             }
         }

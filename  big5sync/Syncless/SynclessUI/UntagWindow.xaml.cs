@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.IO;
+using System.Windows;
+using System.Windows.Input;
 using Syncless.Core.Exceptions;
 using SynclessUI.Helper;
 
@@ -11,15 +12,11 @@ namespace SynclessUI
     /// Interaction logic for UntagWindow.xaml
     /// </summary>
     public partial class UntagWindow : Window
-    {		
-		private readonly MainWindow _main;
+    {
+        private readonly MainWindow _main;
         private bool _notifyUser;
-        private string Path
-        {
-            get { return TxtBoxPath.Text; }
-        }
-        
-		public UntagWindow(MainWindow main, string clipath, bool notifyUser)
+
+        public UntagWindow(MainWindow main, string clipath, bool notifyUser)
         {
             try
             {
@@ -28,14 +25,17 @@ namespace SynclessUI
                 _main = main;
                 _notifyUser = notifyUser;
 
-                List<string> tagListByFolder = new List<string>();
+                var tagListByFolder = new List<string>();
                 DirectoryInfo di = null;
                 try
                 {
                     di = new DirectoryInfo(clipath);
-                } catch { }
+                }
+                catch
+                {
+                }
 
-                if(di != null)
+                if (di != null)
                 {
                     tagListByFolder = _main.Gui.GetTags(di);
                 }
@@ -44,12 +44,12 @@ namespace SynclessUI
                 {
                     TxtBoxPath.Text = clipath;
                     taglist.ItemsSource = tagListByFolder;
-                    if(tagListByFolder.Count == 1)
+                    if (tagListByFolder.Count == 1)
                     {
                         taglist.SelectedIndex = 0;
                         taglist.Focus();
                     }
-                    this.ShowDialog();
+                    ShowDialog();
                 }
                 else
                 {
@@ -64,38 +64,46 @@ namespace SynclessUI
             }
         }
 
-        private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
+        private string Path
         {
-			BtnOk.IsEnabled = false;
+            get { return TxtBoxPath.Text; }
+        }
+
+        private void BtnOk_Click(object sender, RoutedEventArgs e)
+        {
+            BtnOk.IsEnabled = false;
             try
             {
                 string lasttagged = "";
                 if (taglist.SelectedIndex == -1)
                 {
-                    DialogHelper.ShowError("Tag not Selected", "Please select the particular tag to untag the folder from.");
-					BtnOk.IsEnabled = true;
+                    DialogHelper.ShowError("Tag not Selected",
+                                           "Please select the particular tag to untag the folder from.");
+                    BtnOk.IsEnabled = true;
                     return;
                 }
-                
+
                 foreach (string t in taglist.SelectedItems)
                 {
-                    if(!_main.Gui.GetTag(t).IsLocked) {
+                    if (!_main.Gui.GetTag(t).IsLocked)
+                    {
                         int result = _main.Gui.Untag(t, new DirectoryInfo(Path));
                         lasttagged = t;
                         if (result != 1)
                         {
                             DialogHelper.ShowError("Untagging Error", t + " could not be untagged from " + Path);
-                        } else
+                        }
+                        else
                         {
-                            if(_notifyUser)
+                            if (_notifyUser)
                                 _main.NotifyBalloon("Untagging Successful", Path + " has been untagged from " + t);
                         }
                     }
                     else
                     {
                         DialogHelper.ShowError(t + " is Synchronizing",
-                                                "You cannot untag a folder while the tag is synchronizing.");
-						BtnOk.IsEnabled = true;
+                                               "You cannot untag a folder while the tag is synchronizing.");
+                        BtnOk.IsEnabled = true;
                     }
                 }
                 _main.SelectTag(lasttagged);
@@ -104,27 +112,28 @@ namespace SynclessUI
             catch (UnhandledException)
             {
                 DialogHelper.DisplayUnhandledExceptionMessage();
-				CloseWindow();
+                CloseWindow();
             }
         }
-		
-		private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
+
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             CloseWindow();
         }
 
-		private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-		{
-			this.DragMove();
-		}
-		
-		private void CloseWindow() {
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        private void CloseWindow()
+        {
             FormFadeOut.Begin();
-		}
-		
+        }
+
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }

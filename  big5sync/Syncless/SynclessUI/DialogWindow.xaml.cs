@@ -1,8 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.Media;
 using System.Windows;
+using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Media;
 using SynclessUI.Helper;
 
 namespace SynclessUI
@@ -12,48 +16,46 @@ namespace SynclessUI
     /// </summary>
     public partial class DialogWindow : Window
     {
-        public bool CannotBeClosed {
-			get; set;
-		}
-
         public DialogWindow(string caption, string message, DialogType dt)
         {
             InitializeComponent();
-			CannotBeClosed = false;
-			Application.Current.Properties["DialogWindowChoice"] = false;
+            CannotBeClosed = false;
+            Application.Current.Properties["DialogWindowChoice"] = false;
             LblCaption.Content = caption;
             TxtBlkMessageBoxText.Text = message;
 
-			StyleDialogBox(dt);
+            StyleDialogBox(dt);
             PlayDialogSound(dt);
         }
 
+        public bool CannotBeClosed { get; set; }
+
         private void StyleDialogBox(DialogType dt)
         {
-			switch (dt)
-			{
-				case DialogType.Error:
-					this.Title = "Error";
-				    this.OkCommandPanel.Visibility = System.Windows.Visibility.Visible;
-					break;
-                case DialogType.Warning:
-					this.Title = "Warning";
-					this.OkCancelCommandPanel.Visibility = System.Windows.Visibility.Visible;
-				    break;
-                case DialogType.Information:
-					this.Title = "Information";
-					this.OkCommandPanel.Visibility = System.Windows.Visibility.Visible;
-				    break;
-                case DialogType.Indeterminate:
-					CannotBeClosed = true;
-			        this.Title = (string) LblCaption.Content;
-					this.ProgressBarTermination.IsEnabled = true;
-					this.ProgressBarTermination.Visibility = System.Windows.Visibility.Visible;
+            switch (dt)
+            {
+                case DialogType.Error:
+                    Title = "Error";
+                    OkCommandPanel.Visibility = Visibility.Visible;
                     break;
-			}
+                case DialogType.Warning:
+                    Title = "Warning";
+                    OkCancelCommandPanel.Visibility = Visibility.Visible;
+                    break;
+                case DialogType.Information:
+                    Title = "Information";
+                    OkCommandPanel.Visibility = Visibility.Visible;
+                    break;
+                case DialogType.Indeterminate:
+                    CannotBeClosed = true;
+                    Title = (string) LblCaption.Content;
+                    ProgressBarTermination.IsEnabled = true;
+                    ProgressBarTermination.Visibility = Visibility.Visible;
+                    break;
+            }
 
             ImgIcon.Source = GetSystemImage(dt);
-		}
+        }
 
         private static void PlayDialogSound(DialogType dt)
         {
@@ -69,65 +71,68 @@ namespace SynclessUI
         }
 
         private static ImageSource GetSystemImage(DialogType dt)
-		{
-			System.Drawing.Icon iconsource = null;
-			switch (dt)
-			{
-				case DialogType.Error:
-					iconsource = System.Drawing.SystemIcons.Error;
-				    break;
-				case DialogType.Warning:
-					iconsource = System.Drawing.SystemIcons.Exclamation;
-				    break;
-				case DialogType.Information:
-					iconsource = System.Drawing.SystemIcons.Information;
-				    break;
-                case DialogType.Indeterminate:
-                    iconsource = System.Drawing.SystemIcons.Exclamation;
+        {
+            Icon iconsource = null;
+            switch (dt)
+            {
+                case DialogType.Error:
+                    iconsource = SystemIcons.Error;
                     break;
-			}
-			if (iconsource == null) return null;
-				else return System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(iconsource.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-		}
-
-        private void BtnOkCP1_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-			BtnOkCP1.IsEnabled = false;
-        	CloseWindow();
-        }
-		
-        private void BtnOkCP2_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-			BtnOkCP2.IsEnabled = false;
-			Application.Current.Properties["DialogWindowChoice"] = true;
-        	CloseWindow();
-        }
-		
-        private void BtnCancelCP2_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-			BtnCancelCP2.IsEnabled = false;
-			Application.Current.Properties["DialogWindowChoice"] = false;
-        	CloseWindow();
+                case DialogType.Warning:
+                    iconsource = SystemIcons.Exclamation;
+                    break;
+                case DialogType.Information:
+                    iconsource = SystemIcons.Information;
+                    break;
+                case DialogType.Indeterminate:
+                    iconsource = SystemIcons.Exclamation;
+                    break;
+            }
+            if (iconsource == null) return null;
+            else
+                return Imaging.CreateBitmapSourceFromHIcon(iconsource.Handle, Int32Rect.Empty,
+                                                           BitmapSizeOptions.FromEmptyOptions());
         }
 
-        private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void BtnOkCP1_Click(object sender, RoutedEventArgs e)
         {
-        	this.DragMove();
+            BtnOkCP1.IsEnabled = false;
+            CloseWindow();
         }
-		
-		public void CloseWindow() {
+
+        private void BtnOkCP2_Click(object sender, RoutedEventArgs e)
+        {
+            BtnOkCP2.IsEnabled = false;
+            Application.Current.Properties["DialogWindowChoice"] = true;
+            CloseWindow();
+        }
+
+        private void BtnCancelCP2_Click(object sender, RoutedEventArgs e)
+        {
+            BtnCancelCP2.IsEnabled = false;
+            Application.Current.Properties["DialogWindowChoice"] = false;
+            CloseWindow();
+        }
+
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        public void CloseWindow()
+        {
             FormFadeOut.Begin();
-		}
-		
+        }
+
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
-        	if(CannotBeClosed)
-				e.Cancel = true;
+            if (CannotBeClosed)
+                e.Cancel = true;
         }
     }
 }

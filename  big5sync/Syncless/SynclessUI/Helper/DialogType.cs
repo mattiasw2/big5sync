@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SynclessUI.Helper
+﻿namespace SynclessUI.Helper
 {
     public enum DialogType
     {
