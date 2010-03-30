@@ -1528,7 +1528,8 @@ namespace Syncless.Core
                     continue;
                 }
                 List<Filter> tempFilters = new List<Filter>();
-                tempFilters.Add(new SynclessArchiveFilter("_synclessArchive"));
+                tempFilters.Add(FilterFactory.CreateArchiveFilter("_synclessArchive"));
+                tempFilters.Add(FilterFactory.CreateConfigurationFilter());
                 tempFilters.AddRange(tag.Filters);
 
                 string appendedPath;
