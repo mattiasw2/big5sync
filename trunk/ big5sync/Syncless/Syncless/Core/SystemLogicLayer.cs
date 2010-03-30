@@ -34,6 +34,7 @@ namespace Syncless.Core
         private NotificationQueue _uiPriorityNotification;
         private LogicQueueObserver _queueObserver;
 
+        private Dictionary<string, TagState> _switchingTable;
 
         public static SystemLogicLayer Instance
         {
@@ -71,6 +72,7 @@ namespace Syncless.Core
             _sllNotification = new NotificationQueue();
             _uiPriorityNotification = new NotificationQueue();
             _pathTable = new PathTable();
+            _switchingTable = new Dictionary<string, TagState>();
         }
 
 
@@ -900,6 +902,7 @@ namespace Syncless.Core
         /// <returns>whether the tag can be changed.</returns>
         public bool MonitorTag(string tagname, bool mode)
         {
+            
             if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tagname))
             {
                 return false;
@@ -1308,7 +1311,13 @@ namespace Syncless.Core
                 }
             }
 
+            try
+            {
+                _switchingTable.Remove(tag.TagName);
+            }catch(Exception)
+            {
 
+            }
         }
         /// <summary>
         /// Manual Sync
@@ -1361,6 +1370,13 @@ namespace Syncless.Core
         /// <param name="mode"></param>
         private void SwitchMonitorTag(Tag tag, bool mode)
         {
+            TagState state = TagState.Undefined;
+            _switchingTable.TryGetValue(tag.TagName, out state);
+            if (state == TagState.Undefined)
+            {
+                _switchingTable.Add(tag.TagName, mode == true ? TagState.ManualToSeamless : TagState.SeamlessToManual);
+            }
+
             if (mode)
             {
                 StartMonitorTag(tag);
@@ -1411,20 +1427,37 @@ namespace Syncless.Core
             view.IsQueued = CompareAndSyncController.Instance.IsQueued(t.TagName);
             view.IsSyncing = CompareAndSyncController.Instance.IsSyncing(t.TagName);
 
-            if (t.IsSeamless)
+            //if (t.IsSeamless)
+            //{
+            //    view.TagState = TagState.Seamless;
+            //}
+            //else
+            //{
+            //    if (view.IsLocked)
+            //    {
+            //        view.TagState = TagState.Switching;
+            //    }
+            //    else
+            //    {
+            //        view.TagState = TagState.Manual;
+            //    }
+            //}
+            TagState state = TagState.Undefined;
+            _switchingTable.TryGetValue(view.TagName, out state);
+            if (state != TagState.Undefined)
             {
-                view.TagState = TagState.Seamless;
-            }
-            else
-            {
-                if (view.IsLocked)
+                if (state == TagState.ManualToSeamless || state == TagState.SeamlessToManual)
                 {
                     view.TagState = TagState.Switching;
                 }
                 else
                 {
-                    view.TagState = TagState.Manual;
+                    view.TagState = t.IsSeamless ? TagState.Seamless : TagState.Manual;
                 }
+            }
+            else
+            {
+                view.TagState = t.IsSeamless ? TagState.Seamless : TagState.Manual;
             }
             return view;
         }
@@ -1646,8 +1679,6 @@ namespace Syncless.Core
             _userInterface.TagChanged();
         }
         #endregion
-       
-
         
     }
 }
