@@ -761,9 +761,10 @@ namespace Syncless.Core
         public delegate void DeleteTagCleanDelegate(Tag t);
         public void DeleteTagClean(Tag t)
         {
-            foreach (string path in t.FilteredPathListString)
+            foreach (TaggedPath path in t.UnfilteredPathList)
             {
-                string convertedPath = ProfilingLayer.Instance.ConvertLogicalToPhysical(path);
+                string convertedPath = ProfilingLayer.Instance.ConvertLogicalToPhysical(path.PathName);
+
                 if (Directory.Exists(convertedPath))
                 {
                     CleanMetaData(new DirectoryInfo(convertedPath));
