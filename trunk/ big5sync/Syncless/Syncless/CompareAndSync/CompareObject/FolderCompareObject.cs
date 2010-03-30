@@ -58,7 +58,7 @@ namespace Syncless.CompareAndSync.CompareObject
             {
                 if ((f = objects.ElementAt(i) as FolderCompareObject) != null)
                 {
-                    if (f.MetaName != null && f.MetaName == name && f.Name != name && /*f.CreationTime[pos] == creationTime &&*/ f.ChangeType[i] == MetaChangeType.New)
+                    if (f.MetaName != null && f.MetaName == name && f.Name != name /* && f.CreationTime[pos] == creationTime && f.ChangeType[i] == MetaChangeType.New */)
                     {
                         result = f;
                         counter++;
@@ -70,7 +70,7 @@ namespace Syncless.CompareAndSync.CompareObject
 
             return counter == 1 ? result : null;
         }
-
+          
         //TODO: Shift this method to ComparerVisitor
         public FileCompareObject GetIdenticalFile(string name, string hash, long creationTime, int pos)
         {

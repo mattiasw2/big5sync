@@ -49,7 +49,7 @@ namespace Syncless.CompareAndSync.Visitor
             //2. We check all folders which has the same meta name but different name as the non-existent folder
             //3. If the count is 1, we shall proceed to rename
 
-            for (int i = 0; i < deletePos.Count /*numOfPaths*/; i++)
+            for (int i = 0; i < deletePos.Count; i++)
             {
                 if (folder.ChangeType[deletePos[i]] == MetaChangeType.Delete)
                 {
@@ -76,7 +76,7 @@ namespace Syncless.CompareAndSync.Visitor
                     }
                     if (renameCount > 1)
                     {
-                        for (int j = 0; j < deletePos.Count /*numOfPaths*/; j++)
+                        for (int j = 0; j < deletePos.Count; j++)
                             folder.ChangeType[deletePos[j]] = null;
                         return;
                     }
@@ -111,6 +111,7 @@ namespace Syncless.CompareAndSync.Visitor
                         actualFldrObj.MetaCreationTime[pos] = renamedFolderObj.MetaCreationTime[pos];
                         actualFldrObj.MetaExists[pos] = renamedFolderObj.MetaExists[pos];
                         actualFldrObj.MetaUpdated[pos] = renamedFolderObj.MetaUpdated[pos];
+                        actualFldrObj.NewName = renamedFolderObj.NewName;
                         //MergeRenamedFolder(actualFldrObj, renamedFolderObj, pos);
                     }
                     else
