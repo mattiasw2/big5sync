@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using Syncless.Logging;
 using Syncless.Core.Exceptions;
@@ -40,7 +41,7 @@ namespace SynclessUI
             {
                 InitializeComponent();
                 this.ShowDialog();
-            } 
+            }
         }
 
         private void PopulateLogData(List<LogData> log)
@@ -124,6 +125,12 @@ namespace SynclessUI
                     case LogEventType.FSCHANGE_ERROR:
                         eventType = "File Error";
                         break;
+                    case LogEventType.FSCHANGE_ARCHIVED:
+                        eventType = "File Archived";
+                        break;
+                    case LogEventType.FSCHANGE_CONFLICT:
+                        eventType = "File Conflict";
+                        break;
                     case LogEventType.UNKNOWN:
                         category = "Unknown";
                         break;
@@ -133,8 +140,6 @@ namespace SynclessUI
                 row["Event Type"] = eventType;
                 row["Message"] = l.Message;
                 row["Timestamp"] = l.Timestamp;
-
-                _LogData.Rows.Add(row);
             }
         }
 
