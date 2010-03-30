@@ -371,7 +371,7 @@ namespace SynclessUI
                         else
                         {
                             DialogHelper.ShowError("Change Synchronization Mode Error",
-                                                    "' " + SelectedTag + " ' could not be switched to Seamless Mode.");
+                                                    SelectedTag + " could not be switched to Seamless Mode.");
                         }
                     }
                     else if (string.Compare((string)LblSyncMode.Content, "Seamless") == 0)
@@ -383,7 +383,7 @@ namespace SynclessUI
                         else
                         {
                             DialogHelper.ShowError("Change Synchronization Mode Error",
-                                                    "' " + SelectedTag + " ' could not be switched to Manual Mode.");
+                                                    SelectedTag + " could not be switched to Manual Mode.");
                         }
                     }
                 }
@@ -492,7 +492,7 @@ namespace SynclessUI
                         }
                         else
                         {
-                            DialogHelper.ShowError("Synchronization Error", "'" + SelectedTag + "' could not be synchronized.");
+                            DialogHelper.ShowError("Synchronization Error", SelectedTag + " could not be synchronized.");
                             SyncButtonMode();
                         }
                     }
@@ -1403,8 +1403,8 @@ namespace SynclessUI
                     if (!Gui.GetTag(SelectedTag).IsLocked)
                     {
                         bool result = DialogHelper.ShowWarning("Remove Tag",
-                                                                "Are you sure you want to remove the tag '" + SelectedTag +
-                                                                "'?");
+                                                                "Are you sure you want to remove " + SelectedTag +
+                                                                "?");
 
                         if (result)
                         {
@@ -1418,7 +1418,7 @@ namespace SynclessUI
                                 }
                                 else
                                 {
-                                    DialogHelper.ShowError("Remove Tag Error", "' " + SelectedTag + " ' could not be removed.");
+                                    DialogHelper.ShowError("Remove Tag Error", "" + SelectedTag + " could not be removed.");
                                 }
                             }
                             else
