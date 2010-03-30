@@ -117,7 +117,7 @@ namespace SynclessUI
                 }
                 else
                 {
-                    DialogsHelper.ShowError("Syncless Initialization Error",
+                    DialogHelper.ShowError("Syncless Initialization Error",
                                             "Syncless has failed to initialize and will now exit.");
                     _closenormally = false;
 
@@ -131,7 +131,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -337,7 +337,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -362,7 +362,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -380,7 +380,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -404,7 +404,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -460,7 +460,7 @@ namespace SynclessUI
         {
             if (!_manualSyncEnabled)
             {
-                DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                DialogHelper.ShowError(SelectedTag + " is Synchronizing",
                              "You cannot change the synchronization mode while it is synchronizing.");
                 return;
             }
@@ -482,7 +482,7 @@ namespace SynclessUI
                         }
                         else
                         {
-                            DialogsHelper.ShowError("Change Synchronization Mode Error",
+                            DialogHelper.ShowError("Change Synchronization Mode Error",
                                                     "' " + SelectedTag + " ' could not be switched to Seamless Mode.");
                         }
                     }
@@ -494,20 +494,20 @@ namespace SynclessUI
                         }
                         else
                         {
-                            DialogsHelper.ShowError("Change Synchronization Mode Error",
+                            DialogHelper.ShowError("Change Synchronization Mode Error",
                                                     "' " + SelectedTag + " ' could not be switched to Manual Mode.");
                         }
                     }
                 }
                 else
                 {
-                    DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                    DialogHelper.ShowError(SelectedTag + " is Synchronizing",
                                             "You cannot change the synchronization mode while it is synchronizing.");
                 }
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -557,7 +557,7 @@ namespace SynclessUI
         {
             if (!_manualSyncEnabled || Gui.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
             {
-                DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                DialogHelper.ShowError(SelectedTag + " is Synchronizing",
                              "You cannot carry out another synchronization operation while it is synchronizing.");
                 return;
             }
@@ -575,17 +575,17 @@ namespace SynclessUI
                     }
                     else
                     {
-                        DialogsHelper.ShowError("Synchronization Error", "'" + SelectedTag + "' could not be synchronized.");
+                        DialogHelper.ShowError("Synchronization Error", "'" + SelectedTag + "' could not be synchronized.");
                     }
                 }
                 else
                 {
-                    DialogsHelper.ShowError("Nothing to Synchronize", "You can only synchronize when there are two or more folders.");
+                    DialogHelper.ShowError("Nothing to Synchronize", "You can only synchronize when there are two or more folders.");
                 }
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -603,7 +603,7 @@ namespace SynclessUI
                     }
                     else
                     {
-                        DialogsHelper.ShowError("Tag Creation Error", "Tag could not be created.");
+                        DialogHelper.ShowError("Tag Creation Error", "Tag could not be created.");
                     }
                 }
                 catch (TagAlreadyExistsException)
@@ -613,7 +613,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
 
             return true;
@@ -646,7 +646,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -671,7 +671,7 @@ namespace SynclessUI
                     {
                         if (ListTaggedPath.SelectedIndex == -1)
                         {
-                            DialogsHelper.ShowError("No Path Selected", "Please select a path to untag.");
+                            DialogHelper.ShowError("No Path Selected", "Please select a path to untag.");
                         }
                         else
                         {
@@ -687,13 +687,13 @@ namespace SynclessUI
                                 }
                                 else
                                 {
-                                    DialogsHelper.ShowError(tv.TagName + " is Synchronizing",
+                                    DialogHelper.ShowError(tv.TagName + " is Synchronizing",
                                                             "You cannot untag while a tag is synchronizing.");
                                 }
                             }
                             else
                             {
-                                DialogsHelper.ShowError("Tag Does Not Exist",
+                                DialogHelper.ShowError("Tag Does Not Exist",
                                                         "The tag which you tried to untag does not exist.");
 
                                 InitializeTagInfoPanel();
@@ -704,14 +704,14 @@ namespace SynclessUI
                     }
                     else
                     {
-                        DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                        DialogHelper.ShowError(SelectedTag + " is Synchronizing",
                                                 "You cannot untag a folder while the tag is synchronizing.");
                     }
                 }
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -724,7 +724,7 @@ namespace SynclessUI
                     // Prepares the SLL for termination
                     if (Gui.PrepareForTermination())
                     {
-                        bool result = DialogsHelper.ShowWarning("Exit", "Are you sure you want to exit Syncless?" +
+                        bool result = DialogHelper.ShowWarning("Exit", "Are you sure you want to exit Syncless?" +
                                                                         "\nExiting Syncless will disable seamless synchronization.");
 
                         if (result)
@@ -740,10 +740,10 @@ namespace SynclessUI
                     }
                     else
                     {
-                        bool result = DialogsHelper.ShowWarning("Exit",
+                        bool result = DialogHelper.ShowWarning("Exit",
                                                 "Are you sure you want to exit Syncless?" +
                                                 "\nAll current synchronization operations will be completed and" +
-                                                 "\n any unfinished synchronization operations will be removed.");
+                                                 "\nany unfinished synchronization operations will be removed.");
 
                         if (!result)
                         {
@@ -751,8 +751,8 @@ namespace SynclessUI
                         }
                         else
                         {
-                            DialogWindow terminationWindow = DialogsHelper.ShowTermination("Termination in Progress", "Please wait for the current synchronization to complete.");
-
+                            DialogWindow terminationWindow = DialogHelper.ShowIndeterminate("Termination in Progress", "Please wait for the current synchronization to complete.");
+                            terminationWindow.Show();
                             BackgroundWorker bgWorker = new BackgroundWorker();
                             bgWorker.DoWork += bw_DoWork;
                             bgWorker.RunWorkerCompleted += bw_RunWorkerCompleted;
@@ -763,16 +763,13 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
         private void bw_DoWork(object sender, DoWorkEventArgs e)
         {
             DialogWindow terminationWindow = e.Argument as DialogWindow;
-            terminationWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() => {
-                terminationWindow.Show();
-            }));
             Gui.Terminate();
             e.Result = terminationWindow;
         }
@@ -828,7 +825,7 @@ namespace SynclessUI
                 }
                 else
                 {
-                    DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                    DialogHelper.ShowError(SelectedTag + " is Synchronizing",
                                             "You cannot view tag details while the tag is synchronizing.");
                 }
             }
@@ -872,7 +869,7 @@ namespace SynclessUI
         {
             if (!_manualSyncEnabled || Gui.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
             {
-                DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                DialogHelper.ShowError(SelectedTag + " is Synchronizing",
                                             "You cannot preview while it is synchronizing.");
                 return;
             }
@@ -892,7 +889,7 @@ namespace SynclessUI
             }
             else
             {
-                DialogsHelper.ShowError("Nothing to Preview", "You can only preview only when there are two or more folders.");
+                DialogHelper.ShowError("Nothing to Preview", "You can only preview only when there are two or more folders.");
             }
         }
 
@@ -921,19 +918,19 @@ namespace SynclessUI
                 var drive = new DriveInfo(driveletter);
                 if (!Gui.AllowForRemoval(drive))
                 {
-                    DialogsHelper.ShowError("Unmonitor Error",
+                    DialogHelper.ShowError("Unmonitor Error",
                                             "Syncless could not unmonitor " + driveletter + " from seamless mode.");
                 }
                 else
                 {
-                    DialogsHelper.ShowInformation("Monitoring Stopped for " + driveletter,
+                    DialogHelper.ShowInformation("Monitoring Stopped for " + driveletter,
                                                   "Syncless has stopped all seamless monitoring for " + driveletter +
                                                     "\nTagging any folders in this drive will re-activate seamless monitoring.");
                 }
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -1187,7 +1184,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -1209,7 +1206,7 @@ namespace SynclessUI
 
             if (FileHelper.IsFile(clipath))
             {
-                DialogsHelper.ShowError("Tagging not Allowed", "You cannot tag a file.");
+                DialogHelper.ShowError("Tagging not Allowed", "You cannot tag a file.");
                 return;
             }
 
@@ -1220,7 +1217,7 @@ namespace SynclessUI
             }
             catch (Exception)
             {
-                DialogsHelper.ShowError("Invalid Folder", "You cannot tag this folder.");
+                DialogHelper.ShowError("Invalid Folder", "You cannot tag this folder.");
                 return;
             }
 
@@ -1232,7 +1229,7 @@ namespace SynclessUI
             System.Windows.WindowState currentWindowState = this.WindowState;
             if (FileHelper.IsFile(clipath))
             {
-                DialogsHelper.ShowError("Untagging not Allowed", "You cannot tag a file.");
+                DialogHelper.ShowError("Untagging not Allowed", "You cannot tag a file.");
                 return;
             }
 
@@ -1244,7 +1241,7 @@ namespace SynclessUI
             }
             catch (System.ArgumentException)
             {
-                DialogsHelper.ShowError("Invalid Folder", "You cannot untag this folder.");
+                DialogHelper.ShowError("Invalid Folder", "You cannot untag this folder.");
                 return;
             }
 
@@ -1255,7 +1252,7 @@ namespace SynclessUI
         {
             if (FileHelper.IsFile(clipath))
             {
-                DialogsHelper.ShowError("Cleaning not Allowed", "You cannot clean a file.");
+                DialogHelper.ShowError("Cleaning not Allowed", "You cannot clean a file.");
                 return;
             }
 
@@ -1267,13 +1264,13 @@ namespace SynclessUI
             }
             catch (System.ArgumentException)
             {
-                DialogsHelper.ShowError("Invalid Folder", "You cannot clean this folder.");
+                DialogHelper.ShowError("Invalid Folder", "You cannot clean this folder.");
                 return;
             }
 
             //TODO 
             int count = ServiceLocator.GUI.Clean(clipath);
-            DialogsHelper.ShowInformation("Meta-data Cleaned", count + " metaclear-ed");
+            DialogHelper.ShowInformation("Meta-data Cleaned", count + " metaclear-ed");
         }
 
         #endregion
@@ -1470,7 +1467,7 @@ namespace SynclessUI
                 {
                     if (!Gui.GetTag(SelectedTag).IsLocked)
                     {
-                        bool result = DialogsHelper.ShowWarning("Remove Tag",
+                        bool result = DialogHelper.ShowWarning("Remove Tag",
                                                                 "Are you sure you want to remove the tag '" + SelectedTag +
                                                                 "'?");
 
@@ -1486,30 +1483,30 @@ namespace SynclessUI
                                 }
                                 else
                                 {
-                                    DialogsHelper.ShowError("Remove Tag Error", "' " + SelectedTag + " ' could not be removed.");
+                                    DialogHelper.ShowError("Remove Tag Error", "' " + SelectedTag + " ' could not be removed.");
                                 }
                             }
                             else
                             {
-                                DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                                DialogHelper.ShowError(SelectedTag + " is Synchronizing",
                                                         "You cannot remove a tag while the tag is synchronizing.");
                             }
                         }
                     }
                     else
                     {
-                        DialogsHelper.ShowError(SelectedTag + " is Synchronizing",
+                        DialogHelper.ShowError(SelectedTag + " is Synchronizing",
                                                 "You cannot remove a tag while the tag is synchronizing.");
                     }
                 }
                 else
                 {
-                    DialogsHelper.ShowError("No Tag Selected", "Please select a tag.");
+                    DialogHelper.ShowError("No Tag Selected", "Please select a tag.");
                 }
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 

@@ -29,12 +29,12 @@ namespace SynclessUI
                 PopulateLogData(log);
             }  catch (LogFileCorruptedException)
             {
-                DialogsHelper.ShowError("Log File Corrupted", "Stored log files have been corrupted and will be deleted.");
+                DialogHelper.ShowError("Log File Corrupted", "Stored log files have been corrupted and will be deleted.");
             }
             catch (UnhandledException)
             {
                 encounteredError = true;
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
 
             if (!encounteredError)

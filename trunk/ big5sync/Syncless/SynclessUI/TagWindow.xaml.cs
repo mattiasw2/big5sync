@@ -126,7 +126,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -163,44 +163,44 @@ namespace SynclessUI
                                     }
                                     else
                                     {
-                                        DialogsHelper.ShowError("Tag Error", "Tag Error Occured. Please Try Again.");
+                                        DialogHelper.ShowError("Tag Error", "Tag Error Occured. Please Try Again.");
 										BtnOk.IsEnabled = true;
                                     }
                                 }
                                 else
                                 {
-                                    DialogsHelper.ShowError(Tagname + " is Synchronizing",
+                                    DialogHelper.ShowError(Tagname + " is Synchronizing",
                                                             "You cannot tag a folder while the tag is synchronizing.");
 									BtnOk.IsEnabled = true;
                                 }
                             }
                             catch (Syncless.Tagging.Exceptions.RecursiveDirectoryException)
                             {
-                                DialogsHelper.ShowError("Folder cannot be tagged", "Folder could not be tagged as it is a sub-folder/parent/ancestor of a folder which is already tagged.");
+                                DialogHelper.ShowError("Folder cannot be tagged", "Folder could not be tagged as it is a sub-folder/parent/ancestor of a folder which is already tagged.");
                             	BtnOk.IsEnabled = true;
 							}
                             catch (Syncless.Tagging.Exceptions.PathAlreadyExistsException)
                             {
-                                DialogsHelper.ShowError("Path Already Exists", "The path you tried to tag is already tagged.");
+                                DialogHelper.ShowError("Path Already Exists", "The path you tried to tag is already tagged.");
 								BtnOk.IsEnabled = true;
                             }
                         }
                     }
                     else
                     {
-                        DialogsHelper.ShowError("Folder Not Selected", "Please select a folder to tag.");
+                        DialogHelper.ShowError("Folder Not Selected", "Please select a folder to tag.");
 						BtnOk.IsEnabled = true;
                     }
                 }
                 else
                 {
-                    DialogsHelper.ShowError("Tagname Empty", "Please specify a tagname.");
+                    DialogHelper.ShowError("Tagname Empty", "Please specify a tagname.");
 					BtnOk.IsEnabled = true;
                 }
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
 				CloseWindow();
             }
         }
@@ -210,7 +210,7 @@ namespace SynclessUI
             DriveInfo di = new DriveInfo(_path);
             if (di.Name == _path)
             {
-                bool result = DialogsHelper.ShowWarning("Tag Drive Warning", "You are about to tag " + _path  + "\nAre you sure you wish to continue?");
+                bool result = DialogHelper.ShowWarning("Tag Drive Warning", "You are about to tag " + _path  + "\nAre you sure you wish to continue?");
 
                 return result;
             }
@@ -222,7 +222,7 @@ namespace SynclessUI
         {
             if (_path.Length > 200)
             {
-                bool result = DialogsHelper.ShowWarning("Long Path Name Warning", "NTFS File System does not handle paths which are 248 characters or more in length properly. \nAre you sure you wish to continue?");
+                bool result = DialogHelper.ShowWarning("Long Path Name Warning", "NTFS File System does not handle paths which are 248 characters or more in length properly. \nAre you sure you wish to continue?");
 
                 return result;
             }

@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Media;
+using SynclessUI.Helper;
 
 namespace SynclessUI
 {
@@ -11,12 +12,11 @@ namespace SynclessUI
     /// </summary>
     public partial class DialogWindow : Window
     {
-		
         public bool CannotBeClosed {
 			get; set;
 		}
 
-        public DialogWindow(string caption, string message, MessageBoxImage mbimg)
+        public DialogWindow(string caption, string message, DialogType dt)
         {
             InitializeComponent();
 			CannotBeClosed = false;
@@ -24,66 +24,65 @@ namespace SynclessUI
             LblCaption.Content = caption;
             TxtBlkMessageBoxText.Text = message;
 
-            ImgIcon.Source = GetSystemImage(mbimg);
-			DisplayCommandPanel(mbimg);
-            PlayDialogSound(mbimg);
+			StyleDialogBox(dt);
+            PlayDialogSound(dt);
         }
-		
-		private void DisplayCommandPanel(MessageBoxImage icon) {
-			switch (icon)
+
+        private void StyleDialogBox(DialogType dt)
+        {
+			switch (dt)
 			{
-				case MessageBoxImage.Error:
+				case DialogType.Error:
 					this.Title = "Error";
 				    this.OkCommandPanel.Visibility = System.Windows.Visibility.Visible;
 					break;
-				case MessageBoxImage.Exclamation:
+                case DialogType.Warning:
 					this.Title = "Warning";
 					this.OkCancelCommandPanel.Visibility = System.Windows.Visibility.Visible;
 				    break;
-				case MessageBoxImage.Information:
+                case DialogType.Information:
 					this.Title = "Information";
 					this.OkCommandPanel.Visibility = System.Windows.Visibility.Visible;
 				    break;
-                case MessageBoxImage.None:
+                case DialogType.Indeterminate:
 					CannotBeClosed = true;
-                    this.Title = "Termination In Progress";
+			        this.Title = (string) LblCaption.Content;
 					this.ProgressBarTermination.IsEnabled = true;
 					this.ProgressBarTermination.Visibility = System.Windows.Visibility.Visible;
                     break;
 			}
+
+            ImgIcon.Source = GetSystemImage(dt);
 		}
 
-        private static void PlayDialogSound(MessageBoxImage icon)
+        private static void PlayDialogSound(DialogType dt)
         {
-            switch (icon)
+            switch (dt)
             {
-                case MessageBoxImage.Error:
+                case DialogType.Error:
                     SystemSounds.Beep.Play();
                     break;
-                case MessageBoxImage.Exclamation:
+                case DialogType.Warning:
                     SystemSounds.Exclamation.Play();
                     break;
             }
         }
-		
-		private static ImageSource GetSystemImage(MessageBoxImage icon)
+
+        private static ImageSource GetSystemImage(DialogType dt)
 		{
 			System.Drawing.Icon iconsource = null;
-			switch (icon)
+			switch (dt)
 			{
-				case MessageBoxImage.Error:
+				case DialogType.Error:
 					iconsource = System.Drawing.SystemIcons.Error;
 				    break;
-				case MessageBoxImage.Exclamation:
+				case DialogType.Warning:
 					iconsource = System.Drawing.SystemIcons.Exclamation;
 				    break;
-				case MessageBoxImage.Information:
+				case DialogType.Information:
 					iconsource = System.Drawing.SystemIcons.Information;
 				    break;
-				case MessageBoxImage.Question:
-					iconsource = System.Drawing.SystemIcons.Question;
-                    break;
-                case MessageBoxImage.None:
+                case DialogType.Indeterminate:
                     iconsource = System.Drawing.SystemIcons.Exclamation;
                     break;
 			}

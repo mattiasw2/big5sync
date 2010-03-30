@@ -53,14 +53,14 @@ namespace SynclessUI
                 }
                 else
                 {
-                    DialogsHelper.ShowError("No Tags Found", "The folder you were trying to untag had no tags on it.");
+                    DialogHelper.ShowError("No Tags Found", "The folder you were trying to untag had no tags on it.");
 
                     CloseWindow();
                 }
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -72,7 +72,7 @@ namespace SynclessUI
                 string lasttagged = "";
                 if (taglist.SelectedIndex == -1)
                 {
-                    DialogsHelper.ShowError("Tag not Selected", "Please select the particular tag to untag the folder from.");
+                    DialogHelper.ShowError("Tag not Selected", "Please select the particular tag to untag the folder from.");
 					BtnOk.IsEnabled = true;
                     return;
                 }
@@ -84,7 +84,7 @@ namespace SynclessUI
                         lasttagged = t;
                         if (result != 1)
                         {
-                            DialogsHelper.ShowError("Untagging Error", t + " could not be untagged from " + Path);
+                            DialogHelper.ShowError("Untagging Error", t + " could not be untagged from " + Path);
                         } else
                         {
                             if(_notifyUser)
@@ -93,7 +93,7 @@ namespace SynclessUI
                     }
                     else
                     {
-                        DialogsHelper.ShowError(t + " is Synchronizing",
+                        DialogHelper.ShowError(t + " is Synchronizing",
                                                 "You cannot untag a folder while the tag is synchronizing.");
 						BtnOk.IsEnabled = true;
                     }
@@ -103,7 +103,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogsHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage();
 				CloseWindow();
             }
         }
