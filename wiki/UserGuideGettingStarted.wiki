@@ -16,7 +16,7 @@ _*Syncless*_ allows you to synchronize your files and folders automatically thro
 
 == What is a Tag? ==
 
-Coming soon.
+The concept of *Tag* is not uncommon today. In Syncless's context, it is simply an identity or a label associated with folders you want to keep in sync. Associate several folders to the same tag name, and Syncless will keep them all in sync for you. We will discuss the ways to tagging folders in the subsequent section of this tutorial.
 
 == What You'll Learn ==
 If you follow all the steps in this tutorial, you’ll be able to:
