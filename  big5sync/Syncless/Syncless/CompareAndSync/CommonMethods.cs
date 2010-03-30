@@ -379,8 +379,6 @@ namespace Syncless.CompareAndSync
         /// <exception cref="CopyFolderException"></exception>
         public static void CopyDirectory(string source, string destination)
         {
-            Debug.Assert(Directory.Exists(source));
-
             try
             {
                 DirectoryInfo sourceInfo = new DirectoryInfo(source);
