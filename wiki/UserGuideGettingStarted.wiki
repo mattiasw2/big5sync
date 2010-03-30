@@ -54,7 +54,7 @@ http://big5sync.googlecode.com/files/Main_Window_Overview.jpg
 
 You have folders on your computer and thumbdrive that you wish to synchronize automatically without putting too much effort in doing it. Now is the time to use Syncless to help you organise them by using tags.
 
-== Step 1: Tag Folders ==
+== 1. Tag Folders ==
 
 To synchronize 2 or more folders together, you must first tag them with the same name. This tagging process can be initiated in multiple ways.
 
@@ -69,14 +69,16 @@ To synchronize 2 or more folders together, you must first tag them with the same
     * Tagging from Windows Explorer
     http://big5sync.googlecode.com/files/Tag_From_Context_Menu.jpg
 
-=== 2. Viewing the tag after Tagging ===
+== 2. Viewing tag information ==
     http://big5sync.googlecode.com/files/Tag_Info_Panel.jpg
 
-=== 3. Tagging and synchronization complete ===
+After tagging the folders, you may view the details under the tag information panel. You will see a list of folder paths associated with the selected tag. On the right of the folder path list, there are a few options for synchronization. During synchronization, the progress bar will show the percentage of completion and status of the synchronization.
+
+== 3. Synchronize the folders ==
     http://big5sync.googlecode.com/files/Sync_Complete.jpg
 
 
-== Step 2: Switch to Manual Mode ==
+== 4. Switch to Manual Mode ==
 
 http://big5sync.googlecode.com/files/switch-manual-mode.png
 
