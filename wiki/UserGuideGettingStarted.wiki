@@ -67,7 +67,7 @@ To synchronize 2 or more folders together, you must first tag them with the same
     http://big5sync.googlecode.com/files/Drag_And_Drop_Tag.jpg
 
     * Tagging from Windows Explorer
-    http://big5sync.googlecode.com/files/tagshell.png
+    http://big5sync.googlecode.com/files/Tag_From_Context_Menu.jpg
 
 === 2. Viewing the tag after Tagging ===
     http://big5sync.googlecode.com/files/viewing-tag.png
