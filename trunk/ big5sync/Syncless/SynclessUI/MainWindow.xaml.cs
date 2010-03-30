@@ -182,8 +182,6 @@ namespace SynclessUI
                         ManualMode();
                         break;
                 }
-
-                LblStatusText.Content = "";
                 ListTaggedPath.ItemsSource = tv.PathStringList;
 
                 TagIcon.Visibility = Visibility.Visible;
@@ -211,6 +209,8 @@ namespace SynclessUI
                     else
                     {
                         LblStatusText.Content = "";
+                        ProgressBarSync.Visibility = Visibility.Hidden;
+                        LblProgress.Visibility = Visibility.Hidden;
                     }
                 }
             }
@@ -399,8 +399,8 @@ namespace SynclessUI
             BtnSyncMode.SetResourceReference(BackgroundProperty, "ToggleOnBrush");
             LblSyncMode.SetResourceReference(MarginProperty, "ToggleOnMargin");
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOnForeground");
-            //ProgressBarSync.Visibility = System.Windows.Visibility.Hidden;
-            //LblProgress.Visibility = System.Windows.Visibility.Hidden;
+            ProgressBarSync.Visibility = System.Windows.Visibility.Hidden;
+            LblProgress.Visibility = System.Windows.Visibility.Hidden;
             Console.WriteLine("In Seamless Mode");
         }
 
@@ -465,6 +465,7 @@ namespace SynclessUI
 
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine("in here");
             if (LblSyncNow.Content.Equals("Sync Now"))
             {
                 BtnSyncNow.IsHitTestVisible = false;
@@ -475,6 +476,8 @@ namespace SynclessUI
                     {
                         if (Gui.StartManualSync(SelectedTag))
                         {
+                            ProgressBarSync.Visibility = Visibility.Visible;
+                            LblProgress.Visibility = Visibility.Visible;
                             CancelButtonMode();
                             const string message = "Synchronization request has been queued";
                             LblStatusText.Content = message;
