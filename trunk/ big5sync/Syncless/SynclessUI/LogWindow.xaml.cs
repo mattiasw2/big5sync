@@ -69,7 +69,7 @@ namespace SynclessUI
                         category = "Filesystem";
                         break;
                     case LogCategoryType.SYNC:
-                        category = "Synchronization";
+                        category = "Sync";
                         break;
                     case LogCategoryType.UNKNOWN:
                         category = "Unknown";
@@ -79,10 +79,10 @@ namespace SynclessUI
                 switch(l.LogEvent)
                 {
                     case LogEventType.SYNC_STARTED:
-                        eventType = "Synchronization Started";
+                        eventType = "Sync Started";
                         break;
                     case LogEventType.SYNC_STOPPED:
-                        eventType = "Synchronization Stopped";
+                        eventType = "Sync Stopped";
                         break;
                     case LogEventType.APPEVENT_DRIVE_ADDED:
                         eventType = "Drive Added";
