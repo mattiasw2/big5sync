@@ -77,6 +77,7 @@ namespace Syncless.CompareAndSync.Visitor
 
             DirectoryInfo dirInfo = null;
             List<XMLCompareObject> xmlObjList = new List<XMLCompareObject>();
+            List<string> xmlFolderList = new List<string>();
 
             for (int i = 0; i < numOfPaths; i++)
             {
@@ -98,14 +99,14 @@ namespace Syncless.CompareAndSync.Visitor
                     }
 
                     xmlObjList = GetAllFilesInXML(xmlDoc);
-                    List<string> xmlFolderList = GetAllFoldersInXML(xmlDoc);
+                    xmlFolderList = GetAllFoldersInXML(xmlDoc);
                     RemoveSimilarFiles(xmlObjList, fileList);
                     RemoveSimilarFolders(xmlFolderList, dirInfoList);
                 }
 
 
                 AddFileToChild(xmlObjList, folder, i, numOfPaths);
-
+                AddFolderToChild(xmlFolderList, folder, i, numOfPaths);
                 xmlObjList.Clear();
             }
         }
