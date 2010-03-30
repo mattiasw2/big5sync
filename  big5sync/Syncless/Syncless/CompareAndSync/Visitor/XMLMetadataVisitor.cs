@@ -367,12 +367,12 @@ namespace Syncless.CompareAndSync.Visitor
             for (int i = 0; i < folderName.Count; i++)
             {
                 BaseCompareObject o = folder.GetChild(folderName[i]);
-                FileCompareObject fco = null;
+                FolderCompareObject fco = null;
 
                 if (o == null)
-                    fco = new FileCompareObject(folderName[i], length, folder);
+                    fco = new FolderCompareObject(folderName[i], length, folder);
                 else
-                    fco = (FileCompareObject)o;
+                    fco = (FolderCompareObject)o;
 
                 fco.MetaExists[counter] = true;
 
