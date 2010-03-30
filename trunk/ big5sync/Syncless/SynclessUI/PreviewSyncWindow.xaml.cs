@@ -1,11 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Navigation;
 using Syncless.CompareAndSync.CompareObject;
-using Syncless.CompareAndSync.Visitor;
-using System.Data;
 using SynclessUI.Visitor;
 
 namespace SynclessUI
@@ -16,38 +16,42 @@ namespace SynclessUI
     public partial class PreviewSyncWindow : Window
     {
         private readonly MainWindow _main;
-        private DataTable _previewSyncData;
-        private RootCompareObject rco;
-        private string _selectedTag;
+        private readonly DataTable _previewSyncData;
+        private readonly string _selectedTag;
         private BackgroundWorker previewWorker;
+        private RootCompareObject rco;
+
         public PreviewSyncWindow(MainWindow main, string selectedTag)
         {
             _selectedTag = selectedTag;
 
             _previewSyncData = new DataTable();
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Source, typeof(string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Operation, typeof(string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Dest, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Source, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Operation, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Dest, typeof (string)));
             _main = main;
-
-
 
             Populate(_main.Gui.PreviewSync(selectedTag));
             InitializeDataGrid();
 
-            
             //PreviewSyncDelegate previewDelegate = new PreviewSyncDelegate(_main.Gui.PreviewSync);
             //previewDelegate.BeginInvoke(selectedTag, CallBack, previewDelegate);
             //previewWorker = new BackgroundWorker();
             //this.previewWorker.DoWork += new DoWorkEventHandler(GetRCO);
             //this.previewWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
             //this.previewWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
-
         }
+
+        public DataTable PreviewSyncData
+        {
+            get { return _previewSyncData; }
+        }
+
         private void GetRCO(object sender, DoWorkEventArgs e)
         {
             rco = _main.Gui.PreviewSync(_selectedTag);
         }
+
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
         }
@@ -56,12 +60,12 @@ namespace SynclessUI
         {
             Populate(rco);
         }
-        private delegate RootCompareObject PreviewSyncDelegate(string tagname);
+
         private void CallBack(IAsyncResult result)
         {
             if (result.IsCompleted)
             {
-                PreviewSyncDelegate previewDel = result.AsyncState as PreviewSyncDelegate;
+                var previewDel = result.AsyncState as PreviewSyncDelegate;
                 RootCompareObject rco = previewDel.EndInvoke(result);
 
                 Populate(rco);
@@ -71,22 +75,20 @@ namespace SynclessUI
             {
                 Console.WriteLine("error");
             }
-
         }
+
         private void Populate(RootCompareObject rco)
         {
             _previewSyncData.Rows.Clear();
 
-            PreviewVisitor visitor = new PreviewVisitor(_previewSyncData);
+            var visitor = new PreviewVisitor(_previewSyncData);
             if (rco != null)
             {
-
                 SyncUIHelper.TraverseFolderHelper(rco, visitor);
             }
             //new UpdateDelegate(Data.InvalidateVisual).BeginInvoke(Test, null);
         }
 
-        private delegate void UpdateDelegate();
         public void Test(IAsyncResult result)
         {
             Console.WriteLine("Call back Hit");
@@ -97,26 +99,22 @@ namespace SynclessUI
 
         private void InitializeDataGrid()
         {
-
             InitializeComponent();
         }
 
-        public DataTable PreviewSyncData
-        { get { return _previewSyncData; } }
-
-        private void BtnOk_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
             CloseWindow();
         }
 
-        private void BtnCancel_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             CloseWindow();
         }
 
-        private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            DragMove();
         }
 
         private void CloseWindow()
@@ -126,16 +124,26 @@ namespace SynclessUI
 
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
 
             e.Handled = true;
-
         }
+
+        #region Nested type: PreviewSyncDelegate
+
+        private delegate RootCompareObject PreviewSyncDelegate(string tagname);
+
+        #endregion
+
+        #region Nested type: UpdateDelegate
+
+        private delegate void UpdateDelegate();
+
+        #endregion
     }
 }

@@ -1,27 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Runtime.InteropServices;
 
 namespace SynclessUI.Helper
 {
     internal class CommandLineHelper
     {
-        /*
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-        private static extern int GetLongPathName(
-            [MarshalAs(UnmanagedType.LPTStr)]
-            StringBuilder path,
-            [MarshalAs(UnmanagedType.LPTStr)]
-        StringBuilder longPath,
-            int longPathLength
-        );
-        */
-
         // Credits of http://www.mail-archive.com/dotnet@discuss.develop.com/msg04537.html
 
         private static string GetLongPathName(string path)
@@ -29,7 +13,7 @@ namespace SynclessUI.Helper
             string spath = path;
 
             string[] elm = spath.Split(
-                new char[]
+                new[]
                     {
                         Path.DirectorySeparatorChar,
                         Path.AltDirectorySeparatorChar
@@ -42,7 +26,8 @@ namespace SynclessUI.Helper
                     lpath = npath[0];
             }
 
-            if (lpath == "\\") {
+            if (lpath == "\\")
+            {
                 lpath = "";
             }
 
@@ -54,16 +39,17 @@ namespace SynclessUI.Helper
         public static void ProcessCommandLine(string[] commands, MainWindow main)
         {
             string flag = commands[0];
-			
-			// Get full path from array
+
+            // Get full path from array
             string path = "";
-			
-			for(int i = 1; i < commands.Length; i++) {
-				 path += commands[i] + " ";
-			}
+
+            for (int i = 1; i < commands.Length; i++)
+            {
+                path += commands[i] + " ";
+            }
 
             string longPath = GetLongPathName(path);
-			
+
             if (flag.Equals("-TFolder"))
             {
                 //Shell Context Menu clicked for Folders ( Tag )
@@ -78,7 +64,7 @@ namespace SynclessUI.Helper
             }
             else if (flag.Equals("-CleanMeta"))
             {
-                main.CliClean(longPath.ToString());
+                main.CliClean(longPath);
             }
             else
             {

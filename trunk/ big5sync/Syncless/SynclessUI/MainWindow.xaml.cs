@@ -15,6 +15,7 @@ using Hardcodet.Wpf.TaskbarNotification;
 using Syncless.Core;
 using Syncless.Core.Exceptions;
 using Syncless.Core.View;
+using Syncless.Helper;
 using Syncless.Notification;
 using Syncless.Tagging.Exceptions;
 using SynclessUI.Helper;
@@ -43,16 +44,6 @@ namespace SynclessUI
         private Dictionary<string, string> _tagStatusNotificationDictionary =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-        public SyncProgressWatcher Watcher
-        {
-            get;
-            set;
-        }
-        public SyncProgress Progress
-        {
-            get;
-            set;
-        }
         public IUIControllerInterface Gui;
 
 
@@ -63,9 +54,12 @@ namespace SynclessUI
             InitializeKeyboardShortcuts();
         }
 
+        public SyncProgressWatcher Watcher { get; set; }
+        public SyncProgress Progress { get; set; }
+
         public string SelectedTag
         {
-            get { return (string)Application.Current.Properties["SelectedTag"]; }
+            get { return (string) Application.Current.Properties["SelectedTag"]; }
             set { Application.Current.Properties["SelectedTag"] = value; }
         }
 
@@ -76,27 +70,26 @@ namespace SynclessUI
 
         private void DisplayLoadingAnimation()
         {
-            if (Properties.Settings.Default.EnableAnimation)
+            if (Settings.Default.EnableAnimation)
             {
-                Storyboard loading = (Storyboard)this.Resources["MainWindowOnLoaded"];
+                var loading = (Storyboard) Resources["MainWindowOnLoaded"];
                 loading.Begin();
             }
         }
 
         private void DisplayUnloadingAnimation()
         {
-            if (Properties.Settings.Default.EnableAnimation)
+            if (Settings.Default.EnableAnimation)
             {
-                Storyboard unloading = (Storyboard)this.Resources["MainWindowUnloaded"];
+                var unloading = (Storyboard) Resources["MainWindowUnloaded"];
                 unloading.Begin();
 
                 DateTime dateTime = DateTime.Now;
 
                 while (DateTime.Now < dateTime.AddMilliseconds(1000))
                 {
-                    this.Dispatcher.Invoke(DispatcherPriority.Background,
-
-                    (DispatcherOperationCallback)delegate(object unused) { return null; }, null);
+                    Dispatcher.Invoke(DispatcherPriority.Background,
+                                      (DispatcherOperationCallback) delegate(object unused) { return null; }, null);
                 }
             }
         }
@@ -126,7 +119,7 @@ namespace SynclessUI
                 else
                 {
                     DialogHelper.ShowError("Syncless Initialization Error",
-                                            "Syncless has failed to initialize and will now exit.");
+                                           "Syncless has failed to initialize and will now exit.");
                     _closenormally = false;
 
                     Close();
@@ -143,11 +136,9 @@ namespace SynclessUI
             }
         }
 
-
-
         public void NotifyBalloon(string title, string text)
         {
-            if (Properties.Settings.Default.EnableTrayNotification)
+            if (Settings.Default.EnableTrayNotification)
             {
                 SystemSounds.Exclamation.Play();
                 TaskbarIcon.ShowBalloonTip(title, text, BalloonIcon.Info);
@@ -240,7 +231,7 @@ namespace SynclessUI
 
                 ListBoxTag.ItemsSource = taglist;
                 LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
-                SelectedTag = (string)ListBoxTag.SelectedItem;
+                SelectedTag = (string) ListBoxTag.SelectedItem;
 
                 if (taglist.Count != 0)
                 {
@@ -319,7 +310,7 @@ namespace SynclessUI
         private void MinimizeWindow()
         {
             WindowState = WindowState.Minimized;
-            if (Properties.Settings.Default.MinimizeToTray)
+            if (Settings.Default.MinimizeToTray)
                 ShowInTaskbar = false;
         }
 
@@ -334,7 +325,7 @@ namespace SynclessUI
 
         private void BtnDirection_Click(object sender, RoutedEventArgs e)
         {
-            if (string.Compare((string)LblDirection.Content, UNI_DIRECTIONAL) == 0)
+            if (string.Compare((string) LblDirection.Content, UNI_DIRECTIONAL) == 0)
             {
                 LblDirection.Content = BI_DIRECTIONAL;
             }
@@ -349,7 +340,7 @@ namespace SynclessUI
             if (!_manualSyncEnabled)
             {
                 DialogHelper.ShowError(SelectedTag + " is Synchronizing",
-                             "You cannot change the synchronization mode while it is synchronizing.");
+                                       "You cannot change the synchronization mode while it is synchronizing.");
                 return;
             }
 
@@ -357,7 +348,7 @@ namespace SynclessUI
             {
                 if (!Gui.GetTag(SelectedTag).IsLocked && !(GetTagStatus(SelectedTag) == "Finalizing"))
                 {
-                    if (string.Compare((string)LblSyncMode.Content, "Manual") == 0)
+                    if (string.Compare((string) LblSyncMode.Content, "Manual") == 0)
                     {
                         if (Gui.MonitorTag(SelectedTag, true))
                         {
@@ -371,10 +362,10 @@ namespace SynclessUI
                         else
                         {
                             DialogHelper.ShowError("Change Synchronization Mode Error",
-                                                    SelectedTag + " could not be switched to Seamless Mode.");
+                                                   SelectedTag + " could not be switched to Seamless Mode.");
                         }
                     }
-                    else if (string.Compare((string)LblSyncMode.Content, "Seamless") == 0)
+                    else if (string.Compare((string) LblSyncMode.Content, "Seamless") == 0)
                     {
                         if (Gui.MonitorTag(SelectedTag, false))
                         {
@@ -383,14 +374,14 @@ namespace SynclessUI
                         else
                         {
                             DialogHelper.ShowError("Change Synchronization Mode Error",
-                                                    SelectedTag + " could not be switched to Manual Mode.");
+                                                   SelectedTag + " could not be switched to Manual Mode.");
                         }
                     }
                 }
                 else
                 {
                     DialogHelper.ShowError(SelectedTag + " is Synchronizing",
-                                            "You cannot change the synchronization mode while it is synchronizing.");
+                                           "You cannot change the synchronization mode while it is synchronizing.");
                 }
             }
             catch (UnhandledException)
@@ -445,18 +436,18 @@ namespace SynclessUI
             {
                 if (Progress.TagName == SelectedTag && Progress.State == SyncState.Analyzing)
                 {
-                    BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
+                    BtnSyncNow.Visibility = Visibility.Visible;
                     CancelButtonMode();
                 }
                 else
                 {
-                    BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
+                    BtnSyncNow.Visibility = Visibility.Hidden;
                 }
             }
             else
             {
                 SyncButtonMode();
-                BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
+                BtnSyncNow.Visibility = Visibility.Visible;
             }
         }
 
@@ -498,7 +489,8 @@ namespace SynclessUI
                     }
                     else
                     {
-                        DialogHelper.ShowError("Nothing to Synchronize", "You can only synchronize when there are two or more folders.");
+                        DialogHelper.ShowError("Nothing to Synchronize",
+                                               "You can only synchronize when there are two or more folders.");
                         SyncButtonMode();
                     }
                 }
@@ -516,7 +508,7 @@ namespace SynclessUI
                 if (success)
                 {
                     SyncButtonMode();
-                    string message = "Synchronization Cancelled.";
+                    string message = "Synchronization Cancelled";
                     LblStatusText.Content = message;
                     _tagStatusNotificationDictionary[SelectedTag] = message;
                     BtnSyncNow.IsHitTestVisible = true;
@@ -624,26 +616,26 @@ namespace SynclessUI
                         }
                         else
                         {
-                            TagView tv = Gui.GetTag((string)TagTitle.Text);
+                            TagView tv = Gui.GetTag((string) TagTitle.Text);
 
                             if (tv != null)
                             {
                                 if (!tv.IsLocked)
                                 {
-                                    Gui.Untag(tv.TagName, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
+                                    Gui.Untag(tv.TagName, new DirectoryInfo((string) ListTaggedPath.SelectedValue));
 
                                     SelectTag(tv.TagName);
                                 }
                                 else
                                 {
                                     DialogHelper.ShowError(tv.TagName + " is Synchronizing",
-                                                            "You cannot untag while a tag is synchronizing.");
+                                                           "You cannot untag while a tag is synchronizing.");
                                 }
                             }
                             else
                             {
                                 DialogHelper.ShowError("Tag Does Not Exist",
-                                                        "The tag which you tried to untag does not exist.");
+                                                       "The tag which you tried to untag does not exist.");
 
                                 InitializeTagInfoPanel();
 
@@ -654,7 +646,7 @@ namespace SynclessUI
                     else
                     {
                         DialogHelper.ShowError(SelectedTag + " is Synchronizing",
-                                                "You cannot untag a folder while the tag is synchronizing.");
+                                               "You cannot untag a folder while the tag is synchronizing.");
                     }
                 }
             }
@@ -674,7 +666,7 @@ namespace SynclessUI
                     if (Gui.PrepareForTermination())
                     {
                         bool result = DialogHelper.ShowWarning("Exit", "Are you sure you want to exit Syncless?" +
-                                                                        "\nExiting Syncless will disable seamless synchronization.");
+                                                                       "\nExiting Syncless will disable seamless synchronization.");
 
                         if (result)
                         {
@@ -690,9 +682,9 @@ namespace SynclessUI
                     else
                     {
                         bool result = DialogHelper.ShowWarning("Exit",
-                                                "Are you sure you want to exit Syncless?" +
-                                                "\nAll current synchronization operations will be completed and" +
-                                                 "\nany unfinished synchronization operations will be removed.");
+                                                               "Are you sure you want to exit Syncless?" +
+                                                               "\nAll current synchronization operations will be completed and" +
+                                                               "\nany unfinished synchronization operations will be removed.");
 
                         if (!result)
                         {
@@ -700,9 +692,10 @@ namespace SynclessUI
                         }
                         else
                         {
-                            DialogWindow terminationWindow = DialogHelper.ShowIndeterminate("Termination in Progress", "Please wait for the current synchronization to complete.");
+                            DialogWindow terminationWindow = DialogHelper.ShowIndeterminate("Termination in Progress",
+                                                                                            "Please wait for the current synchronization to complete.");
                             terminationWindow.Show();
-                            BackgroundWorker bgWorker = new BackgroundWorker();
+                            var bgWorker = new BackgroundWorker();
                             bgWorker.DoWork += bw_DoWork;
                             bgWorker.RunWorkerCompleted += bw_RunWorkerCompleted;
                             bgWorker.RunWorkerAsync(terminationWindow);
@@ -718,19 +711,22 @@ namespace SynclessUI
 
         private void bw_DoWork(object sender, DoWorkEventArgs e)
         {
-            DialogWindow terminationWindow = e.Argument as DialogWindow;
+            var terminationWindow = e.Argument as DialogWindow;
             Gui.Terminate();
             e.Result = terminationWindow;
         }
 
         private void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            DialogWindow terminationWindow = e.Result as DialogWindow;
-            terminationWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
-            {
-                terminationWindow.CannotBeClosed = false;
-                terminationWindow.CloseWindow();
-            }));
+            var terminationWindow = e.Result as DialogWindow;
+            terminationWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action) (() =>
+                                                                                              {
+                                                                                                  terminationWindow.
+                                                                                                      CannotBeClosed =
+                                                                                                      false;
+                                                                                                  terminationWindow.
+                                                                                                      CloseWindow();
+                                                                                              }));
 
             TerminateNow(false);
         }
@@ -776,7 +772,7 @@ namespace SynclessUI
                 else
                 {
                     DialogHelper.ShowError(SelectedTag + " is Synchronizing",
-                                            "You cannot view tag details while the tag is synchronizing.");
+                                           "You cannot view tag details while the tag is synchronizing.");
                 }
             }
         }
@@ -798,7 +794,7 @@ namespace SynclessUI
                 Application.Current.Properties["OptionsWindowIsOpened"] = false;
             }
 
-            if (!(bool)Application.Current.Properties["OptionsWindowIsOpened"])
+            if (!(bool) Application.Current.Properties["OptionsWindowIsOpened"])
             {
                 var ow = new OptionsWindow();
                 ow.ShowDialog();
@@ -817,20 +813,15 @@ namespace SynclessUI
 
         private void BtnPreview_Click(object sender, RoutedEventArgs e)
         {
+            DialogHelper.ShowInformation("Feature In Progress", "This feature will be presented in a future version of Syncless.");
+            
+            /*
             if (!_manualSyncEnabled || Gui.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
             {
                 DialogHelper.ShowError(SelectedTag + " is Synchronizing",
-                                            "You cannot preview while it is synchronizing.");
+                                       "You cannot preview while it is synchronizing.");
                 return;
             }
-            /*
-            string messageBoxText = "This feature will come in a future version of Syncless.";
-            string caption = "Feature Not Implemented Yet";
-            MessageBoxButton button = MessageBoxButton.OK;
-            MessageBoxImage icon = MessageBoxImage.Exclamation;
-
-            MessageBox.Show(messageBoxText, caption, button, icon);
-			*/
 
             if (Gui.GetTag(SelectedTag).PathStringList.Count > 1)
             {
@@ -839,8 +830,10 @@ namespace SynclessUI
             }
             else
             {
-                DialogHelper.ShowError("Nothing to Preview", "You can only preview only when there are two or more folders.");
+                DialogHelper.ShowError("Nothing to Preview",
+                                       "You can only preview only when there are two or more folders.");
             }
+            */
         }
 
         private List<DriveInfo> GetAllRemovableDrives()
@@ -863,19 +856,19 @@ namespace SynclessUI
         {
             try
             {
-                var source = (MenuItem)sender;
-                var driveletter = (string)source.Header;
+                var source = (MenuItem) sender;
+                var driveletter = (string) source.Header;
                 var drive = new DriveInfo(driveletter);
                 if (!Gui.AllowForRemoval(drive))
                 {
                     DialogHelper.ShowError("Unmonitor Error",
-                                            "Syncless could not unmonitor " + driveletter + " from seamless mode.");
+                                           "Syncless could not unmonitor " + driveletter + " from seamless mode.");
                 }
                 else
                 {
                     DialogHelper.ShowInformation("Monitoring Stopped for " + driveletter,
-                                                  "Syncless has stopped all seamless monitoring for " + driveletter +
-                                                    "\nTagging any folders in this drive will re-activate seamless monitoring.");
+                                                 "Syncless has stopped all seamless monitoring for " + driveletter +
+                                                 "\nTagging any folders in this drive will re-activate seamless monitoring.");
                 }
             }
             catch (UnhandledException)
@@ -986,6 +979,166 @@ namespace SynclessUI
             DropIndicator.Visibility = Visibility.Hidden;
         }
 
+        public void NotifyAutoSyncComplete(string path)
+        {
+            NotifyBalloon("Synchronization Completed", path + " is now synchronized.");
+        }
+
+        public void NotifyNothingToSync(string tagname)
+        {
+            string message = "Nothing to Synchronize";
+
+            if (SelectedTag == tagname)
+            {
+                LblStatusText.Content = message;
+                BtnSyncNow.IsEnabled = true;
+                BtnPreview.IsEnabled = true;
+                BtnSyncMode.IsEnabled = true;
+                _manualSyncEnabled = true;
+            }
+
+            LblStatusText.Content = message;
+            _tagStatusNotificationDictionary[tagname] = message;
+        }
+
+        public double GetSyncProgressPercentage(string tagname)
+        {
+            return Progress.TagName == tagname ? Progress.PercentComplete : _syncProgressNotificationDictionary[tagname];
+        }
+
+        public string GetTagStatus(string tagname)
+        {
+            try
+            {
+                string status = _tagStatusNotificationDictionary[tagname];
+
+                return status;
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        public void SetSyncProgress(string tagname, SyncProgress progress)
+        {
+        }
+
+        private void SetProgressBarColor(double percentageComplete)
+        {
+            byte rcolor = 0, gcolor = 0;
+            const byte bcolor = 0;
+
+            if (percentageComplete <= 50)
+            {
+                rcolor = 211;
+                gcolor = (byte) (percentageComplete/50*211);
+            }
+            else
+            {
+                rcolor = (byte) ((100 - percentageComplete)/50*211);
+                gcolor = 211;
+            }
+
+            ProgressBarSync.Foreground = new SolidColorBrush(Color.FromArgb(255, rcolor, gcolor, bcolor));
+        }
+
+        #region Progress Notification
+
+        public void ProgressNotifySyncStart()
+        {
+            const string message = "Synchronization Started";
+
+            if (SelectedTag == Progress.TagName)
+            {
+                LblStatusText.Content = message;
+            }
+
+            _tagStatusNotificationDictionary[Progress.TagName] = message;
+            NotifyBalloon("Synchronization Started", Progress.TagName + " is being synchronized.");
+        }
+
+        public void ProgressNotifyAnalyzing()
+        {
+            const string message = "Analyzing Folders";
+            const double percentageComplete = 0;
+            string tagname = Progress.TagName;
+            if (SelectedTag == tagname)
+            {
+                LblStatusText.Content = message;
+                ProgressBarSync.Value = percentageComplete;
+            }
+
+            _syncProgressNotificationDictionary[tagname] = percentageComplete;
+            _tagStatusNotificationDictionary[tagname] = message;
+        }
+
+        public void ProgressNotifySynchronizing()
+        {
+            if (SelectedTag == Progress.TagName)
+            {
+                BtnSyncNow.Visibility = Visibility.Hidden;
+            }
+        }
+
+        public void ProgressNotifyFinalizing()
+        {
+        }
+
+        public void ProgressNotifySyncComplete()
+        {
+            string message = "Synchronization Completed at " + DateTime.Now;
+            double percentageComplete = Progress.PercentComplete;
+            if (SelectedTag == Progress.TagName)
+            {
+                LblStatusText.Content = message;
+                ProgressBarSync.Value = percentageComplete;
+                BtnSyncNow.IsEnabled = true;
+                BtnPreview.IsEnabled = true;
+                BtnSyncMode.IsEnabled = true;
+                _manualSyncEnabled = true;
+
+                if(Gui.GetTag(SelectedTag).IsSeamless)
+                {
+                    BtnSyncNow.Visibility = Visibility.Hidden;
+                } else
+                {
+                    BtnSyncNow.Visibility = Visibility.Visible;
+                }
+            }
+            _tagStatusNotificationDictionary[Progress.TagName] = message;
+            _syncProgressNotificationDictionary[Progress.TagName] = percentageComplete;
+            NotifyBalloon("Synchronization Completed", Progress.TagName + " is now synchronized.");
+        }
+
+        public void ProgressNotifyChange()
+        {
+            string message = "";
+            switch (Progress.State)
+            {
+                case SyncState.Synchronizing:
+                    message = "Synchronizing " + Progress.Message;
+                    break;
+
+                case SyncState.Finalizing:
+                    message = "Finalizing";
+                    break;
+            }
+
+            double percentageComplete = Progress.PercentComplete;
+            string tagname = Progress.TagName;
+            if (SelectedTag == tagname)
+            {
+                LblStatusText.Content = message;
+                ProgressBarSync.Value = percentageComplete;
+                SetProgressBarColor(percentageComplete);
+            }
+            _syncProgressNotificationDictionary[tagname] = percentageComplete;
+            _tagStatusNotificationDictionary[tagname] = message;
+        }
+
+        #endregion
+
         #region Events Handlers for Taskbar Icon Context Menu Items
 
         private void TaskbarExitItem_Click(object sender, RoutedEventArgs e)
@@ -1045,7 +1198,7 @@ namespace SynclessUI
 
         private void OpenFolderInWindowsExplorer()
         {
-            var path = (string)ListTaggedPath.SelectedItem;
+            var path = (string) ListTaggedPath.SelectedItem;
             if (path != "")
             {
                 var runExplorer = new ProcessStartInfo();
@@ -1081,7 +1234,7 @@ namespace SynclessUI
                 List<string> taglist = Gui.GetAllTags();
 
                 ListBoxTag.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                                                  (Action)(() =>
+                                                  (Action) (() =>
                                                                 {
                                                                     ListBoxTag.ItemsSource = taglist;
                                                                     LblTagCount.Content = "[" + taglist.Count + "/" +
@@ -1089,7 +1242,7 @@ namespace SynclessUI
                                                                 }));
 
                 ListTaggedPath.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                                                      (Action)(() =>
+                                                      (Action) (() =>
                                                                     {
                                                                         if (SelectedTag == null)
                                                                         {
@@ -1099,11 +1252,13 @@ namespace SynclessUI
                                                                         switch (tv.TagState)
                                                                         {
                                                                             case TagState.Switching:
-                                                                                Console.WriteLine("Tag Changed: Switching");
+                                                                                Console.WriteLine(
+                                                                                    "Tag Changed: Switching");
                                                                                 SwitchingMode();
                                                                                 break;
                                                                             case TagState.Seamless:
-                                                                                Console.WriteLine("Tag Changed: Seamless");
+                                                                                Console.WriteLine(
+                                                                                    "Tag Changed: Seamless");
                                                                                 SeamlessMode();
                                                                                 break;
                                                                             case TagState.Manual:
@@ -1114,7 +1269,10 @@ namespace SynclessUI
                                                                         }
 
                                                                         ListTaggedPath.ItemsSource = tv.PathStringList;
-                                                                        BdrTaggedPath.Visibility = tv.PathStringList.Count == 0 ? Visibility.Hidden : Visibility.Visible;
+                                                                        BdrTaggedPath.Visibility =
+                                                                            tv.PathStringList.Count == 0
+                                                                                ? Visibility.Hidden
+                                                                                : Visibility.Visible;
                                                                     }));
             }
             catch (UnhandledException)
@@ -1161,7 +1319,7 @@ namespace SynclessUI
 
         public void CliUntag(string clipath)
         {
-            System.Windows.WindowState currentWindowState = this.WindowState;
+            WindowState currentWindowState = WindowState;
             if (FileHelper.IsFile(clipath))
             {
                 DialogHelper.ShowError("Untagging not Allowed", "You cannot tag a file.");
@@ -1174,7 +1332,7 @@ namespace SynclessUI
             {
                 di = new DirectoryInfo(clipath);
             }
-            catch (System.ArgumentException)
+            catch (ArgumentException)
             {
                 DialogHelper.ShowError("Invalid Folder", "You cannot untag this folder.");
                 return;
@@ -1197,7 +1355,7 @@ namespace SynclessUI
             {
                 di = new DirectoryInfo(clipath);
             }
-            catch (System.ArgumentException)
+            catch (ArgumentException)
             {
                 DialogHelper.ShowError("Invalid Folder", "You cannot clean this folder.");
                 return;
@@ -1369,6 +1527,16 @@ namespace SynclessUI
             var kg9 = new KeyGesture(Key.L, ModifierKeys.Control);
             var ib9 = new InputBinding(LogCommand, kg9);
             InputBindings.Add(ib9);
+
+            // Exit Command
+            var ExitCommand = new RoutedCommand();
+
+            var cb10 = new CommandBinding(ExitCommand, ExitCommandExecute, ExitCommandCanExecute);
+            CommandBindings.Add(cb10);
+
+            var kg10 = new KeyGesture(Key.W, ModifierKeys.Control);
+            var ib10 = new InputBinding(ExitCommand, kg10);
+            InputBindings.Add(ib10);
         }
 
         private void CreateTagCommandExecute(object sender, ExecutedRoutedEventArgs e)
@@ -1403,8 +1571,8 @@ namespace SynclessUI
                     if (!Gui.GetTag(SelectedTag).IsLocked)
                     {
                         bool result = DialogHelper.ShowWarning("Remove Tag",
-                                                                "Are you sure you want to remove " + SelectedTag +
-                                                                "?");
+                                                               "Are you sure you want to remove " + SelectedTag +
+                                                               "?");
 
                         if (result)
                         {
@@ -1418,20 +1586,21 @@ namespace SynclessUI
                                 }
                                 else
                                 {
-                                    DialogHelper.ShowError("Remove Tag Error", "" + SelectedTag + " could not be removed.");
+                                    DialogHelper.ShowError("Remove Tag Error",
+                                                           "" + SelectedTag + " could not be removed.");
                                 }
                             }
                             else
                             {
                                 DialogHelper.ShowError(SelectedTag + " is Synchronizing",
-                                                        "You cannot remove a tag while the tag is synchronizing.");
+                                                       "You cannot remove a tag while the tag is synchronizing.");
                             }
                         }
                     }
                     else
                     {
                         DialogHelper.ShowError(SelectedTag + " is Synchronizing",
-                                                "You cannot remove a tag while the tag is synchronizing.");
+                                               "You cannot remove a tag while the tag is synchronizing.");
                     }
                 }
                 else
@@ -1509,6 +1678,19 @@ namespace SynclessUI
             e.Handled = true;
         }
 
+        private void ExitCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            e.Handled = true;
+            //Actual Code
+            Close();
+        }
+
+        private void ExitCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+            e.Handled = true;
+        }
+
         private void UnmonitorCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
@@ -1520,7 +1702,7 @@ namespace SynclessUI
         {
             var driveMenu = new ContextMenu();
 
-            List<string> removableDrives = Syncless.Helper.DriveHelper.GetUSBDriveLetters();
+            List<string> removableDrives = DriveHelper.GetUSBDriveLetters();
             if (removableDrives.Count == 0)
             {
                 var driveMenuItem = new MenuItem();
@@ -1602,7 +1784,7 @@ namespace SynclessUI
             Settings.Default.Save();
         }
 
-        private void ListBoxTag_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void ListBoxTag_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Delete && ListBoxTag.Items.Count > 0)
             {
@@ -1610,168 +1792,11 @@ namespace SynclessUI
             }
         }
 
-        private void Canvas_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            DragMove();
         }
 
         #endregion
-
-        public void NotifyAutoSyncComplete(string path)
-        {
-            NotifyBalloon("Synchronization Completed", path + " is now synchronized.");
-        }
-
-        #region Progress Notification
-
-        public void ProgressNotifySyncStart()
-        {
-            const string message = "Synchronization Started";
-
-            if (SelectedTag == Progress.TagName)
-            {
-                LblStatusText.Content = message;
-            }
-
-            _tagStatusNotificationDictionary[Progress.TagName] = message;
-            NotifyBalloon("Synchronization Started", Progress.TagName + " is being synchronized.");
-        }
-
-        public void ProgressNotifyAnalyzing()
-        {
-            const string message = "Analyzing Folders";
-            const double percentageComplete = 0;
-            string tagname = Progress.TagName;
-            if (SelectedTag == tagname)
-            {
-                LblStatusText.Content = message;
-                ProgressBarSync.Value = percentageComplete;
-            }
-
-            _syncProgressNotificationDictionary[tagname] = percentageComplete;
-            _tagStatusNotificationDictionary[tagname] = message;
-        }
-
-        public void ProgressNotifySynchronizing()
-        {
-            if (SelectedTag == Progress.TagName)
-            {
-                BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
-            }
-        }
-
-        public void ProgressNotifyFinalizing()
-        {
-
-        }
-
-        public void ProgressNotifySyncComplete()
-        {
-            string message = "Synchronization Completed at " + DateTime.Now;
-            double percentageComplete = Progress.PercentComplete;
-            if (SelectedTag == Progress.TagName)
-            {
-                LblStatusText.Content = message;
-                ProgressBarSync.Value = percentageComplete;
-                BtnSyncNow.IsEnabled = true;
-                BtnPreview.IsEnabled = true;
-                BtnSyncMode.IsEnabled = true;
-                _manualSyncEnabled = true;
-            }
-
-            BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
-            _tagStatusNotificationDictionary[Progress.TagName] = message;
-            _syncProgressNotificationDictionary[Progress.TagName] = percentageComplete;
-            NotifyBalloon("Synchronization Completed", Progress.TagName + " is now synchronized.");
-        }
-
-        public void ProgressNotifyChange()
-        {
-            string message = "";
-            switch (Progress.State)
-            {
-                case SyncState.Synchronizing: message = "Sychronizing " + Progress.Message;
-                    break;
-
-                case SyncState.Finalizing: message = "Finalizing";
-                    break;
-
-            }
-
-            double percentageComplete = Progress.PercentComplete;
-            string tagname = Progress.TagName;
-            if (SelectedTag == tagname)
-            {
-                LblStatusText.Content = message;
-                ProgressBarSync.Value = percentageComplete;
-            }
-            SetProgressBarColor(percentageComplete);
-            _syncProgressNotificationDictionary[tagname] = percentageComplete;
-            _tagStatusNotificationDictionary[tagname] = message;
-
-        }
-        #endregion
-
-
-
-        public void NotifyNothingToSync(string tagname)
-        {
-            string message = "Nothing to Synchronize";
-
-            if (SelectedTag == tagname)
-            {
-                LblStatusText.Content = message;
-                BtnSyncNow.IsEnabled = true;
-                BtnPreview.IsEnabled = true;
-                BtnSyncMode.IsEnabled = true;
-                _manualSyncEnabled = true;
-            }
-
-            LblStatusText.Content = message;
-            _tagStatusNotificationDictionary[tagname] = message;
-        }
-
-        public double GetSyncProgressPercentage(string tagname)
-        {
-            return Progress.TagName == tagname ? Progress.PercentComplete : _syncProgressNotificationDictionary[tagname];
-        }
-
-        public string GetTagStatus(string tagname)
-        {
-            try
-            {
-                string status = _tagStatusNotificationDictionary[tagname];
-
-                return status;
-            }
-            catch
-            {
-                return "";
-            }
-        }
-
-        public void SetSyncProgress(string tagname, SyncProgress progress)
-        {
-
-        }
-
-        private void SetProgressBarColor(double percentageComplete)
-        {
-            byte rcolor = 0, gcolor = 0;
-            const byte bcolor = 0;
-
-            if (percentageComplete <= 50)
-            {
-                rcolor = 211;
-                gcolor = (byte)(percentageComplete / 50 * 211);
-            }
-            else
-            {
-                rcolor = (byte)((100 - percentageComplete) / 50 * 211);
-                gcolor = 211;
-            }
-
-            ProgressBarSync.Foreground = new SolidColorBrush(Color.FromArgb(255, rcolor, gcolor, bcolor));
-        }
     }
 }

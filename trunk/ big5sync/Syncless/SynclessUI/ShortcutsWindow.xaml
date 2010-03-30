@@ -111,7 +111,7 @@
 				<Label HorizontalAlignment="Center" VerticalAlignment="Center" Content="11" FontFamily="Century Gothic" FontSize="10.667" Foreground="White" />
 			</Grid>
 		</StackPanel>
-		<TextBlock HorizontalAlignment="Left" Margin="410,42,0,0" Grid.Column="1" Grid.Row="2" FontFamily="Century Gothic" Foreground="White" LineHeight="29.333"><Run Text="Ctrl-N (Create Tag)&#xa;Ctrl-R (Remove Tag)&#xa;Ctrl-T (Tag Folder)&#xa;Ctrl-U (Untag Folder)&#xa;Ctrl-D (Tag Details)&#xa;Ctrl-L (Log) &#xa;Ctrl-I (Unmonitor Removable Drives)"/><LineBreak/><Run Text="Ctrl-S (Useful Shortcuts)"/><LineBreak/><Run Text="Ctrl-O (Application Options)"/><LineBreak/><Run Text="Ctrl-M (Minimize Syncless)"/><LineBreak/><Run Text="Alt-F4 (Quit Syncless)"/></TextBlock>
+		<TextBlock HorizontalAlignment="Left" Margin="410,42,0,0" Grid.Column="1" Grid.Row="2" FontFamily="Century Gothic" Foreground="White" LineHeight="29.333"><Run Text="Ctrl-N (Create Tag)&#xa;Ctrl-R (Remove Tag)&#xa;Ctrl-T (Tag Folder)&#xa;Ctrl-U (Untag Folder)&#xa;Ctrl-D (Tag Details)&#xa;Ctrl-L (Log) &#xa;Ctrl-I (Unmonitor Removable Drives)"/><LineBreak/><Run Text="Ctrl-S (Useful Shortcuts)"/><LineBreak/><Run Text="Ctrl-O (Application Options)"/><LineBreak/><Run Text="Ctrl-M (Minimize Syncless)"/><LineBreak/><Run Text="Alt-F4/Ctrl-W (Quit Syncless)"/></TextBlock>
 		<StackPanel x:Name="OptionMinClosePanel" Grid.Row="2" Grid.Column="1" Height="20" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,162,0,0" Cursor="Hand" IsHitTestVisible="False">
 			<Image x:Name="BtnShortcuts" Source="Icons/kb.ico" Width="16" Height="16" Margin="0,2.5,3,1.5" />
 			<Image x:Name="BtnOptions" Source="Icons/option.ico" Width="15" Height="15" Margin="0,0,3,0" />
