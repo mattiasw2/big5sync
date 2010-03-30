@@ -84,7 +84,8 @@ namespace SynclessUI.Notification
                                                                           ssNotification.Progress);
                     
                 }
-            } else if(notification.NotificationCode.Equals(NotificationCode.SYNC_COMPLETE_NOTIFICATION))
+            } 
+            else if(notification.NotificationCode.Equals(NotificationCode.SYNC_COMPLETE_NOTIFICATION))
             {
                 SyncCompleteNotification scNotification = notification as SyncCompleteNotification;
                 if(scNotification != null)
@@ -109,6 +110,18 @@ namespace SynclessUI.Notification
                         (Action)(() =>
                         {
                             _main.NotifyNothingToSync(ntsNotification.TagName);
+                        }));
+                }
+            }
+            else if (notification.NotificationCode.Equals(NotificationCode.AutoSyncCompleteNotification))
+            {
+                AutoSyncCompleteNotification ascNotification = notification as AutoSyncCompleteNotification;
+                if (ascNotification != null)
+                {
+                    _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                        (Action)(() =>
+                        {
+                            _main.NotifyAutoSyncComplete(ascNotification.Path);
                         }));
                 }
             }
