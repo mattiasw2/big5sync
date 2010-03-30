@@ -84,7 +84,7 @@ namespace SynclessUI
 					iconsource = System.Drawing.SystemIcons.Question;
                     break;
                 case MessageBoxImage.None:
-                    iconsource = System.Drawing.SystemIcons.Application;
+                    iconsource = System.Drawing.SystemIcons.Exclamation;
                     break;
 			}
 			if (iconsource == null) return null;
