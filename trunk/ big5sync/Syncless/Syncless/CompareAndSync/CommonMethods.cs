@@ -74,25 +74,36 @@ namespace Syncless.CompareAndSync
         
         public static void CreateFileIfNotExist(string path)
         {
-            string nodename = "name";
-            string metadir = ".syncless";
-            string metadatapath = @".syncless\syncless.xml";
-            string xmlPath = Path.Combine(path, metadatapath);
-            if (File.Exists(xmlPath))
-                return;
+            try
+            {
+                string nodename = "name";
+                string metadir = ".syncless";
+                string metadatapath = @".syncless\syncless.xml";
+                string xmlPath = Path.Combine(path, metadatapath);
+                if (File.Exists(xmlPath))
+                    return;
 
-            DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, metadir));
-            di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-            XmlTextWriter writer = new XmlTextWriter(xmlPath, null);
-            writer.Formatting = Formatting.Indented;
-            writer.WriteStartDocument();
-            writer.WriteStartElement("meta-data");
-            writer.WriteElementString("last_modified", (DateTime.Now.Ticks).ToString());
-            writer.WriteElementString(nodename, GetLastFileIndex(path));
-            writer.WriteEndElement();
-            writer.WriteEndDocument();
-            writer.Flush();
-            writer.Close();
+                DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, metadir));
+                di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+                XmlTextWriter writer = new XmlTextWriter(xmlPath, null);
+                writer.Formatting = Formatting.Indented;
+                writer.WriteStartDocument();
+                writer.WriteStartElement("meta-data");
+                writer.WriteElementString("last_modified", (DateTime.Now.Ticks).ToString());
+                writer.WriteElementString(nodename, GetLastFileIndex(path));
+                writer.WriteEndElement();
+                writer.WriteEndDocument();
+                writer.Flush();
+                writer.Close();
+            }
+            catch(IOException)
+            {
+                throw new IOException("Error IO Exception");
+            }
+            catch(XmlException)
+            {
+                throw new XmlException("Error XML Exception");
+            }
         }
 
         private static string GetLastFileIndex(string filePath)
