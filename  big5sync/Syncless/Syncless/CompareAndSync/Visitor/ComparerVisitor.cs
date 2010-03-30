@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Enum;
+using Syncless.Core;
+using Syncless.Logging;
 
 namespace Syncless.CompareAndSync.Visitor
 {
@@ -231,6 +234,7 @@ namespace Syncless.CompareAndSync.Visitor
                         file.Priority[i] = file.Priority[mostUpdatedPos] - 1;
                         file.FinalState[i] = FinalState.Conflict;
                         file.ConflictPositions.Add(i);
+                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CONFLICT, "Conflicted file detected " + Path.Combine(file.GetSmartParentPath(i), file.Name)));
                     }
                 }
                 else

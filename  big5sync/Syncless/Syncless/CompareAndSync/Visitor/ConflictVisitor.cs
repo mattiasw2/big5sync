@@ -7,6 +7,7 @@ using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Exceptions;
 using Syncless.Core;
+using Syncless.Logging;
 
 namespace Syncless.CompareAndSync.Visitor
 {
@@ -56,8 +57,7 @@ namespace Syncless.CompareAndSync.Visitor
             catch (CopyFileException e)
             {
                 fco.FinalState[fileIndex] = FinalState.Error;
-                //TODO: Throw to notification queue in future
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error copying file from " + src + " to " + dest));
             }
             catch (DeleteFileException e)
             {

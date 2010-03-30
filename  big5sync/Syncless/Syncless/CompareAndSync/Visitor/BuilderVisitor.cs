@@ -66,6 +66,7 @@ namespace Syncless.CompareAndSync.Visitor
                                     folder.RemoveChild(info.Name); //Remove file object
                                     fco = new FolderCompareObject(info.Name, numOfPaths, folder);
                                     conflict = true;
+                                    ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CONFLICT, "Conflicted file detected " + info.FullName));
                                 }
                             }
 
@@ -98,6 +99,7 @@ namespace Syncless.CompareAndSync.Visitor
                                 {
                                     _typeConflicts.Add(info.FullName);
                                     conflict = true;
+                                    ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CONFLICT, "Conflicted file detected " + info.FullName));
                                 }
                             }
 

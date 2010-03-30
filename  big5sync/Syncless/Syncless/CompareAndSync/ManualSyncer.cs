@@ -100,7 +100,7 @@ namespace Syncless.CompareAndSync
                     }
                     catch (CopyFolderException e)
                     {
-                        ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error copying folder: " + s + " to " + dest));
                     }
                     catch (DeleteFolderException e)
                     {
@@ -122,7 +122,7 @@ namespace Syncless.CompareAndSync
                     }
                     catch (CopyFileException e)
                     {
-                        ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error copying file from " + s + " to " + dest));
                     }
                     catch (DeleteFileException e)
                     {
