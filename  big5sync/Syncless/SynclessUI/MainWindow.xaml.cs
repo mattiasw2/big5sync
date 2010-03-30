@@ -752,19 +752,11 @@ namespace SynclessUI
                         else
                         {
                             DialogWindow terminationWindow = DialogsHelper.ShowTermination("Termination in Progress", "Please wait for the current synchronization to complete.");
-                            //terminationWindow.Show();
 
                             BackgroundWorker bgWorker = new BackgroundWorker();
                             bgWorker.DoWork += bw_DoWork;
                             bgWorker.RunWorkerCompleted += bw_RunWorkerCompleted;
                             bgWorker.RunWorkerAsync(terminationWindow);
-
-                            //Thread terminateThread = new Thread(Gui.Terminate);
-                            //terminateThread.Start();
-                            //terminateThread.Join();
-                            //terminationWindow.CannotBeClosed = false;
-                            //terminationWindow.CloseWindow();
-                            //TerminateNow();
                         }
                     }
                 }
@@ -866,7 +858,7 @@ namespace SynclessUI
             }
         }
 
-        private void OpenSynclessWebpage()
+        private static void OpenSynclessWebpage()
         {
             Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/"));
         }
