@@ -37,50 +37,67 @@ namespace SynclessUI.Notification
             _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
             (Action)(() =>
             {
-                _main.NotifySyncStart(_tagName);
+                _main.ProgressNotifySyncStart();
             }));
             StateChanged();
         }
 
         public void StateChanged()
-        { 
+        {
             if (_progress.State == SyncState.Analyzing)
             {
                 _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                                                             (Action) (() =>
+                                                             (Action)(() =>
                                                                            {
-                                                                               _main.NotifySyncAnalyzing(_tagName);
+                                                                               _main.ProgressNotifyAnalyzing();
                                                                            }));
             }
             else if (_progress.State == SyncState.Synchronizing)
             {
                 _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                                                             (Action) (() =>
+                                                             (Action)(() =>
                                                                            {
-                                                                               _main.NotifySynchronization(_tagName);
+                                                                               _main.ProgressNotifySynchronizing();
                                                                            }));
             }
+            else if (_progress.State == SyncState.Finalizing)
+            {
+                _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                                             (Action)(() =>
+                                                             {
+                                                                 _main.ProgressNotifyFinalizing();
+                                                             }));
+            }
+            else if (_progress.State == SyncState.Finished)
+            {
+                _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                                             (Action)(() =>
+                                                             {
+                                                                 _main.ProgressNotifySyncComplete();
+                                                             }));
+            }
 
-            Console.WriteLine("State Changed (New State : " + _progress.State + ")");   
+            Console.WriteLine("State Changed (New State : " + _progress.State + ")");
         }
 
         public void ProgressChanged()
         {
-            
+
             _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
            (Action)(() =>
             {
-                _main.SetSyncProgress(_tagName, _progress);
+                _main.ProgressNotifyChange();
             }));
-            
-            ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Current Percent : "+_progress.PercentComplete + "("+_progress.Message+")");
+
+            ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Current Percent : " + _progress.PercentComplete + "(" + _progress.Message + ")");
         }
 
         public void SyncComplete()
         {
+            StateChanged();
             ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Sync Complete");
         }
-        
+
         #endregion
     }
 }

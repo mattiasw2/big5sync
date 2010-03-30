@@ -83,9 +83,10 @@ namespace SynclessUI.Notification
                 SyncStartNotification ssNotification = notification as SyncStartNotification;
                 if (ssNotification != null)
                 {
+                    _main.Progress = ssNotification.Progress;
                     SyncProgressWatcher watcher = new SyncProgressWatcher(_main, ssNotification.TagName,
                                                                           ssNotification.Progress);
-                    _main.Watcher = watcher;
+                    
                 }
             } 
             else if(notification.NotificationCode.Equals(NotificationCode.SYNC_COMPLETE_NOTIFICATION))
@@ -98,7 +99,6 @@ namespace SynclessUI.Notification
                     _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                         (Action)(() =>
                         {
-                            _main.NotifySyncCompletion(scNotification.TagName);
                             _main.TagChanged();
                             Console.WriteLine("Sync Complete: Calling Tag Changed");
                         }));

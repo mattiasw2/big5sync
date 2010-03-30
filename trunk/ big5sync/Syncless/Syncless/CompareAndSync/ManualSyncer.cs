@@ -36,17 +36,15 @@ namespace Syncless.CompareAndSync
 
             if (progress.State != SyncState.Cancelled)
             {
-                HandleBuildConflicts(typeConflicts, request.Config);
-                CompareObjectHelper.PreTraverseFolder(rco, new ConflictVisitor(request.Config), progress);
-
                 //Syncing
                 progress.ChangeToSyncing(comparerVisitor.TotalNodes);
+                HandleBuildConflicts(typeConflicts, request.Config);
+                CompareObjectHelper.PreTraverseFolder(rco, new ConflictVisitor(request.Config), progress);
                 SyncerVisitor syncerVisitor = new SyncerVisitor(request.Config, progress);
                 CompareObjectHelper.PreTraverseFolder(rco, syncerVisitor, progress);
 
                 //XML Writer
                 progress.ChangeToFinalizing(syncerVisitor.NodesCount);
-
                 CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor(progress), progress);
                 AbstractNotification notification = new SyncCompleteNotification(request.TagName, rco);
                 progress.ChangeToFinished(notification);
