@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Timers;
 using Timer = System.Timers.Timer;
+using System.Security.Cryptography;
 
 namespace SynclessSeamlessTester
 {
@@ -264,6 +265,10 @@ namespace SynclessSeamlessTester
             {
                 Console.WriteLine(e.ToString());
             }
+            catch (IndexOutOfRangeException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
 
         private void Rename()
@@ -322,19 +327,19 @@ namespace SynclessSeamlessTester
         private int RandomSourceOrDest()
         {
             int i = RandomNumberGenerator.GetRandomInt(1, 2);
-            return i == -1 ? new Random().Next(1, 3) : i;
+            return i == -1 ? GetRandomNumber(1, 2) : i;
         }
 
         private int RandomFileOrFolder()
         {
             int i = RandomNumberGenerator.GetRandomInt(3, 4);
-            return i == -1 ? new Random().Next(3, 5) : i;
+            return i == -1 ? GetRandomNumber(3, 4) : i;
         }
 
         private int RandomDestAction()
         {
             int i = RandomNumberGenerator.GetRandomInt(200, 202);
-            return i == -1 ? new Random().Next(200, 203) : i;
+            return i == -1 ? GetRandomNumber(200, 202) : i;
         }
 
         //Averages out to get normal distribution
@@ -424,5 +429,24 @@ namespace SynclessSeamlessTester
             }
         }
 
+
+        public static int GetRandomNumber(byte min, byte max)
+        {
+            if (min <= 0 || max <= 0)
+                throw new ArgumentOutOfRangeException("numberSides");
+            RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider();
+            byte[] randomNumber = new byte[1];
+            do
+            {
+                rngCsp.GetBytes(randomNumber);
+                randomNumber[0] = (byte)((randomNumber[0] % (max - min + 1)) + min);
+            } while (!IsValid(randomNumber[0], min, max));
+            return randomNumber[0];
+        }
+
+        private static bool IsValid(byte result, byte min, byte max)
+        {
+            return (result >= min && result <= max);
+        }
     }
 }
