@@ -103,6 +103,11 @@ namespace Syncless.CompareAndSync.CompareObject
                 return child;
         }
 
+        public bool RemoveChild(string name)
+        {
+            return _contents.Remove(name);
+        }
+
         public string MetaName
         {
             get { return _metaName; }

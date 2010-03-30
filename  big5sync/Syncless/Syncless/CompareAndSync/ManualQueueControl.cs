@@ -68,7 +68,7 @@ namespace Syncless.CompareAndSync
         }
 
         //Change to bool instead?
-        public void CancelSyncJob(CancelSyncRequest item)
+        public bool CancelSyncJob(CancelSyncRequest item)
         {
             lock (locker)
             {
@@ -80,9 +80,11 @@ namespace Syncless.CompareAndSync
                         {
                             _jobs.RemoveAt(i);
                             _queuedJobsLookup.Remove(item.TagName);
-                            ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName, true));
-                            break;
+                            //ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName, true));
+                            return true;
+                            //break;
                         }
+                        return false;
                     }
                 }
                 else if (_currJob!= null && _currJob.TagName == item.TagName)
@@ -92,13 +94,16 @@ namespace Syncless.CompareAndSync
                         case SyncState.Started:
                         case SyncState.Analyzing:
                             _currJobProgress.Cancel();
-                            ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName, true));
+                            return true;
+                            //ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName, true));
                             break;
                         default:
-                            ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName, false));
+                            return false;
+                            //ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName, false));
                             break;
                     }
                 }
+                return false;
             }
         }
 

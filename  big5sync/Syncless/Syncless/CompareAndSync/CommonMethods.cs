@@ -211,8 +211,6 @@ namespace Syncless.CompareAndSync
         /// <exception cref="CopyFileException"></exception>
         public static void CopyFile(string sourceFile, string destFile, bool overwrite)
         {
-            Debug.Assert(File.Exists(sourceFile));
-
             try
             {
                 File.Copy(sourceFile, destFile, overwrite);
