@@ -25,8 +25,8 @@ namespace Syncless.CompareAndSync
 
             //Analyzing
             progress.ChangeToAnalyzing();
-            List<string> buildConflicts = new List<string>();
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters, buildConflicts), progress);
+            List<string> typeConflicts = new List<string>();
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters, typeConflicts), progress);
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), progress);
             CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor(), progress);
             ComparerVisitor comparerVisitor = new ComparerVisitor();
