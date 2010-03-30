@@ -24,7 +24,7 @@ namespace Syncless.CompareAndSync.Visitor
         public void Visit(FileCompareObject file, int numOfPaths)
         {
             _nodesCount++;
-            _syncProgress.Message = "Synchronizing " + file.Name;
+            _syncProgress.Message = file.Name;
             if (file.Invalid)
             {
                 _syncProgress.fail();
@@ -65,7 +65,7 @@ namespace Syncless.CompareAndSync.Visitor
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
             _nodesCount++;
-            _syncProgress.Message = "Synchronizing " + folder.Name;
+            _syncProgress.Message = folder.Name;
             if (folder.Invalid)
             {
                 _syncProgress.fail();
