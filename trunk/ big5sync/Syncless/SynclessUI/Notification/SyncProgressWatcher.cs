@@ -47,14 +47,23 @@ namespace SynclessUI.Notification
             if (_progress.State == SyncState.Analyzing)
             {
                 _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-               (Action)(() =>
-               {
-                   _main.NotifySyncAnalyzing(_tagName);
-               }));
+                                                             (Action) (() =>
+                                                                           {
+                                                                               _main.NotifySyncAnalyzing(_tagName);
+                                                                           }));
+            }
+            else if (_progress.State == SyncState.Synchronizing)
+            {
+                _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                                             (Action) (() =>
+                                                                           {
+                                                                               _main.NotifySynchronization(_tagName);
+                                                                           }));
             }
 
             Console.WriteLine("State Changed (New State : " + _progress.State + ")");   
         }
+
         public void ProgressChanged()
         {
             

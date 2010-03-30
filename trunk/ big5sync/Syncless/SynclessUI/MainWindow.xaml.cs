@@ -3,25 +3,23 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Media;
 using System.Reflection;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Hardcodet.Wpf.TaskbarNotification;
 using Syncless.Core;
 using Syncless.Core.Exceptions;
 using Syncless.Core.View;
 using Syncless.Notification;
-using Syncless.Notification.UINotification;
 using Syncless.Tagging.Exceptions;
 using SynclessUI.Helper;
 using SynclessUI.Notification;
 using SynclessUI.Properties;
-using System.Media;
-using System.Windows.Media.Animation;
 
 namespace SynclessUI
 {
@@ -44,6 +42,11 @@ namespace SynclessUI
 
         private Dictionary<string, string> _tagStatusNotificationDictionary =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        public SyncProgressWatcher Watcher
+        {
+            get; set;
+        } 
 
         public IUIControllerInterface Gui;
 
@@ -150,6 +153,14 @@ namespace SynclessUI
             _tagStatusNotificationDictionary[tagname] = message;
         }
 
+        public void NotifySynchronization(string tagname)
+        {
+            if (SelectedTag == tagname)
+            {
+                BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
+            }
+        }
+
         public void NotifySyncStart(string tagname)
         {
             const string message = "Synchronization Started";
@@ -177,6 +188,7 @@ namespace SynclessUI
                 _manualSyncEnabled = true;
             }
 
+            BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
             _tagStatusNotificationDictionary[tagname] = message;
             NotifyBalloon("Synchronization Completed", tagname + " is now synchronized.");
         }
@@ -307,10 +319,18 @@ namespace SynclessUI
 
                 if(tv.IsLocked)
                 {
-                    CancelButtonMode();
+                    if(Watcher != null && Watcher.Progress.State == SyncState.Analyzing)
+                    {
+                        BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
+                        CancelButtonMode();
+                    } else
+                    {
+                        BtnSyncNow.Visibility = System.Windows.Visibility.Hidden;
+                    }
                 } else
                 {
                     SyncButtonMode();
+                    BtnSyncNow.Visibility = System.Windows.Visibility.Visible;
                 }
 
                 LblStatusText.Content = "";
