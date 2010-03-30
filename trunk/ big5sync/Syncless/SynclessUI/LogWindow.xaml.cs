@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
+using System.Windows.Input;
 using Syncless.Logging;
 using Syncless.Core.Exceptions;
 using SynclessUI.Helper;
@@ -167,6 +168,14 @@ namespace SynclessUI
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+        	if(e.Key == Key.Escape)
+        	{
+        	    CloseWindow();
+        	}
         }
     }
 }
