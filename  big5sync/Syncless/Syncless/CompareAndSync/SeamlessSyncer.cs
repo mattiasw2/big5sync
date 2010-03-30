@@ -140,6 +140,11 @@ namespace Syncless.CompareAndSync
                         {
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error renaming file from " + sourceFullPath + " to " + destFullPath));
                         }
+                        catch (HashFileException)
+                        {
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error hashing " + sourceFullPath + "."));
+                            return;
+                        }
                     }
                 }
             }
@@ -179,6 +184,11 @@ namespace Syncless.CompareAndSync
                         catch (DeleteFileException e)
                         {
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error deleting file " + destFullPath));
+                        }
+                        catch (HashFileException)
+                        {
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error hashing " + sourceFullPath + "."));
+                            return;
                         }
                     }
                 }
