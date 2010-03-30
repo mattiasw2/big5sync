@@ -29,7 +29,6 @@ namespace Syncless.Logging
                 streamReader.Close();
                 fs.Close();
                 File.Delete(USER_LOG_BACKUP_PATH);
-                throw e;
             }
             finally
             {
