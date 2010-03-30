@@ -142,7 +142,7 @@ namespace SynclessSeamlessTester
             try
             {
                 if (listBoxSourcePaths.Items.Count > 0 && listBoxDestPaths.Items.Count > 0 &&
-                    Convert.ToInt32(textBoxDuration.Text) > 0 && Convert.ToInt32(textBoxMinWaitTime.Text) >= 0 && Convert.ToInt32(textBoxMaxWaitTime.Text) >= Convert.ToInt32(textBoxMinWaitTime.Text))
+                    Convert.ToInt32(textBoxDuration.Text) > 0 && Convert.ToInt32(textBoxMinWaitTime.Text) >= 0 && (checkBoxBurst.Checked ? Convert.ToInt32(textBoxMaxWaitTime.Text) >= 0 : (Convert.ToInt32(textBoxMaxWaitTime.Text) >= Convert.ToInt32(textBoxMinWaitTime.Text))))
                 {
                     ToggleAllControls(Action.Propagate);
                     _testInfo = new TestInfo();
@@ -257,7 +257,7 @@ namespace SynclessSeamlessTester
                 StartPropagating();
                 new TestWorkerClass(Convert.ToInt32(textBoxDuration.Text), Convert.ToInt32(textBoxMinWaitTime.Text),
                                     Convert.ToInt32(textBoxMaxWaitTime.Text), _sourcePaths, _destPaths,
-                                    info, backgroundWorker1, e, _filters);
+                                    info, backgroundWorker1, e, _filters, checkBoxBurst.Checked);
                 info.Propagated = true;
             }
             if (info.Propagated)
@@ -412,6 +412,20 @@ namespace SynclessSeamlessTester
         {
             _filters.Clear();
             listBoxFilter.Items.Clear();
+        }
+
+        private void checkBoxBurst_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxBurst.Checked)
+            {
+                labelMin.Text = "Wait Time:";
+                labelMax.Text = "No. of Bursts:";
+            }
+            else
+            {
+                labelMin.Text = "Min.";
+                labelMax.Text = "Max.";
+            }
         }
 
     }

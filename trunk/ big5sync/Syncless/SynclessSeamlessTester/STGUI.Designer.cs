@@ -49,8 +49,8 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.buttonClearSource = new System.Windows.Forms.Button();
             this.buttonClearDest = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelMin = new System.Windows.Forms.Label();
+            this.labelMax = new System.Windows.Forms.Label();
             this.textBoxMinWaitTime = new System.Windows.Forms.TextBox();
             this.textBoxMaxWaitTime = new System.Windows.Forms.TextBox();
             this.labelInstructions = new System.Windows.Forms.Label();
@@ -65,6 +65,7 @@
             this.textBoxFilter = new System.Windows.Forms.TextBox();
             this.buttonFilterAdd = new System.Windows.Forms.Button();
             this.buttonFilterClear = new System.Windows.Forms.Button();
+            this.checkBoxBurst = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // textBoxSourcePath
@@ -109,7 +110,7 @@
             this.listBoxSourcePaths.FormattingEnabled = true;
             this.listBoxSourcePaths.Location = new System.Drawing.Point(16, 51);
             this.listBoxSourcePaths.Name = "listBoxSourcePaths";
-            this.listBoxSourcePaths.Size = new System.Drawing.Size(338, 108);
+            this.listBoxSourcePaths.Size = new System.Drawing.Size(338, 95);
             this.listBoxSourcePaths.TabIndex = 5;
             this.listBoxSourcePaths.DragDrop += new System.Windows.Forms.DragEventHandler(this.listBoxSourcePaths_DragDrop);
             this.listBoxSourcePaths.DragEnter += new System.Windows.Forms.DragEventHandler(this.listBox_DragEnter);
@@ -127,7 +128,7 @@
             // labelDuration
             // 
             this.labelDuration.AutoSize = true;
-            this.labelDuration.Location = new System.Drawing.Point(12, 448);
+            this.labelDuration.Location = new System.Drawing.Point(13, 422);
             this.labelDuration.Name = "labelDuration";
             this.labelDuration.Size = new System.Drawing.Size(50, 13);
             this.labelDuration.TabIndex = 6;
@@ -135,7 +136,7 @@
             // 
             // textBoxDuration
             // 
-            this.textBoxDuration.Location = new System.Drawing.Point(62, 445);
+            this.textBoxDuration.Location = new System.Drawing.Point(62, 419);
             this.textBoxDuration.Name = "textBoxDuration";
             this.textBoxDuration.Size = new System.Drawing.Size(54, 20);
             this.textBoxDuration.TabIndex = 7;
@@ -155,7 +156,7 @@
             // 
             this.labelDestPaths.AutoSize = true;
             this.labelDestPaths.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDestPaths.Location = new System.Drawing.Point(12, 162);
+            this.labelDestPaths.Location = new System.Drawing.Point(12, 149);
             this.labelDestPaths.Name = "labelDestPaths";
             this.labelDestPaths.Size = new System.Drawing.Size(84, 13);
             this.labelDestPaths.TabIndex = 14;
@@ -165,16 +166,16 @@
             // 
             this.listBoxDestPaths.AllowDrop = true;
             this.listBoxDestPaths.FormattingEnabled = true;
-            this.listBoxDestPaths.Location = new System.Drawing.Point(16, 204);
+            this.listBoxDestPaths.Location = new System.Drawing.Point(16, 191);
             this.listBoxDestPaths.Name = "listBoxDestPaths";
-            this.listBoxDestPaths.Size = new System.Drawing.Size(338, 108);
+            this.listBoxDestPaths.Size = new System.Drawing.Size(338, 95);
             this.listBoxDestPaths.TabIndex = 13;
             this.listBoxDestPaths.DragDrop += new System.Windows.Forms.DragEventHandler(this.listBoxDestPaths_DragDrop);
             this.listBoxDestPaths.DragEnter += new System.Windows.Forms.DragEventHandler(this.listBox_DragEnter);
             // 
             // buttonDestAdd
             // 
-            this.buttonDestAdd.Location = new System.Drawing.Point(248, 176);
+            this.buttonDestAdd.Location = new System.Drawing.Point(248, 162);
             this.buttonDestAdd.Name = "buttonDestAdd";
             this.buttonDestAdd.Size = new System.Drawing.Size(50, 23);
             this.buttonDestAdd.TabIndex = 6;
@@ -184,7 +185,7 @@
             // 
             // buttonDestBrowse
             // 
-            this.buttonDestBrowse.Location = new System.Drawing.Point(192, 176);
+            this.buttonDestBrowse.Location = new System.Drawing.Point(192, 163);
             this.buttonDestBrowse.Name = "buttonDestBrowse";
             this.buttonDestBrowse.Size = new System.Drawing.Size(50, 23);
             this.buttonDestBrowse.TabIndex = 5;
@@ -195,7 +196,7 @@
             // labelDestPath
             // 
             this.labelDestPath.AutoSize = true;
-            this.labelDestPath.Location = new System.Drawing.Point(13, 181);
+            this.labelDestPath.Location = new System.Drawing.Point(13, 168);
             this.labelDestPath.Name = "labelDestPath";
             this.labelDestPath.Size = new System.Drawing.Size(32, 13);
             this.labelDestPath.TabIndex = 10;
@@ -203,7 +204,7 @@
             // 
             // textBoxDest
             // 
-            this.textBoxDest.Location = new System.Drawing.Point(51, 178);
+            this.textBoxDest.Location = new System.Drawing.Point(51, 165);
             this.textBoxDest.Name = "textBoxDest";
             this.textBoxDest.Size = new System.Drawing.Size(135, 20);
             this.textBoxDest.TabIndex = 4;
@@ -247,7 +248,7 @@
             // 
             // buttonClearDest
             // 
-            this.buttonClearDest.Location = new System.Drawing.Point(304, 176);
+            this.buttonClearDest.Location = new System.Drawing.Point(304, 162);
             this.buttonClearDest.Name = "buttonClearDest";
             this.buttonClearDest.Size = new System.Drawing.Size(50, 23);
             this.buttonClearDest.TabIndex = 7;
@@ -255,27 +256,27 @@
             this.buttonClearDest.UseVisualStyleBackColor = true;
             this.buttonClearDest.Click += new System.EventHandler(this.buttonClearDest_Click);
             // 
-            // label1
+            // labelMin
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(132, 448);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(30, 13);
-            this.label1.TabIndex = 19;
-            this.label1.Text = "Min.:";
+            this.labelMin.AutoSize = true;
+            this.labelMin.Location = new System.Drawing.Point(132, 422);
+            this.labelMin.Name = "labelMin";
+            this.labelMin.Size = new System.Drawing.Size(30, 13);
+            this.labelMin.TabIndex = 19;
+            this.labelMin.Text = "Min.:";
             // 
-            // label2
+            // labelMax
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(251, 448);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(33, 13);
-            this.label2.TabIndex = 20;
-            this.label2.Text = "Max.:";
+            this.labelMax.AutoSize = true;
+            this.labelMax.Location = new System.Drawing.Point(251, 422);
+            this.labelMax.Name = "labelMax";
+            this.labelMax.Size = new System.Drawing.Size(33, 13);
+            this.labelMax.TabIndex = 20;
+            this.labelMax.Text = "Max.:";
             // 
             // textBoxMinWaitTime
             // 
-            this.textBoxMinWaitTime.Location = new System.Drawing.Point(181, 445);
+            this.textBoxMinWaitTime.Location = new System.Drawing.Point(181, 419);
             this.textBoxMinWaitTime.Name = "textBoxMinWaitTime";
             this.textBoxMinWaitTime.Size = new System.Drawing.Size(54, 20);
             this.textBoxMinWaitTime.TabIndex = 21;
@@ -284,7 +285,7 @@
             // 
             // textBoxMaxWaitTime
             // 
-            this.textBoxMaxWaitTime.Location = new System.Drawing.Point(300, 445);
+            this.textBoxMaxWaitTime.Location = new System.Drawing.Point(300, 419);
             this.textBoxMaxWaitTime.Name = "textBoxMaxWaitTime";
             this.textBoxMaxWaitTime.Size = new System.Drawing.Size(54, 20);
             this.textBoxMaxWaitTime.TabIndex = 22;
@@ -294,7 +295,7 @@
             // 
             this.labelInstructions.AutoSize = true;
             this.labelInstructions.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInstructions.Location = new System.Drawing.Point(13, 429);
+            this.labelInstructions.Location = new System.Drawing.Point(13, 403);
             this.labelInstructions.Name = "labelInstructions";
             this.labelInstructions.Size = new System.Drawing.Size(277, 13);
             this.labelInstructions.TabIndex = 23;
@@ -367,7 +368,7 @@
             // 
             this.listBoxFilter.AllowDrop = true;
             this.listBoxFilter.FormattingEnabled = true;
-            this.listBoxFilter.Location = new System.Drawing.Point(16, 344);
+            this.listBoxFilter.Location = new System.Drawing.Point(15, 318);
             this.listBoxFilter.Name = "listBoxFilter";
             this.listBoxFilter.Size = new System.Drawing.Size(338, 82);
             this.listBoxFilter.TabIndex = 30;
@@ -376,7 +377,7 @@
             // 
             this.labelFilter.AutoSize = true;
             this.labelFilter.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelFilter.Location = new System.Drawing.Point(13, 321);
+            this.labelFilter.Location = new System.Drawing.Point(13, 295);
             this.labelFilter.Name = "labelFilter";
             this.labelFilter.Size = new System.Drawing.Size(45, 13);
             this.labelFilter.TabIndex = 31;
@@ -384,14 +385,14 @@
             // 
             // textBoxFilter
             // 
-            this.textBoxFilter.Location = new System.Drawing.Point(62, 318);
+            this.textBoxFilter.Location = new System.Drawing.Point(62, 292);
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.Size = new System.Drawing.Size(180, 20);
             this.textBoxFilter.TabIndex = 32;
             // 
             // buttonFilterAdd
             // 
-            this.buttonFilterAdd.Location = new System.Drawing.Point(248, 316);
+            this.buttonFilterAdd.Location = new System.Drawing.Point(248, 290);
             this.buttonFilterAdd.Name = "buttonFilterAdd";
             this.buttonFilterAdd.Size = new System.Drawing.Size(50, 23);
             this.buttonFilterAdd.TabIndex = 33;
@@ -401,7 +402,7 @@
             // 
             // buttonFilterClear
             // 
-            this.buttonFilterClear.Location = new System.Drawing.Point(304, 316);
+            this.buttonFilterClear.Location = new System.Drawing.Point(304, 290);
             this.buttonFilterClear.Name = "buttonFilterClear";
             this.buttonFilterClear.Size = new System.Drawing.Size(50, 23);
             this.buttonFilterClear.TabIndex = 34;
@@ -409,12 +410,24 @@
             this.buttonFilterClear.UseVisualStyleBackColor = true;
             this.buttonFilterClear.Click += new System.EventHandler(this.buttonFilterClear_Click);
             // 
+            // checkBoxBurst
+            // 
+            this.checkBoxBurst.AutoSize = true;
+            this.checkBoxBurst.Location = new System.Drawing.Point(273, 445);
+            this.checkBoxBurst.Name = "checkBoxBurst";
+            this.checkBoxBurst.Size = new System.Drawing.Size(80, 17);
+            this.checkBoxBurst.TabIndex = 35;
+            this.checkBoxBurst.Text = "Burst Mode";
+            this.checkBoxBurst.UseVisualStyleBackColor = true;
+            this.checkBoxBurst.CheckedChanged += new System.EventHandler(this.checkBoxBurst_CheckedChanged);
+            // 
             // FormSeamlessTester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(784, 547);
+            this.Controls.Add(this.checkBoxBurst);
             this.Controls.Add(this.buttonFilterClear);
             this.Controls.Add(this.buttonFilterAdd);
             this.Controls.Add(this.textBoxFilter);
@@ -429,8 +442,8 @@
             this.Controls.Add(this.labelInstructions);
             this.Controls.Add(this.textBoxMaxWaitTime);
             this.Controls.Add(this.textBoxMinWaitTime);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelMax);
+            this.Controls.Add(this.labelMin);
             this.Controls.Add(this.buttonClearDest);
             this.Controls.Add(this.buttonClearSource);
             this.Controls.Add(this.progressBar1);
@@ -483,8 +496,8 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button buttonClearSource;
         private System.Windows.Forms.Button buttonClearDest;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelMin;
+        private System.Windows.Forms.Label labelMax;
         private System.Windows.Forms.TextBox textBoxMinWaitTime;
         private System.Windows.Forms.TextBox textBoxMaxWaitTime;
         private System.Windows.Forms.Label labelInstructions;
@@ -499,6 +512,7 @@
         private System.Windows.Forms.TextBox textBoxFilter;
         private System.Windows.Forms.Button buttonFilterAdd;
         private System.Windows.Forms.Button buttonFilterClear;
+        private System.Windows.Forms.CheckBox checkBoxBurst;
     }
 }
 
