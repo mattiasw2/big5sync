@@ -205,13 +205,13 @@ namespace Syncless.CompareAndSync
         {
             Debug.Assert(path != null && archiveName != null && archiveLimit >= 0);
 
-            FileInfo f = new FileInfo(path);
-
-            if (!f.Exists)
-                return;
-
             try
             {
+                FileInfo f = new FileInfo(path);
+
+                if (!f.Exists)
+                    return;
+
                 string parent = f.DirectoryName;
                 string archiveDir = Path.Combine(parent, archiveName);
                 if (!Directory.Exists(archiveDir))
@@ -420,13 +420,14 @@ namespace Syncless.CompareAndSync
         public static void ArchiveFolder(string path, string archiveName, int archiveLimit)
         {
             Debug.Assert(path != null && archiveName != null && archiveLimit >= 0);
-            DirectoryInfo f = new DirectoryInfo(path);
-
-            if (!f.Exists)
-                return;
 
             try
             {
+                DirectoryInfo f = new DirectoryInfo(path);
+
+                if (!f.Exists)
+                    return;
+
                 string parent = f.Parent.FullName;
                 string archiveDir = Path.Combine(parent, archiveName);
                 if (!Directory.Exists(archiveDir))

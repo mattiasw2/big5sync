@@ -262,7 +262,7 @@ namespace Syncless.CompareAndSync.Visitor
                             else
                             {
                                 CommonMethods.CopyFile(srcName, newName, true);
-                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "File copied from " + oldName + " to " + newName));
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "File copied from " + srcName + " to " + newName));
                                 //fco.FinalState[i] = FinalState.Created;
                             }
                             fco.FinalState[i] = FinalState.Renamed;
