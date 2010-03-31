@@ -96,7 +96,7 @@ namespace Syncless.CompareAndSync.Visitor
                 else
                 {
                     actualFolder.AddChild(renamedFolder.Contents[name]);
-                    renamedFolder.Contents[name].Parent = actualFolder.Parent;
+                    renamedFolder.Contents[name].Parent = actualFolder;
                 }
             }
 
@@ -135,7 +135,7 @@ namespace Syncless.CompareAndSync.Visitor
                 else
                 {
                     actualFolder.AddChild(renamedFolder.Contents[name]);
-                    renamedFolder.Contents[name].Parent = actualFolder.Parent;
+                    renamedFolder.Contents[name].Parent = actualFolder;
                 }
             }
 
@@ -164,8 +164,8 @@ namespace Syncless.CompareAndSync.Visitor
 
             if (actualFldrObj.Contents.Count == 0)
             {
-                actualFldrObj.Parent = renamedFolderObj.Parent;
                 actualFldrObj.Contents = renamedFolderObj.Contents;
+                ChangeFatherMother(actualFldrObj);
             }
             else
                 MergeOneLevelDown(actualFldrObj, renamedFolderObj, pos);
@@ -182,6 +182,16 @@ namespace Syncless.CompareAndSync.Visitor
             actualObj.MetaExists[pos] = renameObj.MetaExists[pos];
             actualObj.MetaUpdated[pos] = renameObj.MetaUpdated[pos];
             actualObj.ToDoAction[pos] = renameObj.ToDoAction[pos];
+        }
+
+        private void ChangeFatherMother(FolderCompareObject actualFldrObj)
+        {
+            Dictionary<string, BaseCompareObject>.ValueCollection values = actualFldrObj.Contents.Values;
+
+            foreach (BaseCompareObject bco in values)
+            {
+                bco.Parent = actualFldrObj;
+            }
         }
     }
 }
