@@ -426,13 +426,11 @@ namespace Syncless.CompareAndSync.Visitor
                             {
                                 CommonMethods.MoveFolder(oldFolderName, newFolderName);
                                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_RENAMED, "Folder renamed from " + oldFolderName + " to " + newFolderName));
-                                //folder.FinalState[i] = FinalState.Renamed;
                             }
                             else
                             {
                                 CommonMethods.CopyDirectory(srcFolderName, newFolderName);
                                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "Folder copied from " + srcFolderName + " to " + newFolderName));
-                                //folder.FinalState[i] = FinalState.Created;
                             }
                             folder.FinalState[i] = FinalState.Renamed;
                             changed = true;
