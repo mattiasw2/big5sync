@@ -487,7 +487,7 @@ namespace SynclessUI
 
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
         {
-            PathChanged();
+            TagChanged();
 
             if (LblSyncNow.Content.Equals("Sync Now"))
             {
@@ -1082,6 +1082,7 @@ namespace SynclessUI
             {
                 LblStatusText.Content = message;
                 ProgressBarSync.Value = percentageComplete;
+                SetProgressBarColor(percentageComplete);
             }
 
             _syncProgressNotificationDictionary[tagname] = percentageComplete;
@@ -1633,6 +1634,9 @@ namespace SynclessUI
                                 bool success = Gui.DeleteTag(SelectedTag);
                                 if (success)
                                 {
+                                    _syncProgressNotificationDictionary.Remove(SelectedTag);
+                                    _tagStatusNotificationDictionary.Remove(SelectedTag);
+
                                     InitializeTagList();
                                     InitializeTagInfoPanel();
                                 }

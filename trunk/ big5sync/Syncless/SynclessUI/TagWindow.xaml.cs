@@ -236,6 +236,9 @@ namespace SynclessUI
                                                        "The path you tried to tag is already tagged.");
                                 BtnOk.IsEnabled = true;
                             }
+                        } else
+                        {
+                            BtnOk.IsEnabled = true;
                         }
                     }
                     else
