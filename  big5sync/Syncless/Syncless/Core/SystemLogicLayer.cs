@@ -1356,6 +1356,11 @@ namespace Syncless.Core
             List<string> paths = tag.FilteredPathListString;
             List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
 
+            if (filterPaths.Length < 2)
+            {
+                return false;
+            }
+
             ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), tag.Filters, SyncConfig.Instance, tag.TagName, notify);
             CompareAndSyncController.Instance.Sync(syncRequest);
 
@@ -1415,6 +1420,7 @@ namespace Syncless.Core
         /// <returns></returns>
         private TagView ConvertToTagView(Tag t)
         {
+            FindAndCleanDeletedPaths();
             TagView view = new TagView(t.TagName, t.LastUpdatedDate);
             List<string>[] pathList = ProfilingLayer.Instance.ConvertAndFilter(t.FilteredPathListString);
             List<string> namedPath = ProfilingLayer.Instance.ConvertAndFilterToNamed(pathList[1]);
