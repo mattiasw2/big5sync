@@ -44,7 +44,7 @@ namespace Syncless.Filters
             bool parentEqual = base.Equals(filter);
             if (parentEqual)
             {
-                if (!filter.Pattern.Equals(_pattern.ToLower()))
+                if (!filter.Pattern.ToLower().Equals(_pattern.ToLower()))
                 {
                     return false;
                 }

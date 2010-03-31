@@ -56,6 +56,17 @@ namespace SynclessUI
                 if (f is ExtensionFilter)
                 {
                     var ef = (ExtensionFilter) f;
+                    
+					string mode = "";
+					
+                    /*
+                    if(ef.Mode == FilterMode.INCLUDE) {
+						mode = "[Inclusion] ";
+					} else if(ef.Mode == FilterMode.EXCLUDE) {
+						mode = "[Exclusion] ";
+					}
+                    */
+						
                     generatedFilterStringList.Add(i + ". " + ef.Pattern);
                 }
                 i++;
