@@ -141,11 +141,15 @@ namespace Syncless.CompareAndSync.Visitor
         {
             //Rename will only occur if all other changes are MetaChangeType.NoChange or null
             int renamePos = -1;
+            int count = 0;
 
             for (int i = 0; i < numOfPaths; i++)
             {
                 if (file.ChangeType[i] == MetaChangeType.Rename)
+                {
                     renamePos = i;
+                    count++;
+                }
                 else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null && file.ChangeType[i] != MetaChangeType.Delete)
                 {
                     renamePos = -1;
@@ -153,7 +157,7 @@ namespace Syncless.CompareAndSync.Visitor
                 }
             }
 
-            if (renamePos > -1)
+            if (renamePos > -1 && count == 1)
             {
                 file.Priority[renamePos] = 1;
                 file.SourcePosition = renamePos;
@@ -283,11 +287,15 @@ namespace Syncless.CompareAndSync.Visitor
         {
             //Rename will only occur if all other changes are MetaChangeType.NoChange or null
             int renamePos = -1;
+            int count = 0;
 
             for (int i = 0; i < numOfPaths; i++)
             {
                 if (folder.ChangeType[i] == MetaChangeType.Rename)
+                {
                     renamePos = i;
+                    count++;
+                }
                 else if (folder.ChangeType[i] != MetaChangeType.NoChange && folder.ChangeType[i] != MetaChangeType.Delete && folder.ChangeType[i] != null)
                 {
                     renamePos = -1;
@@ -295,7 +303,7 @@ namespace Syncless.CompareAndSync.Visitor
                 }
             }
 
-            if (renamePos > -1)
+            if (renamePos > -1 && count == 1)
             {
                 folder.Priority[renamePos] = 1;
                 folder.SourcePosition = renamePos;
