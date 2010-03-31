@@ -1164,6 +1164,21 @@ namespace Syncless.Core
                 {
                     return false;
                 }
+                string logicalid = ProfilingLayer.Instance.GetLogicalIdFromDrive(drive);
+                if (logicalid == null)
+                {
+                    //Drive does not exist in the profile
+                    return true;
+                }
+                List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logicalid);
+                foreach (Tag t in tagList)
+                {
+                    if (CompareAndSyncController.Instance.IsQueuedOrSyncing(t.TagName))
+                    {
+                        return false;
+                    }
+                }
+
                 MonitorLayer.Instance.UnMonitorDrive(drive.Name);
                 ProfilingLayer.Instance.RemoveDrive(drive);
                 _userInterface.DriveChanged();
