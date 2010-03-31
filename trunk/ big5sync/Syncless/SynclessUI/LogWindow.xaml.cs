@@ -43,6 +43,7 @@ namespace SynclessUI
             {
                 InitializeComponent();
                 ShowDialog();
+				datagrid.UpdateLayout();
             }
         }
 
@@ -58,7 +59,7 @@ namespace SynclessUI
             _LogData.Columns.Add(new DataColumn("Event Type", typeof (string)));
             _LogData.Columns.Add(new DataColumn("Message", typeof (string)));
             _LogData.Columns.Add(new DataColumn("Timestamp", typeof (string)));
-
+			
             foreach (LogData l in log)
             {
                 LogEventType @event = l.LogEvent;
