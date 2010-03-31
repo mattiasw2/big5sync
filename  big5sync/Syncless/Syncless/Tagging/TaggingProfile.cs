@@ -9,7 +9,7 @@ namespace Syncless.Tagging
     {
         private const int TAG_ALREADY_EXISTS = 1;
         private const int TAG_NOT_FOUND = 2;
-
+        
         private string _profileName;
         private long _lastUpdatedDate;
         private long _createdDate;
@@ -53,6 +53,21 @@ namespace Syncless.Tagging
                 return pathList;
             }
         }
+        public List<Tag> ReadOnlyTagList
+        {
+            get
+            {
+                lock (_tagList)
+                {
+                    List<Tag> readOnlyTagList = new List<Tag>();
+                    foreach (Tag t in _tagList)
+                    {
+                        readOnlyTagList.Add(t);
+                    }
+                    return readOnlyTagList;
+                }
+            }
+        }
 
         public TaggingProfile(long created)
         {
@@ -70,9 +85,15 @@ namespace Syncless.Tagging
                 if (t.IsDeleted)
                 {
                     CurrentTime current = new CurrentTime();
-                    _tagList.Remove(t);
+                    lock (_tagList)
+                    {
+                        _tagList.Remove(t);
+                    }
                     Tag tag = new Tag(tagname, current.CurrentTimeLong);
-                    _tagList.Add(tag);
+                    lock (_tagList)
+                    {
+                        _tagList.Add(tag);
+                    }
                     _lastUpdatedDate = current.CurrentTimeLong;
                     return tag;
                 }
@@ -85,7 +106,10 @@ namespace Syncless.Tagging
             {
                 CurrentTime current = new CurrentTime();
                 Tag tag = new Tag(tagname, current.CurrentTimeLong);
-                _tagList.Add(tag);
+                lock (_tagList)
+                {
+                    _tagList.Add(tag);
+                }
                 _lastUpdatedDate = current.CurrentTimeLong; ;
                 return tag;
             }
@@ -98,8 +122,11 @@ namespace Syncless.Tagging
             {
                 if (t.IsDeleted)
                 {
-                    _tagList.Remove(t);
-                    _tagList.Add(tag);
+                    lock (_tagList)
+                    {
+                        _tagList.Remove(t);
+                        _tagList.Add(tag);
+                    }
                     _lastUpdatedDate = TaggingHelper.GetCurrentTime();
                     return tag;
                 }
@@ -110,7 +137,10 @@ namespace Syncless.Tagging
             }
             else
             {
-                _tagList.Add(tag);
+                lock (_tagList)
+                {
+                    _tagList.Add(tag);
+                }
                 _lastUpdatedDate = TaggingHelper.GetCurrentTime();
                 return tag;
             }
@@ -192,7 +222,10 @@ namespace Syncless.Tagging
             {
                 Tag tag = new Tag(tagname, current.CurrentTimeLong);
                 tag.AddPath(path, current.CurrentTimeLong);
-                _tagList.Add(tag);
+                lock (_tagList)
+                {
+                    _tagList.Add(tag);
+                }
                 _lastUpdatedDate = current.CurrentTimeLong;
                 return tag;
             }
@@ -200,10 +233,16 @@ namespace Syncless.Tagging
             {
                 if (toTag.IsDeleted)
                 {
-                    _tagList.Remove(toTag);
+                    lock (_tagList)
+                    {
+                        _tagList.Remove(toTag);
+                    }
                     Tag tag = new Tag(tagname, current.CurrentTimeLong);
                     tag.AddPath(path, current.CurrentTimeLong);
-                    _tagList.Add(tag);
+                    lock (_tagList)
+                    {
+                        _tagList.Add(tag);
+                    }
                     _lastUpdatedDate = current.CurrentTimeLong;
                     return tag;
                 }

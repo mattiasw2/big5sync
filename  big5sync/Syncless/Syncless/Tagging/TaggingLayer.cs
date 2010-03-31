@@ -46,7 +46,7 @@ namespace Syncless.Tagging
         /// </summary>
         public List<Tag> TagList
         {
-            get { return _taggingProfile.TagList; }
+            get { return _taggingProfile.ReadOnlyTagList; }
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Syncless.Tagging
             get
             {
                 List<Tag> allTagList = new List<Tag>();
-                foreach (Tag tag in _taggingProfile.TagList)
+                foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
                 {
                     allTagList.Add(tag);
                 }
@@ -74,7 +74,7 @@ namespace Syncless.Tagging
             get 
             { 
                 List<Tag> filteredTagList = new List<Tag>();
-                foreach (Tag tag in _taggingProfile.TagList)
+                foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
                 {
                     if (!tag.IsDeleted)
                     {
@@ -357,7 +357,7 @@ namespace Syncless.Tagging
         {
             bool found;
             List<Tag> tagList = new List<Tag>();
-            foreach (Tag tag in _taggingProfile.TagList)
+            foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
             {
                 found = CheckID(tag, logicalid);
                 if (found)
@@ -382,7 +382,7 @@ namespace Syncless.Tagging
         {
             string logicalid = TaggingHelper.GetLogicalID(folderPath);
             List<string> pathList = new List<string>();
-            foreach (Tag tag in _taggingProfile.TagList)
+            foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
             {
                 if (tag.Contains(folderPath))
                 {
@@ -424,7 +424,7 @@ namespace Syncless.Tagging
         {
             List<Tag> parentPathList = new List<Tag>();
 
-            foreach (Tag tag in _taggingProfile.TagList)
+            foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
             {
                 foreach (TaggedPath p in tag.FilteredPathList)
                 {
@@ -449,7 +449,7 @@ namespace Syncless.Tagging
         public List<string> RetrieveAncestors(string path)
         {
             List<string> ancestors = new List<string>();
-            foreach (Tag tag in _taggingProfile.TagList)
+            foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
             {
                 foreach (string found in tag.FindAncestors(path))
                 {
@@ -499,7 +499,7 @@ namespace Syncless.Tagging
         /// <returns>True if the logicalid is found, else false</returns>
         public bool CheckIDExists(string logicalid)
         {
-            foreach (Tag tag in _taggingProfile.TagList)
+            foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
             {
                 if (CheckID(tag, logicalid))
                 {
@@ -589,7 +589,7 @@ namespace Syncless.Tagging
 
         private Tag GetTag(string tagname)
         {
-            foreach (Tag tag in _taggingProfile.TagList)
+            foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
             {
                 if (TaggingHelper.FormatTagName(tag.TagName).Equals(TaggingHelper.FormatTagName(tagname)))
                 {
@@ -601,7 +601,7 @@ namespace Syncless.Tagging
 
         private bool CheckTagExists(string tagname)
         {
-            foreach (Tag tag in _taggingProfile.TagList)
+            foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
             {
                 if (TaggingHelper.FormatTagName(tag.TagName).Equals(TaggingHelper.FormatTagName(tagname)))
                 {

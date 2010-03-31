@@ -686,7 +686,7 @@ namespace Syncless.Core
             AutoSyncRequest request = new AutoSyncRequest(dce.OldPath.Name, dce.OldPath.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance);
             SendAutoRequest(request);
             FindAndCleanDeletedPaths();
-            _userInterface.PathChanged();
+            _userInterface.TagChanged();
         }
 
         #endregion
