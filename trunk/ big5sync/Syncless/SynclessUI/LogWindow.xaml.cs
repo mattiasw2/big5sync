@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Windows;
 using System.Windows.Input;
@@ -14,9 +15,9 @@ namespace SynclessUI
     /// </summary>
     public partial class LogWindow : Window
     {
+        private bool _closingAnimationNotCompleted = true;
         private DataTable _LogData;
         private MainWindow _main;
-        private bool _closingAnimationNotCompleted = true;
 
         public LogWindow(MainWindow main)
         {
@@ -43,7 +44,7 @@ namespace SynclessUI
             {
                 InitializeComponent();
                 ShowDialog();
-				datagrid.UpdateLayout();
+                datagrid.UpdateLayout();
             }
         }
 
@@ -59,13 +60,12 @@ namespace SynclessUI
             _LogData.Columns.Add(new DataColumn("Event Type", typeof (string)));
             _LogData.Columns.Add(new DataColumn("Message", typeof (string)));
             _LogData.Columns.Add(new DataColumn("Timestamp", typeof (string)));
-			
+
             foreach (LogData l in log)
             {
                 LogEventType @event = l.LogEvent;
 
                 DataRow row = _LogData.NewRow();
-
 
                 string category = "";
                 string eventType = "";
@@ -170,12 +170,12 @@ namespace SynclessUI
             Close();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {   
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
             if (_closingAnimationNotCompleted)
             {
                 BtnOk.IsCancel = false;
-				this.IsHitTestVisible = false;
+                IsHitTestVisible = false;
                 e.Cancel = true;
                 FormFadeOut.Begin();
             }

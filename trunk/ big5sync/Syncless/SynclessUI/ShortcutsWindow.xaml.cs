@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
@@ -32,7 +33,7 @@ namespace SynclessUI
             Close();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             if (_closingAnimationNotCompleted)
             {
@@ -41,11 +42,12 @@ namespace SynclessUI
             }
         }
 
-        private void LayoutRoot_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void LayoutRoot_KeyDown(object sender, KeyEventArgs e)
         {
-        	if(e.Key == Key.Escape) {
-				Close();
-			}
+            if (e.Key == Key.Escape)
+            {
+                Close();
+            }
         }
     }
 }
