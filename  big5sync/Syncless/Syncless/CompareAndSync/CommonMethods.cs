@@ -502,7 +502,18 @@ namespace Syncless.CompareAndSync
         //TODO: Handle exceptions?
         public static void DeleteFolderToRecycleBin(string path)
         {
-            Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+            try
+            {
+                Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+             }
+            catch (DirectoryNotFoundException e)
+            {
+                throw new DeleteFolderException(e);
+            }
+            catch (IOException e)
+            {
+                throw new DeleteFolderException(e);
+            }
         }
 
         public static void MoveFolder(string sourceFullPath, string destFullPath)
