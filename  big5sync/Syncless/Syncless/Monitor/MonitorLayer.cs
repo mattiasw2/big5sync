@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using Syncless.Core;
+using Syncless.Filters;
 using Syncless.Helper;
 using Syncless.Monitor.DTO;
 using Syncless.Monitor.Exceptions;
@@ -10,6 +11,8 @@ namespace Syncless.Monitor
 {
     public class MonitorLayer
     {
+
+        private const int BUFFER_SIZE = 16384;
         private static MonitorLayer _instance;
         public static MonitorLayer Instance
         {
@@ -27,6 +30,7 @@ namespace Syncless.Monitor
         private List<string> monitoredPaths;
         private List<FileSystemWatcher> rootWatchers;
         private Dictionary<string, List<string>> rootsAndParent;
+        private FilterChain configFilter;
         
         private MonitorLayer()
         {
@@ -34,6 +38,7 @@ namespace Syncless.Monitor
             monitoredPaths = new List<string>();
             rootWatchers = new List<FileSystemWatcher>();
             rootsAndParent = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+            configFilter = new FilterChain();
         }
 
         public void Terminate()
@@ -322,6 +327,7 @@ namespace Syncless.Monitor
             ExtendedFileSystemWatcher watcher = new ExtendedFileSystemWatcher(path, filter);
             watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
             watcher.IncludeSubdirectories = true;
+            watcher.InternalBufferSize = BUFFER_SIZE;
             watcher.Changed += new FileSystemEventHandler(OnModified);
             watcher.Created += new FileSystemEventHandler(OnCreated);
             watcher.Deleted += new FileSystemEventHandler(OnDeleted);
@@ -334,6 +340,10 @@ namespace Syncless.Monitor
 
         private void OnModified(object source, FileSystemEventArgs e)
         {
+            if (!configFilter.ApplyFilter(null, e.FullPath))
+            {
+                return;
+            }
             if (File.Exists(e.FullPath))
             {
                 FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.MODIFIED, FileSystemType.FILE);
@@ -343,6 +353,10 @@ namespace Syncless.Monitor
         
         private void OnCreated(object source, FileSystemEventArgs e)
         {
+            if (!configFilter.ApplyFilter(null, e.FullPath))
+            {
+                return;
+            }
             FileSystemEvent fse;
             if (File.Exists(e.FullPath))
             {
@@ -361,6 +375,10 @@ namespace Syncless.Monitor
 
         private void OnDeleted(object source, FileSystemEventArgs e)
         {
+            if (!configFilter.ApplyFilter(null, e.FullPath))
+            {
+                return;
+            }
             ExtendedFileSystemWatcher watcher = (ExtendedFileSystemWatcher)source;
             FileSystemEvent fse = new FileSystemEvent(e.FullPath, watcher.Path);
             FileSystemEventDispatcher.Instance.Enqueue(fse);
@@ -368,6 +386,10 @@ namespace Syncless.Monitor
 
         private void OnRenamed(object source, RenamedEventArgs e)
         {
+            if (!configFilter.ApplyFilter(null, e.OldFullPath))
+            {
+                return;
+            }
             FileSystemEvent fse;
             if (File.Exists(e.FullPath))
             {
@@ -386,6 +408,10 @@ namespace Syncless.Monitor
 
         private void OnCreateComplete(object source, FileSystemEventArgs e)
         {
+            if (!configFilter.ApplyFilter(null, e.FullPath))
+            {
+                return;
+            }
             FileSystemEvent fse = new FileSystemEvent(e.FullPath, EventChangeType.CREATED, FileSystemType.FILE);
             FileSystemEventDispatcher.Instance.Enqueue(fse);
         }
@@ -410,6 +436,10 @@ namespace Syncless.Monitor
 
         private void OnRootDeleted(object source, FileSystemEventArgs e)
         {
+            if (!configFilter.ApplyFilter(null, e.FullPath))
+            {
+                return;
+            }
             FileSystemWatcher watcher = (FileSystemWatcher)source;
             List<string> folders = rootsAndParent[watcher.Path];
             foreach (string folder in folders)
@@ -425,6 +455,10 @@ namespace Syncless.Monitor
 
         private void OnRootRenamed(object source, RenamedEventArgs e)
         {
+            if (!configFilter.ApplyFilter(null, e.OldFullPath))
+            {
+                return;
+            }
             FileSystemWatcher watcher = (FileSystemWatcher)source;
             List<string> folders = rootsAndParent[watcher.Path];
             foreach (string folder in folders)
