@@ -1094,7 +1094,7 @@ namespace Syncless.Core
 
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
@@ -1237,6 +1237,7 @@ namespace Syncless.Core
             catch (Exception e)
             {
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
             }
         }
         /// <summary>
