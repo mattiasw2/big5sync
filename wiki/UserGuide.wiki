@@ -12,7 +12,7 @@ http://big5sync.googlecode.com/files/mainpagelogosmall.png
 
 This users' guide provides a more detailed insight into the functionalities available in *_Syncless_*. If you wish to have a quick view on the basic functions provided in *_Syncless_*, you can refer to the *_Getting Started User Guide_* [http://code.google.com/p/big5sync/wiki/UserGuideGettingStarted here].
 
-= Welcome to Syncless =
+= Welcome to Syncless! =
 
 Synchronization is taken on a whole new level with _*Syncless*_. This document familiarizes you with the basic features in _*Syncless*_ and introduces you to the concepts of *tagging* and *n-way* _seamless synchronization_ in _*Syncless*_.
 
