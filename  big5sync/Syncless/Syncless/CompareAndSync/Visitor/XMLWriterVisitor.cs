@@ -155,11 +155,11 @@ namespace Syncless.CompareAndSync.Visitor
             string xmlPath = Path.Combine(file.GetSmartParentPath(counter), Metadatapath);
             CommonMethods.CreateFileIfNotExist(file.GetSmartParentPath(counter));
             CommonMethods.LoadXML(ref xmlDoc, xmlPath);
-            //int position = GetPropagated(file);
+            int position = GetPropagated(file);
             DoFileCleanUp(xmlDoc, file.Name);
-            XmlText hashText = xmlDoc.CreateTextNode(file.MetaHash[counter /*position*/]);
+            XmlText hashText = xmlDoc.CreateTextNode(file.MetaHash[position]);
             XmlText nameText = xmlDoc.CreateTextNode(file.NewName);
-            XmlText sizeText = xmlDoc.CreateTextNode(file.MetaLength[counter /*position*/].ToString());
+            XmlText sizeText = xmlDoc.CreateTextNode(file.MetaLength[position].ToString());
             XmlText lastModifiedText = xmlDoc.CreateTextNode(file.MetaLastWriteTime[counter].ToString());
             XmlText lastCreatedText = xmlDoc.CreateTextNode(file.MetaCreationTime[counter].ToString());
             XmlText lastUpdated = xmlDoc.CreateTextNode(dateTime.ToString());
