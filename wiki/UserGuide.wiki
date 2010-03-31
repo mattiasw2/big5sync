@@ -20,7 +20,7 @@ Synchronization is taken on a whole new level with _*Syncless*_. This document f
 
 _*Syncless*_ allows you to synchronize your files and folders automatically through the use of tags, even across removable drives. With _*Syncless*_, you can quickly tag multiple folders and configure them to be either in _seamless_ or _manual_ synchronization mode. Syncless is designed to have the finest usability that caters to each individual's workflow. Lastly, Syncless is a portable application, so it will run off any removable drive with no installation required.
 
-== Why use Syncless? ==
+== Why Use Syncless? ==
 
 Why choose Syncless over other synchronization tools? The reason is simple. Syncless provides many powerful features which are rarely found in one single synchronization tool in the market.
 
