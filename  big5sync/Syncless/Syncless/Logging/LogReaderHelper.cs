@@ -24,7 +24,7 @@ namespace Syncless.Logging
             }
             catch (FileNotFoundException)
             { }
-            catch (LogFileCorruptedException e)
+            catch (LogFileCorruptedException)
             {
                 streamReader.Close();
                 fs.Close();

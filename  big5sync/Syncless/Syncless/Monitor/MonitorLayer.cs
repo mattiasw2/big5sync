@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
+using Syncless.CompareAndSync;
 using Syncless.Core;
 using Syncless.Filters;
 using Syncless.Helper;
@@ -12,7 +13,7 @@ namespace Syncless.Monitor
     public class MonitorLayer
     {
 
-        private const int BUFFER_SIZE = 16384;
+        private const int BUFFER_SIZE = 65536;
         private static MonitorLayer _instance;
         public static MonitorLayer Instance
         {
@@ -30,7 +31,8 @@ namespace Syncless.Monitor
         private List<string> monitoredPaths;
         private List<FileSystemWatcher> rootWatchers;
         private Dictionary<string, List<string>> rootsAndParent;
-        private FilterChain configFilter;
+        private FilterChain filtering;
+        private List<Filter> archiveFilter;
         
         private MonitorLayer()
         {
@@ -38,7 +40,9 @@ namespace Syncless.Monitor
             monitoredPaths = new List<string>();
             rootWatchers = new List<FileSystemWatcher>();
             rootsAndParent = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
-            configFilter = new FilterChain();
+            filtering = new FilterChain();
+            archiveFilter = new List<Filter>();
+            archiveFilter.Add(FilterFactory.CreateArchiveFilter(SyncConfig.Instance.ArchiveName));
         }
 
         public void Terminate()
@@ -340,7 +344,7 @@ namespace Syncless.Monitor
 
         private void OnModified(object source, FileSystemEventArgs e)
         {
-            if (!configFilter.ApplyFilter(null, e.FullPath))
+            if (!filtering.ApplyFilter(archiveFilter, e.FullPath))
             {
                 return;
             }
@@ -353,7 +357,7 @@ namespace Syncless.Monitor
         
         private void OnCreated(object source, FileSystemEventArgs e)
         {
-            if (!configFilter.ApplyFilter(null, e.FullPath))
+            if (!filtering.ApplyFilter(archiveFilter, e.FullPath))
             {
                 return;
             }
@@ -375,7 +379,7 @@ namespace Syncless.Monitor
 
         private void OnDeleted(object source, FileSystemEventArgs e)
         {
-            if (!configFilter.ApplyFilter(null, e.FullPath))
+            if (!filtering.ApplyFilter(archiveFilter, e.FullPath))
             {
                 return;
             }
@@ -386,7 +390,7 @@ namespace Syncless.Monitor
 
         private void OnRenamed(object source, RenamedEventArgs e)
         {
-            if (!configFilter.ApplyFilter(null, e.OldFullPath))
+            if (!filtering.ApplyFilter(archiveFilter, e.OldFullPath))
             {
                 return;
             }
@@ -408,7 +412,7 @@ namespace Syncless.Monitor
 
         private void OnCreateComplete(object source, FileSystemEventArgs e)
         {
-            if (!configFilter.ApplyFilter(null, e.FullPath))
+            if (!filtering.ApplyFilter(archiveFilter, e.FullPath))
             {
                 return;
             }
@@ -436,7 +440,7 @@ namespace Syncless.Monitor
 
         private void OnRootDeleted(object source, FileSystemEventArgs e)
         {
-            if (!configFilter.ApplyFilter(null, e.FullPath))
+            if (!filtering.ApplyFilter(archiveFilter, e.FullPath))
             {
                 return;
             }
@@ -455,7 +459,7 @@ namespace Syncless.Monitor
 
         private void OnRootRenamed(object source, RenamedEventArgs e)
         {
-            if (!configFilter.ApplyFilter(null, e.OldFullPath))
+            if (!filtering.ApplyFilter(archiveFilter, e.OldFullPath))
             {
                 return;
             }
