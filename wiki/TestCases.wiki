@@ -1,11 +1,6 @@
 #summary Developers' Guide - Test Cases
 
-= Introduction =
-
-Add your content here.
-
-
-= Manual Sync (File) =
+== Manual Sync (File) ==
 
 <table border=1>
   <tbody>
@@ -49,9 +44,6 @@ Add your content here.
       <p>
         2) Sync over
       </p>
-      <p>
-        &nbsp;
-      </p>
     </td>
     <td>
       <p>
@@ -77,9 +69,6 @@ Add your content here.
       <p>
         2) Sync over
       </p>
-      <p>
-        &nbsp;
-      </p>
     </td>
     <td>
       <p>
@@ -104,9 +93,6 @@ Add your content here.
       </p>
       <p>
         2) Sync over
-      </p>
-      <p>
-        &nbsp;
       </p>
     </td>
     <td>
@@ -392,7 +378,7 @@ Add your content here.
   </tbody>
 </table>
 
-= Manual Sync (Folder) =
+== Manual Sync (Folder) ==
 
 <table border=1>
   <tbody>
@@ -785,11 +771,8 @@ Add your content here.
   </tr>
   </tbody>
 </table>
-<p>
-  &nbsp;
-</p>
 
-= Manual Sync (File + Folder) =
+== Manual Sync (File + Folder) ==
 
 <table border=1>
   <tbody>
@@ -947,9 +930,6 @@ Add your content here.
       <p>
         File will be deleted and folder will be renamed
       </p>
-      <p>
-        &nbsp;
-      </p>
     </td>
   </tr>
   <tr>
@@ -988,7 +968,7 @@ Add your content here.
     </td>
     <td>
       <p>
-        Delete the folder , create a file in another&nbsp; folder
+        Delete the folder, create a file in another folder
       </p>
     </td>
     <td>
@@ -1137,18 +1117,12 @@ Add your content here.
       <p>
         All changes will be propagated
       </p>
-      <p>
-        &nbsp;
-      </p>
     </td>
   </tr>
   </tbody>
 </table>
-<p>
-  &nbsp;
-</p>
 
-= TODO =
+== TODO ==
 
 <table border="1">
   <tbody>
@@ -1285,34 +1259,19 @@ Add your content here.
   </tr>
   <tr>
     <td>
-      <p>
-        &nbsp;
-      </p>
     </td>
     <td>
-      <p>
-        &nbsp;
-      </p>
     </td>
     <td>
-      <p>
-        &nbsp;
-      </p>
     </td>
     <td>
-      <p>
-        &nbsp;
-      </p>
     </td>
   </tr>
   </tbody>
 </table>
-<p>
-  &nbsp;
-</p>
-<p>
-  Seamless
-</p>
+
+==  Seamless ==
+
 <table border="1">
   <tbody>
   <tr>
