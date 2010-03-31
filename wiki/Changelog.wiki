@@ -31,7 +31,7 @@
        * Included a Wiki page for a more comprehensive guide on using Syncless
 
 = Changelog for version _0.9_ =
- * First release of *Syncless*.
+ * First release of *Syncless*
 
  * Feature List  
    # Tagging of Folders.
