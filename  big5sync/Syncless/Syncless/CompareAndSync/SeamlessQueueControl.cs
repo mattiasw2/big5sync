@@ -12,8 +12,8 @@ namespace Syncless.CompareAndSync
     public class SeamlessQueueControl : IDisposable
     {
         private readonly List<Thread> _threads = new List<Thread>();
-        private int threadsToUse = 1;
-        private static readonly object locker = new object();
+        private const int ThreadsToUse = 1;
+        private static readonly object Locker = new object();
         private readonly Queue<AutoSyncRequest> _jobs = new Queue<AutoSyncRequest>();
         private readonly EventWaitHandle _wh = new AutoResetEvent(false);
         private static SeamlessQueueControl _instance;
@@ -21,7 +21,7 @@ namespace Syncless.CompareAndSync
 
         private SeamlessQueueControl()
         {
-            for (int i = 0; i < threadsToUse; i++)
+            for (int i = 0; i < ThreadsToUse; i++)
             {
                 Thread t = new Thread(Work);
                 _threads.Add(t);
@@ -41,27 +41,31 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        //public int ThreadsToUse
-        //{
-        //    set { threadsToUse = value; }
-        //    get { return threadsToUse; }
-        //}
-
+        /// <summary>
+        /// Adds a AutoSyncRequest to the queue.
+        /// </summary>
+        /// <param name="item">AutoSyncRequest</param>
+        /// <exception cref="ArgumentNullException">Thrown when AutoSyncRequest is null</exception>
         public void AddSyncJob(AutoSyncRequest item)
         {
-            Debug.Assert(locker != null);
-            lock (locker)
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            lock (Locker)
             {
                 _jobs.Enqueue(item);
             }
             _wh.Set();
         }
 
+        /// <summary>
+        /// Worker thread to dequeue and process jobs in the queue.
+        /// </summary>
         private void Work()
         {
             while (true)
             {
-                lock (locker)
+                lock (Locker)
                 {
                     if (_jobs.Count > 0)
                     {
@@ -82,11 +86,18 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        // <summary>
+        /// Gets a boolean indicating if the queue is empty.
+        /// </summary>
         public bool IsEmpty
         {
             get { return _jobs.Count == 0; }
         }
 
+        /// <summary>
+        /// Returns a boolean indicating if it is possible to terminate all jobs.
+        /// </summary>
+        /// <returns>A boolean indicating if it is possible to terminate all jobs.</returns>
         public bool PrepareForTermination()
         {
             if (IsEmpty && _currJob == null)
@@ -94,31 +105,32 @@ namespace Syncless.CompareAndSync
             return false;
         }
 
+        /// <summary>
+        /// Clears the queue of all jobs, and attempts to cancel current job if possible.
+        /// </summary>
         public void Terminate()
         {
             if (IsEmpty && _currJob == null)
                 Dispose();
             else
             {
-                // Clear all jobs
-                lock (locker)
+                lock (Locker)
                 {
                     _jobs.Clear();
                 }
 
-                //while (_currJob != null)
-                //{
-                //    //Busy waiting
-                //}
                 Dispose();
             }
         }
 
+        /// <summary>
+        /// Adds a null value to the queue so that the worker thread will return.
+        /// </summary>
         public void Dispose()
         {
             for (int i = 0; i < _threads.Count; i++)
             {
-                lock (locker)
+                lock (Locker)
                 {
                     _jobs.Enqueue(null);
                 }

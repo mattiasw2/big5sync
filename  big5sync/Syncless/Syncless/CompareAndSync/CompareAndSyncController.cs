@@ -29,11 +29,13 @@ namespace Syncless.CompareAndSync
 
         }
 
+        #region Not Implemented
+
         /// <summary>
-        /// Sync a list of folders, without tagging or writing to metadata (if it exists)
+        /// Sync a list of folders, without tagging or writing to metadata (if it exists).
         /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
+        /// <param name="request">The ManualSyncRequest to sync.</param>
+        /// <returns>A RootCompareObject containing the final state of each sync.</returns>
         public RootCompareObject SyncFolders(ManualSyncRequest request)
         {
             SyncStartNotification notification = new SyncStartNotification(request.TagName);
@@ -56,36 +58,27 @@ namespace Syncless.CompareAndSync
             return rco;
         }
 
+        #endregion
+
+        #region Manual Synchronization
+
+        /// <summary>
+        /// Adds a ManualSyncRequest job to the single-instance ManualQueueControl.
+        /// </summary>
+        /// <param name="request">ManualSyncRequest request to add to the queue.</param>
         public void Sync(ManualSyncRequest request)
         {
             ManualQueueControl.Instance.AddSyncJob(request);
         }
 
+        /// <summary>
+        /// Returns a boolean indicating if the given request has been cancelled.
+        /// </summary>
+        /// <param name="request">The CancelSyncRequest containing information on which job to cancel.</param>
+        /// <returns>A boolean indicating if the given request has been cancelled.</returns>
         public bool Cancel(CancelSyncRequest request)
         {
             return ManualQueueControl.Instance.CancelSyncJob(request);
-        }
-
-        public RootCompareObject Compare(ManualCompareRequest request)
-        {
-            return ManualSyncer.Compare(request);
-        }
-
-        public void Sync(AutoSyncRequest request)
-        {
-            SeamlessQueueControl.Instance.AddSyncJob(request);
-        }
-
-        public bool PrepareForTermination()
-        {
-            return (ManualQueueControl.Instance.PrepareForTermination() &&
-                    SeamlessQueueControl.Instance.PrepareForTermination());
-        }
-
-        public void Terminate()
-        {
-            ManualQueueControl.Instance.Terminate();
-            SeamlessQueueControl.Instance.Terminate();
         }
 
         public bool IsQueued(string tagName)
@@ -102,5 +95,42 @@ namespace Syncless.CompareAndSync
         {
             return ManualQueueControl.Instance.IsQueuedOrSyncing(tagName);
         }
+
+        #endregion
+
+        #region Manual Preview
+
+        public RootCompareObject Compare(ManualCompareRequest request)
+        {
+            return ManualSyncer.Compare(request);
+        }
+
+        #endregion
+
+        #region Seamless Synchronization
+
+        public void Sync(AutoSyncRequest request)
+        {
+            SeamlessQueueControl.Instance.AddSyncJob(request);
+        }
+
+        #endregion
+
+        #region Termination
+
+        public bool PrepareForTermination()
+        {
+            return (ManualQueueControl.Instance.PrepareForTermination() &&
+                    SeamlessQueueControl.Instance.PrepareForTermination());
+        }
+
+        public void Terminate()
+        {
+            ManualQueueControl.Instance.Terminate();
+            SeamlessQueueControl.Instance.Terminate();
+        }
+
+        #endregion
+
     }
 }
