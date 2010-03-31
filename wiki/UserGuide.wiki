@@ -1,5 +1,5 @@
 #summary User's Guide : A Comprehensive Guide to Using Syncless
-#labels Phase-Implementation
+#labels Phase-Implementation,Featured
 #sidebar DeveloperGuideSidebar
 
 http://big5sync.googlecode.com/files/mainpagelogosmall.png
