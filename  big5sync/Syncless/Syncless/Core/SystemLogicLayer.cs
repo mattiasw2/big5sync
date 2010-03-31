@@ -619,7 +619,6 @@ namespace Syncless.Core
             AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance);
             SendAutoRequest(request);
             FindAndCleanDeletedPaths();
-            _userInterface.TagChanged();
         }
 
         private void HandleRootFolderDeleteEvent(FolderChangeEvent dce)
@@ -710,7 +709,11 @@ namespace Syncless.Core
         {
             return this.ManualSync(tagname, false);
         }
-
+        /// <summary>
+        /// Cancel a Manual Sync.
+        /// </summary>
+        /// <param name="tagName">The name of the tag to cancel.</param>
+        /// <returns>true if cancel succeed, false if cannot cancel.</returns>
         public bool CancelManualSync(string tagName)
         {
             try
@@ -749,7 +752,7 @@ namespace Syncless.Core
             }
             catch (TagNotFoundException te)
             {
-                throw te;
+                return false;
             }
             catch (Exception e)// Handle Unexpected Exception
             {
@@ -758,19 +761,7 @@ namespace Syncless.Core
             }
 
         }
-        public delegate void DeleteTagCleanDelegate(Tag t);
-        public void DeleteTagClean(Tag t)
-        {
-            foreach (TaggedPath path in t.UnfilteredPathList)
-            {
-                string convertedPath = ProfilingLayer.Instance.ConvertLogicalToPhysical(path.PathName);
-
-                if (Directory.Exists(convertedPath))
-                {
-                    CleanMetaData(new DirectoryInfo(convertedPath));
-                }
-            }
-        }
+        
 
         /// <summary>
         /// Create a Tag.
@@ -868,14 +859,10 @@ namespace Syncless.Core
                     }
 
                 }
-                //SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 SaveLoadHelper.SaveAll(_userInterface.getAppPath());
-                //CleanMetaData
                 CleanMetaDataDelegate del = new CleanMetaDataDelegate(CleanMetaData);
                 del.BeginInvoke(folder, null, null);
                 return count;
-
-
             }
             catch (TagNotFoundException tnfe)
             {
@@ -887,26 +874,6 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
-        private delegate void CleanMetaDataDelegate(DirectoryInfo info);
-        private void CleanMetaData(DirectoryInfo folder)
-        {
-            if (!folder.Exists) return;
-            string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, false);
-            if (convertedPath == null || convertedPath.Equals("")) return;
-            // See if there is any tag still contain this folder.
-            List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(convertedPath);
-
-            if(tagList.Count>0)return; //Still have tag contain the folder , do not attempt to clean.
-
-            List<string> parentPaths = TaggingLayer.Instance.RetrieveAncestors(convertedPath);
-            if(parentPaths.Count!=0)return;//Parent still tagged. Do not clean.
-            
-            List<string> childPaths = TaggingLayer.Instance.RetrieveDescendants(convertedPath);
-            List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(childPaths);
-
-            Cleaner.CleanSynclessMeta(folder,convertedList);
-        }
-
         /// <summary>
         /// Set the monitor mode for a tag
         /// </summary>
@@ -1291,6 +1258,7 @@ namespace Syncless.Core
         private void SetTagMode(Tag tag, bool mode)
         {
             tag.IsSeamless = mode;
+            SaveLoadHelper.SaveAll(_userInterface.getAppPath());
             List<string> pathList = new List<string>();
             foreach (TaggedPath path in tag.FilteredPathList)
             {
@@ -1513,6 +1481,27 @@ namespace Syncless.Core
                 {
                     if (t.IsSeamless)
                     {
+                        try
+                        {
+                            if (_switchingTable.ContainsKey(t.TagName))
+                            {
+                                _switchingTable[t.TagName] = TagState.ManualToSeamless;
+                            }
+                            else
+                            {
+                                _switchingTable.Add(t.TagName, TagState.ManualToSeamless);
+                            }
+
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        TagState state = TagState.Undefined;
+                        _switchingTable.TryGetValue(tag.TagName, out state);
+                        if (state == TagState.Undefined)
+                        {
+                            _switchingTable.Add(tag.TagName, mode == true ? TagState.ManualToSeamless : TagState.SeamlessToManual);
+                        }
                         StartMonitorTag(t);
                     }
                 }
@@ -1600,6 +1589,46 @@ namespace Syncless.Core
                 if (convertedPath != null)
                 {
                     TaggingLayer.Instance.UntagFolder(convertedPath);
+                }
+            }
+        }
+        /// <summary>
+        /// Clean Meta Data Delegate and Clean Meta Data.
+        /// </summary>
+        /// <param name="info">The Directory to clean.</param>
+        private delegate void CleanMetaDataDelegate(DirectoryInfo info);
+        private void CleanMetaData(DirectoryInfo folder)
+        {
+            if (!folder.Exists) return;
+            string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, false);
+            if (convertedPath == null || convertedPath.Equals("")) return;
+            // See if there is any tag still contain this folder.
+            List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(convertedPath);
+
+            if (tagList.Count > 0) return; //Still have tag contain the folder , do not attempt to clean.
+
+            List<string> parentPaths = TaggingLayer.Instance.RetrieveAncestors(convertedPath);
+            if (parentPaths.Count != 0) return;//Parent still tagged. Do not clean.
+
+            List<string> childPaths = TaggingLayer.Instance.RetrieveDescendants(convertedPath);
+            List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(childPaths);
+
+            Cleaner.CleanSynclessMeta(folder, convertedList);
+        }
+        /// <summary>
+        /// Clean a tag before deleting
+        /// </summary>
+        /// <param name="t">The Tag to clean.</param>
+        private delegate void DeleteTagCleanDelegate(Tag t);
+        private void DeleteTagClean(Tag t)
+        {
+            foreach (TaggedPath path in t.UnfilteredPathList)
+            {
+                string convertedPath = ProfilingLayer.Instance.ConvertLogicalToPhysical(path.PathName);
+
+                if (Directory.Exists(convertedPath))
+                {
+                    CleanMetaData(new DirectoryInfo(convertedPath));
                 }
             }
         }
