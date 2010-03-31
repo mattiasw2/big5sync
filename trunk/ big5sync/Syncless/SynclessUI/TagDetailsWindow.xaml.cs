@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,9 +14,9 @@ namespace SynclessUI
     /// </summary>
     public partial class TagDetailsWindow : Window
     {
-        private readonly MainWindow _main;
-        private readonly string _tagname;
-        private readonly List<Filter> filters;
+        private MainWindow _main;
+        private string _tagname;
+        private List<Filter> filters;
         private bool _closingAnimationNotCompleted = true;
 
         public TagDetailsWindow(string tagname, MainWindow main)
@@ -57,18 +56,15 @@ namespace SynclessUI
                 if (f is ExtensionFilter)
                 {
                     var ef = (ExtensionFilter) f;
-
-                    string mode = "";
-
-                    if (ef.Mode == FilterMode.INCLUDE)
-                    {
-                        mode = "[Inclusion] ";
-                    }
-                    else if (ef.Mode == FilterMode.EXCLUDE)
-                    {
-                        mode = "[Exclusion] ";
-                    }
-
+                    
+					string mode = "";
+					
+                    if(ef.Mode == FilterMode.INCLUDE) {
+						mode = "[Inclusion] ";
+					} else if(ef.Mode == FilterMode.EXCLUDE) {
+						mode = "[Exclusion] ";
+					}
+						
                     generatedFilterStringList.Add(i + ". " + mode + " " + ef.Pattern);
                 }
                 i++;
@@ -104,12 +100,11 @@ namespace SynclessUI
             {
                 if (!_main.Gui.GetTag(_tagname).IsLocked)
                 {
-                    if (CheckRedundantFilters())
+                    if(CheckRedundantFilters())
                     {
                         DialogHelper.ShowError("Duplicate Filters", "Please remove all duplicate filters.");
                         BtnOk.IsEnabled = true;
-                    }
-                    else
+                    } else
                     {
                         bool result = _main.Gui.UpdateFilterList(_tagname, filters);
                         Close();
@@ -136,11 +131,11 @@ namespace SynclessUI
 
         private bool CheckRedundantFilters()
         {
-            for (int i = 0; i < filters.Count; i++)
+            for(int i = 0; i < filters.Count; i++)
             {
                 Filter fi = filters[i];
                 filters.RemoveAt(i);
-                if (filters.Contains(fi))
+                if(filters.Contains(fi))
                 {
                     return true;
                 }
@@ -234,14 +229,14 @@ namespace SynclessUI
                 if(!CheckIfFilterExist(TxtBoxPattern.Text))
                 {
                 */
-                Filter f = filters[ListFilters.SelectedIndex];
-                if (f is ExtensionFilter)
-                {
-                    var ef = (ExtensionFilter) f;
-                    ef.Pattern = TxtBoxPattern.Text;
-                }
+                    Filter f = filters[ListFilters.SelectedIndex];
+                    if (f is ExtensionFilter)
+                    {
+                        var ef = (ExtensionFilter)f;
+                        ef.Pattern = TxtBoxPattern.Text;
+                    }
 
-                PopulateFilterStringList(true);
+                    PopulateFilterStringList(true);
                 //}                
             }
         }
@@ -250,10 +245,10 @@ namespace SynclessUI
         {
             bool exist = false;
 
-            foreach (Filter f in filters)
+            foreach(Filter f in filters)
             {
-                var ef = (ExtensionFilter) f;
-                if (ef.Pattern == pattern)
+                ExtensionFilter ef = (ExtensionFilter) f;
+                if(ef.Pattern == pattern)
                 {
                     exist = true;
                     break;
@@ -274,7 +269,7 @@ namespace SynclessUI
             Close();
         }
 
-        private void Window_Closing(object sender, CancelEventArgs e)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (_closingAnimationNotCompleted)
             {

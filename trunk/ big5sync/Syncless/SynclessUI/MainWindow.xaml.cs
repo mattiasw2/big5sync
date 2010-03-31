@@ -31,19 +31,18 @@ namespace SynclessUI
     {
         private const string BI_DIRECTIONAL = "Bi-Dir..";
         private const string UNI_DIRECTIONAL = "Uni-Dir..";
-
-        private readonly Dictionary<string, double> _syncProgressNotificationDictionary =
-            new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
-
-        private readonly Dictionary<string, string> _tagStatusNotificationDictionary =
-            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
         private string _appPath;
         private bool _closenormally = true;
         private bool _manualSyncEnabled = true;
 
         private NotificationWatcher _notificationWatcher;
         private PriorityNotificationWatcher _priorityNotificationWatcher;
+
+        private Dictionary<string, double> _syncProgressNotificationDictionary =
+            new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
+
+        private Dictionary<string, string> _tagStatusNotificationDictionary =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public IUIControllerInterface Gui;
 
@@ -52,7 +51,7 @@ namespace SynclessUI
         {
             InitializeComponent();
             InitializeSyncless();
-            //DisplayWelcomeScreen();
+			//DisplayWelcomeScreen();
             InitializeKeyboardShortcuts();
         }
 
@@ -91,18 +90,16 @@ namespace SynclessUI
                 while (DateTime.Now < dateTime.AddMilliseconds(1000))
                 {
                     Dispatcher.Invoke(DispatcherPriority.Background,
-                                      (DispatcherOperationCallback) delegate { return null; }, null);
+                                      (DispatcherOperationCallback) delegate(object unused) { return null; }, null);
                 }
             }
         }
-
-        private void DisplayWelcomeScreen()
-        {
-            if (Settings.Default.MinimizeToTray)
-            {
-                var wsw = new WelcomeScreenWindow(this);
-            }
-        }
+		
+		private void DisplayWelcomeScreen() {
+			if (Settings.Default.MinimizeToTray) {
+				WelcomeScreenWindow wsw = new WelcomeScreenWindow(this);
+			}
+		}
 
         /// <summary>
         ///     Starts up the system logic layer and initializes it
@@ -118,7 +115,7 @@ namespace SynclessUI
 
                 if (Gui.Initiate(this))
                 {
-                    if (Settings.Default.EnableShellIntegration)
+                    if (Settings.Default.EnableShellIntegration == true)
                     {
                         RegistryHelper.CreateRegistry(_appPath);
                     }
@@ -417,8 +414,8 @@ namespace SynclessUI
             BtnSyncMode.SetResourceReference(BackgroundProperty, "ToggleOnBrush");
             LblSyncMode.SetResourceReference(MarginProperty, "ToggleOnMargin");
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOnForeground");
-            ProgressBarSync.Visibility = Visibility.Hidden;
-            LblProgress.Visibility = Visibility.Hidden;
+            ProgressBarSync.Visibility = System.Windows.Visibility.Hidden;
+            LblProgress.Visibility = System.Windows.Visibility.Hidden;
             Console.WriteLine("In Seamless Mode");
             LblStatusTitle.Visibility = Visibility.Hidden;
             LblStatusText.Visibility = Visibility.Hidden;
@@ -442,59 +439,48 @@ namespace SynclessUI
 
         private void ManualMode()
         {
-            try
+            LblSyncMode.Content = "Manual";
+            BtnSyncMode.ToolTip = "Switch to Seamless Synchronization Mode";
+            BtnPreview.Visibility = Visibility.Visible;
+            BtnSyncMode.SetResourceReference(BackgroundProperty, "ToggleOffBrush");
+            LblSyncMode.SetResourceReference(MarginProperty, "ToggleOffMargin");
+            LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOffForeground");
+            
+            if(_tagStatusNotificationDictionary.ContainsKey(SelectedTag))
             {
-                LblSyncMode.Content = "Manual";
-                BtnSyncMode.ToolTip = "Switch to Seamless Synchronization Mode";
-                BtnPreview.Visibility = Visibility.Visible;
-                BtnSyncMode.SetResourceReference(BackgroundProperty, "ToggleOffBrush");
-                LblSyncMode.SetResourceReference(MarginProperty, "ToggleOffMargin");
-                LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOffForeground");
+                ProgressBarSync.Visibility = Visibility.Visible;
+                LblProgress.Visibility = Visibility.Visible;
+            }
 
-                if (_tagStatusNotificationDictionary.ContainsKey(SelectedTag))
+            Console.WriteLine("In Manual Mode");
+            LblStatusTitle.Visibility = Visibility.Visible;
+            LblStatusText.Visibility = Visibility.Visible;
+
+            if(SelectedTag != null) {
+                TagView tv = Gui.GetTag(SelectedTag);
+
+                if (tv.IsLocked)
                 {
-                    ProgressBarSync.Visibility = Visibility.Visible;
-                    LblProgress.Visibility = Visibility.Visible;
-                }
-
-                Console.WriteLine("In Manual Mode");
-                LblStatusTitle.Visibility = Visibility.Visible;
-                LblStatusText.Visibility = Visibility.Visible;
-
-                if (SelectedTag != null)
-                {
-                    TagView tv = Gui.GetTag(SelectedTag);
-
-                    if (tv.IsLocked)
+                    if (Progress != null && Progress.TagName == SelectedTag && (Progress.State == SyncState.Analyzing || Progress.State == SyncState.Queued || Progress.State == SyncState.Started))
                     {
-                        if (Progress != null && Progress.TagName == SelectedTag &&
-                            (Progress.State == SyncState.Analyzing || Progress.State == SyncState.Queued ||
-                             Progress.State == SyncState.Started))
-                        {
-                            BtnSyncNow.Visibility = Visibility.Visible;
-                            CancelButtonMode();
-                        }
-                        else
-                        {
-                            BtnSyncNow.Visibility = Visibility.Hidden;
-                        }
-
-                        if (tv.IsQueued)
-                        {
-                            BtnSyncNow.Visibility = Visibility.Visible;
-                            CancelButtonMode();
-                        }
+                        BtnSyncNow.Visibility = Visibility.Visible;
+                        CancelButtonMode();
                     }
                     else
                     {
-                        SyncButtonMode();
-                        BtnSyncNow.Visibility = Visibility.Visible;
+                        BtnSyncNow.Visibility = Visibility.Hidden;
                     }
+					
+					if(tv.IsQueued) {
+                        BtnSyncNow.Visibility = Visibility.Visible;
+                        CancelButtonMode();
+					}
                 }
-            }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage();
+                else
+                {
+                    SyncButtonMode();
+                    BtnSyncNow.Visibility = Visibility.Visible;
+                }
             }
         }
 
@@ -512,75 +498,67 @@ namespace SynclessUI
 
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
         {
-            try
+            PathChanged();
+
+            if (LblSyncNow.Content.Equals("Sync Now"))
             {
-                PathChanged();
-
-                if (LblSyncNow.Content.Equals("Sync Now"))
+                BtnSyncNow.IsEnabled = false;
+                
+                try
                 {
-                    BtnSyncNow.IsEnabled = false;
-
-                    try
+                    if (Gui.GetTag(SelectedTag).PathStringList.Count > 1)
                     {
-                        if (Gui.GetTag(SelectedTag).PathStringList.Count > 1)
+                        if (Gui.StartManualSync(SelectedTag))
                         {
-                            if (Gui.StartManualSync(SelectedTag))
-                            {
-                                ProgressBarSync.Visibility = Visibility.Visible;
-                                LblProgress.Visibility = Visibility.Visible;
-                                CancelButtonMode();
-                                const string message = "Synchronization Request Has Been Queued";
-                                LblStatusText.Content = message;
-                                _tagStatusNotificationDictionary[SelectedTag] = message;
-                                _syncProgressNotificationDictionary[SelectedTag] = 0;
-                                ProgressBarSync.Value = 0;
-                                SetProgressBarColor(0);
-                            }
-                            else
-                            {
-                                DialogHelper.ShowError("Synchronization Error",
-                                                       SelectedTag + " could not be synchronized.");
-                                SyncButtonMode();
-                            }
+                            ProgressBarSync.Visibility = Visibility.Visible;
+                            LblProgress.Visibility = Visibility.Visible;
+                            CancelButtonMode();
+                            const string message = "Synchronization Request Has Been Queued";
+                            LblStatusText.Content = message;
+                            _tagStatusNotificationDictionary[SelectedTag] = message;
+                            _syncProgressNotificationDictionary[SelectedTag] = 0;
+                            ProgressBarSync.Value = 0;
+                            SetProgressBarColor(0);
                         }
                         else
                         {
-                            DialogHelper.ShowError("Nothing to Synchronize",
-                                                   "You can only synchronize when there are two or more folders.");
+                            DialogHelper.ShowError("Synchronization Error", SelectedTag + " could not be synchronized.");
                             SyncButtonMode();
                         }
                     }
-                    catch (UnhandledException)
+                    else
                     {
-                        DialogHelper.DisplayUnhandledExceptionMessage();
+                        DialogHelper.ShowError("Nothing to Synchronize",
+                                               "You can only synchronize when there are two or more folders.");
+                        SyncButtonMode();
                     }
+                }
+                catch (UnhandledException)
+                {
+                    DialogHelper.DisplayUnhandledExceptionMessage();
+                }
 
+                BtnSyncNow.IsEnabled = true;
+            }
+            else
+            {
+                BtnSyncNow.IsEnabled = false;
+                bool success = Gui.CancelManualSync(SelectedTag);
+                if (success)
+                {
+                    SyncButtonMode();
+                    string message = "Synchronization Cancelled";
+                    LblStatusText.Content = message;
+                    _tagStatusNotificationDictionary[SelectedTag] = message;
                     BtnSyncNow.IsEnabled = true;
+                    //ProgressBarSync.IsIndeterminate = false;
+                    //LblProgress.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    BtnSyncNow.IsEnabled = false;
-                    bool success = Gui.CancelManualSync(SelectedTag);
-                    if (success)
-                    {
-                        SyncButtonMode();
-                        string message = "Synchronization Cancelled";
-                        LblStatusText.Content = message;
-                        _tagStatusNotificationDictionary[SelectedTag] = message;
-                        BtnSyncNow.IsEnabled = true;
-                        //ProgressBarSync.IsIndeterminate = false;
-                        //LblProgress.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        DialogHelper.ShowError("Unable to Cancel", "Please wait until synchronization is complete.");
-                        BtnSyncNow.IsEnabled = true;
-                    }
+                    DialogHelper.ShowError("Unable to Cancel", "Please wait until synchronization is complete.");
+                    BtnSyncNow.IsEnabled = true;
                 }
-            }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -678,17 +656,15 @@ namespace SynclessUI
                             {
                                 if (!tv.IsLocked)
                                 {
-                                    int count = Gui.Untag(currentTag,
-                                                          new DirectoryInfo((string) ListTaggedPath.SelectedValue));
+                                    int count = Gui.Untag(currentTag, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
 
-                                    if (count == 1)
+                                    if(count == 1)
                                     {
                                         //success
                                         _syncProgressNotificationDictionary.Remove(currentTag);
                                         _tagStatusNotificationDictionary.Remove(currentTag);
                                         LblStatusText.Content = "";
-                                    }
-                                    else
+                                    } else
                                     {
                                         // fail
                                         DialogHelper.ShowError("Error Untagging", "An error while untagging the folder");
@@ -791,11 +767,8 @@ namespace SynclessUI
             var terminationWindow = e.Result as DialogWindow;
             terminationWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action) (() =>
                                                                                               {
-                                                                                                  terminationWindow.
-                                                                                                      CannotBeClosed =
-                                                                                                      false;
-                                                                                                  terminationWindow.
-                                                                                                      Close();
+                                                                                                  terminationWindow.CannotBeClosed = false;
+                                                                                                  terminationWindow.Close();
                                                                                               }));
 
             TerminateNow(false);
@@ -883,9 +856,8 @@ namespace SynclessUI
 
         private void BtnPreview_Click(object sender, RoutedEventArgs e)
         {
-            DialogHelper.ShowInformation("Feature In Progress",
-                                         "This feature will be presented in a future version of Syncless.");
-
+            DialogHelper.ShowInformation("Feature In Progress", "This feature will be presented in a future version of Syncless.");
+            
             /*
             if (!_manualSyncEnabled || Gui.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
             {
@@ -905,6 +877,22 @@ namespace SynclessUI
                                        "You can only preview only when there are two or more folders.");
             }
             */
+        }
+
+        private List<DriveInfo> GetAllRemovableDrives()
+        {
+            DriveInfo[] allDrives = DriveInfo.GetDrives();
+            var removableDrives = new List<DriveInfo>();
+
+            foreach (DriveInfo di in allDrives)
+            {
+                if (di.DriveType == DriveType.Removable)
+                {
+                    removableDrives.Add(di);
+                }
+            }
+
+            return removableDrives;
         }
 
         private void driveMenuItem_Click(object sender, RoutedEventArgs e)
@@ -949,85 +937,71 @@ namespace SynclessUI
 
         private void LayoutRoot_Drop(object sender, DragEventArgs e)
         {
-            try
+            HideDropIndicator();
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                HideDropIndicator();
+                var foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+                if (foldernames != null)
+                    foreach (string i in foldernames)
+                    {
+                        string path = i;
 
-                if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                {
-                    var foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
-                    if (foldernames != null)
-                        foreach (string i in foldernames)
+                        // convert potential shortcuts into folders
+                        string shortcutfolderpath = FileHelper.GetShortcutTargetFile(i);
+                        if (shortcutfolderpath != null)
                         {
-                            string path = i;
+                            path = shortcutfolderpath;
+                        }
 
-                            // convert potential shortcuts into folders
-                            string shortcutfolderpath = FileHelper.GetShortcutTargetFile(i);
-                            if (shortcutfolderpath != null)
+                        // to detect folders
+                        try
+                        {
+                            var folder = new DirectoryInfo(path);
+                            if (folder.Exists && !FileHelper.IsFile(path))
                             {
-                                path = shortcutfolderpath;
-                            }
-
-                            // to detect folders
-                            try
-                            {
-                                var folder = new DirectoryInfo(path);
-                                if (folder.Exists && !FileHelper.IsFile(path))
-                                {
-                                    var tw = new TagWindow(this, path, SelectedTag, false);
-                                }
-                            }
-                            catch
-                            {
+                                var tw = new TagWindow(this, path, SelectedTag, false);
                             }
                         }
-                }
-                TxtBoxFilterTag.IsHitTestVisible = true;
+                        catch
+                        {
+                        }
+                    }
             }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage();
-            }
+            TxtBoxFilterTag.IsHitTestVisible = true;
         }
 
         private void LayoutRoot_DragEnter(object sender, DragEventArgs e)
         {
-            try
+            TxtBoxFilterTag.IsHitTestVisible = false;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                TxtBoxFilterTag.IsHitTestVisible = false;
-                if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                {
-                    var foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
-                    if (foldernames != null)
-                        foreach (string i in foldernames)
+                var foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+                if (foldernames != null)
+                    foreach (string i in foldernames)
+                    {
+                        string path = i;
+
+                        // convert potential shortcuts into folders
+                        string shortcutfolderpath = FileHelper.GetShortcutTargetFile(path);
+                        if (shortcutfolderpath != null)
                         {
-                            string path = i;
+                            path = shortcutfolderpath;
+                        }
 
-                            // convert potential shortcuts into folders
-                            string shortcutfolderpath = FileHelper.GetShortcutTargetFile(path);
-                            if (shortcutfolderpath != null)
+                        // to detect folders
+                        try
+                        {
+                            var folder = new DirectoryInfo(path);
+                            if (folder.Exists && !FileHelper.IsFile(path))
                             {
-                                path = shortcutfolderpath;
-                            }
-
-                            // to detect folders
-                            try
-                            {
-                                var folder = new DirectoryInfo(path);
-                                if (folder.Exists && !FileHelper.IsFile(path))
-                                {
-                                    ShowDropIndicator();
-                                }
-                            }
-                            catch
-                            {
+                                ShowDropIndicator();
                             }
                         }
-                }
-            }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage();
+                        catch
+                        {
+                        }
+                    }
             }
         }
 
@@ -1189,11 +1163,10 @@ namespace SynclessUI
                 BtnSyncMode.IsEnabled = true;
                 _manualSyncEnabled = true;
 
-                if (Gui.GetTag(SelectedTag).IsSeamless)
+                if(Gui.GetTag(SelectedTag).IsSeamless)
                 {
                     BtnSyncNow.Visibility = Visibility.Hidden;
-                }
-                else
+                } else
                 {
                     BtnSyncNow.Visibility = Visibility.Visible;
                 }
@@ -1322,41 +1295,6 @@ namespace SynclessUI
             UpdateAllTags_ThreadSafe();
         }
 
-        public void PathChanged()
-        {
-            try
-            {
-                ListBoxTag.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                                                  (Action) (() =>
-                                                                {
-                                                                    List<string> taglist = Gui.GetAllTags();
-                                                                    ListBoxTag.ItemsSource = taglist;
-                                                                    LblTagCount.Content = "[" + taglist.Count + "/" +
-                                                                                          taglist.Count + "]";
-                                                                }));
-
-                ListTaggedPath.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                                                      (Action) (() =>
-                                                                    {
-                                                                        if (SelectedTag == null)
-                                                                        {
-                                                                            return;
-                                                                        }
-                                                                        TagView tv = Gui.GetTag(SelectedTag);
-
-                                                                        ListTaggedPath.ItemsSource = tv.PathStringList;
-                                                                        BdrTaggedPath.Visibility =
-                                                                            tv.PathStringList.Count == 0
-                                                                                ? Visibility.Hidden
-                                                                                : Visibility.Visible;
-                                                                    }));
-            }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage();
-            }
-        }
-
         private void UpdateAllTags_ThreadSafe()
         {
             try
@@ -1403,6 +1341,41 @@ namespace SynclessUI
                                                                                 ? Visibility.Hidden
                                                                                 : Visibility.Visible;
                                                                     }));
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage();
+            }
+        }
+
+        public void PathChanged()
+        {
+            try
+            {
+                ListBoxTag.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                                  (Action)(() =>
+                                                  {
+                                                      List<string> taglist = Gui.GetAllTags();
+                                                      ListBoxTag.ItemsSource = taglist;
+                                                      LblTagCount.Content = "[" + taglist.Count + "/" +
+                                                                            taglist.Count + "]";
+                                                  }));
+
+                ListTaggedPath.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                                      (Action)(() =>
+                                                      {
+                                                          if (SelectedTag == null)
+                                                          {
+                                                              return;
+                                                          }
+                                                          TagView tv = Gui.GetTag(SelectedTag);
+
+                                                          ListTaggedPath.ItemsSource = tv.PathStringList;
+                                                          BdrTaggedPath.Visibility =
+                                                              tv.PathStringList.Count == 0
+                                                                  ? Visibility.Hidden
+                                                                  : Visibility.Visible;
+                                                      }));
             }
             catch (UnhandledException)
             {
@@ -1847,7 +1820,7 @@ namespace SynclessUI
                 {
                     var driveMenuItem = new MenuItem();
                     driveMenuItem.Header = letter;
-                    driveMenuItem.Click += driveMenuItem_Click;
+                    driveMenuItem.Click += new RoutedEventHandler(driveMenuItem_Click);
                     driveMenu.Items.Add(driveMenuItem);
                 }
             }

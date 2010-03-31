@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Media;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
