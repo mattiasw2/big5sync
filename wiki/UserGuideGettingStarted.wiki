@@ -146,7 +146,7 @@ Syncless offers other powerful features. These additional features include:
 
   * *Filtering*:  Use Syncless's filtering features for the ultimate control in synchronization. Currently, Syncless is able to include or exclude files and folders by extension and path. Other filters will be available in later versions.
 
- * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder will be archived up to 5 backups at one time. As of version 1.0, archiving is not user-configurable, but will be in the future.
+ * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder will be archived up to 2 backups at one time. As of version 1.0, archiving is not user-configurable, but will be in the future.
 
  * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving it on your computer.
 
@@ -180,7 +180,7 @@ Now, let us look at some real-world examples. For example, if you want to includ
 As seen from the above, creating a filter is a simple and intuitive task in Syncless.
 
 == Archiving ==
-With the archiving feature, you do not need to worry about losing an important file if you accidentally delete it and the change is propagated to other folders in the same tag. Syncless will keep up to 5 copies of the deleted file in an archive folder. This folder will be created in all the other folders in the same tag. Note that it will not be created in the folder where the file deletion is initiated by the user.
+With the archiving feature, you do not need to worry about losing an important file if you accidentally delete it and the change is propagated to other folders in the same tag. Syncless will keep up to 2 copies of the deleted file in an archive folder. This folder will be created in all the other folders in the same tag. Note that it will not be created in the folder where the file deletion is initiated by the user.
 
 To illustrate, let's say you tag D:\Lecture and E:\Notes to a tag named 'Lecture', both contain the file Chapter1.pdf. You accidentally delete Chapter1.pdf under D:\Lecture. Syncless will keep a copy of Chapter1.pdf in the archive folder under E:\Notes. If you need to restore that file, simply copy the archived file back to D:\Lecture.
 
