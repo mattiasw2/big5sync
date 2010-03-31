@@ -128,7 +128,7 @@ Tag a folder through the http://big5sync.googlecode.com/files/tagbuttonicon.jpg 
     http://big5sync.googlecode.com/files/Drag_And_Drop_Tag.jpg
 
 ==== Tagging from Windows Explorer ====
-    http://big5sync.googlecode.com/files/Tag_From_Context_Menu.jpg
+    http://big5sync.googlecode.com/files/Tag_From_Context_Menu.png
 
 === 2. Viewing tag information ===
     http://big5sync.googlecode.com/files/Tag_Info_Panel.jpg
