@@ -49,6 +49,7 @@ namespace SynclessUI
         {
             base.OnStartupNextInstance(eventArgs);
             App.main.Activate();
+            App.main.RestoreWindow();
             App.ProcessArgs(eventArgs.CommandLine.ToArray());
         }
     }
