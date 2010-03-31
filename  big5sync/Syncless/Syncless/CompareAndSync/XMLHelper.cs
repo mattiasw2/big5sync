@@ -326,6 +326,10 @@ namespace Syncless.CompareAndSync
             {
                 
             }
+            catch (UnauthorizedAccessException)
+            {
+
+            }
             catch (XmlException)
             {
                 if (File.Exists(todoXML))
