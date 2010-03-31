@@ -13,8 +13,8 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
-            if (folder.Invalid)
-                return;
+            //if (folder.Invalid)
+            //    return;
 
             DetectFolderRename(folder, numOfPaths);
         }
@@ -81,17 +81,10 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 if (actualFolder.Contents.TryGetValue(name, out o))
                 {
-
                     if ((actualFldrObj = o as FolderCompareObject) != null)
                     {
                         renamedFolderObj = renamedFolder.Contents[name] as FolderCompareObject;
-                        if (actualFldrObj.Contents.Count == 0)
-                        {
-                            actualFolder.RemoveChild(name);
-                            actualFolder.AddChild(renamedFolder.Contents[name]);
-                        }
-                        else
-                            MergeFolder(actualFldrObj, renamedFolderObj, pos);
+                        MergeFolder(actualFldrObj, renamedFolderObj, pos);
                     }
                     else
                     {
@@ -126,20 +119,10 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 if (actualFolder.Contents.TryGetValue(name, out o))
                 {
-
                     if ((actualFldrObj = o as FolderCompareObject) != null)
                     {
                         renamedFolderObj = renamedFolder.Contents[name] as FolderCompareObject;
-                        if (actualFldrObj.Contents.Count == 0)
-                        {
-                            actualFolder.RemoveChild(name);
-                            actualFolder.AddChild(renamedFolder.Contents[name]);
-                        }
-                        else
-                            MergeFolder(actualFldrObj, renamedFolderObj, pos);
-
-                        //renamedFolderObj = renamedFolder.Contents[name] as FolderCompareObject;
-                        //MergeFolder(actualFldrObj, renamedFolderObj, pos);
+                        MergeFolder(actualFldrObj, renamedFolderObj, pos);
                     }
                     else
                     {
@@ -151,6 +134,7 @@ namespace Syncless.CompareAndSync.Visitor
                 else
                 {
                     actualFolder.AddChild(renamedFolder.Contents[name]);
+                    renamedFolder.Contents[name].Parent = actualFolder.Parent;
                 }
             }
 
@@ -161,13 +145,6 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void MergeFile(FileCompareObject actualFileObj, FileCompareObject renamedFileObj, int pos)
         {
-            //actualFileObj.CreationTime[pos] = renamedFileObj.CreationTime[pos];
-            //actualFileObj.Exists[pos] = renamedFileObj.Exists[pos];
-            //actualFileObj.MetaCreationTime[pos] = renamedFileObj.MetaCreationTime[pos];
-            //actualFileObj.MetaExists[pos] = renamedFileObj.MetaExists[pos];
-            //actualFileObj.ChangeType[pos] = renamedFileObj.ChangeType[pos];
-            //actualFileObj.MetaUpdated[pos] = renamedFileObj.MetaUpdated[pos];
-            //actualFileObj.ToDoAction[pos] = renamedFileObj.ToDoAction[pos];
             MergeFileSystemObject(actualFileObj, renamedFileObj, pos);
             actualFileObj.Hash[pos] = renamedFileObj.Hash[pos];
             actualFileObj.Length[pos] = renamedFileObj.Length[pos];
@@ -180,20 +157,17 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void MergeFolder(FolderCompareObject actualFldrObj, FolderCompareObject renamedFolderObj, int pos)
         {
-            //actualFldrObj.ChangeType[pos] = renamedFolderObj.ChangeType[pos];
-            //actualFldrObj.CreationTime[pos] = renamedFolderObj.CreationTime[pos];
-            //actualFldrObj.Exists[pos] = renamedFolderObj.Exists[pos];
-            //actualFldrObj.MetaCreationTime[pos] = renamedFolderObj.MetaCreationTime[pos];
-            //actualFldrObj.MetaExists[pos] = renamedFolderObj.MetaExists[pos];
-            //actualFldrObj.SourcePosition = renamedFolderObj.SourcePosition;
-            //actualFldrObj.MetaUpdated[pos] = renamedFolderObj.MetaUpdated[pos];
-            //actualFldrObj.NewName = renamedFolderObj.NewName;
-            //actualFldrObj.MetaName = renamedFolderObj.MetaName;
-            //actualFldrObj.Dirty = renamedFolderObj.Dirty;
             MergeFileSystemObject(actualFldrObj, renamedFolderObj, pos);
             actualFldrObj.UseNewName[pos] = renamedFolderObj.UseNewName[pos];
             actualFldrObj.ToDoAction[pos] = actualFldrObj.ToDoAction[pos];
-            MergeOneLevelDown(actualFldrObj, renamedFolderObj, pos);
+
+            if (actualFldrObj.Contents.Count == 0)
+            {
+                actualFldrObj.Parent = renamedFolderObj.Parent;
+                actualFldrObj.Contents = renamedFolderObj.Contents;
+            }
+            else
+                MergeOneLevelDown(actualFldrObj, renamedFolderObj, pos);
         }
 
         private void MergeFileSystemObject(BaseCompareObject actualObj, BaseCompareObject renameObj, int pos)
