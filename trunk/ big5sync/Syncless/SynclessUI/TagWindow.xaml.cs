@@ -30,6 +30,8 @@ namespace SynclessUI
         private bool _popupclosed = true;
         private string _selectedTag;
         private VistaFolderBrowserDialog vistafolderDialog = new VistaFolderBrowserDialog();
+        private bool _isTagNormally;
+        private bool _isInvalidFolder;
 
         public TagWindow(MainWindow main, string path, string tagname, bool notifyUser)
         {
@@ -49,7 +51,9 @@ namespace SynclessUI
             InitializeFolderDialogs();
 
             ACBName.IsEnabled = false;
-
+            
+            _isTagNormally = path == "" ? true : false;
+            _isInvalidFolder = false;
             _path = path == "" ? SelectPath() : path;
 
             if (_cancelstatus)
@@ -59,7 +63,14 @@ namespace SynclessUI
             else
             {
                 ProcessPath(_path, _selectedTag);
-                ShowDialog();
+                if (!_isTagNormally && _isInvalidFolder)
+                {
+                    Close();
+                }
+                else
+                {
+                    ShowDialog();
+                }
             }
         }
 
@@ -123,16 +134,27 @@ namespace SynclessUI
                     var di = new DirectoryInfo(path);
                     if (di.Exists && !FileHelper.IsFile(path))
                     {
-                        TxtBoxPath.Text = path;
-                        ACBName.IsEnabled = true;
-                        ACBName.ItemsSource = _main.Gui.GetAllTags();
-                        if (selectedTag == null)
+                        if (FileHelper.IsSynclessFolder(path))
                         {
-                            ACBName.Text = di.Name;
+                            DialogHelper.ShowError("Invalid Folder", "You cannot tag this folder.");
+                            if (!_isTagNormally)
+                            {
+                                _isInvalidFolder = true;
+                            }
                         }
                         else
                         {
-                            ACBName.Text = selectedTag;
+                            TxtBoxPath.Text = path;
+                            ACBName.IsEnabled = true;
+                            ACBName.ItemsSource = _main.Gui.GetAllTags();
+                            if (selectedTag == null)
+                            {
+                                ACBName.Text = di.Name;
+                            }
+                            else
+                            {
+                                ACBName.Text = selectedTag;
+                            }
                         }
                     }
                     else

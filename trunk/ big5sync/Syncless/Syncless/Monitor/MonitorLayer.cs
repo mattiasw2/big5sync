@@ -43,6 +43,7 @@ namespace Syncless.Monitor
             filtering = new FilterChain();
             archiveFilter = new List<Filter>();
             archiveFilter.Add(FilterFactory.CreateArchiveFilter(SyncConfig.Instance.ArchiveName));
+            archiveFilter.Add(FilterFactory.CreateArchiveFilter(SyncConfig.Instance.ConflictDir));
         }
 
         public void Terminate()
