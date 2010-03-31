@@ -96,11 +96,11 @@ namespace Syncless.CompareAndSync
                         CommonMethods.CopyDirectory(s, dest);
                         CommonMethods.DeleteFolder(s, true);
                     }
-                    catch (CopyFolderException e)
+                    catch (CopyFolderException)
                     {
                         ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error copying folder: " + s + " to " + dest));
                     }
-                    catch (DeleteFolderException e)
+                    catch (DeleteFolderException)
                     {
                         ;
                     }
@@ -118,11 +118,11 @@ namespace Syncless.CompareAndSync
                         CommonMethods.CopyFile(s, dest, true);
                         CommonMethods.DeleteFile(s);
                     }
-                    catch (CopyFileException e)
+                    catch (CopyFileException)
                     {
                         ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error copying file from " + s + " to " + dest));
                     }
-                    catch (DeleteFileException e)
+                    catch (DeleteFileException)
                     {
                         ;
                     }

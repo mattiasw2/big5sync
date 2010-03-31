@@ -70,7 +70,6 @@ namespace Syncless.Profiling
             {
 
             }
-            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.UNKNOWN,"Guid Created"));
             return guidString;
         }
         

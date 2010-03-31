@@ -54,12 +54,12 @@ namespace Syncless.CompareAndSync.Visitor
                 CommonMethods.DeleteFile(src);
                 fco.FinalState[fileIndex] = null; //Set back to null
             }
-            catch (CopyFileException e)
+            catch (CopyFileException)
             {
                 fco.FinalState[fileIndex] = FinalState.Error;
                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error copying file from " + src + " to " + dest));
             }
-            catch (DeleteFileException e)
+            catch (DeleteFileException)
             {
                 ;
             }

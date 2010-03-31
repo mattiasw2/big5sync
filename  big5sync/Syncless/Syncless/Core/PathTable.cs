@@ -89,7 +89,6 @@ namespace Syncless.Core
         }
         public bool AddPathPair(string source, string dest, TableType type)
         {
-            PathPair returnPair = null;
             List<PathPair> usedTable = null;
             switch (type)
             {
