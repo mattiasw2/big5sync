@@ -57,7 +57,7 @@ namespace Syncless.Tagging
         {
             get
             {
-                lock (_tagList)
+                lock (TagList)
                 {
                     List<Tag> readOnlyTagList = new List<Tag>();
                     foreach (Tag t in _tagList)
@@ -85,12 +85,12 @@ namespace Syncless.Tagging
                 if (t.IsDeleted)
                 {
                     CurrentTime current = new CurrentTime();
-                    lock (_tagList)
+                    lock (TagList)
                     {
                         _tagList.Remove(t);
                     }
                     Tag tag = new Tag(tagname, current.CurrentTimeLong);
-                    lock (_tagList)
+                    lock (TagList)
                     {
                         _tagList.Add(tag);
                     }
@@ -106,7 +106,7 @@ namespace Syncless.Tagging
             {
                 CurrentTime current = new CurrentTime();
                 Tag tag = new Tag(tagname, current.CurrentTimeLong);
-                lock (_tagList)
+                lock (TagList)
                 {
                     _tagList.Add(tag);
                 }
@@ -122,7 +122,7 @@ namespace Syncless.Tagging
             {
                 if (t.IsDeleted)
                 {
-                    lock (_tagList)
+                    lock (TagList)
                     {
                         _tagList.Remove(t);
                         _tagList.Add(tag);
@@ -137,7 +137,7 @@ namespace Syncless.Tagging
             }
             else
             {
-                lock (_tagList)
+                lock (TagList)
                 {
                     _tagList.Add(tag);
                 }
@@ -222,7 +222,7 @@ namespace Syncless.Tagging
             {
                 Tag tag = new Tag(tagname, current.CurrentTimeLong);
                 tag.AddPath(path, current.CurrentTimeLong);
-                lock (_tagList)
+                lock (TagList)
                 {
                     _tagList.Add(tag);
                 }
@@ -233,13 +233,13 @@ namespace Syncless.Tagging
             {
                 if (toTag.IsDeleted)
                 {
-                    lock (_tagList)
+                    lock (TagList)
                     {
                         _tagList.Remove(toTag);
                     }
                     Tag tag = new Tag(tagname, current.CurrentTimeLong);
                     tag.AddPath(path, current.CurrentTimeLong);
-                    lock (_tagList)
+                    lock (TagList)
                     {
                         _tagList.Add(tag);
                     }

@@ -159,7 +159,10 @@ namespace Syncless.Tagging
                 if (tagElement.Name.Equals(ELE_TAG_ROOT))
                 {
                     Tag tag = CreateTagFromXml(tagElement);
-                    taggingProfile.TagList.Add(tag);
+                    lock (taggingProfile.TagList)
+                    {
+                        taggingProfile.TagList.Add(tag);
+                    }
                 }
             }
             return taggingProfile;
@@ -308,7 +311,7 @@ namespace Syncless.Tagging
             profileElement.SetAttribute(ATTR_PROFILE_NAME, taggingProfile.ProfileName);
             profileElement.SetAttribute(ATTR_PROFILE_CREATEDDATE, taggingProfile.CreatedDate.ToString());
             profileElement.SetAttribute(ATTR_PROFILE_LASTUPDATEDDATE, taggingProfile.LastUpdatedDate.ToString());
-            foreach (Tag tag in taggingProfile.TagList)
+            foreach (Tag tag in taggingProfile.ReadOnlyTagList)
             {
                 profileElement.AppendChild(CreateTagElement(xmldoc, tag));
             }
