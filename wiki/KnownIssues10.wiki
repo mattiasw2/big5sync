@@ -9,6 +9,11 @@ Note: As much as we try to keep this page updated, please take a look at the pro
 
 = General =
 
+== Some Conflicting Filters Not Handled ==
+
+As of 1.0, all conflicting filters are handled except "*.*". Looking into better ways 
+to implement it in 2.0.
+
 == Cannot Sync File With Very Long Name ==
 
 As of version 1.0, the file/folder with PathTooLongException will simply not be synced. No error will be thrown. Will try to implement a notification to inform user of such error in future releases.
