@@ -166,7 +166,7 @@ namespace Syncless.CompareAndSync.Visitor
             actualFldrObj.MetaExists[pos] = renamedFolderObj.MetaExists[pos];
             actualFldrObj.MetaUpdated[pos] = renamedFolderObj.MetaUpdated[pos];
             actualFldrObj.NewName = renamedFolderObj.NewName;
-            //MergeOneLevelDown(actualFldrObj, renamedFolderObj, pos);
+            MergeOneLevelDown(actualFldrObj, renamedFolderObj, pos);
         }
     }
 }
