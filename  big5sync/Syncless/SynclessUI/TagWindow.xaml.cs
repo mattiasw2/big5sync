@@ -194,8 +194,8 @@ namespace SynclessUI
                         {
                             try
                             {
-								var di = new DirectoryInfo(path);
-                   				if (di.Exists && !FileHelper.IsFile(path)) {
+								var di = new DirectoryInfo(_path);
+                   				if (di.Exists && !FileHelper.IsFile(_path)) {
 									_main.CreateTag(Tagname);
 		
 									TagView tv1 = null;
