@@ -89,7 +89,7 @@ Before you continue, you may want to find out what each button in Syncless does.
 
 == How to Tag and Synchronize? ==
 
-You have folders on your computer and removable drives that you wish to synchronize automatically Let us get started on using Syncless! 
+You have folders on your computer and removable drives that you wish to synchronize automatically. Let us get started on using Syncless! 
 
 === 1. Tag Folders ===
 
