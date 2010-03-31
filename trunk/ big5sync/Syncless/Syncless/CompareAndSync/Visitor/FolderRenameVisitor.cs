@@ -13,6 +13,9 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
+            if (folder.Invalid)
+                return;
+
             DetectFolderRename(folder, numOfPaths);
         }
 
@@ -82,7 +85,13 @@ namespace Syncless.CompareAndSync.Visitor
                     if ((actualFldrObj = o as FolderCompareObject) != null)
                     {
                         renamedFolderObj = renamedFolder.Contents[name] as FolderCompareObject;
-                        MergeFolder(actualFldrObj, renamedFolderObj, pos);
+                        if (actualFldrObj.Contents.Count == 0)
+                        {
+                            actualFolder.RemoveChild(name);
+                            actualFolder.AddChild(renamedFolder.Contents[name]);
+                        }
+                        else
+                            MergeFolder(actualFldrObj, renamedFolderObj, pos);
                     }
                     else
                     {
@@ -121,7 +130,16 @@ namespace Syncless.CompareAndSync.Visitor
                     if ((actualFldrObj = o as FolderCompareObject) != null)
                     {
                         renamedFolderObj = renamedFolder.Contents[name] as FolderCompareObject;
-                        MergeFolder(actualFldrObj, renamedFolderObj, pos);
+                        if (actualFldrObj.Contents.Count == 0)
+                        {
+                            actualFolder.RemoveChild(name);
+                            actualFolder.AddChild(renamedFolder.Contents[name]);
+                        }
+                        else
+                            MergeFolder(actualFldrObj, renamedFolderObj, pos);
+
+                        //renamedFolderObj = renamedFolder.Contents[name] as FolderCompareObject;
+                        //MergeFolder(actualFldrObj, renamedFolderObj, pos);
                     }
                     else
                     {
