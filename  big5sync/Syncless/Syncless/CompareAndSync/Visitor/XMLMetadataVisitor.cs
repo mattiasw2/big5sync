@@ -108,6 +108,7 @@ namespace Syncless.CompareAndSync.Visitor
                 AddFileToChild(xmlObjList, folder, i, numOfPaths);
                 AddFolderToChild(xmlFolderList, folder, i, numOfPaths);
                 xmlObjList.Clear();
+                xmlFolderList.Clear();
             }
         }
 
@@ -117,6 +118,7 @@ namespace Syncless.CompareAndSync.Visitor
             string[] listOfPaths = root.Paths;
             DirectoryInfo di = null;
             List<XMLCompareObject> xmlObjList = null;
+            List<string> name = new List<string>();
 
             for (int i = 0; i < listOfPaths.Length; i++)
             {
@@ -143,6 +145,7 @@ namespace Syncless.CompareAndSync.Visitor
                 AddFolderToRoot(folderNames, root, i, root.Paths.Length);
                 AddFileToRoot(xmlObjList, root, i, root.Paths.Length);
                 xmlObjList.Clear();
+                folderNames.Clear();
             }
 
         }
