@@ -32,3 +32,18 @@ For example, Folder A and Folder B both containing 1.txt file of size 3MB are ta
 == Changes Made After Every Sync Not Shown ==
 
 Currently, the program does not show a list of changes made to the filesystem after every synchronization.
+
+== Tagging From Shell During Synchronizing ==
+Tagging from the shell (Right-click on a folder) and tagging/untagging while any tag is synchronizing will cause the program to go into a hang state. After some time without interference when all the synchronization operations have been completed, the tagging/untagging window might be shown.
+
+== Unable to detect U3 Partitions ==
+Syncless is unable to detect U3 partitions on a thumbdrive. This means that features like tagging and unmonitoring will not be available for it.
+
+== Datagrid Rendering Issue ==
+Slight rendering issue on Log Window. The log table might automatically resize after scrolling the window, most likely due to a custom component bug.
+
+== Tag Filter Not Applied After Tag List Refreshing ==
+Tag Filter does not apply after the tag list has been refreshed. This means even if there is a filter, the tag list will not be filtered after refreshing.
+
+== Indeterminate Synchronization Progress Updates ==
+Sometimes, the status and progress bar might be stuck at finalizing during synchronization. Progress bar colour might also not correspond to the approriate percentage (eg. 100% is indicated at yellow when it is supposed to be green). This does not occur very often, and work has been started on fixing it.
