@@ -38,10 +38,7 @@ Before continuing, make sure you have fulfill the following:
 
 To download Syncless, please visit http://code.google.com/p/big5sync/downloads/list to get the latest version (ver 0.9) of Syncless. After that, unzip the package to anywhere and run Syncless.exe. Absolutely no installation of Syncless is required.
 
-To make it easier to do the tasks in this tutorial, it is a good idea to print this document before you start. In some tasks shown in this tutorial, you will need to choose toolbar commands, which looks like this:
-Toolbar > Create Tag
-
-The term after Toolbar is the name of the command in the main toolbar located in the Main Window.
+To make it easier to do the tasks in this tutorial, it is a good idea to print this document before you start.
 
 
 == The Syncless Interface ==
@@ -60,7 +57,7 @@ To synchronize 2 or more folders together, you must first tag them with the same
 
 === Multiple ways of tagging a folder ===
 
-    * Tagging from Syncless (Can also use the keyboard shortcut equivalent Ctrl-T, refer to [UserGuideGettingStarted#Misc:_Keyboard_Shortcuts keyboard shortcuts] for a complete list of shortcuts)
+    * Tagging from Syncless through the http://big5sync.googlecode.com/files/tagbuttonicon.jpg button (Can also use the keyboard shortcut equivalent Ctrl-T, refer to [UserGuideGettingStarted#Misc:_Keyboard_Shortcuts keyboard shortcuts] for a complete list of shortcuts)
     http://big5sync.googlecode.com/files/Tag_From_Syncless.jpg
 
     * Drag-and-Drop folder(s) on the Main Window
