@@ -28,7 +28,7 @@
         * [UserGuide#Enable_Window_Animation_on_Application_Start/Exit Enable Window Animation on Application Start/Exit]
         * [UserGuide#Enable_Tray_Notification Enable Tray Notification]
         * [UserGuide#When_Minimizing,_Minimize_to_Tray When Minimizing, Minimize to Tray]
-      * [UserGuide#How_is_Syncless_User-friendly How is Syncless User-friendly]
+      * [UserGuide#How_is_Syncless_User-friendly? How is Syncless User-friendly?]
         * [UserGuide#Tag_Name_Auto_Completion Tag Name Auto Completion]
         * [UserGuide#Filter_Tag_List Filter Tag List]
         * [UserGuide#Keyboard_Shortcuts Keyboard Shortcuts]
