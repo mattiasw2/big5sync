@@ -6,8 +6,8 @@ namespace SynclessUI.Helper
     public static class FileHelper
     {
         private const string SYNCLESS = ".syncless";
-        private const string ARCHIVE = "_synclessArchive";
-        private const string CONFLICT = "_synclessConflict";
+        private const string ARCHIVE = "_synclessarchive";
+        private const string CONFLICT = "_synclessconflict";
 
         public static bool IsFile(string path)
         {
