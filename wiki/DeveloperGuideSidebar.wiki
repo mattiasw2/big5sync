@@ -1,7 +1,7 @@
 #labels Phase-Implementation
   * [UserGuideGettingStarted Getting Started!]
     * [UserGuideGettingStarted#Welcome_to_Syncless Welcome to Syncless]
-      * [UserGuideGettingStarted#Why_use_Syncless? Why use Syncless?]
+      * [UserGuideGettingStarted#Why_Use_Syncless? Why Use Syncless?]
         * [UserGuideGettingStarted#N-way_Synchronization N-way Synchronization]
         * [UserGuideGettingStarted#Filtering Filtering]
         * [UserGuideGettingStarted#Archiving Archiving]
