@@ -37,8 +37,11 @@ namespace SynclessUI
 
             _main = main;
 
-            int maxlength = tagname.Length > 20 ? 20 : tagname.Length;
-            tagname = tagname.Substring(0, maxlength);
+            if(tagname != null)
+            {
+                int maxlength = tagname.Length > 20 ? 20 : tagname.Length;
+                tagname = tagname.Substring(0, maxlength);
+            }
 
             _selectedTag = tagname;
             _notifyUser = notifyUser;

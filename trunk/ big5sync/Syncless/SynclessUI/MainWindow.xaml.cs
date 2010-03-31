@@ -279,6 +279,8 @@ namespace SynclessUI
                     TagStatusPanel.Visibility = Visibility.Hidden;
                     SyncPanel.Visibility = Visibility.Hidden;
                     BdrTaggedPath.Visibility = Visibility.Hidden;
+                    ProgressBarSync.Visibility = Visibility.Hidden;
+                    LblProgress.Visibility = Visibility.Hidden;
                 }
             }
             catch (UnhandledException)
@@ -314,7 +316,7 @@ namespace SynclessUI
                 ShowInTaskbar = false;
         }
 
-        private void RestoreWindow()
+        public void RestoreWindow()
         {
             ShowInTaskbar = true;
             WindowState = WindowState.Normal;
