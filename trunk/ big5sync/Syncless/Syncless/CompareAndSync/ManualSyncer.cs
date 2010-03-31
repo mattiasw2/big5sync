@@ -30,7 +30,7 @@ namespace Syncless.CompareAndSync
             List<string> typeConflicts = new List<string>();
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters, typeConflicts), progress);
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), progress);
-            CompareObjectHelper.PostTraverseFolder(rco, new FolderRenameVisitor(), progress);
+            CompareObjectHelper.LevelOrderTraverseFolder(rco, new FolderRenameVisitor(), progress);
             ComparerVisitor comparerVisitor = new ComparerVisitor();
             CompareObjectHelper.PostTraverseFolder(rco, comparerVisitor, progress);
 
