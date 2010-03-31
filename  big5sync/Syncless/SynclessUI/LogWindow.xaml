@@ -59,7 +59,7 @@
 				<Label x:Name="LblOk" FontFamily="Century Gothic" FontSize="9.333" Content="Close"/>
 			</Button>
 		</StackPanel>
-		<toolkit:DataGrid ItemsSource="{Binding LogData, ElementName=Window}" Margin="5,5,0,0" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="2" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True" MinHeight="100" MinWidth="700" Height="Auto" Width="Auto" MaxHeight="300" MaxWidth="700" RowBackground="#FF666666" AlternatingRowBackground="#FF555555" HorizontalGridLinesBrush="#FF828790" VerticalGridLinesBrush="#FF828790" FontFamily="Century Gothic">
+		<toolkit:DataGrid x:Name="datagrid" ItemsSource="{Binding LogData, ElementName=Window}" Margin="5,5,0,0" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="2" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True" MinHeight="100" MinWidth="700" MaxHeight="300" MaxWidth="700" RowBackground="#FF666666" AlternatingRowBackground="#FF555555" HorizontalGridLinesBrush="#FF828790" VerticalGridLinesBrush="#FF828790" FontFamily="Century Gothic" Background="#FF666666">
 			<toolkit:DataGrid.Columns>
 				<toolkit:DataGridTextColumn Binding="{Binding Timestamp}" Header="Timestamp" IsReadOnly="True" Foreground="White"/>
 				<toolkit:DataGridTextColumn Binding="{Binding Category}" Header="Category" IsReadOnly="True" Foreground="White"/>

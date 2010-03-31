@@ -56,7 +56,7 @@ namespace SynclessUI
                 if (f is ExtensionFilter)
                 {
                     var ef = (ExtensionFilter) f;
-                    generatedFilterStringList.Add(i + ". " + "[Ext.]" + ef.Pattern);
+                    generatedFilterStringList.Add(i + ". " + ef.Pattern);
                 }
                 i++;
             }
@@ -119,7 +119,7 @@ namespace SynclessUI
             var ef = (ExtensionFilter) FilterFactory.CreateExtensionFilter("*.*", FilterMode.INCLUDE);
             filters.Add(ef);
 
-            PopulateFilterStringList(false);
+            PopulateFilterStringList(true);
             SelectFilter(ef);
         }
 
@@ -158,7 +158,6 @@ namespace SynclessUI
 
         private void CmbBoxMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            /*
             if (ListFilters.SelectedIndex != -1 && ListFilters.SelectedIndex <= filters.Count)
             {
                 Filter f = filters[ListFilters.SelectedIndex];
@@ -168,7 +167,6 @@ namespace SynclessUI
                 else if (CmbBoxMode.SelectedIndex == 1)
                     f.Mode = FilterMode.EXCLUDE;
             }
-            */
         }
 
         private void TabItemFiltering_GotFocus(object sender, RoutedEventArgs e)
@@ -188,7 +186,6 @@ namespace SynclessUI
 
         private void TxtBoxPattern_LostFocus(object sender, RoutedEventArgs e)
         {
-            /*
             if (ListFilters.SelectedIndex != -1)
             {
                 if(!CheckIfFilterExist(TxtBoxPattern.Text))
@@ -203,7 +200,6 @@ namespace SynclessUI
                     PopulateFilterStringList(true);
                 }                
             }
-            */
         }
 
         private bool CheckIfFilterExist(string pattern)
