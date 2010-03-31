@@ -16,8 +16,8 @@ namespace Syncless.CompareAndSync
     public class ManualQueueControl : IDisposable
     {
         private readonly List<Thread> _threads = new List<Thread>();
-        private const int threadsToUse = 1;
-        private static readonly object locker = new object();
+        private const int ThreadsToUse = 1;
+        private static readonly object Locker = new object();
         private readonly List<ManualSyncRequest> _jobs = new List<ManualSyncRequest>();
         private readonly EventWaitHandle _wh = new AutoResetEvent(false);
         private static ManualQueueControl _instance;
@@ -27,7 +27,7 @@ namespace Syncless.CompareAndSync
 
         private ManualQueueControl()
         {
-            for (int i = 0; i < threadsToUse; i++)
+            for (int i = 0; i < ThreadsToUse; i++)
             {
                 Thread t = new Thread(Work);
                 _threads.Add(t);
@@ -49,14 +49,21 @@ namespace Syncless.CompareAndSync
 
         //public int ThreadsToUse
         //{
-        //    set { threadsToUse = value; }
-        //    get { return threadsToUse; }
+        //    set { ThreadsToUse = value; }
+        //    get { return ThreadsToUse; }
         //}
 
+        /// <summary>
+        /// Adds a ManualSyncRequest to the queue.
+        /// </summary>
+        /// <param name="item">ManualSyncRequest</param>
+        /// <exception cref="ArgumentNullException">Thrown when ManualSyncRequest is null</exception>
         public void AddSyncJob(ManualSyncRequest item)
         {
-            Debug.Assert(item != null);
-            lock (locker)
+            if (item == null)
+                throw new ArgumentNullException("ManualSyncRequest cannot be null.");
+
+            lock (Locker)
             {
                 if (!_queuedJobsLookup.Contains(item.TagName))
                 {
@@ -67,10 +74,17 @@ namespace Syncless.CompareAndSync
             _wh.Set();
         }
 
-        //Change to bool instead?
+        /// <summary>
+        /// Attempts to cancel a synchronization job and returns true if it can be cancelled and false if it cannot be cancelled.
+        /// </summary>
+        /// <param name="item">CancelSyncRequest</param>
+        /// <returns>True if the job can be cancelled, false if it cannot be cancelled</returns>
         public bool CancelSyncJob(CancelSyncRequest item)
         {
-            lock (locker)
+            if (item == null)
+                throw new ArgumentNullException("CancelSyncRequest cannot be null.");
+
+            lock (Locker)
             {
                 if (_queuedJobsLookup.Contains(item.TagName))
                 {
@@ -80,7 +94,6 @@ namespace Syncless.CompareAndSync
                         {
                             _jobs.RemoveAt(i);
                             _queuedJobsLookup.Remove(item.TagName);
-                            //ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName, true));
                             return true;
                             //break;
                         }
@@ -95,23 +108,22 @@ namespace Syncless.CompareAndSync
                         case SyncState.Analyzing:
                             _currJobProgress.Cancel();
                             return true;
-                            //ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName, true));
-                            break;
                         default:
                             return false;
-                            //ServiceLocator.UINotificationQueue().Enqueue(new CancelSyncNotification(item.TagName, false));
-                            break;
                     }
                 }
                 return false;
             }
         }
 
+        /// <summary>
+        /// Worker thread to dequeue and process jobs in the queue.
+        /// </summary>
         private void Work()
         {
             while (true)
             {
-                lock (locker)
+                lock (Locker)
                 {
                     if (_jobs.Count > 0)
                     {
@@ -160,26 +172,48 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        /// <summary>
+        /// Gets a boolean indicating if the queue is empty.
+        /// </summary>
         public bool IsEmpty
         {
             get { return _jobs.Count == 0; }
         }
 
+        /// <summary>
+        /// Returns a boolean indicating if the tag name passed in is currently being queued.
+        /// </summary>
+        /// <param name="tagName">The tag name to check.</param>
+        /// <returns>A boolean indicating if the tag name is being queued.</returns>
         public bool IsQueued(string tagName)
         {
             return _queuedJobsLookup.Contains(tagName);
         }
 
+        /// <summary>
+        /// Returns a boolean indicating if tag name passed in is being synced.
+        /// </summary>
+        /// <param name="tagName">The tag name to check.</param>
+        /// <returns>A boolean indicating if the tag name is in progress.</returns>
         public bool IsSyncing(string tagName)
         {
             return _currJob == null ? false : tagName.Equals(_currJob.TagName);
         }
 
+        /// <summary>
+        /// Returns a boolean indicating if the tag name passed in is being queued or currently in progress.
+        /// </summary>
+        /// <param name="tagName"></param>
+        /// <returns>A boolean indicating if the tag name passed in is being queued or currently in progress.</returns>
         public bool IsQueuedOrSyncing(string tagName)
         {
             return IsQueued(tagName) || IsSyncing(tagName);
         }
 
+        /// <summary>
+        /// Returns a boolean indicating if it is possible to terminate all jobs.
+        /// </summary>
+        /// <returns>A boolean indicating if it is possible to terminate all jobs.</returns>
         public bool PrepareForTermination()
         {
             if (IsEmpty && _currJob == null)
@@ -187,14 +221,16 @@ namespace Syncless.CompareAndSync
             return false;
         }
 
+        /// <summary>
+        /// Clears the queue of all jobs, and attempts to cancel current job if possible.
+        /// </summary>
         public void Terminate()
         {
             if (IsEmpty && _currJob == null)
                 Dispose();
             else
             {
-                // Clear all jobs
-                lock (locker)
+                lock (Locker)
                 {
                     _jobs.Clear();
                     _queuedJobsLookup.Clear();
@@ -210,20 +246,18 @@ namespace Syncless.CompareAndSync
                             break;
                     }
                 }
-
-                //while (_currJobProgress != null)
-                //{
-                //    //Busy waiting
-                //}
                 Dispose();
             }
         }
 
+        /// <summary>
+        /// Adds a null value to the queue so that the worker thread will return.
+        /// </summary>
         public void Dispose()
         {
             for (int i = 0; i < _threads.Count; i++)
             {
-                lock (locker)
+                lock (Locker)
                 {
                     _jobs.Insert(0, null);
                 }

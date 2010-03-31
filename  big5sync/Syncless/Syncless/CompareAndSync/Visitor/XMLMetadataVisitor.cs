@@ -153,7 +153,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         private FileCompareObject PopulateFileWithMetaData(XmlDocument xmlDoc, FileCompareObject file, int counter)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/" + FILE + "[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/" + FILE + "[name=" + CommonMethods.ParseXPathString(file.Name) + "]");
             if (node != null)
             {
 
@@ -193,7 +193,7 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     XmlDocument todoXMLDoc = new XmlDocument();
                     CommonMethods.LoadXML(ref todoXMLDoc, path);
-                    XmlNode todoNode = todoXMLDoc.SelectSingleNode("/" + LastKnownState + "/" + FILE + "[name=" + CommonMethods.ParseXpathString(file.Name) + "]");
+                    XmlNode todoNode = todoXMLDoc.SelectSingleNode("/" + LastKnownState + "/" + FILE + "[name=" + CommonMethods.ParseXPathString(file.Name) + "]");
                     if (todoNode != null)
                     {
                         XmlNodeList nodeList = todoNode.ChildNodes;
@@ -489,7 +489,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         private FolderCompareObject PopulateFolderWithMetaData(XmlDocument xmlDoc, FolderCompareObject folder, int counter)
         {
-            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/"+ FOLDER + "[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
+            XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/"+ FOLDER + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
             if (node != null)
             {
                 folder.MetaExists[counter] = true;
@@ -501,7 +501,7 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     XmlDocument todoXmlDoc = new XmlDocument();
                     CommonMethods.LoadXML(ref todoXmlDoc, path);
-                    XmlNode todoNode = todoXmlDoc.SelectSingleNode("/" + LastKnownState + "/" + FOLDER + "[name=" + CommonMethods.ParseXpathString(folder.Name) + "]");
+                    XmlNode todoNode = todoXmlDoc.SelectSingleNode("/" + LastKnownState + "/" + FOLDER + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
                     if (todoNode != null)
                     {
                         XmlNodeList nodeList = todoNode.ChildNodes;

@@ -11,11 +11,11 @@ using Syncless.CompareAndSync.Exceptions;
 namespace Syncless.CompareAndSync
 {
     /// <summary>
-    /// Static class that contains all common filer and folder operation methods.
+    /// Static class that contains all common file and folder operation methods.
     /// </summary>
     public static class CommonMethods
     {
-        private static readonly object syncLock = new object();
+        private static readonly object SyncLock = new object();
 
         #region XML
 
@@ -25,7 +25,7 @@ namespace Syncless.CompareAndSync
             {
                 try
                 {
-                    lock (syncLock)
+                    lock (SyncLock)
                     {
                         XmlNode node = xmlDoc.SelectSingleNode("/meta-data");
                         if (node != null)
@@ -117,6 +117,41 @@ namespace Syncless.CompareAndSync
             }
 
             return folderPath;
+        }
+
+        // Method credited to http://stackoverflow.com/questions/642125/encoding-xpath-expressions-with-both-single-and-double-quotes
+        public static string ParseXPathString(string input)
+        {
+            // If we don't have any " then encase string in " 
+            if (!input.Contains("\""))
+                return String.Format("\"{0}\"", input);
+
+            // If we have some " but no ' then encase in ' 
+            if (!input.Contains("'"))
+                return String.Format("'{0}'", input);
+
+            // If we get here we have both " and ' in the string so must use Concat 
+            StringBuilder sb = new StringBuilder("concat(");
+
+            // Going to look for " as they are LESS likely than ' in our data so will minimise 
+            // number of arguments to concat. 
+            int lastPos = 0;
+            int nextPos = input.IndexOf("\"");
+            while (nextPos != -1)
+            {
+                // If this is not the first time through the loop then seperate arguments with , 
+                if (lastPos != 0)
+                    sb.Append(",");
+
+                sb.AppendFormat("\"{0}\",'\"'", input.Substring(lastPos, nextPos - lastPos));
+                lastPos = ++nextPos;
+
+                // Find next occurance 
+                nextPos = input.IndexOf("\"", lastPos);
+            }
+
+            sb.Append(")");
+            return sb.ToString();
         }
 
         #endregion
@@ -491,56 +526,6 @@ namespace Syncless.CompareAndSync
         }
 
         #endregion
-
-        /// <summary>
-        /// Checks if all the give file system objects are the same type, that is, file or folder.
-        /// </summary>
-        /// <param name="paths"></param>
-        private static void CheckIfSameType(List<string> paths)
-        {
-            bool isFile = File.Exists(paths[0]);
-
-            for (int i = 1; i < paths.Count; i++)
-                if (isFile != File.Exists(paths[i]))
-                    throw new IncompatibleTypeException();
-        }
-
-
-        // Method credited to http://stackoverflow.com/questions/642125/encoding-xpath-expressions-with-both-single-and-double-quotes
-        public static string ParseXpathString(string input)
-        {
-            // If we don't have any " then encase string in " 
-            if (!input.Contains("\""))
-                return String.Format("\"{0}\"", input);
-
-            // If we have some " but no ' then encase in ' 
-            if (!input.Contains("'"))
-                return String.Format("'{0}'", input);
-
-            // If we get here we have both " and ' in the string so must use Concat 
-            StringBuilder sb = new StringBuilder("concat(");
-
-            // Going to look for " as they are LESS likely than ' in our data so will minimise 
-            // number of arguments to concat. 
-            int lastPos = 0;
-            int nextPos = input.IndexOf("\"");
-            while (nextPos != -1)
-            {
-                // If this is not the first time through the loop then seperate arguments with , 
-                if (lastPos != 0)
-                    sb.Append(",");
-
-                sb.AppendFormat("\"{0}\",'\"'", input.Substring(lastPos, nextPos - lastPos));
-                lastPos = ++nextPos;
-
-                // Find next occurance 
-                nextPos = input.IndexOf("\"", lastPos);
-            }
-
-            sb.Append(")");
-            return sb.ToString();
-        }
-
 
     }
 }
