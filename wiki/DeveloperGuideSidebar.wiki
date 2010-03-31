@@ -16,6 +16,12 @@
     * [UserGuideGettingStarted#Misc:_Keyboard_Shortcuts Misc. Keyboard Shortcuts]
     * [UserGuideGettingStarted#Getting_More_Help Getting More Help]
   * [UserGuide Comprehensive User Guide]
+    *[UserGuide#Preface Preface]
+    *[UserGuide#Welcome_to_Syncless Welcome to Syncless]
+      *[UserGuide#Why_use_Syncless? Why use Syncless?]
+      *[UserGuide#What_is_a_Tag? What is a Tag?]
+      *[UserGuide#What_You'll_Need What You'll Need]
+      *[UserGuide#The_Syncless_Interface The Syncless Interface]
   * [DeveloperGuide Developers' Guide]
     * System Overview
       * [DeveloperGuide#Architecture Architecture]
