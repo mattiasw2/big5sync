@@ -6,6 +6,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using Syncless.CompareAndSync.CompareObject;
+using Syncless.Core.Exceptions;
+using SynclessUI.Helper;
 using SynclessUI.Visitor;
 
 namespace SynclessUI
@@ -64,6 +66,7 @@ namespace SynclessUI
 
         private void CallBack(IAsyncResult result)
         {
+            try {
             if (result.IsCompleted)
             {
                 var previewDel = result.AsyncState as PreviewSyncDelegate;
@@ -76,16 +79,27 @@ namespace SynclessUI
             {
                 Console.WriteLine("error");
             }
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage();
+            }
         }
 
         private void Populate(RootCompareObject rco)
         {
+            try {
             _previewSyncData.Rows.Clear();
 
             var visitor = new PreviewVisitor(_previewSyncData);
             if (rco != null)
             {
                 SyncUIHelper.TraverseFolderHelper(rco, visitor);
+            }
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
             //new UpdateDelegate(Data.InvalidateVisual).BeginInvoke(Test, null);
         }
