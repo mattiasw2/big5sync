@@ -4,6 +4,8 @@
 
 http://big5sync.googlecode.com/files/mainpagelogosmall.png
 
+<wiki:toc max_depth="6">
+
 = Preface =
 
 This users' guide provides a more detailed insight into the functionalities available in *_Syncless_*. If you wish to have a quick view on the basic functions provided in *_Syncless_*, you can refer to the *_Getting Started User Guide_* [http://code.google.com/p/big5sync/wiki/UserGuideGettingStarted here].
@@ -14,21 +16,38 @@ Synchronization is taken on a whole new level with _*Syncless*_. This document f
 
 _*Syncless*_ allows you to synchronize your files and folders automatically through the use of tags, even across removable drives. With _*Syncless*_, you can quickly tag multiple folders and configure them to be either in _seamless_ or _manual_ synchronization mode. Syncless also includes powerful filters and versioning capability, along with the finest usability that caters to each individual's workflow. Lastly, Syncless is a portable application, so it will run off any removable drive with no installation required.
 
+== Why use Syncless? ==
+
+Why choose Syncless over other synchronization tools? The reason is simple. Syncless provides many powerful features which are rarely found in one single synchronization tool in the market.
+
+  * *N-way Synchronization*: Why restrict yourself to just syncing two folders? Let Syncless perform n-way synchronization between multiple folders for you.
+
+  * *Filtering*:  Use Syncless's filtering features for the ultimate control in synchronization. Currently, Syncless is able to include or exclude files and folders by extension and path. Other filters will be available in later versions.
+
+ * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder will be archived up to 5 backups at one time. As of version 1.0, archiving is not user-configurable, but will be in the future.
+
+ * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving it on your computer.
+
+=== N-way Synchronization ===
+Traditionally, to keep a few folders in sync, you need to create multiple jobs because many tools provide synchronization between 2 folders only. Syncless is capable of synchronizing multiple folders without having you to create multiple jobs. Simply create one tag and tag multiple folders to the same tag, then Syncless will keep them all in sync.
+
+=== Filtering ===
+Syncless provides basic filtering for files currently. There are 2 main kinds of filters, inclusion and exclusion filters. Exclusion filters will always have a higher priority over inclusion filters. In this section, we are going to take a look at how we can construct some filters to suit our needs.
+
+=== Archiving ===
+With the archiving feature, you do not need to worry about losing an important file if you accidentally delete it and the change is propagated to other folders in the same tag. Syncless will keep up to 5 copies of the deleted file in an archive folder. This folder will be created in all the other folders in the same tag. Note that it will not be created in the folder where the file deletion is initiated by the user.
+
+To illustrate, let's say you tag D:\Lecture and E:\Notes to a tag named 'Lecture', both contain the file Chapter1.pdf. You accidentally delete Chapter1.pdf under D:\Lecture. Syncless will keep a copy of Chapter1.pdf in the archive folder under E:\Notes. If you need to restore that file, simply copy the archived file back to D:\Lecture.
+
+=== Portability ===
+If you frequently use your removable storage drive on various computers, Syncless can automate this job for you. For example, a student has a home computer, as well as a regular workstation in his school lab. He wishes to keep his school work synchronized across both computers. By having Syncless on both his home computer and school workstation, and giving them the same tag, say "Lectures", Syncless will auto-detect and synchronize each time the removable storage drive is inserted. See the below diagrams for a clearer illustration:
+
+http://big5sync.googlecode.com/files/merging.png
+
+
 == What is a Tag? ==
 
 The concept of *Tag* is not uncommon today. In Syncless's context, it is simply an identity or a label associated with folders you want to keep in sync. Associate several folders to the same tag name, and Syncless will keep them all in sync for you. We will discuss the ways to tagging folders in the subsequent section of this tutorial.
-
-== What You'll Learn ==
-If you follow all the steps in this tutorial, you’ll be able to:
-  * Synchronize files/folders between the computer and a removable drive
-
-  * Tag in multiple ways
-
-  * Manage tags
-
-  * Prepare removable drives for removal
-
-  * Learn basic shortcuts to speed up productivity
 
 
 == What You'll Need ==
@@ -36,7 +55,7 @@ Before continuing, make sure you have fulfill the following:
   * Running a Windows Operating System (XP and Above). 
   * .NET 3.5 SP2 Framework installed (Get from http://msdn.microsoft.com/en-us/netframework/default.aspx)
 
-To download Syncless, please visit http://code.google.com/p/big5sync/downloads/list to get the latest version (ver 0.9) of Syncless. After that, unzip the package to anywhere and run Syncless.exe. Absolutely no installation of Syncless is required.
+To download Syncless, please visit http://code.google.com/p/big5sync/downloads/list to get the latest version (ver 1.0) of Syncless. After that, unzip the package to anywhere and run Syncless.exe. Absolutely no installation of Syncless is required.
 
 To make it easier to do the tasks in this tutorial, it is a good idea to print this document before you start.
 
@@ -134,37 +153,15 @@ You can access this through the http://big5sync.googlecode.com/files/unmonitorbu
 
 Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be *stopped* (only seamless operations will be stopped so far) and thus allow the removable drive to be safely removed.
 
-== You can start using Syncless now! ==
 
-With the successful operation of synchronization, you have now completed the full Syncless tutorial. Continue on to see other major features in Syncless.
-
-
-= Continue to Explore Syncless =
-
-Syncless offers other powerful features. These additional features include:
-
-  * *N-way Synchronization*: Why restrict yourself to just syncing two folders? Let Syncless perform n-way synchronization between multiple folders for you.
-
-  * *Filtering*:  Use Syncless's filtering features for the ultimate control in synchronization. Currently, Syncless is able to include or exclude files and folders by extension and path. Other filters will be available in later versions.
-
- * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder will be archived up to 5 backups at one time. As of version 1.0, archiving is not user-configurable, but will be in the future.
-
- * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving it on your computer.
-
-== N-way Synchronization ==
-Traditionally, to keep a few folders in sync, you need to create multiple jobs because many tools provide synchronization between 2 folders only. Syncless is capable of synchronizing multiple folders without having you to create multiple jobs. Simply create one tag and tag multiple folders to the same tag, then Syncless will keep them all in sync.
-
-== Filtering ==
-Syncless provides basic filtering for files currently. There are 2 main kinds of filters, inclusion and exclusion filters. Exclusion filters will always have a higher priority over inclusion filters. In this section, we are going to take a look at how we can construct some filters to suit our needs.
-
-=== Create a Filter ===
-Click on either the folder icon or the details icon in the toolbar to open up the filter panel. You should see a list of filters, and most likely, it will be blank since no filters have been added yet.
+=== 6. Create a Filter ===
+Click the http://big5sync.googlecode.com/files/detailsbuttonicon.jpg button in the toolbar to open up the tag properties panel. Inside the properties panel, choose the *Filtering* property. You should see a list of filters, and most likely, it will be blank since no filters have been added yet.
 
 http://big5sync.googlecode.com/files/Configure_Filter.jpg
 
 Now, click on the http://big5sync.googlecode.com/files/Add_Filter_Button.jpg button to add a new filter. You can now set the "Ext. Mask" and the "Mode".
 
-=== Construct a Filter ===
+==== Construct a Filter ====
 Ext. mask can be an actual filename, or simply a name with wildcards. Some examples will be "Storyboard.ppt", "`*`.exe" or "File?.txt".
 
   * *`*`* - Wildcard for any number of characters. For example, s`*`t will mean sit, sat, shoot, skit, etc.
@@ -180,15 +177,22 @@ Now, let us look at some real-world examples. For example, if you want to includ
 
 As seen from the above, creating a filter is a simple and intuitive task in Syncless.
 
-== Archiving ==
-With the archiving feature, you do not need to worry about losing an important file if you accidentally delete it and the change is propagated to other folders in the same tag. Syncless will keep up to 5 copies of the deleted file in an archive folder. This folder will be created in all the other folders in the same tag. Note that it will not be created in the folder where the file deletion is initiated by the user.
 
-To illustrate, let's say you tag D:\Lecture and E:\Notes to a tag named 'Lecture', both contain the file Chapter1.pdf. You accidentally delete Chapter1.pdf under D:\Lecture. Syncless will keep a copy of Chapter1.pdf in the archive folder under E:\Notes. If you need to restore that file, simply copy the archived file back to D:\Lecture.
+= How is Syncless User-friendly =
 
-== Portability ==
-If you frequently use your removable storage drive on various computers, Syncless can automate this job for you. For example, a student has a home computer, as well as a regular workstation in his school lab. He wishes to keep his school work synchronized across both computers. By having Syncless on both his home computer and school workstation, and giving them the same tag, say "Lectures", Syncless will auto-detect and synchronize each time the removable storage drive is inserted. See the below diagrams for a clearer illustration:
+Syncless makes your user experience as pleasant as possible by providing several user-friendly functionalities.
 
-http://big5sync.googlecode.com/files/merging.png
+== Filter Tag List ==
+
+Do you have many tags to maintain and have difficulty finding that exact tag from the long list? Syncless supports filtering of tags so that you can search for the tag you want by just entering the tag name.
+
+Let's say you have many tags in the tag list.
+
+http://big5sync.googlecode.com/files/Zoom_In_All_Tag_List.jpg
+
+You want to filter out only tags related to your photo folders. Simply enter the word 'Photos' in the http://big5sync.googlecode.com/files/Search_Tag_Text_Box.jpg text box and only tag names containing 'Photos' will be displayed.
+
+http://big5sync.googlecode.com/files/Zoom_In_Filter_Tag_List.jpg
 
 = Misc: Keyboard Shortcuts =
 
