@@ -57,7 +57,7 @@ Before continuing, make sure you have fulfill the following:
   * Running a Windows Operating System (XP and Above). 
   * .NET 3.5 SP2 Framework installed (Get from http://msdn.microsoft.com/en-us/netframework/default.aspx)
 
-To download Syncless, please visit http://code.google.com/p/big5sync/downloads/list to get the latest version (ver 1.0) of Syncless. After that, unzip the package to anywhere and run Syncless.exe. Absolutely no installation of Syncless is required.
+To download Syncless, please visit http://code.google.com/p/big5sync/downloads/list to get the latest version (ver 1.0) of Syncless. After that, unzip the package to anywhere and run SynclessUI.exe. Absolutely no installation of Syncless is required.
 
 To make it easier to do the tasks in this tutorial, it is a good idea to print this document before you start.
 
