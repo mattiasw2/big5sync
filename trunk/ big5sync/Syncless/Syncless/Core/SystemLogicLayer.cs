@@ -498,7 +498,7 @@ namespace Syncless.Core
                 TaggingLayer.Instance.RenameFolder(logicalAddress, newLogicalAddress);
                 MonitorLayer.Instance.UnMonitorPath(fe.OldPath.FullName);
                 MonitorLayer.Instance.MonitorPath(fe.NewPath.FullName);
-                _userInterface.TagChanged();
+                _userInterface.PathChanged();
             }
 
             
@@ -619,6 +619,7 @@ namespace Syncless.Core
             AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance);
             SendAutoRequest(request);
             FindAndCleanDeletedPaths();
+            _userInterface.PathChanged();
         }
 
         private void HandleRootFolderDeleteEvent(FolderChangeEvent dce)
@@ -685,7 +686,7 @@ namespace Syncless.Core
             AutoSyncRequest request = new AutoSyncRequest(dce.OldPath.Name, dce.OldPath.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance);
             SendAutoRequest(request);
             FindAndCleanDeletedPaths();
-            _userInterface.TagChanged();
+            _userInterface.PathChanged();
         }
 
         #endregion

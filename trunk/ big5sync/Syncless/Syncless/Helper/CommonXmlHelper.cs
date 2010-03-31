@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Xml;
 using System.IO;
@@ -9,6 +10,7 @@ namespace Syncless.Helper
 {
     public static class CommonXmlHelper
     {
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public static void SaveXml(XmlDocument xml, string path)
         {
             XmlTextWriter textWriter = null;
@@ -70,7 +72,7 @@ namespace Syncless.Helper
             }
 
         }
-
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public static XmlDocument LoadXml(string path)
         {
             FileStream fs = null;
