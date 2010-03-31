@@ -205,6 +205,8 @@ You can also view a video of the quick run-through of the features:
 
 <wiki:video url="http://www.youtube.com/watch?v=i30Q2U7ceWs"/>
 
+Want to find out more about Syncless? Take a look at the comprehensive guide [http://code.google.com/p/big5sync/wiki/UserGuide here]!
+
 Interested in what's coming after version 1.0? Take a look [http://code.google.com/p/big5sync/wiki/ComingSoon here]!
 
 Are you a developer? Interested to further improve Syncless? Have a [http://code.google.com/p/big5sync/wiki/DeveloperGuide look]!
