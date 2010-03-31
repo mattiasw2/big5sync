@@ -215,7 +215,7 @@ namespace Syncless.Profiling
 
                 return drive;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.UNKNOWN,"Error Loading Profile"));
                 return null;

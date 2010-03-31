@@ -57,7 +57,7 @@ namespace Syncless.CompareAndSync.Visitor
                                 {
                                     fco = (FolderCompareObject)o;
                                 }
-                                catch (InvalidCastException e)
+                                catch (InvalidCastException)
                                 {
                                     _typeConflicts.Add(info.FullName);
                                     folder.RemoveChild(info.Name); //Remove file object
@@ -92,7 +92,7 @@ namespace Syncless.CompareAndSync.Visitor
                                 {
                                     fco = (FileCompareObject)o;
                                 }
-                                catch (InvalidCastException e)
+                                catch (InvalidCastException)
                                 {
                                     _typeConflicts.Add(info.FullName);
                                     conflict = true;

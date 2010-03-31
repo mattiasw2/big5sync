@@ -177,11 +177,11 @@ namespace Syncless.CompareAndSync
                             }
                             XMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, MetaChangeType.Delete, _metaUpdated));
                         }
-                        catch (ArchiveFileException e)
+                        catch (ArchiveFileException)
                         {
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving file " + destFullPath));
                         }
-                        catch (DeleteFileException e)
+                        catch (DeleteFileException)
                         {
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error deleting file " + destFullPath));
                         }
@@ -204,7 +204,7 @@ namespace Syncless.CompareAndSync
             {
                 return (CommonMethods.CalculateMD5Hash(sourceFile) != CommonMethods.CalculateMD5Hash(destFile));
             }
-            catch (HashFileException e)
+            catch (HashFileException)
             {
                 return true;
             }
@@ -260,11 +260,11 @@ namespace Syncless.CompareAndSync
                                 break;
                         }
                     }
-                    catch (CreateFolderException e)
+                    catch (CreateFolderException)
                     {
                         ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error creating folder " + destFullPath));
                     }
-                    catch (MoveFolderException e)
+                    catch (MoveFolderException)
                     {
                         ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error renaming folder from " + oldFullPath + " to " + newFullPath));
                     }
@@ -298,11 +298,11 @@ namespace Syncless.CompareAndSync
                             }
                             XMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, dest, MetaChangeType.Delete, _metaUpdated));
                         }
-                        catch (ArchiveFolderException e)
+                        catch (ArchiveFolderException)
                         {
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving folder " + destFullPath));
                         }
-                        catch (DeleteFolderException e)
+                        catch (DeleteFolderException)
                         {
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error deleting folder " + destFullPath));
                         }

@@ -232,11 +232,11 @@ namespace SynclessTaggingTester
                 _logic.SaveTo(locations);
                 testcase.Actual = "";
             }
-            catch (IOException ioe)
+            catch (IOException)
             {
                 testcase.Actual = "IOException";
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 testcase.Actual = "Exception";
             }

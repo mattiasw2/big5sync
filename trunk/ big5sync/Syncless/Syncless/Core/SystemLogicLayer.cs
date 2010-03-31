@@ -751,7 +751,7 @@ namespace Syncless.Core
                 cleanDel.BeginInvoke(t, null, null);
                 return t != null;
             }
-            catch (TagNotFoundException te)
+            catch (TagNotFoundException)
             {
                 return false;
             }
