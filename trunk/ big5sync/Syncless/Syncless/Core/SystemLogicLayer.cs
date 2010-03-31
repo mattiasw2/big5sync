@@ -1355,9 +1355,12 @@ namespace Syncless.Core
             }
             List<string> paths = tag.FilteredPathListString;
             List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
-
-            if (filterPaths.Length < 2)
+            if (filterPaths[0].Count < 2)
             {
+                if (notify)
+                {
+                    SetTagMode(tag, true);
+                }
                 return false;
             }
 
@@ -1541,12 +1544,7 @@ namespace Syncless.Core
                         catch (Exception)
                         {
                         }
-                        TagState state = TagState.Undefined;
-                        _switchingTable.TryGetValue(t.TagName, out state);
-                        if (state == TagState.Undefined)
-                        {
-                            _switchingTable.Add(t.TagName, t.IsSeamless ? TagState.ManualToSeamless : TagState.SeamlessToManual);
-                        }
+                        
                         StartMonitorTag(t);
                     }
                 }
