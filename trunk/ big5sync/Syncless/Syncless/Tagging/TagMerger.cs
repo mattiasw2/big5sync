@@ -24,7 +24,7 @@ namespace Syncless.Tagging
             }
             //list of tags from the new profile.
             List<Tag> newTagList = new List<Tag>();
-            newTagList.AddRange(newProfile.TagList);
+            newTagList.AddRange(newProfile.ReadOnlyTagList);
             List<Tag> monitorList = new List<Tag>();
             foreach (Tag newTag in newTagList)//handles the new tag from new profile
             {
