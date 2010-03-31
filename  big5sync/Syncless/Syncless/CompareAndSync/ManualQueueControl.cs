@@ -195,7 +195,7 @@ namespace Syncless.CompareAndSync
         /// <returns>A boolean indicating if the tag name is in progress.</returns>
         public bool IsSyncing(string tagName)
         {
-            if (_isPendingCancel != null && _isPendingCancel == tagName)
+            if (_isPendingCancel.Contains(tagName))
                 return false;
             return _currJob == null ? false : tagName.Equals(_currJob.TagName);
         }
