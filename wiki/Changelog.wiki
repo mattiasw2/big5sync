@@ -24,6 +24,8 @@
  * Documentation
    # Developers' Guide
        * Included a Wiki page to describe how to use the seamless tester
+   # Users' Guide
+       * Included a Wiki page for a more comprehensive guide on using Syncless
 
 = Changelog for version _0.9_ =
  * First release of *Syncless*.
