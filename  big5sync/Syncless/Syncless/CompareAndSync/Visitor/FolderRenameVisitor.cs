@@ -68,11 +68,11 @@ namespace Syncless.CompareAndSync.Visitor
         private void MergeRenamedFolder(FolderCompareObject actualFolder, FolderCompareObject renamedFolder, int pos)
         {
             Dictionary<string, BaseCompareObject>.KeyCollection renamedFolderContents = renamedFolder.Contents.Keys;
-            BaseCompareObject o = null;
-            FolderCompareObject actualFldrObj = null;
-            FolderCompareObject renamedFolderObj = null;
-            FileCompareObject actualFileObj = null;
-            FileCompareObject renamedFileObj = null;
+            BaseCompareObject o;
+            FolderCompareObject actualFldrObj;
+            FolderCompareObject renamedFolderObj;
+            FileCompareObject actualFileObj;
+            FileCompareObject renamedFileObj;
 
             actualFolder.NewName = renamedFolder.Name;
             actualFolder.ChangeType[pos] = MetaChangeType.Rename;
@@ -96,6 +96,7 @@ namespace Syncless.CompareAndSync.Visitor
                 else
                 {
                     actualFolder.AddChild(renamedFolder.Contents[name]);
+                    renamedFolder.Contents[name].Parent = actualFolder.Parent;
                 }
             }
 
