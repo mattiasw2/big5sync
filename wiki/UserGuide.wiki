@@ -218,6 +218,14 @@ http://big5sync.googlecode.com/files/Right_Click_Tagged_Path.jpg
 
 Simply right-click on the tagged path in the tag info panel and choose to *Open in Windows Explorer*. The folder will immediately be opened in Explorer Window.
 
+== Tray Notification ==
+
+Syncless allows you to perform other tasks as well when you synchronize large amount of files. You will still be kept updated of the syncrhonization status even when you are not viewing the Syncless main window.
+
+Whenever a synchronization task is initiated or completed, Syncless will notify you at the tray.
+
+http://big5sync.googlecode.com/files/Tray_Notification.jpg
+
 == Viewing Past History ==
 
 You do not have to remember the changes you have made to your folders and files. Syncless keeps a log of the changes in your folders and files and lets you view them through a single click.
