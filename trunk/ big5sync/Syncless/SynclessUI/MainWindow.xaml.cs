@@ -445,24 +445,26 @@ namespace SynclessUI
             LblStatusTitle.Visibility = Visibility.Visible;
             LblStatusText.Visibility = Visibility.Visible;
 
-            TagView tv = Gui.GetTag(SelectedTag);
+            if(SelectedTag != null) {
+                TagView tv = Gui.GetTag(SelectedTag);
 
-            if (tv.IsLocked)
-            {
-                if (Progress.TagName == SelectedTag && (Progress.State == SyncState.Analyzing || Progress.State == SyncState.Queued || Progress.State == SyncState.Started))
+                if (tv.IsLocked)
                 {
-                    BtnSyncNow.Visibility = Visibility.Visible;
-                    CancelButtonMode();
+                    if (Progress.TagName == SelectedTag && (Progress.State == SyncState.Analyzing || Progress.State == SyncState.Queued || Progress.State == SyncState.Started))
+                    {
+                        BtnSyncNow.Visibility = Visibility.Visible;
+                        CancelButtonMode();
+                    }
+                    else
+                    {
+                        BtnSyncNow.Visibility = Visibility.Hidden;
+                    }
                 }
                 else
                 {
-                    BtnSyncNow.Visibility = Visibility.Hidden;
+                    SyncButtonMode();
+                    BtnSyncNow.Visibility = Visibility.Visible;
                 }
-            }
-            else
-            {
-                SyncButtonMode();
-                BtnSyncNow.Visibility = Visibility.Visible;
             }
         }
 
