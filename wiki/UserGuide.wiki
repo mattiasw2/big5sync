@@ -1,4 +1,4 @@
-#summary Users' Guide
+#summary Users' Guide : A More Comprehensive Guide On Using Syncless
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
