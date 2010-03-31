@@ -80,7 +80,6 @@ The User Interface (UI) component is in charge of handling all interactions betw
 To understand more about User Interface component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentUI here].
      
 = Known Issues =
-There are some known issues with V0.9, and they can be found [http://code.google.com/p/big5sync/wiki/KnownIssues09 here].
 
 There are some known issues with V1.0, and they can be found [http://code.google.com/p/big5sync/wiki/KnownIssues10 here].
 
