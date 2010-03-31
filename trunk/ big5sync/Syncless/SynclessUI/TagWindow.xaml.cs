@@ -192,37 +192,43 @@ namespace SynclessUI
 
                         if (tocontinue1 && tocontinue2)
                         {
-                            _main.CreateTag(Tagname);
-
-                            TagView tv1 = null;
-
                             try
                             {
-                                if (!_main.Gui.GetTag(Tagname).IsLocked)
-                                {
-                                    tv1 = _main.Gui.Tag(Tagname, new DirectoryInfo(_path));
-
-                                    if (tv1 != null)
-                                    {
-                                        _main.InitializeTagList();
-                                        _main.SelectTag(Tagname);
-                                        if (_notifyUser)
-                                            _main.NotifyBalloon("Folder Tagged",
-                                                                _path + " has been tagged to " + Tagname);
-                                        Close();
-                                    }
-                                    else
-                                    {
-                                        DialogHelper.ShowError("Tag Error", "Tag Error Occured. Please Try Again.");
-                                        BtnOk.IsEnabled = true;
-                                    }
-                                }
-                                else
-                                {
-                                    DialogHelper.ShowError(Tagname + " is Synchronizing",
-                                                           "You cannot tag a folder while the tag is synchronizing.");
-                                    BtnOk.IsEnabled = true;
-                                }
+								var di = new DirectoryInfo(path);
+                   				if (di.Exists && !FileHelper.IsFile(path)) {
+									_main.CreateTag(Tagname);
+		
+									TagView tv1 = null;
+									
+									if (!_main.Gui.GetTag(Tagname).IsLocked)
+									{
+										tv1 = _main.Gui.Tag(Tagname, new DirectoryInfo(_path));
+	
+										if (tv1 != null)
+										{
+											_main.InitializeTagList();
+											_main.SelectTag(Tagname);
+											if (_notifyUser)
+												_main.NotifyBalloon("Folder Tagged",
+																	_path + " has been tagged to " + Tagname);
+											Close();
+										}
+										else
+										{
+											DialogHelper.ShowError("Tag Error", "Tag Error Occured. Please Try Again.");
+											BtnOk.IsEnabled = true;
+										}
+									}
+									else
+									{
+										DialogHelper.ShowError(Tagname + " is Synchronizing",
+															"You cannot tag a folder while the tag is synchronizing.");
+										BtnOk.IsEnabled = true;
+									}
+								} else {
+									DialogHelper.ShowError("Invalid/Missing Folder", "You cannot tag the specified folder");
+									BtnOk.IsEnabled = true;
+								}
                             }
                             catch (RecursiveDirectoryException)
                             {
