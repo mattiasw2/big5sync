@@ -34,15 +34,21 @@ namespace Syncless.CompareAndSync.Visitor
             //highly probable that it is a folder rename
             //2. We check all folders which has the same meta name but different name as the non-existent folder
             //3. If the count is 1, we shall proceed to rename
+            FolderCompareObject folderObject = null;
+            int count = 0;
+            int renamePos = -1;
             for (int i = 0; i < deletePos.Count; i++)
             {
                 if (folder.ChangeType[deletePos[i]] == MetaChangeType.Delete)
                 {
                     int renameCount;
-                    FolderCompareObject f = folder.Parent.GetRenamedFolder(folder.Name, folder.CreationTime[i], deletePos[i], out renameCount);
+                    folderObject = folder.Parent.GetRenamedFolder(folder.Name, folder.CreationTime[i], deletePos[i], out renameCount);
 
-                    if (f != null)
-                        MergeRenamedFolder(folder, f, deletePos[i]);
+                    if (folderObject != null)
+                    {
+                        count++;
+                        renamePos = deletePos[i];
+                    }
                     if (renameCount > 1)
                     {
                         for (int j = 0; j < deletePos.Count; j++)
@@ -51,6 +57,9 @@ namespace Syncless.CompareAndSync.Visitor
                     }
                 }
             }
+
+            if (count == 1)
+                MergeRenamedFolder(folder, folderObject, renamePos);
         }
 
         private void MergeRenamedFolder(FolderCompareObject actualFolder, FolderCompareObject renamedFolder, int pos)
@@ -157,7 +166,7 @@ namespace Syncless.CompareAndSync.Visitor
             actualFldrObj.MetaExists[pos] = renamedFolderObj.MetaExists[pos];
             actualFldrObj.MetaUpdated[pos] = renamedFolderObj.MetaUpdated[pos];
             actualFldrObj.NewName = renamedFolderObj.NewName;
-            MergeOneLevelDown(actualFldrObj, renamedFolderObj, pos);
+            //MergeOneLevelDown(actualFldrObj, renamedFolderObj, pos);
         }
     }
 }
