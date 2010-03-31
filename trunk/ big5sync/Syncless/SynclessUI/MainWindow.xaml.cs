@@ -1122,6 +1122,8 @@ namespace SynclessUI
                 {
                     BtnSyncNow.Visibility = Visibility.Visible;
                 }
+
+                SyncButtonMode();
             }
             _tagStatusNotificationDictionary[Progress.TagName] = message;
             _syncProgressNotificationDictionary[Progress.TagName] = percentageComplete;
