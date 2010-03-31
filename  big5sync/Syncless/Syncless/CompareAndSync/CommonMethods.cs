@@ -21,7 +21,8 @@ namespace Syncless.CompareAndSync
 
         public static void SaveXML(ref XmlDocument xmlDoc, string xmlPath)
         {
-            while (true)
+            int count = 0;
+            while (true && count < 5)
             {
                 try
                 {
@@ -34,16 +35,26 @@ namespace Syncless.CompareAndSync
                     }
                     break;
                 }
+                catch (XmlException)
+                {
+                    break;
+                }
                 catch (IOException)
                 {
-                    System.Threading.Thread.Sleep(250);
+                    System.Threading.Thread.Sleep(500);
+                    count++;
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    break;
                 }
             }
         }
 
         public static void LoadXML(ref XmlDocument xmlDoc, string xmlPath)
         {
-            while (true)
+            int count = 0;
+            while (true && count < 5)
             {
                 try
                 {
@@ -52,35 +63,51 @@ namespace Syncless.CompareAndSync
                 }
                 catch (FileNotFoundException)
                 {
-
+                    break;
                 }
                 catch (IOException)
                 {
-                    System.Threading.Thread.Sleep(250);
+                    System.Threading.Thread.Sleep(500);
+                    count++;
                 }
-                catch(XmlException)
+                catch (XmlException)
                 {
-                    if(File.Exists(xmlPath))
+                    if (File.Exists(xmlPath))
                     {
-                        File.Delete(xmlPath);
+                        try
+                        {
+                            File.Delete(xmlPath);
+                        }
+                        catch (IOException)
+                        {
+                            System.Threading.Thread.Sleep(500);
+                            count++;
+                        }
+                        catch (UnauthorizedAccessException)
+                        {
+                            break;
+                        }
                     }
                     string synclessfolder = @"\.syncless\syncless.xml";
                     string parentfolder = xmlPath.Replace(synclessfolder, string.Empty);
                     CreateFileIfNotExist(parentfolder);
-                    xmlDoc.Load(xmlPath);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    break;
                 }
             }
         }
-        
+
         public static void CreateFileIfNotExist(string path)
         {
-            
-                string nodename = "name";
-                string metadir = ".syncless";
-                string metadatapath = @".syncless\syncless.xml";
-                string xmlPath = Path.Combine(path, metadatapath);
-                if (File.Exists(xmlPath))
-                    return;
+
+            string nodename = "name";
+            string metadir = ".syncless";
+            string metadatapath = @".syncless\syncless.xml";
+            string xmlPath = Path.Combine(path, metadatapath);
+            if (File.Exists(xmlPath))
+                return;
 
             try
             {
@@ -97,17 +124,21 @@ namespace Syncless.CompareAndSync
                 writer.Flush();
                 writer.Close();
             }
-            catch(IOException)
+            catch (IOException)
             {
-                
+
             }
-            catch(XmlException)
+            catch (XmlException)
             {
                 if (File.Exists(xmlPath))
                 {
                     File.Delete(xmlPath);
                 }
                 CreateFileIfNotExist(path);
+            }
+            catch (UnauthorizedAccessException)
+            {
+
             }
         }
 
@@ -218,7 +249,10 @@ namespace Syncless.CompareAndSync
             {
                 throw new ArchiveFileException(e);
             }
-
+            catch (UnauthorizedAccessException e)
+            {
+                throw new ArchiveFileException(e);
+            }
         }
 
         /// <summary>
@@ -239,15 +273,15 @@ namespace Syncless.CompareAndSync
                 fileStream.Close();
                 return BitConverter.ToString(fileHash).Replace("-", "");
             }
-            catch (UnauthorizedAccessException e)
-            {
-                throw new HashFileException(e);
-            }
             catch (DirectoryNotFoundException e)
             {
                 throw new HashFileException(e);
             }
             catch (IOException e)
+            {
+                throw new HashFileException(e);
+            }
+            catch (UnauthorizedAccessException e)
             {
                 throw new HashFileException(e);
             }
@@ -278,6 +312,10 @@ namespace Syncless.CompareAndSync
             {
                 throw new CopyFileException(e);
             }
+            catch (UnauthorizedAccessException e)
+            {
+                throw new CopyFileException(e);
+            }
         }
 
         /// <summary>
@@ -300,6 +338,10 @@ namespace Syncless.CompareAndSync
                 throw new DeleteFileException(e);
             }
             catch (IOException e)
+            {
+                throw new DeleteFileException(e);
+            }
+            catch (UnauthorizedAccessException e)
             {
                 throw new DeleteFileException(e);
             }
@@ -328,6 +370,10 @@ namespace Syncless.CompareAndSync
             {
                 throw new DeleteFileException(e);
             }
+            catch (UnauthorizedAccessException e)
+            {
+                throw new DeleteFileException(e);
+            }
         }
 
         /// <summary>
@@ -351,6 +397,10 @@ namespace Syncless.CompareAndSync
                 throw new MoveFileException(e);
             }
             catch (IOException e)
+            {
+                throw new MoveFileException(e);
+            }
+            catch (UnauthorizedAccessException e)
             {
                 throw new MoveFileException(e);
             }
@@ -419,6 +469,10 @@ namespace Syncless.CompareAndSync
             {
                 throw new ArchiveFolderException(e);
             }
+            catch (UnauthorizedAccessException e)
+            {
+                throw new ArchiveFolderException(e);
+            }
 
         }
 
@@ -462,6 +516,10 @@ namespace Syncless.CompareAndSync
             {
                 throw new CopyFolderException(e);
             }
+            catch (UnauthorizedAccessException e)
+            {
+                throw new CopyFolderException(e);
+            }
         }
 
         public static void CreateFolder(string path)
@@ -479,6 +537,10 @@ namespace Syncless.CompareAndSync
                 throw new CreateFolderException(e);
             }
             catch (IOException e)
+            {
+                throw new CreateFolderException(e);
+            }
+            catch (UnauthorizedAccessException e)
             {
                 throw new CreateFolderException(e);
             }
@@ -502,6 +564,10 @@ namespace Syncless.CompareAndSync
             {
                 throw new DeleteFolderException(e);
             }
+            catch (UnauthorizedAccessException e)
+            {
+                throw new DeleteFolderException(e);
+            }
         }
 
         //TODO: Handle exceptions?
@@ -510,12 +576,16 @@ namespace Syncless.CompareAndSync
             try
             {
                 Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
-             }
+            }
             catch (DirectoryNotFoundException e)
             {
                 throw new DeleteFolderException(e);
             }
             catch (IOException e)
+            {
+                throw new DeleteFolderException(e);
+            }
+            catch (UnauthorizedAccessException e)
             {
                 throw new DeleteFolderException(e);
             }
@@ -536,6 +606,10 @@ namespace Syncless.CompareAndSync
                 throw new MoveFolderException(e);
             }
             catch (IOException e)
+            {
+                throw new MoveFolderException(e);
+            }
+            catch (UnauthorizedAccessException e)
             {
                 throw new MoveFolderException(e);
             }

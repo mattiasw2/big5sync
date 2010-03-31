@@ -90,9 +90,7 @@ namespace Syncless.CompareAndSync
                             _jobs.RemoveAt(i);
                             _queuedJobsLookup.Remove(item.TagName);
                             return true;
-                            //break;
                         }
-                        return false;
                     }
                 }
                 else if (_currJob != null && _currJob.TagName == item.TagName)
