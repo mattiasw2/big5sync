@@ -55,11 +55,11 @@ If Folder A is tagged with Folder D and Folder B is tagged with Folder C, a recu
 
 == Slow Progress During Finalizing ==
 
-When CompareAndSync updates metadata files at the finalizing stage, it will take quite a while. Will optimize the algorithm later at version 1.5.
+When !CompareAndSync updates metadata files at the finalizing stage, it will take quite a while. Will optimize the algorithm later at version 1.5.
 
-== UnauthorizedAccessException Encountered ==
+== !UnauthorizedAccessException Encountered ==
 
-Sometimes an UnauthorizedAccessException is thrown during a manual 
+Sometimes an !UnauthorizedAccessException is thrown during a manual 
 sync/compare job. As of now, it is not handled since it occurs very rarely, 
 and are in the process of implementing a better system.
 
@@ -67,7 +67,7 @@ and are in the process of implementing a better system.
 
 == Errors Detecting Tagged Folder Deletion in Seamless Mode==
 
-The result of this is random. Sometimes UnauthorizedAccessException will be thrown while in some occasions program works fine.
+The result of this is random. Sometimes !UnauthorizedAccessException will be thrown while in some occasions program works fine.
 
 == Drive Plugin Unstable ==
 
