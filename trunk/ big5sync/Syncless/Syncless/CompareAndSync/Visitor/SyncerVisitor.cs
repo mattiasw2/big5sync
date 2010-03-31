@@ -154,6 +154,11 @@ namespace Syncless.CompareAndSync.Visitor
                             fco.FinalState[i] = FinalState.Error;
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving file " + destFile));
                         }
+                        catch (DeleteFileException)
+                        {
+                            fco.FinalState[i] = FinalState.Error;
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error delete file to recycle bin " + destFile));
+                        }
 
                         try
                         {
