@@ -59,15 +59,13 @@ namespace SynclessUI
                     
 					string mode = "";
 					
-                    /*
                     if(ef.Mode == FilterMode.INCLUDE) {
 						mode = "[Inclusion] ";
 					} else if(ef.Mode == FilterMode.EXCLUDE) {
 						mode = "[Exclusion] ";
 					}
-                    */
 						
-                    generatedFilterStringList.Add(i + ". " + ef.Pattern);
+                    generatedFilterStringList.Add(i + ". " + mode + " " + ef.Pattern);
                 }
                 i++;
             }
@@ -139,9 +137,9 @@ namespace SynclessUI
                 filters.RemoveAt(i);
                 if(filters.Contains(fi))
                 {
-                    filters.Insert(i, fi);
                     return true;
                 }
+                filters.Insert(i, fi);
             }
 
             return false;
