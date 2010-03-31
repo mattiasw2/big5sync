@@ -52,7 +52,7 @@ namespace Syncless.CompareAndSync
                 }
                 catch (FileNotFoundException)
                 {
-                    throw new FileNotFoundException("Error :(");
+
                 }
                 catch (IOException)
                 {
@@ -74,8 +74,7 @@ namespace Syncless.CompareAndSync
         
         public static void CreateFileIfNotExist(string path)
         {
-            try
-            {
+            
                 string nodename = "name";
                 string metadir = ".syncless";
                 string metadatapath = @".syncless\syncless.xml";
@@ -83,6 +82,8 @@ namespace Syncless.CompareAndSync
                 if (File.Exists(xmlPath))
                     return;
 
+            try
+            {
                 DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, metadir));
                 di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
                 XmlTextWriter writer = new XmlTextWriter(xmlPath, null);
@@ -98,11 +99,15 @@ namespace Syncless.CompareAndSync
             }
             catch(IOException)
             {
-                throw new IOException("Error IO Exception");
+                
             }
             catch(XmlException)
             {
-                throw new XmlException("Error XML Exception");
+                if (File.Exists(xmlPath))
+                {
+                    File.Delete(xmlPath);
+                }
+                CreateFileIfNotExist(path);
             }
         }
 
