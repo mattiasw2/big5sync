@@ -9,6 +9,10 @@ Note: As much as we try to keep this page updated, please take a look at the pro
 
 = General =
 
+== Unable to Handle External Disk With Not Enough Space ==
+
+If an external disk runs out of space during synchronization in seamless mode, program will encounter problem.
+
 = Profiling =
 
 == Unable to Load Profile from Protected Removable Drive ==
