@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using Syncless.Core.Exceptions;
@@ -12,8 +11,8 @@ namespace SynclessUI
     /// </summary>
     public partial class CreateTagWindow : Window
     {
-        private readonly MainWindow _main;
         private bool _closingAnimationNotCompleted = true;
+        private MainWindow _main;
 
         public CreateTagWindow(MainWindow main)
         {
@@ -80,7 +79,7 @@ namespace SynclessUI
             Close();
         }
 
-        private void Window_Closing(object sender, CancelEventArgs e)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (_closingAnimationNotCompleted)
             {
