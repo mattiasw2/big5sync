@@ -177,6 +177,15 @@ Now, let us look at some real-world examples. For example, if you want to includ
 
 As seen from the above, creating a filter is a simple and intuitive task in Syncless.
 
+== How to Configure Syncless? ==
+
+You can personalize Syncless through the http://big5sync.googlecode.com/files/App_Settings_Button.jpg button. After which, you will see a window with a list of settings.
+
+http://big5sync.googlecode.com/files/Configure_Application_Settings.jpg
+
+=== Enable Shell Integration ===
+
+Syncless makes tagging easy for you by providing right-clicking function at Explorer Window. However, if you do not wish to have many entries in your context menu, you can choose to disable the function by deselecting the *Enable Shell Integration* checkbox.
 
 = How is Syncless User-friendly =
 
