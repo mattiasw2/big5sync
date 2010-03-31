@@ -459,6 +459,11 @@ namespace SynclessUI
                     {
                         BtnSyncNow.Visibility = Visibility.Hidden;
                     }
+					
+					if(tv.IsQueued) {
+                        BtnSyncNow.Visibility = Visibility.Visible;
+                        CancelButtonMode();
+					}
                 }
                 else
                 {
@@ -497,7 +502,7 @@ namespace SynclessUI
                             ProgressBarSync.Visibility = Visibility.Visible;
                             LblProgress.Visibility = Visibility.Visible;
                             CancelButtonMode();
-                            const string message = "Synchronization request has been queued";
+                            const string message = "Synchronization Request Has Been Queued";
                             LblStatusText.Content = message;
                             _tagStatusNotificationDictionary[SelectedTag] = message;
                             _syncProgressNotificationDictionary[SelectedTag] = 0;
