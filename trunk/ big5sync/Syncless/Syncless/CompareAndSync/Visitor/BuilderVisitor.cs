@@ -25,10 +25,7 @@ namespace Syncless.CompareAndSync.Visitor
             _typeConflicts = typeConflicts;
         }
 
-        public void Visit(FileCompareObject file, int numOfPaths)
-        {
-            //Do nothing
-        }
+        public void Visit(FileCompareObject file, int numOfPaths) { /* Do nothing. */ }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {

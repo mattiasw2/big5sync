@@ -47,12 +47,6 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        //public int ThreadsToUse
-        //{
-        //    set { ThreadsToUse = value; }
-        //    get { return ThreadsToUse; }
-        //}
-
         /// <summary>
         /// Adds a ManualSyncRequest to the queue.
         /// </summary>
@@ -61,7 +55,7 @@ namespace Syncless.CompareAndSync
         public void AddSyncJob(ManualSyncRequest item)
         {
             if (item == null)
-                throw new ArgumentNullException("ManualSyncRequest cannot be null.");
+                throw new ArgumentNullException("item");
 
             lock (Locker)
             {
