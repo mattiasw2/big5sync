@@ -61,6 +61,10 @@ and are in the process of implementing a better system.
 
 = Monitor =
 
+== Errors Detecting Tagged Folder Deletion in Seamless Mode==
+
+The result of this is random. Sometimes UnauthorizedAccessException will be thrown while in some occasions program works fine.
+
 == Drive Plugin Unstable ==
 
 Most of the time, program can detect drive plugin event. Once in a while, such event is not detected.
