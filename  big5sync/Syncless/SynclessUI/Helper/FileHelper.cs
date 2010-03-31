@@ -5,6 +5,10 @@ namespace SynclessUI.Helper
 {
     public static class FileHelper
     {
+        private const string SYNCLESS = ".syncless";
+        private const string ARCHIVE = "_synclessArchive";
+        private const string CONFLICT = "_synclessConflict";
+
         public static bool IsFile(string path)
         {
             try
@@ -44,6 +48,19 @@ namespace SynclessUI.Helper
             }
 
             return null; // not found
+        }
+
+        public static bool IsSynclessFolder(string path)
+        {
+            string[] tokens = path.Split(new char[] { '\\' });
+            foreach (string token in tokens)
+            {
+                if (token.ToLower().Equals(SYNCLESS) || token.ToLower().Equals(ARCHIVE) || token.ToLower().Equals(CONFLICT))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
