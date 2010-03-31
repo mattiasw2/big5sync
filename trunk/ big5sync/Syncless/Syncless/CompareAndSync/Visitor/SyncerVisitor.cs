@@ -131,6 +131,7 @@ namespace Syncless.CompareAndSync.Visitor
                     {
                         string destFile = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
                         bool fileExists = File.Exists(destFile);
+
                         try
                         {
                             if (fileExists)
@@ -147,11 +148,24 @@ namespace Syncless.CompareAndSync.Visitor
                                 }
                             }
 
+                        }
+                        catch (ArchiveFileException)
+                        {
+                            fco.FinalState[i] = FinalState.Error;
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving file " + destFile));
+                        }
+
+                        try
+                        {
                             CommonMethods.CopyFile(src, destFile, true);
                             if (fileExists)
-                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_MODIFIED, "File updated from " + src + " to " + destFile));
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(
+                                    new LogData(LogEventType.FSCHANGE_MODIFIED,
+                                                "File updated from " + src + " to " + destFile));
                             else
-                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "File copied from " + src + " to " + destFile));
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(
+                                    new LogData(LogEventType.FSCHANGE_CREATED,
+                                                "File copied from " + src + " to " + destFile));
 
                             fco.CreationTime[i] = new FileInfo(destFile).CreationTime.Ticks;
                             fco.Exists[i] = true;
@@ -160,11 +174,6 @@ namespace Syncless.CompareAndSync.Visitor
                             fco.LastWriteTime[i] = fco.LastWriteTime[srcFilePos];
                             fco.Length[i] = fco.LastWriteTime[srcFilePos];
                             changed = true;
-                        }
-                        catch (ArchiveFileException)
-                        {
-                            fco.FinalState[i] = FinalState.Error;
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving file " + destFile));
                         }
                         catch (CopyFileException)
                         {
@@ -202,6 +211,15 @@ namespace Syncless.CompareAndSync.Visitor
                                 CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
                                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "File archived " + destFile));
                             }
+                        }
+                        catch (ArchiveFileException)
+                        {
+                            fco.FinalState[i] = FinalState.Error;
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving file " + destFile));
+                        }
+
+                        try
+                        {
                             if (_syncConfig.Recycle)
                             {
                                 CommonMethods.DeleteFileToRecycleBin(destFile);
@@ -216,11 +234,6 @@ namespace Syncless.CompareAndSync.Visitor
                             fco.Exists[i] = false;
                             fco.FinalState[i] = FinalState.Deleted;
                             changed = true;
-                        }
-                        catch (ArchiveFileException)
-                        {
-                            fco.FinalState[i] = FinalState.Error;
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving file " + destFile));
                         }
                         catch (DeleteFileException)
                         {
@@ -348,6 +361,15 @@ namespace Syncless.CompareAndSync.Visitor
                                 CommonMethods.ArchiveFolder(destFolder, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
                                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "Folder archived " + destFolder));
                             }
+                        }
+                        catch (ArchiveFolderException)
+                        {
+                            folder.FinalState[i] = FinalState.Error;
+                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving folder " + destFolder));
+                        }
+
+                        try
+                        {
                             if (_syncConfig.Recycle)
                             {
                                 CommonMethods.DeleteFolderToRecycleBin(destFolder);
@@ -363,11 +385,6 @@ namespace Syncless.CompareAndSync.Visitor
                             folder.FinalState[i] = FinalState.Deleted;
                             folder.Contents.Clear(); //Experimental
                             changed = true;
-                        }
-                        catch (ArchiveFolderException)
-                        {
-                            folder.FinalState[i] = FinalState.Error;
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error archiving folder " + destFolder));
                         }
                         catch (DeleteFolderException)
                         {
