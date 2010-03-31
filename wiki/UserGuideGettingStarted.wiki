@@ -163,23 +163,17 @@ You can access this through the http://big5sync.googlecode.com/files/unmonitorbu
 
 Syncless cares about the safety of your removable drives. Unmonitoring will stop all monitoring actions on any folders that are currently in seamless mode, and thus allow the removable drive to be safely removed.
 
-== You Can Start Using Syncless Now! ==
 
-With the successful operation of synchronization, you have now completed the full Syncless tutorial. Continue on to see other major features in Syncless.
+=== 6. Configure Filter Properties ===
 
-
-= Continue to Explore Syncless =
-
-== 1. Configure Filter Properties ==
-
-=== Create a Filter ===
+==== Create a Filter ====
 Click the http://big5sync.googlecode.com/files/detailsbuttonicon.jpg button in the toolbar to open up the tag properties panel. Inside the properties panel, choose the *Filtering* property. You should see a list of filters , and it will likely be blank since no filters have been added yet.
 
 http://big5sync.googlecode.com/files/Tag_Configuration.jpg
 
 Now, click on the http://big5sync.googlecode.com/files/Add_Filter_Button.jpg button to add a new filter. You can now set the "Ext. Mask" and the "Mode".
 
-=== Construct a Filter ===
+==== Construct a Filter ====
 Ext. mask can be an actual filename, or simply a name with wildcards. Some examples will be "Storyboard.ppt", "`*`.exe" or "File?.txt".
 
   * *`*`* - Wildcard for any number of characters. For example, s`*`t will mean sit, sat, shoot, skit, etc.
@@ -196,11 +190,21 @@ Now, let us look at some real-world examples. For example, if you want to includ
 As seen from the above, creating a filter is a simple and intuitive task in Syncless.
 
 
-== 2. Using Keyboard Shortcuts ==
+== You Can Start Using Syncless Now! ==
+
+With the successful operation of synchronization, you have now completed the full Syncless tutorial. Continue on to see other major features in Syncless.
+
+= Continue to Explore Syncless =
+
+Besides the basic operations you can perform as described in the previous section, Syncless provides many other functionalities which make your user experience as pleasant as possible. This quick guide will only list the keyboard shortcut function. For the full list of other features, you may refer to the comprehensive guide [http://code.google.com/p/big5sync/wiki/UserGuide here].
+
+
+== 1. Using Keyboard Shortcuts ==
 
 http://big5sync.googlecode.com/files/Shortcut.jpg
 
 To save time and increase productivity, refer to the list of keyboard shortcuts.
+
 
 
 = Ending Note =
