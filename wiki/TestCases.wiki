@@ -7,16 +7,6 @@ Add your content here.
 
 = Manual Sync (File) =
 
-<p>
-  Manual Sync (File)
-</p>
-
-
-<p>
-  Manual Sync (File)
-</p>
-
-
 <table border=1>
   <tbody>
   <tr>
@@ -401,12 +391,9 @@ Add your content here.
   </tr>
   </tbody>
 </table>
-<p>
-  &nbsp;
-</p>
-<p>
-  Manual Sync (Folder)
-</p>
+
+= Manual Sync (Folder) =
+
 <table border=1>
   <tbody>
   <tr>
@@ -801,9 +788,9 @@ Add your content here.
 <p>
   &nbsp;
 </p>
-<p>
-  Manual Sync (File + Folder)
-</p>
+
+= Manual Sync (File + Folder) =
+
 <table border=1>
   <tbody>
   <tr>
@@ -1160,9 +1147,9 @@ Add your content here.
 <p>
   &nbsp;
 </p>
-<p>
-  ToDo
-</p>
+
+= TODO =
+
 <table border="1">
   <tbody>
   <tr>
