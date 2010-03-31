@@ -110,6 +110,7 @@ namespace SynclessUI
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
+            BtnCancel.IsEnabled = false;
             Close();
         }
 
@@ -128,15 +129,6 @@ namespace SynclessUI
             {
                 int index = ListFilters.SelectedIndex;
                 filters.RemoveAt(index);
-
-
-                // Not Needed I think
-                /*
-                TxtBoxPattern.IsEnabled = false;
-                TxtBoxPattern.Text = "";
-                CmbBoxMode.IsEnabled = false;
-                CmbBoxMode.SelectedIndex = -1;
-				*/
 
                 PopulateFilterStringList(false);
             }
@@ -164,9 +156,9 @@ namespace SynclessUI
             }
         }
 
-
         private void CmbBoxMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            /*
             if (ListFilters.SelectedIndex != -1 && ListFilters.SelectedIndex <= filters.Count)
             {
                 Filter f = filters[ListFilters.SelectedIndex];
@@ -176,6 +168,7 @@ namespace SynclessUI
                 else if (CmbBoxMode.SelectedIndex == 1)
                     f.Mode = FilterMode.EXCLUDE;
             }
+            */
         }
 
         private void TabItemFiltering_GotFocus(object sender, RoutedEventArgs e)
@@ -195,16 +188,39 @@ namespace SynclessUI
 
         private void TxtBoxPattern_LostFocus(object sender, RoutedEventArgs e)
         {
+            /*
             if (ListFilters.SelectedIndex != -1)
             {
-                Filter f = filters[ListFilters.SelectedIndex];
-                if (f is ExtensionFilter)
+                if(!CheckIfFilterExist(TxtBoxPattern.Text))
                 {
-                    var ef = (ExtensionFilter) f;
-                    ef.Pattern = TxtBoxPattern.Text;
-                }
-                PopulateFilterStringList(true);
+                    Filter f = filters[ListFilters.SelectedIndex];
+                    if (f is ExtensionFilter)
+                    {
+                        var ef = (ExtensionFilter)f;
+                        ef.Pattern = TxtBoxPattern.Text;
+                    }
+
+                    PopulateFilterStringList(true);
+                }                
             }
+            */
+        }
+
+        private bool CheckIfFilterExist(string pattern)
+        {
+            bool exist = false;
+
+            foreach(Filter f in filters)
+            {
+                ExtensionFilter ef = (ExtensionFilter) f;
+                if(ef.Pattern == pattern)
+                {
+                    exist = true;
+                    break;
+                }
+            }
+
+            return exist;
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

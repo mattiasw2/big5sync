@@ -36,6 +36,10 @@ namespace SynclessUI
             InitializeComponent();
 
             _main = main;
+
+            int maxlength = tagname.Length > 20 ? 20 : tagname.Length;
+            tagname = tagname.Substring(0, maxlength);
+
             _selectedTag = tagname;
             _notifyUser = notifyUser;
 
@@ -170,7 +174,7 @@ namespace SynclessUI
                                         _main.InitializeTagList();
                                         _main.SelectTag(Tagname);
                                         if (_notifyUser)
-                                            _main.NotifyBalloon("Tagging Successful",
+                                            _main.NotifyBalloon("Folder Tagged",
                                                                 _path + " has been tagged to " + Tagname);
                                         Close();
                                     }
@@ -250,6 +254,7 @@ namespace SynclessUI
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
+            BtnCancel.IsEnabled = false;
             Close();
         }
 

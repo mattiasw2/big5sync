@@ -153,11 +153,7 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
-            Close();
-        }
-
-        private void BtnCancel_Click(object sender, RoutedEventArgs e)
-        {
+            BtnOk.IsEnabled = false;
             Close();
         }
 

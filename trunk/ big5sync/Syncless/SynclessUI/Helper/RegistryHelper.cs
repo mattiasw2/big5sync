@@ -1,15 +1,21 @@
-﻿using Microsoft.Win32;
+﻿using System;
+using System.IO;
+using Microsoft.Win32;
 
 namespace SynclessUI.Helper
 {
     internal static class RegistryHelper
     {
+        private static string _appPath;
+
         /// <summary>
         /// Create the context Menu for Syncless
         /// </summary>
         /// <param name="path">The location of Syncless</param>
         public static void CreateRegistry(string path)
         {
+            _appPath = path;
+
             try
             {
                 RegistryKey tagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessTag");
@@ -48,23 +54,27 @@ namespace SynclessUI.Helper
             {
             }
 
-            try
+            if (CheckDebugModeOn())
             {
-                RegistryKey cleanKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessClean");
-                cleanKey.SetValue(null, "Syncless - Clean");
-            }
-            catch
-            {
-            }
+                try
+                {
+                    RegistryKey cleanKey =
+                        Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessClean");
+                    cleanKey.SetValue(null, "Syncless - Clean");
+                }
+                catch
+                {
+                }
 
-            try
-            {
-                RegistryKey cleanKeyCommand =
-                    Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessClean\command");
-                cleanKeyCommand.SetValue(null, path + " -CleanMeta %1");
-            }
-            catch
-            {
+                try
+                {
+                    RegistryKey cleanKeyCommand =
+                        Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessClean\command");
+                    cleanKeyCommand.SetValue(null, path + " -CleanMeta %1");
+                }
+                catch
+                {
+                }
             }
         }
 
@@ -86,13 +96,43 @@ namespace SynclessUI.Helper
             {
             }
 
+            if (CheckDebugModeOn())
+            {
+                try
+                {
+                    Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\SynclessClean");
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        public static bool CheckDebugModeOn()
+        {
+            FileInfo fi1 = null;
+            bool exists = false;
+
             try
             {
-                Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\SynclessClean");
+                fi1 = new FileInfo(_appPath);
             }
-            catch
+            catch {}
+
+            if(fi1 != null)
             {
+                string directoryPath = fi1.DirectoryName;
+
+                string path = directoryPath + "\\debug";
+
+                try
+                {
+                    var fi = new FileInfo(path);
+                    exists = fi.Exists;
+                } catch {}
             }
+
+            return exists;
         }
     }
 }

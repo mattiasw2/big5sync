@@ -402,6 +402,8 @@ namespace SynclessUI
             ProgressBarSync.Visibility = System.Windows.Visibility.Hidden;
             LblProgress.Visibility = System.Windows.Visibility.Hidden;
             Console.WriteLine("In Seamless Mode");
+            LblStatusTitle.Visibility = Visibility.Hidden;
+            LblStatusText.Visibility = Visibility.Hidden;
         }
 
         private void SwitchingMode()
@@ -416,6 +418,8 @@ namespace SynclessUI
             ProgressBarSync.Visibility = Visibility.Visible;
             LblProgress.Visibility = Visibility.Visible;
             Console.WriteLine("In Switching Mode");
+            LblStatusTitle.Visibility = Visibility.Visible;
+            LblStatusText.Visibility = Visibility.Visible;
         }
 
         private void ManualMode()
@@ -429,6 +433,8 @@ namespace SynclessUI
             ProgressBarSync.Visibility = Visibility.Visible;
             LblProgress.Visibility = Visibility.Visible;
             Console.WriteLine("In Manual Mode");
+            LblStatusTitle.Visibility = Visibility.Visible;
+            LblStatusText.Visibility = Visibility.Visible;
 
             TagView tv = Gui.GetTag(SelectedTag);
 
@@ -468,7 +474,7 @@ namespace SynclessUI
             Console.WriteLine("in here");
             if (LblSyncNow.Content.Equals("Sync Now"))
             {
-                BtnSyncNow.IsHitTestVisible = false;
+                BtnSyncNow.IsEnabled = false;
 
                 try
                 {
@@ -502,11 +508,11 @@ namespace SynclessUI
                     DialogHelper.DisplayUnhandledExceptionMessage();
                 }
 
-                BtnSyncNow.IsHitTestVisible = true;
+                BtnSyncNow.IsEnabled = true;
             }
             else
             {
-                BtnSyncNow.IsHitTestVisible = false;
+                BtnSyncNow.IsEnabled = false;
                 bool success = Gui.CancelManualSync(SelectedTag);
                 if (success)
                 {
@@ -514,12 +520,12 @@ namespace SynclessUI
                     string message = "Synchronization Cancelled";
                     LblStatusText.Content = message;
                     _tagStatusNotificationDictionary[SelectedTag] = message;
-                    BtnSyncNow.IsHitTestVisible = true;
+                    BtnSyncNow.IsEnabled = true;
                 }
                 else
                 {
                     DialogHelper.ShowError("Unable to Cancel", "Please wait until synchronization is complete.");
-                    BtnSyncNow.IsHitTestVisible = true;
+                    BtnSyncNow.IsEnabled = true;
                 }
             }
 

@@ -53,6 +53,7 @@ namespace SynclessUI
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
+            BtnCancel.IsEnabled = false;
             Close();
         }
 
