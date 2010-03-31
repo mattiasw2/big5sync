@@ -194,12 +194,13 @@ You want to filter out only tags related to your photo folders. Simply enter the
 
 http://big5sync.googlecode.com/files/Zoom_In_Filter_Tag_List.jpg
 
-= Misc: Keyboard Shortcuts =
+== Keyboard Shortcuts ==
+
+Syncless helps you to save time and increase productivity by providing keyboard shortcuts to the many common operations. Below is the list of keyboard shortcuts provided by Syncless.
 
 http://big5sync.googlecode.com/files/Shortcut.jpg
 
-To save time and increase productivity, refer to the list of keyboard shortcuts.
-
+If you forget the shortcut keys, simply go to http://big5sync.googlecode.com/files/Shortcut_Button.jpg at the window toolbar and view the list again.
 
 = Ending Note =
 
