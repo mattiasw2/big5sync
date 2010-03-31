@@ -17,7 +17,7 @@
         * [UserGuideGettingStarted#Tag_Info_Panel Tag Info Panel]
       * [UserGuideGettingStarted#How_to_Tag_and_Synchronize? How to Tag and Synchronize?]
         * [UserGuideGettingStarted#1._Tag_Folders 1. Tag Folders]
-        * [UserGuideGettingStarted#2._Viewing_Tag_Information 2. Viewing Tag Information]
+        * [UserGuideGettingStarted#2._View_Tag_Information 2. View Tag Information]
         * [UserGuideGettingStarted#3._Synchronize_the_Folders 3. Synchronize the Folders]
         * [UserGuideGettingStarted#4._Switch_to_Seamless_Mode 4. Switch to Seamless Mode]
         * [UserGuideGettingStarted#5._Unmonitor_Removable_Drive_to_Prepare_for_Removal 5. Unmonitor Removable Drive to Prepare for Removal]
