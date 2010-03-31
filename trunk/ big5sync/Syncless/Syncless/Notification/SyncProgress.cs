@@ -260,6 +260,7 @@ namespace Syncless.Notification
             _state = SyncState.Finished;
             TriggerSyncComplete();
             ServiceLocator.UINotificationQueue().Enqueue(notification);
+            _wh.Set();
             return true;
         }
         private void TriggerSyncComplete()
