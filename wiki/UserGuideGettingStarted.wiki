@@ -53,6 +53,18 @@ http://big5sync.googlecode.com/files/Main_Window_Overview.jpg
 
 Before you continue to read further, you may want to find out what each button in Syncless does.
 
+=== From Window Toolbar ===
+
+  * http://big5sync.googlecode.com/files/Shortcut_Button.jpg : Displays the list of shortcut keys in Syncless
+
+  * http://big5sync.googlecode.com/files/App_Settings_Button.jpg : Configure Syncless settings
+
+  * http://big5sync.googlecode.com/files/Minimize_Button.jpg : Minimize Syncless main window
+
+  * http://big5sync.googlecode.com/files/Exit_Button.jpg : Exit Syncless
+
+=== From Main Toolbar ===
+
   * http://big5sync.googlecode.com/files/createbuttonicon.jpg : Create a tag
 
   * http://big5sync.googlecode.com/files/removebuttonicon.jpg : Remove a tag
@@ -67,6 +79,8 @@ Before you continue to read further, you may want to find out what each button i
 
   * http://big5sync.googlecode.com/files/unmonitorbuttonicon.jpg : Unmonitor removable drives
 
+=== From Tag Info Panel ===
+
   * http://big5sync.googlecode.com/files/Manual_Mode_Button.jpg : Indicates the current synchronization is in manual mode, click to switch to seamless mode
 
   * http://big5sync.googlecode.com/files/Seamless_Mode_Button.jpg : Indicates the current synchronization is in seamless mode, click to switch to manual mode
@@ -75,22 +89,16 @@ Before you continue to read further, you may want to find out what each button i
 
   * http://big5sync.googlecode.com/files/Sync_Now_Button.jpg : Start synchronization for currently selected tag, only available in manual mode
 
-  * http://big5sync.googlecode.com/files/Shortcut_Button.jpg : Displays the list of shortcut keys in Syncless
 
-  * http://big5sync.googlecode.com/files/App_Settings_Button.jpg : Configure Syncless settings
-
-  * http://big5sync.googlecode.com/files/Minimize_Button.jpg : Minimize Syncless main window
-
-  * http://big5sync.googlecode.com/files/Exit_Button.jpg : Exit Syncless
-
+== How to Tag and Synchronize? ==
 
 You have folders on your computer and thumbdrive that you wish to synchronize automatically without putting too much effort in doing it. Now is the time to use Syncless to help you organise them by using tags.
 
-== 1. Tag Folders ==
+=== 1. Tag Folders ===
 
 To synchronize 2 or more folders together, you must first tag them with the same name. This tagging process can be initiated in multiple ways.
 
-=== Multiple ways of tagging a folder ===
+==== Multiple ways of tagging a folder ====
 
     * Tagging from Syncless through the http://big5sync.googlecode.com/files/tagbuttonicon.jpg button (Can also use the keyboard shortcut equivalent Ctrl-T, refer to [UserGuideGettingStarted#Misc:_Keyboard_Shortcuts keyboard shortcuts] for a complete list of shortcuts)
     http://big5sync.googlecode.com/files/Tag_From_Syncless.jpg
@@ -101,24 +109,24 @@ To synchronize 2 or more folders together, you must first tag them with the same
     * Tagging from Windows Explorer
     http://big5sync.googlecode.com/files/Tag_From_Context_Menu.jpg
 
-== 2. Viewing tag information ==
+=== 2. Viewing tag information ===
     http://big5sync.googlecode.com/files/Tag_Info_Panel.jpg
 
 After tagging the folders, you may view the details under the tag information panel through the http://big5sync.googlecode.com/files/detailsbuttonicon.jpg button. You will see a list of folder paths associated with the selected tag. On the right of the folder path list, there are a few options for synchronization. During synchronization, the progress bar will show the percentage of completion and status of the synchronization.
 
-== 3. Synchronize the folders ==
+=== 3. Synchronize the folders ===
     http://big5sync.googlecode.com/files/Sync_Complete.jpg
 
 After you have tagged the required folders, click on the http://big5sync.googlecode.com/files/Sync_Now_Button.jpg button. Syncless will take care of the rest and keep the folders in sync.
 
-== 4. Switch to Seamless Mode ==
+=== 4. Switch to Seamless Mode ===
 
 http://big5sync.googlecode.com/files/Switching_To_Seamless.jpg
 
 Switching to seamless mode is a simple matter of pressing the button. After clicking the synchronization mode button, Syncless will automatically perform a synchronization. After which, it will monitor any changes in the tagged folders and keep them in sync without you having to do it manually.
 
 
-== 5. Prepare Removable Drive for Removal ==
+=== 5. Prepare Removable Drive for Removal ===
 
 http://big5sync.googlecode.com/files/Unmonitor_Drive.jpg
 
