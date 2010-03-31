@@ -439,6 +439,7 @@ namespace SynclessUI
 
         private void ManualMode()
         {
+            try {
             LblSyncMode.Content = "Manual";
             BtnSyncMode.ToolTip = "Switch to Seamless Synchronization Mode";
             BtnPreview.Visibility = Visibility.Visible;
@@ -482,6 +483,11 @@ namespace SynclessUI
                     BtnSyncNow.Visibility = Visibility.Visible;
                 }
             }
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage();
+            }
         }
 
         private void CancelButtonMode()
@@ -498,6 +504,7 @@ namespace SynclessUI
 
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
         {
+            try {
             PathChanged();
 
             if (LblSyncNow.Content.Equals("Sync Now"))
@@ -559,6 +566,11 @@ namespace SynclessUI
                     DialogHelper.ShowError("Unable to Cancel", "Please wait until synchronization is complete.");
                     BtnSyncNow.IsEnabled = true;
                 }
+            }
+
+                        } catch(UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
@@ -879,22 +891,6 @@ namespace SynclessUI
             */
         }
 
-        private List<DriveInfo> GetAllRemovableDrives()
-        {
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
-            var removableDrives = new List<DriveInfo>();
-
-            foreach (DriveInfo di in allDrives)
-            {
-                if (di.DriveType == DriveType.Removable)
-                {
-                    removableDrives.Add(di);
-                }
-            }
-
-            return removableDrives;
-        }
-
         private void driveMenuItem_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -937,6 +933,7 @@ namespace SynclessUI
 
         private void LayoutRoot_Drop(object sender, DragEventArgs e)
         {
+            try {
             HideDropIndicator();
 
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -969,39 +966,50 @@ namespace SynclessUI
                     }
             }
             TxtBoxFilterTag.IsHitTestVisible = true;
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage();
+            }
         }
 
         private void LayoutRoot_DragEnter(object sender, DragEventArgs e)
         {
-            TxtBoxFilterTag.IsHitTestVisible = false;
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            try
             {
-                var foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
-                if (foldernames != null)
-                    foreach (string i in foldernames)
-                    {
-                        string path = i;
-
-                        // convert potential shortcuts into folders
-                        string shortcutfolderpath = FileHelper.GetShortcutTargetFile(path);
-                        if (shortcutfolderpath != null)
+                TxtBoxFilterTag.IsHitTestVisible = false;
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                {
+                    var foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+                    if (foldernames != null)
+                        foreach (string i in foldernames)
                         {
-                            path = shortcutfolderpath;
-                        }
+                            string path = i;
 
-                        // to detect folders
-                        try
-                        {
-                            var folder = new DirectoryInfo(path);
-                            if (folder.Exists && !FileHelper.IsFile(path))
+                            // convert potential shortcuts into folders
+                            string shortcutfolderpath = FileHelper.GetShortcutTargetFile(path);
+                            if (shortcutfolderpath != null)
                             {
-                                ShowDropIndicator();
+                                path = shortcutfolderpath;
+                            }
+
+                            // to detect folders
+                            try
+                            {
+                                var folder = new DirectoryInfo(path);
+                                if (folder.Exists && !FileHelper.IsFile(path))
+                                {
+                                    ShowDropIndicator();
+                                }
+                            }
+                            catch
+                            {
                             }
                         }
-                        catch
-                        {
-                        }
-                    }
+                }
+            } catch(UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
