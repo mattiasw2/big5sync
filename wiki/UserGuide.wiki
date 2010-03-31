@@ -131,7 +131,6 @@ Tag a folder through the http://big5sync.googlecode.com/files/tagbuttonicon.jpg 
     http://big5sync.googlecode.com/files/Tag_From_Context_Menu.png
 
 === 2. Viewing tag information ===
-    http://big5sync.googlecode.com/files/Tag_Info_Panel.jpg
 
 After tagging the folders, you may view the details under the tag information panel through the http://big5sync.googlecode.com/files/detailsbuttonicon.jpg button. You will see a list of folder paths associated with the selected tag. On the right of the folder path list, there are a few options for synchronization. During synchronization, the progress bar will show the percentage of completion and status of the synchronization.
 
