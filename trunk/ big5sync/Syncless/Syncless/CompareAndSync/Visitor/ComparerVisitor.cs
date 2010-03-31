@@ -146,7 +146,7 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 if (file.ChangeType[i] == MetaChangeType.Rename)
                     renamePos = i;
-                else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null)
+                else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null && file.ChangeType[i] != MetaChangeType.Delete)
                 {
                     renamePos = -1;
                     break;
