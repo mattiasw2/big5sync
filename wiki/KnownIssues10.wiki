@@ -77,6 +77,10 @@ For example, Folder A and Folder B both containing 1.txt file of size 3MB are ta
 
 = User Interface =
 
+== Manual Button Changed to Switching Button When Analyzing ==
+
+This is a very rare case which cannot be reproduced subsequently. When program is analyzing tagged folders, the manual button is changed to switching button.
+
 == Changes Made After Every Sync Not Shown ==
 
 Currently, the program does not show a list of changes made to the filesystem after every synchronization.
