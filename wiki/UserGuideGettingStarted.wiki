@@ -49,6 +49,31 @@ http://big5sync.googlecode.com/files/Main_Window_Overview.jpg
 
 = Learn Syncless =
 
+== Understand the Buttons ==
+
+Before you continue to read further, you may want to find out what each button in Syncless does.
+
+  * http://big5sync.googlecode.com/files/createbuttonicon.jpg : Create a tag
+
+  * http://big5sync.googlecode.com/files/removebuttonicon.jpg : Remove a tag
+
+  * http://big5sync.googlecode.com/files/tagbuttonicon.jpg : Tag a folder
+
+  * http://big5sync.googlecode.com/files/untagbuttonicon.jpg : Untag a folder
+
+  * http://big5sync.googlecode.com/files/detailsbuttonicon.jpg : View tag properties
+
+  * http://big5sync.googlecode.com/files/logbuttonicon.jpg : View log
+
+  * http://big5sync.googlecode.com/files/unmonitorbuttonicon.jpg : Unmonitor removable drives
+
+  * http://big5sync.googlecode.com/files/Manual_Mode_Button.jpg : Indicates the current synchronization is in manual mode, click to switch to seamless mode
+
+  * http://big5sync.googlecode.com/files/Seamless_Mode_Button.jpg : Indicates the current synchronization is in seamless mode, click to switch to manual mode
+
+  * http://big5sync.googlecode.com/files/Sync_Now_Button.jpg : Start synchronization for currently selected tag, only available in manual mode
+
+
 You have folders on your computer and thumbdrive that you wish to synchronize automatically without putting too much effort in doing it. Now is the time to use Syncless to help you organise them by using tags.
 
 == 1. Tag Folders ==
