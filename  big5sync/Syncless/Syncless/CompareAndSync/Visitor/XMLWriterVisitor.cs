@@ -50,6 +50,9 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(FileCompareObject file, int numOfPaths)
         {
+            if (file.Invalid)
+                return;
+
             for (int i = 0; i < numOfPaths; i++) // HANDLE ALL EXCEPT PROPAGATED
             {
                 ProcessMetaChangeType(file, i);
@@ -60,6 +63,8 @@ namespace Syncless.CompareAndSync.Visitor
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
+            if (folder.Invalid)
+                return;
             
             for (int i = 0; i < numOfPaths; i++)
             {
@@ -316,8 +321,25 @@ namespace Syncless.CompareAndSync.Visitor
                 //CreateFileObject(file, counter);
                 return;
             }
-            node.FirstChild.InnerText = file.NewName;
-            node.LastChild.InnerText = dateTime.ToString();
+
+            FileInfo actualFile = new FileInfo(Path.Combine(file.GetSmartParentPath(counter), file.NewName));
+
+            XmlNodeList childNodeList = node.ChildNodes;
+            for (int i = 0; i < childNodeList.Count; i++)
+            {
+                XmlNode nodes = childNodeList[i];
+                if (nodes.Name.Equals(NodeName))
+                    nodes.InnerText = file.NewName;
+                else if (nodes.Name.Equals(NodeLastModified))
+                    nodes.InnerText = actualFile.LastWriteTime.Ticks.ToString();
+                else if (nodes.Name.Equals(NodeLastCreated))
+                    nodes.InnerText = actualFile.CreationTime.Ticks.ToString();
+                else if (nodes.Name.Equals(NodeLastUpdated))
+                    nodes.InnerText = dateTime.ToString();
+            }
+
+            //node.FirstChild.InnerText = file.NewName;
+            //node.LastChild.InnerText = dateTime.ToString();
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             GenerateFileTodo(file, counter);
         }
