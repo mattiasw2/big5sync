@@ -1127,6 +1127,21 @@ namespace SynclessUI
         {
         }
 
+        /*
+        private void StartPropagating()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(StartPropagating));
+            }
+            else
+            {
+                progressBar1.Style = ProgressBarStyle.Continuous;
+                labelStatus.Visible = true;
+                labelStatus.Text = "Randomly propagating stuff...";
+            }
+        }*/
+
         public void ProgressNotifySyncComplete()
         {
             string message = "Synchronization Completed at " + DateTime.Now;
