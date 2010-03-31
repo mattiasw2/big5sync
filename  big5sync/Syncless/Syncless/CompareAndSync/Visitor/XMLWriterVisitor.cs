@@ -571,19 +571,35 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void CreateTodoFile(string path)
         {
-            string todoXML = Path.Combine(path, Todopath);
-            if (File.Exists(todoXML))
-                return;
-            DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, MetaDir));
-            di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-            XmlTextWriter writer = new XmlTextWriter(todoXML, null);
-            writer.Formatting = Formatting.Indented;
-            writer.WriteStartDocument();
-            writer.WriteStartElement(LastKnownState);
-            writer.WriteEndElement();
-            writer.WriteEndDocument();
-            writer.Flush();
-            writer.Close();
+            
+                string todoXML = Path.Combine(path, Todopath);
+                if (File.Exists(todoXML))
+                    return;
+            try
+            {
+                DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, MetaDir));
+                di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+                XmlTextWriter writer = new XmlTextWriter(todoXML, null);
+                writer.Formatting = Formatting.Indented;
+                writer.WriteStartDocument();
+                writer.WriteStartElement(LastKnownState);
+                writer.WriteEndElement();
+                writer.WriteEndDocument();
+                writer.Flush();
+                writer.Close();
+            }
+            catch (IOException)
+            {
+                
+            }
+            catch (XmlException)
+            {
+                if (File.Exists(todoXML))
+                {
+                    File.Delete(todoXML);
+                }
+                CreateTodoFile(path);
+            }
         }
 
         private void AppendActionFileTodo(XmlDocument xmlDoc, FileCompareObject file, int counter, string changeType)
