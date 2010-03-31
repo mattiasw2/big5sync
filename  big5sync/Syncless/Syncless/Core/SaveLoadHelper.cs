@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Syncless.Tagging;
 using Syncless.Profiling;
@@ -12,15 +13,14 @@ namespace Syncless.Core
 {
     internal class SaveLoadHelper
     {
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public static bool SaveAll(string appPath)
         {
-
             SaveProfiling(appPath);
             SaveTagging(appPath);
             return true;
-
         }
-
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public static bool LoadAll(string appPath)
         {
             try

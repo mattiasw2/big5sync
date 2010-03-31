@@ -46,9 +46,12 @@ namespace Syncless.Profiling
         {
             get
             {
-                List<ProfileDrive> driveList = new List<ProfileDrive>();
-                driveList.AddRange(_fullList);
-                return driveList;
+                lock (_fullList)
+                {
+                    List<ProfileDrive> driveList = new List<ProfileDrive>();
+                    driveList.AddRange(_fullList);
+                    return driveList;
+                }
             }
 
         }
@@ -102,7 +105,7 @@ namespace Syncless.Profiling
 
         public void SetDriveName(DriveInfo info, string name)
         {
-            ProfileDrive drive = FindProfileDriveFromPhyisicalId(info.Name);
+            ProfileDrive drive = FindProfileDriveFromPhysicalId(info.Name);
             drive.LastUpdated = DateTime.Now.Ticks;
             _lastUpdatedTime = DateTime.Now.Ticks;
             drive.DriveName = name;
@@ -144,7 +147,7 @@ namespace Syncless.Profiling
             ProfileDrive drive = null;
             if (_phyiscalDict.TryGetValue(driveLetter, out drive))
             {
-                Debug.Assert(drive!=null);
+                Debug.Assert(drive != null);
                 if (_phyiscalDict.ContainsKey(drive.PhysicalId))
                 {
                     _phyiscalDict.Remove(drive.PhysicalId);
@@ -165,40 +168,53 @@ namespace Syncless.Profiling
         public ProfileDrive CreateProfileDrive(string guid)
         {
             ProfileDrive drive = new ProfileDrive(guid, DEFAULT_DRIVE_NAME);
-            _fullList.Add(drive);
-
+            lock (_fullList)
+            {
+                _fullList.Add(drive);
+            }
             return drive;
         }
         internal bool AddProfileDrive(ProfileDrive drive)
         {
-            this._fullList.Add(drive);
+            lock (_fullList)
+            {
+                this._fullList.Add(drive);
+            }
+
             return true;
         }
         internal ProfileDrive FindProfileDriveFromGUID(string guid)
         {
-            foreach (ProfileDrive drive in _fullList)
+            lock (_fullList)
             {
-                if (drive.Guid.Equals(guid))
+                foreach (ProfileDrive drive in _fullList)
                 {
-                    return drive;
+                    if (drive.Guid.Equals(guid))
+                    {
+                        return drive;
+                    }
                 }
+                return null;
             }
-            return null;
         }
         internal ProfileDrive FindProfileDriveFromLogicalId(string logicalid)
         {
-            foreach (ProfileDrive drive in _fullList)
+            lock (_fullList)
             {
-                if (drive.Guid.Equals(logicalid))
+                foreach (ProfileDrive drive in _fullList)
                 {
-                    return drive;
+                    if (drive.Guid.Equals(logicalid))
+                    {
+                        return drive;
+                    }
                 }
+                return null;
             }
-            return null;
         }
-        internal ProfileDrive FindProfileDriveFromPhyisicalId(string physicalid)
+        internal ProfileDrive FindProfileDriveFromPhysicalId(string physicalid)
         {
-            if(_phyiscalDict.ContainsKey(physicalid)){
+            if (_phyiscalDict.ContainsKey(physicalid))
+            {
                 return _phyiscalDict[physicalid];
             }
             return null;
