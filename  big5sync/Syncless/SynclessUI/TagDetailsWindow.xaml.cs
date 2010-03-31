@@ -91,8 +91,20 @@ namespace SynclessUI
             {
                 if (!_main.Gui.GetTag(_tagname).IsLocked)
                 {
+                    if(CheckRedundantFilters())
+                    {
+                        DialogHelper.ShowError("Duplicate Filters", "Please remove all duplicate filters.");
+                        BtnOk.IsEnabled = true;
+                    } else
+                    {
+                        bool result = _main.Gui.UpdateFilterList(_tagname, filters);
+                        Close();
+                    }
+
+                    /*
                     bool result = _main.Gui.UpdateFilterList(_tagname, filters);
                     Close();
+                    */
                 }
                 else
                 {
@@ -106,6 +118,22 @@ namespace SynclessUI
                 DialogHelper.DisplayUnhandledExceptionMessage();
                 Close();
             }
+        }
+
+        private bool CheckRedundantFilters()
+        {
+            for(int i = 0; i < filters.Count; i++)
+            {
+                Filter fi = filters[i];
+                filters.RemoveAt(i);
+                if(filters.Contains(fi))
+                {
+                    filters.Insert(i, fi);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
@@ -188,8 +216,10 @@ namespace SynclessUI
         {
             if (ListFilters.SelectedIndex != -1)
             {
+                /*
                 if(!CheckIfFilterExist(TxtBoxPattern.Text))
                 {
+                */
                     Filter f = filters[ListFilters.SelectedIndex];
                     if (f is ExtensionFilter)
                     {
@@ -198,7 +228,7 @@ namespace SynclessUI
                     }
 
                     PopulateFilterStringList(true);
-                }                
+                //}                
             }
         }
 
