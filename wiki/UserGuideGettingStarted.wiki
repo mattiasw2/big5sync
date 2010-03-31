@@ -83,14 +83,14 @@ After you have tagged the required folders, click on the *Sync Now* button. Sync
 
 http://big5sync.googlecode.com/files/Switching_To_Seamless.jpg
 
-Switching to seamless modes is a simple matter of pressing the button. After clicking the synchronization mode button, Syncless will automatically perform a synchronization. After which, it will monitor any changes in the tagged folders and keep them in sync without you having to do it manually.
+Switching to seamless mode is a simple matter of pressing the button. After clicking the synchronization mode button, Syncless will automatically perform a synchronization. After which, it will monitor any changes in the tagged folders and keep them in sync without you having to do it manually.
 
 
 == 5. Prepare Removable Drive for Removal ==
 
 http://big5sync.googlecode.com/files/Unmonitor_Drive.jpg
 
-You can access this from the Toolbar > Unmonitor or by using its keyboard shortcut equivalent (Ctrl-I)
+You can access this from the Toolbar > Unmonitor or by using its keyboard shortcut equivalent (Ctrl-I).
 
 Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be *stopped* (only seamless operations will be stopped so far) and thus allow the removable drive to be safely removed.
 
