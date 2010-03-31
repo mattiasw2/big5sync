@@ -77,6 +77,10 @@ For example, Folder A and Folder B both containing 1.txt file of size 3MB are ta
 
 = User Interface =
 
+== Preview Button Shown During Synchronization ==
+
+During synchronization in manual mode, the preview button is shown. Though it does not affect the flow of synchronization, may consider removing it in future releases.
+
 == Manual Button Changed to Switching Button When Analyzing ==
 
 This is a very rare case which cannot be reproduced subsequently. When program is analyzing tagged folders, the manual button is changed to switching button.
