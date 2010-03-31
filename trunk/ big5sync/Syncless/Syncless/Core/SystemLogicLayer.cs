@@ -1512,10 +1512,10 @@ namespace Syncless.Core
                         {
                         }
                         TagState state = TagState.Undefined;
-                        _switchingTable.TryGetValue(tag.TagName, out state);
+                        _switchingTable.TryGetValue(t.TagName, out state);
                         if (state == TagState.Undefined)
                         {
-                            _switchingTable.Add(tag.TagName, mode == true ? TagState.ManualToSeamless : TagState.SeamlessToManual);
+                            _switchingTable.Add(t.TagName, t.IsSeamless ? TagState.ManualToSeamless : TagState.SeamlessToManual);
                         }
                         StartMonitorTag(t);
                     }
