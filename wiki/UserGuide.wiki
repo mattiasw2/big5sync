@@ -202,7 +202,15 @@ http://big5sync.googlecode.com/files/Shortcut.jpg
 
 If you forget the shortcut keys, simply go to http://big5sync.googlecode.com/files/Shortcut_Button.jpg at the window toolbar and view the list again.
 
-== Accessing Tagged Folders ==
+== Accessing Tags Through Right-clicking ==
+
+If you prefer right-clicking than clicking buttons, Syncless provides you the option to access your tags through context menu.
+
+http://big5sync.googlecode.com/files/Right_Click_Tag_List.jpg
+
+Simply right-click on the tag under the tag list and you can choose to tag more folders, view tag properties or remove the tag.
+
+== Accessing Tagged Folders Through Right-clicking ==
 
 If you have many folders tagged to the same tag, when you want to view the folders in Explorer Window, you will most probably have to go through Start Menu -> My Computer -> D: -> Your folders many times to open up the various folders. Why go through the hassle when you can simply open up the folders in Syncless?
 
