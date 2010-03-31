@@ -24,6 +24,7 @@ namespace Syncless.CompareAndSync
         private readonly HashSet<string> _queuedJobsLookup = new HashSet<string>();
         private ManualSyncRequest _currJob;
         private SyncProgress _currJobProgress;
+        private string _isPendingCancel;
 
         private ManualQueueControl()
         {
@@ -101,6 +102,7 @@ namespace Syncless.CompareAndSync
                         case SyncState.Started:
                         case SyncState.Analyzing:
                             _currJobProgress.Cancel();
+                            _isPendingCancel = _currJob.TagName;
                             return true;
                         default:
                             return false;
@@ -157,6 +159,7 @@ namespace Syncless.CompareAndSync
                         //Set both to null
                         _currJob = null;
                         _currJobProgress = null;
+                        _isPendingCancel = null;
                     }
                 }
                 else
@@ -191,6 +194,8 @@ namespace Syncless.CompareAndSync
         /// <returns>A boolean indicating if the tag name is in progress.</returns>
         public bool IsSyncing(string tagName)
         {
+            if (_isPendingCancel != null && _isPendingCancel == tagName)
+                return false;
             return _currJob == null ? false : tagName.Equals(_currJob.TagName);
         }
 
