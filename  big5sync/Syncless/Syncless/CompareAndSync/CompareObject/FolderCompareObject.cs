@@ -10,7 +10,7 @@ namespace Syncless.CompareAndSync.CompareObject
         private Dictionary<string, BaseCompareObject> _contents;
         private bool _dirty;
         private string _metaName;
-        private readonly bool[] _useNewName;
+        private bool[] _useNewName;
 
         public FolderCompareObject(string name, int numOfPaths, FolderCompareObject parent)
             : base(name, numOfPaths, parent)
@@ -142,6 +142,12 @@ namespace Syncless.CompareAndSync.CompareObject
         public bool DoRename(int index)
         {
             return _useNewName[index];
+        }
+
+        public bool[] UseNewName
+        {
+            get { return _useNewName; }
+            set { _useNewName = value; }
         }
 
         public void UpdateRename(int posNewName)

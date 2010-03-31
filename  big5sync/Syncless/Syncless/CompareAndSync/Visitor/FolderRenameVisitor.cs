@@ -16,7 +16,7 @@ namespace Syncless.CompareAndSync.Visitor
             DetectFolderRename(folder, numOfPaths);
         }
 
-        public void Visit(RootCompareObject root)  { /* Do nothing. */ }
+        public void Visit(RootCompareObject root) { /* Do nothing. */ }
 
         #endregion
 
@@ -143,30 +143,52 @@ namespace Syncless.CompareAndSync.Visitor
 
         private void MergeFile(FileCompareObject actualFileObj, FileCompareObject renamedFileObj, int pos)
         {
-            actualFileObj.CreationTime[pos] = renamedFileObj.CreationTime[pos];
-            actualFileObj.Exists[pos] = renamedFileObj.Exists[pos];
+            //actualFileObj.CreationTime[pos] = renamedFileObj.CreationTime[pos];
+            //actualFileObj.Exists[pos] = renamedFileObj.Exists[pos];
+            //actualFileObj.MetaCreationTime[pos] = renamedFileObj.MetaCreationTime[pos];
+            //actualFileObj.MetaExists[pos] = renamedFileObj.MetaExists[pos];
+            //actualFileObj.ChangeType[pos] = renamedFileObj.ChangeType[pos];
+            //actualFileObj.MetaUpdated[pos] = renamedFileObj.MetaUpdated[pos];
+            //actualFileObj.ToDoAction[pos] = renamedFileObj.ToDoAction[pos];
+            MergeFileSystemObject(actualFileObj, renamedFileObj, pos);
             actualFileObj.Hash[pos] = renamedFileObj.Hash[pos];
-            actualFileObj.LastWriteTime[pos] = renamedFileObj.LastWriteTime[pos];
             actualFileObj.Length[pos] = renamedFileObj.Length[pos];
-            actualFileObj.MetaCreationTime[pos] = renamedFileObj.MetaCreationTime[pos];
-            actualFileObj.MetaExists[pos] = renamedFileObj.MetaExists[pos];
+            actualFileObj.LastWriteTime[pos] = renamedFileObj.LastWriteTime[pos];
             actualFileObj.MetaHash[pos] = renamedFileObj.MetaHash[pos];
             actualFileObj.MetaLastWriteTime[pos] = renamedFileObj.MetaLastWriteTime[pos];
             actualFileObj.MetaLength[pos] = renamedFileObj.MetaLength[pos];
-            actualFileObj.ChangeType[pos] = renamedFileObj.ChangeType[pos];
-            actualFileObj.MetaUpdated[pos] = renamedFileObj.MetaUpdated[pos];
+            //List of conflicts
         }
 
         private void MergeFolder(FolderCompareObject actualFldrObj, FolderCompareObject renamedFolderObj, int pos)
         {
-            actualFldrObj.ChangeType[pos] = renamedFolderObj.ChangeType[pos];
-            actualFldrObj.CreationTime[pos] = renamedFolderObj.CreationTime[pos];
-            actualFldrObj.Exists[pos] = renamedFolderObj.Exists[pos];
-            actualFldrObj.MetaCreationTime[pos] = renamedFolderObj.MetaCreationTime[pos];
-            actualFldrObj.MetaExists[pos] = renamedFolderObj.MetaExists[pos];
-            actualFldrObj.MetaUpdated[pos] = renamedFolderObj.MetaUpdated[pos];
-            actualFldrObj.NewName = renamedFolderObj.NewName;
+            //actualFldrObj.ChangeType[pos] = renamedFolderObj.ChangeType[pos];
+            //actualFldrObj.CreationTime[pos] = renamedFolderObj.CreationTime[pos];
+            //actualFldrObj.Exists[pos] = renamedFolderObj.Exists[pos];
+            //actualFldrObj.MetaCreationTime[pos] = renamedFolderObj.MetaCreationTime[pos];
+            //actualFldrObj.MetaExists[pos] = renamedFolderObj.MetaExists[pos];
+            //actualFldrObj.SourcePosition = renamedFolderObj.SourcePosition;
+            //actualFldrObj.MetaUpdated[pos] = renamedFolderObj.MetaUpdated[pos];
+            //actualFldrObj.NewName = renamedFolderObj.NewName;
+            //actualFldrObj.MetaName = renamedFolderObj.MetaName;
+            //actualFldrObj.Dirty = renamedFolderObj.Dirty;
+            MergeFileSystemObject(actualFldrObj, renamedFolderObj, pos);
+            actualFldrObj.UseNewName[pos] = renamedFolderObj.UseNewName[pos];
+            actualFldrObj.ToDoAction[pos] = actualFldrObj.ToDoAction[pos];
             MergeOneLevelDown(actualFldrObj, renamedFolderObj, pos);
+        }
+
+        private void MergeFileSystemObject(BaseCompareObject actualObj, BaseCompareObject renameObj, int pos)
+        {
+            actualObj.ChangeType[pos] = renameObj.ChangeType[pos];
+            actualObj.CreationTime[pos] = renameObj.CreationTime[pos];
+            actualObj.Exists[pos] = renameObj.Exists[pos];
+            actualObj.FinalState[pos] = renameObj.FinalState[pos];
+            actualObj.Invalid = renameObj.Invalid; //EXP
+            actualObj.MetaCreationTime[pos] = renameObj.MetaCreationTime[pos];
+            actualObj.MetaExists[pos] = renameObj.MetaExists[pos];
+            actualObj.MetaUpdated[pos] = renameObj.MetaUpdated[pos];
+            actualObj.ToDoAction[pos] = renameObj.ToDoAction[pos];
         }
     }
 }
