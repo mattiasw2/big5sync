@@ -450,7 +450,7 @@ namespace SynclessUI
 
                 if (tv.IsLocked)
                 {
-                    if (Progress.TagName == SelectedTag && (Progress.State == SyncState.Analyzing || Progress.State == SyncState.Queued || Progress.State == SyncState.Started))
+                    if (Progress != null && Progress.TagName == SelectedTag && (Progress.State == SyncState.Analyzing || Progress.State == SyncState.Queued || Progress.State == SyncState.Started))
                     {
                         BtnSyncNow.Visibility = Visibility.Visible;
                         CancelButtonMode();
@@ -482,7 +482,8 @@ namespace SynclessUI
 
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
         {
-            TagChanged();
+            PathChanged();
+
             if (LblSyncNow.Content.Equals("Sync Now"))
             {
                 BtnSyncNow.IsEnabled = false;
@@ -540,15 +541,6 @@ namespace SynclessUI
                     BtnSyncNow.IsEnabled = true;
                 }
             }
-
-            /*
-                        if (!_manualSyncEnabled || Gui.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
-                        {
-                            DialogHelper.ShowError(SelectedTag + " is Synchronizing",
-                                         "You cannot carry out another synchronization operation while it is synchronizing.");
-                            return;
-                        }
-             */
         }
 
         public bool CreateTag(string tagName)
@@ -1294,6 +1286,41 @@ namespace SynclessUI
                                                                                 ? Visibility.Hidden
                                                                                 : Visibility.Visible;
                                                                     }));
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage();
+            }
+        }
+
+        public void PathChanged()
+        {
+            try
+            {
+                ListBoxTag.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                                  (Action)(() =>
+                                                  {
+                                                      List<string> taglist = Gui.GetAllTags();
+                                                      ListBoxTag.ItemsSource = taglist;
+                                                      LblTagCount.Content = "[" + taglist.Count + "/" +
+                                                                            taglist.Count + "]";
+                                                  }));
+
+                ListTaggedPath.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                                      (Action)(() =>
+                                                      {
+                                                          if (SelectedTag == null)
+                                                          {
+                                                              return;
+                                                          }
+                                                          TagView tv = Gui.GetTag(SelectedTag);
+
+                                                          ListTaggedPath.ItemsSource = tv.PathStringList;
+                                                          BdrTaggedPath.Visibility =
+                                                              tv.PathStringList.Count == 0
+                                                                  ? Visibility.Hidden
+                                                                  : Visibility.Visible;
+                                                      }));
             }
             catch (UnhandledException)
             {

@@ -13,5 +13,7 @@ namespace Syncless.Core
         void DriveChanged(); // <--- inform you of a drive that is changed
 
         void TagChanged(); // <--- inform you of a change in one of the tag
+
+        void PathChanged();
     }
 }
