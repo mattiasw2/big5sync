@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SynclessUI.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="DisplaySplashScreen" Provider="PortableSettingsProvider" Roaming="true" Type="System.Boolean" Scope="User">
+    <Setting Name="DisplayWelcomeScreen" Provider="PortableSettingsProvider" Roaming="true" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="EnableShellIntegration" Provider="PortableSettingsProvider" Roaming="true" Type="System.Boolean" Scope="User">

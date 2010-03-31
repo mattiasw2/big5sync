@@ -28,12 +28,12 @@ namespace SynclessUI.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
-        public bool DisplaySplashScreen {
+        public bool DisplayWelcomeScreen {
             get {
-                return ((bool)(this["DisplaySplashScreen"]));
+                return ((bool)(this["DisplayWelcomeScreen"]));
             }
             set {
-                this["DisplaySplashScreen"] = value;
+                this["DisplayWelcomeScreen"] = value;
             }
         }
         
