@@ -480,10 +480,11 @@ namespace SynclessUI
 
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
         {
+            TagChanged();
             if (LblSyncNow.Content.Equals("Sync Now"))
             {
                 BtnSyncNow.IsEnabled = false;
-
+                
                 try
                 {
                     if (Gui.GetTag(SelectedTag).PathStringList.Count > 1)
