@@ -9,6 +9,10 @@ Note: As much as we try to keep this page updated, please take a look at the pro
 
 = General =
 
+== Cannot Handle Tagging/Untagging from Context Menu During Synchronization ==
+
+During synchronization, tagging/untagging a folder from context menu will cause program to stop responding.
+
 == Errors Accessing Some Hard Disks ==
 
 There might be errors accessing some hard disks. It could be due to the NTFS configuration issues.
