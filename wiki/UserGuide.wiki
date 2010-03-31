@@ -33,7 +33,7 @@ Why choose Syncless over other synchronization tools? The reason is simple. Sync
  * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving it on your computer.
 
 === N-way Synchronization ===
-Traditionally, to keep a few folders in sync, you need to create multiple jobs because many tools provide synchronization between 2 folders only. Syncless is capable of synchronizing multiple folders without having you to create multiple jobs. Simply create one tag and tag multiple folders to the same tag, then Syncless will keep them all in sync.
+The traditional way to keep a few folders in sync is to create multiple jobs because many tools provide synchronization between 2 folders only. Syncless is capable of synchronizing multiple folders without you having to create multiple jobs. Simply tag multiple folders with the same tag name and Syncless will keep them all in sync. 
 
 === Filtering ===
 Syncless provides basic filtering for files currently. There are 2 main kinds of filters, inclusion and exclusion filters. Exclusion filters will always have a higher priority over inclusion filters. In this section, we are going to take a look at how we can construct some filters to suit our needs.
