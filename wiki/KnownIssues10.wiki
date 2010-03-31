@@ -1,10 +1,19 @@
 #summary Developers' Guide - Known Issues - V1.0
+#labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 <wiki:toc max_depth="6">
 
 These are the current known issues with Syncless 1.0, and will be handled at a later version. For a list of how Syncless handles certain unique sequence of actions, please look at [http://code.google.com/p/big5sync/wiki/SpecialCases here].
 
 Note: As much as we try to keep this page updated, please take a look at the project's [http://code.google.com/p/big5sync/issues/list issue tracker] before reporting any bugs, thank you.
+
+= Tagging =
+
+== Recursive Tagging ==
+
+If Folder A is tagged with Folder D and Folder B is tagged with Folder C, a recursion will occur and folders will be created in them until they hit the maximum file path length.
+
+http://big5sync.googlecode.com/files/RecursiveTagging.jpg
 
 = Monitor =
 
@@ -17,3 +26,9 @@ Due to limitation of the `FileSystemWatcher`, when performing mass filesystem op
 Due to a delay in receiving events, sometimes additional files will be created when performing filesystem operation within a short period of time in seamless synchronization.
 
 For example, Folder A and Folder B both containing 1.txt file of size 3MB are tagged to the same tag. Rename 1.txt to 2.txt in Folder A. Before this change takes effect in Folder B, the system detects that 1.txt exists in Folder B but not in Folder A, so an event is queued to create 1.txt in Folder A. After creating 1.txt in Folder A, the system also detects that 1.txt does not exist in Folder B, so creates 1.txt in Folder B. As such, eventually, 1.txt and 2.txt will both exist in Folder A and Folder B.
+
+= User Interface =
+
+== Changes Made After Every Sync Not Shown ==
+
+Currently, the program does not show a list of changes made to the filesystem after every synchronization.
