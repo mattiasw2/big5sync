@@ -71,7 +71,17 @@ Before you continue to read further, you may want to find out what each button i
 
   * http://big5sync.googlecode.com/files/Seamless_Mode_Button.jpg : Indicates the current synchronization is in seamless mode, click to switch to manual mode
 
+  * http://big5sync.googlecode.com/files/Sync_Preview_Button.jpg : Preview synchronization result, only available in manual mode (currently not implemented in version 1.0)
+
   * http://big5sync.googlecode.com/files/Sync_Now_Button.jpg : Start synchronization for currently selected tag, only available in manual mode
+
+  * http://big5sync.googlecode.com/files/Shortcut_Button.jpg : Displays the list of shortcut keys in Syncless
+
+  * http://big5sync.googlecode.com/files/App_Settings_Button.jpg : Configure Syncless settings
+
+  * http://big5sync.googlecode.com/files/Minimize_Button.jpg : Minimize Syncless main window
+
+  * http://big5sync.googlecode.com/files/Exit_Button.jpg : Exit Syncless
 
 
 You have folders on your computer and thumbdrive that you wish to synchronize automatically without putting too much effort in doing it. Now is the time to use Syncless to help you organise them by using tags.
