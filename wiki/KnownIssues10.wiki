@@ -26,7 +26,7 @@ Syncless cannot access some of the protected removable drives to retrieve guid.i
 If Folder A is tagged with Folder D and Folder B is tagged with Folder C, a recursion will occur and folders will be created in them until they hit the maximum file path length.
     http://big5sync.googlecode.com/files/RecursiveTagging.jpg
 
-= CompareAndSync =
+= !CompareAndSync =
 
 == Slow Progress During Finalizing ==
 
