@@ -32,7 +32,7 @@ to implement it in 2.0.
 
 == Cannot Sync File With Very Long Name ==
 
-As of version 1.0, the file/folder with PathTooLongException will simply not be synced. No error will be thrown. Will try to implement a notification to inform user of such error in future releases.
+As of version 1.0, the file/folder with !PathTooLongException will simply not be synced. No error will be thrown. Will try to implement a notification to inform user of such error in future releases.
 
 == Unable to Handle External Disk With Not Enough Space ==
 
