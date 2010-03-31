@@ -190,15 +190,15 @@ http://big5sync.googlecode.com/files/Configure_Application_Settings.jpg
 
 === Enable Shell Integration ===
 
-Syncless makes tagging easy for you by providing right-clicking function at Explorer Window. However, if you do not wish to have many entries in your context menu, you can choose to disable the function by deselecting the *Enable Shell Integration* checkbox.
+Syncless makes tagging easy for you by integrating directly into Windows Explorer. You can simply right-click on any folder you wish to tag. In the case where you rather not have this function, you can deselect *Enable Shell Integration* in settings.
 
 === Enable Window Animation on Application Start/Exit===
 
-Syncless main window will animate upon start up or exit. However, if you find that the animation affects your computer performance, you can choose to disable the function by deselecting the *Enable Window Animation on Application Start/Exit* checkbox.
+Syncless's main window will animate upon start up or exit. You may choose to disable the function by deselecting the *Enable Window Animation on Application Start/Exit* checkbox.
 
 === Enable Tray Notification ===
 
-Syncless notifies you through tray notification upon initialization/completion of a synchronization. However, if you do not wish to have many notification bubbles shown at the tray, you can choose to disable the function by deselecting the *Enable Tray Notification* checkbox.
+Syncless notifies you through tray notification upon initialization/completion of a synchronization. Enable or disable the function by deselecting the *Enable Tray Notification* checkbox.
 
 === When Minimizing, Minimize to Tray ===
 
@@ -210,7 +210,7 @@ Syncless makes your user experience as pleasant as possible by providing several
 
 == Tag Name Auto Completion ==
 
-Do you have a tag with long name? Syncless understands the inconvenience you experience when trying to tag more folders to that tag with a long name. As such, Syncless provides an auto-completion function when you type in a tag name.
+Do you have a tag with a long name? Syncless understands the inconvenience you experience when trying to tag folders to a tag with a long name. As such, Syncless provides an auto-completion function when you type in a tag name.
 
 http://big5sync.googlecode.com/files/Tagname_Auto_Complete.jpg
 
@@ -218,7 +218,7 @@ Simply type in part of the tag name and Syncless will display the full name for 
 
 == Filter Tag List ==
 
-Do you have many tags to maintain and have difficulty finding that exact tag from the long list? Syncless supports filtering of tags so that you can search for the tag you want by just entering the tag name.
+Do you have many tags to maintain and have difficulty finding that exact tag from the long list? Syncless supports filtering of tags so that you can search for the tag you want just by entering the tag name.
 
 Let's say you have many tags in the tag list.
 
