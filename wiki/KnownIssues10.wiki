@@ -35,6 +35,10 @@ When CompareAndSync updates metadata files at the finalizing stage, it will take
 
 = Monitor =
 
+== Drive Plugin Unstable ==
+
+Most of the time, program can detect drive plugin event. Once in a while, such event is not detected.
+
 == Seamless Synchronization Limitation ==
 
 Due to limitation of the `FileSystemWatcher`, when performing mass filesystem operation within a short period of time in seamless synchronization, some files/folders may not be propagated.
