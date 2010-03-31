@@ -134,7 +134,15 @@ namespace SynclessUI
                     var di = new DirectoryInfo(path);
                     if (di.Exists && !FileHelper.IsFile(path))
                     {
-                        if (FileHelper.IsSynclessFolder(path))
+                        if (FileHelper.IsCDRomDrive(path))
+                        {
+                            DialogHelper.ShowError("Invalid Folder", "You cannot tag any folder from a CD/DVD-Rom drive.");
+                            if (!_isTagNormally)
+                            {
+                                _isInvalidFolder = true;
+                            }
+                        }
+                        else if (FileHelper.IsSynclessFolder(path))
                         {
                             DialogHelper.ShowError("Invalid Folder", "You cannot tag this folder.");
                             if (!_isTagNormally)

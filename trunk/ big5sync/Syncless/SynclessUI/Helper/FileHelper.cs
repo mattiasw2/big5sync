@@ -62,5 +62,19 @@ namespace SynclessUI.Helper
             }
             return false;
         }
+
+        public static bool IsCDRomDrive(string path)
+        {
+            DirectoryInfo d = new DirectoryInfo(path);
+            DriveInfo drive = new DriveInfo(d.Root.FullName);
+            if (drive.DriveType == DriveType.CDRom)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
