@@ -6,7 +6,7 @@ http://big5sync.googlecode.com/files/mainpagelogosmall.png
 
 ----
 
-<wiki:toc max_depth="6">
+<wiki:toc max_depth="3">
 
 ----
 
@@ -28,9 +28,9 @@ Why choose Syncless over other synchronization tools? The reason is simple. Sync
 
   * *Filtering*:  Use Syncless's filtering features for the ultimate control in synchronization. Currently, Syncless is able to include or exclude files and folders by extension and path. Other filters will be available in later versions.
 
- * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder will be archived up to 2 backups at one time. As of version 1.0, archiving is not user-configurable, but will be in the future.
+  * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder will be archived up to 2 backups at one time. As of version 1.0, archiving is not user-configurable, but will be in the future.
 
- * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving it on your computer.
+  * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving it on your computer.
 
 === N-way Synchronization ===
 The traditional way to keep a few folders in sync is to create multiple jobs because many tools provide synchronization between 2 folders only. Syncless is capable of synchronizing multiple folders without you having to create multiple jobs. Simply tag multiple folders with the same tag name and Syncless will keep them all in sync. 
@@ -70,7 +70,7 @@ When you run Syncless, you will be greeted with the main window, which allows yo
 http://big5sync.googlecode.com/files/Main_Window_Overview_Edited.jpg
 
 
-= Learn Syncless =
+= Getting Started =
 
 == Understanding the Syncless Interface ==
 
@@ -181,6 +181,7 @@ Now, let us look at some real-world examples. For example, if you want to includ
 
 As seen from the above, creating a filter is a simple and intuitive task in Syncless.
 
+= Continue to Explore Syncless =
 
 == How to Configure Syncless? ==
 
@@ -204,11 +205,11 @@ Syncless notifies you through tray notification upon initialization/completion o
 
 Syncless can minimize to tray so that your task bar will be kept as clean as possible. However, if you wish to access Syncless more quickly through the task bar, you can disable the function by deselecting the *When Minimizing, Minimize to Tray* checkbox.
 
-= How is Syncless User-friendly? =
+== How is Syncless User-friendly? ==
 
 Syncless makes your user experience as pleasant as possible by providing several user-friendly functionalities.
 
-== Tag Name Auto Completion ==
+=== Tag Name Auto Completion ===
 
 Do you have a tag with a long name? Syncless understands the inconvenience you experience when trying to tag folders to a tag with a long name. As such, Syncless provides an auto-completion function when you type in a tag name.
 
@@ -216,7 +217,7 @@ http://big5sync.googlecode.com/files/Tagname_Auto_Complete.jpg
 
 Simply type in part of the tag name and Syncless will display the full name for you.
 
-== Filter Tag List ==
+=== Filter Tag List ===
 
 Do you have many tags to maintain and have difficulty finding that exact tag from the long list? Syncless supports filtering of tags so that you can search for the tag you want just by entering the tag name.
 
@@ -228,7 +229,7 @@ You want to filter out only tags related to your photo folders. Simply enter the
 
 http://big5sync.googlecode.com/files/Zoom_In_Filter_Tag_List.jpg
 
-== Keyboard Shortcuts ==
+=== Keyboard Shortcuts ===
 
 Syncless helps you to save time and increase productivity by providing keyboard shortcuts to the many commonly used operations. Below is the list of keyboard shortcuts provided by Syncless.
 
@@ -236,7 +237,7 @@ http://big5sync.googlecode.com/files/Shortcut.jpg
 
 If you forget the shortcut keys, simply go to http://big5sync.googlecode.com/files/Shortcut_Button.jpg at the window toolbar and view the list again.
 
-== Accessing Tags Through Right-clicking ==
+=== Accessing Tags Through Right-clicking ===
 
 If you prefer right-clicking than clicking buttons, Syncless provides you the option to access your tags through context menu.
 
@@ -244,7 +245,7 @@ http://big5sync.googlecode.com/files/Right_Click_Tag_List.jpg
 
 Simply right-click on the tag under the tag list and you can choose to tag more folders, view tag properties or remove the tag.
 
-== Accessing Tagged Folders Through Right-clicking ==
+=== Accessing Tagged Folders Through Right-clicking ===
 
 Suppose you have many folders tagged with the same tag. When you want to view the folders in Windows Explorer, you will most probably have to go through Start Menu -> My Computer -> D: -> Your folders many times to open up the various folders. Why go through the hassle when you can simply open up the folders in Syncless?
 
@@ -252,7 +253,7 @@ http://big5sync.googlecode.com/files/Right_Click_Tagged_Path.jpg
 
 Simply right-click on the tagged path in the tag info panel and choose to Open in Windows Explorer or just double-click on it. The folder will be opened in Explorer Window. 
 
-== Tray Notification ==
+=== Tray Notification ===
 
 Syncless allows you to perform other tasks as well when you synchronize large amount of files. You will still be kept updated of the synchronization status even when you are not viewing the Syncless main window.
 
@@ -260,7 +261,7 @@ Whenever a synchronization task is initiated or completed, Syncless will notify 
 
 http://big5sync.googlecode.com/files/Tray_Notification.jpg
 
-== Viewing Logs ==
+=== Viewing Logs ===
 
 You do not have to remember the changes you have made to your folders and files. Syncless keeps a log of the changes in your folders and files and lets you view them easily.
 
