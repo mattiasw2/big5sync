@@ -1,5 +1,4 @@
-﻿#define DEBUGPATH
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -619,7 +618,7 @@ namespace Syncless.Core
             AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance);
             SendAutoRequest(request);
             FindAndCleanDeletedPaths();
-            _userInterface.PathChanged();
+            _userInterface.TagChanged();
         }
 
         private void HandleRootFolderDeleteEvent(FolderChangeEvent dce)
