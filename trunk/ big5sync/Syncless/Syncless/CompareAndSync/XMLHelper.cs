@@ -336,6 +336,9 @@ namespace Syncless.CompareAndSync
         private static void GenerateFolderTodo(XMLWriteFolderObject xmlWriteObj)
         {
             string parentPath = xmlWriteObj.FullPath;
+            if(!Directory.Exists(parentPath))
+                return;
+
             XmlDocument xmlTodoDoc = new XmlDocument();
             string todoPath = Path.Combine(parentPath, Todopath);
             CreateTodoFile(parentPath);
