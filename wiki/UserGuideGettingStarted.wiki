@@ -69,12 +69,12 @@ To synchronize 2 or more folders together, you must first tag them with the same
 == 2. Viewing tag information ==
     http://big5sync.googlecode.com/files/Tag_Info_Panel.jpg
 
-After tagging the folders, you may view the details under the tag information panel. You will see a list of folder paths associated with the selected tag. On the right of the folder path list, there are a few options for synchronization. During synchronization, the progress bar will show the percentage of completion and status of the synchronization.
+After tagging the folders, you may view the details under the tag information panel through the http://big5sync.googlecode.com/files/detailsbuttonicon.jpg button. You will see a list of folder paths associated with the selected tag. On the right of the folder path list, there are a few options for synchronization. During synchronization, the progress bar will show the percentage of completion and status of the synchronization.
 
 == 3. Synchronize the folders ==
     http://big5sync.googlecode.com/files/Sync_Complete.jpg
 
-After you have tagged the required folders, click on the *Sync Now* button. Syncless will take care of the rest and keep the folders in sync.
+After you have tagged the required folders, click on the http://big5sync.googlecode.com/files/Sync_Now_Button.jpg button. Syncless will take care of the rest and keep the folders in sync.
 
 == 4. Switch to Seamless Mode ==
 
@@ -87,7 +87,7 @@ Switching to seamless mode is a simple matter of pressing the button. After clic
 
 http://big5sync.googlecode.com/files/Unmonitor_Drive.jpg
 
-You can access this from the Toolbar > Unmonitor or by using its keyboard shortcut equivalent (Ctrl-I).
+You can access this through the http://big5sync.googlecode.com/files/unmonitorbuttonicon.jpg button or by using its keyboard shortcut equivalent (Ctrl-I).
 
 Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be *stopped* (only seamless operations will be stopped so far) and thus allow the removable drive to be safely removed.
 
