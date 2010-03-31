@@ -158,7 +158,7 @@ Traditionally, to keep a few folders in sync, you need to create multiple jobs b
 Syncless provides basic filtering for files currently. There are 2 main kinds of filters, inclusion and exclusion filters. Exclusion filters will always have a higher priority over inclusion filters. In this section, we are going to take a look at how we can construct some filters to suit our needs.
 
 === Create a Filter ===
-Click the http://big5sync.googlecode.com/files/detailsbuttonicon.jpg button in the toolbar to open up the tag properties panel. Inside the properties panel, choose the *Filter* property. You should see a list of filters, and most likely, it will be blank since no filters have been added yet.
+Click the http://big5sync.googlecode.com/files/detailsbuttonicon.jpg button in the toolbar to open up the tag properties panel. Inside the properties panel, choose the *Filtering* property. You should see a list of filters, and most likely, it will be blank since no filters have been added yet.
 
 http://big5sync.googlecode.com/files/Configure_Filter.jpg
 
