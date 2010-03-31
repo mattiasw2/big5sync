@@ -22,7 +22,8 @@ namespace Syncless.CompareAndSync
             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STARTED, "Started Manual Sync for " + request.TagName));
 
             List<Filter> filters = request.Filters.ToList();
-            filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
+            filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ArchiveName));
+            filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ConflictDir));
             RootCompareObject rco = new RootCompareObject(request.Paths);
 
             //Analyzing
@@ -69,7 +70,8 @@ namespace Syncless.CompareAndSync
         public static RootCompareObject Compare(ManualCompareRequest request)
         {
             List<Filter> filters = request.Filters.ToList();
-            filters.Add(new SynclessArchiveFilter(request.Config.ArchiveName));
+            filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ArchiveName));
+            filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ConflictDir));
             RootCompareObject rco = new RootCompareObject(request.Paths);
             List<string> buildConflicts = new List<string>();
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters, buildConflicts), null);
