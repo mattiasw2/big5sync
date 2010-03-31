@@ -380,6 +380,10 @@ namespace SynclessUI
                     {
                         if (Gui.MonitorTag(SelectedTag, false))
                         {
+                            _syncProgressNotificationDictionary.Remove(SelectedTag);
+                            _tagStatusNotificationDictionary.Remove(SelectedTag);
+                            LblStatusText.Content = "";
+
                             ManualMode();
                         }
                         else
@@ -441,8 +445,13 @@ namespace SynclessUI
             BtnSyncMode.SetResourceReference(BackgroundProperty, "ToggleOffBrush");
             LblSyncMode.SetResourceReference(MarginProperty, "ToggleOffMargin");
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOffForeground");
-            ProgressBarSync.Visibility = Visibility.Visible;
-            LblProgress.Visibility = Visibility.Visible;
+            
+            if(_tagStatusNotificationDictionary.ContainsKey(SelectedTag))
+            {
+                ProgressBarSync.Visibility = Visibility.Visible;
+                LblProgress.Visibility = Visibility.Visible;
+            }
+
             Console.WriteLine("In Manual Mode");
             LblStatusTitle.Visibility = Visibility.Visible;
             LblStatusText.Visibility = Visibility.Visible;
@@ -489,7 +498,7 @@ namespace SynclessUI
 
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
         {
-            TagChanged();
+            PathChanged();
 
             if (LblSyncNow.Content.Equals("Sync Now"))
             {
