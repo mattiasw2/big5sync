@@ -260,7 +260,7 @@ Whenever a synchronization task is initiated or completed, Syncless will notify 
 
 http://big5sync.googlecode.com/files/Tray_Notification.jpg
 
-== Viewing Past History ==
+== Viewing Logs ==
 
 You do not have to remember the changes you have made to your folders and files. Syncless keeps a log of the changes in your folders and files and lets you view them through a single click.
 
