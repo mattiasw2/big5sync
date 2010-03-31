@@ -1145,6 +1145,8 @@ namespace SynclessUI
                 case SyncState.Finalizing:
                     message = "Finalizing";
                     break;
+                default:
+                    return;
             }
 
             double percentageComplete = Progress.PercentComplete;
