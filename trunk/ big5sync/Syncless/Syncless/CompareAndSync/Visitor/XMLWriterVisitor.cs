@@ -554,7 +554,8 @@ namespace Syncless.CompareAndSync.Visitor
             CommonMethods.LoadXML(ref subFolderDoc , xmlPath);
 
             XmlNode xmlNameNode = subFolderDoc.SelectSingleNode(XpathExpr + "/name");
-            xmlNameNode.InnerText = name;
+            if(xmlNameNode != null)
+                xmlNameNode.InnerText = name;
             CommonMethods.SaveXML(ref subFolderDoc , xmlPath);
         }
 
