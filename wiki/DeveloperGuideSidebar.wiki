@@ -15,6 +15,7 @@
       * [UserGuideGettingStarted#Portability Portability]
     * [UserGuideGettingStarted#Misc:_Keyboard_Shortcuts Misc. Keyboard Shortcuts]
     * [UserGuideGettingStarted#Getting_More_Help Getting More Help]
+  * [UserGuide Comprehensive User Guide]
   * [DeveloperGuide Developers' Guide]
     * System Overview
       * [DeveloperGuide#Architecture Architecture]
