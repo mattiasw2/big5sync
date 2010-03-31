@@ -25,6 +25,10 @@ http://big5sync.googlecode.com/files/RecursiveTagging.jpg
 
 = CompareAndSync =
 
+== Slow Progress During Finalizing ==
+
+When CompareAndSync updates metadata files at the finalizing stage, it will take quite a while. Will optimize the algorithm later at version 1.5.
+
 = Monitor =
 
 == Seamless Synchronization Limitation ==
