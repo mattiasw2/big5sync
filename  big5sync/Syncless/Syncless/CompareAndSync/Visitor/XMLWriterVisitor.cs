@@ -65,6 +65,7 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 ProcessFolderFinalState(folder, i);
             }
+
             _progress.complete();
         }
 
@@ -461,15 +462,15 @@ namespace Syncless.CompareAndSync.Visitor
             {
                 XmlDocument newXmlDoc = new XmlDocument();
                 string editOldXML = Path.Combine(Path.Combine(folder.GetSmartParentPath(counter), folder.NewName), Metadatapath);
-
+                CommonMethods.CreateFileIfNotExist(Path.Combine(folder.GetSmartParentPath(counter), folder.NewName));
                 CommonMethods.LoadXML(ref newXmlDoc, editOldXML);
-
                 XmlNode xmlNameNode = newXmlDoc.SelectSingleNode(XpathExpr + "/name");
                 xmlNameNode.InnerText = folder.NewName;
                 CommonMethods.SaveXML(ref newXmlDoc, editOldXML);
 
                 string parentXML = Path.Combine(folder.GetSmartParentPath(counter), Metadatapath);
                 XmlDocument parentXmlDoc = new XmlDocument();
+                CommonMethods.CreateFileIfNotExist(folder.GetSmartParentPath(counter));
                 CommonMethods.LoadXML(ref parentXmlDoc, parentXML);
                 XmlNode parentXmlFolderNode = parentXmlDoc.SelectSingleNode(XpathExpr + "/" + FOLDER + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
                 parentXmlFolderNode.FirstChild.InnerText = folder.NewName;
