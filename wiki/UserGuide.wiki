@@ -202,6 +202,14 @@ http://big5sync.googlecode.com/files/Shortcut.jpg
 
 If you forget the shortcut keys, simply go to http://big5sync.googlecode.com/files/Shortcut_Button.jpg at the window toolbar and view the list again.
 
+== Accessing Tagged Folders ==
+
+If you have many folders tagged to the same tag, when you want to view the folders in Explorer Window, you will most probably have to go through Start Menu -> My Computer -> D: -> Your folders many times to open up the various folders. Why go through the hassle when you can simply open up the folders in Syncless?
+
+http://big5sync.googlecode.com/files/Right_Click_Tagged_Path.jpg
+
+Simply right-click on the tagged path in the tag info panel and choose to *Open in Windows Explorer*. The folder will immediately be opened in Explorer Window.
+
 = Ending Note =
 
 Please report any bugs you find at http://code.google.com/p/big5sync/issues/list, thank you! You may wish to take a look at http://code.google.com/p/big5sync/wiki/KnownIssues10 for the known bugs in version 1.0. You may also contact us at *_big5.syncless@gmail.com_*.
