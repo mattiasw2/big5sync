@@ -23,7 +23,7 @@
             {
                 if (_instance == null)
                 {
-                    _instance = new SyncConfig("_synclessArchive", 2, true);
+                    _instance = new SyncConfig("_synclessArchive", 2, false);
                 }
                 return _instance;
             }
