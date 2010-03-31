@@ -44,7 +44,7 @@ To make it easier to do the tasks in this tutorial, it is a good idea to print t
 == The Syncless Interface ==
 When you run Syncless, you will be greeted with the main window, which allows you to choose what you want to do next, such as create tag, tag a folder, view tag details or etc. The interface also incorporates a lot of useful shortcuts to speed up productivity.
 
-http://big5sync.googlecode.com/files/Main_Window_Overview.jpg
+http://big5sync.googlecode.com/files/Main_Window_Overview_Edited.jpg
 
 = Learn Syncless =
 
@@ -103,13 +103,13 @@ Tag a folder through the http://big5sync.googlecode.com/files/tagbuttonicon.jpg 
     http://big5sync.googlecode.com/files/Tag_From_Syncless.jpg
 
 ==== Drag-and-Drop folder(s) on the Main Window ====
-    http://big5sync.googlecode.com/files/Drag_And_Drop_Tag.jpg
+    http://big5sync.googlecode.com/files/Drag_And_Drop_Tag_Edited.jpg
 
 ==== Tagging from Windows Explorer ====
-    http://big5sync.googlecode.com/files/Tag_From_Context_Menu.png
+    http://big5sync.googlecode.com/files/Tag_From_Context_Menu_Edited.png
 
 === 2. Viewing tag information ===
-    http://big5sync.googlecode.com/files/Tag_Info_Panel.jpg
+    http://big5sync.googlecode.com/files/Tag_Info_Panel_Edited.jpg
 
 After tagging the folders, you may view the details under the tag information panel through the http://big5sync.googlecode.com/files/detailsbuttonicon.jpg button. You will see a list of folder paths associated with the selected tag. On the right of the folder path list, there are a few options for synchronization. During synchronization, the progress bar will show the percentage of completion and status of the synchronization.
 
