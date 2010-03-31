@@ -199,15 +199,16 @@ namespace SynclessUI
                 if (_syncProgressNotificationDictionary.ContainsKey(tagname))
                 {
                     double percentageComplete = GetSyncProgressPercentage(tagname);
-                    SetProgressBarColor(percentageComplete);
-                    string status = GetTagStatus(tagname);
 
+                    string status = GetTagStatus(tagname);
+                    SetProgressBarColor(percentageComplete);
                     ProgressBarSync.Value = percentageComplete;
                     LblStatusText.Content = status;
                 }
                 else
                 {
                     ProgressBarSync.Value = 0;
+                    SetProgressBarColor(0);
 
                     if (_tagStatusNotificationDictionary.ContainsKey(tagname))
                     {
@@ -362,6 +363,7 @@ namespace SynclessUI
                         if (Gui.MonitorTag(SelectedTag, true))
                         {
                             ProgressBarSync.Value = 0;
+                            SetProgressBarColor(0);
                             const string message = "Please Wait";
                             LblStatusText.Content = message;
                             _tagStatusNotificationDictionary[SelectedTag] = message;
@@ -507,6 +509,7 @@ namespace SynclessUI
                             _tagStatusNotificationDictionary[SelectedTag] = message;
                             _syncProgressNotificationDictionary[SelectedTag] = 0;
                             ProgressBarSync.Value = 0;
+                            SetProgressBarColor(0);
                         }
                         else
                         {
