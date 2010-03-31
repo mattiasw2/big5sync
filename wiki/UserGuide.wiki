@@ -187,6 +187,10 @@ http://big5sync.googlecode.com/files/Configure_Application_Settings.jpg
 
 Syncless makes tagging easy for you by providing right-clicking function at Explorer Window. However, if you do not wish to have many entries in your context menu, you can choose to disable the function by deselecting the *Enable Shell Integration* checkbox.
 
+=== Enable Window Animation on Application Start/Exit===
+
+Syncless main window will animate upon start up or exit. However, if you find that the animation affects your computer performance, you can choose to disable the function by deselecting the *Enable Window Animation on Application Start/Exit* checkbox.
+
 = How is Syncless User-friendly =
 
 Syncless makes your user experience as pleasant as possible by providing several user-friendly functionalities.
