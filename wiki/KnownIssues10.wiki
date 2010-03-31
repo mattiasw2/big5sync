@@ -11,6 +11,10 @@ Note: As much as we try to keep this page updated, please take a look at the pro
 
 = Profiling =
 
+== Unable to Load Profile from Protected Removable Drive ==
+
+Syncless cannot access some of the protected removable drives to retrieve guid.id or write metadata into the drive.
+
 = Tagging =
 
 == Recursive Tagging ==
@@ -38,6 +42,10 @@ For example, Folder A and Folder B both containing 1.txt file of size 3MB are ta
 == Changes Made After Every Sync Not Shown ==
 
 Currently, the program does not show a list of changes made to the filesystem after every synchronization.
+
+== Tag Properties Panel ==
+
+The tag properties panel only contains the filter property as of version 1.0. It may be confusing to the user at first when he tries to create filters. It is implemented this way so that it is easier to extend the properties panel in future releases. 
 
 == Tagging From Shell During Synchronizing ==
 Tagging from the shell (Right-click on a folder) and tagging/untagging while any tag is synchronizing will cause the program to go into a hang state. After some time without interference when all the synchronization operations have been completed, the tagging/untagging window might be shown.
