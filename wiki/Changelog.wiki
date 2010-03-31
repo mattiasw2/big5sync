@@ -1,6 +1,8 @@
 #summary List of changes in different version
 #labels Featured
-= Changelog for version _0.99_ =
+= Changelog for version _1.0_ =
+ * First public release of *Syncless*
+
  * Feature List
    # Notification
        * Sync Progress and Queue can now be seen on the User Interface
