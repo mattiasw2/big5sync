@@ -1071,6 +1071,30 @@ namespace Syncless.Core
         {
             try
             {
+                //Ensure the app folder have write access
+                string path = Path.Combine(inf.getAppPath(), "temp.txt");
+                FileStream stream = new FileStream(path, FileMode.Create);
+
+                stream.Close();
+                try
+                {
+                    FileInfo info = new FileInfo(path);
+                    if (info.Exists)
+                    {
+                        info.Delete();
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            try
+            {
                 this._userInterface = inf;
 
                 bool init = Initiate();
