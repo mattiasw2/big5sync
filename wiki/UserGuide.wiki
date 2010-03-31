@@ -1,4 +1,4 @@
-#summary Users' Guide : A Comprehensive Guide to Using Syncless
+#summary User's Guide : A Comprehensive Guide to Using Syncless
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
@@ -12,7 +12,7 @@ http://big5sync.googlecode.com/files/mainpagelogosmall.png
 
 = Preface =
 
-This users' guide provides a more detailed insight into the functionalities available in *_Syncless_*. If you wish to have a quick view on the basic functions provided in *_Syncless_*, you can refer to the *_Getting Started User Guide_* [http://code.google.com/p/big5sync/wiki/UserGuideGettingStarted here].
+This user's guide provides a more detailed insight into the functionalities available in *_Syncless_*. If you wish to have a quick view on the basic functions provided in *_Syncless_*, you can refer to the *_Getting Started User Guide_* [http://code.google.com/p/big5sync/wiki/UserGuideGettingStarted here].
 
 = Welcome to Syncless =
 
