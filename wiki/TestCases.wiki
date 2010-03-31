@@ -12,6 +12,11 @@ Add your content here.
 </p>
 
 
+<p>
+  Manual Sync (File)
+</p>
+
+
 <table border=1>
   <tbody>
   <tr>
@@ -410,7 +415,7 @@ Add your content here.
         No.
       </p>
     </td>
-    <td0>
+    <td>
       <p>
         1 – Line Summary
       </p>
