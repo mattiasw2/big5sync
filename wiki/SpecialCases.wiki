@@ -30,3 +30,13 @@ Similar to the above case, Syncless will propagate this folder rename across the
 Assume the user has a "Music" folder in all the folders you have tagged "Media". If a user renames "Music" to "Songs" in one of these tagged folders and "Music" to "Mp3" in another of these folders, Syncless will handle this by propagating all 3 folders ("Media", "Music", "Songs") to all other folders tagged "Media".
 
 The reason for doing so is because it is in actual fact, a rename conflict, but more importantly, it is highly probable that the user wants to keep different things in them, and thus the conflicting renames.
+
+=== Renaming Multiple Levels ===
+Assume the initial folder structure is "A\B\C", and the user renames it to "1\2\3". Syncless is able to detect N-levels of rename will attempt to merge and rename accordingly at each level.
+
+=== Conflicts ===
+In general, the idea of conflicts is almost non-existent in Syncless. We have identified 2 cases of conflicts, and they are as follows:
+  # Different file hashes, but the last modified time is the same
+  # Same names, but some are folders and some are files
+
+Although both cases are very rare, Syncless will handle them. For case 1, it will only propagate one copy of the file, while the rest with the different hash will be thrown into a "_synclessConflict" folder. This way, the user need not worry about losing his files in such a case. For case 2, the folders will always be propagated, while the files will be thrown into the "_synclessConflict" folder.
