@@ -4,9 +4,11 @@
  * First public release of *Syncless*
 
  * Feature List
+   # N-Way Synchronization
+       * Multiple-level rename now works properly
+       * Detect Changes across any number of tagged folder.
    # Notification
        * Sync Progress and Queue can now be seen on the User Interface
-
  * Bug Fixes/Enhancements
    # User interface
        * Error message for recursive tagging modified
@@ -20,7 +22,6 @@
    # !CompareAndSync
        * Improved seamless synchronization
    # Others
-       * User can now clear up all .syncless folders for a tagged folder through context  menu
        * Removing a tag will now clear all .syncless folders created under the folders tagged to the deleted tag
 
  * Documentation
