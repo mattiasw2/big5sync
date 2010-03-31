@@ -157,11 +157,21 @@ namespace Syncless.CompareAndSync.Visitor
             CommonMethods.LoadXML(ref xmlDoc, xmlPath);
             int position = GetPropagated(file);
             DoFileCleanUp(xmlDoc, file.Name);
+
+            FileInfo actualFile = new FileInfo(Path.Combine(file.GetSmartParentPath(counter), file.NewName));
+
+            //XmlText hashText = xmlDoc.CreateTextNode(file.MetaHash[position]);
+            //XmlText nameText = xmlDoc.CreateTextNode(file.NewName);
+            //XmlText sizeText = xmlDoc.CreateTextNode(file.MetaLength[position].ToString());
+            //XmlText lastModifiedText = xmlDoc.CreateTextNode(file.MetaLastWriteTime[position /*counter*/].ToString());
+            //XmlText lastCreatedText = xmlDoc.CreateTextNode(file.MetaCreationTime[position /*counter*/].ToString());
+            //XmlText lastUpdated = xmlDoc.CreateTextNode(dateTime.ToString());
+
             XmlText hashText = xmlDoc.CreateTextNode(file.MetaHash[position]);
             XmlText nameText = xmlDoc.CreateTextNode(file.NewName);
             XmlText sizeText = xmlDoc.CreateTextNode(file.MetaLength[position].ToString());
-            XmlText lastModifiedText = xmlDoc.CreateTextNode(file.MetaLastWriteTime[counter].ToString());
-            XmlText lastCreatedText = xmlDoc.CreateTextNode(file.MetaCreationTime[counter].ToString());
+            XmlText lastModifiedText = xmlDoc.CreateTextNode(actualFile.LastWriteTime.Ticks.ToString());
+            XmlText lastCreatedText = xmlDoc.CreateTextNode(actualFile.CreationTime.Ticks.ToString());
             XmlText lastUpdated = xmlDoc.CreateTextNode(dateTime.ToString());
 
             XmlElement fileElement = xmlDoc.CreateElement(FILE);
