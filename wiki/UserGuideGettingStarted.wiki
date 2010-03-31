@@ -50,7 +50,7 @@ http://big5sync.googlecode.com/files/Main_Window_Overview_Edited.jpg
 
 Before you continue, you may want to find out what each button in Syncless does.
 
-=== From Window Toolbar ===
+=== Window Toolbar ===
 
   * http://big5sync.googlecode.com/files/Shortcut_Button.jpg : Displays the list of shortcut keys in Syncless
 
@@ -60,7 +60,7 @@ Before you continue, you may want to find out what each button in Syncless does.
 
   * http://big5sync.googlecode.com/files/Exit_Button.jpg : Exit Syncless
 
-=== From Main Toolbar ===
+=== Main Toolbar ===
 
   * http://big5sync.googlecode.com/files/createbuttonicon.jpg : Create a tag
 
@@ -76,7 +76,7 @@ Before you continue, you may want to find out what each button in Syncless does.
 
   * http://big5sync.googlecode.com/files/unmonitorbuttonicon.jpg : Unmonitor removable drives
 
-=== From Tag Info Panel ===
+=== Tag Info Panel ===
 
   * http://big5sync.googlecode.com/files/Manual_Mode_Button.jpg : Indicates the current synchronization is in manual mode, click to switch to seamless mode
 
@@ -89,29 +89,29 @@ Before you continue, you may want to find out what each button in Syncless does.
 
 == How to Tag and Synchronize? ==
 
-You have folders on your computer and thumbdrive that you wish to synchronize automatically without putting too much effort in doing it. Now is the time to use Syncless to help you organise them by using tags.
+You have folders on your computer and removable drives that you wish to synchronize automatically Let us get started on using Syncless! 
 
 === 1. Tag Folders ===
 
-To synchronize 2 or more folders together, you must first tag them with the same name. This tagging process can be initiated in multiple ways.
+To synchronize 2 or more folders, you must first tag them with the same name. This tagging process can be initiated in multiple ways.
 
 ==== Tagging from Syncless ==== 
 
-Tag a folder through the http://big5sync.googlecode.com/files/tagbuttonicon.jpg button (Can also use the keyboard shortcut equivalent Ctrl-T, refer to [UserGuideGettingStarted#Misc:_Keyboard_Shortcuts keyboard shortcuts] for a complete list of shortcuts)
+Tag a folder through the http://big5sync.googlecode.com/files/tagbuttonicon.jpg button (You can also use the keyboard shortcut equivalent Ctrl-T. Please refer to [UserGuideGettingStarted#Misc:_Keyboard_Shortcuts keyboard shortcuts] for a complete list of shortcuts)
     http://big5sync.googlecode.com/files/Tag_From_Syncless.jpg
 
-==== Drag-and-Drop folder(s) on the Main Window ====
+==== Drag-and-Drop Folder(s) into the Main Window ====
     http://big5sync.googlecode.com/files/Drag_And_Drop_Tag_Edited.jpg
 
-==== Tagging from Windows Explorer ====
+==== Tag Directly from Windows Explorer ====
     http://big5sync.googlecode.com/files/Tag_From_Context_Menu_Edited.png
 
-=== 2. Viewing tag information ===
+=== 2. Viewing Tag Information ===
     http://big5sync.googlecode.com/files/Tag_Info_Panel_Edited.jpg
 
 After tagging the folders, you may view the details under the tag information panel through the http://big5sync.googlecode.com/files/detailsbuttonicon.jpg button. You will see a list of folder paths associated with the selected tag. On the right of the folder path list, there are a few options for synchronization. During synchronization, the progress bar will show the percentage of completion and status of the synchronization.
 
-=== 3. Synchronize the folders ===
+=== 3. Synchronize the Folders ===
     http://big5sync.googlecode.com/files/Sync_Complete.jpg
 
 After you have tagged the required folders, click on the http://big5sync.googlecode.com/files/Sync_Now_Button.jpg button. Syncless will take care of the rest and keep the folders in sync.
@@ -120,18 +120,18 @@ After you have tagged the required folders, click on the http://big5sync.googlec
 
 http://big5sync.googlecode.com/files/Switching_To_Seamless.jpg
 
-Switching to seamless mode is a simple matter of pressing the button. After clicking the synchronization mode button, Syncless will automatically perform a synchronization. After which, it will monitor any changes in the tagged folders and keep them in sync without you having to do it manually.
+Switching to seamless mode is a simple matter of pressing the button. After clicking the synchronization mode button, Syncless will automatically perform an initial synchronization. After which, it will monitor any changes in the tagged folders and keep them in sync without you having to do it manually.
 
 
-=== 5. Prepare Removable Drive for Removal ===
+=== 5. Unmonitor Removable Drive to Prepare for Removal ===
 
 http://big5sync.googlecode.com/files/Unmonitor_Drive.jpg
 
 You can access this through the http://big5sync.googlecode.com/files/unmonitorbuttonicon.jpg button or by using its keyboard shortcut equivalent (Ctrl-I).
 
-Syncless cares about the safety of your removable drives. It allows for all current synchronization jobs linked to a removable drive to be *stopped* (only seamless operations will be stopped so far) and thus allow the removable drive to be safely removed.
+Syncless cares about the safety of your removable drives. Unmonitoring will stop all monitoring actions on any folders that are currently in seamless mode, and thus allow the removable drive to be safely removed.
 
-== You can start using Syncless now! ==
+== You Can Start Using Syncless Now! ==
 
 With the successful operation of synchronization, you have now completed the full Syncless tutorial. Continue on to see other major features in Syncless.
 
@@ -155,7 +155,7 @@ Traditionally, to keep a few folders in sync, you need to create multiple jobs b
 Syncless provides basic filtering for files currently. There are 2 main kinds of filters, inclusion and exclusion filters. Exclusion filters will always have a higher priority over inclusion filters. In this section, we are going to take a look at how we can construct some filters to suit our needs.
 
 === Create a Filter ===
-Click the http://big5sync.googlecode.com/files/detailsbuttonicon.jpg button in the toolbar to open up the tag properties panel. Inside the properties panel, choose the *Filtering* property. You should see a list of filters, and most likely, it will be blank since no filters have been added yet.
+Click the http://big5sync.googlecode.com/files/detailsbuttonicon.jpg button in the toolbar to open up the tag properties panel. Inside the properties panel, choose the *Filtering* property. You should see a list of filters , and it will likely be blank since no filters have been added yet.
 
 http://big5sync.googlecode.com/files/Tag_Configuration.jpg
 
@@ -178,9 +178,11 @@ Now, let us look at some real-world examples. For example, if you want to includ
 As seen from the above, creating a filter is a simple and intuitive task in Syncless.
 
 == Archiving ==
-With the archiving feature, you do not need to worry about losing an important file if you accidentally delete it and the change is propagated to other folders in the same tag. Syncless will keep up to 2 copies of the deleted file in an archive folder. This folder will be created in all the other folders in the same tag. Note that it will not be created in the folder where the file deletion is initiated by the user.
+With the archiving feature, you do not need to worry about losing an important file or folder if you accidentally delete it and the change is propagated to other folders in the same tag. Syncless will keep up to 2 copies of the deleted file in an archive folder. This folder will be created in all the other folders in the same tag. Note that it will not be created in the folder where the file deletion is initiated by the user.
 
 To illustrate, let's say you tag D:\Lecture and E:\Notes to a tag named 'Lecture', both contain the file Chapter1.pdf. You accidentally delete Chapter1.pdf under D:\Lecture. Syncless will keep a copy of Chapter1.pdf in the archive folder under E:\Notes. If you need to restore that file, simply copy the archived file back to D:\Lecture.
+
+For now, it will save the 2 latest copies of each file or folder. This will be make configurable in future.
 
 == Portability ==
 If you frequently use your removable storage drive on various computers, Syncless can automate this job for you. For example, a student has a home computer, as well as a regular workstation in his school lab. He wishes to keep his school work synchronized across both computers. By having Syncless on both his home computer and school workstation, and giving them the same tag, say "Lectures", Syncless will auto-detect and synchronize each time the removable storage drive is inserted. See the below diagrams for a clearer illustration:
