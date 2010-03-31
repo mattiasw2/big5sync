@@ -24,7 +24,7 @@ namespace Syncless.CompareAndSync
         private readonly HashSet<string> _queuedJobsLookup = new HashSet<string>();
         private ManualSyncRequest _currJob;
         private SyncProgress _currJobProgress;
-        private string _isPendingCancel;
+        private HashSet<string> _isPendingCancel = new HashSet<string>();
 
         private ManualQueueControl()
         {
@@ -95,14 +95,14 @@ namespace Syncless.CompareAndSync
                         return false;
                     }
                 }
-                else if (_currJob!= null && _currJob.TagName == item.TagName)
+                else if (_currJob != null && _currJob.TagName == item.TagName)
                 {
                     switch (_currJobProgress.State)
                     {
                         case SyncState.Started:
                         case SyncState.Analyzing:
                             _currJobProgress.Cancel();
-                            _isPendingCancel = _currJob.TagName;
+                            _isPendingCancel.Add(_currJob.TagName);
                             return true;
                         default:
                             return false;
@@ -157,9 +157,10 @@ namespace Syncless.CompareAndSync
                         ManualSyncer.Sync(_currJob, _currJobProgress);
 
                         //Set both to null
+                        if (_currJob != null)
+                            _isPendingCancel.Remove(_currJob.TagName);
                         _currJob = null;
                         _currJobProgress = null;
-                        _isPendingCancel = null;
                     }
                 }
                 else
