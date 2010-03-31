@@ -177,7 +177,7 @@ namespace Syncless.CompareAndSync.Visitor
                             fco.FinalState[i] = fileExists ? FinalState.Updated : FinalState.Created;
                             fco.Hash[i] = fco.Hash[srcFilePos];
                             fco.LastWriteTime[i] = fco.LastWriteTime[srcFilePos];
-                            fco.Length[i] = fco.LastWriteTime[srcFilePos];
+                            fco.Length[i] = fco.Length[srcFilePos];
                             changed = true;
                         }
                         catch (CopyFileException)
