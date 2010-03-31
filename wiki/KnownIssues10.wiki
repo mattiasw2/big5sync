@@ -32,6 +32,12 @@ If Folder A is tagged with Folder D and Folder B is tagged with Folder C, a recu
 
 When CompareAndSync updates metadata files at the finalizing stage, it will take quite a while. Will optimize the algorithm later at version 1.5.
 
+== UnauthorizedAccessException Encountered ==
+
+Sometimes an UnauthorizedAccessException is thrown during a manual 
+sync/compare job. As of now, it is not handled since it occurs very rarely, 
+and are in the process of implementing a better system.
+
 = Monitor =
 
 == Drive Plugin Unstable ==
