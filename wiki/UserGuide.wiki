@@ -191,6 +191,14 @@ Syncless makes tagging easy for you by providing right-clicking function at Expl
 
 Syncless main window will animate upon start up or exit. However, if you find that the animation affects your computer performance, you can choose to disable the function by deselecting the *Enable Window Animation on Application Start/Exit* checkbox.
 
+=== Enable Tray Notification ===
+
+Syncless notifies you through tray notification upon initialization/completion of a synchronization. However, if you do not wish to have many notification bubbles shown at the tray, you can choose to disable the function by deselecting the *Enable Tray Notification* checkbox.
+
+=== When Minimizing, Minimize to Tray ===
+
+Syncless can minimize to tray so that your task bar will be kept as clean as possible. However, if you wish to access Syncless more quickly through the task bar, you can disable the function by deselecting the *When Minimizing, Minimize to Tray* checkbox.
+
 = How is Syncless User-friendly =
 
 Syncless makes your user experience as pleasant as possible by providing several user-friendly functionalities.
