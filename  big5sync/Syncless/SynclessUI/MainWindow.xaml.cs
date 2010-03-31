@@ -51,6 +51,7 @@ namespace SynclessUI
         {
             InitializeComponent();
             InitializeSyncless();
+			//DisplayWelcomeScreen();
             InitializeKeyboardShortcuts();
         }
 
@@ -93,6 +94,12 @@ namespace SynclessUI
                 }
             }
         }
+		
+		private void DisplayWelcomeScreen() {
+			if (Settings.Default.MinimizeToTray) {
+				WelcomeScreenWindow wsw = new WelcomeScreenWindow(this);
+			}
+		}
 
         /// <summary>
         ///     Starts up the system logic layer and initializes it
@@ -442,7 +449,7 @@ namespace SynclessUI
 
             if (tv.IsLocked)
             {
-                if (Progress.TagName == SelectedTag && Progress.State == SyncState.Analyzing)
+                if (Progress.TagName == SelectedTag && (Progress.State == SyncState.Analyzing || Progress.State == SyncState.Queued || SyncState.Started))
                 {
                     BtnSyncNow.Visibility = Visibility.Visible;
                     CancelButtonMode();
@@ -490,6 +497,7 @@ namespace SynclessUI
                             const string message = "Synchronization request has been queued";
                             LblStatusText.Content = message;
                             _tagStatusNotificationDictionary[SelectedTag] = message;
+                            _syncProgressNotificationDictionary[SelectedTag] = 0;
                             ProgressBarSync.Value = 0;
                         }
                         else
@@ -1372,7 +1380,7 @@ namespace SynclessUI
 
             //TODO 
             int count = ServiceLocator.GUI.Clean(clipath);
-            DialogHelper.ShowInformation("Meta-data Cleaned", count + " metaclear-ed");
+            DialogHelper.ShowInformation("Folder Cleaned", "The folder has been cleared of all meta-data files.");
         }
 
         #endregion
