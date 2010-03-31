@@ -6,6 +6,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using Syncless.CompareAndSync.CompareObject;
+using Syncless.Core.Exceptions;
+using SynclessUI.Helper;
 using SynclessUI.Visitor;
 
 namespace SynclessUI
@@ -18,9 +20,9 @@ namespace SynclessUI
         private readonly MainWindow _main;
         private readonly DataTable _previewSyncData;
         private readonly string _selectedTag;
+        private bool _closingAnimationNotCompleted = true;
         private BackgroundWorker previewWorker;
         private RootCompareObject rco;
-        private bool _closingAnimationNotCompleted = true;
 
         public PreviewSyncWindow(MainWindow main, string selectedTag)
         {
@@ -64,28 +66,42 @@ namespace SynclessUI
 
         private void CallBack(IAsyncResult result)
         {
-            if (result.IsCompleted)
+            try
             {
-                var previewDel = result.AsyncState as PreviewSyncDelegate;
-                RootCompareObject rco = previewDel.EndInvoke(result);
+                if (result.IsCompleted)
+                {
+                    var previewDel = result.AsyncState as PreviewSyncDelegate;
+                    RootCompareObject rco = previewDel.EndInvoke(result);
 
-                Populate(rco);
-                Console.WriteLine("Populated");
+                    Populate(rco);
+                    Console.WriteLine("Populated");
+                }
+                else
+                {
+                    Console.WriteLine("error");
+                }
             }
-            else
+            catch (UnhandledException)
             {
-                Console.WriteLine("error");
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
         }
 
         private void Populate(RootCompareObject rco)
         {
-            _previewSyncData.Rows.Clear();
-
-            var visitor = new PreviewVisitor(_previewSyncData);
-            if (rco != null)
+            try
             {
-                SyncUIHelper.TraverseFolderHelper(rco, visitor);
+                _previewSyncData.Rows.Clear();
+
+                var visitor = new PreviewVisitor(_previewSyncData);
+                if (rco != null)
+                {
+                    SyncUIHelper.TraverseFolderHelper(rco, visitor);
+                }
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
             //new UpdateDelegate(Data.InvalidateVisual).BeginInvoke(Test, null);
         }
@@ -132,7 +148,7 @@ namespace SynclessUI
             Close();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             if (_closingAnimationNotCompleted)
             {
