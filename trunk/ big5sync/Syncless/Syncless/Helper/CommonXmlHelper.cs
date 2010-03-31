@@ -6,6 +6,8 @@ using System.Text;
 using System.Xml;
 using System.IO;
 using System.Threading;
+using Syncless.Core;
+
 namespace Syncless.Helper
 {
     public static class CommonXmlHelper
@@ -15,7 +17,17 @@ namespace Syncless.Helper
         {
             XmlTextWriter textWriter = null;
             FileStream fs = null;
-
+            try
+            {
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+            }
+            catch (Exception)
+            {
+                
+            }
             FileInfo fileInfo = new FileInfo(path);
             if (fileInfo.Directory!=null && !fileInfo.Directory.Exists)
             {
@@ -24,10 +36,7 @@ namespace Syncless.Helper
             }
             try
             {
-                if (File.Exists(path))
-                {
-                    File.Delete(path);
-                }
+                
                 int tries = 0;
                 while (tries < 5 && fs == null)
                 {

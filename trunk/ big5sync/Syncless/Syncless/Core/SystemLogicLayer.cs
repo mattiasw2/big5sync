@@ -707,7 +707,15 @@ namespace Syncless.Core
         /// <returns>true if the sync is success.</returns>        
         public bool StartManualSync(string tagname)
         {
-            return this.ManualSync(tagname, false);
+            try
+            {
+                return this.ManualSync(tagname, false);
+            }
+            catch (Exception e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
         }
         /// <summary>
         /// Cancel a Manual Sync.
@@ -730,7 +738,6 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
-
         /// <summary>
         /// Delete a tag
         /// </summary>
@@ -761,8 +768,6 @@ namespace Syncless.Core
             }
 
         }
-        
-
         /// <summary>
         /// Create a Tag.
         /// </summary>
@@ -1089,7 +1094,7 @@ namespace Syncless.Core
 
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }
@@ -1225,7 +1230,14 @@ namespace Syncless.Core
         /// <returns>number of .syncless removed.</returns>
         public int Clean(string path)
         {
-            return Cleaner.CleanSynclessMeta(new DirectoryInfo(path));
+            try
+            {
+                return Cleaner.CleanSynclessMeta(new DirectoryInfo(path));
+            }
+            catch (Exception e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+            }
         }
         /// <summary>
         /// Merge a profile from a particular path. Will only merge profile with the same name.
@@ -1234,9 +1246,17 @@ namespace Syncless.Core
         /// <returns></returns>
         public bool Merge(string path)
         {
-            ProfilingLayer.Instance.Merge(path);
-            TaggingLayer.Instance.Merge(path);
-            return true;
+            try
+            {
+                ProfilingLayer.Instance.Merge(path);
+                TaggingLayer.Instance.Merge(path);
+                return true;
+            }
+            catch (Exception e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
         }
         /// <summary>
         /// Set the profile name
@@ -1245,7 +1265,8 @@ namespace Syncless.Core
         /// <returns></returns>
         public bool SetProfileName(string profileName)
         {
-            return true;
+            throw new NotImplementedException();
+            //return false;
         }
         /// <summary>
         /// Get the current profile name
@@ -1253,7 +1274,8 @@ namespace Syncless.Core
         /// <returns>Profile name</returns>
         public string GetProfileName()
         {
-            return ProfilingLayer.Instance.CurrentProfile.ProfileName;
+            throw new NotImplementedException();
+            //return ProfilingLayer.Instance.CurrentProfile.ProfileName;
         }
         /// <summary>
         /// Set the name for a drive.
@@ -1263,8 +1285,9 @@ namespace Syncless.Core
         /// <returns></returns>
         public bool SetDriveName(DriveInfo info, string driveName)
         {
-            ProfilingLayer.Instance.SetDriveName(info, driveName);
-            return false;
+            throw new NotImplementedException();
+            //ProfilingLayer.Instance.SetDriveName(info, driveName);
+            //return false;
         }
         /// <summary>
         /// Return the user log 
