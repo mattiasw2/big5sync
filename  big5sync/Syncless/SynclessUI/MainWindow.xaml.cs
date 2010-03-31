@@ -638,7 +638,9 @@ namespace SynclessUI
                 }
                 else
                 {
-                    if (!Gui.GetTag(SelectedTag).IsLocked)
+                    string currentTag = SelectedTag;
+
+                    if (!Gui.GetTag(currentTag).IsLocked)
                     {
                         if (ListTaggedPath.SelectedIndex == -1)
                         {
@@ -646,15 +648,27 @@ namespace SynclessUI
                         }
                         else
                         {
-                            TagView tv = Gui.GetTag((string) TagTitle.Text);
+                            TagView tv = Gui.GetTag(currentTag);
 
                             if (tv != null)
                             {
                                 if (!tv.IsLocked)
                                 {
-                                    Gui.Untag(tv.TagName, new DirectoryInfo((string) ListTaggedPath.SelectedValue));
+                                    int count = Gui.Untag(currentTag, new DirectoryInfo((string)ListTaggedPath.SelectedValue));
 
-                                    SelectTag(tv.TagName);
+                                    if(count == 1)
+                                    {
+                                        //success
+                                        _syncProgressNotificationDictionary.Remove(currentTag);
+                                        _tagStatusNotificationDictionary.Remove(currentTag);
+                                        LblStatusText.Content = "";
+                                    } else
+                                    {
+                                        // fail
+                                        DialogHelper.ShowError("Error Untagging", "An error while untagging the folder");
+                                    }
+
+                                    SelectTag(currentTag);
                                 }
                                 else
                                 {
