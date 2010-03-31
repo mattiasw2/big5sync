@@ -9,6 +9,10 @@ Note: As much as we try to keep this page updated, please take a look at the pro
 
 = General =
 
+== Unable to Synchronize After An Error Has Occurred Previously ==
+
+Sometimes program does not perform synchronization after an error has occurred previously (in seamless mode). However, switching the synchronization mode can let program resume operation. 
+
 == Exception Thrown At Program Start Up Randomly ==
 
 Sometimes unhandled exception is thrown at program start up. Apparently, it is due to multiple threads accessing the same tag list. Attempted to fix by returning a read-only tag list to methods which access it. 
