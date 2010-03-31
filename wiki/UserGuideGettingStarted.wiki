@@ -8,6 +8,8 @@ http://big5sync.googlecode.com/files/mainpagelogosmall.png
 
 <wiki:toc max_depth="6" />
 
+----
+
 = Welcome to Syncless =
 
 Synchronization is taken on a whole new level with _*Syncless*_. This document familiarizes you with the basic features in _*Syncless*_ and introduces you to the concepts of *tagging* and *n-way* _seamless synchronization_ in _*Syncless*_.
