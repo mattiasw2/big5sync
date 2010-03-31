@@ -449,7 +449,7 @@ namespace SynclessUI
 
             if (tv.IsLocked)
             {
-                if (Progress.TagName == SelectedTag && (Progress.State == SyncState.Analyzing || Progress.State == SyncState.Queued || SyncState.Started))
+                if (Progress.TagName == SelectedTag && (Progress.State == SyncState.Analyzing || Progress.State == SyncState.Queued || Progress.State == SyncState.Started))
                 {
                     BtnSyncNow.Visibility = Visibility.Visible;
                     CancelButtonMode();
