@@ -35,7 +35,7 @@
         * [UserGuide#Accessing_Tags_Through_Right-clicking Accessing Tags Through Right-clicking]
         * [UserGuide#Accessing_Tagged_Folders_Through_Right-clicking Accessing Tagged Folders Through Right-clicking]
         * [UserGuide#Tray_Notification Tray Notification]
-        * [UserGuide#Viewing_Past_History Viewing Past History]
+        * [UserGuide#Viewing_Logs Viewing Logs]
     * [UserGuide#Ending_Note Ending Note]
   * [DeveloperGuide Developers' Guide]
     * System Overview
