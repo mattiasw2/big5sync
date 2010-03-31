@@ -308,8 +308,8 @@ namespace SynclessUI
         private void BtnBrowse_Click(object sender, RoutedEventArgs e)
         {
             _selectedTag = ACBName.Text;
-            string path = SelectPath();
-            ProcessPath(path, _selectedTag);
+            _path = SelectPath();
+            ProcessPath(_path, _selectedTag);
         }
 
         /// <summary>
