@@ -465,7 +465,8 @@ namespace Syncless.CompareAndSync.Visitor
                 CommonMethods.CreateFileIfNotExist(Path.Combine(folder.GetSmartParentPath(counter), folder.NewName));
                 CommonMethods.LoadXML(ref newXmlDoc, editOldXML);
                 XmlNode xmlNameNode = newXmlDoc.SelectSingleNode(XpathExpr + "/name");
-                xmlNameNode.InnerText = folder.NewName;
+                if(xmlNameNode!=null)
+                    xmlNameNode.InnerText = folder.NewName;
                 CommonMethods.SaveXML(ref newXmlDoc, editOldXML);
 
                 string parentXML = Path.Combine(folder.GetSmartParentPath(counter), Metadatapath);
@@ -473,8 +474,11 @@ namespace Syncless.CompareAndSync.Visitor
                 CommonMethods.CreateFileIfNotExist(folder.GetSmartParentPath(counter));
                 CommonMethods.LoadXML(ref parentXmlDoc, parentXML);
                 XmlNode parentXmlFolderNode = parentXmlDoc.SelectSingleNode(XpathExpr + "/" + FOLDER + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
-                parentXmlFolderNode.FirstChild.InnerText = folder.NewName;
-                parentXmlFolderNode.LastChild.InnerText = dateTime.ToString();
+                if (parentXmlFolderNode != null)
+                {
+                    parentXmlFolderNode.FirstChild.InnerText = folder.NewName;
+                    parentXmlFolderNode.LastChild.InnerText = dateTime.ToString();
+                }
                 CommonMethods.SaveXML(ref parentXmlDoc, Path.Combine(folder.GetSmartParentPath(counter), Metadatapath));
                 GenerateFolderTodo(folder, counter);
             }
