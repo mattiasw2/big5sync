@@ -44,7 +44,7 @@ To make it easier to do the tasks in this tutorial, it is a good idea to print t
 == The Syncless Interface ==
 When you run Syncless, you will be greeted with the main window, which allows you to choose what you want to do next, such as create tag, tag a folder, view tag details or etc. The interface also incorporates a lot of useful shortcuts to speed up productivity.
 
-
+http://big5sync.googlecode.com/files/Main_Window_Overview.jpg
 
 = Learn Syncless =
 
