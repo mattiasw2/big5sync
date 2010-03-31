@@ -218,6 +218,14 @@ http://big5sync.googlecode.com/files/Right_Click_Tagged_Path.jpg
 
 Simply right-click on the tagged path in the tag info panel and choose to *Open in Windows Explorer*. The folder will immediately be opened in Explorer Window.
 
+== Viewing Past History ==
+
+You do not have to remember the changes you have made to your folders and files. Syncless keeps a log of the changes in your folders and files and lets you view them through a single click.
+
+Access the event log through the http://big5sync.googlecode.com/files/logbuttonicon.jpg button.
+
+http://big5sync.googlecode.com/files/Log_Panel.jpg
+
 = Ending Note =
 
 Please report any bugs you find at http://code.google.com/p/big5sync/issues/list, thank you! You may wish to take a look at http://code.google.com/p/big5sync/wiki/KnownIssues10 for the known bugs in version 1.0. You may also contact us at *_big5.syncless@gmail.com_*.
