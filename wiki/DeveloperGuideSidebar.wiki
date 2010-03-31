@@ -28,6 +28,13 @@
       * [UserGuide#How_to_Tag_and_Synchronize? How to Tag and Synchronize?]
       * [UserGuide#How_to_Configure_Syncless? How to Configure Syncless?]
     * [UserGuide#How_is_Syncless_User-friendly How is Syncless User-friendly?]
+      * [UserGuide#Tag_Name_Auto_Completion Tag Name Auto Completion]
+      * [UserGuide#Filter_Tag_List Filter Tag List]
+      * [UserGuide#Keyboard_Shortcuts Keyboard Shortcuts]
+      * [UserGuide#Accessing_Tags_Through_Right-clicking Accessing Tag Through Right-clicking]
+      * [UserGuide#Accessing_Tagged_Folders_Through_Right-clicking Accessing Tagged Folders Through Right-clicking]
+      * [UserGuide#Tray_Notification Tray Notification]
+      * [UserGuide#Viewing_Past_History Viewing Past History]
     * [UserGuide#Ending_Note Ending Note]
   * [DeveloperGuide Developers' Guide]
     * System Overview
