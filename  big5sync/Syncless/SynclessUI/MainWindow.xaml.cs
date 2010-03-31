@@ -551,6 +551,8 @@ namespace SynclessUI
                     LblStatusText.Content = message;
                     _tagStatusNotificationDictionary[SelectedTag] = message;
                     BtnSyncNow.IsEnabled = true;
+                    //ProgressBarSync.IsIndeterminate = false;
+                    //LblProgress.Visibility = Visibility.Visible;
                 }
                 else
                 {
@@ -1109,6 +1111,8 @@ namespace SynclessUI
                 LblStatusText.Content = message;
                 ProgressBarSync.Value = percentageComplete;
                 SetProgressBarColor(percentageComplete);
+                //ProgressBarSync.IsIndeterminate = true;
+                //LblProgress.Visibility = Visibility.Hidden;
             }
 
             _syncProgressNotificationDictionary[tagname] = percentageComplete;
@@ -1146,6 +1150,9 @@ namespace SynclessUI
         {
             string message = "Synchronization Completed at " + DateTime.Now;
             double percentageComplete = Progress.PercentComplete;
+            _tagStatusNotificationDictionary[Progress.TagName] = message;
+            _syncProgressNotificationDictionary[Progress.TagName] = percentageComplete;
+            NotifyBalloon("Synchronization Completed", Progress.TagName + " is now synchronized.");
             if (SelectedTag == Progress.TagName)
             {
                 LblStatusText.Content = message;
@@ -1163,12 +1170,9 @@ namespace SynclessUI
                 {
                     BtnSyncNow.Visibility = Visibility.Visible;
                 }
-
+                //ProgressBarSync.IsIndeterminate = false;
                 SyncButtonMode();
             }
-            _tagStatusNotificationDictionary[Progress.TagName] = message;
-            _syncProgressNotificationDictionary[Progress.TagName] = percentageComplete;
-            NotifyBalloon("Synchronization Completed", Progress.TagName + " is now synchronized.");
         }
 
         public void ProgressNotifyChange()
@@ -1194,6 +1198,8 @@ namespace SynclessUI
                 LblStatusText.Content = message;
                 ProgressBarSync.Value = percentageComplete;
                 SetProgressBarColor(percentageComplete);
+                //ProgressBarSync.IsIndeterminate = false;
+                //LblProgress.Visibility = Visibility.Visible;
             }
             _syncProgressNotificationDictionary[tagname] = percentageComplete;
             _tagStatusNotificationDictionary[tagname] = message;
