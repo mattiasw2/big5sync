@@ -9,6 +9,10 @@ Note: As much as we try to keep this page updated, please take a look at the pro
 
 = General =
 
+== Errors Accessing Some Hard Disks ==
+
+There might be errors accessing some hard disks. It could be due to the NTFS configuration issues.
+
 == Unable to Synchronize After An Error Has Occurred Previously ==
 
 Sometimes program does not perform synchronization after an error has occurred previously (in seamless mode). However, switching the synchronization mode can let program resume operation. 
