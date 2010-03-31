@@ -24,6 +24,7 @@
  * Documentation
    # Developers' Guide
        * Included a Wiki page to describe how to use the seamless tester
+       * Included a Wiki page to describe the *Notification* component
    # Users' Guide
        * Included a Wiki page for a more comprehensive guide on using Syncless
 
