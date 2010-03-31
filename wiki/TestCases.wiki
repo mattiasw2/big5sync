@@ -7,302 +7,1454 @@ Add your content here.
 
 = Manual Sync (File) =
 
-  || No. || 1 – Line Summary          || Steps                     || Expected Output
-  || 1   || Create a file             || 1) Create a file          || New file created through all the folders
-  ||     ||                           || 2) Sync over              ||
- 
+<p>
+  Manual Sync (File)
+</p>
 
-2
-Update a file
-1) Update a file
-2) Sync over
- 
-File is updated through all the folders
-3
-Rename a file
-1) Rename a file
-2) Sync over
- 
-File is renamed through all the folders
-4
-Delete a file
-1) Delete a file
-2) Sync over
-Deletion is propagated through all folders
-5
-Renaming a file with 2 different names
-1) Rename a file at 1 folder
-2) Rename a file at another folder
-3) Sync it
-At least 2 new files created
-6
-Deleting a file , update from another tagged folder
-1) Delete a file
-2) Update the same file from another folder
-3) Sync it
-All folders should reflect the updated file
-7
-Rename a file and update the contents.
-1) Rename a file
-2) Update the contents
-3) Sync it
-Every tagged folder should have 2 files in this case
-8
-Delete the file and create a new one with the same name
-1) Delete a file
-2) Sync
-3) Create a new file similar to (1)
-4) Sync
-All folders will show the same file again
-9
-Rename a file from a folder , delete the old file
-1) Rename a file from a folder
-2) Delete the old file from the folder
-3) Sync
-All folders should only show the renamed file
-10
-Create a file in all folders
-1) Create a new file in all folder
-2) Sync over
-No change on each folder. But XML should be updated
-11
-Rename a file from 2 folder
-1) Rename a file from 2 folders
-2) Sync over
-The file that is non-renamed will have syncless archive
-12
-Delete the same file in every folder
-1) Delete the file in each folder
-2) Sync them
-XML will be updated
-13
-Untag a folder and tag it again
-1) Untag a folder
-2) Delete the files in it
-3) Tag the folder removed in (1)
-4) Sync again
-The file will be repropagated again
- 
 
-Manual Sync (Folder)
-
-No.
-1 – Line Summary
-Steps
-Expected Output
-1
-Create a folder
-1) Create a folder
-2) Sync over
-New folder is propagated to all folders
-2
-Rename a folder
-1) Rename a folder
-2) Sync over
-Renamed folder is propagated to all folders
-3
-Delete a folder
-1) Delete a folder
-2) Sync over
-Deletion of folder is propagated to all folders
-4
-Rename a folder , and delete the folder from another folder
-1) Rename a folder , delete a folder from another folder
-2) Sync over
-Renamed folder will propagate over
-5
-Delete a folder , create a subfolder
-1) Delete 1 of the folder
-2) Create a sub folder in another folder
-3) Sync over
-Deletion will propagate through all folders
-6
-Rename 2 levels of folder
-1) Rename a folder
-2) Rename the subfolder
-Rename will propagate through all levels
-7
-Rename folder in 2 different folders
-1) Rename a folder in a folder
-2) Rename it to another name in another folder
-3) Sync now
-All folders will reflect the different rename
-8
-Delete a folder and create a new folder of the same name
-1) Delete the folder in all folders
-2) Create a folder in either of the folder
-3) Sync over
-Will delete the folder
-9
-Deletion of sub folder
-1) Delete the sub folder in either of the folder
-2) Sync over
-Will delete the sub folder
-10
-Rename the folder and delete the sub-folder
-1) Rename the folder
-2) Delete the sub-folder
-3) Sync over
-Will rename the folder and delete the sub-folder
-11
-Rename a different folder at different level
-1) Rename a folder at different
-2) Sync them
-Will merge all the renamed folders in every level
-12
-Create a new folder in each folder
-1) Create a new folder in each folder
-2) Sync them
-XML should reflect all the created folders
-13
-Rename all the folders
-1) Rename all the folder
-2) Sync them
-XML should reflect all the created folders
-14
-Untag the folder and tag it again
-1) Create a folder in all and sync
-2) Untag the folder , delete the folder in the rest
-3) Retag the folder and sync
-Will repropagate the deleted folder
- 
-
-Manual Sync (File + Folder)
-
-No.
-1 – Line Summary
-Steps
-Expected Output
-1
-Create a file in a folder
-1) Create a file inside a folder
-2) Sync over
-All folders will show the file inside the folder
-2
-Rename the file , rename the folder
-1) Rename the file
-2) Rename the folder
-3) Sync over
-Folder will propagate the renamed folder and renamed file
-3
-Update the file
-1) Update the file
-2) Sync over
-File will be updated in all folders
-4
-Rename the folder , update the file
-1) Rename the folder
-2) Update the file
-3) Sync over
-Files will be updated , folders will be renamed
-5
-Rename the folder , delete the file
-1) Delete the file
-2) Rename the folder
-3) Sync over
-File will be deleted and folder will be renamed
- 
-6
-Rename the folder , create a file
-1) Create a file
-2) Rename the folder
-3) Sync over
-Folder will be renamed with the file created
-7
-Delete the folder , create a file in another  folder
-1) Delete 1 of the sub - folder
-2) Create a file
-3) Sync over
-No folder will be deleted , with a file inside created for all folders
-8
-Deletion and renaming of folder with a file inside
-1) Create a folder with a file inside and sync over
-2) Delete 1 of the folder , while u rename the other folder
-3) Sync over
-Folder will be renamed with the file inside
-9
-Delete a folder , update the file
-1) Delete a folder containing a file on 1 side
-2) Update the contents of the file on another side
-3) Sync over
-No folders will be deleted , the updated file will be propagated over
-10
-Rename the folder with 2 different names , rename the file with 2 different names
-1) Rename the folder with 2 different names
-2) Rename the files with 2 different names
-3) Sync over
-Folder will show at least 2 names. Files will show 2 different names
-11
-Create a folder with a file inside in all folders
-1) Create a folder and file in all different folders
-2) Sync over
-XML will be updated in all folders
-12
-Sync files/ folders with large file size / large number of files
-1) Sync it over
-All changes will be propagated
- 
- 
-
-ToDo
-
-No.
-1 – Line Summary
-Steps
-Expected Output
-1
-Delete a file
-1) Delete a file
-2) Sync over
-ToDo.xml will be created with the file name inside
-2
-Rename a file
-1) Rename a file
-2) Sync over
-ToDo.xml will be created
-3
-Update to thumb drive
-1) Create a file in folders and sync over
-2) Remove the thumb drive and delete the file and sync
-3) Plug in the thumb drive and sync again
-The file in the thumb drive will be deleted or renamed again
-4
-Delete a file and update the file in thumbdrive
-1) Create a file in folders and sync over
-2) Remove the thumb drive and delete the file and sync
-3) Update the file content in the thumbdrive
-4) Plug the thumbdrive back and sync
-The newly modified file in the thumbdrive will propagate to the rest
- 
- 
- 
- 
- 
-
-Seamless
-
-No.
-1 – Line Summary
-Summary
-Steps
-1
-Create a file
-1) Create a file
-File will be synced over
-2
-Delete a file
-1) Delete a file
-File will be deleted in all folders
-3
-Rename a file
-1) Rename a file
-File rename will be propagated
-4
-Update a file
-1) Update a file
-File update will be propagated
-5
-Copy a folder with a file into any of the tagged folder
-1) Copy a folder with a file
-Folder will be propagated with the file inside
+<table border=1 cellpadding=0 cellspacing=0 class=MsoTableGrid style="BORDER:medium none">
+  <tbody>
+  <tr>
+    <td style="BORDER:1pt solid black;WIDTH:26.5pt" valign=top width=35>
+      <p>
+        No.
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:136.4pt" valign=top width=182>
+      <p>
+        1 – Line Summary
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:196.95pt" valign=top width=263>
+      <p>
+        Steps
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:118.95pt" valign=top width=159>
+      <p>
+        Expected Output
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:26.5pt" valign=top width=35>
+      <p>
+        1
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:136.4pt" valign=top width=182>
+      <p>
+        Create a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.95pt" valign=top width=263>
+      <p>
+        1) Create a file
+      </p>
+      <p>
+        2) Sync over
+      </p>
+      <p>
+        &nbsp;
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:118.95pt" valign=top width=159>
+      <p>
+        New file created through all the folders
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:26.5pt" valign=top width=35>
+      <p>
+        2
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:136.4pt" valign=top width=182>
+      <p>
+        Update a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.95pt" valign=top width=263>
+      <p>
+        1) Update a file
+      </p>
+      <p>
+        2) Sync over
+      </p>
+      <p>
+        &nbsp;
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:118.95pt" valign=top width=159>
+      <p>
+        File is updated through all the folders
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:26.5pt" valign=top width=35>
+      <p>
+        3
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:136.4pt" valign=top width=182>
+      <p>
+        Rename a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.95pt" valign=top width=263>
+      <p>
+        1) Rename a file
+      </p>
+      <p>
+        2) Sync over
+      </p>
+      <p>
+        &nbsp;
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:118.95pt" valign=top width=159>
+      <p>
+        File is renamed through all the folders
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:26.5pt" valign=top width=35>
+      <p>
+        4
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:136.4pt" valign=top width=182>
+      <p>
+        Delete a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.95pt" valign=top width=263>
+      <p>
+        1) Delete a file
+      </p>
+      <p>
+        2) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:118.95pt" valign=top width=159>
+      <p>
+        Deletion is propagated through all folders
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:26.5pt" valign=top width=35>
+      <p>
+        5
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:136.4pt" valign=top width=182>
+      <p>
+        Renaming a file with 2 different names
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.95pt" valign=top width=263>
+      <p>
+        1) Rename a file at 1 folder
+      </p>
+      <p>
+        2) Rename a file at another folder
+      </p>
+      <p>
+        3) Sync it
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:118.95pt" valign=top width=159>
+      <p>
+        At least 2 new files created
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:26.5pt" valign=top width=35>
+      <p>
+        6
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:136.4pt" valign=top width=182>
+      <p>
+        Deleting a file , update from another tagged folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.95pt" valign=top width=263>
+      <p>
+        1) Delete a file
+      </p>
+      <p>
+        2) Update the same file from another folder
+      </p>
+      <p>
+        3) Sync it
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:118.95pt" valign=top width=159>
+      <p>
+        All folders should reflect the updated file
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:26.5pt" valign=top width=35>
+      <p>
+        7
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:136.4pt" valign=top width=182>
+      <p>
+        Rename a file and update the contents.
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.95pt" valign=top width=263>
+      <p>
+        1) Rename a file
+      </p>
+      <p>
+        2) Update the contents
+      </p>
+      <p>
+        3) Sync it
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:118.95pt" valign=top width=159>
+      <p>
+        Every tagged folder should have 2 files in this case
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:26.5pt" valign=top width=35>
+      <p>
+        8
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:136.4pt" valign=top width=182>
+      <p>
+        Delete the file and create a new one with the same name
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.95pt" valign=top width=263>
+      <p>
+        1) Delete a file
+      </p>
+      <p>
+        2) Sync
+      </p>
+      <p>
+        3) Create a new file similar to (1)
+      </p>
+      <p>
+        4) Sync
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:118.95pt" valign=top width=159>
+      <p>
+        All folders will show the same file again
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:26.5pt" valign=top width=35>
+      <p>
+        9
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:136.4pt" valign=top width=182>
+      <p>
+        Rename a file from a folder , delete the old file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.95pt" valign=top width=263>
+      <p>
+        1) Rename a file from a folder
+      </p>
+      <p>
+        2) Delete the old file from the folder
+      </p>
+      <p>
+        3) Sync
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:118.95pt" valign=top width=159>
+      <p>
+        All folders should only show the renamed file
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:26.5pt" valign=top width=35>
+      <p>
+        10
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:136.4pt" valign=top width=182>
+      <p>
+        Create a file in all folders
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.95pt" valign=top width=263>
+      <p>
+        1) Create a new file in all folder
+      </p>
+      <p>
+        2) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:118.95pt" valign=top width=159>
+      <p>
+        No change on each folder. But XML should be updated
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:26.5pt" valign=top width=35>
+      <p>
+        11
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:136.4pt" valign=top width=182>
+      <p>
+        Rename a file from 2 folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.95pt" valign=top width=263>
+      <p>
+        1) Rename a file from 2 folders
+      </p>
+      <p>
+        2) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:118.95pt" valign=top width=159>
+      <p>
+        The file that is non-renamed will have syncless archive
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:26.5pt" valign=top width=35>
+      <p>
+        12
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:136.4pt" valign=top width=182>
+      <p>
+        Delete the same file in every folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.95pt" valign=top width=263>
+      <p>
+        1) Delete the file in each folder
+      </p>
+      <p>
+        2) Sync them
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:118.95pt" valign=top width=159>
+      <p>
+        XML will be updated
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:26.5pt" valign=top width=35>
+      <p>
+        13
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:136.4pt" valign=top width=182>
+      <p>
+        Untag a folder and tag it again
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.95pt" valign=top width=263>
+      <p>
+        1) Untag a folder
+      </p>
+      <p>
+        2) Delete the files in it
+      </p>
+      <p>
+        3) Tag the folder removed in (1)
+      </p>
+      <p>
+        4) Sync again
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:118.95pt" valign=top width=159>
+      <p>
+        The file will be repropagated again
+      </p>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<p>
+  &nbsp;
+</p>
+<p>
+  Manual Sync (Folder)
+</p>
+<table border=1 cellpadding=0 cellspacing=0 class=MsoTableGrid style="BORDER:medium none">
+  <tbody>
+  <tr>
+    <td style="BORDER:1pt solid black;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        No.
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        1 – Line Summary
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        Steps
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        Expected Output
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        1
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        Create a folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        1) Create a folder
+      </p>
+      <p>
+        2) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        New folder is propagated to all folders
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        2
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        Rename a folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        1) Rename a folder
+      </p>
+      <p>
+        2) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        Renamed folder is propagated to all folders
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        3
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        Delete a folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        1) Delete a folder
+      </p>
+      <p>
+        2) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        Deletion of folder is propagated to all folders
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        4
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        Rename a folder , and delete the folder from another folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        1) Rename a folder , delete a folder from another folder
+      </p>
+      <p>
+        2) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        Renamed folder will propagate over
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        5
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        Delete a folder , create a subfolder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        1) Delete 1 of the folder
+      </p>
+      <p>
+        2) Create a sub folder in another folder
+      </p>
+      <p>
+        3) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        Deletion will propagate through all folders
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        6
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        Rename 2 levels of folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        1) Rename a folder
+      </p>
+      <p>
+        2) Rename the subfolder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        Rename will propagate through all levels
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        7
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        Rename folder in 2 different folders
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        1) Rename a folder in a folder
+      </p>
+      <p>
+        2) Rename it to another name in another folder
+      </p>
+      <p>
+        3) Sync now
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        All folders will reflect the different rename
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        8
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        Delete a folder and create a new folder of the same name
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        1) Delete the folder in all folders
+      </p>
+      <p>
+        2) Create a folder in either of the folder
+      </p>
+      <p>
+        3) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        Will delete the folder
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        9
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        Deletion of sub folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        1) Delete the sub folder in either of the folder
+      </p>
+      <p>
+        2) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        Will delete the sub folder
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        10
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        Rename the folder and delete the sub-folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        1) Rename the folder
+      </p>
+      <p>
+        2) Delete the sub-folder
+      </p>
+      <p>
+        3) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        Will rename the folder and delete the sub-folder
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        11
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        Rename a different folder at different level
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        1) Rename a folder at different
+      </p>
+      <p>
+        2) Sync them
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        Will merge all the renamed folders in every level
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        12
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        Create a new folder in each folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        1) Create a new folder in each folder
+      </p>
+      <p>
+        2) Sync them
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        XML should reflect all the created folders
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        13
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        Rename all the folders
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        1) Rename all the folder
+      </p>
+      <p>
+        2) Sync them
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        XML should reflect all the created folders
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        14
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:135pt" valign=top width=180>
+      <p>
+        Untag the folder and tag it again
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:198pt" valign=top width=264>
+      <p>
+        1) Create a folder in all and sync
+      </p>
+      <p>
+        2) Untag the folder , delete the folder in the rest
+      </p>
+      <p>
+        3) Retag the folder and sync
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:117.9pt" valign=top width=157>
+      <p>
+        Will repropagate the deleted folder
+      </p>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<p>
+  &nbsp;
+</p>
+<p>
+  Manual Sync (File + Folder)
+</p>
+<table border=1 cellpadding=0 cellspacing=0 class=MsoTableGrid style="BORDER:medium none">
+  <tbody>
+  <tr>
+    <td style="BORDER:1pt solid black;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        No.
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        1 – Line Summary
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        Steps
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        Expected Output
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        1
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Create a file in a folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Create a file inside a folder
+      </p>
+      <p>
+        2) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        All folders will show the file inside the folder
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        2
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Rename the file , rename the folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Rename the file
+      </p>
+      <p>
+        2) Rename the folder
+      </p>
+      <p>
+        3) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        Folder will propagate the renamed folder and renamed file
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        3
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Update the file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Update the file
+      </p>
+      <p>
+        2) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        File will be updated in all folders
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        4
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Rename the folder , update the file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Rename the folder
+      </p>
+      <p>
+        2) Update the file
+      </p>
+      <p>
+        3) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        Files will be updated , folders will be renamed
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        5
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Rename the folder , delete the file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Delete the file
+      </p>
+      <p>
+        2) Rename the folder
+      </p>
+      <p>
+        3) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        File will be deleted and folder will be renamed
+      </p>
+      <p>
+        &nbsp;
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        6
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Rename the folder , create a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Create a file
+      </p>
+      <p>
+        2) Rename the folder
+      </p>
+      <p>
+        3) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        Folder will be renamed with the file created
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        7
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Delete the folder , create a file in another&nbsp; folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Delete 1 of the sub - folder
+      </p>
+      <p>
+        2) Create a file
+      </p>
+      <p>
+        3) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        No folder will be deleted , with a file inside created for all folders
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        8
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Deletion and renaming of folder with a file inside
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Create a folder with a file inside and sync over
+      </p>
+      <p>
+        2) Delete 1 of the folder , while u rename the other folder
+      </p>
+      <p>
+        3) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        Folder will be renamed with the file inside
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        9
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Delete a folder , update the file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Delete a folder containing a file on 1 side
+      </p>
+      <p>
+        2) Update the contents of the file on another side
+      </p>
+      <p>
+        3) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        No folders will be deleted , the updated file will be propagated over
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        10
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Rename the folder with 2 different names , rename the file with 2 different names
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Rename the folder with 2 different names
+      </p>
+      <p>
+        2) Rename the files with 2 different names
+      </p>
+      <p>
+        3) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        Folder will show at least 2 names. Files will show 2 different names
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        11
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Create a folder with a file inside in all folders
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Create a folder and file in all different folders
+      </p>
+      <p>
+        2) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        XML will be updated in all folders
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        12
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Sync files/ folders with large file size / large number of files
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Sync it over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        All changes will be propagated
+      </p>
+      <p>
+        &nbsp;
+      </p>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<p>
+  &nbsp;
+</p>
+<p>
+  ToDo
+</p>
+<table border=1 cellpadding=0 cellspacing=0 class=MsoTableGrid style="BORDER:medium none">
+  <tbody>
+  <tr>
+    <td style="BORDER:1pt solid black;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        No.
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        1 – Line Summary
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        Steps
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        Expected Output
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        1
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Delete a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Delete a file
+      </p>
+      <p>
+        2) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        ToDo.xml will be created with the file name inside
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        2
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Rename a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Rename a file
+      </p>
+      <p>
+        2) Sync over
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        ToDo.xml will be created
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        3
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Update to thumb drive
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Create a file in folders and sync over
+      </p>
+      <p>
+        2) Remove the thumb drive and delete the file and sync
+      </p>
+      <p>
+        3) Plug in the thumb drive and sync again
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        The file in the thumb drive will be deleted or renamed again
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        4
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Delete a file and update the file in thumbdrive
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        1) Create a file in folders and sync over
+      </p>
+      <p>
+        2) Remove the thumb drive and delete the file and sync
+      </p>
+      <p>
+        3) Update the file content in the thumbdrive
+      </p>
+      <p>
+        4) Plug the thumbdrive back and sync
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        The newly modified file in the thumbdrive will propagate to the rest
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:27.9pt" valign=top width=37>
+      <p>
+        &nbsp;
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        &nbsp;
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:200.7pt" valign=top width=268>
+      <p>
+        &nbsp;
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        &nbsp;
+      </p>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<p>
+  &nbsp;
+</p>
+<p>
+  Seamless
+</p>
+<table border=1 cellpadding=0 cellspacing=0 class=MsoTableGrid style="BORDER:medium none">
+  <tbody>
+  <tr>
+    <td style="BORDER:1pt solid black;WIDTH:32.4pt" valign=top width=43>
+      <p>
+        No.
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        1 – Line Summary
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:196.2pt" valign=top width=262>
+      <p>
+        Summary
+      </p>
+    </td>
+    <td style="BORDER-COLOR:black black black -moz-use-text-color;BORDER-STYLE:solid solid solid none;BORDER-WIDTH:1pt 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        Steps
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:32.4pt" valign=top width=43>
+      <p>
+        1
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Create a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.2pt" valign=top width=262>
+      <p>
+        1) Create a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        File will be synced over
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:32.4pt" valign=top width=43>
+      <p>
+        2
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Delete a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.2pt" valign=top width=262>
+      <p>
+        1) Delete a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        File will be deleted in all folders
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:32.4pt" valign=top width=43>
+      <p>
+        3
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Rename a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.2pt" valign=top width=262>
+      <p>
+        1) Rename a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        File rename will be propagated
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:32.4pt" valign=top width=43>
+      <p>
+        4
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Update a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.2pt" valign=top width=262>
+      <p>
+        1) Update a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        File update will be propagated
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="BORDER-COLOR:-moz-use-text-color black black;BORDER-STYLE:none solid solid;BORDER-WIDTH:medium 1pt 1pt;WIDTH:32.4pt" valign=top width=43>
+      <p>
+        5
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:130.5pt" valign=top width=174>
+      <p>
+        Copy a folder with a file into any of the tagged folder
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:196.2pt" valign=top width=262>
+      <p>
+        1) Copy a folder with a file
+      </p>
+    </td>
+    <td style="BORDER-COLOR:-moz-use-text-color black black -moz-use-text-color;BORDER-STYLE:none solid solid none;BORDER-WIDTH:medium 1pt 1pt medium;WIDTH:119.7pt" valign=top width=160>
+      <p>
+        Folder will be propagated with the file inside
+      </p>
+    </td>
+  </tr>
+  </tbody>
+</table>
  
