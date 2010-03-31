@@ -480,7 +480,6 @@ namespace SynclessUI
 
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("in here");
             if (LblSyncNow.Content.Equals("Sync Now"))
             {
                 BtnSyncNow.IsEnabled = false;
@@ -1248,11 +1247,10 @@ namespace SynclessUI
         {
             try
             {
-                List<string> taglist = Gui.GetAllTags();
-
                 ListBoxTag.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                                                   (Action) (() =>
                                                                 {
+                                                                    List<string> taglist = Gui.GetAllTags();
                                                                     ListBoxTag.ItemsSource = taglist;
                                                                     LblTagCount.Content = "[" + taglist.Count + "/" +
                                                                                           taglist.Count + "]";
