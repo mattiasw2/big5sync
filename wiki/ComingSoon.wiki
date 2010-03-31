@@ -1,4 +1,4 @@
-#summary What's In It For You After 0.9?
+#summary What's In It For You After 1.0?
 <wiki:toc max_depth="6" />
 
 = Features =
@@ -8,9 +8,6 @@ We are in the process of coming up with a clean and clear interface on presentin
 
 == Uni-Directional Synchronization ==
 Currently, our software simply keeps every folder under the same tag in sync. In future, we will look at including options for setting sources and targets, so that the synchronization is uni-directional.
-
-== Notification System Providing Feedback to User ==
-Currently, error and notification messages from the sub-components are not sent to the User Interface, due to multiple threading issues. We are looking into this so that there can be a intuitive feedback system to the user soon.
 
 == Merging of Profiles for External Hard Disks ==
 Currently, the system only merges the profiles from certain removable drives with the current profile. However, certain removable drives, such as the external hard disk, are detected as fixed drives instead, which affects our current implementation of profile merging. We will fix this in an upcoming release.
