@@ -182,6 +182,14 @@ As seen from the above, creating a filter is a simple and intuitive task in Sync
 
 Syncless makes your user experience as pleasant as possible by providing several user-friendly functionalities.
 
+== Tag Name Auto Completion ==
+
+Do you have a tag with long name? Syncless understands the inconvenience you experience when trying to tag more folders to that tag with a long name. As such, Syncless provides an auto-completion function when you type in a tag name.
+
+http://big5sync.googlecode.com/files/Tagname_Auto_Complete.jpg
+
+Simply type in part of the tag name and Syncless will display the full name for you.
+
 == Filter Tag List ==
 
 Do you have many tags to maintain and have difficulty finding that exact tag from the long list? Syncless supports filtering of tags so that you can search for the tag you want by just entering the tag name.
