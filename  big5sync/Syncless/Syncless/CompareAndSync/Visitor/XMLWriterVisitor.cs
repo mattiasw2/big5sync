@@ -531,9 +531,10 @@ namespace Syncless.CompareAndSync.Visitor
 
             XmlDocument xmlDoc = new XmlDocument();
             string xmlPath = Path.Combine(folder.GetSmartParentPath(counter), Metadatapath);
+            if (!File.Exists(xmlPath))
+                return;
 
             CommonMethods.LoadXML(ref xmlDoc, xmlPath);
-
             XmlNode node = xmlDoc.SelectSingleNode(XpathExpr + "/" + FOLDER + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
             if (node != null)
                 node.ParentNode.RemoveChild(node);
