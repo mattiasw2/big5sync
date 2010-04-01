@@ -6,7 +6,8 @@
         Updated,
         Created,
         Renamed,
-        Propagated,
+        CreatedRenamed,
+        /*Propagated,*/
         Unchanged,
         Error,
         Conflict

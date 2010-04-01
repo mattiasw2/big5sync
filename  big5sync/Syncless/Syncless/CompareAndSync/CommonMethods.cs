@@ -19,6 +19,11 @@ namespace Syncless.CompareAndSync
 
         #region XML
 
+        /// <summary>
+        /// Helper method to assist with the saving of XML metadata.
+        /// </summary>
+        /// <param name="xmlDoc">XmlDocument object to save from.</param>
+        /// <param name="xmlPath">Path to save XML to.</param>
         public static void SaveXML(ref XmlDocument xmlDoc, string xmlPath)
         {
             int count = 0;
@@ -28,7 +33,7 @@ namespace Syncless.CompareAndSync
                 {
                     lock (SyncLock)
                     {
-                        XmlNode node = xmlDoc.SelectSingleNode("/meta-data");
+                        XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr);
                         if (node != null)
                             node.FirstChild.InnerText = DateTime.Now.Ticks.ToString();
                         xmlDoc.Save(xmlPath);
@@ -51,6 +56,11 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        /// <summary>
+        /// Helper method to assist with the loading of XML metadata.
+        /// </summary>
+        /// <param name="xmlDoc">XmlDocument object to load to.</param>
+        /// <param name="xmlPath">Path to XML file to load from.</param>
         public static void LoadXML(ref XmlDocument xmlDoc, string xmlPath)
         {
             int count = 0;
@@ -101,7 +111,6 @@ namespace Syncless.CompareAndSync
 
         public static void CreateFileIfNotExist(string path)
         {
-
             string nodename = "name";
             string metadir = ".syncless";
             string metadatapath = @".syncless\syncless.xml";
@@ -109,36 +118,41 @@ namespace Syncless.CompareAndSync
             if (File.Exists(xmlPath))
                 return;
 
-            try
-            {
-                DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, metadir));
-                di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-                XmlTextWriter writer = new XmlTextWriter(xmlPath, null);
-                writer.Formatting = Formatting.Indented;
-                writer.WriteStartDocument();
-                writer.WriteStartElement("meta-data");
-                writer.WriteElementString("last_modified", (DateTime.Now.Ticks).ToString());
-                writer.WriteElementString(nodename, GetLastFileIndex(path));
-                writer.WriteEndElement();
-                writer.WriteEndDocument();
-                writer.Flush();
-                writer.Close();
-            }
-            catch (IOException)
-            {
+            int count = 0;
 
-            }
-            catch (XmlException)
+            while (true && count < 5)
             {
-                if (File.Exists(xmlPath))
+                try
                 {
-                    File.Delete(xmlPath);
+                    DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, metadir));
+                    di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+                    XmlTextWriter writer = new XmlTextWriter(xmlPath, null);
+                    writer.Formatting = Formatting.Indented;
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("meta-data");
+                    writer.WriteElementString("last_modified", (DateTime.Now.Ticks).ToString());
+                    writer.WriteElementString(nodename, GetLastFileIndex(path));
+                    writer.WriteEndElement();
+                    writer.WriteEndDocument();
+                    writer.Flush();
+                    writer.Close();
+                    break;
                 }
-                CreateFileIfNotExist(path);
-            }
-            catch (UnauthorizedAccessException)
-            {
-
+                catch (IOException)
+                {
+                    count++;
+                    System.Threading.Thread.Sleep(500);
+                }
+                catch (XmlException)
+                {
+                    if (File.Exists(xmlPath))
+                        File.Delete(xmlPath);
+                    count++;
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    break;
+                }
             }
         }
 
