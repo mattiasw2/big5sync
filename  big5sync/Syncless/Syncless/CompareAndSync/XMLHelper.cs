@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Xml;
-using Syncless.CompareAndSync.XMLWriteObject;
 using Syncless.CompareAndSync.Enum;
+using Syncless.CompareAndSync.XMLWriteObject;
 
 namespace Syncless.CompareAndSync
 {
@@ -25,13 +22,11 @@ namespace Syncless.CompareAndSync
         private const string FILE = "file";
         private const string TodoName = "todo.xml";
         private const string Todopath = MetaDir + "\\" + TodoName;
-        private const string Deleted = "Deleted";
-        private const string Renamed = "Renamed";
+        private const string Deleted = "deleted";
         private const string Action = "action";
         private const string NodeLastUpdated = "last_updated";
         private const string LastKnownState = "last_known_state";
         private static long dateTime = DateTime.Now.Ticks;
-        private static readonly object SyncLock = new object();
 
         #region Main method
         public static void UpdateXML(BaseXMLWriteObject xmlWriteList)

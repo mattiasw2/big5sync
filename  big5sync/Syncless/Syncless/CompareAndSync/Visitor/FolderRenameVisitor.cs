@@ -9,7 +9,7 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region IVisitor Members
 
-        public void Visit(FileCompareObject file, int numOfPaths) { /* Do nothing. */ }
+        public void Visit(FileCompareObject file, int numOfPaths) { }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
@@ -19,7 +19,7 @@ namespace Syncless.CompareAndSync.Visitor
             DetectFolderRename(folder, numOfPaths);
         }
 
-        public void Visit(RootCompareObject root) { /* Do nothing. */ }
+        public void Visit(RootCompareObject root) { }
 
         #endregion
 
@@ -189,9 +189,7 @@ namespace Syncless.CompareAndSync.Visitor
             Dictionary<string, BaseCompareObject>.ValueCollection values = actualFldrObj.Contents.Values;
 
             foreach (BaseCompareObject bco in values)
-            {
                 bco.Parent = actualFldrObj;
-            }
         }
     }
 }

@@ -65,7 +65,9 @@ namespace Syncless.CompareAndSync.Visitor
 
             for (int i = 0; i < numOfPaths; i++)
             {
+                // ReSharper disable PossibleNullReferenceException
                 if (file.ChangeType[i].HasValue && file.ChangeType[i] == MetaChangeType.Delete)
+                    // ReSharper restore PossibleNullReferenceException
                     indexes.Add(i);
                 else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType != null)
                     return;
@@ -91,7 +93,9 @@ namespace Syncless.CompareAndSync.Visitor
                     }
 
                     if (found)
+                        // ReSharper disable PossibleNullReferenceException
                         file.ChangeType[indexes[i]] = null; //TODO: Unchanged?
+                    // ReSharper restore PossibleNullReferenceException
 
                 }
             }

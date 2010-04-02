@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Exceptions;
@@ -31,15 +27,9 @@ namespace Syncless.CompareAndSync.Visitor
             }
         }
 
-        public void Visit(FolderCompareObject folder, int numOfPaths)
-        {
-            //Do nothing
-        }
+        public void Visit(FolderCompareObject folder, int numOfPaths) { }
 
-        public void Visit(RootCompareObject root)
-        {
-            //Do nothing
-        }
+        public void Visit(RootCompareObject root) { }
 
         private void ConflictHandler(FileCompareObject fco, int fileIndex)
         {
@@ -61,7 +51,6 @@ namespace Syncless.CompareAndSync.Visitor
             }
             catch (DeleteFileException)
             {
-                ;
             }
         }
     }

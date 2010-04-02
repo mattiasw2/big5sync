@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Syncless.CompareAndSync
+﻿namespace Syncless.CompareAndSync
 {
     public static class CommonXMLConstants
     {
@@ -47,7 +42,6 @@ namespace Syncless.CompareAndSync
         public const string XPathFile = "/" + NodeFile;
         public const string XPathLastModified = "/" + NodeLastModified;
         public const string XPathLastUpdated = "/" + NodeLastUpdated;
-
 
     }
 
