@@ -275,17 +275,15 @@ namespace Syncless.CompareAndSync
         /// <param name="fileInput">FileInfo object to hash</param>
         /// <returns>MD5 hash of file</returns>
         /// <exception cref="Syncless.CompareAndSync.Exceptions.HashFileException"></exception>
-        public static string CalculateMD5Hash(FileInfo fileInput)
+        public static string CalculateMD5Hash(string fileInput)
         {
-            if (!fileInput.Exists)
+            if (!File.Exists(fileInput))
                 throw new HashFileException(new FileNotFoundException());
 
             try
             {
-                FileStream fileStream = fileInput.OpenRead();
-                byte[] fileHash = MD5.Create().ComputeHash(fileStream);
-                fileStream.Close();
-                return BitConverter.ToString(fileHash).Replace("-", "");
+                FileStream fileStream = File.OpenRead(fileInput);
+                return CalculateMD5Hash(fileStream);
             }
             catch (DirectoryNotFoundException e)
             {
@@ -299,6 +297,43 @@ namespace Syncless.CompareAndSync
             {
                 throw new HashFileException(e);
             }
+        }
+
+        /// <summary>
+        /// Calculates the MD5 hash of a given FileInfo
+        /// </summary>
+        /// <param name="fileInput">FileInfo object to hash</param>
+        /// <returns>MD5 hash of file</returns>
+        /// <exception cref="Syncless.CompareAndSync.Exceptions.HashFileException"></exception>
+        public static string CalculateMD5Hash(FileInfo fileInput)
+        {
+            if (!fileInput.Exists)
+                throw new HashFileException(new FileNotFoundException());
+
+            try
+            {
+                FileStream fileStream = fileInput.OpenRead();
+                return CalculateMD5Hash(fileStream);
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                throw new HashFileException(e);
+            }
+            catch (IOException e)
+            {
+                throw new HashFileException(e);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                throw new HashFileException(e);
+            }
+        }
+
+        private static string CalculateMD5Hash(FileStream fileStream)
+        {
+            byte[] fileHash = MD5.Create().ComputeHash(fileStream);
+            fileStream.Close();
+            return BitConverter.ToString(fileHash).Replace("-", "");
         }
 
         /// <summary>
