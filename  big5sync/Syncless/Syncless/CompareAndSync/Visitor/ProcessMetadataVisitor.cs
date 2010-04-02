@@ -1,9 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Syncless.CompareAndSync.CompareObject;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Exceptions;
 using Syncless.Core;
@@ -11,7 +7,7 @@ using Syncless.Logging;
 
 namespace Syncless.CompareAndSync.Visitor
 {
-    public class ProcessMetadataHashVisitor : IVisitor
+    public class ProcessMetadataVisitor : IVisitor
     {
         #region IVisitor Members
 
