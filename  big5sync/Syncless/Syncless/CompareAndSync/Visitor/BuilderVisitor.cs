@@ -102,20 +102,20 @@ namespace Syncless.CompareAndSync.Visitor
 
                             if (!conflict)
                             {
-                                //try
-                                //{
-                                //    fco.Hash[index] = CommonMethods.CalculateMD5Hash(info);
-                                //}
-                                //catch (HashFileException)
-                                //{
-                                //    ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(
-                                //        new LogData(LogEventType.FSCHANGE_ERROR,
-                                //                    "Error hashing " +
-                                //                    Path.Combine(fco.GetSmartParentPath(index), fco.Name + ".")));
-                                //    fco.FinalState[index] = FinalState.Error;
-                                //    fco.Invalid = true;
-                                //    continue;
-                                //}
+                                try
+                                {
+                                    fco.Hash[index] = CommonMethods.CalculateMD5Hash(info);
+                                }
+                                catch (HashFileException)
+                                {
+                                    ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(
+                                        new LogData(LogEventType.FSCHANGE_ERROR,
+                                                    "Error hashing " +
+                                                    Path.Combine(fco.GetSmartParentPath(index), fco.Name + ".")));
+                                    fco.FinalState[index] = FinalState.Error;
+                                    fco.Invalid = true;
+                                    continue;
+                                }
 
                                 fco.CreationTime[index] = info.CreationTime.Ticks;
                                 fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
