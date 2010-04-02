@@ -9,32 +9,14 @@ namespace Syncless.CompareAndSync.Visitor
 {
     public class ProcessMetadataVisitor : IVisitor
     {
+
         #region IVisitor Members
 
         public void Visit(FileCompareObject file, int numOfPaths)
         {
             for (int i = 0; i < numOfPaths; i++)
             {
-                if (file.Exists[i])
-                {
-                    if (file.MetaExists[i] && file.CreationTime[i] == file.MetaCreationTime[i] && file.LastWriteTime[i] == file.MetaLastWriteTime[i] && file.Length[i] == file.MetaLength[i])
-                    {
-                        file.Hash[i] = file.MetaHash[i];
-                    }
-                    else
-                    {
-                        try
-                        {
-                            file.Hash[i] = CommonMethods.CalculateMD5Hash(Path.Combine(file.GetSmartParentPath(i), file.Name));
-                        }
-                        catch (HashFileException)
-                        {
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error hashing " + Path.Combine(file.GetSmartParentPath(i), file.Name + ".")));
-                            file.FinalState[i] = FinalState.Error;
-                            file.Invalid = true; //EXP
-                        }
-                    }
-                }
+                PopulateHash(file, i);
                 ProcessFileMetaData(file, i);
             }
         }
@@ -45,12 +27,35 @@ namespace Syncless.CompareAndSync.Visitor
                 ProcessFolderMetaData(folder, i);
         }
 
-        public void Visit(RootCompareObject root)
-        {
-            //Do nothing
-        }
+        public void Visit(RootCompareObject root) { }
 
         #endregion
+
+        #region File Operations
+
+        private void PopulateHash(FileCompareObject file, int index)
+        {
+            if (file.Exists[index])
+            {
+                if (file.MetaExists[index] && file.CreationTime[index] == file.MetaCreationTime[index] && file.LastWriteTime[index] == file.MetaLastWriteTime[index] && file.Length[index] == file.MetaLength[index])
+                {
+                    file.Hash[index] = file.MetaHash[index];
+                }
+                else
+                {
+                    try
+                    {
+                        file.Hash[index] = CommonMethods.CalculateMD5Hash(Path.Combine(file.GetSmartParentPath(index), file.Name));
+                    }
+                    catch (HashFileException)
+                    {
+                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error hashing " + Path.Combine(file.GetSmartParentPath(index), file.Name + ".")));
+                        file.FinalState[index] = FinalState.Error;
+                        file.Invalid = true; //EXP
+                    }
+                }
+            }
+        }
 
         private void ProcessFileMetaData(FileCompareObject file, int index)
         {
@@ -72,6 +77,10 @@ namespace Syncless.CompareAndSync.Visitor
             }
         }
 
+        #endregion
+
+        #region Folder Operations
+
         private void ProcessFolderMetaData(FolderCompareObject folder, int index)
         {
             if (folder.Exists[index] && !folder.MetaExists[index])
@@ -86,6 +95,8 @@ namespace Syncless.CompareAndSync.Visitor
                     folder.ChangeType[index] = MetaChangeType.Delete;
             }
         }
+
+        #endregion
 
     }
 }

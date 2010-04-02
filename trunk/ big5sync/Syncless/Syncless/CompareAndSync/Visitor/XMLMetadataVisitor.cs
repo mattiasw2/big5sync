@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using Syncless.CompareAndSync.CompareObject;
 using System.IO;
 using System.Xml;
-using Syncless.CompareAndSync.Enum;
+using Syncless.CompareAndSync.CompareObject;
 
 namespace Syncless.CompareAndSync.Visitor
 {
@@ -22,7 +21,6 @@ namespace Syncless.CompareAndSync.Visitor
         private const string FILE = "file";
         private const string FOLDER = "folder";
         private const string Action = "action";
-        private const string LastUpdated = "last_updated";
         private const string LastKnownState = "last_known_state";
         private static readonly object SyncLock = new object();
 
@@ -194,7 +192,7 @@ namespace Syncless.CompareAndSync.Visitor
                             {
                                 case Action:
                                     string action = childNode.InnerText;
-                                    if (action.Equals("Deleted"))
+                                    if (action.Equals("deleted"))
                                     {
                                         file.ToDoAction[counter] = Enum.LastKnownState.Deleted;
                                     }
@@ -469,7 +467,7 @@ namespace Syncless.CompareAndSync.Visitor
                             {
                                 case Action:
                                     string action = childNode.InnerText;
-                                    if (action.Equals("Deleted"))
+                                    if (action.Equals("deleted"))
                                     {
                                         folder.ToDoAction[counter] = Enum.LastKnownState.Deleted;
                                     }

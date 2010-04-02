@@ -442,7 +442,7 @@ namespace Syncless.CompareAndSync.Visitor
             rootNode.AppendChild(fileElement);
         }
 
-        private void AppendActionFolderToDo(XmlDocument xmlDoc, FolderCompareObject folder, int counter, string changeType)
+        private void AppendActionFolderToDo(XmlDocument xmlDoc, FolderCompareObject folder, string changeType)
         {
             string name = folder.MetaName ?? folder.Name;
 
@@ -518,7 +518,7 @@ namespace Syncless.CompareAndSync.Visitor
             string todoPath = Path.Combine(parentPath, CommonXMLConstants.TodoPath);
             CreateToDoFile(parentPath);
             CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
-            AppendActionFolderToDo(xmlTodoDoc, folder, counter, CommonXMLConstants.ActionDeleted);
+            AppendActionFolderToDo(xmlTodoDoc, folder, CommonXMLConstants.ActionDeleted);
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
         }
 

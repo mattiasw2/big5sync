@@ -7,7 +7,7 @@
         private readonly string _archiveName;
         private readonly int _archiveLimit;
         private readonly bool _recycle;
-        private string _conflictDir;
+        private readonly string _conflictDir;
 
         private SyncConfig(string archiveName, int archiveLimit, bool recycle)
         {

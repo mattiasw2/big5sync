@@ -19,10 +19,7 @@ namespace Syncless.CompareAndSync.Visitor
                 folder.ChangeType[i] = MetaChangeType.New;
         }
 
-        public void Visit(RootCompareObject root)
-        {
-            //Do nothing
-        }
+        public void Visit(RootCompareObject root) { }
 
         #endregion
     }

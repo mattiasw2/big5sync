@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Threading;
 using System.Collections.Generic;
+using System.Threading;
 using Syncless.CompareAndSync.Request;
 using Syncless.Core;
 using Syncless.Notification;

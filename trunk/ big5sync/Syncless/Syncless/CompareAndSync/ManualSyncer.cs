@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Syncless.CompareAndSync.CompareObject;
@@ -89,7 +88,9 @@ namespace Syncless.CompareAndSync
                 if (Directory.Exists(s))
                 {
                     DirectoryInfo info = new DirectoryInfo(s);
+                    // ReSharper disable PossibleNullReferenceException
                     string conflictPath = Path.Combine(info.Parent.FullName, config.ConflictDir);
+                    // ReSharper restore PossibleNullReferenceException
                     if (!Directory.Exists(conflictPath))
                         Directory.CreateDirectory(conflictPath);
                     string dest = Path.Combine(conflictPath, info.Name);
@@ -105,13 +106,14 @@ namespace Syncless.CompareAndSync
                     }
                     catch (DeleteFolderException)
                     {
-                        ;
                     }
                 }
                 else if (File.Exists(s))
                 {
                     FileInfo info = new FileInfo(s);
+                    // ReSharper disable AssignNullToNotNullAttribute
                     string conflictPath = Path.Combine(info.DirectoryName, config.ConflictDir);
+                    // ReSharper restore AssignNullToNotNullAttribute
                     if (!Directory.Exists(conflictPath))
                         Directory.CreateDirectory(conflictPath);
                     string dest = Path.Combine(conflictPath, info.Name);
@@ -127,7 +129,6 @@ namespace Syncless.CompareAndSync
                     }
                     catch (DeleteFileException)
                     {
-                        ;
                     }
                 }
             }
