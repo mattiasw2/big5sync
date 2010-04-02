@@ -33,8 +33,6 @@ namespace Syncless.CompareAndSync.Visitor
             XmlDocument xmlDoc = new XmlDocument();
             for (int i = 0; i < numOfPaths; i++)
             {
-                //if (currentPaths[i].Contains(MetaDir))
-                //    continue;
                 string path = Path.Combine(file.GetSmartParentPath(i), Metadatapath);
                 if (!File.Exists(path))
                     continue;
@@ -43,24 +41,17 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     CommonMethods.LoadXML(ref xmlDoc, path);
                 }
-
-                file = PopulateFileWithMetaData(xmlDoc, file, i);
-                //xmlDoc.Save(path);                
+                file = PopulateFileWithMetaData(xmlDoc, file, i);            
             }
-            xmlDoc = null;
-            ProcessFileMetaData(file, numOfPaths);
-            ProcessToDo(file, numOfPaths);
         }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
             XmlDocument xmlDoc = new XmlDocument();
-
             PopulateFolderMetaName(folder, numOfPaths);
 
             for (int i = 0; i < numOfPaths; i++)
             {
-
                 string path = Path.Combine(folder.GetSmartParentPath(i), Metadatapath);
                 if (!File.Exists(path))
                     continue;
@@ -72,8 +63,6 @@ namespace Syncless.CompareAndSync.Visitor
 
                 folder = PopulateFolderWithMetaData(xmlDoc, folder, i);
             }
-            ProcessFolderMetaData(folder, numOfPaths);
-            ProcessToDo(folder, numOfPaths);
 
             DirectoryInfo dirInfo = null;
             List<XMLCompareObject> xmlObjList = new List<XMLCompareObject>();
@@ -82,7 +71,6 @@ namespace Syncless.CompareAndSync.Visitor
             for (int i = 0; i < numOfPaths; i++)
             {
                 string path = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
-
 
                 if (Directory.Exists(path))
                 {
@@ -103,7 +91,6 @@ namespace Syncless.CompareAndSync.Visitor
                     RemoveSimilarFiles(xmlObjList, fileList);
                     RemoveSimilarFolders(xmlFolderList, dirInfoList);
                 }
-
 
                 AddFileToChild(xmlObjList, folder, i, numOfPaths);
                 AddFolderToChild(xmlFolderList, folder, i, numOfPaths);
@@ -434,39 +421,6 @@ namespace Syncless.CompareAndSync.Visitor
             }
         }
 
-        private void ProcessFileMetaData(FileCompareObject file, int numOfPaths)
-        {
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                if (file.Exists[i] && !file.MetaExists[i])
-                    file.ChangeType[i] = MetaChangeType.New; //Possible rename/move
-                else if (!file.Exists[i] && file.MetaExists[i])
-                    file.ChangeType[i] = MetaChangeType.Delete; //Possible rename/move
-                else if (file.Exists[i] && file.MetaExists[i])
-                {
-                    if (file.Length[i] != file.MetaLength[i] || file.Hash[i] != file.MetaHash[i])
-                        file.ChangeType[i] = MetaChangeType.Update;
-                    else
-                        file.ChangeType[i] = MetaChangeType.NoChange;
-                }
-                else
-                    file.ChangeType[i] = null;
-            }
-        }
-
-
-        private void ProcessToDo(BaseCompareObject bco, int numOfPaths)
-        {
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                if (bco.ChangeType[i] == null && bco.ToDoAction[i].HasValue)
-                {
-                    if (bco.ToDoAction[i] == Enum.LastKnownState.Deleted)
-                        bco.ChangeType[i] = MetaChangeType.Delete;
-                }
-            }
-        }
-
         #endregion
 
         #region Folders
@@ -536,22 +490,6 @@ namespace Syncless.CompareAndSync.Visitor
             return folder;
         }
 
-        private void ProcessFolderMetaData(FolderCompareObject folder, int numOfPaths)
-        {
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                if (folder.Exists[i] && !folder.MetaExists[i])
-                    folder.ChangeType[i] = MetaChangeType.New; //Possible rename/move
-                else if (!folder.Exists[i] && folder.MetaExists[i])
-                    folder.ChangeType[i] = MetaChangeType.Delete; //Possible rename/move
-                else if (folder.Exists[i] && folder.MetaExists[i])
-                    folder.ChangeType[i] = MetaChangeType.NoChange;
-                else
-                    folder.ChangeType[i] = null;
-            }
-        }
-
         #endregion
-
     }
 }
