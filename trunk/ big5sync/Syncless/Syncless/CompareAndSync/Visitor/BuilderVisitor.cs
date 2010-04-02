@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Syncless.CompareAndSync.CompareObject;
-using Syncless.CompareAndSync.Enum;
-using Syncless.CompareAndSync.Exceptions;
 using Syncless.Core;
 using Syncless.Filters;
 using Syncless.Logging;
-using System;
 
 namespace Syncless.CompareAndSync.Visitor
 {
