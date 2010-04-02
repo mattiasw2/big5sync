@@ -8,13 +8,13 @@ namespace Syncless.CompareAndSync.Visitor
 {
     public class XMLMetadataVisitor : IVisitor
     {
-        private static readonly object SyncLock = new object();
 
         #region IVisitor Members
 
         public void Visit(FileCompareObject file, int numOfPaths)
         {
             XmlDocument xmlDoc = new XmlDocument();
+
             for (int i = 0; i < numOfPaths; i++)
             {
                 string path = Path.Combine(file.GetSmartParentPath(i), CommonXMLConstants.MetadataPath);
@@ -22,11 +22,7 @@ namespace Syncless.CompareAndSync.Visitor
                 if (!File.Exists(path))
                     continue;
 
-                lock (SyncLock)
-                {
-                    CommonMethods.LoadXML(ref xmlDoc, path);
-                }
-
+                CommonMethods.LoadXML(ref xmlDoc, path);
                 file = PopulateFileWithMetaData(xmlDoc, file, i);
             }
         }
@@ -43,11 +39,7 @@ namespace Syncless.CompareAndSync.Visitor
                 if (!File.Exists(path))
                     continue;
 
-                lock (SyncLock)
-                {
-                    CommonMethods.LoadXML(ref xmlDoc, path);
-                }
-
+                CommonMethods.LoadXML(ref xmlDoc, path);
                 folder = PopulateFolderWithMetaData(xmlDoc, folder, i);
             }
 
@@ -68,11 +60,7 @@ namespace Syncless.CompareAndSync.Visitor
                     if (!File.Exists(xmlPath))
                         continue;
 
-                    lock (SyncLock)
-                    {
-                        CommonMethods.LoadXML(ref xmlDoc, xmlPath);
-                    }
-
+                    CommonMethods.LoadXML(ref xmlDoc, xmlPath);
                     xmlObjList = GetAllFilesInXML(xmlDoc);
                     xmlFolderList = GetAllFoldersInXML(xmlDoc);
                     RemoveSimilarFiles(xmlObjList, fileList);
@@ -100,11 +88,7 @@ namespace Syncless.CompareAndSync.Visitor
                 if (!File.Exists(xmlPath))
                     continue;
 
-                lock (SyncLock)
-                {
-                    CommonMethods.LoadXML(ref xmlDoc, xmlPath);
-                }
-
+                CommonMethods.LoadXML(ref xmlDoc, xmlPath);
                 di = new DirectoryInfo(listOfPaths[i]);
                 FileInfo[] fileInfoList = di.GetFiles();
                 DirectoryInfo[] dirInfoList = di.GetDirectories();
@@ -282,6 +266,7 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     FileInfo fileInfo = fileList[i];
                     string name = xmlObjList[j].Name;
+
                     if (name.Equals(fileInfo.Name))
                         xmlObjList.RemoveAt(j);
                 }
@@ -299,6 +284,7 @@ namespace Syncless.CompareAndSync.Visitor
                 {
                     DirectoryInfo dirInfo = dirList[i];
                     string folderName = folderNameList[j];
+
                     if (dirInfo.Name.Equals(folderName))
                         folderNameList.RemoveAt(j);
                 }
@@ -408,15 +394,11 @@ namespace Syncless.CompareAndSync.Visitor
             for (int i = 0; i < numOfPaths; i++)
             {
                 string currMetaData = Path.Combine(Path.Combine(folder.GetSmartParentPath(i), folder.Name), CommonXMLConstants.MetadataPath);
+
                 if (File.Exists(currMetaData))
                 {
                     XmlDocument xmlDoc = new XmlDocument();
-
-                    lock (SyncLock)
-                    {
-                        CommonMethods.LoadXML(ref xmlDoc, currMetaData);
-                    }
-
+                    CommonMethods.LoadXML(ref xmlDoc, currMetaData);
                     folder.MetaName = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + "/name").InnerText;
                 }
             }
@@ -432,17 +414,20 @@ namespace Syncless.CompareAndSync.Visitor
             else
             {
                 string path = Path.Combine(folder.GetSmartParentPath(counter), CommonXMLConstants.TodoPath);
+
                 if (File.Exists(path))
                 {
                     XmlDocument todoXmlDoc = new XmlDocument();
                     CommonMethods.LoadXML(ref todoXmlDoc, path);
                     XmlNode todoNode = todoXmlDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
+
                     if (todoNode != null)
                     {
                         XmlNodeList nodeList = todoNode.ChildNodes;
                         for (int i = 0; i < nodeList.Count; i++)
                         {
                             XmlNode childNode = nodeList[i];
+
                             switch (childNode.Name)
                             {
                                 case CommonXMLConstants.NodeAction:

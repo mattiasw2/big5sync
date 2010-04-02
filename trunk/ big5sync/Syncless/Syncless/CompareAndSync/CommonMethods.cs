@@ -68,7 +68,10 @@ namespace Syncless.CompareAndSync
             {
                 try
                 {
-                    xmlDoc.Load(xmlPath);
+                    lock (SyncLock)
+                    {
+                        xmlDoc.Load(xmlPath);
+                    }
                     break;
                 }
                 catch (FileNotFoundException)
