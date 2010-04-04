@@ -31,4 +31,4 @@ The Notification component makes use of the observer pattern to notify its watch
 
 = Extending Notification =
 
-To include more notifications, developers can add more enumerators to the `!NotificationCode` enumeration and extend the `AbstractNotification` class.
+To include more notifications, developers can add more enumerators to the `NotificationCode` enumeration and extend the `AbstractNotification` class.
