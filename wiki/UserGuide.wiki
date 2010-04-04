@@ -240,7 +240,7 @@ If you forget the shortcut keys, simply go to http://big5sync.googlecode.com/fil
 
 === Accessing Tags Through Right-clicking ===
 
-If you prefer right-clicking than clicking buttons, Syncless provides you the option to access your tags through context menu.
+If you prefer right-clicking to clicking buttons, Syncless provides you the option to access your tags through context menu.
 
 http://big5sync.googlecode.com/files/Right_Click_Tag_List.jpg
 
