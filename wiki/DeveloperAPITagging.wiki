@@ -9,6 +9,7 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 = Classes Summary =
 
 || *Class* || *Description* ||
+|| [#CurrentTime CurrentTime] || ||
 || [#LogMessage LogMessage] || ||
 || [#Tag Tag] || ||
 || [#TagConfig TagConfig] || ||
@@ -18,6 +19,10 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 || [#TaggingProfile TaggingProfile] || ||
 || [#TaggingXMLHelper TaggingXMLHelper] || ||
 || [#TagMerger TagMerger] || ||
+
+== !CurrentTime ==
+
+[#Classes_Summary Back to top]
 
 == !LogMessage ==
 
