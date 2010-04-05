@@ -1,0 +1,23 @@
+#summary Developers' Guide - API - Monitor.DTO
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Classes Summary =
+
+== DeleteChangeEvent ==
+
+== DriveChangeEvent ==
+
+== FileChangeEvent ==
+
+== FileSystemEvent ==
+
+== FolderChangeEvent ==
+
+= Enumerations Summary =
+
+== DriveChangeType ==
+
+== EventChageType ==
+
+== FileSystemType ==
