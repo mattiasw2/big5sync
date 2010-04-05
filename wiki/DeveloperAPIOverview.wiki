@@ -19,12 +19,12 @@ This document is the API specification for Syncless, version 2.0
 || [DeveloperAPICore Syncless.Core] || ||
 || [DeveloperAPICoreExceptions Syncless.Core.Exceptions] || ||
 || [DeveloperAPICoreView Syncless.Core.View] || ||
-|| [DeveloperAPIFilters Syncless.Filters] || ||
+|| [DeveloperAPIFilter Syncless.Filters] || ||
 || [DeveloperAPIHelper Syncless.Helper] || ||
 || [DeveloperAPILogging Syncless.Logging] || ||
 || [DeveloperAPIMonitor Syncless.Monitor] || ||
-|| [DeveloperAPIDTO Syncless.Monitor.DTO] || ||
-|| [DeveloperAPIExceptions Syncless.Monitor.Exceptions] || ||
+|| [DeveloperAPIMonitorDTO Syncless.Monitor.DTO] || ||
+|| [DeveloperAPIMonitorExceptions Syncless.Monitor.Exceptions] || ||
 || [DeveloperAPINotification Syncless.Notification] || ||
 || [DeveloperAPINotificationUINotification Syncless.Notification.UINotification] || ||
 || [DeveloperAPIProfiling Syncless.Profiling] || ||
