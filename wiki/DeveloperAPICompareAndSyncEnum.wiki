@@ -2,7 +2,7 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
-`[`*[DeveloperAPICompareAndSyncEnum Prev - Syncless.CompareAndSync.Enum]* `|` *[DeveloperAPICompareAndSyncExceptions Next - Syncless.CompareAndSync.Exceptions]*`]`
+`[`*[DeveloperAPICompareAndSyncCompareObject Prev - Syncless.CompareAndSync.CompareObject]* `|` *[DeveloperAPICompareAndSyncExceptions Next - Syncless.CompareAndSync.Exceptions]*`]`
 
 = Enumerations Summary =
 
@@ -22,4 +22,4 @@
 
 [#Enumerations_Summary Back to top]
 
-`[`*[DeveloperAPICompareAndSyncEnum Prev - Syncless.CompareAndSync.Enum]* `|` *[DeveloperAPICompareAndSyncExceptions Next - Syncless.CompareAndSync.Exceptions]*`]`
+`[`*[DeveloperAPICompareAndSyncCompareObject Prev - Syncless.CompareAndSync.CompareObject]* `|` *[DeveloperAPICompareAndSyncExceptions Next - Syncless.CompareAndSync.Exceptions]*`]`
