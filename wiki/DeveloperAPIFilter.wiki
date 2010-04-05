@@ -2,20 +2,26 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
-= !ExtensionFilter =
+= Classes Summary =
 
-= !FileFilter =
+== !ExtensionFilter ==
 
-= Filter =
+== !FileFilter ==
 
-= !FilterChain =
+== Filter ==
 
-= !FilterFactory =
+== !FilterChain ==
 
-= !FolderFilter =
+== !FilterFactory ==
 
-= !SizeFilter =
+== !FolderFilter ==
 
-= !SynclessArchiveFilter =
+== !SizeFilter ==
 
-= !SynclessConfigFilter =
+== !SynclessArchiveFilter ==
+
+== !SynclessConfigFilter ==
+
+= Enumerations Summary =
+
+== !FilterMode ==
