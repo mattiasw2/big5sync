@@ -102,7 +102,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
             actualFolder.UpdateRename(pos);
             actualFolder.ChangeType[pos] = MetaChangeType.Rename;
-            //actualFolder.Parent.Dirty = true; //EXP
+            actualFolder.Parent.Dirty = true; //EXP
             renamedFolder.Contents = new Dictionary<string, BaseCompareObject>();
             renamedFolder.Invalid = true;
         }
