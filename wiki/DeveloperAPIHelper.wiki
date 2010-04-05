@@ -1,14 +1,15 @@
 #summary Developers' Guide - API - Helper
 #labels Phase-Implementation
+#sidebar DeveloperAPISidebar
 
-= Introduction =
+= Classes Summary =
 
-Add your content here.
+== Cleaner ==
 
+== !CommonXmlHelper ==
 
-= Details =
+== !DriveHelper ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== !ErrorMessage ==
+
+== !PathHelper ==
