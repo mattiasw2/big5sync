@@ -8,10 +8,14 @@
 || [#CurrentTimeLong CurrentTimeLong] || The current time in long format ||
 || !CurrentTimeString || The current time in string format DD/MM/YY HH:MM:SS ||
 
+= Properties Details =
+
 == !CurrentTimeLong ==
 
 `internal long` !CurrentTimeLong
          The current time in long format.
+
+----
 
 = Constructors Summary =
 
