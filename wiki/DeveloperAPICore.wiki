@@ -33,3 +33,11 @@
 == !SystemLogicLayer ==
 
 == !TableType ==
+
+= Exceptions Summary =
+
+== !InvalidPathException ==
+
+== !LoggerNotFoundException ==
+
+== !UnhandledException ==
