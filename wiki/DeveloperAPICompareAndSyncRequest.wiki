@@ -2,16 +2,32 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPICompareAndSyncManualVisitor Prev - Syncless.CompareAndSync.Manual.Visitor]* `|` *[DeveloperAPICompareAndSyncSeamless Next - Syncless.CompareAndSync.Seamless]*`]`
+
 = Classes Summary =
 
 == !AutoSyncRequest ==
 
+[#Classes_Summary Back to top]
+
 == !CancelSyncRequest ==
+
+[#Classes_Summary Back to top]
 
 == !ManualCompareRequest ==
 
+[#Classes_Summary Back to top]
+
 == !ManualRequest ==
+
+[#Classes_Summary Back to top]
 
 == !ManualSyncRequest ==
 
+[#Classes_Summary Back to top]
+
 == Request ==
+
+[#Classes_Summary Back to top]
+
+`[`*[DeveloperAPICompareAndSyncManualVisitor Prev - Syncless.CompareAndSync.Manual.Visitor]* `|` *[DeveloperAPICompareAndSyncSeamless Next - Syncless.CompareAndSync.Seamless]*`]`
