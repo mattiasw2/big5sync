@@ -43,6 +43,11 @@ namespace Syncless.CompareAndSync.Visitor
                 folder = PopulateFolderWithMetaData(xmlDoc, folder, i);
             }
 
+            AddXmlNodes(folder, numOfPaths, xmlDoc);
+        }
+
+        private void AddXmlNodes(FolderCompareObject folder, int numOfPaths, XmlDocument xmlDoc)
+        {
             List<XMLCompareObject> xmlObjList = new List<XMLCompareObject>();
             List<string> xmlFolderList = new List<string>();
 
