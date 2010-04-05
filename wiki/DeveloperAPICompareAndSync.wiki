@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - CompareAndSync
+#summary Developers' Guide - API - Syncless.CompareAndSync
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
