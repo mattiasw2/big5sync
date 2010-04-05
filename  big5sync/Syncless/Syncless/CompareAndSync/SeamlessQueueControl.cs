@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Syncless.CompareAndSync.Request;
+using Syncless.CompareAndSync.Seamless;
 
 namespace Syncless.CompareAndSync
 {

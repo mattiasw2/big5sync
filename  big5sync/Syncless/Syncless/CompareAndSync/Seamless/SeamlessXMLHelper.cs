@@ -4,9 +4,9 @@ using System.Xml;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.XMLWriteObject;
 
-namespace Syncless.CompareAndSync
+namespace Syncless.CompareAndSync.Seamless
 {
-    public class XMLHelper
+    public class SeamlessXMLHelper
     {
         private static long dateTime = DateTime.Now.Ticks;
 
@@ -79,7 +79,7 @@ namespace Syncless.CompareAndSync
             XmlNode rootNode = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr);
             rootNode.AppendChild(fileElement);
             CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
-            DeleteFileTodoByName(xmlWriteObj);
+            DeleteFileToDoByName(xmlWriteObj);
         }
 
         private static void UpdateFile(XMLWriteFileObject xmlWriteObj)
@@ -123,7 +123,7 @@ namespace Syncless.CompareAndSync
             }
 
             CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
-            DeleteFileTodoByName(xmlWriteObj);
+            DeleteFileToDoByName(xmlWriteObj);
         }
 
 
@@ -141,7 +141,7 @@ namespace Syncless.CompareAndSync
             tempNode = node.Clone();
             node.FirstChild.InnerText = xmlWriteObj.NewName;
             CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
-            GenerateFileTodo(xmlWriteObj, tempNode);
+            GenerateFileToDo(xmlWriteObj, tempNode);
         }
 
         private static void DeleteFile(XMLWriteFileObject xmlWriteObj)
@@ -160,7 +160,7 @@ namespace Syncless.CompareAndSync
                 CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
             }
 
-            GenerateFileTodo(xmlWriteObj, tempNode);
+            GenerateFileToDo(xmlWriteObj, tempNode);
         }
 
         #endregion
@@ -200,7 +200,7 @@ namespace Syncless.CompareAndSync
             XmlNode rootNode = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr);
             rootNode.AppendChild(folder);
             CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
-            DeleteFolderTodoByName(xmlWriteObj);
+            DeleteFolderToDoByName(xmlWriteObj);
         }
 
         private static void RenameFolder(XMLWriteFolderObject xmlWriteObj)
@@ -227,7 +227,7 @@ namespace Syncless.CompareAndSync
                 return;
             subFolderNode.InnerText = xmlWriteObj.NewName;
             CommonMethods.SaveXML(ref subFolderXmlDoc, subFolderXmlPath);
-            GenerateFolderTodo(xmlWriteObj);
+            GenerateFolderToDo(xmlWriteObj);
         }
 
         private static void DeleteFolder(XMLWriteFolderObject xmlWriteObj)
@@ -244,14 +244,14 @@ namespace Syncless.CompareAndSync
                 CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
             }
 
-            GenerateFolderTodo(xmlWriteObj);
+            GenerateFolderToDo(xmlWriteObj);
         }
 
         #endregion
 
         #region ToDo Operations
 
-        private static void GenerateFileTodo(XMLWriteFileObject xmlWriteObj, XmlNode deletedNode)
+        private static void GenerateFileToDo(XMLWriteFileObject xmlWriteObj, XmlNode deletedNode)
         {
             if (deletedNode == null)
                 return;
@@ -260,11 +260,11 @@ namespace Syncless.CompareAndSync
             string todoPath = Path.Combine(fullPath, CommonXMLConstants.TodoPath);
             CommonMethods.CreateToDoFile(fullPath);
             CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
-            AppendActionFileTodo(xmlTodoDoc, xmlWriteObj, CommonXMLConstants.ActionDeleted, deletedNode);
+            AppendActionFileToDo(xmlTodoDoc, xmlWriteObj, CommonXMLConstants.ActionDeleted, deletedNode);
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
         }
 
-        private static void GenerateFolderTodo(XMLWriteFolderObject xmlWriteObj)
+        private static void GenerateFolderToDo(XMLWriteFolderObject xmlWriteObj)
         {
             string parentPath = xmlWriteObj.FullPath;
             if (!Directory.Exists(parentPath))
@@ -274,11 +274,11 @@ namespace Syncless.CompareAndSync
             string todoPath = Path.Combine(parentPath, CommonXMLConstants.TodoPath);
             CommonMethods.CreateToDoFile(parentPath);
             CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
-            AppendActionFolderTodo(xmlTodoDoc, xmlWriteObj, CommonXMLConstants.ActionDeleted);
+            AppendActionFolderToDo(xmlTodoDoc, xmlWriteObj, CommonXMLConstants.ActionDeleted);
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
         }
 
-        private static void AppendActionFileTodo(XmlDocument xmlDoc, XMLWriteFileObject xmlWriteObj, string changeType, XmlNode node)
+        private static void AppendActionFileToDo(XmlDocument xmlDoc, XMLWriteFileObject xmlWriteObj, string changeType, XmlNode node)
         {
             string hash = string.Empty;
             string lastModified = string.Empty;
@@ -326,7 +326,7 @@ namespace Syncless.CompareAndSync
             rootNode.AppendChild(fileElement);
         }
 
-        private static void DeleteFileTodoByName(XMLWriteFileObject xmlWriteObj)
+        private static void DeleteFileToDoByName(XMLWriteFileObject xmlWriteObj)
         {
             string todoXmlPath = Path.Combine(xmlWriteObj.FullPath, CommonXMLConstants.TodoPath);
             if (!File.Exists(todoXmlPath))
@@ -340,7 +340,7 @@ namespace Syncless.CompareAndSync
             CommonMethods.SaveXML(ref todoXmlDoc, todoXmlPath);
         }
 
-        private static void AppendActionFolderTodo(XmlDocument xmlDoc, XMLWriteFolderObject folder, string changeType)
+        private static void AppendActionFolderToDo(XmlDocument xmlDoc, XMLWriteFolderObject folder, string changeType)
         {
             XmlText nameText = xmlDoc.CreateTextNode(folder.Name);
             XmlText action = xmlDoc.CreateTextNode(changeType);
@@ -362,7 +362,7 @@ namespace Syncless.CompareAndSync
             rootNode.AppendChild(folderElement);
         }
 
-        private static void DeleteFolderTodoByName(XMLWriteFolderObject xmlWriteObj)
+        private static void DeleteFolderToDoByName(XMLWriteFolderObject xmlWriteObj)
         {
             string todoXmlPath = Path.Combine(xmlWriteObj.FullPath, CommonXMLConstants.TodoPath);
             if (!File.Exists(todoXmlPath))
