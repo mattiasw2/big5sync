@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Syncless.Core.View;
 
 namespace Syncless.Core
 {
@@ -12,7 +13,9 @@ namespace Syncless.Core
         
         void DriveChanged(); // <--- inform you of a drive that is changed
 
-        void TagChanged(); // <--- inform you of a change in one of the tag
+        void TagChanged(string tagName); // <--- inform you of a change in the TagView
+
+        void TagsChanged(); // <-- inform you of changes in the tags changed
 
         void PathChanged();
     }

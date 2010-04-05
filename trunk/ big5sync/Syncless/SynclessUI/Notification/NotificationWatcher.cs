@@ -94,12 +94,10 @@ namespace SynclessUI.Notification
                 SyncCompleteNotification scNotification = notification as SyncCompleteNotification;
                 if(scNotification != null)
                 {
-                    
-                    
                     _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                         (Action)(() =>
                         {
-                            _main.TagChanged();
+                            _main.TagChanged(scNotification.TagName);
                             Console.WriteLine("Sync Complete: Calling Tag Changed");
                         }));
                 }

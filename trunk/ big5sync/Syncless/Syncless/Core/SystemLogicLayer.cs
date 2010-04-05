@@ -618,7 +618,7 @@ namespace Syncless.Core
             AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance);
             SendAutoRequest(request);
             FindAndCleanDeletedPaths();
-            _userInterface.TagChanged();
+            _userInterface.TagsChanged();
         }
 
         private void HandleRootFolderDeleteEvent(FolderChangeEvent dce)
@@ -685,7 +685,7 @@ namespace Syncless.Core
             AutoSyncRequest request = new AutoSyncRequest(dce.OldPath.Name, dce.OldPath.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance);
             SendAutoRequest(request);
             FindAndCleanDeletedPaths();
-            _userInterface.TagChanged();
+            _userInterface.TagsChanged();
         }
 
         #endregion
@@ -920,9 +920,9 @@ namespace Syncless.Core
         {
             switch (mode)
             {
-                case TagMode.Seamless:
+                case TagMode.Seamless: MonitorTag(name, true);
                     break;
-                case TagMode.Manual:
+                case TagMode.Manual: MonitorTag(name, false);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("mode");
@@ -956,7 +956,7 @@ namespace Syncless.Core
         /// <param name="mode">true - set tag to seamless. , false - set tag to manual</param>
         /// <exception cref="TagNotFoundException">If the Tag is not found</exception>
         /// <returns>whether the tag can be changed.</returns>
-        public bool MonitorTag(string tagname, bool mode)
+        private bool MonitorTag(string tagname, bool mode)
         {
 
             if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tagname))
@@ -971,7 +971,7 @@ namespace Syncless.Core
                     throw new TagNotFoundException(tagname);
                 }
                 SwitchMonitorTag(tag, mode);
-                _userInterface.TagChanged();
+                _userInterface.TagChanged(tagname);
                 return true;
             }
             catch (TagNotFoundException tge)
@@ -1242,7 +1242,7 @@ namespace Syncless.Core
             try
             {
                 Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
-                return t.Filters;
+                return t.ReadOnlyFilters;
             }
             catch (Exception e)
             {
@@ -1832,7 +1832,7 @@ namespace Syncless.Core
                 return;
             }
             SetTagMode(t, true);
-            _userInterface.TagChanged();
+            _userInterface.TagChanged(tagname);
         }
         /// <summary>
         /// Inform The Tagging Layer to untag a particular path as it is no longer available.
@@ -1845,7 +1845,7 @@ namespace Syncless.Core
                 string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(path, false);
                 TaggingLayer.Instance.UntagFolder(convertedPath);
             }
-            _userInterface.TagChanged();
+            _userInterface.TagsChanged();
         }
         #endregion
 
