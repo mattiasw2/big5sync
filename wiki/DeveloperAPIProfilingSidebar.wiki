@@ -5,7 +5,7 @@
       * [DeveloperAPIProfiling#ProfileDrive ProfileDrive]
       * [DeveloperAPIProfiling#Profile Profile]
       * [DeveloperAPIProfiling#ProfilingLayer ProfilingLayer]
-      * [DeveloperAPIProfiling#ProfilingMerger ProfilingMerger]
+      * [DeveloperAPIProfiling#ProfileMerger ProfileMerger]
       * [DeveloperAPIProfiling#ProfilingHelper ProfilingHelper]
       * [DeveloperAPIProfiling#ProfilingXMLHelper ProfilingXMLHelper]
       * [DeveloperAPIProfiling#ProfilingGUIDHelper ProfilingGUIDHelper]
