@@ -1,0 +1,13 @@
+#summary Developers' Guide - API - Profiling.Exceptions
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Exceptions Summary =
+
+== !ProfileDriveConflictException ==
+
+== !ProfileGuidConflictException ==
+
+== !ProfileLoadException ==
+
+== !ProfileNameDifferentException ==
