@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - CompareAndSync.Manual.Visitor
+#summary Developers' Guide - API - Syncless.CompareAndSync.Manual.Visitor
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
