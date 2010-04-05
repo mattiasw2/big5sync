@@ -1,0 +1,11 @@
+#summary Developers' Guide - API - CompareAndSync.XMLWriteObject
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Classes Summary =
+
+== BaseXMLWriteObject ==
+
+== XMLWriteFileObject ==
+
+== XMLWriteFolderObject ==
