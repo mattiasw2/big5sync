@@ -8,8 +8,10 @@
 
 == !PathView ==
 
+== !TagView ==
+
+= Enumerations Summary =
+
 == !TagMode ==
 
 == !TagState ==
-
-== !TagView ==
