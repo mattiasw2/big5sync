@@ -9,6 +9,7 @@ Provides static string values which are used for logging events invoked in the T
 || *Property* || *Description* ||
 || [#TAG_CREATED TAG_CREATED] || The string value for tag creation event log ||
 || [#TAG_RENAMED TAG_RENAMED] || The string value for tag rename event log ||
+|| [#TAG_REMOVED TAG_REMOVED] || The string value for tag removal event log ||
 
 = Properties Details =
 
@@ -22,6 +23,13 @@ Provides static string values which are used for logging events invoked in the T
 == TAG_RENAMED ==
 
 `internal static string` TAG_RENAMED
-        The string value for tag creation event log given by "Tag \'{0}\' renamed to \'{1}\'." where {0} will be replaced by a tag name property when used.
+        The string value for tag rename event log given by "Tag \'{0}\' renamed to \'{1}\'." where {0} will be replaced by a tag name property when used.
+
+----
+
+== TAG_REMOVED ==
+
+`internal static string` TAG_REMOVED
+        The string value for tag removal event log given by "Tag \'{0}\' removed." where {0} will be replaced by a tag name property when used.
 
 ----
