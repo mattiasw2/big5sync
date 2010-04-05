@@ -240,8 +240,11 @@ namespace Syncless.Core
                 return;
             }
             //Create the request and Send it.
-            AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.Update, SyncConfig.Instance);
-            SendAutoRequest(request);
+            if (fe.OldPath.Directory != null)
+            {
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.Update, SyncConfig.Instance);
+                SendAutoRequest(request);
+            }
         }
 
         private void HandleFileCreateEvent(FileChangeEvent fe)
@@ -300,8 +303,11 @@ namespace Syncless.Core
                 return;
             }
             //Create the request and Send it.
-            AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.New, SyncConfig.Instance);
-            SendAutoRequest(request);
+            if (fe.OldPath.Directory != null)
+            {
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.New, SyncConfig.Instance);
+                SendAutoRequest(request);
+            }
         }
 
         private static void SendAutoRequest(AutoSyncRequest request)
@@ -709,7 +715,7 @@ namespace Syncless.Core
         {
             try
             {
-                return this.ManualSync(tagname, false);
+                return ManualSync(tagname, false);
             }
             catch (Exception e)
             {
@@ -753,8 +759,8 @@ namespace Syncless.Core
             {
                 Tag t = TaggingLayer.Instance.DeleteTag(tagname);
                 SaveLoadHelper.SaveAll(_userInterface.getAppPath());
-                DeleteTagCleanDelegate cleanDel = new DeleteTagCleanDelegate(DeleteTagClean);
-                cleanDel.BeginInvoke(t, null, null);
+                new DeleteTagCleanDelegate(DeleteTagClean).BeginInvoke(t,null,null);
+                
                 return t != null;
             }
             catch (TagNotFoundException)
@@ -781,9 +787,9 @@ namespace Syncless.Core
                 SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return ConvertToTagView(t);
             }
-            catch (TagAlreadyExistsException te)
+            catch (TagAlreadyExistsException)
             {
-                throw te;
+                throw;
             }
             catch (Exception e) //Handle Unexpected Exception
             {
@@ -809,8 +815,8 @@ namespace Syncless.Core
                 {
                     throw new InvalidPathException(folder.FullName);
                 }
-                Tag tag = null;
-                tag = TaggingLayer.Instance.TagFolder(path, tagname);
+
+                Tag tag = TaggingLayer.Instance.TagFolder(path, tagname);
                 if (tag == null)
                 {
                     return null;
@@ -822,13 +828,13 @@ namespace Syncless.Core
                 SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return ConvertToTagView(tag);
             }
-            catch (RecursiveDirectoryException re)
+            catch (RecursiveDirectoryException)
             {
-                throw re;
+                throw;
             }
-            catch (PathAlreadyExistsException pae)
+            catch (PathAlreadyExistsException)
             {
-                throw pae;
+                throw;
             }
             catch (Exception e) // Handle Unexpected Exception
             {
@@ -865,13 +871,13 @@ namespace Syncless.Core
 
                 }
                 SaveLoadHelper.SaveAll(_userInterface.getAppPath());
-                CleanMetaDataDelegate del = new CleanMetaDataDelegate(CleanMetaData);
-                del.BeginInvoke(folder, null, null);
+                new CleanMetaDataDelegate(CleanMetaData).BeginInvoke(folder, null, null);
+                
                 return count;
             }
-            catch (TagNotFoundException tnfe)
+            catch (TagNotFoundException)
             {
-                throw tnfe;
+                throw;
             }
             catch (Exception e)
             {
@@ -956,12 +962,12 @@ namespace Syncless.Core
         /// <param name="mode">true - set tag to seamless. , false - set tag to manual</param>
         /// <exception cref="TagNotFoundException">If the Tag is not found</exception>
         /// <returns>whether the tag can be changed.</returns>
-        private bool MonitorTag(string tagname, bool mode)
+        private void MonitorTag(string tagname, bool mode)
         {
 
             if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tagname))
             {
-                return false;
+                return;
             }
             try
             {
@@ -972,11 +978,11 @@ namespace Syncless.Core
                 }
                 SwitchMonitorTag(tag, mode);
                 _userInterface.TagChanged(tagname);
-                return true;
+                return;
             }
-            catch (TagNotFoundException tge)
+            catch (TagNotFoundException)
             {
-                throw tge;
+                throw;
             }
             catch (Exception e)
             {
@@ -992,9 +998,9 @@ namespace Syncless.Core
         {
             try
             {
-                List<Tag> TagList = TaggingLayer.Instance.TagList;
+                List<Tag> tagList = TaggingLayer.Instance.TagList;
                 List<string> tagNames = new List<string>();
-                foreach (Tag t in TagList)
+                foreach (Tag t in tagList)
                 {
                     if (!t.IsDeleted)
                     {
@@ -1082,10 +1088,9 @@ namespace Syncless.Core
                     ManualCompareRequest request = new ManualCompareRequest(filteredPaths[0].ToArray(), tag.Filters, SyncConfig.Instance);
                     return CompareAndSyncController.Instance.Compare(request);
                 }
-                else
-                {
-                    return null;
-                }
+
+                return null;
+
             }
             catch (Exception e)
             {
@@ -1145,6 +1150,28 @@ namespace Syncless.Core
         /// <returns></returns>
         public bool Initiate(IUIInterface inf)
         {
+            bool hasWriteAccess = CheckForWriteAccess(inf);
+            if (!hasWriteAccess)
+            {
+                return false;
+            }
+            try
+            {
+                _userInterface = inf;
+
+                bool init = Initiate();
+                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                return init;
+            }
+            catch (Exception e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+
+        private bool CheckForWriteAccess(IUIInterface inf)
+        {
             try
             {
                 //Ensure the app folder have write access
@@ -1160,29 +1187,18 @@ namespace Syncless.Core
                         info.Delete();
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-
+                    ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 }
             }
-            catch (Exception)
+            catch (IOException)
             {
                 return false;
             }
-            try
-            {
-                this._userInterface = inf;
-
-                bool init = Initiate();
-                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
-                return init;
-            }
-            catch (Exception e)
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                throw new UnhandledException(e);
-            }
+            return true;
         }
+
         /// <summary>
         /// XXXXXXXXXXXXXXXXXXXX NOT IMPLEMENTED XXXXXXXXXXXXXXXXXXXXXXXX
         /// </summary>
@@ -1222,9 +1238,9 @@ namespace Syncless.Core
                 SaveLoadHelper.SaveAll(_userInterface.getAppPath());
                 return true;
             }
-            catch (TagNotFoundException tnfe)
+            catch (TagNotFoundException)
             {
-                throw tnfe;
+                throw;
             }
             catch (Exception e)
             {
@@ -1371,9 +1387,9 @@ namespace Syncless.Core
             {
                 return LoggingLayer.Instance.ReadLog();
             }
-            catch (LogFileCorruptedException lfce)
+            catch (LogFileCorruptedException)
             {
-                throw lfce;
+                throw;
             }
             catch (Exception e)
             {
@@ -1429,11 +1445,14 @@ namespace Syncless.Core
 
             try
             {
-                _switchingTable.Remove(tag.TagName);
+                if (_switchingTable.ContainsKey(tag.TagName))
+                {
+                    _switchingTable.Remove(tag.TagName);
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
             }
         }
         /// <summary>
@@ -1496,11 +1515,11 @@ namespace Syncless.Core
         /// <param name="mode"></param>
         private void SwitchMonitorTag(Tag tag, bool mode)
         {
-            TagState state = TagState.Undefined;
+            TagState state;
             _switchingTable.TryGetValue(tag.TagName, out state);
             if (state == TagState.Undefined)
             {
-                _switchingTable.Add(tag.TagName, mode == true ? TagState.ManualToSeamless : TagState.SeamlessToManual);
+                _switchingTable.Add(tag.TagName, mode ? TagState.ManualToSeamless : TagState.SeamlessToManual);
             }
 
             if (mode)
@@ -1621,8 +1640,9 @@ namespace Syncless.Core
                             }
 
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
+                            ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                         }
 
                         StartMonitorTag(t);
@@ -1807,7 +1827,7 @@ namespace Syncless.Core
         {
             try
             {
-                Tag t = TaggingLayer.Instance.DeleteTag(tag.TagName);
+                TaggingLayer.Instance.DeleteTag(tag.TagName);
             }
             catch (TagNotFoundException te)
             {
