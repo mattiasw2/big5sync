@@ -207,6 +207,64 @@ namespace Syncless.CompareAndSync
             return sb.ToString();
         }
 
+        public static void DoFileCleanUp(XmlDocument xmlDoc, string name)
+        {
+            XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(name) + "]");
+
+            if (node == null)
+                return;
+
+            node.ParentNode.RemoveChild(node);
+        }
+
+        public static void DoFolderCleanUp(XmlDocument xmlDoc, string name)
+        {
+            XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(name) + "]");
+
+            if (node == null)
+                return;
+
+            node.ParentNode.RemoveChild(node);
+        }
+
+        public static void CreateToDoFile(string path)
+        {
+            string todoXML = Path.Combine(path, CommonXMLConstants.TodoPath);
+            if (File.Exists(todoXML))
+                return;
+
+            while (true)
+            {
+                try
+                {
+                    DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, CommonXMLConstants.MetaDir));
+                    di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+                    XmlTextWriter writer = new XmlTextWriter(todoXML, null);
+                    writer.Formatting = Formatting.Indented;
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement(CommonXMLConstants.NodeLastKnownState);
+                    writer.WriteEndElement();
+                    writer.WriteEndDocument();
+                    writer.Flush();
+                    writer.Close();
+                    break;
+                }
+                catch (IOException)
+                {
+                    break;
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    break;
+                }
+                catch (XmlException)
+                {
+                    if (File.Exists(todoXML))
+                        File.Delete(todoXML);
+                }
+            }
+        }
+
         #endregion
 
         #region File Operations

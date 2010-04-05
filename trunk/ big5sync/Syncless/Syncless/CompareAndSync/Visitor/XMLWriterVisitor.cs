@@ -90,7 +90,7 @@ namespace Syncless.CompareAndSync.Visitor
             string xmlPath = Path.Combine(file.GetSmartParentPath(counter), CommonXMLConstants.MetadataPath);
             CommonMethods.CreateFileIfNotExist(file.GetSmartParentPath(counter));
             CommonMethods.LoadXML(ref xmlDoc, xmlPath);
-            DoFileCleanUp(xmlDoc, useNewName ? file.NewName : file.Name);
+            CommonMethods.DoFileCleanUp(xmlDoc, useNewName ? file.NewName : file.Name);
 
             XmlText hashText = xmlDoc.CreateTextNode(file.Hash[counter]);
             XmlText nameText = xmlDoc.CreateTextNode(useNewName ? file.NewName : file.Name);
@@ -266,7 +266,7 @@ namespace Syncless.CompareAndSync.Visitor
             string xmlPath = Path.Combine(folder.GetSmartParentPath(counter), CommonXMLConstants.MetadataPath);
             CommonMethods.CreateFileIfNotExist(folder.GetSmartParentPath(counter));
             CommonMethods.LoadXML(ref xmlDoc, xmlPath);
-            DoFolderCleanUp(xmlDoc, name);
+            CommonMethods.DoFolderCleanUp(xmlDoc, name);
             XmlText nameText = xmlDoc.CreateTextNode(name);
             XmlText lastUpdatedText = xmlDoc.CreateTextNode(_dateTime.ToString());
             XmlElement nameElement = xmlDoc.CreateElement(CommonXMLConstants.NodeName);
@@ -376,41 +376,6 @@ namespace Syncless.CompareAndSync.Visitor
 
         #region ToDo Operations
 
-        private void CreateToDoFile(string path)
-        {
-            string todoXML = Path.Combine(path, CommonXMLConstants.TodoPath);
-            if (File.Exists(todoXML))
-                return;
-            try
-            {
-                DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, CommonXMLConstants.MetaDir));
-                di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-                XmlTextWriter writer = new XmlTextWriter(todoXML, null);
-                writer.Formatting = Formatting.Indented;
-                writer.WriteStartDocument();
-                writer.WriteStartElement(CommonXMLConstants.NodeLastKnownState);
-                writer.WriteEndElement();
-                writer.WriteEndDocument();
-                writer.Flush();
-                writer.Close();
-            }
-            catch (IOException)
-            {
-
-            }
-            catch (UnauthorizedAccessException)
-            {
-
-            }
-            catch (XmlException)
-            {
-                if (File.Exists(todoXML))
-                    File.Delete(todoXML);
-
-                CreateToDoFile(path);
-            }
-        }
-
         private void AppendActionFileToDo(XmlDocument xmlDoc, FileCompareObject file, int counter, string changeType)
         {
             XmlText hashText = xmlDoc.CreateTextNode(file.MetaHash[counter]);
@@ -505,7 +470,7 @@ namespace Syncless.CompareAndSync.Visitor
             string parentPath = file.GetSmartParentPath(counter);
             XmlDocument xmlTodoDoc = new XmlDocument();
             string todoPath = Path.Combine(parentPath, CommonXMLConstants.TodoPath);
-            CreateToDoFile(parentPath);
+            CommonMethods.CreateToDoFile(parentPath);
             CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
             AppendActionFileToDo(xmlTodoDoc, file, counter, CommonXMLConstants.ActionDeleted);
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
@@ -516,34 +481,10 @@ namespace Syncless.CompareAndSync.Visitor
             string parentPath = folder.GetSmartParentPath(counter);
             XmlDocument xmlTodoDoc = new XmlDocument();
             string todoPath = Path.Combine(parentPath, CommonXMLConstants.TodoPath);
-            CreateToDoFile(parentPath);
+            CommonMethods.CreateToDoFile(parentPath);
             CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
             AppendActionFolderToDo(xmlTodoDoc, folder, CommonXMLConstants.ActionDeleted);
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
-        }
-
-        #endregion
-
-        #region Misc Operations
-
-        private void DoFileCleanUp(XmlDocument xmlDoc, string name)
-        {
-            XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(name) + "]");
-            
-            if (node == null)
-                return;
-
-            node.ParentNode.RemoveChild(node);
-        }
-
-        private void DoFolderCleanUp(XmlDocument xmlDoc, string name)
-        {
-            XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(name) + "]");
-            
-            if (node == null)
-                return;
-
-            node.ParentNode.RemoveChild(node);
         }
 
         #endregion
