@@ -6,7 +6,7 @@
 
 || *Property* || *Description* ||
 || [#CurrentTimeLong CurrentTimeLong] || The current time in long format ||
-|| !CurrentTimeString || The current time in string format DD/MM/YY HH:MM:SS ||
+|| [#CurrentTimeString CurrentTimeString] || The current time in string format DD/MM/YY HH:MM:SS ||
 
 = Properties Details =
 
@@ -14,6 +14,13 @@
 
 `internal long` !CurrentTimeLong
          The current time in long format.
+
+----
+
+== !CurrentTimeString ==
+
+`internal long` !CurrentTimeString
+         The current time in string format DD/MM/YY HH:MM:SS.
 
 ----
 
