@@ -36,6 +36,8 @@
 `internal` !CurrentTime()
         Creates a new !CurrentTime object.
 
+----
+
 = Methods Summary =
 
 || *Method* || *Description* ||
