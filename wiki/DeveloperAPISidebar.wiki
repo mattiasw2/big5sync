@@ -156,7 +156,7 @@
       * [DeveloperAPIMonitorExceptions#Exceptions_Summary Exceptions Summary]
         * [DeveloperAPIMonitorExceptions#MonitorDriveNotFoundException MonitorDriveNotFoundException]
         * [DeveloperAPIMonitorExceptions#MonitorPathNotFoundException MonitorPathNotFoundException]
-    * [DeveloperAPINotification Notification]
+    * [DeveloperAPINotification Syncless.Notification]
       * [DeveloperAPINotification#Interfaces_Summary Interfaces Summary]
         * [DeveloperAPINotification#INotificationQueue INotificationQueue]
         * [DeveloperAPINotification#IQueueObserver IQueueObserver]
