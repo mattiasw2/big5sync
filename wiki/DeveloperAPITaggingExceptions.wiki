@@ -2,20 +2,40 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPITagging Prev - Syncless.Tagging]* `|` *[DeveloperAPIUI Next - SynclessUI]*`]`
+
 = Exceptions Summary =
 
 == CorruptedTaggingXMLException ==
 
+[#Exceptions_Summary Back to top]
+
 == !FilterAlreadyExistException ==
+
+[#Exceptions_Summary Back to top]
 
 == !FilterNotExistException ==
 
+[#Exceptions_Summary Back to top]
+
 == !PathAlreadyExistsException ==
+
+[#Exceptions_Summary Back to top]
 
 == !PathNotFoundException ==
 
+[#Exceptions_Summary Back to top]
+
 == !RecursiveDirectoryException ==
+
+[#Exceptions_Summary Back to top]
 
 == !TagAlreadyExistsException ==
 
+[#Exceptions_Summary Back to top]
+
 == !TagNotFoundException ==
+
+[#Exceptions_Summary Back to top]
+
+`[`*[DeveloperAPITagging Prev - Syncless.Tagging]* `|` *[DeveloperAPIUI Next - SynclessUI]*`]`
