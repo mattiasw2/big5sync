@@ -1,5 +1,5 @@
 #labels Phase-Implementation
-  * [ Syncless Namespaces]
+  * Syncless Namespaces
     * [DeveloperAPICore Core]
     * [DeveloperAPIProfiling Profiling]
     * [DeveloperAPITagging Tagging]
@@ -9,7 +9,7 @@
     * [DeveloperAPIFilter Filters]
     * [DeveloperAPINotification Notification]
     * [DeveloperAPIHelper Helper]
-  * [ SynclessUI Namespaces]
+  * SynclessUI Namespaces
     * [Helper]
     * [Notification]
     * [Visitor]
