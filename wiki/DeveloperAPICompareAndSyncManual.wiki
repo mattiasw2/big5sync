@@ -2,8 +2,16 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPICompareAndSyncExceptions Prev - Syncless.CompareAndSync.Exceptions]* `|` *[DeveloperAPICompareAndSyncManualVisitor Next - Syncless.CompareAndSync.Manual.Visitor]*`]`
+
 = Classes Summary =
 
 == !ManualQueueControl ==
 
+[#Classes_Summary Back to top]
+
 == !ManualSyncer ==
+
+[#Classes_Summary Back to top]
+
+`[`*[DeveloperAPICompareAndSyncExceptions Prev - Syncless.CompareAndSync.Exceptions]* `|` *[DeveloperAPICompareAndSyncManualVisitor Next - Syncless.CompareAndSync.Manual.Visitor]*`]`
