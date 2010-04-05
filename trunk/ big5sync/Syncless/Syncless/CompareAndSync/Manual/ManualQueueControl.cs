@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Request;
 using Syncless.Core;
 using Syncless.Notification;
@@ -149,13 +150,17 @@ namespace Syncless.CompareAndSync.Manual
                         SyncStartNotification notification = new SyncStartNotification(_currJob.TagName);
                         _currJobProgress = notification.Progress;
                         ServiceLocator.UINotificationQueue().Enqueue(notification);
-                        ManualSyncer.Sync(_currJob, _currJobProgress);
+                        RootCompareObject rco = ManualSyncer.Sync(_currJob, _currJobProgress);
 
                         //Set both to null
+                        AbstractNotification endnotification = new SyncCompleteNotification(_currJob.TagName, rco);
                         if (_currJob != null)
                             _isPendingCancel.Remove(_currJob.TagName);
                         _currJob = null;
                         _currJobProgress = null;
+                        ServiceLocator.UINotificationQueue().Enqueue(endnotification);
+
+
                     }
                 }
                 else

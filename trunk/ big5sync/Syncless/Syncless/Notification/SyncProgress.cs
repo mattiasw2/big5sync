@@ -248,18 +248,18 @@ namespace Syncless.Notification
             _wh.Set();
             return true;
         }
-        public bool ChangeToFinished(AbstractNotification notification)
+        public bool ChangeToFinished()
         {
             
             if (_state != SyncState.Finalizing)
             {
                 return false;
             }
-            _notification = notification;
+            
             _completed = true;
             _state = SyncState.Finished;
             TriggerSyncComplete();
-            ServiceLocator.UINotificationQueue().Enqueue(notification);
+            
             _wh.Set();
             return true;
         }
