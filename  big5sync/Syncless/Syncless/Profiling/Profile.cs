@@ -9,16 +9,13 @@ namespace Syncless.Profiling
 {
     public class Profile
     {
+        #region attributes
         private const string DEFAULT_DRIVE_NAME = "-";
-
 
         /// <summary>
         /// Profile name
         /// </summary>
         private string _profilename;
-        /// <summary>
-        /// Profile name
-        /// </summary>
         public string ProfileName
         {
             get { return _profilename; }
@@ -29,19 +26,16 @@ namespace Syncless.Profiling
         /// Last Updated Time
         /// </summary>
         private long _lastUpdatedTime;
-        /// <summary>
-        /// Last Updated Time
-        /// </summary>
         public long LastUpdatedTime
         {
             get { return _lastUpdatedTime; }
             set { _lastUpdatedTime = value; }
         }
 
+        /// <summary>
+        /// The list of ProfileDrive
+        /// </summary>
         private List<ProfileDrive> _fullList;
-        //Connected List of ProfileDrive
-        private Dictionary<string, ProfileDrive> _logicalDict; //Key is LogicalId
-        private Dictionary<string, ProfileDrive> _phyiscalDict; //key is PhysicalId
         public List<ProfileDrive> ProfileDriveList
         {
             get
@@ -56,6 +50,21 @@ namespace Syncless.Profiling
 
         }
 
+        /// <summary>
+        /// Connected list of ProfileDrive using logical id as key
+        /// </summary>
+        private Dictionary<string, ProfileDrive> _logicalDict;
+
+        /// <summary>
+        /// Connected list of ProfileDrive using physical id as key
+        /// </summary>
+        private Dictionary<string, ProfileDrive> _phyiscalDict;
+        #endregion
+
+        /// <summary>
+        /// Constructor for Profile
+        /// </summary>
+        /// <param name="profileName">The name of the profile for the Profile constructed</param>
         public Profile(string profileName)
         {
             _profilename = profileName;
@@ -64,11 +73,12 @@ namespace Syncless.Profiling
             _phyiscalDict = new Dictionary<string, ProfileDrive>();
         }
 
+        #region public methods
         /// <summary>
         /// Find a Logical Mapping From a Physical Mapping
         /// </summary>
-        /// <param name="physical"></param>
-        /// <returns></returns>
+        /// <param name="physical">The physical address to be used to find its corresponding logical address</param>
+        /// <returns>The corresponding logical address if it is available or found, else null</returns>
         public string FindLogicalFromPhysical(string physical)
         {
             ProfileDrive drive = null;
@@ -78,8 +88,8 @@ namespace Syncless.Profiling
         /// <summary>
         /// Find a Physical Mapping From a Logical Mapping
         /// </summary>
-        /// <param name="logical">logical address</param>
-        /// <returns>physical address . return null if the logical address is not found or the physical drive is not in.</returns>
+        /// <param name="logical">The logical address to be used to find its corresponding physical address</param>
+        /// <returns>The corresponding physical address if it is available or found, else null</returns>
         public string FindPhysicalFromLogical(string logical)
         {
             ProfileDrive drive = null;
@@ -87,35 +97,49 @@ namespace Syncless.Profiling
         }
 
         /// <summary>
-        /// Find a Logical Mapping From a Physical Mapping
+        /// Find the logical id that corresponds to the GUID given
         /// </summary>
-        /// <param name="physical"></param>
-        /// <returns></returns>
+        /// <param name="guid">The GUID for which its logical id is to be retrieved</param>
+        /// <returns>The logical id that corresponds to the GUID given if the drive is available or exists,
+        /// else null</returns>
         public string FindLogicalIdFromGUID(string guid)
         {
             ProfileDrive drive = FindProfileDriveFromLogicalId(guid);
-            return drive == null ? null : drive.LogicalId;
+            return drive != null ? drive.LogicalId : null;
         }
 
+        /// <summary>
+        /// Find the drive name that corresponds to the logical id given
+        /// </summary>
+        /// <param name="logical">The logical id for which its GUID is to be retrieved</param>
+        /// <returns>The drive name that corresponds to the logical id given if the drive is available
+        /// or exists, else null</returns>
         public string FindDriveNameFromLogical(string logical)
         {
             ProfileDrive drive = FindProfileDriveFromLogicalId(logical);
             return drive != null ? drive.DriveName : null;
         }
 
+        /// <summary>
+        /// Not yet implemented : Set the drive name of a given drive to the name given
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="name"></param>
         public void SetDriveName(DriveInfo info, string name)
         {
-            ProfileDrive drive = FindProfileDriveFromPhysicalId(info.Name);
-            drive.LastUpdated = DateTime.Now.Ticks;
-            _lastUpdatedTime = DateTime.Now.Ticks;
-            drive.DriveName = name;
-
+            throw new NotImplementedException();
+            //ProfileDrive drive = FindProfileDriveFromPhysicalId(info.Name);
+            //drive.LastUpdated = DateTime.Now.Ticks;
+            //_lastUpdatedTime = DateTime.Now.Ticks;
+            //drive.DriveName = name;
         }
+
         /// <summary>
-        /// Update a Particular drive with to its GUID
+        /// If the given drive is not already in the list of existing profile drives, 
+        /// add the profile drive to the list of profile drives
         /// </summary>
-        /// <param name="guid"></param>
-        /// <param name="driveid"></param>
+        /// <param name="info">The DriveInfo of the drive to be added</param>
+        /// <param name="guid">The corresponding GUID for the drive to be added</param>
         public void InsertDrive(DriveInfo info, string guid)
         {
             ProfileDrive drive = null;
@@ -126,7 +150,6 @@ namespace Syncless.Profiling
                 if (drive == null)
                 {
                     drive = CreateProfileDrive(guid);
-
                 }
                 drive.Info = info;
                 _phyiscalDict[drive.PhysicalId] = drive;
@@ -139,8 +162,15 @@ namespace Syncless.Profiling
                     throw new ProfileDriveConflictException();
                 }
             }
-
         }
+
+        /// <summary>
+        /// If the given drive is in the list of existing profile drives,
+        /// remove the profile drive from the list
+        /// </summary>
+        /// <param name="info">The DriveInfo of the drive to be removed</param>
+        /// <returns>True if the drive is successfully removed from the list of existing profile drives,
+        /// else false</returns>
         public bool RemoveDrive(DriveInfo info)
         {
             string driveLetter = ProfilingHelper.ExtractDriveName(info.Name);
@@ -165,6 +195,11 @@ namespace Syncless.Profiling
             }
         }
 
+        /// <summary>
+        /// Create a ProfileDrive using the GUID given and add to the list of existing profile drives
+        /// </summary>
+        /// <param name="guid">The GUID for which the profile drive is to be created</param>
+        /// <returns>The ProfileDrive that is created</returns>
         public ProfileDrive CreateProfileDrive(string guid)
         {
             ProfileDrive drive = new ProfileDrive(guid, DEFAULT_DRIVE_NAME);
@@ -174,15 +209,28 @@ namespace Syncless.Profiling
             }
             return drive;
         }
+        #endregion
+
+        #region internal methods
+        /// <summary>
+        /// Add the given profile drive the the list of existing profile drives
+        /// </summary>
+        /// <param name="drive">The new profile drive to be added</param>
+        /// <returns>True if the drive is added</returns>
         internal bool AddProfileDrive(ProfileDrive drive)
         {
             lock (_fullList)
             {
                 this._fullList.Add(drive);
             }
-
             return true;
         }
+        
+        /// <summary>
+        /// Find the profile drive using the given GUID
+        /// </summary>
+        /// <param name="guid">The GUID for which the profile drive is to be retrieved</param>
+        /// <returns>The profile drive if it is found in the list of existing profile drives, else null</returns>
         internal ProfileDrive FindProfileDriveFromGUID(string guid)
         {
             lock (_fullList)
@@ -197,6 +245,13 @@ namespace Syncless.Profiling
                 return null;
             }
         }
+        
+        /// <summary>
+        /// Find the profile drive using the given logical id
+        /// </summary>
+        /// <param name="logicalid">The logical id for which the profile drive is to be retrieved</param>
+        /// <returns>The profile drive if it is found in the list of existing profile drives,
+        /// else null</returns>
         internal ProfileDrive FindProfileDriveFromLogicalId(string logicalid)
         {
             lock (_fullList)
@@ -211,6 +266,13 @@ namespace Syncless.Profiling
                 return null;
             }
         }
+        
+        /// <summary>
+        /// Find the profile drive using the given physical id
+        /// </summary>
+        /// <param name="physicalid">The physical id for which the profile drive is to be retrieved</param>
+        /// <returns>The profile drive if it is found in the list of existing profile drives,
+        /// else null</returns>
         internal ProfileDrive FindProfileDriveFromPhysicalId(string physicalid)
         {
             if (_phyiscalDict.ContainsKey(physicalid))
@@ -219,7 +281,7 @@ namespace Syncless.Profiling
             }
             return null;
         }
-
+        #endregion
 
     }
 }

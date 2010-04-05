@@ -14,38 +14,26 @@ namespace Syncless.Profiling
     internal static class ProfilingXMLHelper
     {
         public const string DEFAULT_NAME = "";
+
+        #region Xml tag name
         private const string ELE_PROFILING_ROOT = "profiling";
 
-        private const string ELE_PROFILE = "profile";
-        private const string ELE_PROFILE_NAME = "profilename";
-        private const string ELE_PROFILE_LAST_UPDATED = "last_updated";
+        private const string ELE_PROFILE_ROOT = "profile";
+        private const string ATTR_PROFILE_NAME = "profilename";
+        private const string ATTR_PROFILE_LAST_UPDATED = "last_updated";
 
-        private const string ELE_PROFILE_DRIVE = "drive";
-        private const string ELE_PROFILE_DRIVE_NAME = "drivename";
-        private const string ELE_PROFILE_DRIVE_LAST_UPDATED = "last_updated";
-        private const string ELE_PROFILE_DRIVE_GUID = "guid";
-        
-        
+        private const string ELE_PROFILE_DRIVE_ROOT = "drive";
+        private const string ATTR_PROFILE_DRIVE_NAME = "drivename";
+        private const string ATTR_PROFILE_DRIVE_LAST_UPDATED = "last_updated";
+        private const string ATTR_PROFILE_DRIVE_GUID = "guid";
+        #endregion
+
         #region Save Profile
-        public static void SaveProfile(List<Profile> profileList, List<string> location)
-        {
-            XmlDocument xmlDoc = new XmlDocument();
-            XmlElement root = xmlDoc.CreateElement(ELE_PROFILING_ROOT);
-            xmlDoc.AppendChild(root);
-            XmlElement profileEle = CreateProfileElement(profileList[0], xmlDoc);
-            root.AppendChild(profileEle);
-
-            CommonXmlHelper.SaveXml(xmlDoc, location[0]);
-            for (int i = 1; i < profileList.Count; i++)
-            {
-                root.AppendChild(CreateProfileElement(profileList[i], xmlDoc));
-            }
-
-            for (int i = 1; i < location.Count; i++)
-            {
-                CommonXmlHelper.SaveXml(xmlDoc, location[i]);
-            }
-        }
+        /// <summary>
+        /// Save the given profile to the given location
+        /// </summary>
+        /// <param name="profile">The profile to be saved</param>
+        /// <param name="location">The location for which the profile is to be saved to</param>
         public static void SaveProfile(Profile profile, string location)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -55,6 +43,13 @@ namespace Syncless.Profiling
             root.AppendChild(profileEle);
             CommonXmlHelper.SaveXml(xmlDoc, location);
         }
+        
+        /// <summary>
+        /// Append the given profile to the Xml document stored in the given list of locations
+        /// </summary>
+        /// <param name="profile">The profile to be appended</param>
+        /// <param name="locations">The list of locations containing the Xml documents for which
+        /// the given profile is to be appended to</param>
         public static void AppendProfile(Profile profile, List<string> locations)
         {
             foreach (string path in locations)
@@ -71,7 +66,7 @@ namespace Syncless.Profiling
                     {
                         //Loaded XML , replace the old profile data with a new.
                         //Find the Profile with the same name
-                        XmlNode node = xmlDoc.SelectSingleNode(@"//"+ELE_PROFILE+"[@" + ELE_PROFILE_NAME + @"='" + profile.ProfileName + @"']");
+                        XmlNode node = xmlDoc.SelectSingleNode(@"//" + ELE_PROFILE_ROOT + "[@" + ATTR_PROFILE_NAME + @"='" + profile.ProfileName + @"']");
                         XmlElement profileNode = CreateProfileElement(profile, xmlDoc);
                         XmlNode profilingRootNode = xmlDoc.SelectSingleNode(@"//" + ELE_PROFILING_ROOT);
                         if (node != null)
@@ -88,37 +83,46 @@ namespace Syncless.Profiling
             }
         }
         
-        private static XmlElement CreateProfileElement(Profile profile, XmlDocument doc)
+        /// <summary>
+        /// Create a profile xml element storing the attributes of the given profile
+        /// </summary>
+        /// <param name="profile">The profile to be used to create the xml element</param>
+        /// <param name="xmlDoc">The xml document for which the created xml element belongs to</param>
+        /// <returns></returns>
+        private static XmlElement CreateProfileElement(Profile profile, XmlDocument xmlDoc)
         {
-            XmlElement profileElement = doc.CreateElement(ELE_PROFILE);
-            profileElement.SetAttribute(ELE_PROFILE_NAME, profile.ProfileName);
-            profileElement.SetAttribute(ELE_PROFILE_LAST_UPDATED, profile.LastUpdatedTime + "");
-            PopulateDrive(profile.ProfileDriveList, profileElement, doc);
-
+            XmlElement profileElement = xmlDoc.CreateElement(ELE_PROFILE_ROOT);
+            profileElement.SetAttribute(ATTR_PROFILE_NAME, profile.ProfileName);
+            profileElement.SetAttribute(ATTR_PROFILE_LAST_UPDATED, profile.LastUpdatedTime + "");
+            PopulateDrive(profile.ProfileDriveList, profileElement, xmlDoc);
             return profileElement;
-
         }
-        private static void PopulateDrive(List<ProfileDrive> driveList, XmlElement profile, XmlDocument doc)
+        
+        /// <summary>
+        /// Create an xml element for each profile drive in the given list of profile
+        /// </summary>
+        /// <param name="driveList">The list of profile drives for which xml element is to be created</param>
+        /// <param name="profile">The profile root element for which the profile drive xml elements belong to</param>
+        /// <param name="xmlDoc">The xml document for which the profile drive xml elements belong to</param>
+        private static void PopulateDrive(List<ProfileDrive> driveList, XmlElement profile, XmlDocument xmlDoc)
         {
             foreach (ProfileDrive drive in driveList)
             {
-                XmlElement element = doc.CreateElement(ELE_PROFILE_DRIVE);
-                element.SetAttribute(ELE_PROFILE_DRIVE_GUID, drive.Guid);
-                element.SetAttribute(ELE_PROFILE_DRIVE_NAME, drive.DriveName);
-                element.SetAttribute(ELE_PROFILE_DRIVE_LAST_UPDATED, drive.LastUpdated + "");
-
+                XmlElement element = xmlDoc.CreateElement(ELE_PROFILE_DRIVE_ROOT);
+                element.SetAttribute(ATTR_PROFILE_DRIVE_GUID, drive.Guid);
+                element.SetAttribute(ATTR_PROFILE_DRIVE_NAME, drive.DriveName);
+                element.SetAttribute(ATTR_PROFILE_DRIVE_LAST_UPDATED, drive.LastUpdated + "");
                 profile.AppendChild(element);
             }
-
         }
         #endregion
 
         #region Load Profile
         /// <summary>
-        /// Load a list of Profile
+        /// Load the list of profiles from the xml document loaded from given path
         /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
+        /// <param name="path">The path for which the xml document is saved at</param>
+        /// <returns>The list of profiles loaded from the xml document</returns>
         public static List<Profile> LoadProfile(string path)
         {
             XmlDocument xmlDoc = CommonXmlHelper.LoadXml(path);
@@ -127,7 +131,7 @@ namespace Syncless.Profiling
                 return null;
             }
 
-            XmlNodeList profileElementList = xmlDoc.GetElementsByTagName(ELE_PROFILE);
+            XmlNodeList profileElementList = xmlDoc.GetElementsByTagName(ELE_PROFILE_ROOT);
             List<Profile> profileList = new List<Profile>();
 
             foreach (XmlNode profile in profileElementList)
@@ -142,11 +146,12 @@ namespace Syncless.Profiling
             }
             return profileList;
         }
+        
         /// <summary>
-        /// Load the First profile in the document
+        /// Load the first profile from the xml document saved at the given path
         /// </summary>
-        /// <param name="path">The path to load from</param>
-        /// <returns>Profile.</returns>
+        /// <param name="path">The path for which the xml document is saved at</param>
+        /// <returns>The first profile saved in the xml document</returns>
         public static Profile LoadSingleProfile(string path)
         {
             XmlDocument xmlDoc = CommonXmlHelper.LoadXml(path);
@@ -155,13 +160,19 @@ namespace Syncless.Profiling
                 return CreateDefaultProfile(path);
             }
 
-            XmlNodeList profileElementList = xmlDoc.GetElementsByTagName(ELE_PROFILE);
+            XmlNodeList profileElementList = xmlDoc.GetElementsByTagName(ELE_PROFILE_ROOT);
 
             XmlElement profileElement = profileElementList[0] as XmlElement;
             
             return CreateProfile(profileElement);
-            
         }
+        
+        /// <summary>
+        /// Load a profile having the given profile name from the xml document saved at the given path
+        /// </summary>
+        /// <param name="path">The path for which the xml document is saved at</param>
+        /// <param name="profileName">The name of the profile to be loaded</param>
+        /// <returns>The profile having the given profile name</returns>
         public static Profile LoadSingleProfile(string path, string profileName)
         {
             XmlDocument xmlDoc = CommonXmlHelper.LoadXml(path);
@@ -169,18 +180,24 @@ namespace Syncless.Profiling
             {
                 return null;
             }
-            XmlNode selectedProfile = xmlDoc.SelectSingleNode(@"\\" + ELE_PROFILE + "[@" + ELE_PROFILE_NAME + "=" + profileName + "]");
+            XmlNode selectedProfile = xmlDoc.SelectSingleNode(@"\\" + ELE_PROFILE_ROOT + "[@" + ATTR_PROFILE_NAME + "=" + profileName + "]");
             if(selectedProfile == null){
                 return null;
             }
             XmlElement profileElement = selectedProfile as XmlElement;
             return CreateProfile(profileElement);
         }
+        
+        /// <summary>
+        /// Create a profile from the attributes of the given profile xml element
+        /// </summary>
+        /// <param name="profileElement">The xml element for which the profile is to be created from</param>
+        /// <returns>The profile created from the given profile xml element</returns>
         private static Profile CreateProfile(XmlElement profileElement)
         {
-            string profileName = profileElement.GetAttribute(ELE_PROFILE_NAME);
+            string profileName = profileElement.GetAttribute(ATTR_PROFILE_NAME);
             Profile profile = new Profile(profileName);
-            XmlNodeList driveList = profileElement.GetElementsByTagName(ELE_PROFILE_DRIVE);
+            XmlNodeList driveList = profileElement.GetElementsByTagName(ELE_PROFILE_DRIVE_ROOT);
             foreach (XmlNode drive in driveList)
             {
                 XmlElement driveElement = drive as XmlElement;
@@ -199,16 +216,21 @@ namespace Syncless.Profiling
             return profile;
         }
 
+        /// <summary>
+        /// Create a profile drive from the attribtues of the given profile drive xml element
+        /// </summary>
+        /// <param name="driveElement">The xml element for which the profile drive is to be created from</param>
+        /// <returns>The profile drive created from the given profile drive xml element</returns>
         private static ProfileDrive CreateProfileDrive(XmlElement driveElement)
         {
             try
             {
-                string guid = driveElement.GetAttribute(ELE_PROFILE_DRIVE_GUID);
-                string lastUpdatedString = driveElement.GetAttribute(ELE_PROFILE_LAST_UPDATED);
+                string guid = driveElement.GetAttribute(ATTR_PROFILE_DRIVE_GUID);
+                string lastUpdatedString = driveElement.GetAttribute(ATTR_PROFILE_LAST_UPDATED);
 
                 long lastUpdated = long.Parse(lastUpdatedString);
 
-                string driveName = driveElement.GetAttribute(ELE_PROFILE_DRIVE_NAME);
+                string driveName = driveElement.GetAttribute(ATTR_PROFILE_DRIVE_NAME);
 
                 ProfileDrive drive = new ProfileDrive(guid, driveName);
                 drive.LastUpdated = lastUpdated;
@@ -223,7 +245,11 @@ namespace Syncless.Profiling
         }
         #endregion
 
-
+        /// <summary>
+        /// Create and save the default profile at the given path
+        /// </summary>
+        /// <param name="path">The path for which the default profile is to be saved to</param>
+        /// <returns>The default profile created</returns>
         public static Profile CreateDefaultProfile(string path)
         {
             Profile profile = new Profile(DEFAULT_NAME);
@@ -231,6 +257,5 @@ namespace Syncless.Profiling
             SaveProfile(profile, path);
             return profile;
         }
-                
     }
 }
