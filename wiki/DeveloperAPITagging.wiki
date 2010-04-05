@@ -22,6 +22,9 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 
 == !CurrentTime ==
 
+`internal class` !CurrentTime
+        Provides properties which enclose the `DateTime.Now` property. The object created allows for repeated use of the same `DateTime.Now` property value.
+
 [#Classes_Summary Back to top]
 
 == !LogMessage ==
