@@ -188,7 +188,7 @@ namespace Syncless.CompareAndSync.Visitor
                     }
                 }
             }
-            fco.FinalState[srcFilePos] = fco.MetaHash[srcFilePos] == fco.Hash[srcFilePos] ? FinalState.Unchanged : FinalState.Created;
+            fco.FinalState[srcFilePos] = (fco.MetaExists[srcFilePos] && fco.MetaHash[srcFilePos] == fco.Hash[srcFilePos]) ? FinalState.Unchanged : FinalState.Created;
         }
 
         private void DeleteFile(FileCompareObject fco, int numOfPaths, int srcFilePos)
