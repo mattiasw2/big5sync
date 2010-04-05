@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - Overview
-#labels Phase-Implementation
+#labels Phase-Implementation,Featured
 #sidebar DeveloperAPISidebar
 
 This document is the API specification for Syncless, version 2.0
