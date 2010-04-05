@@ -29,7 +29,7 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 
 ----
 
-== !LogMessage ==
+== [DeveloperAPITaggingLogMessage LogMessage] ==
 
 `internal static class` !LogMessage
         Provides static string values which are used for logging events invoked in the Tagging namespace.
