@@ -879,21 +879,26 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
-
-        public TagView SwitchMode(string tagname)
+        /// <summary>
+        /// Switch the mode of the tag
+        /// </summary>
+        /// <param name="tagName">Name of the tag to switch</param>
+        /// <returns>true if the switch is successful.</returns>
+        /// <exception cref="TagNotFoundException">If the tag is not found</exception>
+        public bool SwitchMode(string tagName)
         {
-            Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            Tag tag = TaggingLayer.Instance.RetrieveTag(tagName);
             if (tag == null)
             {
-                return null;
+                throw new TagNotFoundException(tagName);
             }
-            TagState tagState = GetTagState(tagname);
+            TagState tagState = GetTagState(tagName);
             switch (tagState)
             {
-                case TagState.Undefined: return null;
-                case TagState.Seamless: MonitorTag(tagname, false);
+                case TagState.Undefined: return false;
+                case TagState.Seamless: MonitorTag(tagName, false);
                     break;
-                case TagState.Manual: MonitorTag(tagname, true);
+                case TagState.Manual: MonitorTag(tagName, true);
                     break;
                 case TagState.SeamlessToManual: //might want to de queue
                     break;
@@ -903,8 +908,27 @@ namespace Syncless.Core
                     throw new ArgumentOutOfRangeException();
             }
 
-            return null;
+            return true;
         }
+        /// <summary>
+        /// force the mode of a tag to be of a particular mode
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="mode"></param>
+        /// <returns></returns>
+        public bool SwitchMode(string name, TagMode mode)
+        {
+            switch (mode)
+            {
+                case TagMode.Seamless:
+                    break;
+                case TagMode.Manual:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("mode");
+            }
+        }
+
         public TagState GetTagState(string tagname)
         {
 

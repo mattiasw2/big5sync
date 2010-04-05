@@ -107,6 +107,7 @@
     <Compile Include="Core\PathTable.cs" />
     <Compile Include="Core\View\PathGroupView.cs" />
     <Compile Include="Core\View\PathView.cs" />
+    <Compile Include="Core\View\TagMode.cs" />
     <Compile Include="Core\View\TagState.cs" />
     <Compile Include="Filters\FolderFilter.cs" />
     <Compile Include="Filters\SizeFilter.cs" />
