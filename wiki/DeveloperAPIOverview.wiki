@@ -35,8 +35,8 @@ This document is the API specification for Syncless, version 2.0
 = SynclessUI Namespaces =
 
 || *Namespace* || *Description* ||
-|| SynclessUI || ||
-|| SynclessUI.Helper || ||
-|| SynclessUI.Notification || ||
-|| SynclessUI.Properties || ||
-|| SynclessUI.Visitor || ||
+|| [DeveloperAPIUI SynclessUI] || ||
+|| [DeveloperAPIUIHelper SynclessUI.Helper] || ||
+|| [DeveloperAPIUINotification SynclessUI.Notification] || ||
+|| [DeveloperAPIUIProperties SynclessUI.Properties] || ||
+|| [DeveloperAPIUIVisitor SynclessUI.Visitor] || ||
