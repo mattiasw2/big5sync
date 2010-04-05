@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - CompareAndSync.Enum
+#summary Developers' Guide - API - Syncless.CompareAndSync.Enum
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
