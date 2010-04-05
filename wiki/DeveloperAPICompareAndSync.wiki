@@ -2,22 +2,24 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
-= !CommonMethods =
+= Classes Summary =
 
-= CommonXMLConstants =
+== !CommonMethods ==
 
-= !CompareAndSyncController =
+== CommonXMLConstants ==
 
-= !CompareObjectHelper =
+== !CompareAndSyncController ==
 
-= !ManualQueueControl =
+== !CompareObjectHelper ==
 
-= !ManualSyncer =
+== !ManualQueueControl ==
 
-= !SeamlessQueueControl =
+== !ManualSyncer ==
 
-= !SeamlessSyncer =
+== !SeamlessQueueControl ==
 
-= !SyncConfig =
+== !SeamlessSyncer ==
 
-= XMLHelper =
+== !SyncConfig ==
+
+== XMLHelper ==
