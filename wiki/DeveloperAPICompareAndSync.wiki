@@ -2,6 +2,8 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+*Prev* [DeveloperAPICompareAndSyncCompareObject *Next*]
+
 = Classes Summary =
 
 == !CommonMethods ==
