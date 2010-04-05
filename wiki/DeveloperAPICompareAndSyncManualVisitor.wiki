@@ -48,4 +48,4 @@
 
 [#Classes_Summary Back to top]
 
-`[`*DeveloperAPICompareAndSyncManual Prev - Syncless.CompareAndSync.Manual]* `|` *[DeveloperAPICompareAndSyncRequest Next - Syncless.CompareAndSync.Request]*`]`
+`[`*[DeveloperAPICompareAndSyncManual Prev - Syncless.CompareAndSync.Manual]* `|` *[DeveloperAPICompareAndSyncRequest Next - Syncless.CompareAndSync.Request]*`]`
