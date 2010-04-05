@@ -5,6 +5,7 @@
 = Properties Summary =
 
 || *Property* || *Description* ||
+|| !CurrentTimeLong || The current time in long format ||
 
 = Constructors Summary =
 
