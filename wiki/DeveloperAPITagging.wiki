@@ -4,6 +4,8 @@
 
 `[`*[DeveloperAPIProfilingExceptions Prev - Syncless.Profiling.Exceptions]* `|` *[DeveloperAPITaggingExceptions Next - Syncless.Tagging.Exceptions]*`]`
 
+Provides classes necessary for creating/removing tags, tagging/untagging folders, managing other settings such as the filter settings per tag.
+
 = Classes Summary =
 
 == !LogMessage ==
