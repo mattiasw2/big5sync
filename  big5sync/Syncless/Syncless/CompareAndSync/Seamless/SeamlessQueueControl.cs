@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using Syncless.CompareAndSync.Request;
-using Syncless.CompareAndSync.Seamless;
 
-namespace Syncless.CompareAndSync
+namespace Syncless.CompareAndSync.Seamless
 {
     /// <summary>
     /// Class for queuing auto-sync jobs. Based off http://moazzam-khan.com/blog/?p=418

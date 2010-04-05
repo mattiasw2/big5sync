@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Syncless.CompareAndSync.CompareObject;
-using Syncless.CompareAndSync.Visitor;
 using System.Data;
 
 namespace SynclessUI.Visitor
