@@ -1,0 +1,13 @@
+#summary Developers' Guide - API - CompareAndSync.Enum
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Enumerations Summary =
+
+== !AutoSyncRequestType ==
+
+== !FinalState ==
+
+== !LastKnownState ==
+
+== !MetaChangeType ==
