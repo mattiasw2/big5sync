@@ -2,7 +2,7 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
-*Prev* *[DeveloperAPICompareAndSyncCompareObject Next - Syncless.CompareAndSync.CompareObject]*
+`[`*Prev* `|` *[DeveloperAPICompareAndSyncCompareObject Next - Syncless.CompareAndSync.CompareObject]*`]`
 
 = Classes Summary =
 
