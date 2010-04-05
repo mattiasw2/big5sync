@@ -26,26 +26,26 @@
 
 = Exceptions Summary =
 
-== ArchiveFileException ==
+== !ArchiveFileException ==
 
-== ArchiveFolderException ==
+== !ArchiveFolderException ==
 
-== CopyFileException ==
+== !CopyFileException ==
 
-== CopyFolderException ==
+== !CopyFolderException ==
 
-== CreateFolderException ==
+== !CreateFolderException ==
 
-== DeleteFileException ==
+== !DeleteFileException ==
 
-== DeleteFolderException ==
+== !DeleteFolderException ==
 
-== HashFileException ==
+== !HashFileException ==
 
-== IncompatibleTypeException ==
+== !IncompatibleTypeException ==
 
-== MoveFileException ==
+== !MoveFileException ==
 
-== MoveFolderException ==
+== !MoveFolderException ==
 
 == SynclessIOException ==
