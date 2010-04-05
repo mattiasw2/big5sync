@@ -1932,6 +1932,11 @@ namespace SynclessUI
         private void DisplayShortcutsWindow()
         {
             var sw = new ShortcutsWindow();
+
+            //YC: Set owner to the main window, and hide the taskbar. This will stop mainwindow from being on top.
+            //Even better, disable mainwindow so drag and drop stops working.
+            sw.Owner = this;
+            sw.ShowInTaskbar = false;
             sw.ShowDialog();
         }
 
