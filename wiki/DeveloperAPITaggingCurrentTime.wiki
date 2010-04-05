@@ -5,12 +5,18 @@
 = Properties Summary =
 
 || *Property* || *Description* ||
-|| !CurrentTimeLong || The current time in long format ||
+|| [#CurrentTimeLong CurrentTimeLong] || The current time in long format ||
 || !CurrentTimeString || The current time in string format DD/MM/YY HH:MM:SS ||
+
+== !CurrentTimeLong ==
+
+`internal long` !CurrentTimeLong
+         The current time in long format.
 
 = Constructors Summary =
 
 || *Constructor* || *Description* ||
+|| CurrentTime() || Creates a new CurrentTime object ||
 
 = Methods Summary =
 
