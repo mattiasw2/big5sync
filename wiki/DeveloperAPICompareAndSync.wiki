@@ -12,14 +12,4 @@
 
 == !CompareObjectHelper ==
 
-== !ManualQueueControl ==
-
-== !ManualSyncer ==
-
-== !SeamlessQueueControl ==
-
-== !SeamlessSyncer ==
-
 == !SyncConfig ==
-
-== XMLHelper ==
