@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - Monitor.DTO
+#summary Developers' Guide - API - Syncless.Monitor.DTO
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
