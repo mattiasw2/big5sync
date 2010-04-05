@@ -1,14 +1,23 @@
 #summary Developers' Guide - API - CompareAndSync
 #labels Phase-Implementation
+#sidebar DeveloperAPISidebar
 
-= Introduction =
+= CommonMethods =
 
-Add your content here.
+= CommonXMLConstants =
 
+= CompareAndSyncController =
 
-= Details =
+= CompareObjectHelper =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= ManualQueueControl =
+
+= ManualSyncer =
+
+= SeamlessQueueControl =
+
+= SeamlessSyncer =
+
+= SyncConfig =
+
+= XMLHelper =
