@@ -1,14 +1,35 @@
-#summary Developers' Guide - API - User Interface
+#summary Developers' Guide - API - SynclessUI
 #labels Phase-Implementation
+#sidebar DeveloperAPISidebar
 
-= Introduction =
+= Classes Summary =
 
-Add your content here.
+== !CreateTagWindow ==
 
+== !DialogWindow ==
 
-= Details =
+== !LogWindow ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== !MainWindow ==
+
+== !MinimizeToTray ==
+
+== !OptionsWindow ==
+
+== !PortableSettingsProvider ==
+
+== !PreviewSyncWindow ==
+
+== Shortcuts Window ==
+
+== !SingleInstanceManager ==
+
+== !SynclessApplication ==
+
+== !TagDetailsWindow ==
+
+== !TagWindow ==
+
+== !UntagWindow ==
+
+== !WelcomeScreenWindow ==
