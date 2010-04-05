@@ -28,8 +28,6 @@
 
 == !NothingToSyncNotification ==
 
-== !NotificationCode ==
-
 == !NotificationFactory ==
 
 == !NotificationQueue ==
@@ -42,10 +40,14 @@
 
 == !SyncStartNotification ==
 
-== !SyncState ==
-
 == !TaggedFolderDeletedNotification ==
 
 == !TaggedPathDeletedNotification ==
 
 == !UnMonitorPathNotification ==
+
+= Enumerations Summary =
+
+== !NotificationCode ==
+
+== !SyncState ==
