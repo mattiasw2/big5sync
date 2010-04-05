@@ -20,4 +20,4 @@ Extending Filter can be easily done. It can be done by creating a custom `Filter
 Ideally, filtering should only be applied to the physical address (i.e. C:\Lecture\) and not the logical address (address stored in the *Tagging* component).
 
 = API =
-You can refer to the API for !CompareAndSync component [http://code.google.com/p/big5sync/wiki/DeveloperAPIFilter here].
+You can refer to the API for Filter component [http://code.google.com/p/big5sync/wiki/DeveloperAPIFilter here].
