@@ -1,0 +1,9 @@
+#summary Developers' Guide - API - Monitor.Exceptions
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Exceptions Summary =
+
+== !MonitorDriveNotFoundException ==
+
+== !MonitorPathNotFoundException ==
