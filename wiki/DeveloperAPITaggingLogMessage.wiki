@@ -1,6 +1,7 @@
 #summary Developers' Guide - API - Syncless.Tagging.LogMessage
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
+<wiki:toc max_depth = "4">
 
 Provides static string values which are used for logging events invoked in the Tagging namespace.
 
