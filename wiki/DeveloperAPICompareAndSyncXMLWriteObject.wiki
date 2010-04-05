@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - CompareAndSync.XMLWriteObject
+#summary Developers' Guide - API - Syncless.CompareAndSync.XMLWriteObject
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
