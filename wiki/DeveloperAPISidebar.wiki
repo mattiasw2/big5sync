@@ -21,6 +21,7 @@
         * [DeveloperAPICore#InvalidPathException InvalidPathException]
         * [DeveloperAPICore#LoggerNotFoundException LoggerNotFoundException]
         * [DeveloperAPICore#UnhandledException UnhandledException]
+    * [DeveloperAPICoreView Core.View]
     * [DeveloperAPIProfiling Profiling]
       * [DeveloperAPIProfiling#Classes_Summary Classes Summary]
         * [DeveloperAPIProfiling#Profile Profile]
