@@ -1,14 +1,51 @@
 #summary Developers' Guide - API - Notification
 #labels Phase-Implementation
+#sidebar DeveloperAPISidebar
 
-= Introduction =
+= Interfaces Summary =
 
-Add your content here.
+== INotificationQueue ==
 
+== IQueueObserver ==
 
-= Details =
+== ISyncProgressObserver ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= Classes Summary =
+
+== !AbstractNotification ==
+
+== !AddTagNotification ==
+
+== !AutoSyncCompleteNotification ==
+
+== !MessageNotification ==
+
+== !MonitorPathNotification ==
+
+== !MonitorTagNotification ==
+
+== !NewProfileNotification ==
+
+== !NothingToSyncNotification ==
+
+== !NotificationCode ==
+
+== !NotificationFactory ==
+
+== !NotificationQueue ==
+
+== !RemoveTagNotification ==
+
+== !SyncCompleteNotification ==
+
+== !SyncProgress ==
+
+== !SyncStartNotification ==
+
+== !SyncState ==
+
+== !TaggedFolderDeletedNotification ==
+
+== !TaggedPathDeletedNotification ==
+
+== !UnMonitorPathNotification ==
