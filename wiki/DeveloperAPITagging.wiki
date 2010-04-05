@@ -8,6 +8,17 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 
 = Classes Summary =
 
+|| *Class* || *Description* ||
+|| [#LogMessage LogMessage] || ||
+|| [#Tag Tag] || ||
+|| [#TagConfig TagConfig] || ||
+|| [#TaggedPath TaggedPath] || ||
+|| [#TaggingHelper TaggingHelper] || ||
+|| [#TaggingLayer TaggingLayer] || ||
+|| [#TaggingProfile TaggingProfile] || ||
+|| [#TaggingXMLHelper TaggingXMLHelper] || ||
+|| [#TagMerger TagMerger] || ||
+
 == !LogMessage ==
 
 [#Classes_Summary Back to top]
