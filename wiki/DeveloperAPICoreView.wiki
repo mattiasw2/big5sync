@@ -4,12 +4,12 @@
 
 = Classes Summary =
 
-== PathGroupView ==
+== !PathGroupView ==
 
-== PathView ==
+== !PathView ==
 
-== TagMode ==
+== !TagMode ==
 
-== TagState ==
+== !TagState ==
 
-== TagView ==
+== !TagView ==
