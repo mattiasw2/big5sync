@@ -1,0 +1,9 @@
+#summary Developers' Guide - API - CompareAndSync.Manual
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Classes Summary =
+
+== !ManualQueueControl ==
+
+== !ManualSyncer ==
