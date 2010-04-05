@@ -1,0 +1,11 @@
+#summary Developers' Guide - API - Core.Exceptions
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Exceptions Summary =
+
+== !InvalidPathException ==
+
+== !LoggerNotFoundException ==
+
+== !UnhandledException ==
