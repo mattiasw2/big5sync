@@ -1,0 +1,3 @@
+#summary Developers' Guide - API - Syncless.Tagging.LogMessage
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
