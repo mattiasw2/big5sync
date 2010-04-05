@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - SynclessUI
+#summary Developers' Guide - API - SynclessUI.SynclessUI
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
