@@ -1,0 +1,15 @@
+#summary Developers' Guide - API - CompareAndSync.CompareObject
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Classes Summary =
+
+== BaseCompareObject ==
+
+== FileCompareObject ==
+
+== FolderCompareObject ==
+
+== RootCompareObject ==
+
+== XMLCompareObject ==
