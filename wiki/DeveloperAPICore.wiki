@@ -32,14 +32,6 @@
 
 == !SystemLogicLayer ==
 
-= Exceptions Summary =
-
-== !InvalidPathException ==
-
-== !LoggerNotFoundException ==
-
-== !UnhandledException ==
-
 = Enumerations Summary =
 
 == !TableType ==
