@@ -211,19 +211,16 @@ namespace Syncless.Monitor
                         addDeleted = false;
                     }
                 }
-                /*if (pEvent.EventType == EventChangeType.DELETED)
+                if (pEvent.EventType == EventChangeType.DELETED) // Remove All Child Deleted Event
                 {
                     FileInfo child = new FileInfo(pEvent.Path);
                     DirectoryInfo parent = new DirectoryInfo(fse.Path);
-                    Console.WriteLine("Child: {0}", child.Directory.FullName);
-                    Console.WriteLine("Parent: {0}", parent.FullName);
                     if (child.Directory.FullName.ToLower().Equals(parent.FullName.ToLower()))
                     {
-                        Console.WriteLine("{0} Deleted", pEvent.Path);
                         processList.RemoveAt(i);
                         i--;
                     }
-                }*/
+                }
             }
             if (addDeleted)
             {
