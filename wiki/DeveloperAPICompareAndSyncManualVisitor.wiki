@@ -2,26 +2,50 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*DeveloperAPICompareAndSyncManual Prev - Syncless.CompareAndSync.Manual]* `|` *[DeveloperAPICompareAndSyncRequest Next - Syncless.CompareAndSync.Request]*`]`
+
 = Interfaces Summary =
 
 == IVisitor ==
+
+[#Interfaces_Summary Back to top]
 
 = Classes Summary =
 
 == !BuilderVisitor ==
 
+[#Classes_Summary Back to top]
+
 == !ComparerVisitor ==
+
+[#Classes_Summary Back to top]
 
 == !ConflictVisitor ==
 
+[#Classes_Summary Back to top]
+
 == !FolderRenameVisitor ==
+
+[#Classes_Summary Back to top]
 
 == !IgnoreMetaDataVisitor ==
 
+[#Classes_Summary Back to top]
+
 == !ProcessMetadataVisitor ==
+
+[#Classes_Summary Back to top]
 
 == !SyncerVisitor ==
 
+[#Classes_Summary Back to top]
+
 == XMLMetadataVisitor ==
 
+[#Classes_Summary Back to top]
+
 == XMLWriterVisitor ==
+
+[#Classes_Summary Back to top]
+
+`[`*DeveloperAPICompareAndSyncManual Prev - Syncless.CompareAndSync.Manual]* `|` *[DeveloperAPICompareAndSyncRequest Next - Syncless.CompareAndSync.Request]*`]`
