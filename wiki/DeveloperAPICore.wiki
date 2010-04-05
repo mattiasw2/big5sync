@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - Core
+#summary Developers' Guide - API - Syncless.Core
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
