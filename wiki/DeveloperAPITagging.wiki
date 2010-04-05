@@ -10,7 +10,7 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 
 || *Class* || *Description* ||
 || [#CurrentTime CurrentTime] || Provides properties which enclose the `DateTime.Now` property. The object created allows for repeated use of the same `DateTime.Now` property value ||
-|| [#LogMessage LogMessage] || ||
+|| [#LogMessage LogMessage] || Provides static string values which are used for logging events invoked in the Tagging namespace ||
 || [#Tag Tag] || ||
 || [#TagConfig TagConfig] || ||
 || [#TaggedPath TaggedPath] || ||
@@ -30,6 +30,9 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 ----
 
 == !LogMessage ==
+
+`internal static class` !LogMessage
+        Provides static string values which are used for logging events invoked in the Tagging namespace.
 
 [#Classes_Summary Back to top]
 
