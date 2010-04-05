@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - CompareAndSync.CompareObject
+#summary Developers' Guide - API - Syncless.CompareAndSync.CompareObject
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
