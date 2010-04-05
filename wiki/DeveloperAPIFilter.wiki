@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - Syncless.Filter
+#summary Developers' Guide - API - Syncless.Filters
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
