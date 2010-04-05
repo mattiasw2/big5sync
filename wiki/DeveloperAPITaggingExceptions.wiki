@@ -1,0 +1,21 @@
+#summary Developers' Guide - API - Tagging.Exceptions
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Exceptions Summary =
+
+== CorruptedTaggingXMLException ==
+
+== !FilterAlreadyExistException ==
+
+== !FilterNotExistException ==
+
+== !PathAlreadyExistsException ==
+
+== !PathNotFoundException ==
+
+== !RecursiveDirectoryException ==
+
+== !TagAlreadyExistsException ==
+
+== !TagNotFoundException ==
