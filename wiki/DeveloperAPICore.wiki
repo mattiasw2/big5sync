@@ -1,7 +1,6 @@
 #summary Developers' Guide - API - Core
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
-<wiki:toc max_depth = "4">
 
 = Interfaces Summary =
 
