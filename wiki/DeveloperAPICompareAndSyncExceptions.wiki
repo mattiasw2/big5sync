@@ -1,0 +1,29 @@
+#summary Developers' Guide - API - CompareAndSync.Exceptions
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Exceptions Summary =
+
+== !ArchiveFileException ==
+
+== !ArchiveFolderException ==
+
+== !CopyFileException ==
+
+== !CopyFolderException ==
+
+== !CreateFolderException ==
+
+== !DeleteFileException ==
+
+== !DeleteFolderException ==
+
+== !HashFileException ==
+
+== !IncompatibleTypeException ==
+
+== !MoveFileException ==
+
+== !MoveFolderException ==
+
+== SynclessIOException ==
