@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - Tagging
+#summary Developers' Guide - API - Syncless.Tagging
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
