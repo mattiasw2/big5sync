@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Syncless.Core;
-using Syncless.Notification.SLLNotification;
+using Syncless.Notification;
 namespace Syncless.Tagging
 {
     public static class TagMerger

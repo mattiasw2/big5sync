@@ -490,7 +490,7 @@ namespace Syncless.Core
                                                                  SyncConfig.Instance);
                     SendAutoRequest(request);
                 }
-            } 
+            }
             List<Tag> preRenameTagList = TaggingLayer.Instance.RetrieveTagByPath(logicalAddress);
             if (preRenameTagList.Count != 0)
             {
@@ -500,7 +500,7 @@ namespace Syncless.Core
                 _userInterface.PathChanged();
             }
 
-            
+
         }
 
         /// <summary>
@@ -879,6 +879,51 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
+
+        public TagView SwitchMode(string tagname)
+        {
+            Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            if (tag == null)
+            {
+                return null;
+            }
+            TagState tagState = GetTagState(tagname);
+            switch (tagState)
+            {
+                case TagState.Undefined: return null;
+                case TagState.Seamless: MonitorTag(tagname, false);
+                    break;
+                case TagState.Manual: MonitorTag(tagname, true);
+                    break;
+                case TagState.SeamlessToManual: //might want to de queue
+                    break;
+                case TagState.ManualToSeamless: //??
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return null;
+        }
+        public TagState GetTagState(string tagname)
+        {
+
+            Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+            if (tag == null)
+            {
+                //TODO
+                throw new Exception();
+            }
+            TagState state = TagState.Undefined;
+            if (_switchingTable.TryGetValue(tagname, out state))
+            {
+                return state;
+            }
+            return tag.IsSeamless ? TagState.Seamless : TagState.Manual;
+
+
+        }
+
         /// <summary>
         /// Set the monitor mode for a tag
         /// </summary>
@@ -888,7 +933,7 @@ namespace Syncless.Core
         /// <returns>whether the tag can be changed.</returns>
         public bool MonitorTag(string tagname, bool mode)
         {
-            
+
             if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tagname))
             {
                 return false;
@@ -901,6 +946,7 @@ namespace Syncless.Core
                     throw new TagNotFoundException(tagname);
                 }
                 SwitchMonitorTag(tag, mode);
+                _userInterface.TagChanged();
                 return true;
             }
             catch (TagNotFoundException tge)
@@ -1053,7 +1099,7 @@ namespace Syncless.Core
         {
             try
             {
-                
+
                 CompareAndSyncController.Instance.Terminate();
                 DeviceWatcher.Instance.Terminate();
                 MonitorLayer.Instance.Terminate();
@@ -1359,7 +1405,8 @@ namespace Syncless.Core
             try
             {
                 _switchingTable.Remove(tag.TagName);
-            }catch(Exception)
+            }
+            catch (Exception)
             {
 
             }
@@ -1385,7 +1432,7 @@ namespace Syncless.Core
                 {
                     SetTagMode(tag, true);
                 }
-                return false;
+                return true;
             }
 
             ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), tag.Filters, SyncConfig.Instance, tag.TagName, notify);
@@ -1497,23 +1544,7 @@ namespace Syncless.Core
             //        view.TagState = TagState.Manual;
             //    }
             //}
-            TagState state = TagState.Undefined;
-            _switchingTable.TryGetValue(view.TagName, out state);
-            if (state != TagState.Undefined)
-            {
-                if (state == TagState.ManualToSeamless || state == TagState.SeamlessToManual)
-                {
-                    view.TagState = TagState.Switching;
-                }
-                else
-                {
-                    view.TagState = t.IsSeamless ? TagState.Seamless : TagState.Manual;
-                }
-            }
-            else
-            {
-                view.TagState = t.IsSeamless ? TagState.Seamless : TagState.Manual;
-            }
+            view.TagState = GetTagState(view.TagName);
             return view;
         }
         /// <summary>
@@ -1568,7 +1599,7 @@ namespace Syncless.Core
                         catch (Exception)
                         {
                         }
-                        
+
                         StartMonitorTag(t);
                     }
                 }
@@ -1792,6 +1823,6 @@ namespace Syncless.Core
             _userInterface.TagChanged();
         }
         #endregion
-        
+
     }
 }

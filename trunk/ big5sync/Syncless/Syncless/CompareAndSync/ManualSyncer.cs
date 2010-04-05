@@ -9,8 +9,7 @@ using Syncless.Core;
 using Syncless.Filters;
 using Syncless.Logging;
 using Syncless.Notification;
-using Syncless.Notification.SLLNotification;
-using Syncless.Notification.UINotification;
+
 
 namespace Syncless.CompareAndSync
 {

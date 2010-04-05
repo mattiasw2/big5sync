@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Syncless.Notification.UINotification
+namespace Syncless.Notification
 {
     public class AutoSyncCompleteNotification : AbstractNotification
     {

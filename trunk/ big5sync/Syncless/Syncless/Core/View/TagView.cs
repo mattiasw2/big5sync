@@ -78,7 +78,13 @@ namespace Syncless.Core.View
         {
             get { return (isQueued || isSyncing); }
         }
-        
+        public bool IsSwitching{
+            get
+            {
+                return (_tagState == Core.View.TagState.ManualToSeamless ||
+                        _tagState == Core.View.TagState.SeamlessToManual);
+            }
+        }
         
         
         public TagState TagState

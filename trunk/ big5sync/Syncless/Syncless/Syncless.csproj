@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{79C1CBE7-297A-4820-A2D9-BE3507B8EF19}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -121,17 +121,18 @@
     <Compile Include="Logging\LogReaderHelper.cs" />
     <Compile Include="Logging\UserLogger.cs" />
     <Compile Include="Monitor\FileSystemEventExecutor.cs" />
-    <Compile Include="Notification\SLLNotification\AddTagNotification.cs" />
-    <Compile Include="Notification\SLLNotification\MonitorTagNotification.cs" />
-    <Compile Include="Notification\SLLNotification\TaggedPathDeletedNotification.cs" />
+    <Compile Include="Notification\NotificationFactory.cs" />
+    <Compile Include="Notification\AddTagNotification.cs" />
+    <Compile Include="Notification\MonitorTagNotification.cs" />
+    <Compile Include="Notification\TaggedPathDeletedNotification.cs" />
     <Compile Include="Notification\SyncState.cs" />
-    <Compile Include="Notification\UINotification\AutoSyncCompleteNotification.cs" />
-    <Compile Include="Notification\UINotification\CancelSyncNotification.cs" />
-    <Compile Include="Notification\UINotification\CompareCompleteNotification.cs" />
+    <Compile Include="Notification\AutoSyncCompleteNotification.cs" />
+    <Compile Include="Notification\CancelSyncNotification.cs" />
+    <Compile Include="Notification\CompareCompleteNotification.cs" />
     <Compile Include="Notification\ISyncProgressObserver.cs" />
-    <Compile Include="Notification\UINotification\NewProfileNotification.cs" />
-    <Compile Include="Notification\SLLNotification\RemoveTagNotification.cs" />
-    <Compile Include="Notification\SLLNotification\UnMonitorPathNotification.cs" />
+    <Compile Include="Notification\NewProfileNotification.cs" />
+    <Compile Include="Notification\RemoveTagNotification.cs" />
+    <Compile Include="Notification\UnMonitorPathNotification.cs" />
     <Compile Include="Notification\INotificationQueue.cs" />
     <Compile Include="Core\IUIInterface.cs" />
     <Compile Include="Core\DeviceWatcher.cs" />
@@ -140,8 +141,8 @@
     <Compile Include="Core\IMonitorControllerInterface.cs" />
     <Compile Include="Core\IUIControllerInterface.cs" />
     <Compile Include="Notification\AbstractNotification.cs" />
-    <Compile Include="Notification\UINotification\MessageNotification.cs" />
-    <Compile Include="Notification\SLLNotification\MonitorPathNotification.cs" />
+    <Compile Include="Notification\MessageNotification.cs" />
+    <Compile Include="Notification\MonitorPathNotification.cs" />
     <Compile Include="Notification\NotificationCode.cs" />
     <Compile Include="Notification\NotificationQueue.cs" />
     <Compile Include="Core\SaveLoadHelper.cs" />
@@ -178,11 +179,11 @@
     <Compile Include="Monitor\FileSystemEventProcessor.cs" />
     <Compile Include="Monitor\MonitorLayer.cs" />
     <Compile Include="Notification\IQueueObserver.cs" />
-    <Compile Include="Notification\UINotification\NothingToSyncNotification.cs" />
-    <Compile Include="Notification\UINotification\SyncCompleteNotification.cs" />
+    <Compile Include="Notification\NothingToSyncNotification.cs" />
+    <Compile Include="Notification\SyncCompleteNotification.cs" />
     <Compile Include="Notification\SyncProgress.cs" />
-    <Compile Include="Notification\UINotification\SyncStartNotification.cs" />
-    <Compile Include="Notification\UINotification\TaggedFolderDeletedNotification.cs" />
+    <Compile Include="Notification\SyncStartNotification.cs" />
+    <Compile Include="Notification\TaggedFolderDeletedNotification.cs" />
     <Compile Include="Profiling\Exceptions\ProfileDriveConflictException.cs" />
     <Compile Include="Profiling\Exceptions\ProfileLoadException.cs" />
     <Compile Include="Profiling\Exceptions\ProfileNameDifferentException.cs" />
