@@ -1,14 +1,35 @@
 #summary Developers' Guide - API - Core
 #labels Phase-Implementation
+#sidebar DeveloperAPISidebar
 
-= Introduction =
+= Interfaces Summary =
 
-Add your content here.
+== ICommandLineControllerInterface ==
 
+== IMonitorControllerInterface ==
 
-= Details =
+== IUIControllerInterface ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== IUIInterface =
+
+= Classes Sumamry =
+
+== DeletedTaggedPathWatcher ==
+
+== DeviceWatcher ==
+
+== LogicQueueObserver ==
+
+== PathPair ==
+
+== PathTable ==
+
+== PathTableReader ==
+
+== SaveLoadHelper ==
+
+== ServerLocator ==
+
+== SystemLogicLayer ==
+
+== TableType ==
