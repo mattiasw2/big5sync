@@ -39,7 +39,3 @@ Provides properties which enclose the `DateTime.Now` property. The object create
         Creates a new !CurrentTime object.
 
 ----
-
-= Methods Summary =
-
-|| *Method* || *Description* ||
