@@ -230,3 +230,7 @@ Clearly, D\Note.txt is the most updated file. To end it off, !SyncerVisitor will
 
 = Extending !CompareAndSync =
 Further functionality can be added into !CompareAndSync should a developer wish to. He can simply create his own visitor that visits each node and performs the action he decides. A good example would be to generate a report after a synchronization. A developer can simply code a visitor to create a report based on the attributes of each node.
+
+
+= API =
+You can refer to the API for CompareAndSync component [http://code.google.com/p/big5sync/wiki/DeveloperAPICompareAndSync here].
