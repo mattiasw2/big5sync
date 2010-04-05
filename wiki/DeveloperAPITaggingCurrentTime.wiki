@@ -2,6 +2,8 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+Provides properties which enclose the DateTime.Now property. The object created allows for repeated use of the same DateTime.Now property value.
+
 = Properties Summary =
 
 || *Property* || *Description* ||
