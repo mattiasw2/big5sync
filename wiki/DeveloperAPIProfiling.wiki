@@ -1,17 +1,17 @@
 #summary Developers' Guide - API - Profiling
 #labels Phase-Implementation
-#sidebar DeveloperAPIProfilingSidebar
-
-= !ProfileDrive =
+#sidebar DeveloperAPISidebar
 
 = Profile =
 
-= !ProfilingLayer =
+= !ProfileDrive =
 
 = !ProfileMerger =
 
+= ProfilingGUIDHelper =
+
 = !ProfilingHelper =
 
-= ProfilingXMLHelper =
+= !ProfilingLayer =
 
-= ProfilingGUIDHelper =
+= ProfilingXMLHelper =
