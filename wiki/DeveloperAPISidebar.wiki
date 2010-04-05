@@ -202,6 +202,7 @@
         * [DeveloperAPIProfilingExceptions#ProfileNameDifferentException ProfileNameDifferentException]
     * [DeveloperAPITagging Tagging]
       * [DeveloperAPITagging#Classes_Summary Classes Summary]
+        * [DeveloperAPITagging#CurrentTime CurrentTime]
         * [DeveloperAPITagging#LogMessage LogMessage]
         * [DeveloperAPITagging#Tag Tag]
         * [DeveloperAPITagging#TagConfig TagConfig]
