@@ -29,3 +29,6 @@ Likewise, when a drive-out event is detected, `ProfilingLayer` will remove the m
 == Merging Multiple _profiling.xml_ ==
 
 Profile from many computers will be merged. Currently, logicalId and GUID is the same. Therefore we will do a direct merge. As long as the guid and logicalid does not have conflict with the existing mapping, it will be added to the current profile.
+
+= API =
+You can refer to the API for Profiling component [http://code.google.com/p/big5sync/wiki/DeveloperAPIProfiling here].
