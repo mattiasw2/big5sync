@@ -348,6 +348,7 @@ namespace SynclessUI
 
         private void BtnSyncMode_Click(object sender, RoutedEventArgs e)
         {
+            /*
             if (!_manualSyncEnabled)
             {
                 DialogHelper.ShowError(SelectedTag + " is Synchronizing",
@@ -404,6 +405,7 @@ namespace SynclessUI
             {
                 DialogHelper.DisplayUnhandledExceptionMessage();
             }
+            */
         }
 
         private void SeamlessMode()
