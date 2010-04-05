@@ -1,3 +1,15 @@
 #summary Developers' Guide - API - Syncless.Tagging.CurrentTime
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
+
+= Properties Summary =
+
+|| *Property* || *Description* ||
+
+= Constructors Summary =
+
+|| *Constructor* || *Description* ||
+
+= Methods Summary =
+
+|| *Method* || *Description* ||
