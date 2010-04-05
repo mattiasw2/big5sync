@@ -6,7 +6,7 @@ This document is the API specification for Syncless, version 2.0
 
 = Syncless Namespaces =
 
-|| Namespace || Description ||
+|| *Namespace* || *Description* ||
 || Syncless.!CompareAndSync || ||
 || Syncless.!CompareAndSync.!CompareObject || ||
 || Syncless.!CompareAndSync.Enum || ||
@@ -35,7 +35,7 @@ This document is the API specification for Syncless, version 2.0
 
 = SynclessUI Namespaces =
 
-|| Namespace || Description ||
+|| *Namespace* || *Description* ||
 || SynclessUI || ||
 || SynclessUI.Helper || ||
 || SynclessUI.Notification || ||
