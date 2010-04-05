@@ -31,37 +31,50 @@ namespace Syncless.Helper
         }
         public static int CleanSynclessMeta(DirectoryInfo info, List<string> childPaths)
         {
-            if (!info.Exists) return 0;
-            DirectoryInfo[] infos = info.GetDirectories("*", SearchOption.AllDirectories);
-            int count = 0;
-            foreach (DirectoryInfo i in infos)
+            if (!info.Exists)
+                return 0;
+
+            try
             {
-                if (i.Name.ToLower().Equals(".syncless"))
+                DirectoryInfo[] infos = info.GetDirectories("*", SearchOption.AllDirectories);
+                int count = 0;
+
+                foreach (DirectoryInfo i in infos)
                 {
-                    bool isChild = false;
-                    foreach (string path in childPaths)
+                    if (i.Name.ToLower().Equals(".syncless"))
                     {
-                        if (i.FullName.ToLower().Contains(path.ToLower()))
+                        bool isChild = false;
+                        foreach (string path in childPaths)
                         {
-                            isChild = true;
-                            break;
+                            if (i.FullName.ToLower().Contains(path.ToLower()))
+                            {
+                                isChild = true;
+                                break;
+                            }
+                        }
+                        if (isChild)
+                        {
+                            continue;
+                        }
+
+                        try
+                        {
+                            i.Delete(true);
+                            count++;
+                        }
+                        catch (IOException)
+                        {
                         }
                     }
-                    if (isChild)
-                    {
-                        continue;
-                    }
-                    try
-                    {
-                        i.Delete(true);
-                        count++;
-                    }
-                    catch (IOException)
-                    {
-                    }
                 }
+
+                return count;
             }
-            return count;
+            catch (DirectoryNotFoundException)
+            {
+                return 0;
+            }
+
         }
     }
 }
