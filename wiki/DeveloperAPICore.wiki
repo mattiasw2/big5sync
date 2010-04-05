@@ -32,6 +32,10 @@
 
 == !SystemLogicLayer ==
 
+= Delegates Summary =
+
+== !LogicQueueObserver.!RunDel ==
+
 = Enumerations Summary =
 
 == !TableType ==
