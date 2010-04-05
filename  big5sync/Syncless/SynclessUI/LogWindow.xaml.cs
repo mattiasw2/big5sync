@@ -20,9 +20,11 @@ namespace SynclessUI
 
         public LogWindow(MainWindow main)
         {
-            _main = main;
             bool encounteredError = false;
-
+            _main = main;
+            Owner = _main;
+            ShowInTaskbar = false;
+            
             try
             {
                 List<LogData> log = _main.Gui.ReadLog();
@@ -31,12 +33,12 @@ namespace SynclessUI
             catch (LogFileCorruptedException)
             {
                 encounteredError = true;
-                DialogHelper.ShowError("Log File Corrupted", "Stored log files have been corrupted and will be deleted.");
+                DialogHelper.ShowError(this, "Log File Corrupted", "Stored log files have been corrupted and will be deleted.");
             }
             catch (UnhandledException)
             {
                 encounteredError = true;
-                DialogHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
 
             if (!encounteredError)

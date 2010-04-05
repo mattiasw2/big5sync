@@ -4,35 +4,39 @@ namespace SynclessUI.Helper
 {
     public static class DialogHelper
     {
-        public static void ShowError(string caption, string message)
+        public static void ShowError(Window window, string caption, string message)
         {
-            var dw = new DialogWindow(caption, message, DialogType.Error);
+            var dw = new DialogWindow(window, caption, message, DialogType.Error);
             dw.ShowDialog();
         }
 
-        public static void ShowInformation(string caption, string message)
+        public static void ShowInformation(Window window, string caption, string message)
         {
-            var dw = new DialogWindow(caption, message, DialogType.Information);
+            var dw = new DialogWindow(window, caption, message, DialogType.Information);
             dw.ShowDialog();
         }
 
-        public static bool ShowWarning(string caption, string message)
+        public static bool ShowWarning(Window window, string caption, string message)
         {
-            var dw = new DialogWindow(caption, message, DialogType.Warning);
+            var dw = new DialogWindow(window, caption, message, DialogType.Warning);
             dw.ShowDialog();
 
-            return (bool) Application.Current.Properties["DialogWindowChoice"];
+            if(Application.Current == null)
+                return false;
+
+            return (bool)Application.Current.Properties["DialogWindowChoice"];
+            
         }
 
-        public static DialogWindow ShowIndeterminate(string caption, string message)
+        public static DialogWindow ShowIndeterminate(Window window, string caption, string message)
         {
-            var dw = new DialogWindow(caption, message, DialogType.Indeterminate);
+            var dw = new DialogWindow(window, caption, message, DialogType.Indeterminate);
             return dw;
         }
 
-        public static void DisplayUnhandledExceptionMessage()
+        public static void DisplayUnhandledExceptionMessage(Window window)
         {
-            ShowError("Unexpected Error",
+            ShowError(window, "Unexpected Error",
                       "An unexpected error has occured. \n\nPlease help us by - \n 1. Submitting the debug.log in your Syncless Application Folder\\log to big5.syncless@gmail.com \n 2. Raise it as an issue on our GCPH @ http://code.google.com/p/big5sync/issues/list\n\n Please restart Syncless.");
         }
     }

@@ -10,10 +10,14 @@ namespace SynclessUI
     public partial class ShortcutsWindow : Window
     {
         private bool _closingAnimationNotCompleted = true;
+        private MainWindow _main;
 
-        public ShortcutsWindow()
+        public ShortcutsWindow(MainWindow main)
         {
             InitializeComponent();
+            _main = main;
+            Owner = _main;
+            ShowInTaskbar = false;
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)

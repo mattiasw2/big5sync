@@ -25,6 +25,8 @@ namespace SynclessUI
 
                 _main = main;
                 _notifyUser = notifyUser;
+                Owner = _main;
+                ShowInTaskbar = false;
 
                 var tagListByFolder = new List<string>();
                 DirectoryInfo di = null;
@@ -54,14 +56,14 @@ namespace SynclessUI
                 }
                 else
                 {
-                    DialogHelper.ShowError("No Tags Found", "The folder you were trying to untag had no tags on it.");
+                    DialogHelper.ShowError(this, "No Tags Found", "The folder you were trying to untag had no tags on it.");
 
                     Close();
                 }
             }
             catch (UnhandledException)
             {
-                DialogHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
         }
 
@@ -78,7 +80,7 @@ namespace SynclessUI
                 string lasttagged = "";
                 if (taglist.SelectedIndex == -1)
                 {
-                    DialogHelper.ShowError("Tag not Selected",
+                    DialogHelper.ShowError(this, "Tag not Selected",
                                            "Please select the particular tag to untag the folder from.");
                     BtnOk.IsEnabled = true;
                     return;
@@ -92,7 +94,7 @@ namespace SynclessUI
                         lasttagged = t;
                         if (result != 1)
                         {
-                            DialogHelper.ShowError("Untagging Error", t + " could not be untagged from " + Path);
+                            DialogHelper.ShowError(this, "Untagging Error", t + " could not be untagged from " + Path);
                         }
                         else
                         {
@@ -102,7 +104,7 @@ namespace SynclessUI
                     }
                     else
                     {
-                        DialogHelper.ShowError(t + " is Synchronizing",
+                        DialogHelper.ShowError(this, t + " is Synchronizing",
                                                "You cannot untag a folder while the tag is synchronizing.");
                         BtnOk.IsEnabled = true;
                     }
@@ -112,7 +114,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
                 Close();
             }
         }

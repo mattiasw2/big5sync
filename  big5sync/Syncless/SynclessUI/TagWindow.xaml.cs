@@ -38,6 +38,8 @@ namespace SynclessUI
             InitializeComponent();
 
             _main = main;
+            Owner = _main;
+            ShowInTaskbar = false;
 
             if(tagname != null)
             {
@@ -136,7 +138,7 @@ namespace SynclessUI
                     {
                         if (FileHelper.IsCDRomDrive(path))
                         {
-                            DialogHelper.ShowError("Invalid Folder", "You cannot tag any folder from a CD/DVD-Rom drive.");
+                            DialogHelper.ShowError(this, "Invalid Folder", "You cannot tag any folder from a CD/DVD-Rom drive.");
                             if (!_isTagNormally)
                             {
                                 _isInvalidFolder = true;
@@ -144,7 +146,7 @@ namespace SynclessUI
                         }
                         else if (FileHelper.IsSynclessFolder(path))
                         {
-                            DialogHelper.ShowError("Invalid Folder", "You cannot tag this folder.");
+                            DialogHelper.ShowError(this, "Invalid Folder", "You cannot tag this folder.");
                             if (!_isTagNormally)
                             {
                                 _isInvalidFolder = true;
@@ -174,7 +176,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
         }
 
@@ -215,30 +217,30 @@ namespace SynclessUI
 										}
 										else
 										{
-											DialogHelper.ShowError("Tag Error", "Tag Error Occured. Please Try Again.");
+                                            DialogHelper.ShowError(this, "Tag Error", "Tag Error Occured. Please Try Again.");
 											BtnOk.IsEnabled = true;
 										}
 									}
 									else
 									{
-										DialogHelper.ShowError(Tagname + " is Synchronizing",
+                                        DialogHelper.ShowError(this, Tagname + " is Synchronizing",
 															"You cannot tag a folder while the tag is synchronizing.");
 										BtnOk.IsEnabled = true;
 									}
 								} else {
-									DialogHelper.ShowError("Invalid/Missing Folder", "You cannot tag the specified folder");
+                                    DialogHelper.ShowError(this, "Invalid/Missing Folder", "You cannot tag the specified folder");
 									BtnOk.IsEnabled = true;
 								}
                             }
                             catch (RecursiveDirectoryException)
                             {
-                                DialogHelper.ShowError("Folder cannot be tagged",
+                                DialogHelper.ShowError(this, "Folder cannot be tagged",
                                                        "Folder could not be tagged as it is a sub-folder/parent/ancestor of a folder which is already tagged.");
                                 BtnOk.IsEnabled = true;
                             }
                             catch (PathAlreadyExistsException)
                             {
-                                DialogHelper.ShowError("Path Already Exists",
+                                DialogHelper.ShowError(this, "Path Already Exists",
                                                        "The path you tried to tag is already tagged.");
                                 BtnOk.IsEnabled = true;
                             }
@@ -249,19 +251,19 @@ namespace SynclessUI
                     }
                     else
                     {
-                        DialogHelper.ShowError("Folder Not Selected", "Please select a folder to tag.");
+                        DialogHelper.ShowError(this, "Folder Not Selected", "Please select a folder to tag.");
                         BtnOk.IsEnabled = true;
                     }
                 }
                 else
                 {
-                    DialogHelper.ShowError("Tagname Empty", "Please specify a tagname.");
+                    DialogHelper.ShowError(this, "Tagname Empty", "Please specify a tagname.");
                     BtnOk.IsEnabled = true;
                 }
             }
             catch (UnhandledException)
             {
-                DialogHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
                 Close();
             }
         }
@@ -271,7 +273,7 @@ namespace SynclessUI
             var di = new DriveInfo(_path);
             if (di.Name == _path)
             {
-                bool result = DialogHelper.ShowWarning("Tag Drive Warning",
+                bool result = DialogHelper.ShowWarning(this, "Tag Drive Warning",
                                                        "You are about to tag " + _path +
                                                        "\nAre you sure you wish to continue?");
 
@@ -285,7 +287,7 @@ namespace SynclessUI
         {
             if (_path.Length > 200)
             {
-                bool result = DialogHelper.ShowWarning("Long Path Name Warning",
+                bool result = DialogHelper.ShowWarning(this, "Long Path Name Warning",
                                                        "NTFS File System does not handle paths which are 248 characters or more in length properly. \nAre you sure you wish to continue?");
 
                 return result;
