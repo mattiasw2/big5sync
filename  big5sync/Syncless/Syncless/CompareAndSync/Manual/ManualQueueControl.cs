@@ -90,7 +90,7 @@ namespace Syncless.CompareAndSync.Manual
                         }
                     }
                 }
-                else if (_currJob != null && _currJob.TagName == item.TagName)
+                else if (_currJob != null && _currJobProgress != null && _currJob.TagName == item.TagName)
                 {
                     switch (_currJobProgress.State)
                     {
