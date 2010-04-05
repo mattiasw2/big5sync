@@ -23,29 +23,3 @@
 == !SyncConfig ==
 
 == XMLHelper ==
-
-= Exceptions Summary =
-
-== !ArchiveFileException ==
-
-== !ArchiveFolderException ==
-
-== !CopyFileException ==
-
-== !CopyFolderException ==
-
-== !CreateFolderException ==
-
-== !DeleteFileException ==
-
-== !DeleteFolderException ==
-
-== !HashFileException ==
-
-== !IncompatibleTypeException ==
-
-== !MoveFileException ==
-
-== !MoveFolderException ==
-
-== SynclessIOException ==
