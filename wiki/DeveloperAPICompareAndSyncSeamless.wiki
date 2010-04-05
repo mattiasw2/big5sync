@@ -2,10 +2,20 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPICompareAndSyncSeamless Prev - Syncless.CompareAndSync.Seamless]* `|` *[DeveloperAPICompareAndSyncXMLWriteObject Next - Syncless.CompareAndSync.XMLWriteObject]*`]`
+
 = Classes Summary =
 
 == !SeamlessQueueControl ==
 
+[#Classes_Summary Back to top]
+
 == !SeamlessSyncer ==
 
+[#Classes_Summary Back to top]
+
 == SeamlessXMLHelper ==
+
+[#Classes_Summary Back to top]
+
+`[`*[DeveloperAPICompareAndSyncSeamless Prev - Syncless.CompareAndSync.Seamless]* `|` *[DeveloperAPICompareAndSyncXMLWriteObject Next - Syncless.CompareAndSync.XMLWriteObject]*`]`
