@@ -19,6 +19,8 @@ namespace SynclessUI
             InitializeComponent();
 
             _main = main;
+            Owner = _main;
+            ShowInTaskbar = false;
         }
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)
@@ -36,7 +38,7 @@ namespace SynclessUI
 
                     if (!tagexists)
                     {
-                        DialogHelper.ShowError("Tag Already Exist", "Please specify another tagname.");
+                        DialogHelper.ShowError(this, "Tag Already Exist", "Please specify another tagname.");
                         BtnOk.IsEnabled = true;
                     }
                     else
@@ -46,13 +48,13 @@ namespace SynclessUI
                 }
                 else
                 {
-                    DialogHelper.ShowError("Tagname Empty", "Please specify a tagname.");
+                    DialogHelper.ShowError(this, "Tagname Empty", "Please specify a tagname.");
                     BtnOk.IsEnabled = true;
                 }
             }
             catch (UnhandledException)
             {
-                DialogHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
                 Close();
             }
         }

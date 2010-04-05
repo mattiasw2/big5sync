@@ -11,12 +11,17 @@ namespace SynclessUI
     /// </summary>
     public partial class OptionsWindow : Window
     {
+        private MainWindow _main;
         private bool _closingAnimationNotCompleted = true;
 
-        public OptionsWindow()
+        public OptionsWindow(MainWindow main)
         {
+            _main = main;
             InitializeComponent();
             InitializeOptions();
+
+            Owner = _main;
+            ShowInTaskbar = false;
         }
 
         private void InitializeOptions()

@@ -20,8 +20,8 @@ namespace SynclessUI
         private readonly MainWindow _main;
         private readonly DataTable _previewSyncData;
         private readonly string _selectedTag;
-        private BackgroundWorker previewWorker;
-        private RootCompareObject rco;
+        private BackgroundWorker _previewWorker;
+        private RootCompareObject _rco;
         private bool _closingAnimationNotCompleted = true;
 
         public PreviewSyncWindow(MainWindow main, string selectedTag)
@@ -33,16 +33,18 @@ namespace SynclessUI
             _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Operation, typeof (string)));
             _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Dest, typeof (string)));
             _main = main;
+            Owner = _main;
+            ShowInTaskbar = false;
 
             Populate(_main.Gui.PreviewSync(selectedTag));
             InitializeDataGrid();
 
             //PreviewSyncDelegate previewDelegate = new PreviewSyncDelegate(_main.Gui.PreviewSync);
             //previewDelegate.BeginInvoke(selectedTag, CallBack, previewDelegate);
-            //previewWorker = new BackgroundWorker();
-            //this.previewWorker.DoWork += new DoWorkEventHandler(GetRCO);
-            //this.previewWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
-            //this.previewWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
+            //_previewWorker = new BackgroundWorker();
+            //this._previewWorker.DoWork += new DoWorkEventHandler(GetRCO);
+            //this._previewWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
+            //this._previewWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
         }
 
         public DataTable PreviewSyncData
@@ -52,7 +54,7 @@ namespace SynclessUI
 
         private void GetRCO(object sender, DoWorkEventArgs e)
         {
-            rco = _main.Gui.PreviewSync(_selectedTag);
+            _rco = _main.Gui.PreviewSync(_selectedTag);
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -61,7 +63,7 @@ namespace SynclessUI
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            Populate(rco);
+            Populate(_rco);
         }
 
         private void CallBack(IAsyncResult result)
@@ -82,7 +84,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
         }
 
@@ -99,7 +101,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
             //new UpdateDelegate(Data.InvalidateVisual).BeginInvoke(Test, null);
         }

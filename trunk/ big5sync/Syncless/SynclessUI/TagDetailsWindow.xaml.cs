@@ -19,12 +19,14 @@ namespace SynclessUI
         private List<Filter> filters;
         private bool _closingAnimationNotCompleted = true;
 
-        public TagDetailsWindow(string tagname, MainWindow main)
+        public TagDetailsWindow(MainWindow main, string tagname)
         {
             try
             {
                 InitializeComponent();
                 _main = main;
+                Owner = _main;
+                ShowInTaskbar = false;
                 _tagname = tagname;
                 LblTag_Details.Content = "Tag Details for " + _tagname;
                 filters = _main.Gui.GetAllFilters(_tagname);
@@ -34,7 +36,7 @@ namespace SynclessUI
             }
             catch (UnhandledException)
             {
-                DialogHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
         }
 
@@ -102,7 +104,7 @@ namespace SynclessUI
                 {
                     if(CheckRedundantFilters())
                     {
-                        DialogHelper.ShowError("Duplicate Filters", "Please remove all duplicate filters.");
+                        DialogHelper.ShowError(this, "Duplicate Filters", "Please remove all duplicate filters.");
                         BtnOk.IsEnabled = true;
                     } else
                     {
@@ -118,13 +120,13 @@ namespace SynclessUI
                 else
                 {
                     BtnOk.IsEnabled = true;
-                    DialogHelper.ShowError(_tagname + " is Synchronizing",
+                    DialogHelper.ShowError(this, _tagname + " is Synchronizing",
                                            "You cannot update tag details while the tag is synchronizing.");
                 }
             }
             catch (UnhandledException)
             {
-                DialogHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
                 Close();
             }
         }
