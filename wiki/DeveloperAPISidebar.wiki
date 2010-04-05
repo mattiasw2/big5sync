@@ -150,6 +150,8 @@
         * [DeveloperAPIFilter#SizeFilter SizeFilter]
         * [DeveloperAPIFilter#SynclessArchiveFilter SynclessArchiveFilter]
         * [DeveloperAPIFilter#SynclessConfigFilter SynclessConfigFilter]
+      * [DeveloperAPIFilter#Enumerations_Summary Enumerations Summary]
+        * [DeveloperAPIFilter#FilterMode FilterMode]
     * [DeveloperAPINotification Notification]
       * [DeveloperAPINotification#Interfaces_Summary Interfaces Summary]
         * [DeveloperAPINotification#INotificationQueue INotificationQueue]
