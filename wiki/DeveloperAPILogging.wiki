@@ -1,4 +1,5 @@
 #summary Developers' Guide - API - Logging
+#labels Phase-Implementation
 
 = Introduction =
 
