@@ -1,0 +1,17 @@
+#summary Developers' Guide - API - CompareAndSync.Request
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Classes Summary =
+
+== !AutoSyncRequest ==
+
+== !CancelSyncRequest ==
+
+== !ManualCompareRequest ==
+
+== !ManualRequest ==
+
+== !ManualSyncRequest ==
+
+== Request ==
