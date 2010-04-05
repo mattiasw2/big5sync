@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Syncless.CompareAndSync.CompareObject;
-using Syncless.CompareAndSync.Visitor;
+using Syncless.CompareAndSync.Manual.Visitor;
 using Syncless.Notification;
 
 namespace Syncless.CompareAndSync

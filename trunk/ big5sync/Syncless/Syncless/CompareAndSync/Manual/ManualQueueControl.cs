@@ -5,7 +5,7 @@ using Syncless.CompareAndSync.Request;
 using Syncless.Core;
 using Syncless.Notification;
 
-namespace Syncless.CompareAndSync
+namespace Syncless.CompareAndSync.Manual
 {
     /// <summary>
     /// Class for queuing manual sync jobs. Based off http://moazzam-khan.com/blog/?p=418

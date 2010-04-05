@@ -3,15 +3,15 @@ using System.IO;
 using System.Linq;
 using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Exceptions;
+using Syncless.CompareAndSync.Manual.Visitor;
 using Syncless.CompareAndSync.Request;
-using Syncless.CompareAndSync.Visitor;
 using Syncless.Core;
 using Syncless.Filters;
 using Syncless.Logging;
 using Syncless.Notification;
 
 
-namespace Syncless.CompareAndSync
+namespace Syncless.CompareAndSync.Manual
 {
     public static class ManualSyncer
     {

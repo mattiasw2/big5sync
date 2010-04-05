@@ -41,6 +41,7 @@ namespace Syncless.CompareAndSync.Seamless
         {
             string sourceFullPath = Path.Combine(request.SourceParent, request.ChangeType == AutoSyncRequestType.Rename ? request.NewName : request.SourceName);
             FileInfo currFile;
+            long currTime = DateTime.Now.Ticks;
 
             if (File.Exists(sourceFullPath))
             {
@@ -54,14 +55,14 @@ namespace Syncless.CompareAndSync.Seamless
                                                                                CommonMethods.CalculateMD5Hash(currFile),
                                                                                currFile.Length, currFile.CreationTime.Ticks,
                                                                                currFile.LastWriteTime.Ticks, MetaChangeType.New,
-                                                                               _metaUpdated));
+                                                                               _metaUpdated), currTime);
                             break;
                         case AutoSyncRequestType.Update:
                             SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent,
                                                                                CommonMethods.CalculateMD5Hash(currFile),
                                                                                currFile.Length, currFile.CreationTime.Ticks,
                                                                                currFile.LastWriteTime.Ticks,
-                                                                               MetaChangeType.Update, _metaUpdated));
+                                                                               MetaChangeType.Update, _metaUpdated), currTime);
                             break;
                         case AutoSyncRequestType.Rename:
                             SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName,
@@ -69,7 +70,7 @@ namespace Syncless.CompareAndSync.Seamless
                                                                                CommonMethods.CalculateMD5Hash(currFile),
                                                                                currFile.Length, currFile.CreationTime.Ticks,
                                                                                currFile.LastWriteTime.Ticks,
-                                                                               MetaChangeType.Rename, _metaUpdated));
+                                                                               MetaChangeType.Rename, _metaUpdated), currTime);
                             break;
                     }
                 }
@@ -122,7 +123,7 @@ namespace Syncless.CompareAndSync.Seamless
                                     else
                                         ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "File copied from " + sourceFullPath + " to " + destFullPath));
                                     currFile = new FileInfo(destFullPath);
-                                    SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, request.ChangeType == AutoSyncRequestType.New ? MetaChangeType.New : MetaChangeType.Update, _metaUpdated));
+                                    SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, request.ChangeType == AutoSyncRequestType.New ? MetaChangeType.New : MetaChangeType.Update, _metaUpdated), currTime);
                                     break;
                                 case AutoSyncRequestType.Rename:
                                     string oldFullPath = Path.Combine(dest, request.OldName);
@@ -132,7 +133,7 @@ namespace Syncless.CompareAndSync.Seamless
                                     else
                                         CommonMethods.MoveFile(oldFullPath, newFullPath);
                                     currFile = new FileInfo(newFullPath);
-                                    SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName, dest, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.Rename, _metaUpdated));
+                                    SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName, dest, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.Rename, _metaUpdated), currTime);
                                     break;
                             }
                         }
@@ -154,7 +155,7 @@ namespace Syncless.CompareAndSync.Seamless
             }
             else if (request.ChangeType == AutoSyncRequestType.Delete)
             {
-                SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent, MetaChangeType.Delete, _metaUpdated));
+                SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent, MetaChangeType.Delete, _metaUpdated), currTime);
 
                 foreach (string dest in request.DestinationFolders)
                 {
@@ -189,7 +190,7 @@ namespace Syncless.CompareAndSync.Seamless
                                 CommonMethods.DeleteFile(destFullPath);
                                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "File deleted " + destFullPath));
                             }
-                            SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, MetaChangeType.Delete, _metaUpdated));
+                            SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, MetaChangeType.Delete, _metaUpdated), currTime);
                         }
                         catch (DeleteFileException)
                         {
@@ -207,12 +208,9 @@ namespace Syncless.CompareAndSync.Seamless
 
         private static bool DoSync(string sourceFullPath, string destFullPath)
         {
-            FileInfo sourceFile = new FileInfo(sourceFullPath);
-            FileInfo destFile = new FileInfo(destFullPath);
-
             try
             {
-                return (CommonMethods.CalculateMD5Hash(sourceFile) != CommonMethods.CalculateMD5Hash(destFile));
+                return (CommonMethods.CalculateMD5Hash(sourceFullPath) != CommonMethods.CalculateMD5Hash(destFullPath));
             }
             catch (HashFileException)
             {
@@ -227,6 +225,7 @@ namespace Syncless.CompareAndSync.Seamless
         private static void SyncFolder(AutoSyncRequest request)
         {
             string sourceFullPath = Path.Combine(request.SourceParent, request.ChangeType == AutoSyncRequestType.Rename ? request.NewName : request.SourceName);
+            long currTime = DateTime.Now.Ticks;
 
             if (Directory.Exists(sourceFullPath))
             {
@@ -234,10 +233,10 @@ namespace Syncless.CompareAndSync.Seamless
                 switch (request.ChangeType)
                 {
                     case AutoSyncRequestType.New:
-                        SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, request.SourceParent, currFolder.CreationTime.Ticks, MetaChangeType.New, _metaUpdated));
+                        SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, request.SourceParent, currFolder.CreationTime.Ticks, MetaChangeType.New, _metaUpdated), currTime);
                         break;
                     case AutoSyncRequestType.Rename:
-                        SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.OldName, request.NewName, request.SourceParent, currFolder.CreationTime.Ticks, MetaChangeType.Rename, _metaUpdated));
+                        SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.OldName, request.NewName, request.SourceParent, currFolder.CreationTime.Ticks, MetaChangeType.Rename, _metaUpdated), currTime);
                         break;
                 }
 
@@ -255,7 +254,7 @@ namespace Syncless.CompareAndSync.Seamless
                                 CommonMethods.CreateFolder(destFullPath);
                                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "Folder created " + destFullPath));
                                 currFolder = new DirectoryInfo(destFullPath);
-                                SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, dest, currFolder.CreationTime.Ticks, MetaChangeType.New, _metaUpdated));
+                                SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, dest, currFolder.CreationTime.Ticks, MetaChangeType.New, _metaUpdated), currTime);
                                 break;
                             case AutoSyncRequestType.Rename:
                                 oldFullPath = Path.Combine(dest, request.OldName);
@@ -265,7 +264,7 @@ namespace Syncless.CompareAndSync.Seamless
                                     CommonMethods.MoveFolder(oldFullPath, newFullPath);
                                     ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "Folder renamed from " + oldFullPath + " to " + newFullPath));
                                     currFolder = new DirectoryInfo(newFullPath);
-                                    SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.OldName, request.NewName, dest, currFolder.CreationTime.Ticks, MetaChangeType.Rename, _metaUpdated));
+                                    SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.OldName, request.NewName, dest, currFolder.CreationTime.Ticks, MetaChangeType.Rename, _metaUpdated), currTime);
                                 }
                                 break;
                         }
@@ -282,7 +281,7 @@ namespace Syncless.CompareAndSync.Seamless
             }
             else if (request.ChangeType == AutoSyncRequestType.Delete)
             {
-                SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, request.SourceParent, MetaChangeType.Delete, _metaUpdated));
+                SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, request.SourceParent, MetaChangeType.Delete, _metaUpdated), currTime);
 
                 foreach (string dest in request.DestinationFolders)
                 {
@@ -316,7 +315,7 @@ namespace Syncless.CompareAndSync.Seamless
                                 CommonMethods.DeleteFolder(destFullPath, true);
                                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "Folder deleted " + destFullPath));
                             }
-                            SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, dest, MetaChangeType.Delete, _metaUpdated));
+                            SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, dest, MetaChangeType.Delete, _metaUpdated), currTime);
                         }
                         catch (DeleteFolderException)
                         {
