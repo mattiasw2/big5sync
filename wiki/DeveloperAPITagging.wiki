@@ -1,21 +1,21 @@
 #summary Developers' Guide - API - Tagging
 #labels Phase-Implementation
-#sidebar DeveloperAPITaggingSidebar
+#sidebar DeveloperAPISidebar
 
-= !TaggedPath =
-
-= !TagConfig =
+= !LogMessage =
 
 = Tag =
 
-= !TaggingProfile =
+= !TagConfig =
 
-= !TaggingLayer =
-
-= !TagMerger =
+= !TaggedPath =
 
 = !TaggingHelper =
 
+= !TaggingLayer =
+
+= !TaggingProfile =
+
 = TaggingXMLHelper =
 
-= !LogMessage =
+= !TagMerger =
