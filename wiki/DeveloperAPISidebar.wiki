@@ -255,4 +255,8 @@
       * [DeveloperAPIUINotification#Delegates_Summary Delegates Summary]
         * [DeveloperAPIUINotification#NotificationWatcher_._RunDel NotificationWatcher.RunDel]
         * [DeveloperAPIUINotification#PriorityNotificationWatcher_._RunDel PriorityNotificationWatcher]
+    * [DeveloperAPIUIProperties Properties]
+      * [DeveloperAPIUIProperties#Classes_Summary Classes Summary]
+        * [DeveloperAPIUIProperties#Resources Resources]
+        * [DeveloperAPIUIProperties#Settings Settings]
     * [Visitor]
