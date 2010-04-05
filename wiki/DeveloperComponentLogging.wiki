@@ -24,4 +24,4 @@ There are two types of logger object, namely the debug log and the user log. Whe
 Logging uses decorator pattern. This allows the developers to extend the method to do pre-processing and post-processing tasks before writing the log.
 
 = API =
-You can refer to the API for !CompareAndSync component [http://code.google.com/p/big5sync/wiki/DeveloperAPILogging here].
+You can refer to the API for Logging component [http://code.google.com/p/big5sync/wiki/DeveloperAPILogging here].
