@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - Profiling
+#summary Developers' Guide - API - Syncless.Profiling
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
