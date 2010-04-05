@@ -175,7 +175,8 @@ namespace SynclessUI
 
                 switch (tv.TagState)
                 {
-                    case TagState.Switching:
+                    case TagState.SeamlessToManual:
+                    case TagState.ManualToSeamless:
                         Console.WriteLine("Viewing: Switching");
                         SwitchingMode();
                         break;
@@ -1326,7 +1327,8 @@ namespace SynclessUI
                                                                         TagView tv = Gui.GetTag(SelectedTag);
                                                                         switch (tv.TagState)
                                                                         {
-                                                                            case TagState.Switching:
+                                                                            case TagState.SeamlessToManual:
+                                                                            case TagState.ManualToSeamless:
                                                                                 Console.WriteLine(
                                                                                     "Tag Changed: Switching");
                                                                                 SwitchingMode();
