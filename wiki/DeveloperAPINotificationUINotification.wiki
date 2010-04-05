@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - Notification.UINotification
+#summary Developers' Guide - API - Syncless.Notification.UINotification
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
