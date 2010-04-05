@@ -4,12 +4,12 @@
 
 = Classes Summary =
 
-== BaseCompareObject ==
+== !BaseCompareObject ==
 
-== FileCompareObject ==
+== !FileCompareObject ==
 
-== FolderCompareObject ==
+== !FolderCompareObject ==
 
-== RootCompareObject ==
+== !RootCompareObject ==
 
 == XMLCompareObject ==
