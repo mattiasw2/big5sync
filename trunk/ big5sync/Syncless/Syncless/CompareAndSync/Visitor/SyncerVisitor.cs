@@ -346,7 +346,6 @@ namespace Syncless.CompareAndSync.Visitor
         private void DeleteFolder(FolderCompareObject folder, int numOfPaths, int srcFolderPos)
         {
             bool changed = false;
-            int count = 0;
 
             for (int i = 0; i < numOfPaths; i++)
             {
@@ -395,7 +394,7 @@ namespace Syncless.CompareAndSync.Visitor
                     }
                     else
                     {
-                        folder.FinalState[i] = folder.MetaExists[i] ? FinalState.Deleted : FinalState.Unchanged;\
+                        folder.FinalState[i] = folder.MetaExists[i] ? FinalState.Deleted : FinalState.Unchanged;
                         changed = true;
                     }
                 }
