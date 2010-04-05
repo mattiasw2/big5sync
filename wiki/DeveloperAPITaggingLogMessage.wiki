@@ -1,3 +1,27 @@
 #summary Developers' Guide - API - Syncless.Tagging.LogMessage
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
+
+Provides static string values which are used for logging events invoked in the Tagging namespace.
+
+= Properties Summary =
+
+|| *Property* || *Description* ||
+|| [#TAG___CREATED TAG_CREATED] || The string value for tag creation event log ||
+|| [#TAG___RENAMED TAG_RENAMED] || The string value for tag rename event log ||
+
+= Properties Details =
+
+== TAG_CREATED ==
+
+`internal static string` TAG_CREATED
+        The string value for tag creation event log given by "Tag \'{0}\' created." where {0} will be replaced by a tag name property when used.
+
+----
+
+== TAG_RENAMED ==
+
+`internal static string` TAG_RENAMED
+        The string value for tag creation event log given by "Tag \'{0}\' renamed to \'{1}\'." where {0} will be replaced by a tag name property when used.
+
+----
