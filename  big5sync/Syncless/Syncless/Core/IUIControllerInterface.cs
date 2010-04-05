@@ -27,14 +27,13 @@ namespace Syncless.Core
                 
         int Untag(string tagName, DirectoryInfo folder);
         
-        bool SwitchMode(string tagName);
         bool SwitchMode(string tagName , TagMode mode);
         TagState GetTagState(string tagName);
         bool PrepareForTermination();
         void Terminate();
 
         bool Initiate(IUIInterface inf);
-        bool MonitorTag(string tagName, bool mode);
+        //bool MonitorTag(string tagName, bool mode);
 
         bool StartManualSync(string tagName);
         bool CancelManualSync(string tagName);

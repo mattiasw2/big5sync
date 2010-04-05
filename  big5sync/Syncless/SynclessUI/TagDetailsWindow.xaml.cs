@@ -137,6 +137,7 @@ namespace SynclessUI
                 filters.RemoveAt(i);
                 if(filters.Contains(fi))
                 {
+                    filters.Insert(i, fi);
                     return true;
                 }
                 filters.Insert(i, fi);

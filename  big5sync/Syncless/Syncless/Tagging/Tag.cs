@@ -81,6 +81,15 @@ namespace Syncless.Tagging
             get { return _filters; }
             set { _filters = value; }
         }
+        public List<Filter> ReadOnlyFilters
+        {
+            get
+            {
+                List<Filter> readOnlyFilters = new List<Filter>();
+                readOnlyFilters.AddRange(Filters);
+                return readOnlyFilters;
+            }
+        }
         public long FiltersUpdatedDate
         {
             get { return _filtersUpdatedDate; }
