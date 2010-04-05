@@ -88,6 +88,12 @@
         * [DeveloperAPINotification#TaggedPathDeletedNotification TaggedPathDeletedNotification]
         * [DeveloperAPINotification#UnMonitorPathNotification UnMonitorPathNotification]
     * [DeveloperAPIHelper Helper]
+      * [DeveloperAPIHelper#Classes_Summary Classes Summary]
+        * [DeveloperAPIHelper#Cleaner Cleaner]
+        * [DeveloperAPIHelper#CommonXmlHelper CommonXmlHelper]
+        * [DeveloperAPIHelper#DriveHelper DriveHelper]
+        * [DeveloperAPIHelper#ErrorMessage ErrorMessage]
+        * [DeveloperAPIHelper#PathHelper PathHelper]
   * SynclessUI Namespaces
     * [Helper]
     * [Notification]
