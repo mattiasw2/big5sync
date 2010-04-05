@@ -4,20 +4,20 @@
 
 = Classes Summary =
 
-== DeleteChangeEvent ==
+== !DeleteChangeEvent ==
 
-== DriveChangeEvent ==
+== !DriveChangeEvent ==
 
-== FileChangeEvent ==
+== !FileChangeEvent ==
 
-== FileSystemEvent ==
+== !FileSystemEvent ==
 
-== FolderChangeEvent ==
+== !FolderChangeEvent ==
 
 = Enumerations Summary =
 
-== DriveChangeType ==
+== !DriveChangeType ==
 
-== EventChageType ==
+== !EventChageType ==
 
-== FileSystemType ==
+== !FileSystemType ==
