@@ -6,6 +6,9 @@ This document is the API specification for Syncless, version 2.0
 
 = Syncless Namespaces =
 
+|| Namespace || Description ||
+|| Syncless.Tagging || Provides classes necessary for creating/removing tags, tagging/untagging folders, managing other settings such as the filter settings per tag. ||
+
 == Syncless.!CompareAndSync ==
 
 == Syncless.!CompareAndSync.!CompareObject ==
