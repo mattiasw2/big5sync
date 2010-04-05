@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Syncless.Tagging;
+﻿using Syncless.Tagging;
 
-namespace Syncless.Notification.SLLNotification
+namespace Syncless.Notification
 {
     public class AddTagNotification : AbstractNotification 
     {
@@ -16,7 +12,7 @@ namespace Syncless.Notification.SLLNotification
             set { _tag = value; }
         }
         public AddTagNotification(Tag tag)
-            : base("Add Tag Notification", Syncless.Notification.NotificationCode.ADD_TAG_NOTIFICATION)
+            : base("Add Tag Notification", NotificationCode.ADD_TAG_NOTIFICATION)
         {
             this._tag = tag;
         }

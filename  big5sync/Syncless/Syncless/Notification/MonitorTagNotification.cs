@@ -1,4 +1,4 @@
-﻿namespace Syncless.Notification.SLLNotification
+﻿namespace Syncless.Notification
 {
     public class MonitorTagNotification :AbstractNotification
     {

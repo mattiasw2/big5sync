@@ -7,6 +7,6 @@ namespace Syncless.Core.View
 {
     public enum TagState
     {
-        Undefined , Seamless,Manual,Switching,SeamlessToManual,ManualToSeamless
+        Undefined , Seamless,Manual,SeamlessToManual,ManualToSeamless
     }
 }

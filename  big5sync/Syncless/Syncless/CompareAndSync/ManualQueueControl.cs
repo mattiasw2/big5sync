@@ -4,8 +4,6 @@ using System.Threading;
 using Syncless.CompareAndSync.Request;
 using Syncless.Core;
 using Syncless.Notification;
-using Syncless.Notification.SLLNotification;
-using Syncless.Notification.UINotification;
 
 namespace Syncless.CompareAndSync
 {

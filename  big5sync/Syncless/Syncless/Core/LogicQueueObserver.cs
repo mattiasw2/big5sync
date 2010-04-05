@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Syncless.Notification;
 using System.Threading;
-using Syncless.Notification.SLLNotification;
 namespace Syncless.Core
 {
     internal class LogicQueueObserver : IQueueObserver

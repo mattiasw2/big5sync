@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using Syncless.Tagging;
 
-namespace Syncless.Notification.SLLNotification
+namespace Syncless.Notification
 {
-    public class UnMonitorPathNotification : AbstractNotification
+    public class MonitorPathNotification : AbstractNotification
     {
         private Tag _targetTag;
 
@@ -23,7 +23,7 @@ namespace Syncless.Notification.SLLNotification
             set { _targetPath = value; }
         }
 
-        public UnMonitorPathNotification(Tag tag, TaggedPath path):base("UnMonitor Path Notification" , Syncless.Notification.NotificationCode.UNMONITOR_PATH_NOTIFICATION)
+        public MonitorPathNotification(Tag tag, TaggedPath path):base("Monitor Path Notification" , Syncless.Notification.NotificationCode.MONITOR_PATH_NOTIFICATION)
         {
             this._targetTag = tag;
             this._targetPath = path;
