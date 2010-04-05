@@ -927,6 +927,7 @@ namespace Syncless.Core
                 default:
                     throw new ArgumentOutOfRangeException("mode");
             }
+            return true;
         }
 
         public TagState GetTagState(string tagname)
