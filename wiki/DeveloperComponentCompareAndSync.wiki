@@ -233,4 +233,4 @@ Further functionality can be added into !CompareAndSync should a developer wish 
 
 
 = API =
-You can refer to the API for CompareAndSync component [http://code.google.com/p/big5sync/wiki/DeveloperAPICompareAndSync here].
+You can refer to the API for !CompareAndSync component [http://code.google.com/p/big5sync/wiki/DeveloperAPICompareAndSync here].
