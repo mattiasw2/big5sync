@@ -1440,9 +1440,9 @@ namespace Syncless.Core
         /// Manual Sync
         /// </summary>
         /// <param name="tag"></param>
-        /// <param name="notify"></param>
+        /// <param name="switchSeamless">true will mean the tag switch to seamless after sync</param>
         [MethodImpl(MethodImplOptions.Synchronized)]
-        private bool ManualSync(Tag tag, bool notify)
+        private bool ManualSync(Tag tag, bool switchSeamless)
         {
             FindAndCleanDeletedPaths();
             if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tag.TagName))
@@ -1453,14 +1453,14 @@ namespace Syncless.Core
             List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
             if (filterPaths[0].Count < 2)
             {
-                if (notify)
+                if (switchSeamless)
                 {
                     SetTagMode(tag, true);
                 }
                 return true;
             }
 
-            ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), tag.Filters, SyncConfig.Instance, tag.TagName, notify);
+            ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), tag.Filters, SyncConfig.Instance, tag.TagName, switchSeamless);
             CompareAndSyncController.Instance.Sync(syncRequest);
 
             return true;
@@ -1469,16 +1469,16 @@ namespace Syncless.Core
         /// Manual Sync
         /// </summary>
         /// <param name="tagname"></param>
-        /// <param name="notify"></param>
+        /// <param name="switchSeamless"></param>
         /// <returns></returns>
-        private bool ManualSync(string tagname, bool notify)
+        private bool ManualSync(string tagname, bool switchSeamless)
         {
             Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
             if (tag == null)
             {
                 return false;
             }
-            return ManualSync(tag, notify);
+            return ManualSync(tag, switchSeamless);
 
         }
         /// <summary>

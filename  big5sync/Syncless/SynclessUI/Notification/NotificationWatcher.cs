@@ -97,7 +97,7 @@ namespace SynclessUI.Notification
                     _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                         (Action)(() =>
                         {
-                            _main.TagChanged(scNotification.TagName);
+                            //_main.TagChanged(scNotification.TagName);
                             Console.WriteLine("Sync Complete: Calling Tag Changed");
                         }));
                 }

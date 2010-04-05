@@ -44,37 +44,36 @@ namespace SynclessUI.Notification
 
         public void StateChanged()
         {
-            if (_progress.State == SyncState.Analyzing)
+            switch (_progress.State)
             {
-                _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                                                             (Action)(() =>
-                                                                           {
-                                                                               _main.ProgressNotifyAnalyzing();
-                                                                           }));
-            }
-            else if (_progress.State == SyncState.Synchronizing)
-            {
-                _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                                                             (Action)(() =>
-                                                                           {
-                                                                               _main.ProgressNotifySynchronizing();
-                                                                           }));
-            }
-            else if (_progress.State == SyncState.Finalizing)
-            {
-                _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                                                             (Action)(() =>
-                                                             {
-                                                                 _main.ProgressNotifyFinalizing();
-                                                             }));
-            }
-            else if (_progress.State == SyncState.Finished)
-            {
-                _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                                                             (Action)(() =>
-                                                             {
-                                                                 _main.ProgressNotifySyncComplete();
-                                                             }));
+                case SyncState.Analyzing:
+                    _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                                                 (Action)(() =>
+                                                                              {
+                                                                                  _main.ProgressNotifyAnalyzing();
+                                                                              }));
+                    break;
+                case SyncState.Synchronizing:
+                    _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                                                 (Action)(() =>
+                                                                              {
+                                                                                  _main.ProgressNotifySynchronizing();
+                                                                              }));
+                    break;
+                case SyncState.Finalizing:
+                    _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                                                 (Action)(() =>
+                                                                              {
+                                                                                  _main.ProgressNotifyFinalizing();
+                                                                              }));
+                    break;
+                case SyncState.Finished:
+                    _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                                                 (Action)(() =>
+                                                                              {
+                                                                                  _main.ProgressNotifySyncComplete();
+                                                                              }));
+                    break;
             }
 
             Console.WriteLine("State Changed (New State : " + _progress.State + ")");
