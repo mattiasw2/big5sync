@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - Monitor.Exceptions
+#summary Developers' Guide - API - Syncless.Monitor.Exceptions
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
