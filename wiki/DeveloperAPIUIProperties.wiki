@@ -1,0 +1,9 @@
+#summary Developers' Guide - API - SynclessUI.Properties
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Classes Summary =
+
+== Resources ==
+
+== Settings ==
