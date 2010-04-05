@@ -16,6 +16,8 @@
         * [DeveloperAPICore#SaveLoadHelper SaveLoadHelper]
         * [DeveloperAPICore#ServiceLocator ServiceLocator]
         * [DeveloperAPICore#SystemLogicLayer SystemLogicLayer]
+      * [DeveloperAPICore#Delegates_Summary Delegates Summary]
+        * [DeveloperAPICore#LogicQueueObserver.RunDel LogicQueueObserver.RunDel]
       * [DeveloperAPICore#Enumerations_Summary Enumerations Summary]
         * [DeveloperAPICore#TableType TableType]
     * [DeveloperAPICoreView Core.View]
