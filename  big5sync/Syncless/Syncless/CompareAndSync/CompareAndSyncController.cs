@@ -55,8 +55,8 @@ namespace Syncless.CompareAndSync
             progress.ChangeToSyncing(totalJobs);
             CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config, progress), progress);
             progress.ChangeToFinalizing(0);
-            AbstractNotification endnotification = new SyncCompleteNotification(request.TagName, rco);
-            progress.ChangeToFinished(endnotification);
+            
+            progress.ChangeToFinished();
             return rco;
         }
 

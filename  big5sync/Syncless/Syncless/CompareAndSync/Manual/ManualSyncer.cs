@@ -15,7 +15,7 @@ namespace Syncless.CompareAndSync.Manual
 {
     public static class ManualSyncer
     {
-        public static void Sync(ManualSyncRequest request, SyncProgress progress)
+        public static RootCompareObject Sync(ManualSyncRequest request, SyncProgress progress)
         {
             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STARTED, "Started Manual Sync for " + request.TagName));
 
@@ -47,18 +47,21 @@ namespace Syncless.CompareAndSync.Manual
                 progress.ChangeToFinalizing(syncerVisitor.NodesCount);
                 CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor(progress), progress);
                 AbstractNotification notification = new SyncCompleteNotification(request.TagName, rco);
-                progress.ChangeToFinished(notification);
+                progress.ChangeToFinished();
 
                 if (request.Notify)
                     ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
 
                 //Finished
                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STOPPED, "Completed Manual Sync for " + request.TagName));
+                return rco;
             }
             else
             {
                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STOPPED, "Cancelled Manual Sync for " + request.TagName));
+                return null;
             }
+            
         }
 
         public static RootCompareObject Compare(ManualCompareRequest request)
