@@ -8,14 +8,11 @@ namespace Syncless.CompareAndSync.Seamless
 {
     public class SeamlessXMLHelper
     {
-        private static long _dateTime;
 
         #region Main Method
 
-        public static void UpdateXML(BaseXMLWriteObject xmlWriteList, long currTime)
+        public static void UpdateXML(BaseXMLWriteObject xmlWriteList)
         {
-            _dateTime = currTime;
-
             if (xmlWriteList is XMLWriteFolderObject)
                 HandleFolder(xmlWriteList);
             else
@@ -303,7 +300,7 @@ namespace Syncless.CompareAndSync.Seamless
             XmlText actionText = xmlDoc.CreateTextNode(changeType);
             XmlText lastModifiedText = xmlDoc.CreateTextNode(lastModified);
             XmlText nameText = xmlDoc.CreateTextNode(xmlWriteObj.Name);
-            XmlText lastUpdatedText = xmlDoc.CreateTextNode(_dateTime.ToString());
+            XmlText lastUpdatedText = xmlDoc.CreateTextNode(xmlWriteObj.MetaUpdated.ToString());
 
             XmlElement fileElement = xmlDoc.CreateElement(CommonXMLConstants.NodeFile);
             XmlElement nameElement = xmlDoc.CreateElement(CommonXMLConstants.NodeName);
@@ -346,7 +343,7 @@ namespace Syncless.CompareAndSync.Seamless
         {
             XmlText nameText = xmlDoc.CreateTextNode(folder.Name);
             XmlText action = xmlDoc.CreateTextNode(changeType);
-            XmlText lastUpdatedText = xmlDoc.CreateTextNode(_dateTime.ToString());
+            XmlText lastUpdatedText = xmlDoc.CreateTextNode(folder.MetaUpdated.ToString());
 
             XmlElement folderElement = xmlDoc.CreateElement(CommonXMLConstants.NodeFolder);
             XmlElement nameElement = xmlDoc.CreateElement(CommonXMLConstants.NodeName);
