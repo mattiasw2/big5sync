@@ -54,8 +54,8 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     }
                     if (renameCount > 1)
                     {
-                        for (int j = 0; j < deletePos.Count; j++)
-                            folder.ChangeType[deletePos[j]] = null;
+                        //for (int j = 0; j < deletePos.Count; j++)
+                        //    folder.ChangeType[deletePos[j]] = null;
                         return;
                     }
                 }
