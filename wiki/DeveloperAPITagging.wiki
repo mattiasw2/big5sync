@@ -27,6 +27,8 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 
 [#Classes_Summary Back to top]
 
+----
+
 == !LogMessage ==
 
 [#Classes_Summary Back to top]
