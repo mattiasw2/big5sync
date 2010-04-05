@@ -4,7 +4,7 @@
 
 This document is the API specification for Syncless, version 2.0
 
-|| Syncless Namespaces ||
+= Syncless Namespaces =
 
 || Namespace || Description ||
 || Syncless.!CompareAndSync || ||
@@ -35,12 +35,9 @@ This document is the API specification for Syncless, version 2.0
 
 = SynclessUI Namespaces =
 
-== SynclessUI ==
-
-== SynclessUI.Helper ==
-
-== SynclessUI.Notification ==
-
-== SynclessUI.Properties ==
-
-== SynclessUI.Visitor ==
+|| Namespace || Description ||
+|| SynclessUI || ||
+|| SynclessUI.Helper || ||
+|| SynclessUI.Notification || ||
+|| SynclessUI.Properties || ||
+|| SynclessUI.Visitor || ||
