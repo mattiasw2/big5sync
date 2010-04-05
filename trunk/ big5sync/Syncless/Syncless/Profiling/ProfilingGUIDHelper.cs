@@ -11,7 +11,12 @@ namespace Syncless.Profiling
     internal static class ProfilingGUIDHelper
     {
         #region GUID Generation
-
+        /// <summary>
+        /// Retrieve the GUID based on the given drive id
+        /// </summary>
+        /// <param name="driveid">The drive id for which the GUID is to be retrieved</param>
+        /// <returns>The GUID that is stored in the GUID file in the given drive, else the GUID created
+        /// based on the given drive id</returns>
         internal static string GetGUID(string driveid)
         {
             FileInfo fileInfo = new FileInfo(driveid + ":\\" + ProfilingLayer.RELATIVE_GUID_SAVE_PATH);
@@ -24,6 +29,12 @@ namespace Syncless.Profiling
                 return CreateGUID(fileInfo.FullName);
             }
         }
+        
+        /// <summary>
+        /// Read the GUID from the file that can be opened by the given FileInfo
+        /// </summary>
+        /// <param name="fileInfo">The FileInfo which contains the file which contains the GUID</param>
+        /// <returns>The GUID stored in the file given by FileInfo</returns>
         internal static string ReadGUID(FileInfo fileInfo)
         {
             Debug.Assert(fileInfo.Exists);
@@ -40,6 +51,12 @@ namespace Syncless.Profiling
             return guid;
 
         }
+        
+        /// <summary>
+        /// Create a GUID, write the GUID to a file and store the file using the path given
+        /// </summary>
+        /// <param name="path">The path for which the GUID file is to be saved</param>
+        /// <returns>The GUID that is created</returns>
         private static string CreateGUID(string path)
         {
             Guid guid = Guid.NewGuid();
@@ -72,7 +89,6 @@ namespace Syncless.Profiling
             }
             return guidString;
         }
-        
         #endregion
     }
 }
