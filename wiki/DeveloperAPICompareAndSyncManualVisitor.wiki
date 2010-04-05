@@ -2,7 +2,7 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
-`[`*DeveloperAPICompareAndSyncManual Prev - Syncless.CompareAndSync.Manual]* `|` *[DeveloperAPICompareAndSyncRequest Next - Syncless.CompareAndSync.Request]*`]`
+`[`*[DeveloperAPICompareAndSyncManual Prev - Syncless.CompareAndSync.Manual]* `|` *[DeveloperAPICompareAndSyncRequest Next - Syncless.CompareAndSync.Request]*`]`
 
 = Interfaces Summary =
 
