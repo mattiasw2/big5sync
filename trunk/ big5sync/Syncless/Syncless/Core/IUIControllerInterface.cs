@@ -34,7 +34,7 @@ namespace Syncless.Core
         void Terminate();
 
         bool Initiate(IUIInterface inf);
-
+        bool MonitorTag(string tagName, bool mode);
 
         bool StartManualSync(string tagName);
         bool CancelManualSync(string tagName);
@@ -43,7 +43,7 @@ namespace Syncless.Core
         bool UpdateFilterList(string tagName, List<Filter> filterlist);
 
         List<Filter> GetAllFilters(string tagName);
-
+        
         RootCompareObject PreviewSync(string tagName);
 
         bool AllowForRemoval(DriveInfo drive);
