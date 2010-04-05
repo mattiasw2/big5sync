@@ -52,6 +52,8 @@
 
 == Syncless.Tagging ==
 
+Provides classes necessary for creating/removing tags, tagging/untagging folders, managing other settings such as the filter settings per tag.
+
 == Syncless.Tagging.Exceptions ==
 
 = SynclessUI Namespaces =
