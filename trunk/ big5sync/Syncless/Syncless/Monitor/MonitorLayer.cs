@@ -13,7 +13,7 @@ namespace Syncless.Monitor
     public class MonitorLayer
     {
 
-        private const int BUFFER_SIZE = 65536;
+        private const int BUFFER_SIZE = 16384;
         private static MonitorLayer _instance;
         public static MonitorLayer Instance
         {
