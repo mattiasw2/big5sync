@@ -33,3 +33,6 @@ To solve problem 3, we thought of an algorithm to transfer all the events curren
 
 = Extending Monitor =
 If there are other custom events which require `FileSystemWatcher` to trigger, simply extend `ExtendedFileSystemWatcher` and replace the current `ExtendedFileSystemWatcher` calls to the newly extended class.
+
+= API =
+You can refer to the API for Monitor component [http://code.google.com/p/big5sync/wiki/DeveloperAPIMonitor here].
