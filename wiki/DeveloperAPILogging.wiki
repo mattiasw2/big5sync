@@ -2,22 +2,24 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
-= !DebugLogger =
+= Classes Summary =
 
-= !DeveloperLogger =
+== !DebugLogger ==
 
-= !LogCategoryType =
+== !DeveloperLogger ==
 
-= !LogData =
+== !LogCategoryType ==
 
-= !LogEventType =
+== !LogData ==
 
-= Logger =
+== !LogEventType ==
 
-= !LoggerFactory =
+== Logger ==
 
-= !LoggingLayer =
+== !LoggerFactory ==
 
-= !LogReaderHelper =
+== !LoggingLayer ==
 
-= !UserLogger =
+== !LogReaderHelper ==
+
+== !UserLogger ==
