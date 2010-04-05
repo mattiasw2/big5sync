@@ -2,20 +2,22 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
-= !LogMessage =
+= Classes Summary =
 
-= Tag =
+== !LogMessage ==
 
-= !TagConfig =
+== Tag ==
 
-= !TaggedPath =
+== !TagConfig ==
 
-= !TaggingHelper =
+== !TaggedPath ==
 
-= !TaggingLayer =
+== !TaggingHelper ==
 
-= !TaggingProfile =
+== !TaggingLayer ==
 
-= TaggingXMLHelper =
+== !TaggingProfile ==
 
-= !TagMerger =
+== TaggingXMLHelper ==
+
+== !TagMerger ==
