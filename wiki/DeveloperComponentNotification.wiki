@@ -1,4 +1,5 @@
 #summary Developers' Guide - Component - Notification
+#labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
 <wiki:toc max_depth = "6">
