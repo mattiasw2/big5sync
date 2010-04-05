@@ -5,11 +5,11 @@
 
 = Profile =
 
-= ProfilingLayer =
+= !ProfilingLayer =
 
-= ProfileMerger =
+= !ProfileMerger =
 
-= ProfilingHelper =
+= !ProfilingHelper =
 
 = ProfilingXMLHelper =
 
