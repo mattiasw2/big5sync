@@ -115,7 +115,7 @@
         * [DeveloperAPIFilter#SynclessConfigFilter SynclessConfigFilter]
       * [DeveloperAPIFilter#Enumerations_Summary Enumerations Summary]
         * [DeveloperAPIFilter#FilterMode FilterMode]
-    * [DeveloperAPIHelper Helper]
+    * [DeveloperAPIHelper Syncless.Helper]
       * [DeveloperAPIHelper#Classes_Summary Classes Summary]
         * [DeveloperAPIHelper#Cleaner Cleaner]
         * [DeveloperAPIHelper#CommonXmlHelper CommonXmlHelper]
