@@ -1,6 +1,6 @@
 ﻿namespace Syncless.Tagging
 {
-    static class LogMessage
+    internal static class LogMessage
     {
         internal static string TAG_CREATED = "Tag \'{0}\' created.";
         internal static string TAG_RENAMED = "Tag \'{0}\' renamed to \'{1}\'.";

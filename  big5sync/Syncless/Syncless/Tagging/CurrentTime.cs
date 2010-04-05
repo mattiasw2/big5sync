@@ -6,16 +6,25 @@ namespace Syncless.Tagging
     {
         private static DateTime _currentDateTime;
 
+        /// <summary>
+        /// The current time in long format
+        /// </summary>
         internal long CurrentTimeLong
         {
             get { return GetCurrentTime(); }
         }
 
+        /// <summary>
+        /// The current time in string format DD/MM/YY HH:MM:SS
+        /// </summary>
         internal string CurrentTimeString
         {
             get { return GetCurrentTimeString(); }
         }
 
+        /// <summary>
+        /// Creates a new CurrentTime object
+        /// </summary>
         internal CurrentTime()
         {
             _currentDateTime = DateTime.Now;
