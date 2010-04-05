@@ -12,6 +12,6 @@
 
 = Delegates Summary =
 
-== !NotificationWatcher.RunDel ==
+== !NotificationWatcher.!RunDel ==
 
-== !PriorityNotificationWatcher.RunDel ==
+== !PriorityNotificationWatcher.!RunDel ==
