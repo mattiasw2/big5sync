@@ -1,0 +1,17 @@
+#summary Developers' Guide - API - SynclessUI.Notification
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Classes Summary =
+
+== !NotificationWatcher ==
+
+== !PriorityNotificationWatcher ==
+
+== !SyncProgressWatcher ==
+
+= Delegates Summary =
+
+== !NotificationWatcher.RunDel ==
+
+== !PriorityNotificationWatcher.RunDel ==
