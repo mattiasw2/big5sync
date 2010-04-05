@@ -2,14 +2,28 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPICompareAndSync Prev - Syncless.CompareAndSync]* `|` *[DeveloperAPICompareAndSyncEnum Next - Syncless.CompareAndSync.Enum]*`]`
+
 = Classes Summary =
 
 == !BaseCompareObject ==
 
+[#Classes_Summary Back to top]
+
 == !FileCompareObject ==
+
+[#Classes_Summary Back to top]
 
 == !FolderCompareObject ==
 
+[#Classes_Summary Back to top]
+
 == !RootCompareObject ==
 
+[#Classes_Summary Back to top]
+
 == XMLCompareObject ==
+
+[#Classes_Summary Back to top]
+
+`[`*[DeveloperAPICompareAndSync Prev - Syncless.CompareAndSync]* `|` *[DeveloperAPICompareAndSyncEnum Next - Syncless.CompareAndSync.Enum]*`]`
