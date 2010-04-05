@@ -1,0 +1,17 @@
+#summary Developers' Guide - API - SynclessUI.Helper
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Classes Summary =
+
+== !CommandLineHelper ==
+
+== !DialogHelper ==
+
+== !FileHelper ==
+
+== !RegistryHelper ==
+
+= Enumerations Summary =
+
+== !DialogType ==
