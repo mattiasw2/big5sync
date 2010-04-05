@@ -2,20 +2,47 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPINotificationUINotification Prev - Syncless.Notification.UINotification]* `|` *[DeveloperAPIProfilingExceptions Next - Syncless.Profiling.Exceptions]*`]`
+
 Provides classes for drive/computer recognization, conversion of a physical directory/file path to a logical address, and vice versa.
 
 = Classes Summary =
 
+|| *Class* || *Description* ||
+|| [#Profile Profile] || ||
+|| [#ProfileDrive ProfileDrive] || ||
+|| [#ProfileMerger ProfileMerger] || ||
+|| [#ProfilingGUIDHelper ProfilingGUIDHelper] || ||
+|| [#ProfilingHelper ProfilingHelper] || ||
+|| [#ProfilingLayer ProfilingLayer] || ||
+|| [#ProfilingXMLHelper ProfilingXMLHelper] || ||
+
 == Profile ==
+
+[#Classes_Summary Back to top]
 
 == !ProfileDrive ==
 
+[#Classes_Summary Back to top]
+
 == !ProfileMerger ==
+
+[#Classes_Summary Back to top]
 
 == ProfilingGUIDHelper ==
 
+[#Classes_Summary Back to top]
+
 == !ProfilingHelper ==
+
+[#Classes_Summary Back to top]
 
 == !ProfilingLayer ==
 
+[#Classes_Summary Back to top]
+
 == ProfilingXMLHelper ==
+
+[#Classes_Summary Back to top]
+
+`[`*[DeveloperAPINotificationUINotification Prev - Syncless.Notification.UINotification]* `|` *[DeveloperAPIProfilingExceptions Next - Syncless.Profiling.Exceptions]*`]`
