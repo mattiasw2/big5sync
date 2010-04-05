@@ -2,12 +2,24 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPICompareAndSyncEnum Prev - Syncless.CompareAndSync.Enum]* `|` *[DeveloperAPICompareAndSyncExceptions Next - Syncless.CompareAndSync.Exceptions]*`]`
+
 = Enumerations Summary =
 
 == !AutoSyncRequestType ==
 
+[#Enumerations_Summary Back to top]
+
 == !FinalState ==
+
+[#Enumerations_Summary Back to top]
 
 == !LastKnownState ==
 
+[#Enumerations_Summary Back to top]
+
 == !MetaChangeType ==
+
+[#Enumerations_Summary Back to top]
+
+`[`*[DeveloperAPICompareAndSyncEnum Prev - Syncless.CompareAndSync.Enum]* `|` *[DeveloperAPICompareAndSyncExceptions Next - Syncless.CompareAndSync.Exceptions]*`]`
