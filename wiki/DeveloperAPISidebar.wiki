@@ -87,6 +87,7 @@
         * [DeveloperAPICompareAndSync#MoveFileException MoveFileException]
         * [DeveloperAPICompareAndSync#MoveFolderException MoveFolderException]
         * [DeveloperAPICompareAndSync#SynclessIOException SynclessIOException]
+    * [DeveloperAPICompareAndSyncCompareObject CompareAndSync.CompareObject]
     * [DeveloperAPIMonitor Monitor]
       * [DeveloperAPIMonitor#Classes_Summary Classes Summary]
         * [DeveloperAPIMonitor#ExtendedFileSystemWatcher ExtendedFileSystemWatcher]
