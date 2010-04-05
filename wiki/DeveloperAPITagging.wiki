@@ -20,7 +20,7 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 || [#TaggingXMLHelper TaggingXMLHelper] || ||
 || [#TagMerger TagMerger] || ||
 
-== !CurrentTime ==
+== [DeveloperAPITaggingCurrentTime CurrentTime] ==
 
 `internal class` !CurrentTime
         Provides properties which enclose the `DateTime.Now` property. The object created allows for repeated use of the same `DateTime.Now` property value.
