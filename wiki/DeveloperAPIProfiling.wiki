@@ -2,6 +2,8 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+Provides classes for drive/computer recognization, conversion of a physical directory/file path to a logical address, and vice versa.
+
 = Classes Summary =
 
 == Profile ==
