@@ -1,0 +1,9 @@
+#summary Developers' Guide - API - Notification.UINotification
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Classes Summary =
+
+== !CancelSyncNotification ==
+
+== !CompareCompleteNotification ==
