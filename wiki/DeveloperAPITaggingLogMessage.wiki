@@ -10,6 +10,21 @@ Provides static string values which are used for logging events invoked in the T
 || [#TAG_CREATED TAG_CREATED] || The string value for tag creation event log ||
 || [#TAG_RENAMED TAG_RENAMED] || The string value for tag rename event log ||
 || [#TAG_REMOVED TAG_REMOVED] || The string value for tag removal event log ||
+|| [#FOLDER_TAGGED FOLDER_TAGGED] || The string value for folder tagging event log ||
+|| [#FOLDER_UNTAGGED FOLDER_UNTAGGED] || The string value for folder tagging event log ||
+|| [#FOLDER_NOT_UNTAGGED FOLDER_NOT_UNTAGGED] || The string value for folder tagging event log ||
+|| [#FOLDER_RENAMED FOLDER_RENAMED] || The string value for folder tagging event log ||
+|| [#TAG_NOT_FOUND TAG_NOT_FOUND] || The string value for folder tagging event log ||
+|| [#TAG_ALREADY_EXISTS TAG_ALREADY_EXISTS] || The string value for folder tagging event log ||
+|| [#PATH_NOT_FOUND_IN_TAG PATH_NOT_FOUND_IN_TAG] || The string value for folder tagging event log ||
+|| [#PATH_ALREADY_EXISTS_IN_TAG PATH_ALREADY_EXISTS_IN_TAG] || The string value for folder tagging event log ||
+|| [#RECURSIVE_DIRECTORY RECURSIVE_DIRECTORY] || The string value for folder tagging event log ||
+|| [#FILTER_ADDED FILTER_ADDED] || The string value for folder tagging event log ||
+|| [#FILTER_REMOVED FILTER_REMOVED] || The string value for folder tagging event log ||
+|| [#FILTER_NOT_ADDED FILTER_NOT_ADDED] || The string value for folder tagging event log ||
+|| [#FILTER_NOT_REMOVED FILTER_NOT_REMOVED] || The string value for folder tagging event log ||
+|| [#PATH_NOT_FOUND PATH_NOT_FOUND] || The string value for folder tagging event log ||
+|| [#PATH_ALREADY_EXISTS PATH_ALREADY_EXISTS] || The string value for folder tagging event log ||
 
 = Properties Details =
 
