@@ -8,14 +8,14 @@ This document is the API specification for Syncless, version 2.0
 
 || *Namespace* || *Description* ||
 || [DeveloperAPICompareAndSync Syncless.CompareAndSync] || ||
-|| Syncless.!CompareAndSync.!CompareObject || ||
-|| Syncless.!CompareAndSync.Enum || ||
-|| Syncless.!CompareAndSync.Exceptions || ||
-|| Syncless.!CompareAndSync.Manual || ||
-|| Syncless.!CompareAndSync.Manual.Visitor || ||
-|| Syncless.!CompareAndSync.Request || ||
-|| Syncless.!CompareAndSync.Seamless || ||
-|| Syncless.!CompareAndSync.XMLWriteObject || ||
+|| [DeveloperAPICompareAndSyncCompareObject Syncless.CompareAndSync.CompareObject] || ||
+|| [DeveloperAPICompareAndSyncEnum Syncless.CompareAndSync.Enum] || ||
+|| [DeveloperAPICompareAndSyncExceptions Syncless.CompareAndSync.Exceptions] || ||
+|| [DeveloperAPICompareAndSyncManual Syncless.CompareAndSync.Manual] || ||
+|| [DeveloperAPICompareAndSyncManualVisitor Syncless.CompareAndSync.Manual.Visitor] || ||
+|| [DeveloperAPICompareAndSyncRequest Syncless.CompareAndSync.Request] || ||
+|| [DeveloperAPICompareAndSyncSeamless Syncless.CompareAndSync.Seamless] || ||
+|| [DeveloperAPICompareAndSyncXMLWriteObject Syncless.CompareAndSync.XMLWriteObject] || ||
 || Syncless.Core || ||
 || Syncless.Core.Exceptions || ||
 || Syncless.Core.View || ||
