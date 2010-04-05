@@ -27,7 +27,7 @@ This document is the API specification for Syncless, version 2.0
 || [DeveloperAPIMonitorExceptions Syncless.Monitor.Exceptions] || ||
 || [DeveloperAPINotification Syncless.Notification] || ||
 || [DeveloperAPINotificationUINotification Syncless.Notification.UINotification] || ||
-|| [DeveloperAPIProfiling Syncless.Profiling] || ||
+|| [DeveloperAPIProfiling Syncless.Profiling] || Provides classes for drive/computer recognization, conversion of a physical directory/file path to a logical address, and vice versa. ||
 || [DeveloperAPIProfilingExceptions Syncless.Profiling.Exceptions] || ||
 || [DeveloperAPITagging Syncless.Tagging] || Provides classes necessary for creating/removing tags, tagging/untagging folders, managing other settings such as the filter settings per tag. ||
 || [DeveloperAPITaggingExceptions Syncless.Tagging.Exceptions] || ||
