@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - Tagging.Exceptions
+#summary Developers' Guide - API - Syncless.Tagging.Exceptions
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
