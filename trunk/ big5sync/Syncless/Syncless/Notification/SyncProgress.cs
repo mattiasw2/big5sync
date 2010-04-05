@@ -301,12 +301,9 @@ namespace Syncless.Notification
                     {
                         obs.ProgressChanged();
                     }
-
+                    continue;
                 }
-                else
-                {
-                    _wh.WaitOne();
-                }
+                _wh.WaitOne();
             }
 
             foreach (ISyncProgressObserver obs in _observerList)
