@@ -1,7 +1,7 @@
 #summary Developers' Guide - API - Syncless.Tagging.CurrentTime
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
-<wiki:toc max_depth = "4">
+
 = Properties Summary =
 
 || *Property* || *Description* ||
@@ -27,7 +27,7 @@
 = Constructors Summary =
 
 || *Constructor* || *Description* ||
-|| [#CurrentTime() CurrentTime()] || Creates a new !CurrentTime object ||
+|| [#CurrentTime_() CurrentTime()] || Creates a new !CurrentTime object ||
 
 = Constructors Details =
 
