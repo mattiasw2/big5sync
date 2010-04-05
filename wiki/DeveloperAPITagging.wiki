@@ -21,3 +21,21 @@
 == TaggingXMLHelper ==
 
 == !TagMerger ==
+
+= Exceptions Summary =
+
+== CorruptedTaggingXMLException ==
+
+== !FilterAlreadyExistException ==
+
+== !FilterNotExistException ==
+
+== !PathAlreadyExistsException ==
+
+== !PathNotFoundException ==
+
+== !RecursiveDirectoryException ==
+
+== !TagAlreadyExistsException ==
+
+== !TagNotFoundException ==
