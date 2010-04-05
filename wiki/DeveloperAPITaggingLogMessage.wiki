@@ -23,7 +23,7 @@ Provides static string values which are used for logging events invoked in the T
 == TAG_RENAMED ==
 
 `internal static string` TAG_RENAMED
-        The string value for tag rename event log given by "Tag \'{0}\' renamed to \'{1}\'." where {0} will be replaced by a tag name property when used.
+        The string value for tag rename event log given by "Tag \'{0}\' renamed to \'{1}\'." where {0} will be replaced by the old tag name property and {1} replaced by the new tag name property when used.
 
 ----
 
