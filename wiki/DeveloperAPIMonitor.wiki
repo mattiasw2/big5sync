@@ -1,4 +1,4 @@
-#summary Developers' Guide - API - Monitor
+#summary Developers' Guide - API - Syncless.Monitor
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
