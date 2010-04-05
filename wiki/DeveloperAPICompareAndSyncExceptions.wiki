@@ -2,28 +2,54 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPICompareAndSyncEnum Prev - Syncless.CompareAndSync.Enum]* `|` *[DeveloperAPICompareAndSyncManual Next - Syncless.CompareAndSync.Manual]*`]`
+
 = Exceptions Summary =
 
 == !ArchiveFileException ==
 
+[#Exceptions_Summary Back to top]
+
 == !ArchiveFolderException ==
+
+[#Exceptions_Summary Back to top]
 
 == !CopyFileException ==
 
+[#Exceptions_Summary Back to top]
+
 == !CopyFolderException ==
+
+[#Exceptions_Summary Back to top]
 
 == !CreateFolderException ==
 
+[#Exceptions_Summary Back to top]
+
 == !DeleteFileException ==
+
+[#Exceptions_Summary Back to top]
 
 == !DeleteFolderException ==
 
+[#Exceptions_Summary Back to top]
+
 == !HashFileException ==
+
+[#Exceptions_Summary Back to top]
 
 == !IncompatibleTypeException ==
 
+[#Exceptions_Summary Back to top]
+
 == !MoveFileException ==
+
+[#Exceptions_Summary Back to top]
 
 == !MoveFolderException ==
 
+[#Exceptions_Summary Back to top]
+
 == SynclessIOException ==
+
+`[`*[DeveloperAPICompareAndSyncEnum Prev - Syncless.CompareAndSync.Enum]* `|` *[DeveloperAPICompareAndSyncManual Next - Syncless.CompareAndSync.Manual]*`]`
