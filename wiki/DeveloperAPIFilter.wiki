@@ -1,14 +1,21 @@
 #summary Developers' Guide - API - Filter
 #labels Phase-Implementation
+#sidebar DeveloperAPISidebar
 
-= Introduction =
+= !ExtensionFilter =
 
-Add your content here.
+= !FileFilter =
 
+= Filter =
 
-= Details =
+= !FilterChain =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= !FilterFactory =
+
+= !FolderFilter =
+
+= !SizeFilter =
+
+= !SynclessArchiveFilter =
+
+= !SynclessConfigFilter =
