@@ -1,0 +1,27 @@
+#summary Developers' Guide - API - CompareAndSync.Manual.Visitor
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Interfaces Summary =
+
+== IVisitor ==
+
+= Classes Summary =
+
+== !BuilderVisitor ==
+
+== !ComparerVisitor ==
+
+== !ConflictVisitor ==
+
+== !FolderRenameVisitor ==
+
+== !IgnoreMetaDataVisitor ==
+
+== !ProcessMetadataVisitor ==
+
+== !SyncerVisitor ==
+
+== XMLMetadataVisitor ==
+
+== XMLWriterVisitor ==
