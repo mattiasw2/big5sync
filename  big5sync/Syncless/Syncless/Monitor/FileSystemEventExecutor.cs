@@ -168,25 +168,25 @@ namespace Syncless.Monitor
             switch (fse.EventType)
             {
                 case EventChangeType.CREATED:
-                    //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File Created: " + fse.Path);
+                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File Created: " + fse.Path);
                     //Console.WriteLine("File Created: " + fse.Path);
                     fileEvent = new FileChangeEvent(new FileInfo(fse.Path), EventChangeType.CREATED);
                     ServiceLocator.MonitorI.HandleFileChange(fileEvent);
                     break;
                 case EventChangeType.MODIFIED:
-                    //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File Modified: " + fse.Path);
+                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File Modified: " + fse.Path);
                     //Console.WriteLine("File Modified: " + fse.Path);
                     fileEvent = new FileChangeEvent(new FileInfo(fse.Path), EventChangeType.MODIFIED);
                     ServiceLocator.MonitorI.HandleFileChange(fileEvent);
                     break;
                 case EventChangeType.DELETED:
-                    //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File Deleted: " + fse.Path);
+                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File Deleted: " + fse.Path);
                     //Console.WriteLine("File Deleted: " + fse.Path);
                     fileEvent = new FileChangeEvent(new FileInfo(fse.Path), EventChangeType.DELETED);
                     ServiceLocator.MonitorI.HandleFileChange(fileEvent);
                     break;
                 case EventChangeType.RENAMED:
-                    //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File Renamed: " + fse.OldPath + " " + fse.Path);
+                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File Renamed: " + fse.OldPath + " " + fse.Path);
                     //Console.WriteLine("File Renamed: " + fse.OldPath + " " + fse.Path);
                     fileEvent = new FileChangeEvent(new FileInfo(fse.OldPath), new FileInfo(fse.Path));
                     ServiceLocator.MonitorI.HandleFileChange(fileEvent);
@@ -202,19 +202,19 @@ namespace Syncless.Monitor
             switch (fse.EventType)
             {
                 case EventChangeType.CREATED:
-                    //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Folder Created: " + fse.Path);
+                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Folder Created: " + fse.Path);
                     //Console.WriteLine("Folder Created: " + fse.Path);
                     folderEvent = new FolderChangeEvent(new DirectoryInfo(fse.Path), EventChangeType.CREATED);
                     ServiceLocator.MonitorI.HandleFolderChange(folderEvent);
                     break;
                 case EventChangeType.DELETED:
-                    //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Folder Deleted: " + fse.Path);
+                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Folder Deleted: " + fse.Path);
                     //Console.WriteLine("Folder Deleted: " + fse.Path);
                     folderEvent = new FolderChangeEvent(new DirectoryInfo(fse.Path), EventChangeType.DELETED);
                     ServiceLocator.MonitorI.HandleFolderChange(folderEvent);
                     break;
                 case EventChangeType.RENAMED:
-                    //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Folder Renamed: " + fse.OldPath + " " + fse.Path);
+                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Folder Renamed: " + fse.OldPath + " " + fse.Path);
                     //Console.WriteLine("Folder Renamed: " + fse.OldPath + " " + fse.Path);
                     folderEvent = new FolderChangeEvent(new DirectoryInfo(fse.OldPath), new DirectoryInfo(fse.Path));
                     ServiceLocator.MonitorI.HandleFolderChange(folderEvent);
@@ -229,7 +229,7 @@ namespace Syncless.Monitor
             switch (fse.EventType)
             {
                 case EventChangeType.DELETED:
-                    //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File/Folder Deleted: " + fse.Path);
+                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File/Folder Deleted: " + fse.Path);
                     //Console.WriteLine("File/Folder Deleted: " + fse.Path);
                     DeleteChangeEvent deleteEvent = new DeleteChangeEvent(new DirectoryInfo(fse.Path), new DirectoryInfo(fse.WatchPath));
                     ServiceLocator.MonitorI.HandleDeleteChange(deleteEvent);

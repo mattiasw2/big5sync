@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using Syncless.Core;
 using Syncless.Monitor.DTO;
+using ThreadState = System.Threading.ThreadState;
 
 namespace Syncless.Monitor
 {
@@ -103,6 +105,7 @@ namespace Syncless.Monitor
                                 ProcessUnknown(fse, eventList);
                                 break;
                             default:
+                                Debug.Assert(false);
                                 break;
                         }
                     }
@@ -124,130 +127,189 @@ namespace Syncless.Monitor
                     createList.Add(fse.Path);
                     break;
                 case EventChangeType.CREATED:
-                    for (int i = 0; i < createList.Count; i++)
-                    {
-                        string path = createList[i];
-                        if (path.ToLower().Equals(fse.Path.ToLower()))
-                        {
-                            createList.RemoveAt(i);
-                            processList.Add(fse);
-                            break;
-                        }
-                    }
+                    FileCreated(fse);
                     break;
                 case EventChangeType.MODIFIED:
-                    foreach (string path in createList)
-                    {
-                        if (path.ToLower().Equals(fse.Path.ToLower()))
-                        {
-                            return;
-                        }
-                    }
-                    bool addModified = true;
-                    for (int i = 0; i < processList.Count; i++)
-                    {
-                        FileSystemEvent pEvent = processList[i];
-                        if (pEvent.Path.ToLower().Equals(fse.Path.ToLower()))
-                        {
-                            addModified = false;
-                            break;
-                        }
-                        else if (pEvent.EventType == EventChangeType.RENAMED)
-                        {
-                            if (pEvent.OldPath.ToLower().Equals(fse.Path.ToLower()) && pEvent.FileSystemType == fse.FileSystemType)
-                            {
-                                addModified = false;
-                                break;
-                            }
-                        }
-                    }
-                    if (addModified)
-                    {
-                        processList.Add(fse);
-                    }
+                    if (!FileModified(fse)) return;
                     break;
                 case EventChangeType.DELETED:
-                    bool addDeleted = true;
-                    for (int i = 0; i < createList.Count; i++)
+                    GenericDeleted(fse);
+                    break;
+                case EventChangeType.RENAMED:
+                    GenericRenamed(fse, eventList);
+                    break;
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
+        }
+
+        private void FileCreated(FileSystemEvent fse)
+        {
+            for (int i = 0; i < createList.Count; i++)
+            {
+                string path = createList[i];
+                if (path.ToLower().Equals(fse.Path.ToLower()))
+                {
+                    createList.RemoveAt(i);
+                    processList.Add(fse);
+                    return;
+                }
+            }
+        }
+
+        private bool FileModified(FileSystemEvent fse)
+        {
+            foreach (string path in createList)
+            {
+                if (path.ToLower().Equals(fse.Path.ToLower()))
+                {
+                    return false;
+                }
+            }
+            bool addModified = true;
+            for (int i = 0; i < processList.Count; i++)
+            {
+                FileSystemEvent pEvent = processList[i];
+                if (pEvent.Path.ToLower().Equals(fse.Path.ToLower()))
+                {
+                    addModified = false;
+                    break;
+                }
+                else if (pEvent.EventType == EventChangeType.RENAMED)
+                {
+                    if (pEvent.OldPath.ToLower().Equals(fse.Path.ToLower()) && pEvent.FileSystemType == fse.FileSystemType)
                     {
-                        string path = createList[i];
-                        if (path.ToLower().Equals(fse.Path.ToLower()))
+                        addModified = false;
+                        break;
+                    }
+                }
+            }
+            if (addModified)
+            {
+                processList.Add(fse);
+            }
+            return true;
+        }
+
+        private void GenericDeleted(FileSystemEvent fse)
+        {
+            bool addDeleted = true;
+            if (fse.FileSystemType != FileSystemType.FOLDER)
+            {
+                addDeleted = DeletedHasCreating(fse);
+            }
+            for (int i = 0; i < processList.Count; i++)
+            {
+                FileSystemEvent pEvent = processList[i];
+                if (pEvent.Path.ToLower().Equals(fse.Path.ToLower()))
+                {
+                    processList.RemoveAt(i);
+                    i--;
+                    if (pEvent.EventType == EventChangeType.CREATED || pEvent.EventType == EventChangeType.RENAMED)
+                    {
+                        addDeleted = false;
+                    }
+                }
+                /*if (pEvent.EventType == EventChangeType.DELETED)
+                {
+                    FileInfo child = new FileInfo(pEvent.Path);
+                    DirectoryInfo parent = new DirectoryInfo(fse.Path);
+                    Console.WriteLine("Child: {0}", child.Directory.FullName);
+                    Console.WriteLine("Parent: {0}", parent.FullName);
+                    if (child.Directory.FullName.ToLower().Equals(parent.FullName.ToLower()))
+                    {
+                        Console.WriteLine("{0} Deleted", pEvent.Path);
+                        processList.RemoveAt(i);
+                        i--;
+                    }
+                }*/
+            }
+            if (addDeleted)
+            {
+                processList.Add(fse);
+            }
+        }
+
+        private bool DeletedHasCreating(FileSystemEvent fse)
+        {
+            for (int i = 0; i < createList.Count; i++)
+            {
+                string path = createList[i];
+                if (path.ToLower().Equals(fse.Path.ToLower()))
+                {
+                    createList.RemoveAt(i);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void GenericRenamed(FileSystemEvent fse, List<FileSystemEvent> eventList)
+        {
+            bool hasCreating = false;
+            bool foundCreated = false;
+
+            if (fse.FileSystemType != FileSystemType.FOLDER)
+            {
+                RenamedHasCreating(fse, eventList, ref hasCreating, ref foundCreated);
+            }
+
+            bool addRenamed = true;
+            for (int i = 0; i < processList.Count; i++)
+            {
+                FileSystemEvent pEvent = processList[i];
+                if (pEvent.Path.ToLower().Equals(fse.OldPath.ToLower()))
+                {
+                    processList.RemoveAt(i);
+                    i--;
+                    if (pEvent.EventType == EventChangeType.CREATED)
+                    {
+                        addRenamed = false;
+                        processList.Add(new FileSystemEvent(fse.Path, EventChangeType.CREATED, fse.FileSystemType));
+                    }
+                    else if (pEvent.EventType == EventChangeType.RENAMED)
+                    {
+                        addRenamed = false;
+                        processList.Add(new FileSystemEvent(pEvent.OldPath, fse.Path, fse.FileSystemType));
+                    }
+                }
+            }
+            if (addRenamed)
+            {
+                processList.Add(fse);
+            }
+
+            if (fse.FileSystemType != FileSystemType.FOLDER)
+            {
+                if (hasCreating && !foundCreated)
+                {
+                    waitingList = new List<FileSystemEvent>(eventList);
+                    eventList.Clear();
+                }
+            }
+        }
+
+        private void RenamedHasCreating(FileSystemEvent fse, List<FileSystemEvent> eventList, ref bool hasCreating, ref bool foundCreated)
+        {
+            for (int i = 0; i < createList.Count; i++)
+            {
+                string path = createList[i];
+                if (path.ToLower().Equals(fse.OldPath.ToLower())) // Still Creating
+                {
+                    hasCreating = true;
+                    for (int j = 0; j < eventList.Count; j++)
+                    {
+                        FileSystemEvent e = eventList[j];
+                        if (e.Path.ToLower().Equals(fse.OldPath.ToLower()) && e.EventType == EventChangeType.CREATED && e.FileSystemType == FileSystemType.FILE)
                         {
-                            createList.RemoveAt(i);
-                            addDeleted = false;
+                            ProcessFile(e, eventList);
+                            eventList.RemoveAt(j);
+                            foundCreated = true;
                             break;
                         }
                     }
-                    for (int i = 0; i < processList.Count; i++)
-                    {
-                        FileSystemEvent pEvent = processList[i];
-                        if (pEvent.Path.ToLower().Equals(fse.Path.ToLower()))
-                        {
-                            processList.RemoveAt(i);
-                            if (pEvent.EventType == EventChangeType.CREATED || pEvent.EventType == EventChangeType.RENAMED)
-                            {
-                                addDeleted = false;
-                            }
-                        }
-                    }
-                    if (addDeleted)
-                    {
-                        processList.Add(fse);
-                    }
-                    break;
-                case EventChangeType.RENAMED:
-                    bool hasCreating = false;
-                    bool foundCreated = false;
-                    for (int i = 0; i < createList.Count; i++)
-                    {
-                        string path = createList[i];
-                        if (path.ToLower().Equals(fse.OldPath.ToLower())) // Still Creating
-                        {
-                            hasCreating = true;
-                            for (int j = 0; j < eventList.Count; j++)
-                            {
-                                FileSystemEvent e = eventList[j];
-                                if (e.Path.ToLower().Equals(fse.OldPath.ToLower()) && e.EventType == EventChangeType.CREATED && e.FileSystemType == fse.FileSystemType)
-                                {
-                                    ProcessFile(e, eventList);
-                                    eventList.RemoveAt(j);
-                                    foundCreated = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    bool addRenamed = true;
-                    for (int i = 0; i < processList.Count; i++)
-                    {
-                        FileSystemEvent pEvent = processList[i];
-                        if (pEvent.Path.ToLower().Equals(fse.OldPath.ToLower()))
-                        {
-                            processList.RemoveAt(i);
-                            if (pEvent.EventType == EventChangeType.CREATED)
-                            {
-                                addRenamed = false;
-                                processList.Add(new FileSystemEvent(fse.Path, EventChangeType.CREATED, fse.FileSystemType));
-                            }
-                            else if (pEvent.EventType == EventChangeType.RENAMED)
-                            {
-                                addRenamed = false;
-                                processList.Add(new FileSystemEvent(pEvent.OldPath, fse.Path, fse.FileSystemType));
-                            }
-                        }
-                    }
-                    if (addRenamed)
-                    {
-                        processList.Add(fse);
-                    }
-                    if (hasCreating && !foundCreated)
-                    {
-                        waitingList = new List<FileSystemEvent>(eventList);
-                        eventList.Clear();
-                    }
-                    break;
-                default:
-                    break;
+                }
             }
         }
 
@@ -259,50 +321,13 @@ namespace Syncless.Monitor
                     processList.Add(fse);
                     break;
                 case EventChangeType.DELETED:
-                    bool addDeleted = true;
-                    for (int i = 0; i < processList.Count; i++)
-                    {
-                        FileSystemEvent pEvent = processList[i];
-                        if (pEvent.Path.ToLower().Equals(fse.Path.ToLower()))
-                        {
-                            processList.RemoveAt(i);
-                            if (pEvent.EventType == EventChangeType.CREATED || pEvent.EventType == EventChangeType.RENAMED)
-                            {
-                                addDeleted = false;
-                            }
-                        }
-                    }
-                    if (addDeleted)
-                    {
-                        processList.Add(fse);
-                    }
+                    GenericDeleted(fse);
                     break;
                 case EventChangeType.RENAMED:
-                    bool addRenamed = true;
-                    for (int i = 0; i < processList.Count; i++)
-                    {
-                        FileSystemEvent pEvent = processList[i];
-                        if (pEvent.Path.ToLower().Equals(fse.OldPath.ToLower()))
-                        {
-                            processList.RemoveAt(i);
-                            if (pEvent.EventType == EventChangeType.CREATED)
-                            {
-                                addRenamed = false;
-                                processList.Add(new FileSystemEvent(fse.Path, EventChangeType.CREATED, fse.FileSystemType));
-                            }
-                            else if (pEvent.EventType == EventChangeType.RENAMED)
-                            {
-                                addRenamed = false;
-                                processList.Add(new FileSystemEvent(pEvent.OldPath, fse.Path, fse.FileSystemType));
-                            }
-                        }
-                    }
-                    if (addRenamed)
-                    {
-                        processList.Add(fse);
-                    }
+                    GenericRenamed(fse, eventList);
                     break;
                 default:
+                    Debug.Assert(false);
                     break;
             }
         }
@@ -315,86 +340,13 @@ namespace Syncless.Monitor
                     processList.Add(fse);
                     break;
                 case EventChangeType.DELETED:
-                    bool addDeleted = true;
-                    for (int i = 0; i < createList.Count; i++)
-                    {
-                        string path = createList[i];
-                        if (path.ToLower().Equals(fse.Path.ToLower()))
-                        {
-                            createList.RemoveAt(i);
-                            addDeleted = false;
-                            break;
-                        }
-                    }
-                    for (int i = 0; i < processList.Count; i++)
-                    {
-                        FileSystemEvent pEvent = processList[i];
-                        if (pEvent.Path.ToLower().Equals(fse.Path.ToLower()))
-                        {
-                            processList.RemoveAt(i);
-                            if (pEvent.EventType == EventChangeType.CREATED || pEvent.EventType == EventChangeType.RENAMED)
-                            {
-                                addDeleted = false;
-                            }
-                        }
-                    }
-                    if (addDeleted)
-                    {
-                        processList.Add(fse);
-                    }
+                    GenericDeleted(fse);
                     break;
                 case EventChangeType.RENAMED:
-                    bool hasCreating = false;
-                    bool foundCreated = false;
-                    for (int i = 0; i < createList.Count; i++)
-                    {
-                        hasCreating = true;
-                        string path = createList[i];
-                        if (path.ToLower().Equals(fse.OldPath.ToLower())) // Still Creating
-                        {
-                            for (int j = 0; j < eventList.Count; j++)
-                            {
-                                FileSystemEvent e = eventList[j];
-                                if (e.Path.ToLower().Equals(fse.OldPath.ToLower()) && e.EventType == EventChangeType.CREATED)
-                                {
-                                    ProcessFile(e, eventList);
-                                    eventList.RemoveAt(j);
-                                    foundCreated = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    bool addRenamed = true;
-                    for (int i = 0; i < processList.Count; i++)
-                    {
-                        FileSystemEvent pEvent = processList[i];
-                        if (pEvent.Path.ToLower().Equals(fse.OldPath.ToLower()))
-                        {
-                            processList.RemoveAt(i);
-                            if (pEvent.EventType == EventChangeType.CREATED)
-                            {
-                                addRenamed = false;
-                                processList.Add(new FileSystemEvent(fse.Path, EventChangeType.CREATED, fse.FileSystemType));
-                            }
-                            else if (pEvent.EventType == EventChangeType.RENAMED)
-                            {
-                                addRenamed = false;
-                                processList.Add(new FileSystemEvent(pEvent.OldPath, fse.Path, fse.FileSystemType));
-                            }
-                        }
-                    }
-                    if (addRenamed)
-                    {
-                        processList.Add(fse);
-                    }
-                    if (hasCreating && !foundCreated)
-                    {
-                        waitingList = new List<FileSystemEvent>(eventList);
-                        eventList.Clear();
-                    }
+                    GenericRenamed(fse, eventList);
                     break;
                 default:
+                    Debug.Assert(false);
                     break;
             }
         }
