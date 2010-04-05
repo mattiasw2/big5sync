@@ -1,0 +1,11 @@
+#summary Developers' Guide - API - CompareAndSync.Seamless
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Classes Summary =
+
+== !SeamlessQueueControl ==
+
+== !SeamlessSyncer ==
+
+== SeamlessXMLHelper ==
