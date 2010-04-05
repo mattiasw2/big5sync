@@ -1,0 +1,13 @@
+#summary Developers' Guide - API - SynclessUI.Visitor
+#labels Phase-Implementation
+#sidebar DeveloperAPISidebar
+
+= Interfaces Summary =
+
+== IVisitor ==
+
+= Classes Summary =
+
+== !PreviewVisitor ==
+
+== SyncUIHelper ==
