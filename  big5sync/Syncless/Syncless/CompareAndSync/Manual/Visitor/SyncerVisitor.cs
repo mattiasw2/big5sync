@@ -27,7 +27,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             _syncProgress.Message = file.Name;
             if (file.Invalid)
             {
-                _syncProgress.fail();
+                _syncProgress.Fail();
                 return;
             }
 
@@ -58,7 +58,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         break;
                 }
             }
-            _syncProgress.complete();
+            _syncProgress.Complete();
             //Basic logic: Look for highest priority and propagate it.
         }
 
@@ -68,7 +68,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             _syncProgress.Message = folder.Name;
             if (folder.Invalid)
             {
-                _syncProgress.fail();
+                _syncProgress.Fail();
                 return;
             }
 
@@ -97,13 +97,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         break;
                 }
             }
-            _syncProgress.complete();
+            _syncProgress.Complete();
         }
 
         public void Visit(RootCompareObject root)
         {
             _nodesCount++;
-            _syncProgress.complete();//Do nothing
+            _syncProgress.Complete();//Do nothing
         }
 
         #endregion

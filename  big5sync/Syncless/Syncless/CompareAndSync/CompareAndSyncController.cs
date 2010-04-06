@@ -46,7 +46,7 @@ namespace Syncless.CompareAndSync
             RootCompareObject rco = new RootCompareObject(request.Paths);
             progress.ChangeToAnalyzing();
             List<string> buildConflicts = new List<string>();
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters, buildConflicts), progress);
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters, buildConflicts,progress), progress);
             CompareObjectHelper.PreTraverseFolder(rco, new IgnoreMetaDataVisitor(), progress);
             ComparerVisitor visitor = new ComparerVisitor();
 

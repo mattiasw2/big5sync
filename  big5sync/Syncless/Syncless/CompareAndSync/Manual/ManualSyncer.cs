@@ -27,7 +27,7 @@ namespace Syncless.CompareAndSync.Manual
             //Analyzing
             progress.ChangeToAnalyzing();
             List<string> typeConflicts = new List<string>();
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters, typeConflicts), progress);
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters, typeConflicts,progress), progress);
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), progress);
             CompareObjectHelper.PreTraverseFolder(rco, new ProcessMetadataVisitor(), progress);
             CompareObjectHelper.LevelOrderTraverseFolder(rco, new FolderRenameVisitor(), progress);
@@ -71,7 +71,7 @@ namespace Syncless.CompareAndSync.Manual
             filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ConflictDir));
             RootCompareObject rco = new RootCompareObject(request.Paths);
             List<string> buildConflicts = new List<string>();
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters, buildConflicts), null);
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters, buildConflicts,new SyncProgress("")), null);
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), null);
             CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor(), null);
             CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor(), null);
