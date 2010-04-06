@@ -10,6 +10,11 @@ Provides properties which enclose the `DateTime.Now` property. The object create
 || [#CurrentTimeLong CurrentTimeLong] || Gets the current time in long format ||
 || [#CurrentTimeString CurrentTimeString] || Gets the current time in string format DD/MM/YY HH:MM:SS ||
 
+= Constructors Summary =
+
+|| *Constructor* || *Description* ||
+|| [#CurrentTime_() CurrentTime()] || Creates a new !CurrentTime object ||
+
 = Properties Details =
 
 == !CurrentTimeLong ==
@@ -25,11 +30,6 @@ Provides properties which enclose the `DateTime.Now` property. The object create
         Gets the current time in string format DD/MM/YY HH:MM:SS.
 
 ----
-
-= Constructors Summary =
-
-|| *Constructor* || *Description* ||
-|| [#CurrentTime_() CurrentTime()] || Creates a new !CurrentTime object ||
 
 = Constructors Details =
 
