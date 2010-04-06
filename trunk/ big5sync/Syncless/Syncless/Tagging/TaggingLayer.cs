@@ -8,9 +8,19 @@ using Syncless.Logging;
 
 namespace Syncless.Tagging
 {
+    /// <summary>
+    /// TaggingLayer class is the main logic controller of the Tagging namespace
+    /// </summary>
     public class TaggingLayer
     {
+        /// <summary>
+        /// The string value for the relative path to save the tagging.xml in a .syncless folder
+        /// </summary>
         public const string RELATIVE_TAGGING_SAVE_PATH = ".syncless\\tagging.xml";
+
+        /// <summary>
+        /// The string value for the relative path to save the tagging.xml in the root folder
+        /// </summary>
         public const string RELATIVE_TAGGING_ROOT_SAVE_PATH = "tagging.xml";
 
         #region attributes
@@ -18,7 +28,7 @@ namespace Syncless.Tagging
         private TaggingProfile _taggingProfile;
 
         /// <summary>
-        /// Singleton Instance
+        /// Gets a singleton instance of the TaggingLayer object
         /// </summary>
         public static TaggingLayer Instance
         {
@@ -33,7 +43,7 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Contains information about the current profile name and the tag lists
+        /// Gets or sets the tagging profile
         /// </summary>
         public TaggingProfile TaggingProfile
         {
@@ -42,7 +52,7 @@ namespace Syncless.Tagging
         }
         
         /// <summary>
-        /// Contains an immutable list of Tag objects
+        /// Gets an immutable list of tag list
         /// </summary>
         public List<Tag> TagList
         {
@@ -50,7 +60,26 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Contains a copy of the list of all Tag objects
+        /// Gets a clone of the list of Tag objects which are not set as deleted
+        /// </summary>
+        public List<Tag> FilteredTagList
+        {
+            get
+            {
+                List<Tag> filteredTagList = new List<Tag>();
+                foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
+                {
+                    if (!tag.IsDeleted)
+                    {
+                        filteredTagList.Add(tag);
+                    }
+                }
+                return filteredTagList;
+            }
+        }
+
+        /// <summary>
+        /// Gets a clone of the list of tags
         /// </summary>
         public List<Tag> UnfilteredTagList
         {
@@ -67,37 +96,23 @@ namespace Syncless.Tagging
         #endregion
 
         /// <summary>
-        /// Contains a copy of the list of Tag objects which are not set as deleted
+        /// Creates a new TaggingLayer object
         /// </summary>
-        public List<Tag> FilteredTagList
-        {
-            get 
-            { 
-                List<Tag> filteredTagList = new List<Tag>();
-                foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
-                {
-                    if (!tag.IsDeleted)
-                    {
-                        filteredTagList.Add(tag);
-                    }
-                }
-                return filteredTagList;
-            }
-        }
-
         private TaggingLayer()
         {
             _taggingProfile = new TaggingProfile(TaggingHelper.GetCurrentTime());
         }
 
         /// <summary>
-        /// Initialize _taggingProfile object. If a tagging.xml file has already been created, load the information
-        /// from the file, else, instantiate a new _taggingProfile object.
+        /// Initializes tagging profile object. If a tagging.xml file has already been created, 
+        /// loads the information from the file; otherwise, instantiates a new tagging profile object.
         /// </summary>
-        /// <param name="paths">The paths of the tagging.xml files to be loaded.</param>
+        /// <param name="paths">The list of strings which represent the paths of the tagging.xml 
+        /// files to be loaded from</param>
+        /// <remarks>paths[0] is always the root</remarks>
         public void Init(List<string> paths)
         {
-            string profileFilePath = paths[0]; //paths[0] is always the root.
+            string profileFilePath = paths[0];
             if (!File.Exists(profileFilePath))
             {
                 _taggingProfile = new TaggingProfile(TaggingHelper.GetCurrentTime());
@@ -118,10 +133,12 @@ namespace Syncless.Tagging
         }
         
         /// <summary>
-        /// Merge the profile given in the path to the current
+        /// Merges the profile that is loaded from the path that is passed as parameter to the current tagging
+        /// profile
         /// </summary>
-        /// <param name="path">The path of the xml file</param>
-        /// <returns>True if merge is successful, else false</returns>
+        /// <param name="path">The string value that represents the path of the xml file to load the new
+        /// profile from</param>
+        /// <returns>true if merging is successful; otherwise, false</returns>
         public bool Merge(string path)
         {
             if (File.Exists(path))
@@ -138,10 +155,12 @@ namespace Syncless.Tagging
 
         #region Tag public implementations
         /// <summary>
-        /// Create a Tag of tagname
+        /// Creates a tag with a name that is given by the tag name that is passed as parameter
         /// </summary>
-        /// <param name="tagname">The name of the Tag to be created</param>
-        /// <returns>The created Tag, else raise TagAlreadyExistsException</returns>
+        /// <param name="tagname">The string value that represents the name that is to be given to the tag
+        /// </param>
+        /// <returns>the created tag</returns>
+        /// <exception cref="TagAlreadyExistsException">TagAlreadyExistsException</exception>
         public Tag CreateTag(string tagname)
         {
             Tag tag = _taggingProfile.AddTag(tagname);
@@ -157,35 +176,36 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Rename a Tag of oldname to newname
+        /// Sets the name of a tag that is the same as the old name to the new name that is passed as parameter
         /// </summary>
-        /// <param name="oldname">The original name of the Tag to be renamed</param>
-        /// <param name="newname">The new name to be given to the Tag</param>
-        /// <returns>If the oldname does not exist, raise TagNotFoundException, if newname is already used
-        /// for another Tag, raise TagAlreadyExistsException</returns>
+        /// <param name="oldname">The string value that represents the old name of a tag</param>
+        /// <param name="newname">The string value that represents the new name to be given to the tag</param>
+        /// <exception cref="TagAlreadyExistsException">thrown if the new name
+        /// that is passed as parameter is already used by another tag in the existing list of tags</exception>
+        /// <exception cref="TagNotFoundException">thrown if the old name that is
+        /// passed as parameter is not used by any tag in the existing list of tags</exception>
         public void RenameTag(string oldname, string newname)
         {
             int result = _taggingProfile.RenameTag(oldname, newname);
             switch (result)
             {
                 case 0:
-                    //TaggingHelper.Logging(LogMessage.TAG_RENAMED, oldname, newname);
                     break;
                 case 1:
                     throw new TagAlreadyExistsException(newname);
                 case 2:
                     throw new TagNotFoundException(oldname);
-                default:
-                    //assertion
-                    break;
             }
         }
 
         /// <summary>
-        /// Remove the Tag of tagname
+        /// Removes the tag whose tag name is the same as the tag name that is passed as parameter
         /// </summary>
-        /// <param name="tagname">The name of the Tag to be removed</param>
-        /// <returns>The Tag that is removed successfully, else raise TagNotFoundException</returns>
+        /// <param name="tagname">The string value that represents the name that is to be used to retrieve
+        /// the tag to be deleted</param>
+        /// <returns>the tag that is deleted</returns>
+        /// <exception cref="TagNotFoundException">thrown if the name that is passed as parameter is
+        /// not used by any tag in the existing list of tags</exception>
         public Tag DeleteTag(string tagname)
         {
             Tag toremove = _taggingProfile.DeleteTag(tagname);
@@ -201,13 +221,17 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Tag a folder with a tagname
+        /// Tags a folder path to a tag with name same as the tag name that is passed as parameter
         /// </summary>
-        /// <param name="path">The path of the folder to be tagged.</param>
-        /// <param name="tagname">The name of the Tag</param>
-        /// <returns>The Tag that contains the path, if path already exists raise PathAlreadyExistsException
-        /// if the given path has sub-directory or parent directory already tagged raise 
-        /// RecursiveDirectoryException</returns>
+        /// <param name="path">The string value that represents the path of the folder to be tagged</param>
+        /// <param name="tagname">The string value that represents the name of the tag the folder path is
+        /// to be tagged to</param>
+        /// <returns>the tag where the folder path is tagged to</returns>
+        /// <exception cref="PathAlreadyExistsException">thrown if the folder path that is passed as 
+        /// parameter is already tagged to the tag</exception>
+        /// <exception cref="RecursiveDirectoryException">thrown if the folder path that is passed as 
+        /// parameter is a parent path or a child path of another path that is already tagged to 
+        /// the tag</exception>
         public Tag TagFolder(string path, string tagname)
         {
             try
@@ -227,12 +251,14 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Untag a Folder from a tagname
+        /// Untags a folder path from a tag with name same as the tag name that is passed as parameter
         /// </summary>
-        /// <param name="path">The path to untag</param>
-        /// <param name="tagname">The name of the Tag</param>
-        /// <returns>1 if the path is removed, 0 if the path is not found in the Tag, else raise 
-        /// TagNotFoundException</returns>
+        /// <param name="path">The string value that represents the path of the folder to be untagged</param>
+        /// <param name="tagname">The string value that represents the name of the tag the folder path is
+        /// to be untagged from</param>
+        /// <returns>1 if the path is removed, 0 if the path is not found in the Tag</returns>
+        /// <exception cref="TagNotFoundException">thrown if the name that is passed as parameter is
+        /// not used by any tag in the existing list of tags</exception>
         public int UntagFolder(string path, string tagname)
         {
             int result = _taggingProfile.UntagFolder(path, tagname);
@@ -249,20 +275,23 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Untag the path in all the Tags it is tagged to
+        /// Untags a folder path from all tags where the folder path is tagged to
         /// </summary>
-        /// <param name="path">The name of the path to be untagged</param>
-        /// <returns>The number of Tags the path is untagged from</returns>
+        /// <param name="path">The string value that represents the path of the folder to be untagged</param>
+        /// <returns>the number of tags the path is untagged from</returns>
         public int UntagFolder(string path)
         {
             return _taggingProfile.UntagFolder(path);
         }
 
         /// <summary>
-        /// Update the list of Filters for a Tag of tagname
+        /// Updates the list of filters for a tag with name same as the tag name that is passed as parameter
         /// </summary>
-        /// <param name="tagname">The name of the Tag</param>
-        /// <param name="newFilterList">The list of new Filters</param>
+        /// <param name="tagname">The string value that represents the name that is to be used to retrieve
+        /// the tag</param>
+        /// <param name="newFilterList">The list of filters that is to be updated to the tag</param>
+        /// <exception cref="TagNotFoundException">thrown if the name that is passed as parameter is
+        /// not used by any tag in the existing list of tags</exception>
         public void UpdateFilter(string tagname, List<Filter> newFilterList)
         {
             if (!_taggingProfile.UpdateFilter(tagname, newFilterList))
@@ -272,87 +301,70 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Rename a path in all the Tags it is tagged to
+        /// Sets the name of a folder path name that is the same as the old path name to the new path 
+        /// name that is passed as parameter
         /// </summary>
-        /// <param name="oldPath">The original path of the folder</param>
-        /// <param name="newPath">The new path of the folder</param>
+        /// <param name="oldPath">The string value that represents the old name of a folder path</param>
+        /// <param name="newPath">The string value that represents the new name of a folder path</param>
+        /// <returns>the number of folder paths whose old name is replaced by the new name</returns>
         public int RenameFolder(string oldPath, string newPath)
         {
             return _taggingProfile.RenameFolder(oldPath, newPath);
         }
 
+        #region retrieve tag methods
         /// <summary>
-        /// Retrieve the Tag with the particular tag name
+        /// Gets the tag whose name is same as the tag name that is passed as parameter
         /// </summary>
-        /// <param name="tagname">The name of the Tag</param>
-        /// <returns>The Tag that is to be found, else null</returns>
+        /// <param name="tagname">The string value that represents the name of the tag to be retrieved</param>
+        /// <returns>the tag that is to be retrieved if it is found; otherwise null</returns>
         public Tag RetrieveTag(string tagname)
         {
             return RetrieveTag(tagname, false, 0);
         }
 
         /// <summary>
-        /// Retrieve the Tag with the particular tag name
+        /// Gets the tag whose name is same as the tag name that is passed as parameter
         /// </summary>
-        /// <param name="tagname">The name of the Tag</param>
-        /// <param name="getdeleted">Indicate whether to return the Tag if its IsDeleted property is true</param>
-        /// <returns>The Tag that is to be found, else null</returns>
+        /// <param name="tagname">The string value that represents the name of the tag to be retrieved</param>
+        /// <param name="getdeleted">The boolean value that represents whether to return the tag if it set
+        /// as deleted</param>
+        /// <returns>the tag that is to be retrieved if it is found; otherwise null</returns>
         public Tag RetrieveTag(string tagname, bool getdeleted)
         {
             return RetrieveTag(tagname, false, getdeleted, 0);
         }
 
         /// <summary>
-        /// Retrieve all Tags
+        /// Gets the list of all tags
         /// </summary>
-        /// <param name="getdeleted">Indicate whether to return a Tag which has been deleted</param>
-        /// <returns>A list of Tags</returns>
+        /// <param name="getdeleted">The boolean value that represents whether to return the tag if it set
+        /// as deleted</param>
+        /// <returns>the list of all tags</returns>
         public List<Tag> RetrieveAllTags(bool getdeleted)
         {
             return _taggingProfile.RetrieveAllTags(getdeleted);
         }
 
         /// <summary>
-        /// Retrieve a list of Tags where a given path is tagged to
+        /// Gets a list of tags where a path, that is passed as parameter, is tagged to
         /// </summary>
-        /// <param name="path">The path to find the Tags it is tagged to</param>
-        /// <returns>The list of Tags containing the given path</returns>
+        /// <param name="path">The string value that represents the path of the folder to be used to
+        /// retrieve a list of tags</param>
+        /// <returns>the list of tags where the path is tagged to</returns>
         public List<Tag> RetrieveTagByPath(string path)
         {
             return _taggingProfile.RetrieveTagsByPath(path);
         }
         
         /// <summary>
-        /// Retrieve all paths having logicalid
+        /// Gets a list of tags where paths, whose logical ID is same as logical ID that is passed as parameter,
+        /// are tagged to
         /// </summary>
-        /// <param name="logicalid">The logical ID</param>
-        /// <returns>The list of paths having logicalid</returns>
-        public List<string> RetrievePathByLogicalId(string logicalid)
-        {
-            List<string> pathList = new List<string>();
-            List<Tag> tagList = RetrieveTagByLogicalId(logicalid);
-            foreach (Tag tag in tagList)
-            {
-                foreach (TaggedPath path in tag.FilteredPathList)
-                {
-                    //try && conditions
-                    if (path.LogicalDriveId.Equals(logicalid))
-                    {
-                        if (!PathHelper.ContainsIgnoreCase(pathList, path.PathName))
-                        {
-                            pathList.Add(path.PathName);
-                        }
-                    }
-                }
-            }
-            return pathList;
-        }
-
-        /// <summary>
-        /// Retrieve all the tags that have path in a logical drive having logicalid.
-        /// </summary>
-        /// <param name="logicalId">The Logical Id</param>
-        /// <returns>The list of Tags</returns>
+        /// <param name="logicalId">The string value that represents the logical ID to be used to retrieve
+        /// the list of tags</param>
+        /// <returns>the list of tags containing tagged paths whose logical ID is same as the logical 
+        /// ID passed as parameter</returns>
         public List<Tag> RetrieveTagByLogicalId(string logicalid)
         {
             bool found;
@@ -368,6 +380,14 @@ namespace Syncless.Tagging
             return tagList;
         }
 
+        /// <summary>
+        /// Gets a filtered list of tags containing tagged paths whose logical ID is same as logical ID that is 
+        /// passed as parameter
+        /// </summary>
+        /// <param name="logicalid">The string value that represents the logical ID to be used to retrieve
+        /// the list of tags</param>
+        /// <returns>the list of tags containing tagged paths whose logical ID is same as the logical 
+        /// ID passed as parameter</returns>
         public List<Tag> RetrieveFilteredTagByLogicalId(string logicalid)
         {
             bool found;
@@ -385,17 +405,78 @@ namespace Syncless.Tagging
             }
             return tagList;
         }
+        
+        /// <summary>
+        /// Gets a list of tags containing tagged paths who are parent paths of the path that is passed
+        /// as parameter
+        /// </summary>
+        /// <param name="path">The string value that represents the path of the folder to be used to
+        /// retrieve a list of tags</param>
+        /// <returns>the list of tags containing the tagged paths who are parent paths of the path
+        /// that is passed as parameter</returns>
+        public List<Tag> RetrieveParentTagByPath(string path)
+        {
+            List<Tag> parentPathList = new List<Tag>();
+
+            foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
+            {
+                foreach (TaggedPath p in tag.FilteredPathList)
+                {
+                    if (PathHelper.StartsWithIgnoreCase(path, p.PathName))
+                    {
+                        if (!PathHelper.EqualsIgnoreCase(path, p.PathName))
+                        {
+                            parentPathList.Add(tag);
+                            break;
+                        }
+                    }
+                }
+            }
+            return parentPathList;
+        }
+        #endregion
+
+        #region retrieve path methods
+        /// <summary>
+        /// Gets a list of paths whose logical ID is same as the logical ID that is passed as parameter
+        /// </summary>
+        /// <param name="logicalid">The string value that represents the logical ID to be used to retrieve
+        /// the list of paths</param>
+        /// <returns>the list of paths whose logical ID is same as the logical ID passed as parameter</returns>
+        public List<string> RetrievePathByLogicalId(string logicalid)
+        {
+            List<string> pathList = new List<string>();
+            List<Tag> tagList = RetrieveTagByLogicalId(logicalid);
+            foreach (Tag tag in tagList)
+            {
+                foreach (TaggedPath path in tag.FilteredPathList)
+                {
+                    if (path.LogicalDriveId.Equals(logicalid))
+                    {
+                        if (!PathHelper.ContainsIgnoreCase(pathList, path.PathName))
+                        {
+                            pathList.Add(path.PathName);
+                        }
+                    }
+                }
+            }
+            return pathList;
+        }
 
         /// <summary>
-        /// Find a list of paths of folders or sub-folders which share the same Tag as folderPath
-        /// Example: TagA - D:\A\, E:\B\C\
+        /// Gets a list of folder paths or sub-folder paths which are tagged to the same tag that the path,
+        /// that is passed as parameter, is tagged to
+        /// </summary>
+        /// <param name="folderPath">The string value that represents the path of the folder to be used 
+        /// to retrieve a list of paths</param>
+        /// <returns>the list of folder paths or sub-folder paths which are tagged to the same tag
+        /// that the path, that is passed as parameter, is tagged to</returns>
+        /// <remarks>Example: TagA - D:\A\, E:\B\C\
         ///          TagB - D:\A\, F:\D\E\G\
         ///          TagC - E:\G\, F:\H\
         ///          Given path D:\A\H\J\
         ///          Should return E:\B\C\H\J\ from TagA, F:\D\E\G\H\J\ from TagB
-        /// </summary>
-        /// <param name="folderPath">The path to search</param>
-        /// <returns>The list of similar paths</returns>
+        /// </remarks>
         public List<string> FindSimilarPathForFolder(string folderPath)
         {
             string logicalid = TaggingHelper.GetLogicalID(folderPath);
@@ -434,36 +515,12 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Retrieve all the tags that contain the parent folder paths of the given path
+        /// Gets a list of paths which are the ancestor paths of the path that is passed as parameter
         /// </summary>
-        /// <param name="path">The path used to retrieve the parent folder paths</param>
-        /// <returns>The list of Tags containing the parent folder paths</returns>
-        public List<Tag> RetrieveParentTagByPath(string path)
-        {
-            List<Tag> parentPathList = new List<Tag>();
-
-            foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
-            {
-                foreach (TaggedPath p in tag.FilteredPathList)
-                {
-                    if (PathHelper.StartsWithIgnoreCase(path, p.PathName))
-                    {
-                        if (!PathHelper.EqualsIgnoreCase(path, p.PathName))
-                        {
-                            parentPathList.Add(tag);
-                            break;
-                        }
-                    }
-                }
-            }
-            return parentPathList;
-        }
-
-        /// <summary>
-        /// Retrieve a list of tagged parent folder paths of the given path
-        /// </summary>
-        /// <param name="path">The path used to retrieve the parent folder paths</param>
-        /// <returns>The list of folder paths</returns>
+        /// <param name="path">The string value that represents the path of the folder to be used 
+        /// to retrieve a list of ancestor paths</param>
+        /// <returns>the list of folder paths which are the ancestor paths of the path that is passed as
+        /// parameter</returns>
         public List<string> RetrieveAncestors(string path)
         {
             List<string> ancestors = new List<string>();
@@ -481,10 +538,12 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Retrieve a list of tagged child folder paths of the given path
+        /// Gets a list of paths which are the descendant paths of the path that is passed as parameter
         /// </summary>
-        /// <param name="path">The path used to retrieve the child folder paths</param>
-        /// <returns>The list of child folder paths</returns>
+        /// <param name="path">The string value that represents the path of the folder to be used 
+        /// to retrieve a list of descendant paths</param>
+        /// <returns>the list of folder paths which are the descendant paths of the path that is passed as
+        /// parameter</returns>
         public List<string> RetrieveDescendants(string path)
         {
             List<string> descendants = new List<string>();
@@ -502,19 +561,20 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Get all the tagged paths
+        /// Gets a filtered list of all paths that are tagged to all tags
         /// </summary>
-        /// <returns>The list of tagged paths</returns>
+        /// <returns>the filtered list of all paths that are tagged to all tags</returns>
         public List<string> GetAllPaths()
         {
             return _taggingProfile.AllFilteredTaggedPathList;
         }
+        #endregion
 
         /// <summary>
-        /// Check if a logicalid exists
+        /// Determines whether the logical ID exists in any tagged path in some tags
         /// </summary>
-        /// <param name="logicalid">The logicalid to be checked</param>
-        /// <returns>True if the logicalid is found, else false</returns>
+        /// <param name="logicalid">The string value that represents the logical ID</param>
+        /// <returns>true if the logical ID exists in any tagged path in some tags; otherwise false</returns>
         public bool CheckIDExists(string logicalid)
         {
             foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
@@ -528,17 +588,18 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Save information of a profile to a xml file
+        /// Saves the tagging profile to a xml file
         /// </summary>
-        /// <param name="xmlFilePath">The path of the tagging.xml file to be saved to</param>
-        /// <returns></returns>
+        /// <param name="xmlFilePath">The string value that represents the path that the xml file is
+        /// to be saved to</param>
         public void SaveTo(List<string> savedLocation)
         {
             TaggingXMLHelper.SaveToLocations(_taggingProfile, savedLocation);
         }
 
         /// <summary>
-        /// Append the current profile to tagging.xml saved in the given list of locations
+        /// Appends the current tagging profile to the tagging.xml saved in the list of locations passed as
+        /// parameter
         /// </summary>
         /// <param name="savedLocation">The list of locations containing tagging.xml where current profile
         /// is to be saved to</param>
@@ -549,9 +610,10 @@ namespace Syncless.Tagging
 
         #region for Merger
         /// <summary>
-        /// Add a Tag to the current tagging profile. Used for merging Tag objects from several tagging profiles.
+        /// Adds a tag to the current tagging profile
         /// </summary>
-        /// <param name="tag">The Tag to be added.</param>
+        /// <param name="tag">The <see cref="Tag">Tag</see> object that represents the tag to be added</param>
+        /// <remarks>Used for merging tag objects from several tagging profiles.</remarks>
         public void AddTag(Tag tag)
         {
             _taggingProfile.AddTag(tag);
@@ -560,7 +622,18 @@ namespace Syncless.Tagging
         #endregion
 
         #region private methods implementations
-        #region completed
+        /// <summary>
+        /// Gets the tag with name that is same as the tag name that is passed as parameter
+        /// </summary>
+        /// <param name="tagname">The string value that represents the tag name of the tag 
+        /// to be retrieved</param>
+        /// <param name="create">The boolean value that indicates whether to create the tag if
+        /// it does not exist</param>
+        /// <param name="getdeleted">The boolean value that indicates whether to retrieve tag
+        /// which is set as deleted</param>
+        /// <param name="lastupdated">The long value that represents the current date time to be
+        /// assigned to the tag if it is newly created</param>
+        /// <returns>the tag if it is found or created; otherwise, null</returns>
         private Tag RetrieveTag(string tagname, bool create, bool getdeleted, long lastupdated)
         {
             Tag tag = GetTag(tagname);
@@ -592,6 +665,16 @@ namespace Syncless.Tagging
             }
         }
 
+        /// <summary>
+        /// Gets the tag with name that is same as the tag name that is passed as parameter
+        /// </summary>
+        /// <param name="tagname">The string value that represents the tag name of the tag 
+        /// to be retrieved</param>
+        /// <param name="create">The boolean value that indicates whether to create the tag if
+        /// it does not exist</param>
+        /// <param name="lastupdated">The long value that represents the current date time to be
+        /// assigned to the tag if it is newly created</param>
+        /// <returns>the tag if it is found or created; otherwise, null</returns>
         private Tag RetrieveTag(string tagname, bool create, long lastupdated)
         {
             Tag tag = GetTag(tagname);
@@ -605,6 +688,12 @@ namespace Syncless.Tagging
             return tag;
         }
 
+        /// <summary>
+        /// Gets the tag with name that is same as the tag name that is passed as parameter
+        /// </summary>
+        /// <param name="tagname">The string value that represents the tag name of the tag 
+        /// to be retrieved</param>
+        /// <returns>the tag if it is found; otherwise, null</returns>
         private Tag GetTag(string tagname)
         {
             foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
@@ -617,6 +706,13 @@ namespace Syncless.Tagging
             return null;
         }
 
+        /// <summary>
+        /// Determines whether a tag with name that is same as the tag name that is passed as parameter
+        /// exists in the list of tags
+        /// </summary>
+        /// <param name="tagname">The string value that represents the tag name of the tag 
+        /// to be checked for existence</param>
+        /// <returns>true if the tag exists; otherwise, false</returns>
         private bool CheckTagExists(string tagname)
         {
             foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
@@ -629,6 +725,12 @@ namespace Syncless.Tagging
             return false;
         }
 
+        /// <summary>
+        /// Determines whether the logical ID exists in any tagged path in the tag that is passed as parameter
+        /// </summary>
+        /// <param name="tag">The <see cref="Tag">Tag</see> object that represents the tag to be checked</param>
+        /// <param name="ID">The string value that represents the logical ID</param>
+        /// <returns>true if the logical ID exists in any tagged path in the tag; otherwise, false</returns>
         private bool CheckID(Tag tag, string ID)
         {
             foreach (TaggedPath path in tag.FilteredPathList)
@@ -640,7 +742,6 @@ namespace Syncless.Tagging
             }
             return false;
         }
-        #endregion
         #endregion
     }
 }
