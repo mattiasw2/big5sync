@@ -513,8 +513,6 @@ namespace Syncless.Core
                 {
                     ProfilingLayer.Instance.UpdateDrive(dce.Info);
                     Merge(dce.Info);
-                    string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
-                    List<Tag> tagList = TaggingLayer.Instance.RetrieveFilteredTagByLogicalId(logical);
 
                 }
                 else
