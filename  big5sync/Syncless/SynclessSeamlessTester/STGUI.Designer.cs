@@ -66,6 +66,8 @@
             this.buttonFilterAdd = new System.Windows.Forms.Button();
             this.buttonFilterClear = new System.Windows.Forms.Button();
             this.checkBoxBurst = new System.Windows.Forms.CheckBox();
+            this.buttonVerifyMetadata = new System.Windows.Forms.Button();
+            this.buttonLastKnownState = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxSourcePath
@@ -117,7 +119,7 @@
             // 
             // buttonPropagate
             // 
-            this.buttonPropagate.Location = new System.Drawing.Point(16, 471);
+            this.buttonPropagate.Location = new System.Drawing.Point(16, 445);
             this.buttonPropagate.Name = "buttonPropagate";
             this.buttonPropagate.Size = new System.Drawing.Size(100, 23);
             this.buttonPropagate.TabIndex = 5;
@@ -220,7 +222,7 @@
             // buttonCancel
             // 
             this.buttonCancel.Enabled = false;
-            this.buttonCancel.Location = new System.Drawing.Point(254, 471);
+            this.buttonCancel.Location = new System.Drawing.Point(135, 445);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(100, 23);
             this.buttonCancel.TabIndex = 15;
@@ -346,7 +348,7 @@
             // 
             // buttonCompare
             // 
-            this.buttonCompare.Location = new System.Drawing.Point(135, 471);
+            this.buttonCompare.Location = new System.Drawing.Point(16, 471);
             this.buttonCompare.Name = "buttonCompare";
             this.buttonCompare.Size = new System.Drawing.Size(100, 23);
             this.buttonCompare.TabIndex = 28;
@@ -421,12 +423,34 @@
             this.checkBoxBurst.UseVisualStyleBackColor = true;
             this.checkBoxBurst.CheckedChanged += new System.EventHandler(this.checkBoxBurst_CheckedChanged);
             // 
+            // buttonVerifyMetadata
+            // 
+            this.buttonVerifyMetadata.Location = new System.Drawing.Point(135, 471);
+            this.buttonVerifyMetadata.Name = "buttonVerifyMetadata";
+            this.buttonVerifyMetadata.Size = new System.Drawing.Size(100, 23);
+            this.buttonVerifyMetadata.TabIndex = 36;
+            this.buttonVerifyMetadata.Text = "Verify Metadata";
+            this.buttonVerifyMetadata.UseVisualStyleBackColor = true;
+            this.buttonVerifyMetadata.Click += new System.EventHandler(this.buttonVerifyMetadata_Click);
+            // 
+            // buttonLastKnownState
+            // 
+            this.buttonLastKnownState.Enabled = false;
+            this.buttonLastKnownState.Location = new System.Drawing.Point(254, 471);
+            this.buttonLastKnownState.Name = "buttonLastKnownState";
+            this.buttonLastKnownState.Size = new System.Drawing.Size(100, 23);
+            this.buttonLastKnownState.TabIndex = 37;
+            this.buttonLastKnownState.Text = "Verify Last Known";
+            this.buttonLastKnownState.UseVisualStyleBackColor = true;
+            // 
             // FormSeamlessTester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(784, 547);
+            this.Controls.Add(this.buttonLastKnownState);
+            this.Controls.Add(this.buttonVerifyMetadata);
             this.Controls.Add(this.checkBoxBurst);
             this.Controls.Add(this.buttonFilterClear);
             this.Controls.Add(this.buttonFilterAdd);
@@ -513,6 +537,8 @@
         private System.Windows.Forms.Button buttonFilterAdd;
         private System.Windows.Forms.Button buttonFilterClear;
         private System.Windows.Forms.CheckBox checkBoxBurst;
+        private System.Windows.Forms.Button buttonVerifyMetadata;
+        private System.Windows.Forms.Button buttonLastKnownState;
     }
 }
 
