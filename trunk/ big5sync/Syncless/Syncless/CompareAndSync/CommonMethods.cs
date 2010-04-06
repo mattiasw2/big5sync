@@ -114,10 +114,8 @@ namespace Syncless.CompareAndSync
 
         public static void CreateFileIfNotExist(string path)
         {
-            string nodename = "name";
-            string metadir = ".syncless";
-            string metadatapath = @".syncless\syncless.xml";
-            string xmlPath = Path.Combine(path, metadatapath);
+            string xmlPath = Path.Combine(path, CommonXMLConstants.MetadataPath);
+            
             if (File.Exists(xmlPath))
                 return;
 
@@ -127,14 +125,14 @@ namespace Syncless.CompareAndSync
             {
                 try
                 {
-                    DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, metadir));
+                    DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, CommonXMLConstants.MetaDir));
                     di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
                     XmlTextWriter writer = new XmlTextWriter(xmlPath, null);
                     writer.Formatting = Formatting.Indented;
                     writer.WriteStartDocument();
-                    writer.WriteStartElement("meta-data");
-                    writer.WriteElementString("last_modified", (DateTime.Now.Ticks).ToString());
-                    writer.WriteElementString(nodename, GetLastFileIndex(path));
+                    writer.WriteStartElement(CommonXMLConstants.NodeMetaData);
+                    writer.WriteElementString(CommonXMLConstants.NodeLastModified, (DateTime.Now.Ticks).ToString());
+                    writer.WriteElementString(CommonXMLConstants.NodeName, GetLastFileIndex(path));
                     writer.WriteEndElement();
                     writer.WriteEndDocument();
                     writer.Flush();
