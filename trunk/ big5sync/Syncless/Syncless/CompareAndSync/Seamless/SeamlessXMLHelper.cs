@@ -270,12 +270,8 @@ namespace Syncless.CompareAndSync.Seamless
         {
             if (deletedNode == null)
                 return;
-<<<<<<< .mine
 
-            string fullPath = xmlWriteObj.FullPath;
-=======
             string fullPath = xmlWriteObj.Parent;
->>>>>>> .r2169
             XmlDocument xmlTodoDoc = new XmlDocument();
             string todoPath = Path.Combine(fullPath, CommonXMLConstants.LastKnownStatePath);
             CommonMethods.CreateLastKnownStateFile(fullPath);
