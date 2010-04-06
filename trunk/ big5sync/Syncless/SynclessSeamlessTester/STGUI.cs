@@ -14,11 +14,13 @@ namespace SynclessSeamlessTester
     {
         private List<string> _sourcePaths, _destPaths, _filters;
         private TestInfo _testInfo;
+        private VerifyWorkerClass.TesterState _testState;
 
         private enum Action
         {
             Propagate,
             Verify,
+            VerifyMeta,
             Cancel,
             Complete
         }
@@ -164,6 +166,8 @@ namespace SynclessSeamlessTester
                     _testInfo.Propagated = true;
                 }
 
+                _testState = VerifyWorkerClass.TesterState.VerifyFiles;
+
                 backgroundWorker1.RunWorkerAsync(_testInfo);
                 Cursor = Cursors.WaitCursor;
             }
@@ -219,13 +223,16 @@ namespace SynclessSeamlessTester
                 case Action.Complete:
                     buttonPropagate.Enabled = true;
                     buttonCompare.Enabled = true;
+                    buttonVerifyMetadata.Enabled = true;
                     buttonCancel.Enabled = false;
                     Cursor = Cursors.Arrow;
                     break;
                 case Action.Propagate:
                 case Action.Verify:
+                case Action.VerifyMeta:
                     buttonPropagate.Enabled = false;
                     buttonCompare.Enabled = false;
+                    buttonVerifyMetadata.Enabled = false;
                     buttonCancel.Enabled = true;
                     enable = false;
                     Cursor = Cursors.WaitCursor;
@@ -263,7 +270,7 @@ namespace SynclessSeamlessTester
             if (info.Propagated)
             {
                 StartVerifying();
-                new VerifyWorkerClass(_destPaths, info, backgroundWorker1, e, _filters);
+                new VerifyWorkerClass(_destPaths, info, backgroundWorker1, e, _filters, _testState);
                 e.Result = info;
             }
         }
@@ -425,6 +432,23 @@ namespace SynclessSeamlessTester
             {
                 labelMin.Text = "Min.";
                 labelMax.Text = "Max.";
+            }
+        }
+
+        private void buttonVerifyMetadata_Click(object sender, EventArgs e)
+        {
+            if (listBoxDestPaths.Items.Count > 0)
+            {
+                if (_testInfo == null)
+                {
+                    _testInfo = new TestInfo();
+                    _testInfo.Propagated = true;
+                }
+
+                _testState = VerifyWorkerClass.TesterState.VerifyMeta;
+
+                backgroundWorker1.RunWorkerAsync(_testInfo);
+                Cursor = Cursors.WaitCursor;
             }
         }
 

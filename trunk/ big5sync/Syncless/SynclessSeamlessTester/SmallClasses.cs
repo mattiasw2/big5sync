@@ -39,7 +39,6 @@ namespace SynclessSeamlessTester
             get { return _folderResults; }
             set { _folderResults = value; }
         }
-
     }
 
     public abstract class LazyObjectCompare
