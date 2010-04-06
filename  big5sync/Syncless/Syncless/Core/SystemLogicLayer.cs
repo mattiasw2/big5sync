@@ -24,16 +24,26 @@ namespace Syncless.Core
     internal class SystemLogicLayer : IUIControllerInterface, IMonitorControllerInterface, ICommandLineControllerInterface
     {
         #region Singleton
-
+        /// <summary>
+        /// Instance of the System Logic Layer.
+        /// </summary>
         private static SystemLogicLayer _instance;
+        /// <summary>
+        /// The User Interface that is using this System Logic Layer.
+        /// </summary>
         private IUIInterface _userInterface;
-        private NotificationQueue _uiNotification;
-        private NotificationQueue _sllNotification;
-        private NotificationQueue _uiPriorityNotification;
+
+        /// <summary>
+        /// The Notification Queue Observer for _sllNotification.
+        /// </summary>
         private LogicQueueObserver _queueObserver;
-
+        /// <summary>
+        /// The Table for storing the state of some of the tags that are in transition state(i.e ManualToSeamless, SeamlessToManual)
+        /// </summary>
         private Dictionary<string, TagState> _switchingTable;
-
+        /// <summary>
+        /// Return the Instance of System Logic Layer.
+        /// </summary>
         public static SystemLogicLayer Instance
         {
             get
@@ -46,29 +56,29 @@ namespace Syncless.Core
                 return _instance;
             }
         }
+        /// <summary>
+        /// UI Notification Queue
+        /// </summary>
+        public NotificationQueue UiNotification { get; private set; }
+        /// <summary>
+        /// UI Priority Notification Queue
+        /// </summary>
+        public NotificationQueue UiPriorityNotification { get; private set; }
+        /// <summary>
+        /// System Logic Layer Notification Queue
+        /// </summary>
+        public NotificationQueue SllNotification { get; private set; }
 
-        public NotificationQueue UiNotification
-        {
-            get { return _uiNotification; }
-        }
-
-        public NotificationQueue SllNotification
-        {
-            get { return _sllNotification; }
-        }
-
-        public NotificationQueue UiPriorityNotification
-        {
-            get { return _uiPriorityNotification; }
-
-        }
-
+        
+        /// <summary>
+        /// Private constructor(for singleton)
+        /// </summary>
         private SystemLogicLayer()
         {
             _userInterface = null;
-            _uiNotification = new NotificationQueue();
-            _sllNotification = new NotificationQueue();
-            _uiPriorityNotification = new NotificationQueue();
+            UiNotification = new NotificationQueue();
+            SllNotification = new NotificationQueue();
+            UiPriorityNotification = new NotificationQueue();
             _pathTable = new PathTable();
             _switchingTable = new Dictionary<string, TagState>();
         }
@@ -77,23 +87,34 @@ namespace Syncless.Core
         #endregion
 
         #region PathTable
+        /// <summary>
+        /// Path Table
+        /// </summary>
         private PathTable _pathTable;
+        /// <summary>
+        /// Internal Reader, use for debugging purpose
+        /// </summary>
         private PathTableReader _reader;
+        /// <summary>
+        /// A watcher that constantly find path that are tagged but does not exist on the filesystem.
+        /// </summary>
         private DeletedTaggedPathWatcher _deletedTaggedPathWatcher;
 
         #endregion
 
         #region IMonitorControllerInterface
-
+        /// <summary>
+        /// A method for Monitor Interface to clear the path table.
+        /// </summary>
         public void ClearPathHash()
         {
             _pathTable.ClearEntry();
         }
 
         /// <summary>
-        /// Handling File Change
+        /// Handle a file change (New,Update,Rename)
         /// </summary>
-        /// <param name="fe">File Change Event with all the objects.</param>
+        /// <param name="fe">File Change Event with all the information for the file change</param>
         public void HandleFileChange(FileChangeEvent fe)
         {
             try
@@ -122,7 +143,6 @@ namespace Syncless.Core
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
             }
         }
-
         private void HandleFileRenameEvent(FileChangeEvent fe)
         {
             //Find the logical Address for the old path
@@ -182,7 +202,6 @@ namespace Syncless.Core
             AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, fe.OldPath.DirectoryName, parentList, false, AutoSyncRequestType.Rename, SyncConfig.Instance);
             SendAutoRequest(request);
         }
-
         private void HandleFileModifyEvent(FileChangeEvent fe)
         {
             //Find the logical Address for the old path
@@ -245,7 +264,6 @@ namespace Syncless.Core
                 SendAutoRequest(request);
             }
         }
-
         private void HandleFileCreateEvent(FileChangeEvent fe)
         {
             //Find the logical Address for the old path
@@ -309,52 +327,10 @@ namespace Syncless.Core
             }
         }
 
-        private static void SendAutoRequest(AutoSyncRequest request)
-        {
-            /*
-#if DEBUG
-            if (request.ChangeType == AutoSyncRequestType.New || request.ChangeType == AutoSyncRequestType.Update)
-            {
-                string output =
-                    string.Format("=====================================================\nAuto Request sent : \nName of File : ({0}){1}\nSource : {2}{3}\nDestination:", (request.ChangeType == AutoSyncRequestType.New ? "New" : "Update"), request.SourceName, request.SourceParent, request.SourceName);
-                foreach (string destination in request.DestinationFolders)
-                {
-                    output += "\n" + destination + "\\" + request.SourceName;
-                }
-                output += "\n================================================================";
-                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
-            }
-            else if (request.ChangeType == AutoSyncRequestType.Rename)
-            {
-                string output =
-                    string.Format("=====================================================\nAuto Request sent : \nName of File : (Renamed){0}\\\\{1}\nSource : {2}{3}---{4}\nDestination:", request.OldName, request.NewName, request.SourceParent, request.OldName, request.NewName);
-                foreach (string destination in request.DestinationFolders)
-                {
-                    output += "\n" + destination + "\\" + request.OldName + " =>" + request.NewName;
-                }
-                output += "\n================================================================";
-                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
-            }
-            else if (request.ChangeType == AutoSyncRequestType.Delete)
-            {
-                string output =
-                    string.Format("=====================================================\nAuto Request sent : \nName of File : (Delete){0}\nSource : {1}{2}\nDestination:", request.SourceName, request.SourceParent, request.SourceName);
-                foreach (string destination in request.DestinationFolders)
-                {
-                    output += "\n" + destination + "\\" + request.SourceName;
-                }
-                output += "\n================================================================";
-                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
-            }
-#endif
-            */
-            CompareAndSyncController.Instance.Sync(request);
-        }
-
         /// <summary>
-        /// Handling Folder Change
+        /// Handling Folder Change (New,Rename)
         /// </summary>
-        /// <param name="fe">Folder Change Event with all the objects.</param>
+        /// <param name="fe">Folder Change Event with all the information for hte file change</param>
         public void HandleFolderChange(FolderChangeEvent fe)
         {
             try
@@ -509,9 +485,10 @@ namespace Syncless.Core
         }
 
         /// <summary>
-        /// Handling Delete Change
+        /// Handling delete change (For both file and folder) 
+        ///   Unable to detect what type of the file is deleted as the file/folder no longer exist.
         /// </summary>
-        /// <param name="dce">Delete Change Event with all the objects</param>
+        /// <param name="dce">Delete Change Event with all the information for the file change</param>
         public void HandleDeleteChange(DeleteChangeEvent dce)
         {
             try
@@ -527,7 +504,7 @@ namespace Syncless.Core
             }
         }
         /// <summary>
-        /// Handling Drive Change
+        /// Handling drive change ( plug in and plug out)
         /// </summary>
         /// <param name="dce">Drive Change Event with all the objects</param>
         public void HandleDriveChange(DriveChangeEvent dce)
@@ -625,7 +602,6 @@ namespace Syncless.Core
             FindAndCleanDeletedPaths();
             _userInterface.TagsChanged();
         }
-
         private void HandleRootFolderDeleteEvent(FolderChangeEvent dce)
         {
             MonitorLayer.Instance.UnMonitorPath(dce.OldPath.FullName);
@@ -693,10 +669,53 @@ namespace Syncless.Core
             _userInterface.TagsChanged();
         }
 
+        private static void SendAutoRequest(AutoSyncRequest request)
+        {
+            /*            
+                        if (request.ChangeType == AutoSyncRequestType.New || request.ChangeType == AutoSyncRequestType.Update)
+                        {
+                            string output =
+                                string.Format("=====================================================\nAuto Request sent : \nName of File : ({0}){1}\nSource : {2}{3}\nDestination:", (request.ChangeType == AutoSyncRequestType.New ? "New" : "Update"), request.SourceName, request.SourceParent, request.SourceName);
+                            foreach (string destination in request.DestinationFolders)
+                            {
+                                output += "\n" + destination + "\\" + request.SourceName;
+                            }
+                            output += "\n================================================================";
+                            ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
+                        }
+                        else if (request.ChangeType == AutoSyncRequestType.Rename)
+                        {
+                            string output =
+                                string.Format("=====================================================\nAuto Request sent : \nName of File : (Renamed){0}\\\\{1}\nSource : {2}{3}---{4}\nDestination:", request.OldName, request.NewName, request.SourceParent, request.OldName, request.NewName);
+                            foreach (string destination in request.DestinationFolders)
+                            {
+                                output += "\n" + destination + "\\" + request.OldName + " =>" + request.NewName;
+                            }
+                            output += "\n================================================================";
+                            ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
+                        }
+                        else if (request.ChangeType == AutoSyncRequestType.Delete)
+                        {
+                            string output =
+                                string.Format("=====================================================\nAuto Request sent : \nName of File : (Delete){0}\nSource : {1}{2}\nDestination:", request.SourceName, request.SourceParent, request.SourceName);
+                            foreach (string destination in request.DestinationFolders)
+                            {
+                                output += "\n" + destination + "\\" + request.SourceName;
+                            }
+                            output += "\n================================================================";
+                            ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
+                        }
+            */
+            CompareAndSyncController.Instance.Sync(request);
+        }
         #endregion
 
         #region Logging
-
+        /// <summary>
+        /// Provide the method to get the logger object. Used by Service Locator.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public Logger GetLogger(string type)
         {
             return LoggingLayer.Instance.GetLogger(type);
@@ -708,8 +727,8 @@ namespace Syncless.Core
         /// <summary>
         /// Manually Sync a Tag
         /// </summary>
-        /// <param name="tagname">tagname of the Tag to Sync</param>
-        /// <returns>true if the sync is success.</returns>        
+        /// <param name="tagname">Tagname of the Tag to sync</param>
+        /// <returns>true if the sync is "queue"</returns>        
         public bool StartManualSync(string tagname)
         {
             try
@@ -725,8 +744,8 @@ namespace Syncless.Core
         /// <summary>
         /// Cancel a Manual Sync.
         /// </summary>
-        /// <param name="tagName">The name of the tag to cancel.</param>
-        /// <returns>true if cancel succeed, false if cannot cancel.</returns>
+        /// <param name="tagName">Tagname of the Tag to sync</param>
+        /// <returns>true if the sync is cancel.</returns>
         public bool CancelManualSync(string tagName)
         {
             try
@@ -797,7 +816,7 @@ namespace Syncless.Core
             }
         }
         /// <summary>
-        /// Tag a Folder to a name
+        /// Tag a Folder to a Tag based on the tag name
         /// </summary>
         /// <param name="tagname">name of the tag</param>
         /// <param name="folder">the folder to tag</param>
@@ -832,6 +851,10 @@ namespace Syncless.Core
                 throw;
             }
             catch (PathAlreadyExistsException)
+            {
+                throw;
+            }
+            catch (InvalidPathException)
             {
                 throw;
             }
@@ -885,38 +908,7 @@ namespace Syncless.Core
             }
         }
         /// <summary>
-        /// Switch the mode of the tag
-        /// </summary>
-        /// <param name="tagName">Name of the tag to switch</param>
-        /// <returns>true if the switch is successful.</returns>
-        /// <exception cref="TagNotFoundException">If the tag is not found</exception>
-        public bool SwitchMode(string tagName)
-        {
-            Tag tag = TaggingLayer.Instance.RetrieveTag(tagName);
-            if (tag == null)
-            {
-                throw new TagNotFoundException(tagName);
-            }
-            TagState tagState = GetTagState(tagName);
-            switch (tagState)
-            {
-                case TagState.Undefined: return false;
-                case TagState.Seamless: MonitorTag(tagName, false);
-                    break;
-                case TagState.Manual: MonitorTag(tagName, true);
-                    break;
-                case TagState.SeamlessToManual: //might want to de queue
-                    break;
-                case TagState.ManualToSeamless: //??
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            return true;
-        }
-        /// <summary>
-        /// force the mode of a tag to be of a particular mode
+        /// Switch the mode of a particular Tag to a mode.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="mode"></param>
@@ -1167,35 +1159,6 @@ namespace Syncless.Core
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
-        }
-
-        private bool CheckForWriteAccess(IUIInterface inf)
-        {
-            try
-            {
-                //Ensure the app folder have write access
-                string path = Path.Combine(inf.getAppPath(), "temp.txt");
-                FileStream stream = new FileStream(path, FileMode.Create);
-
-                stream.Close();
-                try
-                {
-                    FileInfo info = new FileInfo(path);
-                    if (info.Exists)
-                    {
-                        info.Delete();
-                    }
-                }
-                catch (Exception e)
-                {
-                    ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                }
-            }
-            catch (IOException)
-            {
-                return false;
-            }
-            return true;
         }
 
         /// <summary>
@@ -1774,6 +1737,41 @@ namespace Syncless.Core
                 }
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inf"></param>
+        /// <returns></returns>
+        private bool CheckForWriteAccess(IUIInterface inf)
+        {
+            try
+            {
+                //Ensure the app folder have write access
+                string path = Path.Combine(inf.getAppPath(), "temp.txt");
+                FileStream stream = new FileStream(path, FileMode.Create);
+
+                stream.Close();
+                try
+                {
+                    FileInfo info = new FileInfo(path);
+                    if (info.Exists)
+                    {
+                        info.Delete();
+                    }
+                }
+                catch (Exception e)
+                {
+                    ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                }
+            }
+            catch (IOException)
+            {
+                return false;
+            }
+            return true;
+        }
+
         #endregion
 
         #region For Notification // SideThread
