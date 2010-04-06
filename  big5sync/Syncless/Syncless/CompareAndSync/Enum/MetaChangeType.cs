@@ -9,6 +9,6 @@
         New, //File, Folder
         NoChange, //File, Folder
         Rename, //File, Folder
-        Update
+        Update //File
     }
 }
