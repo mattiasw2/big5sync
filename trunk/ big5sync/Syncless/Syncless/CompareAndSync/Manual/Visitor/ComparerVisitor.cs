@@ -28,7 +28,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 return;
 
             DetectFileRename(file, numOfPaths);
-            //DetectFileRenameAndUpdate(file, numOfPaths);
+            DetectFileRenameAndUpdate(file, numOfPaths);
             CompareFiles(file, numOfPaths);
             _totalNodes++;
         }
