@@ -10,6 +10,7 @@
         public const string TodoPath = MetaDir + "\\" + TodoName;
 
         //XML Metadata (syncless.xml)
+        public const string NodeMetaData = "meta-data";
         public const string NodeName = "name";
         public const string NodeSize = "size";
         public const string NodeHash = "hash";
