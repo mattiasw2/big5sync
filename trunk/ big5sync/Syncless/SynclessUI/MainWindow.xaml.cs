@@ -150,8 +150,12 @@ namespace SynclessUI
         {
             if (Settings.Default.EnableTrayNotification)
             {
-                SystemSounds.Exclamation.Play();
                 TaskbarIcon.ShowBalloonTip(title, text, BalloonIcon.Info);
+            }
+
+            if (Settings.Default.EnableNotificationSounds)
+            {
+                SystemSounds.Exclamation.Play();
             }
         }
 

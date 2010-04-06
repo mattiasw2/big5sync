@@ -9,6 +9,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using SynclessUI.Helper;
+using SynclessUI.Properties;
 
 namespace SynclessUI
 {

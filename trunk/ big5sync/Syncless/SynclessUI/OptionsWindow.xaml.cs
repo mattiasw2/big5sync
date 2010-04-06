@@ -30,6 +30,7 @@ namespace SynclessUI
             ChkBoxMinimizeToTray.IsChecked = Settings.Default.MinimizeToTray;
             ChkBoxEnableAnimation.IsChecked = Settings.Default.EnableAnimation;
             ChkBoxEnableTrayNotification.IsChecked = Settings.Default.EnableTrayNotification;
+            ChkBoxEnableNotificationSounds.IsChecked = Settings.Default.EnableNotificationSounds;
         }
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)
@@ -53,6 +54,7 @@ namespace SynclessUI
             Settings.Default.MinimizeToTray = (bool) ChkBoxMinimizeToTray.IsChecked;
             Settings.Default.EnableAnimation = (bool) ChkBoxEnableAnimation.IsChecked;
             Settings.Default.EnableTrayNotification = (bool) ChkBoxEnableTrayNotification.IsChecked;
+            Settings.Default.EnableNotificationSounds = (bool)ChkBoxEnableNotificationSounds.IsChecked;
             Settings.Default.Save();
         }
 
