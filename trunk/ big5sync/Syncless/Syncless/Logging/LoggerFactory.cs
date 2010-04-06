@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Syncless.Core;
 
 namespace Syncless.Logging
@@ -21,6 +22,7 @@ namespace Syncless.Logging
             }
             else
             {
+                Debug.Assert(false);
                 return null;
             }
         }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using log4net.Config;
 using Syncless.Core;
 
@@ -57,6 +59,7 @@ namespace Syncless.Logging
             }
             else
             {
+                Debug.Assert(false);
                 return null;
             }
         }
@@ -64,6 +67,12 @@ namespace Syncless.Logging
         public List<LogData> ReadLog()
         {
             return LogReaderHelper.ReadLog();
+        }
+
+        public void ClearLog()
+        {
+            File.Delete(LogReaderHelper.USER_LOG_BACKUP_PATH);
+            File.Delete(LogReaderHelper.USER_LOG_PATH);
         }
     }
 }

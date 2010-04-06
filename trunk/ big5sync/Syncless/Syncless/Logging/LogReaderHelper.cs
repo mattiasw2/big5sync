@@ -7,8 +7,8 @@ namespace Syncless.Logging
 {
     public class LogReaderHelper
     {
-        private const string USER_LOG_PATH = @"log\user.log";
-        private const string USER_LOG_BACKUP_PATH = @"log\user.log.1";
+        internal const string USER_LOG_PATH = @"log\user.log";
+        internal const string USER_LOG_BACKUP_PATH = @"log\user.log.1";
         private const int MAX_LOG = 1000;
 
         public static List<LogData> ReadLog()
