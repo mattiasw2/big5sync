@@ -13,6 +13,8 @@ namespace SynclessUI.Visitor
         {
             visitor.Visit(root);
 
+            Console.WriteLine("zz");
+
             Dictionary<string, BaseCompareObject>.ValueCollection values = root.Contents.Values;
             FolderCompareObject fco = null;
             foreach (BaseCompareObject o in values)
@@ -27,6 +29,8 @@ namespace SynclessUI.Visitor
         private static void TraverseFolderHelper(FolderCompareObject folder, int numOfPaths, IVisitor visitor)
         {
             visitor.Visit(folder, numOfPaths);
+
+            Console.WriteLine("zz");
 
             Dictionary<string, BaseCompareObject>.ValueCollection values = folder.Contents.Values;
             FolderCompareObject fco = null;

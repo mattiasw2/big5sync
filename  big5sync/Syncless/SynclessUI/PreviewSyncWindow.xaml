@@ -55,7 +55,7 @@
 			        <toolkit:DataGridTemplateColumn.CellTemplate>
 			            <DataTemplate>
                             <TextBlock>
-							<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="{Binding source}"><TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding destination}" />
+							<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="{Binding destination}"><TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding destination}" />
 							</Hyperlink>
                             </TextBlock>
 			            </DataTemplate>
