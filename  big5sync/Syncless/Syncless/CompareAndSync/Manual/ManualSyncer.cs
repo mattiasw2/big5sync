@@ -66,15 +66,21 @@ namespace Syncless.CompareAndSync.Manual
 
         public static RootCompareObject Compare(ManualCompareRequest request)
         {
+            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STARTED, "Started Manual Sync for " + request.TagName));
+
             List<Filter> filters = request.Filters.ToList();
             filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ArchiveName));
             filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ConflictDir));
             RootCompareObject rco = new RootCompareObject(request.Paths);
-            List<string> buildConflicts = new List<string>();
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters, buildConflicts,new SyncProgress("")), null);
+            
+            List<string> typeConflicts = new List<string>();
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters, typeConflicts, null), null);
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), null);
-            CompareObjectHelper.PreTraverseFolder(rco, new FolderRenameVisitor(), null);
-            CompareObjectHelper.PostTraverseFolder(rco, new ComparerVisitor(), null);
+            CompareObjectHelper.PreTraverseFolder(rco, new ProcessMetadataVisitor(), null);
+            CompareObjectHelper.LevelOrderTraverseFolder(rco, new FolderRenameVisitor(), null);
+            ComparerVisitor comparerVisitor = new ComparerVisitor();
+            CompareObjectHelper.PostTraverseFolder(rco, comparerVisitor, null);
+
             return rco;
         }
 

@@ -15,6 +15,12 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         private string _metaName;
         private bool[] _useNewName;
 
+        /// <summary>
+        /// Initializes a <c>FolderCompareObject</c> given the name of the file, the number of paths to synchronize, and the parent of this file.
+        /// </summary>
+        /// <param name="name">A <see cref="string"/> containing the name of this <c>FolderCompareObject</c>.</param>
+        /// <param name="numOfPaths">An <see cref="int"/> containing the number of paths to synchronize.</param>
+        /// <param name="parent">The <see cref="FolderCompareObject"/> which is the parent of this <c>FolderCompareObject</c>.</param>
         public FolderCompareObject(string name, int numOfPaths, FolderCompareObject parent)
             : base(name, numOfPaths, parent)
         {
@@ -22,11 +28,21 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             _useNewName = new bool[numOfPaths];
         }
 
+        /// <summary>
+        /// Adds a child to the <c>FolderCompareObject</c>.
+        /// </summary>
+        /// <param name="child"><see cref="BaseCompareObject"/> to add to to this <c>FolderCompareObject</c>.</param>
         public void AddChild(BaseCompareObject child)
         {
             _contents.Add(child.Name, child);
         }
 
+        /// <summary>
+        /// Gets another <see cref="FileCompareObject"/> with the same creation time as the one passed in.
+        /// </summary>
+        /// <param name="creationTime">A <see cref="long"/> with the creation time to search for.</param>
+        /// <param name="pos"></param>
+        /// <returns><c>The FileCompareObject with the same creation time as that passed in.</c></returns>
         public FileCompareObject GetSameCreationTime(long creationTime, int pos)
         {
             Dictionary<string, BaseCompareObject>.ValueCollection objects = _contents.Values;
@@ -50,6 +66,14 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             return counter == 1 ? result : null;
         }
 
+        /// <summary>
+        /// Finds the possible folder that the previous folder was renamed to.
+        /// </summary>
+        /// <param name="name">The name to search for.</param>
+        /// <param name="creationTime">The creation time to match.</param>
+        /// <param name="pos"></param>
+        /// <param name="renameCount"></param>
+        /// <returns></returns>
         public FolderCompareObject GetRenamedFolder(string name, long creationTime, int pos, out int renameCount)
         {
             Dictionary<string, BaseCompareObject>.ValueCollection objects = _contents.Values;
@@ -72,7 +96,15 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
 
             return counter == 1 ? result : null;
         }
-          
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="hash"></param>
+        /// <param name="creationTime"></param>
+        /// <param name="pos"></param>
+        /// <returns></returns>
         public FileCompareObject GetIdenticalFile(string name, string hash, long creationTime, int pos)
         {
             Dictionary<string, BaseCompareObject>.ValueCollection objects = _contents.Values;
@@ -96,6 +128,11 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             return counter == 1 ? result : null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public BaseCompareObject GetChild(string name)
         {
             BaseCompareObject child;
