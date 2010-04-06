@@ -66,8 +66,6 @@ namespace Syncless.CompareAndSync.Manual
 
         public static RootCompareObject Compare(ManualCompareRequest request)
         {
-            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STARTED, "Started Manual Sync for " + request.TagName));
-
             List<Filter> filters = request.Filters.ToList();
             filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ArchiveName));
             filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ConflictDir));
