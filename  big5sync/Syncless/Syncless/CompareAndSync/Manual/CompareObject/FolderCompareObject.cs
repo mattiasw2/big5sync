@@ -98,12 +98,11 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
 
         public BaseCompareObject GetChild(string name)
         {
-            BaseCompareObject child = null;
+            BaseCompareObject child;
 
             if (_contents.TryGetValue(name, out child))
                 return child;
-            else
-                return child;
+            return child;
         }
 
         public bool RemoveChild(string name)
@@ -128,8 +127,8 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             set
             {
 
-                if (Parent != null && value != false)
-                    Parent.Dirty = false;
+                if (Parent != null && value)
+                    Parent.Dirty = true; //EXP
                 _dirty = value;
             }
         }
