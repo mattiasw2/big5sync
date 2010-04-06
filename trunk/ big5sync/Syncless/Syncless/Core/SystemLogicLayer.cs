@@ -32,7 +32,6 @@ namespace Syncless.Core
         /// The User Interface that is using this System Logic Layer.
         /// </summary>
         private IUIInterface _userInterface;
-
         /// <summary>
         /// The Notification Queue Observer for _sllNotification.
         /// </summary>
@@ -40,7 +39,7 @@ namespace Syncless.Core
         /// <summary>
         /// The Table for storing the state of some of the tags that are in transition state(i.e ManualToSeamless, SeamlessToManual)
         /// </summary>
-        private Dictionary<string, TagState> _switchingTable;
+        private readonly Dictionary<string, TagState> _switchingTable;
         /// <summary>
         /// Return the Instance of System Logic Layer.
         /// </summary>
@@ -68,8 +67,6 @@ namespace Syncless.Core
         /// System Logic Layer Notification Queue
         /// </summary>
         public NotificationQueue SllNotification { get; private set; }
-
-        
         /// <summary>
         /// Private constructor(for singleton)
         /// </summary>
@@ -82,15 +79,13 @@ namespace Syncless.Core
             _pathTable = new PathTable();
             _switchingTable = new Dictionary<string, TagState>();
         }
-
-
         #endregion
 
         #region PathTable
         /// <summary>
         /// Path Table
         /// </summary>
-        private PathTable _pathTable;
+        private readonly PathTable _pathTable;
         /// <summary>
         /// Internal Reader, use for debugging purpose
         /// </summary>
@@ -410,7 +405,9 @@ namespace Syncless.Core
                 return;
             }
             //Create the request and Send it.
+// ReSharper disable PossibleNullReferenceException
             AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Parent.FullName, parentList, true, AutoSyncRequestType.New, SyncConfig.Instance,ConvertTagListToTagString(tag));
+// ReSharper restore PossibleNullReferenceException
             SendAutoRequest(request);
         }
         private void HandleFolderRenameEvent(FolderChangeEvent fe)
@@ -517,12 +514,8 @@ namespace Syncless.Core
                     ProfilingLayer.Instance.UpdateDrive(dce.Info);
                     Merge(dce.Info);
                     string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
-                    List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logical);
+                    List<Tag> tagList = TaggingLayer.Instance.RetrieveFilteredTagByLogicalId(logical);
 
-                    foreach (Tag t in tagList)
-                    {
-                        SwitchMonitorTag(t, t.IsSeamless);
-                    }
                 }
                 else
                 {
@@ -777,7 +770,7 @@ namespace Syncless.Core
             try
             {
                 Tag t = TaggingLayer.Instance.DeleteTag(tagname);
-                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                InitiateSave();
                 new DeleteTagCleanDelegate(DeleteTagClean).BeginInvoke(t,null,null);
                 
                 return t != null;
@@ -803,7 +796,7 @@ namespace Syncless.Core
             try
             {
                 Tag t = TaggingLayer.Instance.CreateTag(tagname);
-                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                InitiateSave();
                 return ConvertToTagView(t);
             }
             catch (TagAlreadyExistsException)
@@ -844,7 +837,7 @@ namespace Syncless.Core
                 {
                     StartMonitorTag(tag);
                 }
-                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                InitiateSave();
                 return ConvertToTagView(tag);
             }
             catch (RecursiveDirectoryException)
@@ -893,7 +886,7 @@ namespace Syncless.Core
                     }
 
                 }
-                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                InitiateSave();
                 new CleanMetaDataDelegate(CleanMetaData).BeginInvoke(folder, null, null);
                 
                 return count;
@@ -927,17 +920,21 @@ namespace Syncless.Core
             }
             return true;
         }
-
+        /// <summary>
+        /// Get the current Tag of a particular tag.
+        /// See <see cref="TagState"/> for a list of TagState
+        /// </summary>
+        /// <param name="tagname">The name of the tag</param>
+        /// <returns></returns>
         public TagState GetTagState(string tagname)
         {
 
             Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
             if (tag == null)
             {
-                //TODO
-                throw new Exception();
+                throw new TagNotFoundException(tagname);
             }
-            TagState state = TagState.Undefined;
+            TagState state;
             if (_switchingTable.TryGetValue(tagname, out state))
             {
                 return state;
@@ -946,7 +943,6 @@ namespace Syncless.Core
 
 
         }
-
         /// <summary>
         /// Set the monitor mode for a tag
         /// </summary>
@@ -957,10 +953,7 @@ namespace Syncless.Core
         private void MonitorTag(string tagname, bool mode)
         {
 
-            if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tagname))
-            {
-                return;
-            }
+            
             try
             {
                 Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
@@ -1099,7 +1092,7 @@ namespace Syncless.Core
         {
             try
             {
-                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                InitiateSave();
                 if (!CompareAndSyncController.Instance.PrepareForTermination())
                 {
                     return false;
@@ -1152,7 +1145,7 @@ namespace Syncless.Core
                 _userInterface = inf;
 
                 bool init = Initiate();
-                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                InitiateSave();
                 return init;
             }
             catch (Exception e)
@@ -1161,7 +1154,6 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
-
         /// <summary>
         /// XXXXXXXXXXXXXXXXXXXX NOT IMPLEMENTED XXXXXXXXXXXXXXXXXXXXXXXX
         /// </summary>
@@ -1198,7 +1190,7 @@ namespace Syncless.Core
             try
             {
                 TaggingLayer.Instance.UpdateFilter(tagname, filterlist);
-                SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+                InitiateSave();
                 return true;
             }
             catch (TagNotFoundException)
@@ -1236,7 +1228,7 @@ namespace Syncless.Core
         /// <returns>true if succeess , false if fail.</returns>
         public bool AllowForRemoval(DriveInfo drive)
         {
-            SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+            InitiateSave();
             try
             {
                 if (!drive.IsReady)
@@ -1261,6 +1253,7 @@ namespace Syncless.Core
                 MonitorLayer.Instance.UnMonitorDrive(drive.Name);
                 ProfilingLayer.Instance.RemoveDrive(drive);
                 _userInterface.DriveChanged();
+                _userInterface.PathChanged();
                 return true;
             }
             catch (DriveNotFoundException)
@@ -1360,6 +1353,14 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
+        private void InitiateSave()
+        {
+            if (!SllNotification.Contains(new SaveNotification()))
+            {
+                SllNotification.Enqueue(new SaveNotification());
+            }
+        }
+
         #endregion
 
         #region private /internal / delegate
@@ -1371,7 +1372,7 @@ namespace Syncless.Core
         private void SetTagMode(Tag tag, bool mode)
         {
             tag.IsSeamless = mode;
-            SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+            InitiateSave();
             List<string> pathList = new List<string>();
             foreach (TaggedPath path in tag.FilteredPathList)
             {
@@ -1478,6 +1479,10 @@ namespace Syncless.Core
         /// <param name="mode"></param>
         private void SwitchMonitorTag(Tag tag, bool mode)
         {
+            if (tag.IsDeleted || CompareAndSyncController.Instance.IsQueuedOrSyncing(tag.TagName))
+            {
+                return;
+            }
             TagState state;
             _switchingTable.TryGetValue(tag.TagName, out state);
             if (state == TagState.Undefined)
@@ -1565,7 +1570,7 @@ namespace Syncless.Core
 
             string taggingPath = PathHelper.AddTrailingSlash(drive.RootDirectory.FullName) + TaggingLayer.RELATIVE_TAGGING_SAVE_PATH;
             TaggingLayer.Instance.Merge(taggingPath);
-            SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+            InitiateSave();
         }
         /// <summary>
         /// Initialize
@@ -1795,11 +1800,8 @@ namespace Syncless.Core
         {
             if (tag.IsSeamless)
             {
-                string newPath = ProfilingLayer.Instance.ConvertLogicalToPhysical(path.PathName);
-                if (newPath != null)
-                {
-                    MonitorLayer.Instance.MonitorPath(newPath);
-                }
+                SwitchMode(tag.TagName, TagMode.Manual);
+                SwitchMode(tag.TagName, TagMode.Seamless);
             }
         }
         /// <summary>
@@ -1811,11 +1813,8 @@ namespace Syncless.Core
         {
             if (tag.IsSeamless)
             {
-                string converted = ProfilingLayer.Instance.ConvertLogicalToPhysical(path.PathName);
-                if (converted != null)
-                {
-                    MonitorLayer.Instance.UnMonitorPath(converted);
-                }
+                SwitchMode(tag.TagName, TagMode.Manual);
+                SwitchMode(tag.TagName, TagMode.Seamless);
             }
         }
         /// <summary>
@@ -1824,8 +1823,20 @@ namespace Syncless.Core
         /// <param name="tag"></param>
         internal void AddTag(Tag tag)
         {
-            TaggingLayer.Instance.AddTag(tag);
-            SwitchMonitorTag(tag, tag.IsSeamless);
+            //TaggingLayer.Instance.AddTag(tag);
+            if (tag.IsDeleted)
+            {
+                return;
+            }
+            if (tag.IsSeamless)
+            {
+                SwitchMode(tag.TagName, TagMode.Manual);
+                SwitchMode(tag.TagName, TagMode.Seamless);
+            }
+            else
+            {
+                SwitchMode(tag.TagName, TagMode.Manual);
+            }
         }
         /// <summary>
         /// Remove a Tag ( Notify from Merging )
@@ -1835,7 +1846,9 @@ namespace Syncless.Core
         {
             try
             {
+                SwitchMode(tag.TagName, TagMode.Manual); // Unmonitor all the paths.
                 TaggingLayer.Instance.DeleteTag(tag.TagName);
+                
             }
             catch (TagNotFoundException te)
             {
@@ -1875,6 +1888,12 @@ namespace Syncless.Core
             }
             _userInterface.TagsChanged();
         }
+
+        internal void Save()
+        {
+            SaveLoadHelper.SaveAll(_userInterface.getAppPath());
+        }
+
         #endregion
 
     }

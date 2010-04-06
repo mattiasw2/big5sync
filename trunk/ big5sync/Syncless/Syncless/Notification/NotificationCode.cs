@@ -13,6 +13,7 @@ namespace Syncless.Notification
         MONITOR_PATH_NOTIFICATION,UNMONITOR_PATH_NOTIFICATION,ADD_TAG_NOTIFICATION,DEL_TAG_NOTIFICATION,MONITOR_TAG_NOTIFICATION,TAGGED_PATH_DELETED_NOTIFICATION,
         MessageNotification,
         CancelSyncNotification,
-        AutoSyncCompleteNotification
+        AutoSyncCompleteNotification,
+        SaveNotification
     }
 }

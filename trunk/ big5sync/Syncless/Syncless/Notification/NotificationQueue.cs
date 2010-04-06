@@ -64,6 +64,10 @@ namespace Syncless.Notification
         {
             return _notificationQueue.Count != 0;
         }
+        public bool Contains(AbstractNotification notification)
+        {
+            return _notificationQueue.Contains(notification);
+        }
 
         #endregion
     }
