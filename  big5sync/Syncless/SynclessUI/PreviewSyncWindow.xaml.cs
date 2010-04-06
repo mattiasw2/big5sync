@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
@@ -32,6 +33,9 @@ namespace SynclessUI
             _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Source, typeof (string)));
             _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Operation, typeof (string)));
             _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Dest, typeof (string)));
+			_previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Tooltip, typeof (string)));
+			_previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceIcon, typeof (string)));
+			_previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestIcon, typeof (string)));
             _main = main;
             Owner = _main;
             ShowInTaskbar = false;
@@ -137,7 +141,36 @@ namespace SynclessUI
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            string path = e.Uri.AbsoluteUri.Substring(8);
+
+            bool exists = false;
+
+            try {
+                DirectoryInfo di = new DirectoryInfo(path);
+
+                if(di.Exists)
+                    exists = true;
+            } catch
+            {
+                
+            }
+
+            try
+            {
+                FileInfo fi = new FileInfo(path);
+
+                if (fi.Exists)
+                    exists = true;
+            }
+            catch
+            {
+
+            }
+            
+            if(exists)
+                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            else
+                DialogHelper.ShowError(this, "File/Folder Not Found", "The file/folder does not exist.");
 
             e.Handled = true;
         }

@@ -36,12 +36,12 @@
 			</Button>
 		</StackPanel>
 		<Image x:Name="TagIcon" HorizontalAlignment="Right" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,-25,-25,0" Grid.ColumnSpan="2" Source="Icons/folder.ico"/>
-        <toolkit:DataGrid ItemsSource="{Binding PreviewSyncData, ElementName=Window}" Margin="5,5,0,0" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="2" IsReadOnly="True" FontFamily="Century Gothic" MinHeight="100" MinWidth="700" Height="Auto" Width="Auto" MaxHeight="300" MaxWidth="700" RowBackground="#FF666666" AlternatingRowBackground="#FF555555" HorizontalGridLinesBrush="#FF828790" VerticalGridLinesBrush="#FF828790" CanUserResizeRows="False">
+        <toolkit:DataGrid ItemsSource="{Binding PreviewSyncData, ElementName=Window}" Margin="5,5,0,5" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="2" IsReadOnly="True" FontFamily="Century Gothic" MinHeight="100" MinWidth="700" Height="Auto" Width="Auto" MaxHeight="300" MaxWidth="700" RowBackground="#FF666666" AlternatingRowBackground="#FF555555" HorizontalGridLinesBrush="#FF828790" VerticalGridLinesBrush="#FF828790" CanUserResizeRows="False">
             <toolkit:DataGrid.Columns>
-                <toolkit:DataGridTemplateColumn Header="Source" IsReadOnly="True" Width="0.43*" SortMemberPath="source">
+                <toolkit:DataGridTemplateColumn Header="Source" IsReadOnly="True" Width="0.47*" SortMemberPath="source" CanUserReorder="False">
                     <toolkit:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock>
+                            <TextBlock VerticalAlignment="Center"><Image Width="16" Height="16" Source="{Binding Path=sourceicon}" />
 							<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="{Binding source}"><TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding source}"/>
 							</Hyperlink>
                             </TextBlock>
@@ -49,12 +49,18 @@
                     </toolkit:DataGridTemplateColumn.CellTemplate>
                 </toolkit:DataGridTemplateColumn>
                 
-                <toolkit:DataGridTextColumn Binding="{Binding operation}" Header="Operation" Width="0.14*" SortMemberPath="Operation" Foreground="White"/>
-				
-                <toolkit:DataGridTemplateColumn Header="Destination" IsReadOnly="True" Width="0.43*" SortMemberPath="destination">
+				<toolkit:DataGridTemplateColumn Header="" IsReadOnly="True" Width="0.06*" SortMemberPath="operation" CanUserResize="False" CanUserReorder="False">
 			        <toolkit:DataGridTemplateColumn.CellTemplate>
 			            <DataTemplate>
-                            <TextBlock>
+                            <Image Width="25" Height="15" Source="{Binding Path=operation}" ToolTip="{Binding tooltip}"/>
+			            </DataTemplate>
+			        </toolkit:DataGridTemplateColumn.CellTemplate>
+				</toolkit:DataGridTemplateColumn>
+				
+                <toolkit:DataGridTemplateColumn Header="Destination" IsReadOnly="True" Width="0.47*" SortMemberPath="destination" CanUserReorder="False">
+			        <toolkit:DataGridTemplateColumn.CellTemplate>
+			            <DataTemplate>
+                            <TextBlock><Image Width="16" Height="16" Source="{Binding Path=desticon}" />
 							<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="{Binding destination}"><TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding destination}" />
 							</Hyperlink>
                             </TextBlock>
