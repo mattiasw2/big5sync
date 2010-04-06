@@ -17,6 +17,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         private readonly FilterChain _filterChain;
         private readonly List<string> _typeConflicts;
         private SyncProgress _progress;
+
         public BuilderVisitor(List<Filter> filter, List<string> typeConflicts,SyncProgress progress)
         {
             _filter = filter;
