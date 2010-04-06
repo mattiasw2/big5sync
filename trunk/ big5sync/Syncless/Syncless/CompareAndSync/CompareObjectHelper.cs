@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Syncless.CompareAndSync.CompareObject;
+using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.CompareAndSync.Manual.Visitor;
 using Syncless.Notification;
 

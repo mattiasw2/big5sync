@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Exceptions;
+using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.CompareAndSync.Manual.Visitor;
 using Syncless.CompareAndSync.Request;
 using Syncless.Core;

@@ -277,8 +277,8 @@ namespace Syncless.CompareAndSync.Seamless
             string fullPath = xmlWriteObj.Parent;
 >>>>>>> .r2169
             XmlDocument xmlTodoDoc = new XmlDocument();
-            string todoPath = Path.Combine(fullPath, CommonXMLConstants.TodoPath);
-            CommonMethods.CreateToDoFile(fullPath);
+            string todoPath = Path.Combine(fullPath, CommonXMLConstants.LastKnownStatePath);
+            CommonMethods.CreateLastKnownStateFile(fullPath);
             CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
             AppendActionFileToDo(xmlTodoDoc, xmlWriteObj, CommonXMLConstants.ActionDeleted, deletedNode);
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
@@ -291,8 +291,8 @@ namespace Syncless.CompareAndSync.Seamless
                 return;
 
             XmlDocument xmlTodoDoc = new XmlDocument();
-            string todoPath = Path.Combine(parentPath, CommonXMLConstants.TodoPath);
-            CommonMethods.CreateToDoFile(parentPath);
+            string todoPath = Path.Combine(parentPath, CommonXMLConstants.LastKnownStatePath);
+            CommonMethods.CreateLastKnownStateFile(parentPath);
             CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
             AppendActionFolderToDo(xmlTodoDoc, xmlWriteObj, CommonXMLConstants.ActionDeleted);
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
@@ -348,7 +348,7 @@ namespace Syncless.CompareAndSync.Seamless
 
         private static void DeleteFileToDoByName(XMLWriteFileObject xmlWriteObj)
         {
-            string todoXmlPath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.TodoPath);
+            string todoXmlPath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.LastKnownStatePath);
             if (!File.Exists(todoXmlPath))
                 return;
 
@@ -384,7 +384,7 @@ namespace Syncless.CompareAndSync.Seamless
 
         private static void DeleteFolderToDoByName(XMLWriteFolderObject xmlWriteObj)
         {
-            string todoXmlPath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.TodoPath);
+            string todoXmlPath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.LastKnownStatePath);
             if (!File.Exists(todoXmlPath))
                 return;
 

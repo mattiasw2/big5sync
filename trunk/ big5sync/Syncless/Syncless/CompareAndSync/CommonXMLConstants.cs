@@ -5,9 +5,9 @@
         //XML Paths
         public const string MetaDir = ".syncless";
         public const string XMLName = "syncless.xml";
-        public const string TodoName = "todo.xml";
+        public const string LastKnownStateName = "lastknownstate.xml";
         public const string MetadataPath = MetaDir + "\\" + XMLName;
-        public const string TodoPath = MetaDir + "\\" + TodoName;
+        public const string LastKnownStatePath = MetaDir + "\\" + LastKnownStateName;
 
         //XML Metadata (syncless.xml)
         public const string NodeMetaData = "meta-data";
@@ -16,7 +16,7 @@
         public const string NodeHash = "hash";
         public const string NodeLastCreated = "last_created";
 
-        //Todo Metadata (todo.xml)
+        //Last Known State Metadata (lastknownstate.xml)
         public const string NodeLastKnownState = "last_known_state";
         public const string NodeAction = "action";
         public const string ActionDeleted = "deleted";
@@ -34,7 +34,7 @@
         public const string XPathHash = "/" + NodeHash;
         public const string XPathLastCreated = "/" + NodeLastCreated;
 
-        //Todo Metadata XPath
+        //Last Known State Metadata XPath
         public const string XPathLastKnownState = "/" + NodeLastKnownState;
         public const string XPathAction = "/" + NodeAction;
 

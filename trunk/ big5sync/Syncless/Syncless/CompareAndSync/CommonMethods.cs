@@ -225,10 +225,10 @@ namespace Syncless.CompareAndSync
             node.ParentNode.RemoveChild(node);
         }
 
-        public static void CreateToDoFile(string path)
+        public static void CreateLastKnownStateFile(string path)
         {
-            string todoXML = Path.Combine(path, CommonXMLConstants.TodoPath);
-            if (File.Exists(todoXML))
+            string lastKnownXML = Path.Combine(path, CommonXMLConstants.LastKnownStatePath);
+            if (File.Exists(lastKnownXML))
                 return;
 
             while (true)
@@ -237,7 +237,7 @@ namespace Syncless.CompareAndSync
                 {
                     DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, CommonXMLConstants.MetaDir));
                     di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-                    XmlTextWriter writer = new XmlTextWriter(todoXML, null);
+                    XmlTextWriter writer = new XmlTextWriter(lastKnownXML, null);
                     writer.Formatting = Formatting.Indented;
                     writer.WriteStartDocument();
                     writer.WriteStartElement(CommonXMLConstants.NodeLastKnownState);
@@ -257,8 +257,8 @@ namespace Syncless.CompareAndSync
                 }
                 catch (XmlException)
                 {
-                    if (File.Exists(todoXML))
-                        File.Delete(todoXML);
+                    if (File.Exists(lastKnownXML))
+                        File.Delete(lastKnownXML);
                 }
             }
         }

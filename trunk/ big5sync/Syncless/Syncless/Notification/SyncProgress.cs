@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Syncless.CompareAndSync.CompareObject;
 using Syncless.Core;
 using Syncless.Notification.UINotification;
 

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Enum;
+using Syncless.CompareAndSync.Manual.CompareObject;
 
 namespace Syncless.CompareAndSync.Manual.Visitor
 {
@@ -149,17 +149,17 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
             else
             {
-                string path = Path.Combine(file.GetSmartParentPath(counter), CommonXMLConstants.TodoPath);
+                string path = Path.Combine(file.GetSmartParentPath(counter), CommonXMLConstants.LastKnownStatePath);
 
                 if (File.Exists(path))
                 {
-                    XmlDocument todoXMLDoc = new XmlDocument();
-                    CommonMethods.LoadXML(ref todoXMLDoc, path);
-                    XmlNode todoNode = todoXMLDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(file.Name) + "]");
+                    XmlDocument lastKnownXMLDoc = new XmlDocument();
+                    CommonMethods.LoadXML(ref lastKnownXMLDoc, path);
+                    XmlNode fileNode = lastKnownXMLDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(file.Name) + "]");
 
-                    if (todoNode != null)
+                    if (fileNode != null)
                     {
-                        XmlNodeList nodeList = todoNode.ChildNodes;
+                        XmlNodeList nodeList = fileNode.ChildNodes;
                         for (int i = 0; i < nodeList.Count; i++)
                         {
                             XmlNode childNode = nodeList[i];
@@ -167,7 +167,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                             {
                                 case CommonXMLConstants.NodeAction:
                                     string action = childNode.InnerText;
-                                    file.ToDoAction[counter] = action.Equals(CommonXMLConstants.ActionDeleted) ? LastKnownState.Deleted : LastKnownState.Renamed;
+                                    file.LastKnownState[counter] = action.Equals(CommonXMLConstants.ActionDeleted) ? LastKnownState.Deleted : LastKnownState.Renamed;
                                     break;
                                 case CommonXMLConstants.NodeLastModified:
                                     file.MetaLastWriteTime[counter] = long.Parse(childNode.InnerText);
@@ -418,17 +418,17 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
             else
             {
-                string path = Path.Combine(folder.GetSmartParentPath(counter), CommonXMLConstants.TodoPath);
+                string path = Path.Combine(folder.GetSmartParentPath(counter), CommonXMLConstants.LastKnownStatePath);
 
                 if (File.Exists(path))
                 {
-                    XmlDocument todoXmlDoc = new XmlDocument();
-                    CommonMethods.LoadXML(ref todoXmlDoc, path);
-                    XmlNode todoNode = todoXmlDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
+                    XmlDocument lastKnownXmlDoc = new XmlDocument();
+                    CommonMethods.LoadXML(ref lastKnownXmlDoc, path);
+                    XmlNode folderNode = lastKnownXmlDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
 
-                    if (todoNode != null)
+                    if (folderNode != null)
                     {
-                        XmlNodeList nodeList = todoNode.ChildNodes;
+                        XmlNodeList nodeList = folderNode.ChildNodes;
                         for (int i = 0; i < nodeList.Count; i++)
                         {
                             XmlNode childNode = nodeList[i];
@@ -438,9 +438,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                                 case CommonXMLConstants.NodeAction:
                                     string action = childNode.InnerText;
                                     if (action.Equals("deleted"))
-                                        folder.ToDoAction[counter] = LastKnownState.Deleted;
+                                        folder.LastKnownState[counter] = LastKnownState.Deleted;
                                     else
-                                        folder.ToDoAction[counter] = LastKnownState.Renamed;
+                                        folder.LastKnownState[counter] = LastKnownState.Renamed;
                                     break;
                                 case CommonXMLConstants.NodeLastUpdated:
                                     folder.MetaUpdated[counter] = long.Parse(childNode.InnerText);

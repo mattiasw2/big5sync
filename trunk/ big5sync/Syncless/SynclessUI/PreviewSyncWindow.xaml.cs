@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
-using Syncless.CompareAndSync.CompareObject;
+using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Core.Exceptions;
 using SynclessUI.Helper;
 using SynclessUI.Visitor;

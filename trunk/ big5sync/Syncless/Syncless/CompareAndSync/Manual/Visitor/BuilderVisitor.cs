@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Syncless.CompareAndSync.CompareObject;
+using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Core;
 using Syncless.Filters;
 using Syncless.Logging;

@@ -29,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Syncless.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL" />
@@ -53,10 +54,10 @@
     <Compile Include="CompareAndSync\CommonMethods.cs" />
     <Compile Include="CompareAndSync\CompareAndSyncController.cs" />
     <Compile Include="CompareAndSync\CompareObjectHelper.cs" />
-    <Compile Include="CompareAndSync\CompareObject\BaseCompareObject.cs" />
-    <Compile Include="CompareAndSync\CompareObject\FileCompareObject.cs" />
-    <Compile Include="CompareAndSync\CompareObject\FolderCompareObject.cs" />
-    <Compile Include="CompareAndSync\CompareObject\RootCompareObject.cs" />
+    <Compile Include="CompareAndSync\Manual\CompareObject\BaseCompareObject.cs" />
+    <Compile Include="CompareAndSync\Manual\CompareObject\FileCompareObject.cs" />
+    <Compile Include="CompareAndSync\Manual\CompareObject\FolderCompareObject.cs" />
+    <Compile Include="CompareAndSync\Manual\CompareObject\RootCompareObject.cs" />
     <Compile Include="CompareAndSync\Enum\AutoSyncRequestType.cs" />
     <Compile Include="CompareAndSync\Enum\FinalState.cs" />
     <Compile Include="CompareAndSync\Enum\MetaChangeType.cs" />
@@ -94,7 +95,7 @@
     <Compile Include="CompareAndSync\Manual\Visitor\XMLMetadataVisitor.cs" />
     <Compile Include="CompareAndSync\Manual\Visitor\XMLWriterVisitor.cs" />
     <Compile Include="CompareAndSync\Seamless\SeamlessXMLHelper.cs" />
-    <Compile Include="CompareAndSync\CompareObject\XMLCompareObject.cs" />
+    <Compile Include="CompareAndSync\Manual\CompareObject\XMLCompareObject.cs" />
     <Compile Include="CompareAndSync\Seamless\XMLWriteObject\XMLWriteFolderObject.cs" />
     <Compile Include="CompareAndSync\Seamless\XMLWriteObject\XMLWriteFileObject.cs" />
     <Compile Include="CompareAndSync\Seamless\XMLWriteObject\BaseXMLWriteObject.cs" />
