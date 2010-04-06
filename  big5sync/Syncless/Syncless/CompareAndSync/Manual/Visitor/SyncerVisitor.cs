@@ -31,13 +31,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 return;
             }
 
-            //int maxPriorityPos = 0;
-            //for (int i = 0; i < numOfPaths; i++)
-            //{
-            //    if (file.Priority[i] > file.Priority[maxPriorityPos])
-            //        maxPriorityPos = i;
-            //}
-
             int maxPriorityPos = file.SourcePosition;
 
             if (file.Priority[maxPriorityPos] > 0)
@@ -129,7 +122,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     if (fco.Priority[i] != fco.Priority[srcFilePos])
                     {
                         string destFile = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
-                        bool fileExists = File.Exists(destFile);
+                        bool fileExists = fco.Exists[i]; /* File.Exists(destFile); */
 
                         try
                         {

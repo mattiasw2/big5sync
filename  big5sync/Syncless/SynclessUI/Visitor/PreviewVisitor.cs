@@ -9,6 +9,7 @@ namespace SynclessUI.Visitor
     public class PreviewVisitor : IVisitor
     {
         #region IVisitor Members
+
         private DataTable _syncData;
         public const string Source = "source";
         public const string Dest = "destination";
@@ -18,10 +19,10 @@ namespace SynclessUI.Visitor
         private const string DeleteConstant = "--";
         private const string UpdateConstant = "-=>";
         private const string RenameConstant = "--++";
+
         public PreviewVisitor(DataTable syncData)
         {
             _syncData = syncData;
-
         }
 
         public DataTable SyncData
@@ -35,45 +36,48 @@ namespace SynclessUI.Visitor
             if (file.Invalid)
                 return;
 
-            int maxPriorityPos = 0;
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                if (file.Priority[i] > file.Priority[maxPriorityPos])
-                    maxPriorityPos = i;
-            }
-            
+            int maxPriorityPos = file.SourcePosition;
+
             if (file.Priority[maxPriorityPos] > 0)
             {
-                string operation = "";
-                switch (file.ChangeType[maxPriorityPos])
-                {
-                    case MetaChangeType.New: operation = CopyConstant; break;
-                    case MetaChangeType.Delete: operation = DeleteConstant; break;
-                    case MetaChangeType.Rename: operation = RenameConstant; break;
-                    case MetaChangeType.Update: operation = UpdateConstant; break;
-                    case MetaChangeType.NoChange: operation = CopyConstant; break;
-                }
-
-                Console.WriteLine(operation);
-
                 for (int i = 0; i < file.Priority.Length; i++)
                 {
-                    if (i != maxPriorityPos && file.Priority[i]!=file.Priority[maxPriorityPos])
+                    if (i != maxPriorityPos && file.Priority[i] != file.Priority[maxPriorityPos])
                     {
+                        string operation = string.Empty, source = string.Empty, dest = string.Empty;
+                        Console.WriteLine(operation);
                         var row = SyncData.NewRow();
-                        row[Source] = Path.Combine(file.GetSmartParentPath(maxPriorityPos), file.Name);
+
+                        switch (file.ChangeType[maxPriorityPos])
+                        {
+                            case MetaChangeType.New:
+                            case MetaChangeType.Update:
+                            case MetaChangeType.NoChange:
+                                source = Path.Combine(file.GetSmartParentPath(maxPriorityPos), file.Name);
+                                dest = Path.Combine(file.GetSmartParentPath(i), file.Name);
+                                operation = file.Exists[i] ? UpdateConstant : CopyConstant;
+                                break;
+                            case MetaChangeType.Delete:
+                                source = Path.Combine(file.GetSmartParentPath(maxPriorityPos), file.Name);
+                                dest = Path.Combine(file.GetSmartParentPath(i), file.Name);
+                                operation = DeleteConstant;
+                                break;
+                            case MetaChangeType.Rename:
+                                string oldName = Path.Combine(file.GetSmartParentPath(i), file.Name);
+                                source = File.Exists(oldName) ? oldName : Path.Combine(file.GetSmartParentPath(maxPriorityPos), file.NewName);
+                                dest = Path.Combine(file.GetSmartParentPath(i), file.NewName);
+                                operation = File.Exists(oldName) ? RenameConstant : CopyConstant;
+                                break;
+                        }
+                        row[Source] = source;
                         row[Operation] = operation;
-                        row[Dest] = Path.Combine(file.GetSmartParentPath(i), file.Name);
+                        row[Dest] = dest;
                         SyncData.Rows.Add(row);
                         SyncData.AcceptChanges();
-
                     }
                 }
 
             }
-
-            //Basic logic: Look for highest priority and propagate it.
-
         }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
@@ -85,22 +89,39 @@ namespace SynclessUI.Visitor
 
             if (folder.Priority[maxPriorityPos] > 0)
             {
-                string operation = "";
-                switch (folder.ChangeType[maxPriorityPos])
-                {
-                    case MetaChangeType.New: operation = CopyConstant; break;
-                    case MetaChangeType.Delete: operation = DeleteConstant; break;
-                    case MetaChangeType.Rename: operation = RenameConstant; break;
-                }
-
                 for (int i = 0; i < folder.Priority.Length; i++)
                 {
                     if (i != maxPriorityPos && folder.Priority[i] != folder.Priority[maxPriorityPos])
                     {
+                        string operation = string.Empty, source = string.Empty, dest = string.Empty;
+                        Console.WriteLine(operation);
+
                         var row = SyncData.NewRow();
-                        row[Source] = Path.Combine(folder.GetSmartParentPath(maxPriorityPos), folder.Name);
+
+                        switch (folder.ChangeType[maxPriorityPos])
+                        {
+                            case MetaChangeType.New:
+                            case MetaChangeType.NoChange:
+                                source = Path.Combine(folder.GetSmartParentPath(maxPriorityPos), folder.Name);
+                                dest = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
+                                operation = CopyConstant;
+                                break;
+                            case MetaChangeType.Delete:
+                                source = Path.Combine(folder.GetSmartParentPath(maxPriorityPos), folder.Name);
+                                dest = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
+                                operation = DeleteConstant;
+                                break;
+                            case MetaChangeType.Rename:
+                                string oldFolderName = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
+                                source = File.Exists(oldFolderName) ? oldFolderName : Path.Combine(folder.GetSmartParentPath(maxPriorityPos), folder.NewName);
+                                dest = Path.Combine(folder.GetSmartParentPath(i), folder.NewName);
+                                operation = Directory.Exists(oldFolderName) ? RenameConstant : CopyConstant;
+                                break;
+                        }
+
+                        row[Source] = source;
+                        row[Dest] = dest;
                         row[Operation] = operation;
-                        row[Dest] = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
                         _syncData.Rows.Add(row);
                     }
                 }
