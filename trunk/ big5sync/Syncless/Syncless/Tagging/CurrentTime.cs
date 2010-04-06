@@ -2,12 +2,18 @@
 
 namespace Syncless.Tagging
 {
+    /// <summary>
+    /// CurrentTime class allows for repeated use of the same DateTime.Now instance
+    /// </summary>
     internal class CurrentTime
     {
+        /// <summary>
+        /// Private instance of a <see cref="DateTime">DateTime</see> object
+        /// </summary>
         private static DateTime _currentDateTime;
 
         /// <summary>
-        /// The current time in long format
+        /// Gets the current time in long format
         /// </summary>
         internal long CurrentTimeLong
         {
@@ -15,8 +21,9 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// The current time in string format DD/MM/YY HH:MM:SS
+        /// Gets the current time in string format
         /// </summary>
+        /// <remarks>DD/MM/YY HH:MM:SS</remarks>
         internal string CurrentTimeString
         {
             get { return GetCurrentTimeString(); }
@@ -30,11 +37,20 @@ namespace Syncless.Tagging
             _currentDateTime = DateTime.Now;
         }
 
+        /// <summary>
+        /// Gets the number of ticks of the _currentDateTime <see cref="DateTime">DateTime</see> attribute
+        /// </summary>
+        /// <returns>The number of ticks that represents the _currentDateTime attribute</returns>
         private static long GetCurrentTime()
         {
             return _currentDateTime.Ticks;
         }
 
+        /// <summary>
+        /// Gets the string format of the _currentDateTime <see cref="DateTime">DateTime</see> attribute
+        /// </summary>
+        /// <returns>The string format that represents the _currentDateTime attribute</returns>
+        /// <remarks>DD/MM/YY HH:MM:SS</remarks>
         private static string GetCurrentTimeString()
         {
             string day = (_currentDateTime.Day < 10) ? ("0" + _currentDateTime.Day.ToString()) : _currentDateTime.Day.ToString();
