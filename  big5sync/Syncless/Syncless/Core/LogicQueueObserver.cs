@@ -112,6 +112,10 @@ namespace Syncless.Core
                     return;
                 _sll.Untag(tpdNotification.DeletedPaths);
             }
+            else if (notification.NotificationCode == NotificationCode.SaveNotification)
+            {
+                _sll.Save();
+            }
 
 
         }

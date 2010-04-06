@@ -12,7 +12,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         /// <summary>
         /// Initializes a new instance of <c>RootCompareObject</c> given the list of paths to synchronize.
         /// </summary>
-        /// <param name="paths">An <see cref="Array"> of <see cref="string"/> containing the paths to synchronize.</param>
+        /// <param name="paths">An <see cref="Array" /> of <see cref="string"/> containing the paths to synchronize.</param>
         public RootCompareObject(string[] paths)
             : base(null, paths.Length, null)
         {
