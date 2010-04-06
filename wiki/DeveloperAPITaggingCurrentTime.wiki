@@ -7,22 +7,22 @@ Provides properties which enclose the `DateTime.Now` property. The object create
 = Properties Summary =
 
 || *Property* || *Description* ||
-|| [#CurrentTimeLong CurrentTimeLong] || The current time in long format ||
-|| [#CurrentTimeString CurrentTimeString] || The current time in string format DD/MM/YY HH:MM:SS ||
+|| [#CurrentTimeLong CurrentTimeLong] || Gets the current time in long format ||
+|| [#CurrentTimeString CurrentTimeString] || Gets the current time in string format DD/MM/YY HH:MM:SS ||
 
 = Properties Details =
 
 == !CurrentTimeLong ==
 
 `internal long` !CurrentTimeLong
-        The current time in long format.
+        Gets the current time in long format.
 
 ----
 
 == !CurrentTimeString ==
 
 `internal long` !CurrentTimeString
-        The current time in string format DD/MM/YY HH:MM:SS.
+        Gets the current time in string format DD/MM/YY HH:MM:SS.
 
 ----
 
