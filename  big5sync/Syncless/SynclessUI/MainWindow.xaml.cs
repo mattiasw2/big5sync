@@ -301,6 +301,8 @@ namespace SynclessUI
                     BdrTaggedPath.Visibility = Visibility.Hidden;
                     ProgressBarSync.Visibility = Visibility.Hidden;
                     LblProgress.Visibility = Visibility.Hidden;
+                    SelectedTag = null;
+                    ListTaggedPath.ItemsSource = null;
                 }
             }
             catch (UnhandledException)
@@ -677,7 +679,7 @@ namespace SynclessUI
         {
             try
             {
-                if (!ListTaggedPath.HasItems)
+                if (SelectedTag != null && !ListTaggedPath.HasItems)
                 {
                     /*
                     string messageBoxText = "There is nothing to untag.";
