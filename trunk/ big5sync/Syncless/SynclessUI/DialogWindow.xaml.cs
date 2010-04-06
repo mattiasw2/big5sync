@@ -18,15 +18,19 @@ namespace SynclessUI
     public partial class DialogWindow : Window
     {
         private bool _closingAnimationNotCompleted = true;
-        private Window _parentWindow;
+        private readonly Window _parentWindow;
 
         public DialogWindow(Window parentWindow, string caption, string message, DialogType dt)
         {
             InitializeComponent();
             CannotBeClosed = false;
             _parentWindow = parentWindow;
-            Owner = _parentWindow;
             ShowInTaskbar = false;
+
+			if(dt != DialogType.Indeterminate) {
+				Owner = _parentWindow;
+			}
+			
             Application.Current.Properties["DialogWindowChoice"] = false;
             LblCaption.Content = caption;
             TxtBlkMessageBoxText.Text = message;
