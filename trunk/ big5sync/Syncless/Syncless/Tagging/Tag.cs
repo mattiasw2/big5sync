@@ -67,7 +67,7 @@ namespace Syncless.Tagging
 
         /// <summary>
         /// Gets a clone of the list of full path name of tagged paths whose <see cref="IsDeleted">IsDeleted
-        /// </see>property is set to false
+        /// </see> property is set to false
         /// </summary>
         public List<string> FilteredPathListString
         {
