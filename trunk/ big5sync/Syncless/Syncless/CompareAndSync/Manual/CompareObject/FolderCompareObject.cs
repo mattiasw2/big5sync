@@ -98,11 +98,11 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         }
         
         /// <summary>
-        /// 
+        /// Finds an identical file with the given hash and name.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="hash"></param>
-        /// <param name="creationTime"></param>
+        /// <param name="name">The name to match.</param>
+        /// <param name="hash">The hash to match.</param>
+        /// <param name="creationTime">The creation time to match.</param>
         /// <param name="pos"></param>
         /// <returns></returns>
         public FileCompareObject GetIdenticalFile(string name, string hash, long creationTime, int pos)
