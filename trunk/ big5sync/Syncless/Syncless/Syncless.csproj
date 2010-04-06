@@ -95,9 +95,9 @@
     <Compile Include="CompareAndSync\Manual\Visitor\XMLWriterVisitor.cs" />
     <Compile Include="CompareAndSync\Seamless\SeamlessXMLHelper.cs" />
     <Compile Include="CompareAndSync\CompareObject\XMLCompareObject.cs" />
-    <Compile Include="CompareAndSync\XMLWriteObject\XMLWriteFolderObject.cs" />
-    <Compile Include="CompareAndSync\XMLWriteObject\XMLWriteFileObject.cs" />
-    <Compile Include="CompareAndSync\XMLWriteObject\BaseXMLWriteObject.cs" />
+    <Compile Include="CompareAndSync\Seamless\XMLWriteObject\XMLWriteFolderObject.cs" />
+    <Compile Include="CompareAndSync\Seamless\XMLWriteObject\XMLWriteFileObject.cs" />
+    <Compile Include="CompareAndSync\Seamless\XMLWriteObject\BaseXMLWriteObject.cs" />
     <Compile Include="Core\Conflict\Conflict.cs" />
     <Compile Include="Core\Conflict\ConflictQueue.cs" />
     <Compile Include="Core\DeletedTaggedPathWatcher.cs" />

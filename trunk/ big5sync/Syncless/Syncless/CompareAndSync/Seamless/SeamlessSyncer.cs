@@ -5,7 +5,7 @@ using System.IO;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Exceptions;
 using Syncless.CompareAndSync.Request;
-using Syncless.CompareAndSync.XMLWriteObject;
+using Syncless.CompareAndSync.Seamless.XMLWriteObject;
 using Syncless.Core;
 using Syncless.Logging;
 

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml;
 using Syncless.CompareAndSync.Enum;
-using Syncless.CompareAndSync.XMLWriteObject;
+using Syncless.CompareAndSync.Seamless.XMLWriteObject;
 
 namespace Syncless.CompareAndSync.Seamless
 {

@@ -1,6 +1,6 @@
 ﻿using Syncless.CompareAndSync.Enum;
 
-namespace Syncless.CompareAndSync.XMLWriteObject
+namespace Syncless.CompareAndSync.Seamless.XMLWriteObject
 {
     public class XMLWriteFileObject : BaseXMLWriteObject
     {
