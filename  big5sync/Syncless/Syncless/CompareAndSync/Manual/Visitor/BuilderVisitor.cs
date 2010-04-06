@@ -16,9 +16,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         private readonly List<Filter> _filter;
         private readonly FilterChain _filterChain;
         private readonly List<string> _typeConflicts;
-        private SyncProgress _progress;
+        private readonly SyncProgress _progress;
 
-        public BuilderVisitor(List<Filter> filter, List<string> typeConflicts,SyncProgress progress)
+        public BuilderVisitor(List<Filter> filter, List<string> typeConflicts, SyncProgress progress)
         {
             _filter = filter;
             _filterChain = new FilterChain();
@@ -26,16 +26,16 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             _progress = progress;
         }
 
-        public void Visit(FileCompareObject file, int numOfPaths) {  }
+        public void Visit(FileCompareObject file, int numOfPaths) { }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
-            
+
             RootCompareObject root = folder as RootCompareObject;
 
             for (int index = 0; index < numOfPaths; index++)
             {
-                
+
                 string path = root == null ? Path.Combine(folder.GetSmartParentPath(index), folder.Name) : root.Paths[index];
 
                 DirectoryInfo f = new DirectoryInfo(path);

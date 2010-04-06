@@ -4,6 +4,9 @@ using Syncless.CompareAndSync.Enum;
 
 namespace Syncless.CompareAndSync.Manual.CompareObject
 {
+    /// <summary>
+    /// Abstract class <c>BaseCompareObject</c>.
+    /// </summary>
     public abstract class BaseCompareObject
     {
         //Actual

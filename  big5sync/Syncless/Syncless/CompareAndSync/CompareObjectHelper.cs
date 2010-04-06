@@ -28,7 +28,7 @@ namespace Syncless.CompareAndSync
 
             while (levelQueue.Count > 0)
             {
-                if (syncProgress.State == SyncState.Cancelled)
+                if (syncProgress != null && syncProgress.State == SyncState.Cancelled)
                     return;
 
                 BaseCompareObject currObj = levelQueue.Dequeue();
