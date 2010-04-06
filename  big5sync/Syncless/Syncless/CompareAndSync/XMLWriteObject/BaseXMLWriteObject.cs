@@ -4,27 +4,27 @@ namespace Syncless.CompareAndSync.XMLWriteObject
 {
     public abstract class BaseXMLWriteObject
     {
-        private readonly string _name, _fullPath, _newName;
+        private readonly string _name, _parent, _newName;
         private readonly long _creationTime;
         private readonly MetaChangeType _changeType;
         private readonly long _metaUpdated;
 
-        protected BaseXMLWriteObject(string name, string fullPath, MetaChangeType changeType, long metaUpdated)
+        protected BaseXMLWriteObject(string name, string parent, MetaChangeType changeType, long metaUpdated)
         {
             _name = name;
-            _fullPath = fullPath;
+            _parent = parent;
             _changeType = changeType;
             _metaUpdated = metaUpdated;
         }
 
-        protected BaseXMLWriteObject(string name, string fullPath, long creationTime, MetaChangeType changeType, long metaUpdated)
-            : this(name, fullPath, changeType, metaUpdated)
+        protected BaseXMLWriteObject(string name, string parent, long creationTime, MetaChangeType changeType, long metaUpdated)
+            : this(name, parent, changeType, metaUpdated)
         {
             _creationTime = creationTime;
         }
 
-        protected BaseXMLWriteObject(string name, string newName, string fullPath, long creationTime, MetaChangeType changeType, long metaUpdated)
-            : this(name, fullPath, creationTime, changeType, metaUpdated)
+        protected BaseXMLWriteObject(string name, string newName, string parent, MetaChangeType changeType, long metaUpdated)
+            : this(name, parent, changeType, metaUpdated)
         {
             _newName = newName;
         }
@@ -34,9 +34,9 @@ namespace Syncless.CompareAndSync.XMLWriteObject
             get { return _name; }
         }
 
-        public string FullPath
+        public string Parent
         {
-            get { return _fullPath; }
+            get { return _parent; }
         }
 
         public long CreationTime

@@ -45,8 +45,8 @@ namespace Syncless.CompareAndSync.Seamless
         private static void CreateFile(XMLWriteFileObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, CommonXMLConstants.MetadataPath);
-            CommonMethods.CreateFileIfNotExist(xmlWriteObj.FullPath);
+            string xmlFilePath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.MetadataPath);
+            CommonMethods.CreateFileIfNotExist(xmlWriteObj.Parent);
             CommonMethods.LoadXML(ref xmlDoc, xmlFilePath);
 
             CommonMethods.DoFileCleanUp(xmlDoc, xmlWriteObj.Name);
@@ -84,8 +84,8 @@ namespace Syncless.CompareAndSync.Seamless
         private static void UpdateFile(XMLWriteFileObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, CommonXMLConstants.MetadataPath);
-            CommonMethods.CreateFileIfNotExist(xmlWriteObj.FullPath);
+            string xmlFilePath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.MetadataPath);
+            CommonMethods.CreateFileIfNotExist(xmlWriteObj.Parent);
             CommonMethods.LoadXML(ref xmlDoc, xmlFilePath);
 
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(xmlWriteObj.Name) + "]");
@@ -130,8 +130,8 @@ namespace Syncless.CompareAndSync.Seamless
         {
             XmlDocument xmlDoc = new XmlDocument();
             XmlNode tempNode = null;
-            string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, CommonXMLConstants.MetadataPath);
-            CommonMethods.CreateFileIfNotExist(xmlWriteObj.FullPath);
+            string xmlFilePath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.MetadataPath);
+            CommonMethods.CreateFileIfNotExist(xmlWriteObj.Parent);
             CommonMethods.LoadXML(ref xmlDoc, xmlFilePath);
 
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(xmlWriteObj.Name) + "]");
@@ -147,7 +147,7 @@ namespace Syncless.CompareAndSync.Seamless
         {
             XmlDocument xmlDoc = new XmlDocument();
             XmlNode tempNode = null;
-            string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, CommonXMLConstants.MetadataPath);
+            string xmlFilePath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.MetadataPath);
             if (File.Exists(xmlFilePath))
             {
                 CommonMethods.LoadXML(ref xmlDoc, xmlFilePath);
@@ -185,8 +185,8 @@ namespace Syncless.CompareAndSync.Seamless
         private static void CreateFolder(XMLWriteFolderObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, CommonXMLConstants.MetadataPath);
-            CommonMethods.CreateFileIfNotExist(xmlWriteObj.FullPath);
+            string xmlFilePath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.MetadataPath);
+            CommonMethods.CreateFileIfNotExist(xmlWriteObj.Parent);
             CommonMethods.LoadXML(ref xmlDoc, xmlFilePath);
 
             CommonMethods.DoFolderCleanUp(xmlDoc, xmlWriteObj.Name);
@@ -205,8 +205,8 @@ namespace Syncless.CompareAndSync.Seamless
         private static void RenameFolder(XMLWriteFolderObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            string xmlPath = Path.Combine(xmlWriteObj.FullPath, CommonXMLConstants.MetadataPath);
-            CommonMethods.CreateFileIfNotExist(xmlWriteObj.FullPath);
+            string xmlPath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.MetadataPath);
+            CommonMethods.CreateFileIfNotExist(xmlWriteObj.Parent);
             CommonMethods.LoadXML(ref xmlDoc, xmlPath);
 
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(xmlWriteObj.Name) + "]");
@@ -216,7 +216,7 @@ namespace Syncless.CompareAndSync.Seamless
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
 
             XmlDocument subFolderXmlDoc = new XmlDocument();
-            string subFolder = Path.Combine(xmlWriteObj.FullPath, xmlWriteObj.NewName);
+            string subFolder = Path.Combine(xmlWriteObj.Parent, xmlWriteObj.NewName);
             string subFolderXmlPath = Path.Combine(subFolder, CommonXMLConstants.MetadataPath);
             CommonMethods.CreateFileIfNotExist(subFolder);
             CommonMethods.LoadXML(ref subFolderXmlDoc, subFolderXmlPath);
@@ -231,7 +231,7 @@ namespace Syncless.CompareAndSync.Seamless
 
         private static void DeleteFolder(XMLWriteFolderObject xmlWriteObj)
         {
-            string xmlFilePath = Path.Combine(xmlWriteObj.FullPath, CommonXMLConstants.MetadataPath);
+            string xmlFilePath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.MetadataPath);
             XmlDocument xmlDoc = new XmlDocument();
             if (File.Exists(xmlFilePath))
             {
@@ -254,7 +254,7 @@ namespace Syncless.CompareAndSync.Seamless
         {
             if (deletedNode == null)
                 return;
-            string fullPath = xmlWriteObj.FullPath;
+            string fullPath = xmlWriteObj.Parent;
             XmlDocument xmlTodoDoc = new XmlDocument();
             string todoPath = Path.Combine(fullPath, CommonXMLConstants.TodoPath);
             CommonMethods.CreateToDoFile(fullPath);
@@ -265,7 +265,7 @@ namespace Syncless.CompareAndSync.Seamless
 
         private static void GenerateFolderToDo(XMLWriteFolderObject xmlWriteObj)
         {
-            string parentPath = xmlWriteObj.FullPath;
+            string parentPath = xmlWriteObj.Parent;
             if (!Directory.Exists(parentPath))
                 return;
 
@@ -327,7 +327,7 @@ namespace Syncless.CompareAndSync.Seamless
 
         private static void DeleteFileToDoByName(XMLWriteFileObject xmlWriteObj)
         {
-            string todoXmlPath = Path.Combine(xmlWriteObj.FullPath, CommonXMLConstants.TodoPath);
+            string todoXmlPath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.TodoPath);
             if (!File.Exists(todoXmlPath))
                 return;
 
@@ -363,7 +363,7 @@ namespace Syncless.CompareAndSync.Seamless
 
         private static void DeleteFolderToDoByName(XMLWriteFolderObject xmlWriteObj)
         {
-            string todoXmlPath = Path.Combine(xmlWriteObj.FullPath, CommonXMLConstants.TodoPath);
+            string todoXmlPath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.TodoPath);
             if (!File.Exists(todoXmlPath))
                 return;
 
