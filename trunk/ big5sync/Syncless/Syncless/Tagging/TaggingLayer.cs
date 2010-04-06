@@ -368,6 +368,24 @@ namespace Syncless.Tagging
             return tagList;
         }
 
+        public List<Tag> RetrieveFilteredTagByLogicalId(string logicalid)
+        {
+            bool found;
+            List<Tag> tagList = new List<Tag>();
+            foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
+            {
+                if (!tag.IsDeleted)
+                {
+                    found = CheckID(tag, logicalid);
+                    if (found)
+                    {
+                        tagList.Add(tag);
+                    }
+                }
+            }
+            return tagList;
+        }
+
         /// <summary>
         /// Find a list of paths of folders or sub-folders which share the same Tag as folderPath
         /// Example: TagA - D:\A\, E:\B\C\
