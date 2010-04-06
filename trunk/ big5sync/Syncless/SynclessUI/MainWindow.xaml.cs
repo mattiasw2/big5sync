@@ -903,12 +903,11 @@ namespace SynclessUI
 
         private void BtnPreview_Click(object sender, RoutedEventArgs e)
         {
-            DialogHelper.ShowInformation(this, "Feature In Progress", "This feature will be presented in a future version of Syncless.");
+            // DialogHelper.ShowInformation(this, "Feature In Progress", "This feature will be presented in a future version of Syncless.");
 
-            /*
             if (!_manualSyncEnabled || Gui.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
             {
-                DialogHelper.ShowError(SelectedTag + " is Synchronizing",
+                DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
                                        "You cannot preview while it is synchronizing.");
                 return;
             }
@@ -923,7 +922,6 @@ namespace SynclessUI
                 DialogHelper.ShowError(this, "Nothing to Preview",
                                        "You can only preview only when there are two or more folders.");
             }
-            */
         }
 
         private void driveMenuItem_Click(object sender, RoutedEventArgs e)

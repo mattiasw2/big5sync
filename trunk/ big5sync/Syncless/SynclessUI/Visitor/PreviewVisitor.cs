@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Data;
 using System.IO;
 using Syncless.CompareAndSync.Enum;
-using Syncless.CompareAndSync.Exceptions;
-using Syncless.CompareAndSync;
 using Syncless.CompareAndSync.Manual.CompareObject;
-using Syncless.Core;
-using System.Data;
 
 namespace SynclessUI.Visitor
 {
@@ -48,7 +42,6 @@ namespace SynclessUI.Visitor
                     maxPriorityPos = i;
             }
             
-            
             if (file.Priority[maxPriorityPos] > 0)
             {
                 string operation = "";
@@ -60,6 +53,8 @@ namespace SynclessUI.Visitor
                     case MetaChangeType.Update: operation = UpdateConstant; break;
                     case MetaChangeType.NoChange: operation = CopyConstant; break;
                 }
+
+                Console.WriteLine(operation);
 
                 for (int i = 0; i < file.Priority.Length; i++)
                 {
@@ -86,13 +81,7 @@ namespace SynclessUI.Visitor
             if (folder.Invalid)
                 return;
 
-            int maxPriorityPos = 0;
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                if (folder.Priority[i] > folder.Priority[maxPriorityPos])
-                    maxPriorityPos = i;
-            }
-
+            int maxPriorityPos = folder.SourcePosition;
 
             if (folder.Priority[maxPriorityPos] > 0)
             {
