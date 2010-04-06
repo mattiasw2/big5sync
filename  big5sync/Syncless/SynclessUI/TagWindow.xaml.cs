@@ -71,7 +71,14 @@ namespace SynclessUI
                 }
                 else
                 {
-                    ShowDialog();
+                    try
+                    {
+                        ShowDialog();
+                    } catch(InvalidOperationException)
+                    {
+                        
+                    }
+                        
                 }
             }
         }
