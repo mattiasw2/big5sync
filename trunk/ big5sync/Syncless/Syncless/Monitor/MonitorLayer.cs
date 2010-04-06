@@ -13,8 +13,11 @@ namespace Syncless.Monitor
     public class MonitorLayer
     {
 
-        private const int BUFFER_SIZE = 65536;
-        private static MonitorLayer _instance;
+        private const int BUFFER_SIZE = 65536; // internal buffer size for FileSystemWatcher
+        private static MonitorLayer _instance; // singleton instance
+        /// <summary>
+        /// Get the instance of the Monitor Component
+        /// </summary>
         public static MonitorLayer Instance
         {
             get
@@ -27,12 +30,17 @@ namespace Syncless.Monitor
             }
         }
 
+        // watchers for path
         private List<ExtendedFileSystemWatcher> watchers;
         private List<string> monitoredPaths;
+
+        // root watchers for the path being monitored
         private List<FileSystemWatcher> rootWatchers;
         private Dictionary<string, List<string>> rootsAndParent;
+
+        // filters to filter syncless related folder
         private FilterChain filtering;
-        private List<Filter> archiveFilter;
+        private List<Filter> filterList;
         
         private MonitorLayer()
         {
@@ -41,11 +49,14 @@ namespace Syncless.Monitor
             rootWatchers = new List<FileSystemWatcher>();
             rootsAndParent = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
             filtering = new FilterChain();
-            archiveFilter = new List<Filter>();
-            archiveFilter.Add(FilterFactory.CreateArchiveFilter(SyncConfig.Instance.ArchiveName));
-            archiveFilter.Add(FilterFactory.CreateArchiveFilter(SyncConfig.Instance.ConflictDir));
+            filterList = new List<Filter>();
+            filterList.Add(FilterFactory.CreateArchiveFilter(SyncConfig.Instance.ArchiveName)); // filter of syncless archive folder
+            filterList.Add(FilterFactory.CreateArchiveFilter(SyncConfig.Instance.ConflictDir)); // filter of syncless conflict folder
         }
 
+        /// <summary>
+        /// Stop all thread activities related to the Monitor Component
+        /// </summary>
         public void Terminate()
         {
             FileSystemEventDispatcher.Instance.Terminate();
@@ -54,14 +65,14 @@ namespace Syncless.Monitor
         }
 
         /// <summary>
-        /// Start monitoring a path. If the path is already monitored, raise an exception.
+        /// Start monitoring a path. If the path is already monitored, return false.
         ///    001:/Lectures
         ///    001:/Lectures/lecture1.pdf require only 1 monitor (*important) 
         ///      however, if 001:/Lectures is unmonitored, 001:/Lectures/lecture1.pdf have to be monitored. 
         ///      this is to ensure that if a change is made to lecture1.pdf , it will not be notified twice.
         /// </summary>
-        /// <param name="path">The Path to be monitored</param>
-        /// <returns>Boolean stating if the monitor can be started</returns>
+        /// <param name="path">A <see cref="string"/> specifying the path to be monitored.</param>
+        /// <returns><see cref="bool"/> stating if a path will be monitored</returns>
         /// <exception cref="Syncless.Monitor.Exception.MonitorPathNotFoundException">Throw when the path is not found.</exception>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public bool MonitorPath(string path)
@@ -76,6 +87,7 @@ namespace Syncless.Monitor
             }
         }
 
+        // Monitor A Directory
         private bool MonitorDirectory(string path)
         {
             bool addToWatcher = true;
@@ -83,28 +95,28 @@ namespace Syncless.Monitor
             {
                 ExtendedFileSystemWatcher watcher = watchers[i];
                 string watchPath = watcher.Path.ToLower();
-                if (watchPath.Equals(path.ToLower())) // Duplicate directory
+                if (watchPath.Equals(path.ToLower())) // if duplicate directory found
                 {
                     return false;
                 }
-                else if (watchPath.StartsWith(path.ToLower())) // Adding a parent directory or Adding another directory to the same directory
+                else if (watchPath.StartsWith(path.ToLower())) // if adding a parent directory or adding another directory to the same directory
                 {
                     DirectoryInfo newDirectory = new DirectoryInfo(path);
                     DirectoryInfo existingDirectory = new DirectoryInfo(watchPath);
-                    if (!newDirectory.Parent.FullName.ToLower().Equals(existingDirectory.Parent.FullName.ToLower())) // Adding a parent directory
+                    if (!newDirectory.Parent.FullName.ToLower().Equals(existingDirectory.Parent.FullName.ToLower())) // if adding a parent directory
                     {
-                        watcher.Dispose();
+                        watcher.Dispose();      // stop monitoring
                         watchers.RemoveAt(i);
                         i--;
                     }
                 }
-                else if (path.ToLower().StartsWith(watchPath)) // Adding a child directory or Adding another directory to the same directory
+                else if (path.ToLower().StartsWith(watchPath)) // if adding a child directory or adding another directory to the same directory
                 {
                     DirectoryInfo newDirectory = new DirectoryInfo(path);
                     DirectoryInfo existingDirectory = new DirectoryInfo(watchPath);
-                    if (!newDirectory.Parent.FullName.ToLower().Equals(existingDirectory.Parent.FullName.ToLower())) // Adding a child directory
+                    if (!newDirectory.Parent.FullName.ToLower().Equals(existingDirectory.Parent.FullName.ToLower())) // if adding a child directory
                     {
-                        addToWatcher = false;
+                        addToWatcher = false; // do not add a watcher
                     }
                 }
             }
@@ -112,25 +124,26 @@ namespace Syncless.Monitor
             {
                 ExtendedFileSystemWatcher watcher = CreateWatcher(path, "*.*");
                 watchers.Add(watcher);
-                MonitorRootDirectory(path);
+                MonitorRootDirectory(path); // attemp to add a root watcher to watch the path being monitored
             }
             foreach (string mPath in monitoredPaths)
             {
                 if (mPath.ToLower().Equals(path.ToLower()))
                 {
-                    return false;
+                    return false; // already monitoring
                 }
             }
             monitoredPaths.Add(path);
-            return true;
+            return true; // monitoring successful
         }
 
+        // Monitor the root path
         private void MonitorRootDirectory(string path)
         {
             DirectoryInfo directory = new DirectoryInfo(path);
-            if(directory.Root.FullName.ToLower().Equals(path.ToLower())) // Root is excluded
+            if(directory.Root.FullName.ToLower().Equals(path.ToLower())) // if the root of the drive is assigned to be monitored
             {
-                for (int i = 0; i < rootWatchers.Count; i++)
+                for (int i = 0; i < rootWatchers.Count; i++) // remove all existing root watcher monitoring the child of the drive
                 {
                     FileSystemWatcher rootWatcher = rootWatchers[i];
                     string rootWatchPath = rootWatcher.Path.ToLower();
@@ -149,11 +162,11 @@ namespace Syncless.Monitor
             {
                 FileSystemWatcher rootWatcher = rootWatchers[i];
                 string rootWatchPath = rootWatcher.Path.ToLower();
-                if (rootWatchPath.Equals(path.ToLower())) // A parent directory is now being watched
+                if (rootWatchPath.Equals(path.ToLower())) // if a previous root path is now being monitored
                 {
-                    rootWatcher.Dispose();
+                    rootWatcher.Dispose(); // stop monitoring
                     rootWatchers.RemoveAt(i);
-                    transferedPath = (List<string>)rootsAndParent[rootWatcher.Path];
+                    transferedPath = rootsAndParent[rootWatcher.Path]; // transfer all the monitored path to the new root watcher
                     rootsAndParent.Remove(rootWatcher.Path);
                 }
             }
@@ -162,10 +175,10 @@ namespace Syncless.Monitor
             string parent = directory.Parent.FullName;
             foreach (KeyValuePair<string, List<string>> kvp in rootsAndParent)
             {
-                if (kvp.Key.ToLower().Equals(parent.ToLower())) // Same Root
+                if (kvp.Key.ToLower().Equals(parent.ToLower())) // if has same root path
                 {
-                    kvp.Value.Add(path);
-                    noRootWatcher = false;
+                    kvp.Value.Add(path); // add the path to the list to be monitored
+                    noRootWatcher = false; // do not add root watcher
                     break;
                 }
             }
@@ -176,7 +189,7 @@ namespace Syncless.Monitor
                 List<string> folders = new List<string>();
                 if (transferedPath != null)
                 {
-                    folders.AddRange(transferedPath);
+                    folders.AddRange(transferedPath); // transfering the removed monitored path to the new root watcher
                 }
                 folders.Add(path);
                 rootsAndParent.Add(parent, folders);
@@ -184,13 +197,13 @@ namespace Syncless.Monitor
         }
 
         /// <summary>
-        /// Unmonitor a path. If the Path does not exist, raise an exception
+        /// Unmonitor a path. If the Path does not exist, return false.
         ///    if 001:/Lectures is monitored, and i try to unmonitor 001:/Lectures/lecture1.pdf , it should fail.
         ///    if 
         ///     001:/Lectures and 001:/Lectures/lecture1.pdf is being monitored , if i remove 001/Lectures/lecture1.pdf, the next time i remove 001:/Lectures, then 001:/Lectures/lecture1.pdf should not be monitored.
         /// </summary>
-        /// <param name="path">The Path to be monitored</param>
-        /// <returns>Boolean stating if the monitor can be stopped</returns>
+        /// <param name="path">A <see cref="string"/> specifying the path to be unmonitored</param>
+        /// <returns><see cref="bool"/> stating if the monitor can be stopped.</returns>
         public bool UnMonitorPath(string path)
         {
             if (Directory.Exists(path))
@@ -203,10 +216,11 @@ namespace Syncless.Monitor
             }
         }
 
+        // Stop Monitoring a Directory
         private bool UnMonitorDirectory(string path)
         {
             bool isMonitored = false;
-            for (int i = 0; i < monitoredPaths.Count; i++)
+            for (int i = 0; i < monitoredPaths.Count; i++) // check if the path is being monitored
             {
                 if (monitoredPaths[i].ToLower().Equals(path.ToLower()))
                 {
@@ -215,20 +229,20 @@ namespace Syncless.Monitor
                     break;
                 }
             }
-            if (!isMonitored)
+            if (!isMonitored) // if not being monitored
             {
                 return false;
             }
             bool unMonitored = false;
-            for (int i = 0; i < watchers.Count; i++)
+            for (int i = 0; i < watchers.Count; i++) // check if watcher is assigned
             {
                 ExtendedFileSystemWatcher watcher = watchers[i];
                 string watchPath = watcher.Path.ToLower();
-                if (watchPath.Equals(path.ToLower()))
+                if (watchPath.Equals(path.ToLower())) // if watcher is assigned
                 {
-                    watcher.Dispose();
+                    watcher.Dispose(); // stop monitoring
                     watchers.RemoveAt(i);
-                    UnMonitorRootDirectory(path);
+                    UnMonitorRootDirectory(path); // attempt to stop monitoring the root path of this path
                     unMonitored = true;
                     break;
                 }
@@ -237,7 +251,7 @@ namespace Syncless.Monitor
             {
                 return true;
             }
-            foreach (string mPath in monitoredPaths)
+            foreach (string mPath in monitoredPaths) // start monitoring the child path of this path since it has stopped monitoring
             {
                 if (mPath.ToLower().StartsWith(path.ToLower()))
                 {
@@ -247,21 +261,22 @@ namespace Syncless.Monitor
             return true;
         }
 
+        // Stop monitoring root watcher
         private void UnMonitorRootDirectory(string path)
         {
             DirectoryInfo directory = new DirectoryInfo(path);
             string parent = directory.Parent.FullName;
             bool remove = false;
-            foreach (KeyValuePair<string, List<string>> kvp in rootsAndParent)
+            foreach (KeyValuePair<string, List<string>> kvp in rootsAndParent) // check if the root path is being monitored
             {
-                if (kvp.Key.ToLower().Equals(parent))
+                if (kvp.Key.ToLower().Equals(parent)) // if is monitored
                 {
                     List<string> folders = kvp.Value;
-                    if (folders.Count == 1)
+                    if (folders.Count == 1) // if root path is for only one path, then remove the whole root path
                     {
                         remove = true;
                     }
-                    else
+                    else // else, remove the unmonitored path from its root path
                     {
                         folders.Remove(path);
                         return;
@@ -288,12 +303,11 @@ namespace Syncless.Monitor
         /// <summary>
         /// Unmonitor all files that is contained in a physical drive 
         /// </summary>
-        /// <param name="driveLetter">The drive letter (i.e 'C') </param>
-        /// <returns>The number of paths unmonitored</returns>
-        /// <exception cref="Syncless.Monitor.Exception.MonitorDriveNotFoundException">Throw when the drive is not found.</exception>
+        /// <param name="driveLetter">A <see cref="string"/> specifying the drive letter (i.e 'C') </param>
+        /// <returns>An <see cref="int"/> specifying the number of paths unmonitored</returns>
         public int UnMonitorDrive(string driveLetter)
         {
-            for (int i = 0; i < watchers.Count; i++)
+            for (int i = 0; i < watchers.Count; i++) // remove all watcher with path under the specified drive
             {
                 ExtendedFileSystemWatcher watcher = watchers[i];
                 if (watcher.Path.ToLower().StartsWith(driveLetter.ToLower()))
@@ -304,7 +318,7 @@ namespace Syncless.Monitor
                 }
             }
             int count = 0;
-            for (int i = 0; i < monitoredPaths.Count; i++)
+            for (int i = 0; i < monitoredPaths.Count; i++) // remove all path under the specified drive
             {
                 if (monitoredPaths[i].ToLower().StartsWith(driveLetter.ToLower()))
                 {
@@ -313,7 +327,7 @@ namespace Syncless.Monitor
                     count++;
                 }
             }
-            for (int i = 0; i < rootWatchers.Count; i++)
+            for (int i = 0; i < rootWatchers.Count; i++) // remove all root watcher with path under the specified drive
             {
                 if (rootWatchers[i].Path.ToLower().StartsWith(driveLetter.ToLower()))
                 {
@@ -327,6 +341,7 @@ namespace Syncless.Monitor
             return count;
         }
 
+        // Builder for ExtendedFileSystemWatcher
         private ExtendedFileSystemWatcher CreateWatcher(string path, string filter)
         {
             ExtendedFileSystemWatcher watcher = new ExtendedFileSystemWatcher(path, filter);
@@ -343,9 +358,10 @@ namespace Syncless.Monitor
             return watcher;
         }
 
+        // execute when a modified event is fired
         private void OnModified(object source, FileSystemEventArgs e)
         {
-            if (!filtering.ApplyFilter(archiveFilter, e.FullPath))
+            if (!filtering.ApplyFilter(filterList, e.FullPath))
             {
                 return;
             }
@@ -355,10 +371,11 @@ namespace Syncless.Monitor
                 FileSystemEventDispatcher.Instance.Enqueue(fse);
             }
         }
-        
+
+        // execute when a created event is fired
         private void OnCreated(object source, FileSystemEventArgs e)
         {
-            if (!filtering.ApplyFilter(archiveFilter, e.FullPath))
+            if (!filtering.ApplyFilter(filterList, e.FullPath))
             {
                 return;
             }
@@ -378,9 +395,10 @@ namespace Syncless.Monitor
             FileSystemEventDispatcher.Instance.Enqueue(fse);
         }
 
+        // execute when a deleted event is fired
         private void OnDeleted(object source, FileSystemEventArgs e)
         {
-            if (!filtering.ApplyFilter(archiveFilter, e.FullPath))
+            if (!filtering.ApplyFilter(filterList, e.FullPath))
             {
                 return;
             }
@@ -389,9 +407,10 @@ namespace Syncless.Monitor
             FileSystemEventDispatcher.Instance.Enqueue(fse);
         }
 
+        // execute when a renamed event is fired
         private void OnRenamed(object source, RenamedEventArgs e)
         {
-            if (!filtering.ApplyFilter(archiveFilter, e.OldFullPath))
+            if (!filtering.ApplyFilter(filterList, e.OldFullPath))
             {
                 return;
             }
@@ -411,9 +430,10 @@ namespace Syncless.Monitor
             FileSystemEventDispatcher.Instance.Enqueue(fse);
         }
 
+        // execute when a create completed event is fired
         private void OnCreateComplete(object source, FileSystemEventArgs e)
         {
-            if (!filtering.ApplyFilter(archiveFilter, e.FullPath))
+            if (!filtering.ApplyFilter(filterList, e.FullPath))
             {
                 return;
             }
@@ -421,12 +441,15 @@ namespace Syncless.Monitor
             FileSystemEventDispatcher.Instance.Enqueue(fse);
         }
 
+        // execute when a error event is fired
         private void OnError(object source, ErrorEventArgs e)
         {
             ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(e.GetException().ToString());
             //Console.WriteLine(e.GetException().ToString());
+            
         }
         
+        // Builder for FileSystemWatcher, the root watcher
         private FileSystemWatcher CreateRootWatcher(string path, string filter)
         {
             FileSystemWatcher watcher = new FileSystemWatcher(path, filter);
@@ -439,9 +462,10 @@ namespace Syncless.Monitor
             return watcher;
         }
 
+        // execute when a deleted event for root watcher is fired
         private void OnRootDeleted(object source, FileSystemEventArgs e)
         {
-            if (!filtering.ApplyFilter(archiveFilter, e.FullPath))
+            if (!filtering.ApplyFilter(filterList, e.FullPath))
             {
                 return;
             }
@@ -458,9 +482,10 @@ namespace Syncless.Monitor
             }
         }
 
+        // execute when a renamed event for root watcher is fired
         private void OnRootRenamed(object source, RenamedEventArgs e)
         {
-            if (!filtering.ApplyFilter(archiveFilter, e.OldFullPath))
+            if (!filtering.ApplyFilter(filterList, e.OldFullPath))
             {
                 return;
             }
@@ -477,6 +502,7 @@ namespace Syncless.Monitor
             }
         }
 
+        // execute when a error event for root watcher is fired
         private void OnRootError(object source, ErrorEventArgs e)
         {
             ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(e.GetException().ToString());
