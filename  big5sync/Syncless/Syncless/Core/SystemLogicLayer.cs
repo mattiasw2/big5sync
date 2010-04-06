@@ -155,6 +155,7 @@ namespace Syncless.Core
             {
                 return;
             }
+            List<string> tagList = new List<string>();
             //Find the similiar paths for the logical Path
             //The return is physical address
             List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
@@ -199,7 +200,7 @@ namespace Syncless.Core
                 return;
             }
 
-            AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, fe.OldPath.DirectoryName, parentList, false, AutoSyncRequestType.Rename, SyncConfig.Instance);
+            AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, fe.OldPath.DirectoryName, parentList, false, AutoSyncRequestType.Rename, SyncConfig.Instance, ConvertTagListToTagString(tag));
             SendAutoRequest(request);
         }
         private void HandleFileModifyEvent(FileChangeEvent fe)
@@ -260,7 +261,7 @@ namespace Syncless.Core
             //Create the request and Send it.
             if (fe.OldPath.Directory != null)
             {
-                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.Update, SyncConfig.Instance);
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.Update, SyncConfig.Instance,ConvertTagListToTagString(tag));
                 SendAutoRequest(request);
             }
         }
@@ -322,7 +323,7 @@ namespace Syncless.Core
             //Create the request and Send it.
             if (fe.OldPath.Directory != null)
             {
-                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.New, SyncConfig.Instance);
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.New, SyncConfig.Instance,ConvertTagListToTagString(tag));
                 SendAutoRequest(request);
             }
         }
@@ -409,7 +410,7 @@ namespace Syncless.Core
                 return;
             }
             //Create the request and Send it.
-            AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Parent.FullName, parentList, true, AutoSyncRequestType.New, SyncConfig.Instance);
+            AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Parent.FullName, parentList, true, AutoSyncRequestType.New, SyncConfig.Instance,ConvertTagListToTagString(tag));
             SendAutoRequest(request);
         }
         private void HandleFolderRenameEvent(FolderChangeEvent fe)
@@ -468,7 +469,7 @@ namespace Syncless.Core
                 {
                     AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, fe.OldPath.Parent.FullName,
                                                                  parentList, true, AutoSyncRequestType.Rename,
-                                                                 SyncConfig.Instance);
+                                                                 SyncConfig.Instance,ConvertTagListToTagString(tag));
                     SendAutoRequest(request);
                 }
             }
@@ -597,7 +598,7 @@ namespace Syncless.Core
             }
             //Create the request and Send it.
 
-            AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance);
+            AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance,ConvertTagListToTagString(tag));
             SendAutoRequest(request);
             FindAndCleanDeletedPaths();
             _userInterface.TagsChanged();
@@ -663,7 +664,7 @@ namespace Syncless.Core
             }
             //Create the request and Send it.
 
-            AutoSyncRequest request = new AutoSyncRequest(dce.OldPath.Name, dce.OldPath.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance);
+            AutoSyncRequest request = new AutoSyncRequest(dce.OldPath.Name, dce.OldPath.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance,ConvertTagListToTagString(tag));
             SendAutoRequest(request);
             FindAndCleanDeletedPaths();
             _userInterface.TagsChanged();
@@ -1770,6 +1771,16 @@ namespace Syncless.Core
                 return false;
             }
             return true;
+        }
+
+        private List<string> ConvertTagListToTagString(List<Tag> tagList)
+        {
+            List<string> tagStringList = new List<string>();
+            foreach (Tag tag in tagList)
+            {
+                tagStringList.Add(tag.TagName);
+            }
+            return tagStringList;
         }
 
         #endregion

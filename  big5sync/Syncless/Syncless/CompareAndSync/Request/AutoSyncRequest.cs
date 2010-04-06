@@ -11,24 +11,25 @@ namespace Syncless.CompareAndSync.Request
         private readonly AutoSyncRequestType? _requestType;
         private readonly bool? _isFolder;
         private readonly SyncConfig _syncConfig;
-
-        public AutoSyncRequest(string sourceName, string sourceParent, List<string> destinations, AutoSyncRequestType requestType, SyncConfig syncConfig)
+        private readonly List<string> _tagList;
+        public AutoSyncRequest(string sourceName, string sourceParent, List<string> destinations, AutoSyncRequestType requestType, SyncConfig syncConfig,List<string> tagList)
         {
             _sourceName = sourceName;
             _sourceParent = sourceParent;
             _destinations = destinations;
             _requestType = requestType;
             _syncConfig = syncConfig;
+            _tagList = tagList;
         }
 
-        public AutoSyncRequest(string sourceName, string sourceParent, List<string> destinations, bool? isFolder, AutoSyncRequestType requestType, SyncConfig syncConfig)
-            : this(sourceName, sourceParent, destinations, requestType, syncConfig)
+        public AutoSyncRequest(string sourceName, string sourceParent, List<string> destinations, bool? isFolder, AutoSyncRequestType requestType, SyncConfig syncConfig , List<string> tagList)
+            : this(sourceName, sourceParent, destinations, requestType, syncConfig,tagList)
         {
             _isFolder = isFolder;
         }
 
-        public AutoSyncRequest(string oldName, string newName, string sourceParent, List<string> destinations, bool? isFolder, AutoSyncRequestType requestType, SyncConfig syncConfig)
-            : this(newName, sourceParent, destinations, isFolder, requestType, syncConfig)
+        public AutoSyncRequest(string oldName, string newName, string sourceParent, List<string> destinations, bool? isFolder, AutoSyncRequestType requestType, SyncConfig syncConfig , List<string> tagList)
+            : this(newName, sourceParent, destinations, isFolder, requestType, syncConfig,tagList)
         {
             _oldName = oldName;
         }
