@@ -28,7 +28,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 return;
 
             DetectFileRename(file, numOfPaths);
-            DetectFileRenameAndUpdate(file, numOfPaths);
+            //DetectFileRenameAndUpdate(file, numOfPaths);
             CompareFiles(file, numOfPaths);
             _totalNodes++;
         }
@@ -105,8 +105,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         private static void DetectFileRename(FileCompareObject file, int numOfPaths)
         {
             FileCompareObject result = null;
-            int resultPos = -1;
-            int counter = 0;
+            List<int> indexes = new List<int>();
 
             for (int i = 0; i < numOfPaths; i++)
             {
@@ -122,21 +121,25 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
                     if (f != null)
                     {
-                        counter++;
+                        indexes.Add(i);
                         result = f;
-                        resultPos = i;
                     }
                 }
             }
 
-            if (counter == 1)
+            if (indexes.Count == 1)
             {
                 // ReSharper disable PossibleNullReferenceException
                 file.NewName = result.Name;
                 // ReSharper restore PossibleNullReferenceException
-                file.ChangeType[resultPos] = MetaChangeType.Rename;
+                file.ChangeType[indexes[0]] = MetaChangeType.Rename;
                 result.Invalid = true;
                 file.Parent.Dirty = true; //Experimental
+            }
+            else if (indexes.Count > 1) //More than 2 renames detected
+            {
+                foreach (int i in indexes)
+                    file.ChangeType[i] = null;
             }
 
         }
