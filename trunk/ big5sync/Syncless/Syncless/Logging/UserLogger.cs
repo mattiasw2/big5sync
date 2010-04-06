@@ -7,7 +7,7 @@ namespace Syncless.Logging
 {
     public class UserLogger : Logger
     {
-        private const string delimiter = " ~ ";
+        private const string delimiter = " ~:~ ";
 
         public UserLogger()
             : base(ServiceLocator.USER_LOG)
