@@ -6,17 +6,11 @@ namespace Syncless.CompareAndSync.XMLWriteObject
     {
         private readonly long _size;
         private readonly string _hash;
-        private readonly long _lastModified;       
-
-        //Delete
-        public XMLWriteFileObject(string name, string fullPath, MetaChangeType changeType, long metaUpdated)
-            : base(name, fullPath, changeType, metaUpdated)
-        {
-        }
+        private readonly long _lastModified;
 
         //Update, create
-        public XMLWriteFileObject(string name, string fullPath, string hash, long size, long creationTime, long modifiedTime, MetaChangeType changeType, long metaUpdated)
-            : base(name, fullPath, creationTime, changeType, metaUpdated)
+        public XMLWriteFileObject(string name, string parent, string hash, long size, long creationTime, long modifiedTime, MetaChangeType changeType, long metaUpdated)
+            : base(name, parent, creationTime, changeType, metaUpdated)
         {
             _size = size;
             _hash = hash;
@@ -24,12 +18,15 @@ namespace Syncless.CompareAndSync.XMLWriteObject
         }
 
         //Rename
-        public XMLWriteFileObject(string name, string newName, string fullPath, string hash, long size, long creationTime, long modifiedTime, MetaChangeType changeType, long metaUpdated)
-            : base(name, newName, fullPath, creationTime, changeType, metaUpdated)
+        public XMLWriteFileObject(string name, string newName, string parent, MetaChangeType changeType, long metaUpdated)
+            : base(name, newName, parent, changeType, metaUpdated)
         {
-            _size = size;
-            _hash = hash;
-            _lastModified = modifiedTime;
+        }
+
+        //Delete
+        public XMLWriteFileObject(string name, string parent, MetaChangeType changeType, long metaUpdated)
+            : base(name, parent, changeType, metaUpdated)
+        {
         }
 
         public long Size
@@ -46,8 +43,6 @@ namespace Syncless.CompareAndSync.XMLWriteObject
         {
             get { return _lastModified; }
         }
-
-
 
     }
 }
