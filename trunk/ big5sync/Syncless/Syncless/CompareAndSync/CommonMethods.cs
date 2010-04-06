@@ -268,11 +268,11 @@ namespace Syncless.CompareAndSync
         #region File Operations
 
         /// <summary>
-        /// Archives a file
+        /// Archives a file.
         /// </summary>
-        /// <param name="path">The fullpath of the file to archive</param>
-        /// <param name="archiveName">The name of the folder to archive to</param>
-        /// <param name="archiveLimit">The number of old copies to keep for the file</param>
+        /// <param name="path">The fullpath of the file to archive.</param>
+        /// <param name="archiveName">The name of the folder to archive to.</param>
+        /// <param name="archiveLimit">The number of old copies to keep for the file.</param>
         /// <exception cref="ArchiveFileException"></exception>
         public static void ArchiveFile(string path, string archiveName, int archiveLimit)
         {
@@ -329,10 +329,10 @@ namespace Syncless.CompareAndSync
         }
 
         /// <summary>
-        /// Calculates the MD5 hash of a given FileInfo
+        /// Calculates the MD5 hash of a given file.
         /// </summary>
-        /// <param name="fileInput">FileInfo object to hash</param>
-        /// <returns>MD5 hash of file</returns>
+        /// <param name="fileInput">Fullpath of the file to hash.</param>
+        /// <returns>MD5 hash of file.</returns>
         /// <exception cref="Syncless.CompareAndSync.Exceptions.HashFileException"></exception>
         public static string CalculateMD5Hash(string fileInput)
         {
@@ -359,10 +359,10 @@ namespace Syncless.CompareAndSync
         }
 
         /// <summary>
-        /// Calculates the MD5 hash of a given FileInfo
+        /// Calculates the MD5 hash of a given FileInfo.
         /// </summary>
-        /// <param name="fileInput">FileInfo object to hash</param>
-        /// <returns>MD5 hash of file</returns>
+        /// <param name="fileInput">FileInfo object to hash.</param>
+        /// <returns>MD5 hash of file.</returns>
         /// <exception cref="Syncless.CompareAndSync.Exceptions.HashFileException"></exception>
         public static string CalculateMD5Hash(FileInfo fileInput)
         {
@@ -388,6 +388,11 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        /// <summary>
+        /// Helper method that does the actual MD5 hashing.
+        /// </summary>
+        /// <param name="fileStream">FileStream to hash.</param>
+        /// <returns>MD5 hash in string format.</returns>
         private static string CalculateMD5Hash(FileStream fileStream)
         {
             byte[] fileHash = MD5.Create().ComputeHash(fileStream);
@@ -396,17 +401,16 @@ namespace Syncless.CompareAndSync
         }
 
         /// <summary>
-        /// Copys a file from one place to another
+        /// Copys a file from one place to another, overwriting the destination if it exists.
         /// </summary>
-        /// <param name="sourceFile">Fullpath of file to copy</param>
+        /// <param name="sourceFile">Fullpath of file to copy.</param>
         /// <param name="destFile">Fullpath of destination file</param>
-        /// <param name="overwrite">Set to true to overwrite a file if it exists</param>
         /// <exception cref="CopyFileException"></exception>
-        public static void CopyFile(string sourceFile, string destFile, bool overwrite)
+        public static void CopyFile(string sourceFile, string destFile)
         {
             try
             {
-                File.Copy(sourceFile, destFile, overwrite);
+                File.Copy(sourceFile, destFile, true);
             }
             catch (PathTooLongException e)
             {
@@ -427,9 +431,9 @@ namespace Syncless.CompareAndSync
         }
 
         /// <summary>
-        /// Deletes a file
+        /// Deletes a file.
         /// </summary>
-        /// <param name="path">Fullpath of file to delete</param>
+        /// <param name="path">Fullpath of file to delete.</param>
         /// <exception cref="DeleteFileException"></exception>
         public static void DeleteFile(string path)
         {
@@ -456,19 +460,15 @@ namespace Syncless.CompareAndSync
         }
 
         /// <summary>
-        /// Deletes a file to recyclebin
+        /// Deletes a file to recycle bin.
         /// </summary>
-        /// <param name="path">Fullpath of file to delete to recycle bin</param>
+        /// <param name="path">Fullpath of file to delete to recycle bin.</param>
         /// <exception cref="DeleteFileException"></exception>
         public static void DeleteFileToRecycleBin(string path)
         {
             try
             {
-                Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(path,
-                                                                   Microsoft.VisualBasic.FileIO.UIOption.
-                                                                       OnlyErrorDialogs,
-                                                                   Microsoft.VisualBasic.FileIO.RecycleOption.
-                                                                       SendToRecycleBin);
+                Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
             }
             catch (FileNotFoundException e)
             {
@@ -485,10 +485,10 @@ namespace Syncless.CompareAndSync
         }
 
         /// <summary>
-        /// Moves a file from one place to another
+        /// Moves a file from one place to another. This method is also used for file renaming.
         /// </summary>
-        /// <param name="sourceFile">Fullpath of file to move</param>
-        /// <param name="destFile">Fullpath of destination to move to</param>
+        /// <param name="sourceFile">Fullpath of file to move.</param>
+        /// <param name="destFile">Fullpath of destination to move to.</param>
         /// <exception cref="MoveFileException"></exception>
         public static void MoveFile(string sourceFile, string destFile)
         {
@@ -519,11 +519,11 @@ namespace Syncless.CompareAndSync
         #region Folder Operations
 
         /// <summary>
-        /// Archives a folder given the full path of the folder
+        /// Archives a folder given the full path of the folder.
         /// </summary>
-        /// <param name="path">Full path of the folder</param>
-        /// <param name="archiveName">Name of folder to archive to</param>
-        /// <param name="archiveLimit">Number of folders to limit</param>
+        /// <param name="path">Full path of the folder.</param>
+        /// <param name="archiveName">Name of folder to archive to.</param>
+        /// <param name="archiveLimit">Number of folders to limit.</param>
         /// <exception cref="ArchiveFolderException"></exception>
         public static void ArchiveFolder(string path, string archiveName, int archiveLimit)
         {
@@ -586,10 +586,10 @@ namespace Syncless.CompareAndSync
         }
 
         /// <summary>
-        /// Copy folder from source to destination
+        /// Copy folder from source to destination.
         /// </summary>
-        /// <param name="source">Fullpath of source folder</param>
-        /// <param name="destination">Fullpath of destination folder</param>
+        /// <param name="source">Fullpath of source folder.</param>
+        /// <param name="destination">Fullpath of destination folder.</param>
         /// <exception cref="CopyFolderException"></exception>
         public static void CopyDirectory(string source, string destination)
         {
@@ -631,6 +631,10 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        /// <summary>
+        /// Creates a folder given the fullpath.
+        /// </summary>
+        /// <param name="path">The path to the folder to create.</param>
         public static void CreateFolder(string path)
         {
             try
@@ -655,11 +659,15 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        public static void DeleteFolder(string path, bool recursive)
+        /// <summary>
+        /// Deletes a given folder and all the contents inside it.
+        /// </summary>
+        /// <param name="path">The path of the folder to delete.</param>
+        public static void DeleteFolder(string path)
         {
             try
             {
-                Directory.Delete(path, recursive);
+                Directory.Delete(path, true);
             }
             catch (PathTooLongException e)
             {
@@ -679,7 +687,10 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        //TODO: Handle exceptions?
+        /// <summary>
+        /// Deletes the folder and all contents inside it into the recycle bin.
+        /// </summary>
+        /// <param name="path">The path of the folder to delete.</param>
         public static void DeleteFolderToRecycleBin(string path)
         {
             try
@@ -700,6 +711,11 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        /// <summary>
+        /// Moves a folder given the source and destination. This method is also used for folder renaming.
+        /// </summary>
+        /// <param name="sourceFullPath">Fullpath of source to move.</param>
+        /// <param name="destFullPath">Fullpath of destination to move to.</param>
         public static void MoveFolder(string sourceFullPath, string destFullPath)
         {
             try

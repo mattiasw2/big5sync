@@ -117,7 +117,7 @@ namespace Syncless.CompareAndSync.Seamless
                         {
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error deleting file " + destFullPath));
                         }
-                        CommonMethods.CopyFile(sourceFullPath, destFullPath, true);
+                        CommonMethods.CopyFile(sourceFullPath, destFullPath);
 
                         if (File.Exists(destFullPath))
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_MODIFIED, "File updated from " + sourceFullPath + " to " + destFullPath));
@@ -159,7 +159,7 @@ namespace Syncless.CompareAndSync.Seamless
                         string newFullPath = Path.Combine(dest, request.NewName);
 
                         if (!File.Exists(oldFullPath))
-                            CommonMethods.CopyFile(sourceFullPath, newFullPath, true);
+                            CommonMethods.CopyFile(sourceFullPath, newFullPath);
                         else
                             CommonMethods.MoveFile(oldFullPath, newFullPath);
 
@@ -343,7 +343,7 @@ namespace Syncless.CompareAndSync.Seamless
                         }
                         else
                         {
-                            CommonMethods.DeleteFolder(destFullPath, true);
+                            CommonMethods.DeleteFolder(destFullPath);
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_DELETED, "Folder deleted " + destFullPath));
                         }
                         SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, dest, MetaChangeType.Delete, _metaUpdated));

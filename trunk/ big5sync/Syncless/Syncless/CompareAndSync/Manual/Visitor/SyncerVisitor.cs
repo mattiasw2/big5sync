@@ -159,7 +159,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
                         try
                         {
-                            CommonMethods.CopyFile(src, destFile, true);
+                            CommonMethods.CopyFile(src, destFile);
                             fco.CreationTime[i] = File.GetCreationTime(destFile).Ticks;
                             fco.LastWriteTime[i] = File.GetLastWriteTime(destFile).Ticks;
                             fco.Exists[i] = true;
@@ -272,7 +272,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                             }
                             else
                             {
-                                CommonMethods.CopyFile(srcName, newName, true);
+                                CommonMethods.CopyFile(srcName, newName);
                                 FileCompareObject srcFile = fco.Parent.GetChild(fco.NewName) as FileCompareObject;
                                 fco.CreationTime[i] = File.GetCreationTime(newName).Ticks;
                                 fco.LastWriteTime[i] = File.GetLastWriteTime(newName).Ticks;
@@ -374,7 +374,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                             if (_syncConfig.Recycle)
                                 CommonMethods.DeleteFolderToRecycleBin(destFolder);
                             else
-                                CommonMethods.DeleteFolder(destFolder, true);
+                                CommonMethods.DeleteFolder(destFolder);
 
                             folder.Exists[i] = false;
                             folder.FinalState[i] = FinalState.Deleted;

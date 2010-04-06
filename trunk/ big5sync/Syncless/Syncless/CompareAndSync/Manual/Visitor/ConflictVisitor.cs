@@ -40,7 +40,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             string dest = Path.Combine(conflictFolder, fco.Name);
             try
             {
-                CommonMethods.CopyFile(src, dest, true);
+                CommonMethods.CopyFile(src, dest);
                 CommonMethods.DeleteFile(src);
                 fco.FinalState[fileIndex] = null; //Set back to null
             }
