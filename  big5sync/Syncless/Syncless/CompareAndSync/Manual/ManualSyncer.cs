@@ -95,7 +95,7 @@ namespace Syncless.CompareAndSync.Manual
                     try
                     {
                         CommonMethods.CopyDirectory(s, dest);
-                        CommonMethods.DeleteFolder(s, true);
+                        CommonMethods.DeleteFolder(s);
                     }
                     catch (CopyFolderException)
                     {
@@ -117,7 +117,7 @@ namespace Syncless.CompareAndSync.Manual
 
                     try
                     {
-                        CommonMethods.CopyFile(s, dest, true);
+                        CommonMethods.CopyFile(s, dest);
                         CommonMethods.DeleteFile(s);
                     }
                     catch (CopyFileException)
