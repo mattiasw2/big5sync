@@ -1224,14 +1224,23 @@ namespace SynclessUI
         public void ProgressNotifyChange()
         {
             string message = "";
+            string breakString = Progress.Message ?? "";
+            if (breakString.Length >= 45)
+            {
+                breakString = Progress.Message.Substring(0, 10) + " ... " + Progress.Message.Substring(Progress.Message.Length - 35, 35);
+            }
             switch (Progress.State)
             {
+                case SyncState.Analyzing:
+                    
+                    message = "Analyzing " + breakString;
+                    break;
                 case SyncState.Synchronizing:
-                    message = "Synchronizing " + Progress.Message;
+                    message = "Synchronizing " + breakString;
                     break;
 
                 case SyncState.Finalizing:
-                    message = "Finalizing";
+                    message = "Finalizing " + breakString;
                     break;
                 default:
                     return;

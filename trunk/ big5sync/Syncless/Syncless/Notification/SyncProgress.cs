@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using Syncless.Core;
-using Syncless.Notification.UINotification;
 
 namespace Syncless.Notification
 {
@@ -56,7 +52,6 @@ namespace Syncless.Notification
         private int _finalisingJobTotal;
         private int _finalisingCompletedJobs;
         private int _finalisingFailedJobs;
-        private AbstractNotification _notification;
 
         public int FinalisingJobTotal
         {
@@ -103,7 +98,7 @@ namespace Syncless.Notification
             }
         }
 
-        public void complete()
+        public void Complete()
         {
             switch (_state)
             {
@@ -126,7 +121,7 @@ namespace Syncless.Notification
             InvokeChange();
         }
 
-        public void fail()
+        public void Fail()
         {
             switch (_state)
             {
@@ -164,7 +159,11 @@ namespace Syncless.Notification
             get { return _state == SyncState.Cancelled; }
         }
 
-            private void InvokeChange()
+        public void Update()
+        {
+            InvokeChange();
+        }
+        private void InvokeChange()
         {
             if (!_notifyProgressChange)
             {
@@ -173,7 +172,7 @@ namespace Syncless.Notification
                 _wh.Set();
             }
         }
-        
+
         public SyncProgress(string tagName)
         {
             _state = SyncState.Started;
@@ -212,9 +211,9 @@ namespace Syncless.Notification
                 return false;
             }
             _state = SyncState.Analyzing;
-            
+
             TriggerStateChanged();
-            
+
             _wh.Set();
             return true;
         }
@@ -226,9 +225,9 @@ namespace Syncless.Notification
                 return false;
             }
             _state = SyncState.Synchronizing;
-            
+
             TriggerStateChanged();
-            
+
             _wh.Set();
             return true;
         }
@@ -241,24 +240,24 @@ namespace Syncless.Notification
             }
 
             _state = SyncState.Finalizing;
-            
+
             TriggerStateChanged();
-            
+
             _wh.Set();
             return true;
         }
         public bool ChangeToFinished()
         {
-            
+
             if (_state != SyncState.Finalizing)
             {
                 return false;
             }
-            
+
             _completed = true;
             _state = SyncState.Finished;
             TriggerSyncComplete();
-            
+
             _wh.Set();
             return true;
         }
@@ -312,6 +311,7 @@ namespace Syncless.Notification
         }
 
         #endregion
+
     }
 
 }

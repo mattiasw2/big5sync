@@ -5,6 +5,7 @@ using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Core;
 using Syncless.Filters;
 using Syncless.Logging;
+using Syncless.Notification;
 
 namespace Syncless.CompareAndSync.Manual.Visitor
 {
@@ -15,28 +16,36 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         private readonly List<Filter> _filter;
         private readonly FilterChain _filterChain;
         private readonly List<string> _typeConflicts;
-
-        public BuilderVisitor(List<Filter> filter, List<string> typeConflicts)
+        private SyncProgress _progress;
+        public BuilderVisitor(List<Filter> filter, List<string> typeConflicts,SyncProgress progress)
         {
             _filter = filter;
             _filterChain = new FilterChain();
             _typeConflicts = typeConflicts;
+            _progress = progress;
         }
 
-        public void Visit(FileCompareObject file, int numOfPaths) { /* Do nothing. */ }
+        public void Visit(FileCompareObject file, int numOfPaths) {  }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
+            
             RootCompareObject root = folder as RootCompareObject;
 
             for (int index = 0; index < numOfPaths; index++)
             {
+                
                 string path = root == null ? Path.Combine(folder.GetSmartParentPath(index), folder.Name) : root.Paths[index];
 
                 DirectoryInfo f = new DirectoryInfo(path);
 
                 if (f.Exists)
                 {
+                    if (_progress != null)
+                    {
+                        _progress.Message = f.FullName;
+                        _progress.Update();
+                    }
                     DirectoryInfo[] infos = f.GetDirectories();
 
                     foreach (DirectoryInfo info in infos)

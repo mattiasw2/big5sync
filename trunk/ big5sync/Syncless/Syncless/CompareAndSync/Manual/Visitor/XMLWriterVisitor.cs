@@ -27,25 +27,32 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 return;
 
             for (int i = 0; i < numOfPaths; i++)
+            {
+                _progress.Message = Path.Combine(file.GetSmartParentPath(i), file.Name);
                 ProcessMetaChangeType(file, i);
+            }
 
-            _progress.complete();
+            _progress.Complete();
         }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
+            
             if (folder.Invalid)
                 return;
 
             for (int i = 0; i < numOfPaths; i++)
+            {
+                _progress.Message = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
                 ProcessFolderFinalState(folder, i);
+            }
 
-            _progress.complete();
+            _progress.Complete();
         }
 
         public void Visit(RootCompareObject root)
         {
-            _progress.complete();
+            _progress.Complete();
         }
 
         #endregion
