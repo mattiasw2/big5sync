@@ -77,7 +77,7 @@ namespace Syncless.Logging
             while (!streamReader.EndOfStream)
             {
                 string text = streamReader.ReadLine();
-                string[] tokens = text.Split(new char[] { '~' });
+                string[] tokens = text.Split(new string[] { "~:~" }, StringSplitOptions.RemoveEmptyEntries);
                 if (tokens.Length != 4)
                 {
                     throw new LogFileCorruptedException(ErrorMessage.LOG_FILE_CORRUPTED);
