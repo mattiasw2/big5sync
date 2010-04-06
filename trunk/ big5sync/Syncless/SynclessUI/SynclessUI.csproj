@@ -250,7 +250,9 @@
     <Resource Include="Icons\completelogo.ico" />
     <Resource Include="Icons\createtag.ico" />
     <Resource Include="Icons\dropindicator.ico" />
+    <Resource Include="Icons\green-sync-arrow.png" />
     <Resource Include="Icons\log.ico" />
+    <Resource Include="Icons\red-sync-arrow.png" />
     <Resource Include="Icons\unmonitor.ico" />
     <Resource Include="Icons\filter.ico" />
     <Resource Include="Icons\folder.ico" />
@@ -267,6 +269,7 @@
     <Resource Include="Icons\tag.ico" />
     <Resource Include="Icons\taglist.ico" />
     <Resource Include="Icons\untag.ico" />
+    <Resource Include="Icons\yellow-sync-arrow.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
