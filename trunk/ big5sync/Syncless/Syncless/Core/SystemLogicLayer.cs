@@ -529,7 +529,7 @@ namespace Syncless.Core
                     MonitorLayer.Instance.UnMonitorDrive(dce.Info.Name);
                 }
                 _userInterface.DriveChanged();
-
+                _userInterface.PathChanged();
             }
             catch (Exception e)
             {
