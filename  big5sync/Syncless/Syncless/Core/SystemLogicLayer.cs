@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
+using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Tagging;
 using Syncless.Tagging.Exceptions;
 using Syncless.CompareAndSync;
@@ -15,7 +15,6 @@ using Syncless.Helper;
 using Syncless.Filters;
 using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Enum;
-using Syncless.CompareAndSync.CompareObject;
 using Syncless.Notification;
 using Syncless.Core.View;
 using System.Runtime.CompilerServices;

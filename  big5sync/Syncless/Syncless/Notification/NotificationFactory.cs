@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Syncless.CompareAndSync.CompareObject;
+using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Tagging;
 
 namespace Syncless.Notification

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Exceptions;
 using Syncless.CompareAndSync;
+using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Core;
 using System.Data;
 

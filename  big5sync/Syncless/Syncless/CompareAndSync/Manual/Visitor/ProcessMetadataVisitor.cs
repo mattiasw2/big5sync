@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Exceptions;
+using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Core;
 using Syncless.Logging;
 
@@ -70,9 +70,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 else
                     file.ChangeType[index] = MetaChangeType.NoChange;
             }
-            else if (file.ToDoAction[index].HasValue)
+            else if (file.LastKnownState[index].HasValue)
             {
-                if (file.ToDoAction[index] == LastKnownState.Deleted)
+                if (file.LastKnownState[index] == LastKnownState.Deleted)
                     file.ChangeType[index] = MetaChangeType.Delete;
             }
         }
@@ -89,9 +89,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 folder.ChangeType[index] = MetaChangeType.Delete; //Possible rename/move
             else if (folder.Exists[index] && folder.MetaExists[index])
                 folder.ChangeType[index] = MetaChangeType.NoChange;
-            else if (folder.ToDoAction[index].HasValue)
+            else if (folder.LastKnownState[index].HasValue)
             {
-                if (folder.ToDoAction[index] == LastKnownState.Deleted)
+                if (folder.LastKnownState[index] == LastKnownState.Deleted)
                     folder.ChangeType[index] = MetaChangeType.Delete;
             }
         }

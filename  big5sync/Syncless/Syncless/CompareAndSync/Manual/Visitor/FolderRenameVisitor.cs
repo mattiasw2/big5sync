@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Syncless.CompareAndSync.CompareObject;
 using Syncless.CompareAndSync.Enum;
+using Syncless.CompareAndSync.Manual.CompareObject;
 
 namespace Syncless.CompareAndSync.Manual.Visitor
 {
@@ -160,7 +160,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         {
             MergeFileSystemObject(actualFldrObj, renamedFolderObj, pos);
             actualFldrObj.UseNewName[pos] = renamedFolderObj.UseNewName[pos];
-            actualFldrObj.ToDoAction[pos] = actualFldrObj.ToDoAction[pos];
+            actualFldrObj.LastKnownState[pos] = actualFldrObj.LastKnownState[pos];
 
             if (actualFldrObj.Contents.Count == 0)
             {
@@ -181,7 +181,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             actualObj.MetaCreationTime[pos] = renameObj.MetaCreationTime[pos];
             actualObj.MetaExists[pos] = renameObj.MetaExists[pos];
             actualObj.MetaUpdated[pos] = renameObj.MetaUpdated[pos];
-            actualObj.ToDoAction[pos] = renameObj.ToDoAction[pos];
+            actualObj.LastKnownState[pos] = renameObj.LastKnownState[pos];
         }
 
         private void ChangeFatherMother(FolderCompareObject actualFldrObj)

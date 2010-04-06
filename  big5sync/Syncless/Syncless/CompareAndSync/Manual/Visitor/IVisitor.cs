@@ -1,4 +1,4 @@
-﻿using Syncless.CompareAndSync.CompareObject;
+﻿using Syncless.CompareAndSync.Manual.CompareObject;
 
 namespace Syncless.CompareAndSync.Manual.Visitor
 {

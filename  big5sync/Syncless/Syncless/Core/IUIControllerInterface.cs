@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Tagging;
 using Syncless.CompareAndSync;
 using System.IO;
 using Syncless.Filters;
-using Syncless.CompareAndSync.CompareObject;
 using Syncless.Core.View;
 using Syncless.Logging;
 namespace Syncless.Core
