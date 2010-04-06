@@ -285,6 +285,18 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
+        /// Sets the name of a folder path name that is the same as the old path name to the new path 
+        /// name that is passed as parameter
+        /// </summary>
+        /// <param name="oldPath">The string value that represents the old name of a folder path</param>
+        /// <param name="newPath">The string value that represents the new name of a folder path</param>
+        /// <returns>the number of folder paths whose old name is replaced by the new name</returns>
+        public int RenameFolder(string oldPath, string newPath)
+        {
+            return _taggingProfile.RenameFolder(oldPath, newPath);
+        }
+
+        /// <summary>
         /// Updates the list of filters for a tag with name same as the tag name that is passed as parameter
         /// </summary>
         /// <param name="tagname">The string value that represents the name that is to be used to retrieve
@@ -299,19 +311,7 @@ namespace Syncless.Tagging
                 throw new TagNotFoundException(tagname);
             }
         }
-
-        /// <summary>
-        /// Sets the name of a folder path name that is the same as the old path name to the new path 
-        /// name that is passed as parameter
-        /// </summary>
-        /// <param name="oldPath">The string value that represents the old name of a folder path</param>
-        /// <param name="newPath">The string value that represents the new name of a folder path</param>
-        /// <returns>the number of folder paths whose old name is replaced by the new name</returns>
-        public int RenameFolder(string oldPath, string newPath)
-        {
-            return _taggingProfile.RenameFolder(oldPath, newPath);
-        }
-
+        
         #region retrieve tag methods
         /// <summary>
         /// Gets the tag whose name is same as the tag name that is passed as parameter
