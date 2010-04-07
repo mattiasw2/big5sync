@@ -5,43 +5,46 @@ using System.Text;
 using System.IO;
 namespace Syncless.Profiling
 {
+    /// <summary>
+    /// ProfileDrive class encloses properties of a drive.
+    /// </summary>
     public class ProfileDrive
     {
         #region attributes
+        private long _lastUpdated;
         /// <summary>
         /// Last updated date
         /// </summary>
-        private long _lastUpdated;
         public long LastUpdated
         {
             get { return _lastUpdated; }
             set { _lastUpdated = value; }
         }
         
+        private DriveInfo _info;
         /// <summary>
         /// Drive info
         /// </summary>
-        private DriveInfo _info;
         public DriveInfo Info
         {
             get { return _info; }
             set { _info = value; }
         }
         
+        private string _guid;
         /// <summary>
         /// GUID
         /// </summary>
-        private string _guid;
         public string Guid
         {
             get { return _guid; }
             set { _guid = value; }
         }
         
+        private string _driveName;
         /// <summary>
         /// Drive name
         /// </summary>
-        private string _driveName;
         public string DriveName
         {
             get { return _driveName; }
