@@ -17,7 +17,7 @@ namespace Syncless.Logging
         /// <summary>
         /// Initializes a new instance of the <see cref="Syncless.Logging.Logger" /> class, given the specified name.
         /// </summary>
-        /// <param name="name">A <see cref="string" /> specifying the deleted path.</param>
+        /// <param name="name">A <see cref="string" /> specifying the name.</param>
         public Logger(string name)
         {
             log = LogManager.GetLogger(name);
