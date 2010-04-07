@@ -36,6 +36,12 @@ namespace SynclessUI
 			_previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Tooltip, typeof (string)));
 			_previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceIcon, typeof (string)));
 			_previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestIcon, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceLastModifiedDate, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceLastModifiedTime, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceSize, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestLastModifiedDate, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestLastModifiedTime, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestSize, typeof(string)));
             _main = main;
             Owner = _main;
             ShowInTaskbar = false;
