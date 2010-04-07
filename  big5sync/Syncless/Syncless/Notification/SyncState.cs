@@ -1,5 +1,8 @@
 ﻿namespace Syncless.Notification
 {
+    /// <summary>
+    /// SyncState enum provides the enumerations of sync state.
+    /// </summary>
     public enum SyncState
     {
         NotSyncing, //Not Syncing
@@ -9,7 +12,7 @@
         Synchronizing, //Copying files
         Finalizing, //Writing XML
         Finished, //Finished
-        Cancelled , //Cancelled
+        Cancelled, //Cancelled
         Unknown
     }
 
