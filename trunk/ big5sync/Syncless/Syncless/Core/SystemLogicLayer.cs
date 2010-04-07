@@ -720,15 +720,15 @@ namespace Syncless.Core
         /// <summary>
         /// Starts a Manual Sync. The Sync will be queued and will be processed when it is its turn.
         /// </summary>
-        /// <param name="tagname">Tagname of the Tag to sync</param>
+        /// <param name="tagName">Tagname of the Tag to sync</param>
         /// <returns>true if the sync is successfully queued. false if the tag is currently being queued/sync or the tag does not exist.  </returns>        
         /// <exception cref="UnhandledException">Unhandled Exception</exception>
-        public bool StartManualSync(string tagname)
+        public bool StartManualSync(string tagName)
         {
             try
             {
                 //Call the internal method to Sync, and does not switch to seamless after syncing.
-                return ManualSync(tagname, false);
+                return ManualSync(tagName, false);
             }
             catch (TagNotFoundException)
             {
@@ -770,20 +770,20 @@ namespace Syncless.Core
         /// <summary>
         /// Delete a tag
         /// </summary>
-        /// <param name="tagname">Name of the tag to delete</param>
+        /// <param name="tagName">Name of the tag to delete</param>
         /// <returns>true if a tag is removed. false if the tag cannot be removed(i.e Currently Synchronizing)</returns>
         /// <exception cref="UnhandledException">Unhandled Exception</exception>
-        public bool DeleteTag(string tagname)
+        public bool DeleteTag(string tagName)
         {
             //If the tag is currently being Sync/Queue , does not allow the user to delete.
-            if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tagname))
+            if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tagName))
             {
                 return false;
             }
             try
             {
                 //Delete the tag.
-                Tag t = TaggingLayer.Instance.DeleteTag(tagname);
+                Tag t = TaggingLayer.Instance.DeleteTag(tagName);
                 //Initiate a Save.
                 InitiateSave();
                 //Clean up the .syncless file inside all the deleted tag.
@@ -807,16 +807,16 @@ namespace Syncless.Core
         /// <summary>
         /// Create a Tag.
         /// </summary>
-        /// <param name="tagname">name of the tag.</param>
+        /// <param name="tagName">name of the tag.</param>
         /// <returns>The Detail of the Tag.</returns>
         /// <exception cref="UnhandledException">Unhandled Exception</exception>
-        /// <exception cref="TagAlreadyExistsException">Tag with tagname already exist.</exception>
-        public TagView CreateTag(string tagname)
+        /// <exception cref="TagAlreadyExistsException">Tag with tagName already exist.</exception>
+        public TagView CreateTag(string tagName)
         {
             try
             {
                 //Create the tag.
-                Tag t = TaggingLayer.Instance.CreateTag(tagname);
+                Tag t = TaggingLayer.Instance.CreateTag(tagName);
                 //Initiate Save.
                 InitiateSave();
                 //Convert the tag to a tagview and return it.
@@ -1223,7 +1223,6 @@ namespace Syncless.Core
         /// <param name="inf">The User Interface that implements the <see cref="IUIInterface"/></param>
         /// <exception cref="UnhandledException">Unhandled Exception</exception>
         /// <returns>true if the Logic Layer successfully initialized. false if the program fail to initialize</returns>
-        /// 
         public bool Initiate(IUIInterface inf)
         {
             //Check if the program have write access to the root directory of The application folder.
