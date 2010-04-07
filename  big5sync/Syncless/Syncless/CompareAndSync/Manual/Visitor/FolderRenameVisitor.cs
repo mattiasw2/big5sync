@@ -58,12 +58,14 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     return;
                 }
 
-                if (folderObject != null)
+                for (int i = 0; i < numOfPaths; i++)
                 {
-                    //count++;
-                    renamePos = deleteIndexes[0];
-                    MergeRenamedFolder(folder, folderObject, deleteIndexes);
+                    if (!folderObject.Exists[i])
+                        deleteIndexes.Remove(i);
                 }
+
+                if (folderObject != null)
+                        MergeRenamedFolder(folder, folderObject, deleteIndexes);
 
             }
 
