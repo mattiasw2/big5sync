@@ -8,7 +8,6 @@ namespace Syncless.Monitor
     /// <summary>
     /// An Extension to <see cref="System.IO.FileSystemWatcher" />.
     /// Added a CreateComplete event to inform the user when a file has completed creating.
-    /// 
     /// Reference from http://geekswithblogs.net/thibbard/articles/ExtendingFileSystemWatcher.aspx
     /// </summary>
     public class ExtendedFileSystemWatcher : FileSystemWatcher

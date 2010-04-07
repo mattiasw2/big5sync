@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Syncless.Monitor.DTO
 {
+    /// <summary>
+    /// This enum specifies the type of drive change.
+    /// </summary>
     public enum DriveChangeType
     {
         /// <summary>

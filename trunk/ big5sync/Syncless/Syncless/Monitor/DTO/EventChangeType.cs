@@ -2,6 +2,9 @@
 
 namespace Syncless.Monitor.DTO
 {
+    /// <summary>
+    /// This enum specifies the type of event change.
+    /// </summary>
     public enum EventChangeType
     {
         /// <summary>

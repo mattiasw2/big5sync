@@ -9,12 +9,18 @@ using ThreadState = System.Threading.ThreadState;
 
 namespace Syncless.Monitor
 {
+    /// <summary>
+    /// This class will push all received events for execution thru <see cref="Syncless.Core.IMonitorControllerInterface" />.
+    /// </summary>
     public class FileSystemEventExecutor
     {
-        private const int CLEAR_PATH_TABLE_TIME = 30;
-        private const int FILE_BUSY_TIME = 1000;
+        private const int CLEAR_PATH_TABLE_TIME = 30; // idle time in seconds expected to clear the path table
+        private const int FILE_BUSY_TIME = 5000; // wait time in milliseconds to check if a locked file is still being locked
 
         private static FileSystemEventExecutor _instance;
+        /// <summary>
+        /// Get the instance of the <see cref="Syncless.Monitor.FileSystemEventDispatcher"/> Component
+        /// </summary>
         public static FileSystemEventExecutor Instance
         {
             get
@@ -39,6 +45,9 @@ namespace Syncless.Monitor
             waitHandle = new AutoResetEvent(true);
         }
 
+        /// <summary>
+        /// Stop the thread of this component
+        /// </summary>
         public void Terminate()
         {
             waitHandle.Close();
@@ -48,6 +57,10 @@ namespace Syncless.Monitor
             }
         }
 
+        /// <summary>
+        /// Enqueue event and wait to be executed.
+        /// </summary>
+        /// <param name="e">A <see cref="Syncless.Monitor.DTO.FileSystemEvent"/> object containing the information needed to handle a request.</param>
         public void Enqueue(List<FileSystemEvent> eventList)
         {
             lock (queue)
@@ -56,12 +69,12 @@ namespace Syncless.Monitor
             }
             if (executorThread == null)
             {
-                executorThread = new Thread(ExecuteEvent);
+                executorThread = new Thread(ExecuteEvent); // start the thread if not started
                 executorThread.Start();
             }
-            else if (executorThread.ThreadState == ThreadState.WaitSleepJoin)
+            else if (executorThread.ThreadState == ThreadState.WaitSleepJoin) // wake the thread if sleeped
             {
-                ClearPathTable();
+                ClearPathTable(); // attempt to clear path table
                 waitHandle.Set();
             }
         }
@@ -103,7 +116,7 @@ namespace Syncless.Monitor
                     FileSystemEvent fse = Peek(index);
                     if (fse == null)
                     {
-                        Thread.Sleep(FILE_BUSY_TIME);
+                        Thread.Sleep(FILE_BUSY_TIME); // sleep for a while if no new events to handle
                         index = 0;
                         continue;
                     }
@@ -111,8 +124,9 @@ namespace Syncless.Monitor
                     {
                         if (fse.FileSystemType == FileSystemType.FILE)
                         {
-                            if (File.Exists(fse.Path))
+                            if (File.Exists(fse.Path)) // check if the file exist
                             {
+                                // check if the file is locked
                                 FileStream fs = new FileStream(fse.Path, FileMode.Open, FileAccess.Read, FileShare.None);
                                 fs.Close();
                             }
@@ -125,7 +139,7 @@ namespace Syncless.Monitor
                         }
                         else if (fse.FileSystemType == FileSystemType.FOLDER && fse.EventType != EventChangeType.DELETED)
                         {
-                            if (!Directory.Exists(fse.Path))
+                            if (!Directory.Exists(fse.Path)) // check if the directory exist
                             {
                                 Dequeue(index);
                                 index = 0;
@@ -172,25 +186,21 @@ namespace Syncless.Monitor
             {
                 case EventChangeType.CREATED:
                     //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File Created: " + fse.Path);
-                    //Console.WriteLine("File Created: " + fse.Path);
                     fileEvent = new FileChangeEvent(new FileInfo(fse.Path), EventChangeType.CREATED);
                     ServiceLocator.MonitorI.HandleFileChange(fileEvent);
                     break;
                 case EventChangeType.MODIFIED:
                     //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File Modified: " + fse.Path);
-                    //Console.WriteLine("File Modified: " + fse.Path);
                     fileEvent = new FileChangeEvent(new FileInfo(fse.Path), EventChangeType.MODIFIED);
                     ServiceLocator.MonitorI.HandleFileChange(fileEvent);
                     break;
                 case EventChangeType.DELETED:
                     //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File Deleted: " + fse.Path);
-                    //Console.WriteLine("File Deleted: " + fse.Path);
                     fileEvent = new FileChangeEvent(new FileInfo(fse.Path), EventChangeType.DELETED);
                     ServiceLocator.MonitorI.HandleFileChange(fileEvent);
                     break;
                 case EventChangeType.RENAMED:
                     //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File Renamed: " + fse.OldPath + " " + fse.Path);
-                    //Console.WriteLine("File Renamed: " + fse.OldPath + " " + fse.Path);
                     fileEvent = new FileChangeEvent(new FileInfo(fse.OldPath), new FileInfo(fse.Path));
                     ServiceLocator.MonitorI.HandleFileChange(fileEvent);
                     break;
@@ -207,19 +217,16 @@ namespace Syncless.Monitor
             {
                 case EventChangeType.CREATED:
                     //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Folder Created: " + fse.Path);
-                    //Console.WriteLine("Folder Created: " + fse.Path);
                     folderEvent = new FolderChangeEvent(new DirectoryInfo(fse.Path), EventChangeType.CREATED);
                     ServiceLocator.MonitorI.HandleFolderChange(folderEvent);
                     break;
                 case EventChangeType.DELETED:
                     //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Folder Deleted: " + fse.Path);
-                    //Console.WriteLine("Folder Deleted: " + fse.Path);
                     folderEvent = new FolderChangeEvent(new DirectoryInfo(fse.Path), EventChangeType.DELETED);
                     ServiceLocator.MonitorI.HandleFolderChange(folderEvent);
                     break;
                 case EventChangeType.RENAMED:
                     //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Folder Renamed: " + fse.OldPath + " " + fse.Path);
-                    //Console.WriteLine("Folder Renamed: " + fse.OldPath + " " + fse.Path);
                     folderEvent = new FolderChangeEvent(new DirectoryInfo(fse.OldPath), new DirectoryInfo(fse.Path));
                     ServiceLocator.MonitorI.HandleFolderChange(folderEvent);
                     break;
@@ -235,7 +242,6 @@ namespace Syncless.Monitor
             {
                 case EventChangeType.DELETED:
                     //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("File/Folder Deleted: " + fse.Path);
-                    //Console.WriteLine("File/Folder Deleted: " + fse.Path);
                     DeleteChangeEvent deleteEvent = new DeleteChangeEvent(new DirectoryInfo(fse.Path), new DirectoryInfo(fse.WatchPath));
                     ServiceLocator.MonitorI.HandleDeleteChange(deleteEvent);
                     break;
@@ -248,7 +254,7 @@ namespace Syncless.Monitor
         private void ClearPathTable()
         {
             TimeSpan idleTime = new TimeSpan(DateTime.Now.ToBinary() - timer.ToBinary());
-            if (idleTime.TotalSeconds >= CLEAR_PATH_TABLE_TIME)
+            if (idleTime.TotalSeconds >= CLEAR_PATH_TABLE_TIME) // check if the required idle time is met
             {
                 ServiceLocator.MonitorI.ClearPathHash();
             }
