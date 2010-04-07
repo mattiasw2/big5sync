@@ -5,22 +5,37 @@ using Syncless.Helper;
 
 namespace Syncless.Logging
 {
+    /// <summary>
+    /// This class will read the logs from the user log file
+    /// </summary>
     public class LogReaderHelper
     {
+        /// <summary>
+        /// the path of the user log file
+        /// </summary>
         internal const string USER_LOG_PATH = @"log\user.log";
+        /// <summary>
+        /// the path of the rolled over user log file
+        /// </summary>
         internal const string USER_LOG_BACKUP_PATH = @"log\user.log.1";
-        private const int MAX_LOG = 1000;
+        private const int MAX_LOG = 1000; // max log to display
 
+        /// <summary>
+        /// Return the user logs
+        /// </summary>
+        /// <returns>A <see cref="System.Collections.Generic.List<T>"/> of <see cref="Syncless.Logging.LogData"/>
         public static List<LogData> ReadLog()
         {
             List<LogData> logs = new List<LogData>();
             FileStream fs = null;
             StreamReader streamReader = null;
+            // read from the rolled over file first
             try
             {
+                // open as read only
                 fs = new FileStream(USER_LOG_BACKUP_PATH, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 streamReader = new StreamReader(fs);
-                ReadFromPath(streamReader, logs);
+                ReadFromPath(streamReader, logs); // extract logs info from the log file
             }
             catch (FileNotFoundException)
             { }
@@ -28,7 +43,7 @@ namespace Syncless.Logging
             {
                 streamReader.Close();
                 fs.Close();
-                File.Delete(USER_LOG_BACKUP_PATH);
+                File.Delete(USER_LOG_BACKUP_PATH); // delete the file if the file is corrupted
             }
             finally
             {
@@ -41,12 +56,12 @@ namespace Syncless.Logging
                     fs.Close();
                 }
             }
-            
+            // read from the actual user log file
             try
             {
                 fs = new FileStream(USER_LOG_PATH, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 streamReader = new StreamReader(fs);
-                ReadFromPath(streamReader, logs);
+                ReadFromPath(streamReader, logs); // extract logs info from the log file
             }
             catch (FileNotFoundException)
             { }
@@ -54,7 +69,7 @@ namespace Syncless.Logging
             {
                 streamReader.Close();
                 fs.Close();
-                File.Delete(USER_LOG_PATH);
+                File.Delete(USER_LOG_PATH); // delete the file if the file is corrupted
                 throw e;
             }
             finally
@@ -78,12 +93,12 @@ namespace Syncless.Logging
             {
                 string text = streamReader.ReadLine();
                 string[] tokens = text.Split(new string[] { "~:~" }, StringSplitOptions.RemoveEmptyEntries);
-                if (tokens.Length != 4)
+                if (tokens.Length != 4) // if the format is incorrect, most likely the file has beed tampered
                 {
                     throw new LogFileCorruptedException(ErrorMessage.LOG_FILE_CORRUPTED);
                 }
                 string timestamp = tokens[0].Trim();
-                LogEventType logEvent = Convert(tokens[2].Trim());
+                LogEventType logEvent = Convert(tokens[2].Trim()); 
                 string message = tokens[3].Trim();
                 if (logs.Count == MAX_LOG)
                 {
