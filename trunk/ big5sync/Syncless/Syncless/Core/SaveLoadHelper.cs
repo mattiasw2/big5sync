@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Text;
 using Syncless.Tagging;
 using Syncless.Profiling;
 using System.IO;
@@ -13,6 +10,11 @@ namespace Syncless.Core
 {
     internal class SaveLoadHelper
     {
+        /// <summary>
+        /// Save the application data to all the place that it is required.
+        /// </summary>
+        /// <param name="appPath">The path of the current Syncless</param>
+        /// <returns>true if the save is successful, false if it does not</returns>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public static bool SaveAll(string appPath)
         {
@@ -20,6 +22,11 @@ namespace Syncless.Core
             SaveTagging(appPath);
             return true;
         }
+        /// <summary>
+        /// Load the application from a path
+        /// </summary>
+        /// <param name="appPath">The path of the current Syncless</param>
+        /// <returns>true if the load successful. false if it does not</returns>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public static bool LoadAll(string appPath)
         {
@@ -35,10 +42,16 @@ namespace Syncless.Core
             }
             return true;
         }
-
+        /// <summary>
+        /// Load the Tagging Profile
+        /// </summary>
+        /// <param name="appPath">The path of current Syncless</param>
         #region private methods for Loading Tagging and Profiling.
         private static void LoadTagging(string appPath)
         {
+            //Create the list of location
+            //index 0 will be the root location
+            //index 1 - n will be the other drive that contains a guid
             List<string> locations = new List<string>();
             string rootLocation = appPath + @"\" + TaggingLayer.RELATIVE_TAGGING_ROOT_SAVE_PATH;
 
@@ -58,6 +71,7 @@ namespace Syncless.Core
                     }
                 }
             }
+            //Init
             TaggingLayer.Instance.Init(locations);
         }
 
