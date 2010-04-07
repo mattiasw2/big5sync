@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Syncless.Monitor.DTO
 {
+    /// <summary>
+    /// This enum specifies the type of file system change.
+    /// </summary>
     public enum FileSystemType
     {
         /// <summary>

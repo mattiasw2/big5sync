@@ -64,7 +64,7 @@ namespace Syncless.Monitor
         /// <summary>
         /// Enqueue events and wait to be processed.
         /// </summary>
-        /// <param name="e">A <see cref="Syncless.Monitor.DTO.FileSystemEvent"/> object containing the information needed to handle a request.</param>
+        /// <param name="e">A <see cref="Queue<T>"/> object containing the information needed to handle a request.</param>
         public void Enqueue(Queue<FileSystemEvent> eventList)
         {
             lock (queue)
@@ -73,10 +73,10 @@ namespace Syncless.Monitor
             }
             if (processorThread == null)
             {
-                processorThread = new Thread(ProcessEvent);
+                processorThread = new Thread(ProcessEvent); // start the thread if not started
                 processorThread.Start();
             }
-            else if (processorThread.ThreadState == ThreadState.WaitSleepJoin)
+            else if (processorThread.ThreadState == ThreadState.WaitSleepJoin) // wake the thread if sleeped
             {
                 waitHandle.Set();
             }
