@@ -7,7 +7,7 @@ using Syncless.Helper;
 
 namespace Syncless.Tagging
 {
-    static class TaggingXMLHelper
+    internal static class TaggingXMLHelper
     {
         #region tagging root
         private const string ELE_TAGGING_ROOT = "tagging";
@@ -145,7 +145,7 @@ namespace Syncless.Tagging
             }
             else
             {
-                throw new FileNotFoundException("tagging.xml not found.");
+                return new TaggingProfile(TaggingHelper.GetCurrentTime());
             }
         }
 
