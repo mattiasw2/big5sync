@@ -7,35 +7,38 @@ using System.IO;
 using Syncless.Profiling.Exceptions;
 namespace Syncless.Profiling
 {
+    /// <summary>
+    /// Profile class encloses properties of a profile which uniquely identifies different drives.
+    /// </summary>
     public class Profile
     {
         #region attributes
         private const string DEFAULT_DRIVE_NAME = "-";
 
+        private string _profilename;
         /// <summary>
         /// Profile name
         /// </summary>
-        private string _profilename;
         public string ProfileName
         {
             get { return _profilename; }
             set { _profilename = value; }
         }
 
+        private long _lastUpdatedTime;
         /// <summary>
         /// Last Updated Time
         /// </summary>
-        private long _lastUpdatedTime;
         public long LastUpdatedTime
         {
             get { return _lastUpdatedTime; }
             set { _lastUpdatedTime = value; }
         }
 
+        private List<ProfileDrive> _fullList;
         /// <summary>
         /// The list of ProfileDrive
         /// </summary>
-        private List<ProfileDrive> _fullList;
         public List<ProfileDrive> ProfileDriveList
         {
             get
