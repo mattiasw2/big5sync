@@ -11,20 +11,50 @@ using Syncless.Profiling.Exceptions;
 using Syncless.Core;
 namespace Syncless.Profiling
 {
+    /// <summary>
+    /// ProfilingXMLHelper class provides XML-related operations to load and save profiling.xml file.
+    /// </summary>
     internal static class ProfilingXMLHelper
     {
+        /// <summary>
+        /// The default name of the profile
+        /// </summary>
         public const string DEFAULT_NAME = "";
 
         #region Xml tag name
+        /// <summary>
+        /// The tag name for profiling root element
+        /// </summary>
         private const string ELE_PROFILING_ROOT = "profiling";
 
+        /// <summary>
+        /// The tag name for profile root element
+        /// </summary>
         private const string ELE_PROFILE_ROOT = "profile";
+        /// <summary>
+        /// The attribute name for profile name attribute
+        /// </summary>
         private const string ATTR_PROFILE_NAME = "profilename";
+        /// <summary>
+        /// The attribute name for profile last updated attribute
+        /// </summary>
         private const string ATTR_PROFILE_LAST_UPDATED = "last_updated";
 
+        /// <summary>
+        /// The tag name for profile drive root element
+        /// </summary>
         private const string ELE_PROFILE_DRIVE_ROOT = "drive";
+        /// <summary>
+        /// The attribute name for profile drive name attribute
+        /// </summary>
         private const string ATTR_PROFILE_DRIVE_NAME = "drivename";
+        /// <summary>
+        /// The attribute name for profile drive last updated attribute
+        /// </summary>
         private const string ATTR_PROFILE_DRIVE_LAST_UPDATED = "last_updated";
+        /// <summary>
+        /// The attribute name for profile drive GUID attribute
+        /// </summary>
         private const string ATTR_PROFILE_DRIVE_GUID = "guid";
         #endregion
 
