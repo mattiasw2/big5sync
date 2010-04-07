@@ -10,6 +10,9 @@ using Syncless.Monitor.DTO;
 using Syncless.Monitor.Exceptions;
 namespace Syncless.Monitor
 {
+    /// <summary>
+    /// The Monitor Component
+    /// </summary>
     public class MonitorLayer
     {
 

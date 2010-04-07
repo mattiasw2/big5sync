@@ -7,12 +7,15 @@ using Syncless.Monitor;
 using Syncless.Monitor.DTO;
 namespace Syncless.Core
 {
+    /// <summary>
+    /// This class will detect the insertion and removal of USB storage device.
+    /// Reference from http://dotnetslackers.com/community/blogs/basharkokash/archive/2008/03/15/USB-Detection-source-code.aspx
+    /// </summary>
     public class DeviceWatcher
     {
         private static DeviceWatcher _instance;
         /// <summary>
         /// The singleton instance of DeviceWatcher object.
-        /// Reference from http://dotnetslackers.com/community/blogs/basharkokash/archive/2008/03/15/USB-Detection-source-code.aspx
         /// </summary>
         public static DeviceWatcher Instance
         {
@@ -28,7 +31,7 @@ namespace Syncless.Core
         private Dictionary<string, DriveInfo> connectedDrives;
         private ManagementEventWatcher insertUSBWatcher;
         private ManagementEventWatcher removeUSBWatcher;
-        private const int DELAY_TIME = 10000;
+        private const int DELAY_TIME = 10000; // delay time to wait for all inserted drive to be ready
 
         private DeviceWatcher()
         {
@@ -44,10 +47,7 @@ namespace Syncless.Core
             }
         }
 
-        /// <summary>
-        /// Retrieve all fixed and removable connected drives.
-        /// </summary>
-        /// <returns></returns>
+        // Retrieve all fixed and removable connected drives.
         private Dictionary<string, DriveInfo> RetrieveAllDrives()
         {
             Dictionary<string, DriveInfo> drives = new Dictionary<string, DriveInfo>(StringComparer.OrdinalIgnoreCase);
@@ -89,17 +89,16 @@ namespace Syncless.Core
 
         private void USBInserted(object sender, EventArrivedEventArgs e)
         {
-            Thread.Sleep(DELAY_TIME);
+            Thread.Sleep(DELAY_TIME); // wait for a while
             Dictionary<string, DriveInfo> newConnectedDrives = RetrieveAllDrives();
-            foreach (KeyValuePair<string, DriveInfo> kvp in newConnectedDrives)
+            foreach (KeyValuePair<string, DriveInfo> kvp in newConnectedDrives) // find new drive inserted
             {
                 if (!connectedDrives.ContainsKey(kvp.Key))
                 {
                     DriveInfo drive = kvp.Value;
+                    //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(drive.Name + " inserted.");
                     DriveChangeEvent dce = new DriveChangeEvent(DriveChangeType.DRIVE_IN, drive);
                     ServiceLocator.MonitorI.HandleDriveChange(dce);
-                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(drive.Name + " inserted.");
-                    //Console.WriteLine(drive.Name + " inserted.");
                 }
             }
             connectedDrives = newConnectedDrives;
@@ -136,18 +135,20 @@ namespace Syncless.Core
             Dictionary<string, DriveInfo> newConnectedDrives = RetrieveAllDrives();
             foreach (KeyValuePair<string, DriveInfo> kvp in connectedDrives)
             {
-                if (!newConnectedDrives.ContainsKey(kvp.Key))
+                if (!newConnectedDrives.ContainsKey(kvp.Key)) // find new drive removed
                 {
                     DriveInfo drive = kvp.Value;
+                    //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(drive.Name + " removed.");
                     DriveChangeEvent dce = new DriveChangeEvent(DriveChangeType.DRIVE_OUT, drive);
                     ServiceLocator.MonitorI.HandleDriveChange(dce);
-                    ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(drive.Name + " removed.");
-                    //Console.WriteLine(drive.Name + " removed.");
                 }
             }
             connectedDrives = newConnectedDrives;
         }
 
+        /// <summary>
+        /// Stop the watchers of this component
+        /// </summary>
         public void Terminate()
         {
             if (insertUSBWatcher != null)

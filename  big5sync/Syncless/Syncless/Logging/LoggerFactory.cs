@@ -4,8 +4,16 @@ using Syncless.Core;
 
 namespace Syncless.Logging
 {
+    /// <summary>
+    /// This factory helps to create the respective logger.
+    /// </summary>
     public class LoggerFactory
     {
+        /// <summary>
+        /// Create and return the specified type of logger
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static Logger CreateLogger(string type)
         {
             if (type.Equals(ServiceLocator.USER_LOG))

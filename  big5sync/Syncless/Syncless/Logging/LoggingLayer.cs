@@ -7,9 +7,15 @@ using Syncless.Core;
 
 namespace Syncless.Logging
 {
+    /// <summary>
+    /// The Logging Component
+    /// </summary>
     public class LoggingLayer
     {
         private static LoggingLayer _instance;
+        /// <summary>
+        /// Get the instance of the Logging Component
+        /// </summary>
         public static LoggingLayer Instance
         {
             get
@@ -28,9 +34,14 @@ namespace Syncless.Logging
 
         private LoggingLayer()
         {
-           XmlConfigurator.Configure();
+           XmlConfigurator.Configure(); 
         }
 
+        /// <summary>
+        /// Return a logger based on the type specified.
+        /// </summary>
+        /// <param name="type">A <see cref="string"/> specifying the type of logger.</param>
+        /// <returns>The specified <see cref="Syncless.Logging.Logger" />.</returns>
         public Logger GetLogger(string type)
         {
             if (type.Equals(ServiceLocator.USER_LOG))
@@ -64,11 +75,18 @@ namespace Syncless.Logging
             }
         }
 
+        /// <summary>
+        /// Return the user logs
+        /// </summary>
+        /// <returns>A <see cref="System.Collections.Generic.List<T>"/> of <see cref="Syncless.Logging.LogData"/>
         public List<LogData> ReadLog()
         {
             return LogReaderHelper.ReadLog();
         }
 
+        /// <summary>
+        /// Clear the user logs
+        /// </summary>
         public void ClearLog()
         {
             File.Delete(LogReaderHelper.USER_LOG_BACKUP_PATH);
