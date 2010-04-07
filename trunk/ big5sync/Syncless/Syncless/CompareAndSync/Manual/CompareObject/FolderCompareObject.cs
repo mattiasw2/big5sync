@@ -74,7 +74,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         /// <param name="pos"></param>
         /// <param name="renameCount"></param>
         /// <returns></returns>
-        public FolderCompareObject GetRenamedFolder(string name, long creationTime, int pos, out int renameCount)
+        public FolderCompareObject GetRenamedFolder(string name, out int renameCount)
         {
             Dictionary<string, BaseCompareObject>.ValueCollection objects = _contents.Values;
             FolderCompareObject f, result = null;
@@ -84,7 +84,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             {
                 if ((f = objects.ElementAt(i) as FolderCompareObject) != null)
                 {
-                    if (f.MetaName != null && f.MetaName == name && f.Name != name && f.MetaName != f.Name /* && f.CreationTime[pos] == creationTime  && f.ChangeType[pos] == MetaChangeType.New */)
+                    if (f.MetaName != null && f.MetaName == name && f.Name != name && f.MetaName != f.Name)
                     {
                         result = f;
                         counter++;
@@ -96,7 +96,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
 
             return counter == 1 ? result : null;
         }
-        
+
         /// <summary>
         /// Finds an identical file with the given hash and name.
         /// </summary>

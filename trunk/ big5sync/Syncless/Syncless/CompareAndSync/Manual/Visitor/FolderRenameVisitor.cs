@@ -25,12 +25,23 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         private void DetectFolderRename(FolderCompareObject folder, int numOfPaths)
         {
-            List<int> deletePos = new List<int>();
+            List<int> deleteIndexes = new List<int>();
+            List<int> unchangedIndexes = new List<int>();
 
             for (int i = 0; i < numOfPaths; i++)
             {
-                if (folder.ChangeType[i] == MetaChangeType.Delete)
-                    deletePos.Add(i);
+                switch (folder.ChangeType[i])
+                {
+                    case MetaChangeType.Delete:
+                        deleteIndexes.Add(i);
+                        break;
+                    case MetaChangeType.NoChange:
+                        unchangedIndexes.Add(i);
+                        break;
+                }
+
+                //if (folder.ChangeType[i] == MetaChangeType.Delete)
+                //    deleteIndexes.Add(i);
             }
 
             //1. If there exists a folder for which meta exists is true and exists is false, it is (aka changeType.delete)
@@ -40,29 +51,30 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             FolderCompareObject folderObject = null;
             int count = 0;
             int renamePos = -1;
-            for (int i = 0; i < deletePos.Count; i++)
-            {
-                if (folder.ChangeType[deletePos[i]] == MetaChangeType.Delete)
-                {
-                    int renameCount;
-                    folderObject = folder.Parent.GetRenamedFolder(folder.Name, folder.CreationTime[i], deletePos[i], out renameCount);
 
-                    if (folderObject != null)
-                    {
-                        count++;
-                        renamePos = deletePos[i];
-                    }
-                    if (renameCount > 1)
-                    {
-                        foreach (int j in deletePos)
-                            folder.ChangeType[j] = null;
-                        return;
-                    }
+            if (deleteIndexes.Count > 0)
+            {
+                int renameCount;
+                folderObject = folder.Parent.GetRenamedFolder(folder.Name, out renameCount);
+
+                if (renameCount > 1)
+                {
+                    foreach (int j in unchangedIndexes)
+                        folder.ChangeType[j] = MetaChangeType.New;
+                    return;
                 }
+
+                if (folderObject != null)
+                {
+                    //count++;
+                    renamePos = deleteIndexes[0];
+                    MergeRenamedFolder(folder, folderObject, renamePos);
+                }
+
             }
 
-            if (count == 1)
-                MergeRenamedFolder(folder, folderObject, renamePos);
+            //if (count == 1)
+            //    MergeRenamedFolder(folder, folderObject, renamePos);
         }
 
         private void MergeRenamedFolder(FolderCompareObject actualFolder, FolderCompareObject renamedFolder, int pos)
