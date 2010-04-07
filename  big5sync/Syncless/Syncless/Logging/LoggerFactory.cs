@@ -12,7 +12,7 @@ namespace Syncless.Logging
         /// <summary>
         /// Create and return the specified type of logger
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="type">A <see cref="string" /> specifying the type of logger.</param>
         /// <returns></returns>
         public static Logger CreateLogger(string type)
         {
