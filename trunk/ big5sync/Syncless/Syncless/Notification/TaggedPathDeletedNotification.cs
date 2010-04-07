@@ -16,7 +16,7 @@ namespace Syncless.Notification
         }
 
         public TaggedPathDeletedNotification(List<string> deletedPaths)
-            : base("Tagged Path Deleted Notification", Syncless.Notification.NotificationCode.TAGGED_PATH_DELETED_NOTIFICATION)
+            : base("Tagged Path Deleted Notification", Syncless.Notification.NotificationCode.TaggedPathDeletedNotification)
         {
             this._deletedPaths = deletedPaths;
         }

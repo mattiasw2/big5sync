@@ -8,7 +8,7 @@ namespace Syncless.Notification.UINotification
     public class CompareCompleteNotification : AbstractNotification
     {
         public CompareCompleteNotification()
-            : base("Compare Complete Notification", Syncless.Notification.NotificationCode.COMPARE_COMPLETE_NOTIFICATION)
+            : base("Compare Complete Notification", Syncless.Notification.NotificationCode.CompareCompleteNotification)
         {
         }
     }

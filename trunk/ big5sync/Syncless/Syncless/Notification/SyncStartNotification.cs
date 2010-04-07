@@ -26,7 +26,7 @@ namespace Syncless.Notification
         }
 
         public SyncStartNotification(string tagName)
-            : base("Sync Start Notification", Syncless.Notification.NotificationCode.SYNC_START_NOTIFICATION)
+            : base("Sync Start Notification", Syncless.Notification.NotificationCode.SyncStartNotification)
         {
             _progress = new SyncProgress(tagName);
             

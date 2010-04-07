@@ -78,7 +78,7 @@ namespace SynclessUI.Notification
 
         private void Handle(AbstractNotification notification)
         {
-            if (notification.NotificationCode.Equals(NotificationCode.SYNC_START_NOTIFICATION))
+            if (notification.NotificationCode.Equals(NotificationCode.SyncStartNotification))
             {
                 SyncStartNotification ssNotification = notification as SyncStartNotification;
                 if (ssNotification != null)
@@ -89,7 +89,7 @@ namespace SynclessUI.Notification
                     
                 }
             } 
-            else if(notification.NotificationCode.Equals(NotificationCode.SYNC_COMPLETE_NOTIFICATION))
+            else if(notification.NotificationCode.Equals(NotificationCode.SyncCompleteNotification))
             {
                 SyncCompleteNotification scNotification = notification as SyncCompleteNotification;
                 if(scNotification != null)
@@ -102,7 +102,7 @@ namespace SynclessUI.Notification
                         }));
                 }
             }
-            else if (notification.NotificationCode.Equals(NotificationCode.NOTHING_TO_SYNC_NOTIFICATION))
+            else if (notification.NotificationCode.Equals(NotificationCode.NothingToSyncNotification))
             {
                 NothingToSyncNotification ntsNotification = notification as NothingToSyncNotification;
                 if (ntsNotification != null)

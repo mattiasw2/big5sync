@@ -11,7 +11,7 @@ namespace Syncless.Notification
         private string _tagName;
         private RootCompareObject _rco;
         public SyncCompleteNotification(string tagName,RootCompareObject rco)
-            : base("Sync Complete Notification", Syncless.Notification.NotificationCode.SYNC_COMPLETE_NOTIFICATION)
+            : base("Sync Complete Notification", Syncless.Notification.NotificationCode.SyncCompleteNotification)
         {
             _rco = rco;
             _tagName = tagName;

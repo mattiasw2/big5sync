@@ -11,7 +11,7 @@
         }
 
         public MonitorTagNotification(string tagname)
-            : base("Monitor Tag Notification", Syncless.Notification.NotificationCode.MONITOR_TAG_NOTIFICATION)
+            : base("Monitor Tag Notification", Syncless.Notification.NotificationCode.MonitorTagNotification)
         {
             _tagname = tagname;
         }

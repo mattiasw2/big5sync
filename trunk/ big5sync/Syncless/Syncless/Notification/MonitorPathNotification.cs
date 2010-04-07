@@ -23,7 +23,7 @@ namespace Syncless.Notification
             set { _targetPath = value; }
         }
 
-        public MonitorPathNotification(Tag tag, TaggedPath path):base("Monitor Path Notification" , Syncless.Notification.NotificationCode.MONITOR_PATH_NOTIFICATION)
+        public MonitorPathNotification(Tag tag, TaggedPath path):base("Monitor Path Notification" , Syncless.Notification.NotificationCode.MonitorPathNotification)
         {
             this._targetTag = tag;
             this._targetPath = path;
