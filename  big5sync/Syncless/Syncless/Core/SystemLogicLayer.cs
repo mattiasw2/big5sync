@@ -1489,7 +1489,7 @@ namespace Syncless.Core
         /// <summary>
         /// Start a Manual Sync. The Sync will be queued and will be processed when it is its turn.
         /// </summary>
-        /// <param name="tagname">Tagname of the Tag to sync</param>
+        /// <param name="tag">Tag to sync</param>
         /// <param name="switchSeamless">true if the tag needs to be set to seamless mode after synchronization</param>
         /// <returns>true if the sync is successfully queue. false if the tag is already queued or cannot be queued.</returns>  
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -1555,16 +1555,20 @@ namespace Syncless.Core
         /// <param name="tagname">Tagname to set</param>
         /// <param name="mode">true - set tag to seamless. , false - set tag to manual</param>
         /// <exception cref="TagNotFoundException">If the Tag is not found</exception>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
         /// <returns>whether the tag can be changed.</returns>
         private void MonitorTag(string tagname, bool mode)
         {
             try
             {
+                //Retrieve a tag
+                //If tag is null, throw TagNotFoundException
                 Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
                 if (tag == null)
                 {
                     throw new TagNotFoundException(tagname);
                 }
+                //Call the internal method to switch the tag.
                 SwitchMonitorTag(tag, mode);
                 _userInterface.TagChanged(tagname);
                 return;
@@ -1575,6 +1579,7 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
+                //Handle some unexpected exception so that it does not hang the UI.
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
@@ -1582,21 +1587,24 @@ namespace Syncless.Core
         /// <summary>
         /// Switch the tag to the mode. Do the respective work.
         /// </summary>
-        /// <param name="tag"></param>
-        /// <param name="mode"></param>
+        /// <param name="tag">Tag to switch</param>
+        /// <param name="mode">true for seamless, false for manual</param>
         private void SwitchMonitorTag(Tag tag, bool mode)
         {
+            // If the tag is deleted or the tag is queued or syncing, cannot switch.
             if (tag.IsDeleted || CompareAndSyncController.Instance.IsQueuedOrSyncing(tag.TagName))
             {
                 return;
             }
+            //Try to get the state of the tag.
             TagState state;
             _switchingTable.TryGetValue(tag.TagName, out state);
+            //If the state is undefined, switch the state and add it to the switching table.
             if (state == TagState.Undefined)
             {
                 _switchingTable.Add(tag.TagName, mode ? TagState.ManualToSeamless : TagState.SeamlessToManual);
             }
-
+            //call the internal method.
             if (mode)
             {
                 StartMonitorTag(tag);
@@ -1607,17 +1615,20 @@ namespace Syncless.Core
             }
         }
         /// <summary>
-        /// Convert a Tag to a TagView for UI.
+        /// Convert a <see cref="Tag"/> to a <see cref="TagView"/> for UI.
         /// </summary>
-        /// <param name="t"></param>
-        /// <returns></returns>
+        /// <param name="t">The tag to convert</param>
+        /// <returns>return the <see cref="TagView"/> representing the Tag.</returns>
         private TagView ConvertToTagView(Tag t)
         {
+            //Find and clean all the deleted folder that are still tag.
             FindAndCleanDeletedPaths();
+            //Create the Tag View
             TagView view = new TagView(t.TagName, t.LastUpdatedDate);
+            //Convert the path.
             List<string>[] pathList = ProfilingLayer.Instance.ConvertAndFilter(t.FilteredPathListString);
             List<string> namedPath = ProfilingLayer.Instance.ConvertAndFilterToNamed(pathList[1]);
-
+            //a list of available path
             PathGroupView availGrpView = new PathGroupView("Available");
             List<PathView> pathViewList = new List<PathView>();
             foreach (string path in pathList[0])
@@ -1630,6 +1641,7 @@ namespace Syncless.Core
                 pathViewList.Add(p);
             }
             availGrpView.PathList = pathViewList;
+            //a list of unavailable path.
             PathGroupView unavailableList = new PathGroupView("Unavailable");
             pathViewList = new List<PathView>();
             foreach (string path in namedPath)
@@ -1668,7 +1680,7 @@ namespace Syncless.Core
         /// <summary>
         /// Merge a profile from a drive. (use when a drive plug in)
         /// </summary>
-        /// <param name="drive"></param>
+        /// <param name="drive">The drive to merge.</param>
         private void Merge(DriveInfo drive)
         {
             string profilingPath = PathHelper.AddTrailingSlash(drive.RootDirectory.FullName) + ProfilingLayer.RELATIVE_PROFILING_SAVE_PATH;
@@ -1681,23 +1693,33 @@ namespace Syncless.Core
         /// <summary>
         /// Initialize
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true if initiate successful, false if initiate fail.</returns>
         private bool Initiate()
         {
             try
             {
+                //PathTableReader
                 _reader = new PathTableReader(_pathTable);
                 _reader.Start();
+                //Initiate the Logic Queue Observer.
                 _queueObserver = new LogicQueueObserver();
                 _queueObserver.Start();
+                //Attempt to load the XML.
                 bool loadSuccess = SaveLoadHelper.LoadAll(_userInterface.getAppPath());
+                //If load fail , return false.
                 if (!loadSuccess)
                 {
                     return false;
                 }
-                DeviceWatcher.Instance.ToString(); //Starts watching for Drive Change
-                List<Tag> tagList = TaggingLayer.Instance.FilteredTagList;
+                //Starts watching for Drive Change
+                DeviceWatcher.Instance.ToString();
                 FindAndCleanDeletedPaths();
+                //Get the List of filtered tag.
+                List<Tag> tagList = TaggingLayer.Instance.FilteredTagList;
+                //For each tag in the tag list
+                // if tag is seamless, switch the mode to "TagState.ManualToSeamless"
+                //    then do a manual sync.
+                
                 foreach (Tag t in tagList)
                 {
                     if (t.IsSeamless)
@@ -1722,33 +1744,48 @@ namespace Syncless.Core
                         StartMonitorTag(t);
                     }
                 }
+                //start the deleted path watcher to monitor which path is deleted but still tagged.
                 _deletedTaggedPathWatcher = new DeletedTaggedPathWatcher();
                 _deletedTaggedPathWatcher.Start();
                 return true;
             }
             catch (Exception e)
             {
+                //Initialize fail return false.
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 return false;
             }
         }
         /// <summary>
-        /// Find a list of paths of files which share the same parent directories as filePath
+        /// Find the similar path for a particular file/folder.
         /// </summary>
         /// <param name="filePath">The path to search</param>
         /// <returns>The list of similar paths</returns>
         private List<string> FindSimilarSeamlessPathForFile(string filePath)
         {
+            /* 2 path is consider similiar in the following case.
+             *  i.e Folder A is tagged to Folder B.
+             *   FolderA/1.txt is considered similiar to FolderB/1.txt
+             *   
+             * This is use to find similiar when a file change is detected during seamless mode.
+             * 
+             */
+
+            //Convert the path to logical path
             string logicalid = TaggingHelper.GetLogicalID(filePath);
+            
             List<string> pathList = new List<string>();
+            // Get a list of that tag that contain the logical id.
             List<Tag> matchingTag = TaggingLayer.Instance.RetrieveTagByLogicalId(logicalid);
             FilterChain chain = new FilterChain();
+            // Only find the tag if the tag is seamless mode.
             foreach (Tag tag in matchingTag)
             {
                 if (!tag.IsSeamless)
                 {
                     continue;
                 }
+                //Create the default filter 
                 List<Filter> tempFilters = new List<Filter>
                                                {
                                                    FilterFactory.CreateArchiveFilter("_synclessArchive"),
@@ -1783,11 +1820,15 @@ namespace Syncless.Core
         internal List<string> FindAllDeletedPaths()
         {
             List<string> deletedPaths = new List<string>();
+            //Get all the path that exist in the TaggingLayer.
             List<string> allPaths = ProfilingLayer.Instance.ConvertAndFilterToPhysical(TaggingLayer.Instance.GetAllPaths());
             foreach (string path in allPaths)
             {
+                // If the Directory Does not Exist.
+                // If deleted path does not already contain the path , add it in.
                 if (!Directory.Exists(path))
                 {
+                    
                     if (!PathHelper.ContainsIgnoreCase(deletedPaths, path))
                     {
                         deletedPaths.Add(path);
@@ -1801,9 +1842,11 @@ namespace Syncless.Core
         /// </summary>
         private void FindAndCleanDeletedPaths()
         {
+            //Find all the deleted path
             List<string> deletedPaths = FindAllDeletedPaths();
             foreach (string paths in deletedPaths)
             {
+                //Convert the path to logical and untag it.
                 string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(paths, false);
                 if (convertedPath != null)
                 {
@@ -1818,20 +1861,23 @@ namespace Syncless.Core
         private delegate void CleanMetaDataDelegate(DirectoryInfo info);
         private void CleanMetaData(DirectoryInfo folder)
         {
+            //if the folder does not exist, do nothing.
             if (!folder.Exists) return;
+            // Convert the path to a logical path.
             string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, false);
+            // if the converted path is null or equals to "" , means that the path does not exist in the system , thus ignore it.
             if (convertedPath == null || convertedPath.Equals("")) return;
-            // See if there is any tag still contain this folder.
+            // See if this folder is still tagged to any tag.
             List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(convertedPath);
-
             if (tagList.Count > 0) return; //Still have tag contain the folder , do not attempt to clean.
-
+            // See if there is any tag contain the path as a children.
             List<string> parentPaths = TaggingLayer.Instance.RetrieveAncestors(convertedPath);
             if (parentPaths.Count != 0) return;//Parent still tagged. Do not clean.
-
+            // Find all the child path that are tagged.
             List<string> childPaths = TaggingLayer.Instance.RetrieveDescendants(convertedPath);
+            // Convert all the child path to physical path.
             List<string> convertedList = ProfilingLayer.Instance.ConvertAndFilterToPhysical(childPaths);
-
+            // Clean the folder, but ignore all the child path.
             Cleaner.CleanSynclessMeta(folder, convertedList);
         }
         /// <summary>
@@ -1841,6 +1887,7 @@ namespace Syncless.Core
         private delegate void DeleteTagCleanDelegate(Tag t);
         private void DeleteTagClean(Tag t)
         {
+            //For each path in the path, convert it to physical path and if it exist, Clean the meta data.
             foreach (TaggedPath path in t.UnfilteredPathList)
             {
                 string convertedPath = ProfilingLayer.Instance.ConvertLogicalToPhysical(path.PathName);
@@ -1853,10 +1900,10 @@ namespace Syncless.Core
         }
 
         /// <summary>
-        /// 
+        /// Check the program folder if Syncless have write access.
         /// </summary>
-        /// <param name="inf"></param>
-        /// <returns></returns>
+        /// <param name="inf">The user interface.</param>
+        /// <returns>true if Syncless have write access, otherwise false</returns>
         private bool CheckForWriteAccess(IUIInterface inf)
         {
             try
@@ -1885,7 +1932,7 @@ namespace Syncless.Core
             }
             return true;
         }
-
+        //Convert a list of tag to a list of tagname
         private List<string> ConvertTagListToTagString(IEnumerable<Tag> tagList)
         {
             List<string> tagStringList = new List<string>();
@@ -1902,10 +1949,11 @@ namespace Syncless.Core
         /// <summary>
         /// Add a Tag Path ( Notify from Merging )
         /// </summary>
-        /// <param name="tag"></param>
-        /// <param name="path"></param>
+        /// <param name="tag">Tag that the path was added to </param>
+        /// <param name="path">Path that is added</param>
         internal void AddTagPath(Tag tag, TaggedPath path)
         {
+            //At the moment nothing needs to be done , just switch the tag to manual and back to seamless will do.
             if (tag.IsSeamless)
             {
                 SwitchMode(tag.TagName, TagMode.Manual);
@@ -1915,10 +1963,11 @@ namespace Syncless.Core
         /// <summary>
         /// Remove a Tag Path ( Notify from Merging )
         /// </summary>
-        /// <param name="tag"></param>
-        /// <param name="path"></param>
+        /// <param name="tag">Tag that the path was removed from</param>
+        /// <param name="path">Path that is added</param>
         internal void RemoveTagPath(Tag tag, TaggedPath path)
         {
+            //At the moment nothing needs to be done , just switch the tag to manual and back to seamless will do.
             if (tag.IsSeamless)
             {
                 SwitchMode(tag.TagName, TagMode.Manual);
@@ -1928,20 +1977,21 @@ namespace Syncless.Core
         /// <summary>
         /// Add a Tag ( Notify from Merging )
         /// </summary>
-        /// <param name="tag"></param>
+        /// <param name="tag">Tag that was added</param>
         internal void AddTag(Tag tag)
         {
-            //TaggingLayer.Instance.AddTag(tag);
+            //if tag is deleted, nothing needs to be done.
             if (tag.IsDeleted)
             {
                 return;
             }
+            //If the tag is seamless, re-set the mode to seamless
             if (tag.IsSeamless)
             {
                 SwitchMode(tag.TagName, TagMode.Manual);
                 SwitchMode(tag.TagName, TagMode.Seamless);
             }
-            else
+            else //set the mode to manual
             {
                 SwitchMode(tag.TagName, TagMode.Manual);
             }
@@ -1949,12 +1999,13 @@ namespace Syncless.Core
         /// <summary>
         /// Remove a Tag ( Notify from Merging )
         /// </summary>
-        /// <param name="tag"></param>
+        /// <param name="tag">Tag that is removed.</param>
         internal void RemoveTag(Tag tag)
         {
             try
             {
-                SwitchMode(tag.TagName, TagMode.Manual); // Unmonitor all the paths.
+                //Unmonitor the tag first then delete the tag.
+                SwitchMode(tag.TagName, TagMode.Manual); 
                 TaggingLayer.Instance.DeleteTag(tag.TagName);
 
             }
@@ -1970,25 +2021,30 @@ namespace Syncless.Core
         }
         /// <summary>
         /// Monitor Tag ( From Compare and Sync / Merging )
+        /// Inform Core that the tag have complete sync and can be now switch to seamless
         /// </summary>
-        /// <param name="tagname"></param>
+        /// <param name="tagname">Name of the <see cref="Tag"/></param>
         internal void MonitorTag(string tagname)
         {
+            //Retrieve the tag, if the tag does not exist, ignore.
             Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
             if (t == null)
             {
                 //Shouldn't happen
                 return;
             }
+            // Set the mode of the tag to seamless.
             SetTagMode(t, true);
+            // Inform the UI of the changes.
             _userInterface.TagChanged(tagname);
         }
         /// <summary>
-        /// Inform The Tagging Layer to untag a particular path as it is no longer available.
+        /// Inform The Tagging Layer to untag a particular path is deleted.
         /// </summary>
-        /// <param name="pathList"></param>
+        /// <param name="pathList">List of path to untag.</param>
         internal void Untag(List<string> pathList)
         {
+            //foreach path , convert to logical and untag it.
             foreach (string path in pathList)
             {
                 string convertedPath = ProfilingLayer.Instance.ConvertPhysicalToLogical(path, false);
@@ -1996,7 +2052,9 @@ namespace Syncless.Core
             }
             _userInterface.TagsChanged();
         }
-
+        /// <summary>
+        /// Save the Tagging Profile and Drive Profile.
+        /// </summary>
         internal void Save()
         {
             SaveLoadHelper.SaveAll(_userInterface.getAppPath());
