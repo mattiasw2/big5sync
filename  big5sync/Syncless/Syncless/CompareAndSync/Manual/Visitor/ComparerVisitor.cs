@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Manual.CompareObject;
@@ -105,13 +106,20 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         private static void DetectFileRename(FileCompareObject file, int numOfPaths)
         {
             FileCompareObject result = null;
-            List<int> deleteIndexes = new List<int>();
+            Dictionary<string, int> newNames = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             List<int> unchangedIndexes = new List<int>();
 
             for (int i = 0; i < numOfPaths; i++)
             {
-                if (file.ChangeType[i] == MetaChangeType.New || file.ChangeType[i] == MetaChangeType.Update)
-                    return;
+                switch (file.ChangeType[i])
+                {
+                    case MetaChangeType.New:
+                    case MetaChangeType.Update:
+                        return;
+                }
+
+                //if (file.ChangeType[i] == MetaChangeType.New || file.ChangeType[i] == MetaChangeType.Update)
+                //    return;
             }
 
             for (int i = 0; i < numOfPaths; i++)
@@ -122,8 +130,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         FileCompareObject f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);
                         if (f != null)
                         {
-                            deleteIndexes.Add(i);
-                            result = f;
+                            if (!newNames.ContainsKey(f.Name))
+                            {
+                                newNames.Add(f.Name, i);
+                                result = f;
+                            }
                         }
                         break;
                     case MetaChangeType.NoChange:
@@ -132,16 +143,16 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 }
             }
 
-            if (deleteIndexes.Count == 1)
+            if (newNames.Count == 1)
             {
                 // ReSharper disable PossibleNullReferenceException
                 file.NewName = result.Name;
                 // ReSharper restore PossibleNullReferenceException
-                file.ChangeType[deleteIndexes[0]] = MetaChangeType.Rename;
+                file.ChangeType[newNames[result.Name]] = MetaChangeType.Rename;
                 result.Invalid = true;
-                file.Parent.Dirty = true; //Experimental
+                file.Parent.Dirty = true; //EXP
             }
-            else if (deleteIndexes.Count > 1) //More than 2 renames detected
+            else if (newNames.Count > 1) //More than 2 renames detected
             {
                 foreach (int i in unchangedIndexes)
                     file.ChangeType[i] = MetaChangeType.New;
