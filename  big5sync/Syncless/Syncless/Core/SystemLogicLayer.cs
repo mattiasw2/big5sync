@@ -1725,6 +1725,8 @@ namespace Syncless.Core
                 //If load fail , return false.
                 if (!loadSuccess)
                 {
+                    _queueObserver.Stop();
+                    _reader.Stop();
                     return false;
                 }
                 //Starts watching for Drive Change
