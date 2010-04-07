@@ -26,26 +26,35 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             if (file.Invalid)
                 return;
 
+            bool needLastKnownState = false;
+
             for (int i = 0; i < numOfPaths; i++)
             {
                 _progress.Message = Path.Combine(file.GetSmartParentPath(i), file.Name);
-                ProcessMetaChangeType(file, i);
+                needLastKnownState = ProcessMetaChangeType(file, i) || needLastKnownState;
             }
+
+            if (needLastKnownState)
+                GenerateFileLastKnownState(file, numOfPaths);
 
             _progress.Complete();
         }
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
-            
             if (folder.Invalid)
                 return;
+
+            bool needLastKnownState = false;
 
             for (int i = 0; i < numOfPaths; i++)
             {
                 _progress.Message = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
-                ProcessFolderFinalState(folder, i);
+                needLastKnownState = ProcessFolderFinalState(folder, i) || needLastKnownState;
             }
+
+            if (needLastKnownState)
+                GenerateFolderLastKnownState(folder, numOfPaths);
 
             _progress.Complete();
         }
@@ -64,10 +73,10 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region File Operations
 
-        private void ProcessMetaChangeType(FileCompareObject file, int counter)
+        private bool ProcessMetaChangeType(FileCompareObject file, int counter)
         {
             FinalState? changeType = file.FinalState[counter];
-            //Removed the handling of null cases.
+            bool needLastKnownState = false;
 
             switch (changeType)
             {
@@ -79,15 +88,20 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     break;
                 case FinalState.Deleted:
                     DeleteFileObject(file, counter);
+                    needLastKnownState = true;
                     break;
                 case FinalState.Renamed:
                     RenameFileObject(file, counter);
+                    needLastKnownState = true;
                     break;
                 case FinalState.CreatedRenamed:
                     CreateFileObject(file, counter, true);
                     DeleteFileObject(file, counter);
+                    needLastKnownState = true;
                     break;
             }
+
+            return needLastKnownState;
         }
 
 
@@ -189,7 +203,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             CommonMethods.CreateFileIfNotExist(file.GetSmartParentPath(counter));
             CommonMethods.LoadXML(ref xmlDoc, xmlPath);
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(file.Name) + "]");
-            
+
             if (node == null)
             {
                 CreateFileObject(file, counter, true);
@@ -213,7 +227,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
 
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
-            GenerateFileLastKnownState(file, counter);
         }
 
         private void DeleteFileObject(FileCompareObject file, int counter)
@@ -226,27 +239,24 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             {
                 CommonMethods.LoadXML(ref xmlDoc, xmlPath);
                 XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(file.Name) + "]");
-                
+
                 if (node == null)
                     return;
 
                 node.ParentNode.RemoveChild(node);
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
-
-            GenerateFileLastKnownState(file, counter);
         }
 
         #endregion
 
         #region Folder Operations
 
-        private void ProcessFolderFinalState(FolderCompareObject folder, int counter)
+        private bool ProcessFolderFinalState(FolderCompareObject folder, int counter)
         {
-
             FinalState?[] finalStateList = folder.FinalState;
             FinalState? changeType = finalStateList[counter];
-            //Removed the handling of null cases.
+            bool needLastKnownState = false;
 
             switch (changeType)
             {
@@ -255,15 +265,20 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     break;
                 case FinalState.Deleted:
                     DeleteFolderObject(folder, counter);
+                    needLastKnownState = true;
                     break;
                 case FinalState.Renamed:
                     RenameFolderObject(folder, counter);
+                    needLastKnownState = true;
                     break;
                 case FinalState.CreatedRenamed:
                     CreateFolderObject(folder, counter, true);
                     DeleteFolderObject(folder, counter);
+                    needLastKnownState = true;
                     break;
             }
+
+            return needLastKnownState;
         }
 
         private void CreateFolderObject(FolderCompareObject folder, int counter, bool useNewName)
@@ -303,7 +318,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 string xmlPath = Path.Combine(folder.GetSmartParentPath(counter), CommonXMLConstants.MetadataPath);
                 CommonMethods.LoadXML(ref xmlDoc, xmlPath);
                 XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
-                
+
                 if (node == null)
                 {
                     CreateFolderObject(folder, counter, true);
@@ -313,7 +328,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 node.FirstChild.InnerText = folder.NewName;
                 node.LastChild.InnerText = _dateTime.ToString();
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
-                GenerateFolderLastKnownState(folder, counter);
             }
             else
             {
@@ -322,17 +336,17 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 CommonMethods.CreateFileIfNotExist(Path.Combine(folder.GetSmartParentPath(counter), folder.NewName));
                 CommonMethods.LoadXML(ref newXmlDoc, editOldXML);
                 XmlNode xmlNameNode = newXmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathName);
-                
+
                 if (xmlNameNode != null)
                     xmlNameNode.InnerText = folder.NewName;
-                
+
                 CommonMethods.SaveXML(ref newXmlDoc, editOldXML);
                 string parentXML = Path.Combine(folder.GetSmartParentPath(counter), CommonXMLConstants.MetadataPath);
                 XmlDocument parentXmlDoc = new XmlDocument();
                 CommonMethods.CreateFileIfNotExist(folder.GetSmartParentPath(counter));
                 CommonMethods.LoadXML(ref parentXmlDoc, parentXML);
                 XmlNode parentXmlFolderNode = parentXmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
-                
+
                 if (parentXmlFolderNode != null)
                 {
                     parentXmlFolderNode.FirstChild.InnerText = folder.NewName;
@@ -340,7 +354,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 }
 
                 CommonMethods.SaveXML(ref parentXmlDoc, Path.Combine(folder.GetSmartParentPath(counter), CommonXMLConstants.MetadataPath));
-                GenerateFolderLastKnownState(folder, counter);
             }
         }
 
@@ -353,15 +366,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             {
                 CommonMethods.LoadXML(ref xmlDoc, xmlPath);
                 XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
-                
+
                 if (node == null)
                     return;
-                
+
                 node.ParentNode.RemoveChild(node);
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
-
-            GenerateFolderLastKnownState(folder, counter);
         }
 
         private void ModifyFolderName(FolderCompareObject folder, string subFolderPath)
@@ -372,10 +383,10 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             CommonMethods.LoadXML(ref subFolderDoc, xmlPath);
 
             XmlNode xmlNameNode = subFolderDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathName);
-            
+
             if (xmlNameNode != null)
                 xmlNameNode.InnerText = name;
-            
+
             CommonMethods.SaveXML(ref subFolderDoc, xmlPath);
         }
 
@@ -441,14 +452,14 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         private void DeleteFileLastKnownStateByName(FileCompareObject file, int counter)
         {
             string todoXMLPath = Path.Combine(file.GetSmartParentPath(counter), CommonXMLConstants.LastKnownStatePath);
-            
+
             if (!File.Exists(todoXMLPath))
                 return;
 
             XmlDocument todoXMLDoc = new XmlDocument();
             CommonMethods.LoadXML(ref todoXMLDoc, todoXMLPath);
             XmlNode fileNode = todoXMLDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(file.Name) + "]");
-           
+
             if (fileNode != null)
                 fileNode.ParentNode.RemoveChild(fileNode);
 
@@ -458,40 +469,46 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         private void DeleteFolderLastKnownStateByName(FolderCompareObject folder, int counter)
         {
             string todoXMLPath = Path.Combine(folder.GetSmartParentPath(counter), CommonXMLConstants.LastKnownStatePath);
-            
+
             if (!File.Exists(todoXMLPath))
                 return;
 
             XmlDocument todoXMLDoc = new XmlDocument();
             CommonMethods.LoadXML(ref todoXMLDoc, todoXMLPath);
             XmlNode folderNode = todoXMLDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
-            
+
             if (folderNode != null)
                 folderNode.ParentNode.RemoveChild(folderNode);
-            
+
             CommonMethods.SaveXML(ref todoXMLDoc, todoXMLPath);
         }
 
-        private void GenerateFileLastKnownState(FileCompareObject file, int counter)
+        private void GenerateFileLastKnownState(FileCompareObject file, int numOfPaths)
         {
-            string parentPath = file.GetSmartParentPath(counter);
-            XmlDocument xmlTodoDoc = new XmlDocument();
-            string todoPath = Path.Combine(parentPath, CommonXMLConstants.LastKnownStatePath);
-            CommonMethods.CreateLastKnownStateFile(parentPath);
-            CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
-            AppendActionFileLastKnownState(xmlTodoDoc, file, counter, CommonXMLConstants.ActionDeleted);
-            CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
+            for (int i = 0; i < numOfPaths; i++)
+            {
+                string parentPath = file.GetSmartParentPath(i);
+                XmlDocument xmlTodoDoc = new XmlDocument();
+                string todoPath = Path.Combine(parentPath, CommonXMLConstants.LastKnownStatePath);
+                CommonMethods.CreateLastKnownStateFile(parentPath);
+                CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
+                AppendActionFileLastKnownState(xmlTodoDoc, file, i, CommonXMLConstants.ActionDeleted);
+                CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
+            }
         }
 
-        private void GenerateFolderLastKnownState(FolderCompareObject folder, int counter)
+        private void GenerateFolderLastKnownState(FolderCompareObject folder, int numOfPaths)
         {
-            string parentPath = folder.GetSmartParentPath(counter);
-            XmlDocument xmlTodoDoc = new XmlDocument();
-            string todoPath = Path.Combine(parentPath, CommonXMLConstants.LastKnownStatePath);
-            CommonMethods.CreateLastKnownStateFile(parentPath);
-            CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
-            AppendActionFolderLastKnownState(xmlTodoDoc, folder, CommonXMLConstants.ActionDeleted);
-            CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
+            for (int i = 0; i < numOfPaths; i++)
+            {
+                string parentPath = folder.GetSmartParentPath(i);
+                XmlDocument xmlTodoDoc = new XmlDocument();
+                string todoPath = Path.Combine(parentPath, CommonXMLConstants.LastKnownStatePath);
+                CommonMethods.CreateLastKnownStateFile(parentPath);
+                CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
+                AppendActionFolderLastKnownState(xmlTodoDoc, folder, CommonXMLConstants.ActionDeleted);
+                CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
+            }
         }
 
         #endregion

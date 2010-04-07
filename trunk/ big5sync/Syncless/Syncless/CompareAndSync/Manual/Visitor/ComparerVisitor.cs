@@ -332,10 +332,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 return;
 
             //Delete will only occur if none of the folders are marked as dirty
-            List<int> deletePos = new List<int>();
-
             if (!folder.Dirty)
             {
+                List<int> deletePos = new List<int>();
                 bool stop = false;
                 for (int i = 0; i < numOfPaths; i++)
                 {
@@ -365,14 +364,14 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         break;
                     }
                 }
-            }
 
-            if (deletePos.Count > 0)
-            {
-                folder.SourcePosition = deletePos[0];
-                foreach (int i in deletePos)
-                    folder.Priority[i] = 1;
-                return;
+                if (deletePos.Count > 0)
+                {
+                    folder.SourcePosition = deletePos[0];
+                    foreach (int i in deletePos)
+                        folder.Priority[i] = 1;
+                    return;
+                }
             }
 
             int mostUpdatedPos = 0;
