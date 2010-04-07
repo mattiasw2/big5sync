@@ -211,8 +211,6 @@
     <Compile Include="Tagging\Exceptions\TagAlreadyExistsException.cs" />
     <Compile Include="Tagging\Exceptions\TagNotFoundException.cs" />
     <Compile Include="Tagging\LogMessage.cs" />
-    <Compile Include="Tagging\RecursionGraph\GraphNode.cs" />
-    <Compile Include="Tagging\RecursionGraph\TagGraph.cs" />
     <Compile Include="Tagging\Tag.cs" />
     <Compile Include="Tagging\TagConfig.cs" />
     <Compile Include="Tagging\TaggedPath.cs" />
