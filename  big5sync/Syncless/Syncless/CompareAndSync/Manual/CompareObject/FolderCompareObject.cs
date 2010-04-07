@@ -165,7 +165,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             {
 
                 if (Parent != null && value)
-                    Parent.Dirty = true; //EXP
+                    Parent.Dirty = true;
                 _dirty = value;
             }
         }
