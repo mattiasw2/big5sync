@@ -51,7 +51,7 @@ namespace SynclessUI
             }
         }
 
-        private void ChkBoxWelcomeOnStartup_Checked(object sender, System.Windows.RoutedEventArgs e)
+        private void ChkBoxWelcomeOnStartup_Click(object sender, System.Windows.RoutedEventArgs e)
         {
 			Settings.Default.DisplayWelcomeScreen = (bool) this.ChkBoxWelcomeOnStartup.IsChecked;
             Settings.Default.Save();
