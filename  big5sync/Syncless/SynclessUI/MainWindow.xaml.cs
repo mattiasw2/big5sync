@@ -75,6 +75,9 @@ namespace SynclessUI
             {
                 var loading = (Storyboard)Resources["MainWindowOnLoaded"];
                 loading.Begin();
+            } else
+            {
+                DisplayWelcomeScreen(this, null);
             }
         }
 
@@ -680,7 +683,7 @@ namespace SynclessUI
         {
             try
             {
-                if (SelectedTag != null && !ListTaggedPath.HasItems)
+                if (SelectedTag == null || !ListTaggedPath.HasItems)
                 {
                     /*
                     string messageBoxText = "There is nothing to untag.";

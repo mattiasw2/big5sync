@@ -19,14 +19,20 @@ namespace SynclessUI
     public partial class DialogWindow : Window
     {
         private bool _closingAnimationNotCompleted = true;
-        private Window _parentWindow;
 
         public DialogWindow(Window parentWindow, string caption, string message, DialogType dt)
         {
             InitializeComponent();
             CannotBeClosed = false;
-            _parentWindow = parentWindow;
 			
+			try {				
+				if(dt != DialogType.Indeterminate) {
+					this.ShowInTaskbar = false;
+					this.Owner = parentWindow;
+				}
+			} catch(InvalidOperationException) {
+			}
+					
             Application.Current.Properties["DialogWindowChoice"] = false;
             LblCaption.Content = caption;
             TxtBlkMessageBoxText.Text = message;
@@ -144,6 +150,10 @@ namespace SynclessUI
                 e.Cancel = true;
                 FormFadeOut.Begin();
             }
+        }
+
+        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
         }
     }
 }
