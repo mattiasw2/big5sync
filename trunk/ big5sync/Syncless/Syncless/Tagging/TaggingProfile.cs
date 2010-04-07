@@ -405,8 +405,8 @@ namespace Syncless.Tagging
         /// Sets the name of a folder path name that is the same as the old path name to the new path 
         /// name that is passed as parameter
         /// </summary>
-        /// <param name="oldPath">The string value that represents the old name of a folder path</param>
-        /// <param name="newPath">The string value that represents the new name of a folder path</param>
+        /// <param name="oldpath">The string value that represents the old name of a folder path</param>
+        /// <param name="newpath">The string value that represents the new name of a folder path</param>
         /// <returns>the number of folder paths whose old name is replaced by the new name</returns>
         public int RenameFolder(string oldpath, string newpath)
         {
@@ -515,7 +515,7 @@ namespace Syncless.Tagging
         /// Checks whether a tag that is not set as deleted with name same as the tag name 
         /// passed as parameter exists
         /// </summary>
-        /// <param name="path">The string value that represents the tag name of the tag to be checked</param>
+        /// <param name="tagname">The string value that represents the tag name of the tag to be checked</param>
         /// <returns>true if the tag is found; otherwise, false</returns>
         public bool Contains(string tagname)
         {
@@ -539,7 +539,7 @@ namespace Syncless.Tagging
         /// <summary>
         /// Checks whether a tag with name same as the tag name passed as parameter exists
         /// </summary>
-        /// <param name="path">The string value that represents the tag name of the tag to be checked</param>
+        /// <param name="tagname">The string value that represents the tag name of the tag to be checked</param>
         /// <returns>true if the tag is found; otherwise, false</returns>
         public bool ContainsIgnoreDeleted(string tagname)
         {
