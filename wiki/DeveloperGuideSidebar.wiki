@@ -47,7 +47,7 @@
       * [DeveloperComponentFilter Filter]
       * [DeveloperComponentNotification Notification]
       * [DeveloperComponentUI User Interface]
-  * [KnownIssues10 Known Issues]
+  * [KnownIssues20 Known Issues]
   * [SpecialCases Special Cases]
   * [TestSeamlessSyncerTester Testing Syncless]
   * [DeveloperGuideRecommendations Recommended Resources]
