@@ -3,9 +3,20 @@ using Syncless.Core;
 using Syncless.Notification;
 namespace Syncless.Tagging
 {
+    /// <summary>
+    /// TagMerger class performs merging of several tagging profiles which have the same name.
+    /// </summary>
     public static class TagMerger
     {
-
+        /// <summary>
+        /// Merges two tagging profiles with the same profile name by merging the tags in each profile
+        /// </summary>
+        /// <param name="currentProfile">The <see cref="TaggingProfile">TaggingProfile</see> object that
+        /// represents the current tagging profile</param>
+        /// <param name="newProfile">The <see cref="TaggingProfile">TaggingProfile</see> object that
+        /// represents the new tagging profile</param>
+        /// <returns>the number of tags merged, -1 if the profiles are null or they have different
+        /// profile name</returns>
         public static int MergeProfile(TaggingProfile currentProfile, TaggingProfile newProfile)
         {
             //the number of updates/
@@ -31,12 +42,10 @@ namespace Syncless.Tagging
                 Tag oldTag = currentProfile.FindTag(newTag.TagName);
                 if (oldTag != null)
                 {
-                    
                     bool merge = MergeTag(oldTag, newTag);
                     if (merge)
                     {
                         updateCount++;
-                        
                     }
                 }
                 else
@@ -56,6 +65,13 @@ namespace Syncless.Tagging
             return updateCount;
         }
 
+        /// <summary>
+        /// Merges two tags with the same tag name by merging the tagged paths in each tag
+        /// </summary>
+        /// <param name="current">The <see cref="Tag">Tag</see> object that represents the current tag</param>
+        /// <param name="newTag">The <see cref="Tag">Tag</see> object that represents the new tag</param>
+        /// <returns>true if the tags are merged, false if the tags have different tag name or 
+        /// same last updated date or different last updated date</returns>
         private static bool MergeTag(Tag current, Tag newTag)
         {
             if (!newTag.TagName.ToLower().Equals(current.TagName.ToLower()))
@@ -74,7 +90,6 @@ namespace Syncless.Tagging
                 //if new Tag is deleted and current is not
                 if (newTag.IsDeleted && !current.IsDeleted)
                 {
-
                     //check the creation date is the same , then delete
                     if (newTag.CreatedDate == current.CreatedDate)
                     {
