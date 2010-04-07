@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Syncless.Notification
 {
+    /// <summary>
+    /// NotificationCode enum provides the enumerations of notification type.
+    /// </summary>
     public enum NotificationCode
     {
         SyncStartNotification,
