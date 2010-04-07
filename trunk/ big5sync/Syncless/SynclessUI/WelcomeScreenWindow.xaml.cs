@@ -20,8 +20,16 @@ namespace SynclessUI
             InitializeComponent();
 
             _main = main;
-            Owner = _main;
-            ShowInTaskbar = false;
+
+            try
+            {
+                this.ShowInTaskbar = false;
+                this.Owner = main;
+            }
+            catch (InvalidOperationException)
+            {
+            }
+
             ChkBoxWelcomeOnStartup.IsChecked = Properties.Settings.Default.DisplayWelcomeScreen;
         }
 
