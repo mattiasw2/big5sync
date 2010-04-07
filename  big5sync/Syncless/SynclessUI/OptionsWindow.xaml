@@ -36,25 +36,13 @@
 		</StackPanel>
 		<Image x:Name="TagIcon" HorizontalAlignment="Right" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,-25,-25,0" Grid.ColumnSpan="2" Source="Icons/option.ico"/>
 		<StackPanel x:Name="GeneralOptions" Grid.Column="1" Grid.Row="2">
-			<StackPanel x:Name="RegistryGroup" Orientation="Horizontal">
-				<CheckBox x:Name="ChkBoxRegistryIntegration" VerticalAlignment="Center" />
-				<Label x:Name="RegistryDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Enable Shell Integration"/>
-			</StackPanel>
-			<StackPanel x:Name="EnableAnimationGroup" Orientation="Horizontal">
-				<CheckBox x:Name="ChkBoxEnableAnimation" VerticalAlignment="Center" />
-				<Label x:Name="EnableAnimationDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Enable Window Animation on Application Start/Exit"/>
-			</StackPanel>
-			<StackPanel x:Name="EnableTrayNotification" Orientation="Horizontal">
-				<CheckBox x:Name="ChkBoxEnableTrayNotification" VerticalAlignment="Center" />
-				<Label x:Name="EnableTrayNotificationDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Enable Tray Notifications"/>
-			</StackPanel>
-			<StackPanel x:Name="EnableNotificationSounds" Orientation="Horizontal">
-				<CheckBox x:Name="ChkBoxEnableNotificationSounds" VerticalAlignment="Center" />
-				<Label x:Name="EnableNotificationSoundsDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Enable Notification Sounds"/>
-			</StackPanel>
-			<StackPanel x:Name="MinimizeToTrayGroup" Orientation="Horizontal">
-				<CheckBox x:Name="ChkBoxMinimizeToTray" VerticalAlignment="Center" />
-				<Label x:Name="MinimizeDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="When Minimizing, Minimize to Tray"/>
+			<StackPanel x:Name="RegistryGroup">
+				<CheckBox x:Name="ChkBoxDisplayWelcomeScreen" VerticalAlignment="Center" FontFamily="Century Gothic" FontSize="13.333" Content="Display Welcome Screen on Application Start/Exit" Margin="0" Foreground="White" />
+				<CheckBox x:Name="ChkBoxRegistryIntegration" VerticalAlignment="Center" FontFamily="Century Gothic" FontSize="13.333" Content="Enable Shell Integration" Margin="0,10,0,0" Foreground="White" />
+				<CheckBox x:Name="ChkBoxEnableAnimation" VerticalAlignment="Center" Content="Enable Window Animation on Application Start/Exit" FontFamily="Century Gothic" FontSize="13.333" Margin="0,10,0,0" Foreground="White" />
+				<CheckBox x:Name="ChkBoxEnableTrayNotification" VerticalAlignment="Center" Content="Enable Tray Notifications" FontFamily="Century Gothic" FontSize="13.333" Margin="0,10,0,0" Foreground="White" />
+				<CheckBox x:Name="ChkBoxEnableNotificationSounds" VerticalAlignment="Center" Content="Enable Notification Sounds" FontFamily="Century Gothic" FontSize="13.333" Margin="0,10,0,0" Foreground="White" />
+				<CheckBox x:Name="ChkBoxMinimizeToTray" VerticalAlignment="Center" Content="When Minimizing, Minimize to Tray" FontFamily="Century Gothic" FontSize="13.333" Margin="0,10,0,0" Foreground="White" />
 			</StackPanel>
 		</StackPanel>
 	</Grid>

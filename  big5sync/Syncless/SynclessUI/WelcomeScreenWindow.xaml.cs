@@ -3,11 +3,12 @@ using System.Windows;
 using System.Windows.Input;
 using Syncless.Core.Exceptions;
 using SynclessUI.Helper;
+using SynclessUI.Properties;
 
 namespace SynclessUI
 {
     /// <summary>
-    /// Interaction logic for CreateTagWindow.xaml
+    /// Interaction logic for WelcomeScreenWindow.xaml
     /// </summary>
     public partial class WelcomeScreenWindow : Window
     {
@@ -19,7 +20,9 @@ namespace SynclessUI
             InitializeComponent();
 
             _main = main;
-			Show();
+            Owner = _main;
+            ShowInTaskbar = false;
+            ChkBoxWelcomeOnStartup.IsChecked = Properties.Settings.Default.DisplayWelcomeScreen;
         }
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)
@@ -46,6 +49,12 @@ namespace SynclessUI
                 e.Cancel = true;
                 FormFadeOut.Begin();
             }
+        }
+
+        private void ChkBoxWelcomeOnStartup_Checked(object sender, System.Windows.RoutedEventArgs e)
+        {
+			Settings.Default.DisplayWelcomeScreen = (bool) this.ChkBoxWelcomeOnStartup.IsChecked;
+            Settings.Default.Save();
         }
     }
 }
