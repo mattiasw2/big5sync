@@ -51,7 +51,6 @@ namespace SynclessUI
         {
             InitializeComponent();
             InitializeSyncless();
-            //DisplayWelcomeScreen();
             InitializeKeyboardShortcuts();
         }
 
@@ -96,11 +95,12 @@ namespace SynclessUI
             }
         }
 
-        private void DisplayWelcomeScreen()
+        private void DisplayWelcomeScreen(object sender, EventArgs e)
         {
-            if (Settings.Default.MinimizeToTray)
+            if (Settings.Default.DisplayWelcomeScreen)
             {
                 WelcomeScreenWindow wsw = new WelcomeScreenWindow(this);
+				wsw.ShowDialog();
             }
         }
 

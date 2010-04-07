@@ -89,7 +89,7 @@
 			<GradientStop Color="#FF0AACE2" Offset="1"/>
 			<GradientStop Color="#FF8FE2FD" Offset="0.5"/>
 		</LinearGradientBrush>
-		<Storyboard x:Key="MainWindowOnLoaded" Name="MainWindowOnLoaded">
+		<Storyboard x:Key="MainWindowOnLoaded" Name="MainWindowOnLoaded" Completed="DisplayWelcomeScreen">
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LogoHighlight" Storyboard.TargetProperty="(UIElement.Opacity)">
 				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
 				<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="1"/>

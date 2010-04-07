@@ -26,10 +26,10 @@ namespace SynclessUI
             InitializeComponent();
             CannotBeClosed = false;
             _parentWindow = parentWindow;
-            ShowInTaskbar = false;
 
 			if(dt != DialogType.Indeterminate) {
 				Owner = _parentWindow;
+                ShowInTaskbar = false;
 			}
 			
             Application.Current.Properties["DialogWindowChoice"] = false;

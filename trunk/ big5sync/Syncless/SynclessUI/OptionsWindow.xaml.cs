@@ -31,14 +31,15 @@ namespace SynclessUI
             ChkBoxEnableAnimation.IsChecked = Settings.Default.EnableAnimation;
             ChkBoxEnableTrayNotification.IsChecked = Settings.Default.EnableTrayNotification;
             ChkBoxEnableNotificationSounds.IsChecked = Settings.Default.EnableNotificationSounds;
+			ChkBoxDisplayWelcomeScreen.IsChecked = Settings.Default.DisplayWelcomeScreen;
         }
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
             BtnOk.IsEnabled = false;
-            bool choice = ChkBoxRegistryIntegration.IsChecked.Value;
+            bool shellIntegrationChoice = ChkBoxRegistryIntegration.IsChecked.Value;
 
-            if (choice)
+            if (shellIntegrationChoice)
             {
                 var appPath = (string) Application.Current.Properties["AppPath"];
 
@@ -50,11 +51,12 @@ namespace SynclessUI
             }
 
             Close();
-            Settings.Default.EnableShellIntegration = choice;
+            Settings.Default.EnableShellIntegration = shellIntegrationChoice;
             Settings.Default.MinimizeToTray = (bool) ChkBoxMinimizeToTray.IsChecked;
             Settings.Default.EnableAnimation = (bool) ChkBoxEnableAnimation.IsChecked;
             Settings.Default.EnableTrayNotification = (bool) ChkBoxEnableTrayNotification.IsChecked;
             Settings.Default.EnableNotificationSounds = (bool)ChkBoxEnableNotificationSounds.IsChecked;
+			Settings.Default.DisplayWelcomeScreen = (bool) ChkBoxDisplayWelcomeScreen.IsChecked;
             Settings.Default.Save();
         }
 
