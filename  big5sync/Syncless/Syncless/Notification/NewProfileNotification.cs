@@ -8,7 +8,7 @@ namespace Syncless.Notification
     public class NewProfileNotification : AbstractNotification
     {
         public NewProfileNotification()
-            : base("New profile notification", Syncless.Notification.NotificationCode.NEW_PROFILE_NOTIFICATION)
+            : base("New profile notification", Syncless.Notification.NotificationCode.NewProfileNotification)
         {
 
         }

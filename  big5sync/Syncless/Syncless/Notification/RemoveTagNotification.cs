@@ -16,7 +16,7 @@ namespace Syncless.Notification
             set { _tag = value; }
         }
         public RemoveTagNotification(Tag tag)
-            : base("Add Tag Notification", Syncless.Notification.NotificationCode.ADD_TAG_NOTIFICATION)
+            : base("Add Tag Notification", Syncless.Notification.NotificationCode.AddTagNotification)
         {
             this._tag = tag;
         }

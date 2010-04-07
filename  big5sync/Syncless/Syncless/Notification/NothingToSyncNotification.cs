@@ -15,7 +15,7 @@ namespace Syncless.Notification
             set { _tagName = value; }
         }
 
-        public NothingToSyncNotification(string tagName):base("Nothing to Sync" , Syncless.Notification.NotificationCode.NOTHING_TO_SYNC_NOTIFICATION)
+        public NothingToSyncNotification(string tagName):base("Nothing to Sync" , Syncless.Notification.NotificationCode.NothingToSyncNotification)
         {
             _tagName = tagName;
 

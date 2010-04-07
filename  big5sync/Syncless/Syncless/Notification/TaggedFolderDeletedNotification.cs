@@ -23,7 +23,7 @@ namespace Syncless.Notification
         }
 
         public TaggedFolderDeletedNotification(string path,string tagName)
-            : base("Tagged Folder Delete Notification", Syncless.Notification.NotificationCode.Tagged_Folder_Deleted_Notification)
+            : base("Tagged Folder Delete Notification", Syncless.Notification.NotificationCode.TaggedFolderDeletedNotification)
         {
             _path = path;
             _tagName = tagName;

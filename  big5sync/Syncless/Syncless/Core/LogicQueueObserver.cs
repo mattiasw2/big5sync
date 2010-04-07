@@ -69,28 +69,28 @@ namespace Syncless.Core
 
         private void Handle(AbstractNotification notification)
         {
-            if (notification.NotificationCode.Equals(NotificationCode.MONITOR_PATH_NOTIFICATION))
+            if (notification.NotificationCode.Equals(NotificationCode.MonitorPathNotification))
             {
                 MonitorPathNotification mpNotification = notification as MonitorPathNotification;
                 if (mpNotification == null)//Discard
                     return;
                 _sll.AddTagPath(mpNotification.TargetTag, mpNotification.TargetPath);
             }
-            else if (notification.NotificationCode == NotificationCode.UNMONITOR_PATH_NOTIFICATION)
+            else if (notification.NotificationCode == NotificationCode.UnmonitorPathNotification)
             {
                 UnMonitorPathNotification umpNotification = notification as UnMonitorPathNotification;
                 if (umpNotification == null)//Discard
                     return;
                 _sll.RemoveTagPath(umpNotification.TargetTag, umpNotification.TargetPath);
             }
-            else if (notification.NotificationCode ==NotificationCode.ADD_TAG_NOTIFICATION )
+            else if (notification.NotificationCode ==NotificationCode.AddTagNotification )
             {
                 AddTagNotification atNotification = notification as AddTagNotification;
                 if (atNotification == null)//Discard
                     return;
                 _sll.AddTag(atNotification.Tag);
             }
-            else if (notification.NotificationCode ==NotificationCode.DEL_TAG_NOTIFICATION )
+            else if (notification.NotificationCode ==NotificationCode.DeleteTagNotification )
             {
                 RemoveTagNotification rmNotification = notification as RemoveTagNotification;
                 if (rmNotification == null)//Discard
@@ -98,14 +98,14 @@ namespace Syncless.Core
 
                 _sll.RemoveTag(rmNotification.Tag);
             }
-            else if (notification.NotificationCode == NotificationCode.MONITOR_TAG_NOTIFICATION)
+            else if (notification.NotificationCode == NotificationCode.MonitorTagNotification)
             {
                 MonitorTagNotification mtNotification = notification as MonitorTagNotification;
                 if (mtNotification == null)//Discard
                     return;
                 _sll.MonitorTag(mtNotification.Tagname);
             }
-            else if (notification.NotificationCode == NotificationCode.TAGGED_PATH_DELETED_NOTIFICATION)
+            else if (notification.NotificationCode == NotificationCode.TaggedPathDeletedNotification)
             {
                 TaggedPathDeletedNotification tpdNotification = notification as TaggedPathDeletedNotification;
                 if (tpdNotification == null) // Discard
