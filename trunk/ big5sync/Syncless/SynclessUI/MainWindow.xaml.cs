@@ -129,6 +129,11 @@ namespace SynclessUI
                     InitializeTagInfoPanel();
                     InitializeTagList();
                     Show();
+
+                    _notificationWatcher = new NotificationWatcher(this);
+                    _notificationWatcher.Start();
+                    _priorityNotificationWatcher = new PriorityNotificationWatcher();
+                    _priorityNotificationWatcher.Start();
                 }
                 else
                 {
@@ -139,10 +144,7 @@ namespace SynclessUI
                     Close();
                 }
 
-                _notificationWatcher = new NotificationWatcher(this);
-                _notificationWatcher.Start();
-                _priorityNotificationWatcher = new PriorityNotificationWatcher();
-                _priorityNotificationWatcher.Start();
+
             }
             catch (UnhandledException)
             {
@@ -173,11 +175,10 @@ namespace SynclessUI
 
         public void ViewTagInfo(string tagname)
         {
-
             try
             {
-
                 TagView tv = Gui.GetTag(tagname);
+
                 if (tv == null)
                 {
                     InitializeTagInfoPanel();
@@ -185,8 +186,6 @@ namespace SynclessUI
                 }
                 SelectedTag = tagname;
                 TagTitle.Text = tv.TagName;
-                // tag.direction not implemented yet
-
                 
                 ListTaggedPath.ItemsSource = tv.PathStringList;
 
@@ -208,18 +207,31 @@ namespace SynclessUI
                 {
                     ProgressBarSync.Value = 0;
                     SetProgressBarColor(0);
+                }
 
-                    if (_tagStatusNotificationDictionary.ContainsKey(tagname))
+                if (_tagStatusNotificationDictionary.ContainsKey(tagname))
+                {
+                    string tagStatus = GetTagStatus(tagname);
+
+                    LblStatusText.Content = tagStatus;
+
+                    if(tagStatus != "")
                     {
-                        LblStatusText.Content = GetTagStatus(tagname);
-                    }
-                    else
+                        ProgressBarSync.Visibility = Visibility.Visible;
+                        LblProgress.Visibility = Visibility.Visible;
+                    } else
                     {
-                        LblStatusText.Content = "";
                         ProgressBarSync.Visibility = Visibility.Hidden;
                         LblProgress.Visibility = Visibility.Hidden;
                     }
                 }
+                else
+                {
+                    LblStatusText.Content = "";
+                    ProgressBarSync.Visibility = Visibility.Hidden;
+                    LblProgress.Visibility = Visibility.Hidden;
+                }
+
                 switch (tv.TagState)
                 {
                     case TagState.SeamlessToManual:
@@ -453,8 +465,8 @@ namespace SynclessUI
             BtnSyncMode.SetResourceReference(BackgroundProperty, "ToggleOnBrush");
             LblSyncMode.SetResourceReference(MarginProperty, "ToggleOnMargin");
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOnForeground");
-            ProgressBarSync.Visibility = System.Windows.Visibility.Hidden;
-            LblProgress.Visibility = System.Windows.Visibility.Hidden;
+            ProgressBarSync.Visibility = Visibility.Hidden;
+            LblProgress.Visibility = Visibility.Hidden;
             Console.WriteLine("In Seamless Mode");
             LblStatusTitle.Visibility = Visibility.Hidden;
             LblStatusText.Visibility = Visibility.Hidden;
@@ -490,7 +502,8 @@ namespace SynclessUI
                 if (_tagStatusNotificationDictionary.ContainsKey(SelectedTag))
                 {
                     ProgressBarSync.Visibility = Visibility.Visible;
-                    LblProgress.Visibility = Visibility.Visible;
+                    if (Progress.TagName == SelectedTag && Progress.State == SyncState.Analyzing)
+                        LblProgress.Visibility = Visibility.Hidden;
                 }
 
                 Console.WriteLine("In Manual Mode");
@@ -685,14 +698,7 @@ namespace SynclessUI
             {
                 if (SelectedTag == null || !ListTaggedPath.HasItems)
                 {
-                    /*
-                    string messageBoxText = "There is nothing to untag.";
-                    string caption = "Nothing to Untag";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Error;
-
-                    MessageBox.Show(messageBoxText, caption, button, icon);
-                    */
+                    DialogHelper.ShowError(this, "Nothing to Untag", "There is nothing to untag.");
                 }
                 else
                 {
@@ -875,6 +881,9 @@ namespace SynclessUI
                     DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
                                            "You cannot view tag details while the tag is synchronizing.");
                 }
+            } else
+            {
+                DialogHelper.ShowError(this, "No Tag Selected", "Please select a tag to show details.");
             }
         }
 
@@ -1165,8 +1174,8 @@ namespace SynclessUI
                 LblStatusText.Content = message;
                 ProgressBarSync.Value = percentageComplete;
                 SetProgressBarColor(percentageComplete);
-                //ProgressBarSync.IsIndeterminate = true;
-                //LblProgress.Visibility = Visibility.Hidden;
+                ProgressBarSync.IsIndeterminate = true;
+                LblProgress.Visibility = Visibility.Hidden;
             }
 
             _syncProgressNotificationDictionary[tagname] = percentageComplete;
@@ -1262,8 +1271,25 @@ namespace SynclessUI
                 LblStatusText.Content = message;
                 ProgressBarSync.Value = percentageComplete;
                 SetProgressBarColor(percentageComplete);
-                //ProgressBarSync.IsIndeterminate = false;
-                //LblProgress.Visibility = Visibility.Visible;
+
+                switch (Progress.State)
+                {
+                    case SyncState.Analyzing:
+                        ProgressBarSync.IsIndeterminate = true;
+                        LblProgress.Visibility = Visibility.Hidden;
+                        break;
+                    case SyncState.Synchronizing:
+                        ProgressBarSync.IsIndeterminate = false;
+                        LblProgress.Visibility = Visibility.Visible;
+                        break;
+
+                    case SyncState.Finalizing:
+                        ProgressBarSync.IsIndeterminate = false;
+                        LblProgress.Visibility = Visibility.Visible;
+                        break;
+                    default:
+                        return;
+                }
             }
             _syncProgressNotificationDictionary[tagname] = percentageComplete;
             _tagStatusNotificationDictionary[tagname] = message;
@@ -1782,7 +1808,7 @@ namespace SynclessUI
                 }
                 else
                 {
-                    DialogHelper.ShowError(this, "No Tag Selected", "Please select a tag.");
+                    DialogHelper.ShowError(this, "No Tag Selected", "Please select a tag to remove.");
                 }
             }
             catch (UnhandledException)
