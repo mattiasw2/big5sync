@@ -5,7 +5,10 @@ using System.Text;
 
 namespace Syncless.Profiling.Exceptions
 {
-    public class ProfileNameDifferentException:Exception
+    /// <summary>
+    /// The exception that is thrown when there is conflict in profile name between profiles.
+    /// </summary>
+    public class ProfileNameDifferentException : Exception
     {
     }
 }
