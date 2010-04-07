@@ -6,6 +6,10 @@ using System.IO;
 using System.Diagnostics;
 namespace Syncless.Profiling
 {
+    /// <summary>
+    /// ProfilingHelper provides some common methods which may be used by other classes under the 
+    /// Profiling namespace
+    /// </summary>
     internal static class ProfilingHelper
     {
         /// <summary>
