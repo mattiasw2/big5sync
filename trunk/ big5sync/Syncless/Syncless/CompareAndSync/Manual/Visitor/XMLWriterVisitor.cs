@@ -378,7 +378,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         private void ModifyFolderName(FolderCompareObject folder, string subFolderPath)
         {
             string name = folder.NewName ?? folder.Name;
-            string xmlPath = Path.Combine(Path.Combine(subFolderPath, folder.Name), CommonXMLConstants.MetadataPath);
+            string xmlPath = Path.Combine(Path.Combine(subFolderPath, name), CommonXMLConstants.MetadataPath);
             XmlDocument subFolderDoc = new XmlDocument();
             CommonMethods.LoadXML(ref subFolderDoc, xmlPath);
 
