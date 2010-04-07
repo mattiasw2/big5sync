@@ -12,12 +12,42 @@ namespace Syncless.Helper
         public const string INVALID_PATH = "001";
         #endregion
         #region Tagging Error Messages (Error Code : 100~199)
+        /// <summary>
+        /// The string value that represents the error of path not found
+        /// </summary>
         public const string PATH_NOT_FOUND_EXCEPTION = "100";
+
+        /// <summary>
+        /// The string value that represents the error of path already exists
+        /// </summary>
         public const string PATH_ALREADY_EXISTS_EXCEPTION = "110";
+
+        /// <summary>
+        /// The string value that represents the error of tag not found
+        /// </summary>
         public const string TAG_NOT_FOUND_EXCEPTION = "101";
+
+        /// <summary>
+        /// The string value that represents the error of tag already exists
+        /// </summary>
         public const string TAG_ALREADY_EXISTS_EXCEPTION = "111";
+
+        /// <summary>
+        /// The string value that represents the error of recursive tagging
+        /// </summary>
         public const string RECURSIVE_DIRECTORY_EXCEPTION = "120";
-        public const string TAG_TYPE_CONFLICT_EXCEPTION = "130";
+
+        //public const string TAG_TYPE_CONFLICT_EXCEPTION = "130";
+        
+        /// <summary>
+        /// The string value that represents the error of filter not found
+        /// </summary>
+        public const string FILTER_NOT_FOUND_EXCEPTION = "140";
+
+        /// <summary>
+        /// The string value that represents the error of filter already exists
+        /// </summary>
+        public const string FILTER_ALREADY_EXISTS_EXCEPTION = "141";
         #endregion
         #region Profiling Error Messages (Error Code : 200~299)
         public const string PROFILE_CONFLICT_EXCEPTION = "210";
