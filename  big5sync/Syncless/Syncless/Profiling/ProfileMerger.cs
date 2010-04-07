@@ -6,6 +6,9 @@ using Syncless.Profiling.Exceptions;
 
 namespace Syncless.Profiling
 {
+    /// <summary>
+    /// ProfileMerger class performs merging of several profiles which have the same name.
+    /// </summary>
     public static class ProfileMerger
     {
         /// <summary>
