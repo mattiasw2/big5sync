@@ -11,16 +11,34 @@ using Syncless.Notification;
 using Syncless.Notification.UINotification;
 namespace Syncless.Profiling
 {
+    /// <summary>
+    /// ProfilingLayer class provides operations to convert between logical address and physical address
+    /// and operations to setup drives.
+    /// </summary>
     internal class ProfilingLayer
     {
         #region path name constants
+        /// <summary>
+        /// The path for saving profiling.xml in .syncless folder
+        /// </summary>
         public const string RELATIVE_PROFILING_SAVE_PATH = ".syncless\\profiling.xml";
+
+        /// <summary>
+        /// The path for saving guid.id in .syncless folder
+        /// </summary>
         public const string RELATIVE_GUID_SAVE_PATH = ".syncless\\guid.id";
+
+        /// <summary>
+        /// The path for saving profiling.xml
+        /// </summary>
         public const string RELATIVE_PROFILING_ROOT_SAVE_PATH = "profiling.xml";
         #endregion
 
         #region Singleton/Profile
         private static ProfilingLayer _instance;
+        /// <summary>
+        /// Gets the single instance of the profiling layer
+        /// </summary>
         public static ProfilingLayer Instance
         {
             get
@@ -34,15 +52,26 @@ namespace Syncless.Profiling
         }
 
         private Profile _profile;
+        /// <summary>
+        /// Gets the profile
+        /// </summary>
         public Profile CurrentProfile
         {
             get { return _profile; }
         }
         
+        /// <summary>
+        /// Creates a new ProfilingLayer object
+        /// </summary>
         private ProfilingLayer()
         {
             _profile = new Profile("");
         }
+
+        /// <summary>
+        /// Sets the profile name to the new name
+        /// </summary>
+        /// <param name="newName">The new name to be given to the profile</param>
         public void ChangeProfileName(string newName)
         {
             _profile.ProfileName = newName;
@@ -221,7 +250,7 @@ namespace Syncless.Profiling
         #endregion
 
         /// <summary>
-        /// Initialize the Profiling Layer.
+        /// Initialize the profiling layer
         /// </summary>
         /// <param name="path">The root path for the profiling configuration file.</param>
         /// <returns>True if the profile is load.</returns>
