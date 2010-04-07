@@ -6,7 +6,7 @@ using System.Text;
 namespace Syncless.Profiling.Exceptions
 {
     /// <summary>
-    /// The exception that is thrown when there is conflict in profile GUID.
+    /// The exception that is thrown when there is conflict between profile GUIDs.
     /// </summary>
     public class ProfileGuidConflictException : Exception
     {
