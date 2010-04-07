@@ -65,12 +65,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 }
 
                 if (folderObject != null)
-                        MergeRenamedFolder(folder, folderObject, deleteIndexes);
+                    MergeRenamedFolder(folder, folderObject, deleteIndexes);
 
             }
-
-            //if (count == 1)
-            //    MergeRenamedFolder(folder, folderObject, renamePos);
         }
 
         private void MergeRenamedFolder(FolderCompareObject actualFolder, FolderCompareObject renamedFolder, List<int> deleteIndexes)
@@ -110,7 +107,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 }
             }
 
-            actualFolder.Parent.Dirty = true; //EXP
+            actualFolder.Parent.Dirty = true;
             renamedFolder.Contents = new Dictionary<string, BaseCompareObject>();
             renamedFolder.Invalid = true;
         }
@@ -147,7 +144,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 }
             }
 
-            //actualFolder.Parent.Dirty = true; //EXP
             renamedFolder.Contents = new Dictionary<string, BaseCompareObject>();
             renamedFolder.Invalid = true;
         }
@@ -191,7 +187,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 actualObj.CreationTime[i] = renameObj.CreationTime[i];
                 actualObj.Exists[i] = renameObj.Exists[i];
                 actualObj.FinalState[i] = renameObj.FinalState[i];
-                actualObj.Invalid = renameObj.Invalid; //EXP
+                actualObj.Invalid = renameObj.Invalid;
                 actualObj.MetaCreationTime[i] = renameObj.MetaCreationTime[i];
                 actualObj.MetaExists[i] = renameObj.MetaExists[i];
                 actualObj.MetaUpdated[i] = renameObj.MetaUpdated[i];

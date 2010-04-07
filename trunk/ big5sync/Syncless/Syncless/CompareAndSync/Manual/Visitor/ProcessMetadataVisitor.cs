@@ -51,7 +51,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     {
                         ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error hashing " + Path.Combine(file.GetSmartParentPath(index), file.Name + ".")));
                         file.FinalState[index] = FinalState.Error;
-                        file.Invalid = true; //EXP
+                        file.Invalid = true;
                     }
                 }
             }

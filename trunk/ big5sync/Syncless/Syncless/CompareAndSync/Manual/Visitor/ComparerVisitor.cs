@@ -132,8 +132,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                             List<int> pos = null;
                             if (newNames.TryGetValue(f.Name, out pos))
                             {
-                                //newNames.Add(f.Name, i);
-                                //result = f;
                                 pos.Add(i);
                             }
                             else
@@ -160,9 +158,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     file.ChangeType[i] = MetaChangeType.Rename;
 
                 result.Invalid = true;
-                file.Parent.Dirty = true; //EXP
+                file.Parent.Dirty = true;
             }
-            else if (newNames.Count > 1) //More than 2 renames detected
+            else if (newNames.Count > 1)
             {
                 foreach (int i in unchangedIndexes)
                     file.ChangeType[i] = MetaChangeType.New;
@@ -398,6 +396,35 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
 
             folder.SourcePosition = mostUpdatedPos;
+
+            //When to set parent to dirty? When the priority is not the same for all files? EXP
+            int priority = -1;
+            int numExists = 0;
+            int posExists = -1;
+            for (int i = 0; i < numOfPaths; i++)
+            {
+                if (folder.Exists[i])
+                {
+                    numExists++;
+                    posExists = i;
+                    if (priority < 0)
+                        priority = folder.Priority[i];
+                    else
+                    {
+                        if (priority != folder.Priority[i])
+                        {
+                            folder.Parent.Dirty = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (numExists == 1)
+            {
+                if (folder.ChangeType[posExists] == MetaChangeType.New)
+                    folder.Parent.Dirty = true;
+            }
         }
 
         #endregion

@@ -54,7 +54,7 @@ namespace Syncless.CompareAndSync.Seamless
                         HandleFileRename(request, sourceFullPath);
                         break;
                     case AutoSyncRequestType.Delete:
-                        HandleFileDelete(request); //EXP
+                        HandleFileDelete(request);
                         break;
                 }
             }
