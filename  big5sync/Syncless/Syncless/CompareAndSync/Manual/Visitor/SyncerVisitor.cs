@@ -65,13 +65,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 return;
             }
 
-            //int maxPriorityPos = 0;
-            //for (int i = 0; i < numOfPaths; i++)
-            //{
-            //    if (folder.Priority[i] > folder.Priority[maxPriorityPos])
-            //        maxPriorityPos = i;
-            //}
-
             int maxPriorityPos = folder.SourcePosition;
 
             if (folder.Priority[maxPriorityPos] > 0)
@@ -290,7 +283,8 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     }
                     else
                     {
-                        fco.FinalState[i] = FinalState.Unchanged; //Should not be able to hit here
+                        fco.FinalState[i] = FinalState.Renamed;
+                        changed = true;
                     }
                 }
             }
@@ -440,7 +434,8 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     }
                     else
                     {
-                        folder.FinalState[i] = FinalState.Unchanged; //Should not be able to reach here
+                        folder.FinalState[i] = FinalState.Renamed;
+                        changed = true;
                     }
                 }
             }
