@@ -17,6 +17,12 @@ namespace SynclessUI.Visitor
         public const string Tooltip = "tooltip";
         public const string SourceIcon = "sourceicon";
         public const string DestIcon = "desticon";
+        public const string SourceLastModifiedDate = "sourcelastmodifieddate";
+        public const string SourceLastModifiedTime = "sourcelastmodifiedtime";
+        public const string SourceSize = "sourcesize";
+        public const string DestLastModifiedDate = "destlastmodifieddate";
+        public const string DestLastModifiedTime = "destlastmodifiedtime";
+        public const string DestSize = "destsize";
 
         private const string CopyConstant = "Icons\\green-sync-arrow.png";
         private const string DeleteConstant = "Icons\\red-sync-arrow.png";
@@ -42,49 +48,74 @@ namespace SynclessUI.Visitor
             set { _syncData = value; }
         }
 
-        public void Visit(FileCompareObject file, int numOfPaths)
+        public void Visit(FileCompareObject fco, int numOfPaths)
         {
-            if (file.Invalid)
+            if (fco.Invalid)
                 return;
 
-            int maxPriorityPos = file.SourcePosition;
+            int maxPriorityPos = fco.SourcePosition;
 
-            if (file.Priority[maxPriorityPos] > 0)
+            if (fco.Priority[maxPriorityPos] > 0)
             {
-                for (int i = 0; i < file.Priority.Length; i++)
+                for (int i = 0; i < fco.Priority.Length; i++)
                 {
-                    if (i != maxPriorityPos && file.Priority[i] != file.Priority[maxPriorityPos])
+                    if (i != maxPriorityPos && fco.Priority[i] != fco.Priority[maxPriorityPos])
                     {
                         string operation = string.Empty,
                                source = string.Empty,
-                               dest = string.Empty;
-                        Console.WriteLine(operation);
+                               dest = string.Empty,
+                               tooltip = string.Empty;
+
                         var row = SyncData.NewRow();
 
-                        switch (file.ChangeType[maxPriorityPos])
+                        switch (fco.ChangeType[maxPriorityPos])
                         {
                             case MetaChangeType.New:
                             case MetaChangeType.Update:
                             case MetaChangeType.NoChange:
-                                source = Path.Combine(file.GetSmartParentPath(maxPriorityPos), file.Name);
-                                dest = Path.Combine(file.GetSmartParentPath(i), file.Name);
-                                operation = file.Exists[i] ? UpdateConstant : CopyConstant;
+                                source = Path.Combine(fco.GetSmartParentPath(maxPriorityPos), fco.Name);
+                                dest = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
+                                operation = fco.Exists[i] ? UpdateConstant : CopyConstant;
                                 break;
                             case MetaChangeType.Delete:
-                                source = Path.Combine(file.GetSmartParentPath(maxPriorityPos), file.Name);
-                                dest = Path.Combine(file.GetSmartParentPath(i), file.Name);
+                                source = Path.Combine(fco.GetSmartParentPath(maxPriorityPos), fco.Name);
+                                dest = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
                                 operation = DeleteConstant;
+                                tooltip = DeleteToolTip;
                                 break;
                             case MetaChangeType.Rename:
-                                string oldName = Path.Combine(file.GetSmartParentPath(i), file.Name);
-                                source = File.Exists(oldName) ? oldName : Path.Combine(file.GetSmartParentPath(maxPriorityPos), file.NewName);
-                                dest = Path.Combine(file.GetSmartParentPath(i), file.NewName);
+                                string oldName = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
+                                source = File.Exists(oldName) ? oldName : Path.Combine(fco.GetSmartParentPath(maxPriorityPos), fco.NewName);
+                                dest = Path.Combine(fco.GetSmartParentPath(i), fco.NewName);
                                 operation = File.Exists(oldName) ? RenameConstant : CopyConstant;
+                                tooltip = File.Exists(oldName) ? RenameToolTip : CopyToolTip;
                                 break;
                         }
                         row[Source] = source;
                         row[Operation] = operation;
                         row[Dest] = dest;
+                        row[Tooltip] = tooltip;
+                        row[SourceIcon] = FileIcon;
+                        row[DestIcon] = FileIcon;
+                        DateTime sourceDateTime = new DateTime(fco.LastWriteTime[maxPriorityPos]);
+                        row[SourceLastModifiedDate] = sourceDateTime.ToShortDateString();
+                        row[SourceLastModifiedTime] = sourceDateTime.ToShortTimeString();
+                        row[SourceSize] = fco.Length[maxPriorityPos];
+
+                        if (fco.Exists[i])
+                        {
+                            DateTime destDateTime = new DateTime(fco.LastWriteTime[i]);
+                            row[DestLastModifiedDate] = destDateTime.ToShortDateString();
+                            row[DestLastModifiedTime] = destDateTime.ToShortTimeString();
+
+                            row[DestSize] = fco.Length[i];
+                        } else
+                        {
+                            row[DestLastModifiedDate] = "-";
+                            row[DestSize] = "-";
+                        }
+
+
                         SyncData.Rows.Add(row);
                         SyncData.AcceptChanges();
                     }
@@ -141,6 +172,10 @@ namespace SynclessUI.Visitor
                         row[Tooltip] = tooltip;
                         row[SourceIcon] = FolderIcon;
                         row[DestIcon] = FolderIcon;
+                        row[SourceLastModifiedDate] = "-";
+                        row[SourceSize] = "-";
+                        row[DestLastModifiedDate] = "-";
+                        row[DestSize] = "-";
                         _syncData.Rows.Add(row);
                     }
                 }

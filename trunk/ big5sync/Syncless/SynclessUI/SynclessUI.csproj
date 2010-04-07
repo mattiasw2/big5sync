@@ -250,6 +250,7 @@
     <Resource Include="Icons\completelogo.ico" />
     <Resource Include="Icons\createtag.ico" />
     <Resource Include="Icons\dropindicator.ico" />
+    <Resource Include="Icons\file.ico" />
     <Resource Include="Icons\green-sync-arrow.png" />
     <Resource Include="Icons\log.ico" />
     <Resource Include="Icons\red-sync-arrow.png" />
