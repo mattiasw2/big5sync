@@ -169,7 +169,10 @@ namespace Syncless.Core
         /// <exception cref="UnhandledException">Unhandled Exception</exception>
         /// <returns>the list of log data.</returns>
         List<LogData> ReadLog();
-
+        /// <summary>
+        /// Clear the user log
+        /// </summary>
+        void ClearLog();
     }
 
 }

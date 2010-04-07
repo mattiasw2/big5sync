@@ -1402,6 +1402,23 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
+
+        /// <summary>
+        /// Clear the user log
+        /// </summary>
+        public void ClearLog()
+        {
+            try
+            {
+                LoggingLayer.Instance.ClearLog();
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
         /// <summary>
         /// Initiate a save.
         /// </summary>

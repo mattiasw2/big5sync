@@ -7,7 +7,6 @@ namespace Syncless.Logging
 {
     public class DebugLogger : Logger
     {
-
         private const string linebreak = "--------------------------------------------------------";
         private const string indent = "\t\t\t";
 
