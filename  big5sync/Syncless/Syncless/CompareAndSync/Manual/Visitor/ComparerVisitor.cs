@@ -174,7 +174,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         {
             //Rename will only occur if all other changes are MetaChangeType.NoChange or null
             int renamePos = -1;
-            int count = 0;
 
             for (int i = 0; i < numOfPaths; i++)
             {
@@ -186,21 +185,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         file.SourcePosition = renamePos;
                     }
                     file.Priority[i] = 1;
-                    //count++;
                 }
-                //else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null && file.ChangeType[i] != MetaChangeType.Delete)
-                //{
-                //    renamePos = -1;
-                //    break;
-                //}
             }
 
             if (renamePos > -1)
-            {
-                //file.Priority[renamePos] = 1;
-                //file.SourcePosition = renamePos;
                 return;
-            }
 
             //Delete will only occur if all other changes are MetaChangeType.NoChange or null
             List<int> deletePos = new List<int>();
@@ -325,28 +314,22 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         {
             //Rename will only occur if all other changes are MetaChangeType.NoChange or null
             int renamePos = -1;
-            int count = 0;
 
             for (int i = 0; i < numOfPaths; i++)
             {
                 if (folder.ChangeType[i] == MetaChangeType.Rename)
                 {
-                    renamePos = i;
-                    count++;
-                }
-                else if (folder.ChangeType[i] != MetaChangeType.NoChange && folder.ChangeType[i] != MetaChangeType.Delete && folder.ChangeType[i] != null)
-                {
-                    renamePos = -1;
-                    break;
+                    if (renamePos == -1)
+                    {
+                        renamePos = i;
+                        folder.SourcePosition = renamePos;
+                    }
+                    folder.Priority[i] = 1;
                 }
             }
 
-            if (renamePos > -1 && count == 1)
-            {
-                folder.Priority[renamePos] = 1;
-                folder.SourcePosition = renamePos;
+            if (renamePos > -1)
                 return;
-            }
 
             //Delete will only occur if none of the folders are marked as dirty
             List<int> deletePos = new List<int>();
