@@ -73,7 +73,7 @@ namespace Syncless.Logging
         /// </summary>
         FSCHANGE_ERROR,
         /// <summary>
-        /// An measure to prevent exception when the log file is tampered.
+        /// A measure to prevent exception when the log file is tampered.
         /// Do not use this when logging.
         /// </summary>
         UNKNOWN
