@@ -132,7 +132,7 @@ namespace Syncless.Tagging
         /// The string value that represents the attribute name for filter type attribute
         /// </summary>
         private const string ATTR_FILTER_TYPE = "type";
-        
+
         /// <summary>
         /// The string value that represents the attribute value for filter type extension attribute
         /// </summary>
@@ -248,7 +248,7 @@ namespace Syncless.Tagging
                     else
                     {
                         XmlElement newProfileElement = CreateTaggingProfileElement(xmldoc, profile);
-                        XmlElement oldProfileElement = (XmlElement) xmldoc.SelectSingleNode(@"//" + ELE_PROFILE_ROOT + "[@" + ATTR_PROFILE_NAME + @"='" + profile.ProfileName + @"']");
+                        XmlElement oldProfileElement = (XmlElement)xmldoc.SelectSingleNode(@"//" + ELE_PROFILE_ROOT + "[@" + ATTR_PROFILE_NAME + @"='" + profile.ProfileName + @"']");
                         if (oldProfileElement != null)
                         {
                             xmldoc.SelectSingleNode(@"//" + ELE_TAGGING_ROOT).RemoveChild(oldProfileElement);
@@ -303,7 +303,7 @@ namespace Syncless.Tagging
             }
             else
             {
-                XmlElement profileElement = (XmlElement) profileElementList.Item(0);
+                XmlElement profileElement = (XmlElement)profileElementList.Item(0);
                 TaggingProfile taggingProfile = CreateTaggingProfile(profileElement);
                 if (taggingProfile != null)
                 {
@@ -326,7 +326,7 @@ namespace Syncless.Tagging
                             }
                         }
                     }
-                    return taggingProfile; 
+                    return taggingProfile;
                 }
                 else
                 {
@@ -388,21 +388,26 @@ namespace Syncless.Tagging
                 {
                     if (tagChild.Name.Equals(ELE_FOLDER_ROOT))
                     {
-                        tag.FilteredPathList = CreateFolders(tagChild);
-                        if (tag.FilteredPathList == null)
-                        {
-                            return null;
-                        }
-                    }
-                    else if (tagChild.Name.Equals(ELE_FILTER_ROOT))
-                    {
-                        tag.Filters = LoadFilterList(tagChild);
-                        if (tag.Filters == null)
+                        List<TaggedPath> pathList = CreateFolders(tagChild);
+                        if (pathList == null)
                         {
                             return null;
                         }
                         else
                         {
+                            tag.FilteredPathList = pathList;
+                        }
+                    }
+                    else if (tagChild.Name.Equals(ELE_FILTER_ROOT))
+                    {
+                        List<Filter> filterList = LoadFilterList(tagChild);
+                        if (filterList == null)
+                        {
+                            return null;
+                        }
+                        else
+                        {
+                            tag.Filters = filterList;
                             try
                             {
                                 tag.FiltersUpdatedDate = long.Parse(tagChild.GetAttribute(ATTR_FILTER_LASTUPDATEDDATE));
@@ -415,10 +420,14 @@ namespace Syncless.Tagging
                     }
                     else if (tagChild.Name.Equals(ELE_CONFIG_ROOT))
                     {
-                        tag.Config = CreateTagConfig(tagChild);
+                        TagConfig tagConfig = CreateTagConfig(tagChild);
                         if (tag.Config == null)
                         {
                             return null;
+                        }
+                        else
+                        {
+                            tag.Config = tagConfig;
                         }
                     }
                 }
@@ -468,25 +477,18 @@ namespace Syncless.Tagging
                 long pathcreated = long.Parse(taggedFolder.GetAttribute(ATTR_TAGGED_FOLDER_CREATEDDATE));
                 long pathlastupdated = long.Parse(taggedFolder.GetAttribute(ATTR_TAGGED_FOLDER_LASTUPDATEDDATE));
                 XmlNodeList pathList = taggedFolder.GetElementsByTagName(ELE_TAGGED_FOLDER_PATH);
-                if (pathList.Count == 0)
+                try
+                {
+                    XmlElement path = (XmlElement)pathList.Item(0);
+                    string pathname = path.InnerText;
+                    bool isDeleted = bool.Parse(taggedFolder.GetAttribute(ATTR_TAGGED_FOLDER_ISDELETED));
+                    long deletedDate = long.Parse(taggedFolder.GetAttribute(ATTR_TAGGED_FOLDER_DELETEDDATE));
+                    TaggedPath taggedPath = CreateTaggedPath(pathcreated, pathlastupdated, pathname, isDeleted, deletedDate);
+                    return taggedPath;
+                }
+                catch (FormatException)
                 {
                     return null;
-                }
-                else
-                {
-                    try
-                    {
-                        XmlElement path = (XmlElement)pathList.Item(0);
-                        string pathname = path.InnerText;
-                        bool isDeleted = bool.Parse(taggedFolder.GetAttribute(ATTR_TAGGED_FOLDER_ISDELETED));
-                        long deletedDate = long.Parse(taggedFolder.GetAttribute(ATTR_TAGGED_FOLDER_DELETEDDATE));
-                        TaggedPath taggedPath = CreateTaggedPath(pathcreated, pathlastupdated, pathname, isDeleted, deletedDate);
-                        return taggedPath;
-                    }
-                    catch (FormatException)
-                    {
-                        return null;
-                    }
                 }
             }
             catch (FormatException)
@@ -527,26 +529,19 @@ namespace Syncless.Tagging
         {
             List<Filter> filterList = new List<Filter>();
             XmlNodeList elementNodes = filterListNode.GetElementsByTagName(ELE_FILTER_CHILD_FILTER);
-            if (elementNodes.Count == 0)
+            foreach (XmlNode n in elementNodes)
             {
-                return null;
-            }
-            else
-            {
-                foreach (XmlNode n in elementNodes)
+                Filter f = LoadFilter((XmlElement)n);
+                if (f != null)
                 {
-                    Filter f = LoadFilter((XmlElement)n);
-                    if (f != null)
-                    {
-                        filterList.Add(f);
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    filterList.Add(f);
                 }
-                return filterList;
+                else
+                {
+                    return null;
+                }
             }
+            return filterList;
         }
 
         /// <summary>
@@ -597,7 +592,7 @@ namespace Syncless.Tagging
                     else
                     {
                         ExtensionFilter filter = new ExtensionFilter(ext.InnerText, fMode);
-                        return filter;  
+                        return filter;
                     }
                 }
             }
