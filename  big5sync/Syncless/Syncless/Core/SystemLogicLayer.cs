@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Tagging;
@@ -150,7 +151,6 @@ namespace Syncless.Core
             {
                 return;
             }
-            List<string> tagList = new List<string>();
             //Find the similiar paths for the logical Path
             //The return is physical address
             List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
@@ -256,7 +256,7 @@ namespace Syncless.Core
             //Create the request and Send it.
             if (fe.OldPath.Directory != null)
             {
-                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.Update, SyncConfig.Instance,ConvertTagListToTagString(tag));
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.Update, SyncConfig.Instance, ConvertTagListToTagString(tag));
                 SendAutoRequest(request);
             }
         }
@@ -318,7 +318,7 @@ namespace Syncless.Core
             //Create the request and Send it.
             if (fe.OldPath.Directory != null)
             {
-                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.New, SyncConfig.Instance,ConvertTagListToTagString(tag));
+                AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Directory.FullName, parentList, false, AutoSyncRequestType.New, SyncConfig.Instance, ConvertTagListToTagString(tag));
                 SendAutoRequest(request);
             }
         }
@@ -405,9 +405,9 @@ namespace Syncless.Core
                 return;
             }
             //Create the request and Send it.
-// ReSharper disable PossibleNullReferenceException
-            AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Parent.FullName, parentList, true, AutoSyncRequestType.New, SyncConfig.Instance,ConvertTagListToTagString(tag));
-// ReSharper restore PossibleNullReferenceException
+            // ReSharper disable PossibleNullReferenceException
+            AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.OldPath.Parent.FullName, parentList, true, AutoSyncRequestType.New, SyncConfig.Instance, ConvertTagListToTagString(tag));
+            // ReSharper restore PossibleNullReferenceException
             SendAutoRequest(request);
         }
         private void HandleFolderRenameEvent(FolderChangeEvent fe)
@@ -464,9 +464,10 @@ namespace Syncless.Core
                 //If the parent list if empty , it means that there is nothing to sync and thus return.
                 if (parentList.Count != 0)
                 {
+                    Debug.Assert(fe.OldPath.Parent != null);
                     AutoSyncRequest request = new AutoSyncRequest(fe.OldPath.Name, fe.NewPath.Name, fe.OldPath.Parent.FullName,
                                                                  parentList, true, AutoSyncRequestType.Rename,
-                                                                 SyncConfig.Instance,ConvertTagListToTagString(tag));
+                                                                 SyncConfig.Instance, ConvertTagListToTagString(tag));
                     SendAutoRequest(request);
                 }
             }
@@ -588,8 +589,8 @@ namespace Syncless.Core
                 return;
             }
             //Create the request and Send it.
-
-            AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance,ConvertTagListToTagString(tag));
+            Debug.Assert(dce.Path.Parent != null);
+            AutoSyncRequest request = new AutoSyncRequest(dce.Path.Name, dce.Path.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance, ConvertTagListToTagString(tag));
             SendAutoRequest(request);
             FindAndCleanDeletedPaths();
             _userInterface.TagsChanged();
@@ -654,8 +655,8 @@ namespace Syncless.Core
                 return;
             }
             //Create the request and Send it.
-
-            AutoSyncRequest request = new AutoSyncRequest(dce.OldPath.Name, dce.OldPath.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance,ConvertTagListToTagString(tag));
+            Debug.Assert(dce.OldPath.Parent != null);
+            AutoSyncRequest request = new AutoSyncRequest(dce.OldPath.Name, dce.OldPath.Parent.FullName, parentList, AutoSyncRequestType.Delete, SyncConfig.Instance, ConvertTagListToTagString(tag));
             SendAutoRequest(request);
             FindAndCleanDeletedPaths();
             _userInterface.TagsChanged();
@@ -717,18 +718,26 @@ namespace Syncless.Core
 
         #region IUIControllerInterface Members
         /// <summary>
-        /// Manually Sync a Tag
+        /// Starts a Manual Sync. The Sync will be queued and will be processed when it is its turn.
         /// </summary>
         /// <param name="tagname">Tagname of the Tag to sync</param>
-        /// <returns>true if the sync is "queue"</returns>        
+        /// <returns>true if the sync is successfully queued. false if the tag is currently being queued/sync or the tag does not exist.  </returns>        
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
         public bool StartManualSync(string tagname)
         {
             try
             {
+                //Call the internal method to Sync, and does not switch to seamless after syncing.
                 return ManualSync(tagname, false);
+            }
+            catch (TagNotFoundException)
+            {
+                //If tag not found, return false
+                return false;
             }
             catch (Exception e)
             {
+                //Handle some unexpected exception so that it does not hang the UI.
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
@@ -737,19 +746,23 @@ namespace Syncless.Core
         /// Cancel a Manual Sync.
         /// </summary>
         /// <param name="tagName">Tagname of the Tag to sync</param>
-        /// <returns>true if the sync is cancel.</returns>
+        /// <returns>true if the sync is cancel. false if the tag is not currently being queued/sync or the request cannot be cancel.</returns>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception> 
         public bool CancelManualSync(string tagName)
         {
             try
             {
+                //If Tag is not currently being queue, return false
                 if (!CompareAndSyncController.Instance.IsQueuedOrSyncing(tagName))
                 {
                     return false;
                 }
+                //Notify Compare and Sync to Cancel the Job.
                 return CompareAndSyncController.Instance.Cancel(new CancelSyncRequest(tagName));
             }
             catch (Exception e)
             {
+                //Handle some unexpected exception so that it does not hang the UI.
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
@@ -758,27 +771,34 @@ namespace Syncless.Core
         /// Delete a tag
         /// </summary>
         /// <param name="tagname">Name of the tag to delete</param>
-        /// <returns>true if a tag is removed. false if the tag cannot be removed</returns>
+        /// <returns>true if a tag is removed. false if the tag cannot be removed(i.e Currently Synchronizing)</returns>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
         public bool DeleteTag(string tagname)
         {
+            //If the tag is currently being Sync/Queue , does not allow the user to delete.
             if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tagname))
             {
                 return false;
             }
             try
             {
+                //Delete the tag.
                 Tag t = TaggingLayer.Instance.DeleteTag(tagname);
+                //Initiate a Save.
                 InitiateSave();
-                new DeleteTagCleanDelegate(DeleteTagClean).BeginInvoke(t,null,null);
-                
+                //Clean up the .syncless file inside all the deleted tag.
+                new DeleteTagCleanDelegate(DeleteTagClean).BeginInvoke(t, null, null);
+                //if tag does not exist, return false.
                 return t != null;
             }
             catch (TagNotFoundException)
             {
+                //if tag does not exist , return false.
                 return false;
             }
-            catch (Exception e)// Handle Unexpected Exception
+            catch (Exception e)
             {
+                //Handle some unexpected exception so that it does not hang the UI.
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
@@ -789,20 +809,26 @@ namespace Syncless.Core
         /// </summary>
         /// <param name="tagname">name of the tag.</param>
         /// <returns>The Detail of the Tag.</returns>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <exception cref="TagAlreadyExistsException">Tag with tagname already exist.</exception>
         public TagView CreateTag(string tagname)
         {
             try
             {
+                //Create the tag.
                 Tag t = TaggingLayer.Instance.CreateTag(tagname);
+                //Initiate Save.
                 InitiateSave();
+                //Convert the tag to a tagview and return it.
                 return ConvertToTagView(t);
             }
             catch (TagAlreadyExistsException)
             {
                 throw;
             }
-            catch (Exception e) //Handle Unexpected Exception
+            catch (Exception e)
             {
+                //Handle some unexpected exception so that it does not hang the UI.
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
@@ -815,27 +841,33 @@ namespace Syncless.Core
         /// <exception cref="InvalidPathException">The Path is invalid</exception>
         /// <exception cref="RecursiveDirectoryException">Tagging the folder will cause a recursive during Synchronization.</exception>
         /// <exception cref="PathAlreadyExistsException">The Path already exist in the Tag.</exception>
-        /// <returns>the Tag view</returns>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <returns>The Tag View representing the tag. return null , if the tag fail.</returns>
         public TagView Tag(string tagname, DirectoryInfo folder)
         {
             try
             {
+                //Convert the path to a logical path.
                 string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
+                //If path == null , means conversion fail. throw a Invalid Path Exception
                 if (path == null)
                 {
                     throw new InvalidPathException(folder.FullName);
                 }
-
+                //Tag the folder.
                 Tag tag = TaggingLayer.Instance.TagFolder(path, tagname);
-                if (tag == null)
+                if (tag == null) // If tag == null , Something went wrong , and thus return null.
                 {
                     return null;
                 }
+                //if tag is seamless, start monitoring the tag.
                 if (tag.IsSeamless)
                 {
                     StartMonitorTag(tag);
                 }
+                //Initiate a save.
                 InitiateSave();
+                //Convert the Tag to a Tagview and return it.
                 return ConvertToTagView(tag);
             }
             catch (RecursiveDirectoryException)
@@ -850,8 +882,9 @@ namespace Syncless.Core
             {
                 throw;
             }
-            catch (Exception e) // Handle Unexpected Exception
+            catch (Exception e)
             {
+                //Handle some unexpected exception so that it does not hang the UI.
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
@@ -862,14 +895,18 @@ namespace Syncless.Core
         /// <param name="tagname">The name of the tag</param>
         /// <param name="folder">The folder to untag</param>
         /// <exception cref="TagNotFoundException">The tag is not found.</exception>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
         /// <returns>The number of path untag</returns>
         public int Untag(string tagname, DirectoryInfo folder)
         {
             try
             {
+                //Convert the path to logical path.
                 string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, true);
-
+                //Untag a folder and record the number of path untagged.
                 int count = TaggingLayer.Instance.UntagFolder(path, tagname);
+                //Check if there if another tag that this path is tagged to.
+                //if there is no other tag containing this path, unmonitor the path
                 List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(path);
                 if (tagList.Count == 0)
                 {
@@ -884,9 +921,11 @@ namespace Syncless.Core
                     }
 
                 }
+                //Initiate a Save.
                 InitiateSave();
+                //Clean up the meta data (.syncless) inside the folder.
                 new CleanMetaDataDelegate(CleanMetaData).BeginInvoke(folder, null, null);
-                
+
                 return count;
             }
             catch (TagNotFoundException)
@@ -895,63 +934,630 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
+                //Handle some unexpected exception so that it does not hang the UI.
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
         }
         /// <summary>
         /// Switch the mode of a particular Tag to a mode.
+        /// Valid Mode are <see cref="TagMode.Seamless"/> and <see cref="TagMode.Manual"/>
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="mode"></param>
-        /// <returns></returns>
+        /// <param name="name">The name of the tag to switch</param>
+        /// <param name="mode">The mode to switch to</param>
+        /// <exception cref="ArgumentOutOfRangeException">If the TagMode Specified is not a valid TagMode</exception>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <returns>true if the mode can be switch.</returns>
         public bool SwitchMode(string name, TagMode mode)
         {
-            switch (mode)
+            try
             {
-                case TagMode.Seamless: MonitorTag(name, true);
-                    break;
-                case TagMode.Manual: MonitorTag(name, false);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException("mode");
+                switch (mode)
+                {
+                    case TagMode.Seamless: MonitorTag(name, true);
+                        break;
+                    case TagMode.Manual: MonitorTag(name, false);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException("mode");
+                }
+                return true;
             }
-            return true;
+            catch (ArgumentOutOfRangeException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
         }
         /// <summary>
         /// Get the current Tag of a particular tag.
         /// See <see cref="TagState"/> for a list of TagState
         /// </summary>
         /// <param name="tagname">The name of the tag</param>
-        /// <returns></returns>
+        /// <exception cref="TagNotFoundException"><see cref="Tag"/> with the given tagname  is not found.</exception>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <returns><see cref="TagState"/> representing the state of the Tag.</returns>
         public TagState GetTagState(string tagname)
         {
+            try
+            {
+                //Retrieve the Tag from TaggingLayer.
+                //If tag is not found , throw TagNotFoundException
+                Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
+                if (tag == null)
+                {
+                    throw new TagNotFoundException(tagname);
+                }
+                //Try to get the state from the table
+                //IF the state exist ( Probably either TagState.SeamlessToManual or TagState.ManualToSeamless )
+                //return the state.
+                //else return Seamless / Manual.
+                TagState state;
+                if (_switchingTable.TryGetValue(tagname, out state))
+                {
+                    return state;
+                }
+                return tag.IsSeamless ? TagState.Seamless : TagState.Manual;
 
+            }
+            catch (TagNotFoundException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+        /// <summary>
+        /// Return a list contains only the name of all the tags.
+        /// </summary>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <returns>The List containing the name of the tags</returns>
+        public List<string> GetAllTags()
+        {
+            try
+            {
+                //Retrieve the list of undeleted tagList.
+                List<Tag> tagList = TaggingLayer.Instance.FilteredTagList;
+                List<string> tagNames = new List<string>();
+                //Add only the name to the list and return.
+                foreach (Tag t in tagList)
+                {
+
+                    tagNames.Add(t.TagName);
+                }
+                //Sort the names before returning.
+                tagNames.Sort();
+                return tagNames;
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+        /// <summary>
+        /// Return a list of tag name that a folder is tagged to.
+        /// </summary>
+        /// <param name="folder">The folder to find</param>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <returns>The List containing the name of the tags that the folder is tag to.</returns>
+        public List<string> GetTags(DirectoryInfo folder)
+        {
+            try
+            {
+                //Convert the folder path to a logical path.
+                //If the folder cannot be converted, return a empty list.
+                string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, false);
+                if (path == null)
+                {
+                    return new List<string>();
+                }
+                //Retrieve a list of tags.
+                List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(path);
+                List<string> tagNames = new List<string>();
+                //Add the name of the tags to the list.
+                foreach (Tag t in tagList)
+                {
+                    tagNames.Add(t.TagName);
+                }
+                //Sort the name before returning.
+                tagNames.Sort();
+                return tagNames;
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+        /// <summary>
+        /// Get a <see cref="TagView"/> Representation of a <see cref="Tag"/>
+        /// </summary>
+        /// <param name="tagname">The name of the tag to get.</param>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <returns>The <see cref="TagView"/> representing the <see cref="Tag"/> Object.</returns>
+        public TagView GetTag(string tagname)
+        {
+            //if the tagname is null , return null.
+            if (tagname == null)
+            {
+                return null;
+            }
+            try
+            {
+                //Try to get the tag with the given name.
+                //if it is null , return null
+                //else Convert the tag into TagView and return it.
+                Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
+                if (t == null)
+                {
+                    return null;
+                }
+                return ConvertToTagView(t);
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+        /// <summary>
+        /// Preview a Sync of a Tag 
+        /// </summary>
+        /// <param name="tagName">The name of the tag to preview</param>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <returns>The RootCompareObject representing the Preview Result. null if the tag does not exist.</returns>
+        public RootCompareObject PreviewSync(string tagName)
+        {
+            //if tagName is null , return null.
+            //Write to Developer Log as it cannot be null. 
+            if (tagName == null)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("argument (TagName) @ PreviewSync is null");
+                return null;
+            }
+            try
+            {
+                //Retrieve the Tag. 
+                //If tag is null , throw Tag not found exception.
+                Tag tag = TaggingLayer.Instance.RetrieveTag(tagName, false);
+                if (tag == null)
+                {
+                    throw new TagNotFoundException(tagName);
+                }
+                //Retrieve the list of path that is in the tag that are not deleted.
+                List<string> paths = tag.FilteredPathListString;
+                //Convert and Filter the file to find all the existing paths.
+                List<string>[] filteredPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
+                //If the filter path is more than 1, create a manual compare object.
+                //  Call the Method to compare in the CompareAndSyncController.
+                //Else Return null.
+                if (filteredPaths[0].Count >=2)
+                {
+                    ManualCompareRequest request = new ManualCompareRequest(filteredPaths[0].ToArray(), tag.Filters, SyncConfig.Instance);
+                    return CompareAndSyncController.Instance.Compare(request);
+                }
+
+                return null;
+            }
+            catch (TagNotFoundException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+
+        }
+        /// <summary>
+        /// Prepare the core for termination.
+        /// </summary>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <returns>true if the program can terminate, false if the program is not ready for termination</returns>
+        public bool PrepareForTermination()
+        {
+            try
+            {
+                //TODO might have some bug here when terminating while a save Notification is not process.
+                //Initiate A save.
+                InitiateSave();
+                //Check if Compare and Sync Controller is ready for termination.
+                if (!CompareAndSyncController.Instance.PrepareForTermination())
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+        /// <summary>
+        /// Terminate the program. 
+        /// This is to kill the threads created and release the resources.
+        /// Everything will be terminated. 
+        /// If CompareAndSyncController have a job running, it will be completed before the program send a Terminate Notification to the UI.
+        /// </summary>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        public void Terminate()
+        {
+            try
+            {
+                CompareAndSyncController.Instance.Terminate();
+                DeviceWatcher.Instance.Terminate();
+                MonitorLayer.Instance.Terminate();
+                _queueObserver.Stop();
+                _reader.Stop();
+                _deletedTaggedPathWatcher.Stop();
+                //Save();
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+        /// <summary>
+        /// Initiate the program. This is the first command that needs to be run
+        /// If this method is not run before any other method is call, the system might fail.
+        /// </summary>
+        /// <param name="inf">The User Interface that implements the <see cref="IUIInterface"/></param>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <returns>true if the Logic Layer successfully initialized. false if the program fail to initialize</returns>
+        /// 
+        public bool Initiate(IUIInterface inf)
+        {
+            //Check if the program have write access to the root directory of The application folder.
+            bool hasWriteAccess = CheckForWriteAccess(inf);
+            //if does not have write access, return false.
+            if (!hasWriteAccess)
+            {
+                return false;
+            }
+            try
+            {
+                _userInterface = inf;
+                //call the internal save method.
+                bool init = Initiate();
+                InitiateSave();
+                return init;
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+        /// <summary>
+        /// Update the filterlist of a <see cref="Tag"/>
+        /// </summary>
+        /// <param name="tagname">tagname of the <see cref="Tag"/></param>
+        /// <param name="filterlist">the list of filter to set to the tag.</param>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <returns>true if succeed, false if fail.</returns>
+        public bool UpdateFilterList(string tagname, List<Filter> filterlist)
+        {
+            try
+            {
+                TaggingLayer.Instance.UpdateFilter(tagname, filterlist);
+                InitiateSave();
+                return true;
+            }
+            catch (TagNotFoundException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+        /// <summary>
+        /// Get all the filters for a particular <see cref="Tag"/>
+        /// </summary>
+        /// <param name="tagname">the name of the tag.</param>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <returns>the list of <see cref="Filter">Filters</see></returns>
+        public List<Filter> GetAllFilters(String tagname)
+        {
+            try
+            {
+                //Retrieve the Tag and return the read only Filter List.
+                Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
+                return t.ReadOnlyFilters;
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+        /// <summary>
+        /// Call to release a drive so that it can be safety remove.
+        /// </summary>
+        /// <param name="drive">the Drive to remove</param>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <returns>true if succeess , false if fail.</returns>
+        public bool AllowForRemoval(DriveInfo drive)
+        {
+            try
+            {
+                Save();//force a save.
+            }
+            catch (Exception e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                //If save fail , return false.
+                return false;
+            }
+            try
+            {
+                //if drive is not ready, return false.
+                if (!drive.IsReady)
+                {
+                    return false;
+                }
+                //Get The logical id of the drive.
+                string logicalid = ProfilingLayer.Instance.GetLogicalIdFromDrive(drive);
+                if (logicalid == null)
+                {
+                    //Drive does not exist in the profile
+                    //Return true , since drive is not registered to the program.
+                    return true;
+                }
+                //Get the list of tag associated to the drive
+                // i.e The tag that contain a path that is inside the particular drive.
+                List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logicalid);
+                // Check that non of the tag is currently synchronizing.
+                foreach (Tag t in tagList)
+                {
+                    if (CompareAndSyncController.Instance.IsQueuedOrSyncing(t.TagName))
+                    {
+                        return false;
+                    }
+                }
+                //Unmonitor the Drive
+                MonitorLayer.Instance.UnMonitorDrive(drive.Name);
+                //Unregister the drive from the profilingLayer.
+                ProfilingLayer.Instance.RemoveDrive(drive);
+                //Inform the User Interface that there is a possible drive change and path change
+                _userInterface.DriveChanged();
+                _userInterface.PathChanged();
+                return true;
+            }
+            catch (DriveNotFoundException)
+            {
+                return false;
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+        /// <summary>
+        /// Clean the .syncless metadata in the selected path
+        /// </summary>
+        /// <param name="path">the path of the directory</param>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <returns>number of .syncless removed.</returns>
+        public int Clean(string path)
+        {
+            try
+            {
+                //Run the cleaner.
+                return Cleaner.CleanSynclessMeta(new DirectoryInfo(path));
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+        /// <summary>
+        /// Return the user log 
+        /// </summary>
+        /// <exception cref="LogFileCorruptedException">The log file is corrupted.</exception>
+        /// <exception cref="UnhandledException">Unhandled Exception</exception>
+        /// <returns>the list of log data.</returns>
+        public List<LogData> ReadLog()
+        {
+            try
+            {
+                //return the log from logging layer.
+                return LoggingLayer.Instance.ReadLog();
+            }
+            catch (LogFileCorruptedException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                //Handle some unexpected exception so that it does not hang the UI.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+        /// <summary>
+        /// Initiate a save.
+        /// </summary>
+        private void InitiateSave()
+        {
+            // if the queue already contain a Save Notification , do not enqueue.
+            if (!SllNotification.Contains(new SaveNotification()))
+            {
+                SllNotification.Enqueue(new SaveNotification());
+            }
+        }
+
+        #endregion
+
+        #region private /internal / delegate
+        /// <summary>
+        /// Set the mode of the tag to the mode.
+        /// <remarks>
+        /// This is a direct set method. Should only be call by the notification after a Sync is complete or if switching from seamless to manual. 
+        /// If a tag is switch from manual to seamless without doing a manual sync, the tag may not be in sync and seamless mode may not work in a proper way.
+        /// </remarks>
+        /// </summary>
+        /// <param name="tag">The <see cref="Tag"/> to set the mode.</param>
+        /// <param name="mode">true if the mode is seamless, false if the mode is manual</param>
+        private void SetTagMode(Tag tag, bool mode)
+        {
+            //set the tag to the mode.
+            tag.IsSeamless = mode;
+            //Initiate a Save.
+            InitiateSave();
+            //Retrieve all the Path string from the list of path that are not deleted from the tag.
+            List<string> pathList = new List<string>();
+            foreach (TaggedPath path in tag.FilteredPathList)
+            {
+                pathList.Add(path.PathName);
+            }
+            //Convert all the paths to physical path.
+            //if mode is seamless, start monitoring all of them.
+            //if mode is manual, unmonitor all of them.
+            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(pathList);
+            if (mode)
+            {
+                foreach (string path in convertedPath)
+                {
+                    try
+                    {
+                        MonitorLayer.Instance.MonitorPath(PathHelper.RemoveTrailingSlash(path));
+                    }
+                    catch (MonitorPathNotFoundException)
+                    {
+                    }
+                }
+            }
+            else
+            {
+                foreach (string path in convertedPath)
+                {
+                    try
+                    {
+                        MonitorLayer.Instance.UnMonitorPath(PathHelper.RemoveTrailingSlash(path));
+                    }
+                    catch (MonitorPathNotFoundException)
+                    {
+                    }
+                }
+            }
+            //try to remove the tag from the switching table
+            //this will ensure that the ui can update the current state of the tag.
+            try
+            {
+                if (_switchingTable.ContainsKey(tag.TagName))
+                {
+                    _switchingTable.Remove(tag.TagName);
+                }
+            }
+            catch (Exception e)
+            {
+                //this should not happen but record it down just in case.
+                //This should not affect the flow of the application so shall not report.
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+            }
+        }
+        
+        /// <summary>
+        /// Start a Manual Sync. The Sync will be queued and will be processed when it is its turn.
+        /// </summary>
+        /// <param name="tagname">Tagname of the Tag to sync</param>
+        /// <param name="switchSeamless">true if the tag needs to be set to seamless mode after synchronization</param>
+        /// <returns>true if the sync is successfully queue. false if the tag is already queued or cannot be queued.</returns>  
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        private bool ManualSync(Tag tag, bool switchSeamless)
+        {
+            //Try and cleanup the deletepaths first before syncing.
+            //This is the find all the folder that is deleted but still tagged.
+            //This will ensure that if the folder does not exist, no files will be propagated over.
+            FindAndCleanDeletedPaths();
+            //If the Tag is already synchronzing or is already queued , return false.
+            if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tag.TagName))
+            {
+                return false;
+            }
+            //Retrieve the list of paths that are not deleted.
+            List<string> paths = tag.FilteredPathListString;
+            //Convert the path to physical address.
+            List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
+            //If the number of path is less than 2,  does not sync and return a true 
+            //If switch Seamless is true , set the mode of the tag to seamless.
+            if (filterPaths[0].Count < 2)
+            {
+                if (switchSeamless)
+                {
+                    SetTagMode(tag, true);
+                }
+                return true;
+            }
+            //Create the manual Sync request and send it to CompareAndSyncController.
+            ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), tag.Filters, SyncConfig.Instance, tag.TagName, switchSeamless);
+            CompareAndSyncController.Instance.Sync(syncRequest);
+
+            return true;
+        }
+        /// <summary>
+        /// Manual Sync a tag based on tagname
+        /// </summary>
+        /// <param name="tagname">The name of the tag</param>
+        /// <param name="switchSeamless">whether to switch to seamless after the Manual Sync</param>
+        /// <returns>true if the tag is successfully queued. false if tag does not exist.</returns>
+        private bool ManualSync(string tagname, bool switchSeamless)
+        {
+            //if tag is null , return false.
+            //else delegate it to the other method
             Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
             if (tag == null)
             {
-                throw new TagNotFoundException(tagname);
+                return false;
             }
-            TagState state;
-            if (_switchingTable.TryGetValue(tagname, out state))
-            {
-                return state;
-            }
-            return tag.IsSeamless ? TagState.Seamless : TagState.Manual;
-
-
+            return ManualSync(tag, switchSeamless);
+        }
+        /// <summary>
+        /// Sync the tag then monitor the tag.
+        /// </summary>
+        /// <param name="tag">The Tag to Start Monitor</param>
+        private void StartMonitorTag(Tag tag)
+        {
+            ManualSync(tag, true);
         }
         /// <summary>
         /// Set the monitor mode for a tag
         /// </summary>
-        /// <param name="tagname">tagname to set</param>
+        /// <param name="tagname">Tagname to set</param>
         /// <param name="mode">true - set tag to seamless. , false - set tag to manual</param>
         /// <exception cref="TagNotFoundException">If the Tag is not found</exception>
         /// <returns>whether the tag can be changed.</returns>
         private void MonitorTag(string tagname, bool mode)
         {
-
-            
             try
             {
                 Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
@@ -972,503 +1578,6 @@ namespace Syncless.Core
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 throw new UnhandledException(e);
             }
-        }
-        /// <summary>
-        /// Return a list of tag name.
-        /// </summary>
-        /// <returns>the List containing the name of the tags</returns>
-        public List<string> GetAllTags()
-        {
-            try
-            {
-                List<Tag> tagList = TaggingLayer.Instance.TagList;
-                List<string> tagNames = new List<string>();
-                foreach (Tag t in tagList)
-                {
-                    if (!t.IsDeleted)
-                    {
-                        tagNames.Add(t.TagName);
-                    }
-                }
-                tagNames.Sort();
-                return tagNames;
-            }
-            catch (Exception e)// Handle Unexpected Exception
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                throw new UnhandledException(e);
-            }
-        }
-        /// <summary>
-        /// Return a list of tag name that a folder belongs to.
-        /// </summary>
-        /// <param name="folder">the folder to find.</param>
-        /// <returns>the List containing the name of the tags</returns>
-        public List<string> GetTags(DirectoryInfo folder)
-        {
-            try
-            {
-                string path = ProfilingLayer.Instance.ConvertPhysicalToLogical(folder.FullName, false);
-                if (path == null)
-                {
-                    return null;
-                }
-                List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(path);
-                List<string> tagNames = new List<string>();
-                foreach (Tag t in tagList)
-                {
-                    tagNames.Add(t.TagName);
-                }
-                tagNames.Sort();
-                return tagNames;
-            }
-            catch (Exception e)//Handle Unexpected Exception
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                throw new UnhandledException(e);
-            }
-        }
-        /// <summary>
-        /// Get The detailed Tag Info of a tag.
-        /// </summary>
-        /// <param name="tagname"></param>
-        /// <returns></returns>
-        public TagView GetTag(string tagname)
-        {
-            if (tagname == null)
-            {
-                return null;
-            }
-            try
-            {
-                Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
-                if (t == null)
-                {
-                    return null;
-                }
-                return ConvertToTagView(t);
-            }
-            catch (Exception e)
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                throw new UnhandledException(e);
-            }
-        }
-        /// <summary>
-        /// Preview a Sync of a Tag
-        /// </summary>
-        /// <param name="tagName">The name of the tag to preview</param>
-        /// <returns>the RootCompareObject</returns>
-        public RootCompareObject PreviewSync(string tagName)
-        {
-            try
-            {
-                Tag tag = TaggingLayer.Instance.RetrieveTag(tagName, false);
-                List<string> paths = tag.FilteredPathListString;
-                List<string>[] filteredPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
-                if (filteredPaths[0].Count != 0)
-                {
-                    ManualCompareRequest request = new ManualCompareRequest(filteredPaths[0].ToArray(), tag.Filters, SyncConfig.Instance);
-                    return CompareAndSyncController.Instance.Compare(request);
-                }
-
-                return null;
-
-            }
-            catch (Exception e)
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                throw new UnhandledException(e);
-            }
-
-        }
-        /// <summary>
-        /// Check if the Program can Terminate
-        /// </summary>
-        /// <returns>true if the program can terminate, false if the program is not ready for termination</returns>
-        public bool PrepareForTermination()
-        {
-            try
-            {
-                InitiateSave();
-                if (!CompareAndSyncController.Instance.PrepareForTermination())
-                {
-                    return false;
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                throw new UnhandledException(e);
-            }
-        }
-        /// <summary>
-        /// Terminate the program. 
-        /// This is to kill the threads created and release the resources.
-        /// </summary>
-        /// <returns>true if the program successfully terminated , false if it can't be terminated.</returns>
-        public void Terminate()
-        {
-            try
-            {
-
-                CompareAndSyncController.Instance.Terminate();
-                DeviceWatcher.Instance.Terminate();
-                MonitorLayer.Instance.Terminate();
-                _queueObserver.Stop();
-                _reader.Stop();
-                _deletedTaggedPathWatcher.Stop();
-            }
-            catch (Exception e)
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                throw new UnhandledException(e);
-            }
-        }
-        /// <summary>
-        /// Initiate the program. This is the first command that needs to be run.
-        /// </summary>
-        /// <param name="inf"></param>
-        /// <returns></returns>
-        public bool Initiate(IUIInterface inf)
-        {
-            bool hasWriteAccess = CheckForWriteAccess(inf);
-            if (!hasWriteAccess)
-            {
-                return false;
-            }
-            try
-            {
-                _userInterface = inf;
-
-                bool init = Initiate();
-                InitiateSave();
-                return init;
-            }
-            catch (Exception e)
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                throw new UnhandledException(e);
-            }
-        }
-        /// <summary>
-        /// XXXXXXXXXXXXXXXXXXXX NOT IMPLEMENTED XXXXXXXXXXXXXXXXXXXXXXXX
-        /// </summary>
-        /// <param name="oldtagname"></param>
-        /// <param name="newtagname"></param>
-        /// <returns></returns>
-        public bool RenameTag(string oldtagname, string newtagname)
-        {
-            /*
-            try
-            {
-                TaggingLayer.Instance.RenameTag(oldtagname, newtagname);
-            }
-            catch (TagNotFoundException)
-            {
-                return false;
-            }
-            catch (TagAlreadyExistsException)
-            {
-                return false;
-            }
-            return true;
-            */
-            throw new NotImplementedException();
-        }
-        /// <summary>
-        /// Update the filterlist of a tag
-        /// </summary>
-        /// <param name="tagname">tagname of the tag</param>
-        /// <param name="filterlist">filterlist</param>
-        /// <returns>true if succeed</returns>
-        public bool UpdateFilterList(string tagname, List<Filter> filterlist)
-        {
-            try
-            {
-                TaggingLayer.Instance.UpdateFilter(tagname, filterlist);
-                InitiateSave();
-                return true;
-            }
-            catch (TagNotFoundException)
-            {
-                throw;
-            }
-            catch (Exception e)
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                throw new UnhandledException(e);
-            }
-        }
-        /// <summary>
-        /// Get all the filters for a particular tag.
-        /// </summary>
-        /// <param name="tagname">the name of the tag.</param>
-        /// <returns>the list of filters</returns>
-        public List<Filter> GetAllFilters(String tagname)
-        {
-            try
-            {
-                Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
-                return t.ReadOnlyFilters;
-            }
-            catch (Exception e)
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                throw new UnhandledException(e);
-            }
-        }
-        /// <summary>
-        /// Call to release a drive so that it can be safety
-        /// </summary>
-        /// <param name="drive">the Drive to remove</param>
-        /// <returns>true if succeess , false if fail.</returns>
-        public bool AllowForRemoval(DriveInfo drive)
-        {
-            InitiateSave();
-            try
-            {
-                if (!drive.IsReady)
-                {
-                    return false;
-                }
-                string logicalid = ProfilingLayer.Instance.GetLogicalIdFromDrive(drive);
-                if (logicalid == null)
-                {
-                    //Drive does not exist in the profile
-                    return true;
-                }
-                List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logicalid);
-                foreach (Tag t in tagList)
-                {
-                    if (CompareAndSyncController.Instance.IsQueuedOrSyncing(t.TagName))
-                    {
-                        return false;
-                    }
-                }
-
-                MonitorLayer.Instance.UnMonitorDrive(drive.Name);
-                ProfilingLayer.Instance.RemoveDrive(drive);
-                _userInterface.DriveChanged();
-                _userInterface.PathChanged();
-                return true;
-            }
-            catch (DriveNotFoundException)
-            {
-                return false;
-            }
-            catch (Exception e)
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                throw new UnhandledException(e);
-            }
-        }
-        /// <summary>
-        /// Clean the meta data of syncless in a folder.
-        /// </summary>
-        /// <param name="path">the path of the directory</param>
-        /// <returns>number of .syncless removed.</returns>
-        public int Clean(string path)
-        {
-            try
-            {
-                return Cleaner.CleanSynclessMeta(new DirectoryInfo(path));
-            }
-            catch (Exception e)
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                throw new UnhandledException(e);
-            }
-        }
-        /// <summary>
-        /// Merge a profile from a particular path. Will only merge profile with the same name.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public bool Merge(string path)
-        {
-            try
-            {
-                ProfilingLayer.Instance.Merge(path);
-                TaggingLayer.Instance.Merge(path);
-                return true;
-            }
-            catch (Exception e)
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                throw new UnhandledException(e);
-            }
-        }
-        /// <summary>
-        /// Set the profile name
-        /// </summary>
-        /// <param name="profileName">name of the profile</param>
-        /// <returns></returns>
-        public bool SetProfileName(string profileName)
-        {
-            throw new NotImplementedException();
-            //return false;
-        }
-        /// <summary>
-        /// Get the current profile name
-        /// </summary>
-        /// <returns>Profile name</returns>
-        public string GetProfileName()
-        {
-            throw new NotImplementedException();
-            //return ProfilingLayer.Instance.CurrentProfile.ProfileName;
-        }
-        /// <summary>
-        /// Set the name for a drive.
-        /// </summary>
-        /// <param name="info"></param>
-        /// <param name="driveName"></param>
-        /// <returns></returns>
-        public bool SetDriveName(DriveInfo info, string driveName)
-        {
-            throw new NotImplementedException();
-            //ProfilingLayer.Instance.SetDriveName(info, driveName);
-            //return false;
-        }
-        /// <summary>
-        /// Return the user log 
-        /// </summary>
-        /// <returns>return list of log data.</returns>
-        public List<LogData> ReadLog()
-        {
-            try
-            {
-                return LoggingLayer.Instance.ReadLog();
-            }
-            catch (LogFileCorruptedException)
-            {
-                throw;
-            }
-            catch (Exception e)
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-                throw new UnhandledException(e);
-            }
-        }
-        private void InitiateSave()
-        {
-            if (!SllNotification.Contains(new SaveNotification()))
-            {
-                SllNotification.Enqueue(new SaveNotification());
-            }
-        }
-
-        #endregion
-
-        #region private /internal / delegate
-        /// <summary>
-        /// Set the mode of the tag to the mode.
-        /// </summary>
-        /// <param name="tag"></param>
-        /// <param name="mode"></param>
-        private void SetTagMode(Tag tag, bool mode)
-        {
-            tag.IsSeamless = mode;
-            InitiateSave();
-            List<string> pathList = new List<string>();
-            foreach (TaggedPath path in tag.FilteredPathList)
-            {
-                pathList.Add(path.PathName);
-            }
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(pathList);
-            if (mode)
-            {
-                foreach (string path in convertedPath)
-                {
-                    try
-                    {
-                        MonitorLayer.Instance.MonitorPath(PathHelper.RemoveTrailingSlash(path));
-                    }
-                    catch (MonitorPathNotFoundException)
-                    {
-
-                    }
-                }
-            }
-            else
-            {
-                foreach (string path in convertedPath)
-                {
-                    try
-                    {
-                        MonitorLayer.Instance.UnMonitorPath(PathHelper.RemoveTrailingSlash(path));
-                    }
-                    catch (MonitorPathNotFoundException)
-                    {
-                    }
-                }
-            }
-
-            try
-            {
-                if (_switchingTable.ContainsKey(tag.TagName))
-                {
-                    _switchingTable.Remove(tag.TagName);
-                }
-            }
-            catch (Exception e)
-            {
-                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
-            }
-        }
-        /// <summary>
-        /// Manual Sync
-        /// </summary>
-        /// <param name="tag"></param>
-        /// <param name="switchSeamless">true will mean the tag switch to seamless after sync</param>
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        private bool ManualSync(Tag tag, bool switchSeamless)
-        {
-            FindAndCleanDeletedPaths();
-            if (CompareAndSyncController.Instance.IsQueuedOrSyncing(tag.TagName))
-            {
-                return false;
-            }
-            List<string> paths = tag.FilteredPathListString;
-            List<string>[] filterPaths = ProfilingLayer.Instance.ConvertAndFilter(paths);
-            if (filterPaths[0].Count < 2)
-            {
-                if (switchSeamless)
-                {
-                    SetTagMode(tag, true);
-                }
-                return true;
-            }
-
-            ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), tag.Filters, SyncConfig.Instance, tag.TagName, switchSeamless);
-            CompareAndSyncController.Instance.Sync(syncRequest);
-
-            return true;
-        }
-        /// <summary>
-        /// Manual Sync
-        /// </summary>
-        /// <param name="tagname"></param>
-        /// <param name="switchSeamless"></param>
-        /// <returns></returns>
-        private bool ManualSync(string tagname, bool switchSeamless)
-        {
-            Tag tag = TaggingLayer.Instance.RetrieveTag(tagname);
-            if (tag == null)
-            {
-                return false;
-            }
-            return ManualSync(tag, switchSeamless);
-
-        }
-        /// <summary>
-        /// Sync the tag then monitor the tag.
-        /// </summary>
-        /// <param name="tag"></param>
-        private void StartMonitorTag(Tag tag)
-        {
-            ManualSync(tag, true);
         }
         /// <summary>
         /// Switch the tag to the mode. Do the respective work.
@@ -1525,8 +1634,7 @@ namespace Syncless.Core
             pathViewList = new List<PathView>();
             foreach (string path in namedPath)
             {
-                PathView p = new PathView(path);
-                p.IsAvailable = false;
+                PathView p = new PathView(path) { IsAvailable = false };
                 pathViewList.Add(p);
 
             }
@@ -1641,9 +1749,11 @@ namespace Syncless.Core
                 {
                     continue;
                 }
-                List<Filter> tempFilters = new List<Filter>();
-                tempFilters.Add(FilterFactory.CreateArchiveFilter("_synclessArchive"));
-                tempFilters.Add(FilterFactory.CreateConfigurationFilter());
+                List<Filter> tempFilters = new List<Filter>
+                                               {
+                                                   FilterFactory.CreateArchiveFilter("_synclessArchive"),
+                                                   FilterFactory.CreateConfigurationFilter()
+                                               };
                 tempFilters.AddRange(tag.Filters);
 
                 string appendedPath;
@@ -1776,7 +1886,7 @@ namespace Syncless.Core
             return true;
         }
 
-        private List<string> ConvertTagListToTagString(List<Tag> tagList)
+        private List<string> ConvertTagListToTagString(IEnumerable<Tag> tagList)
         {
             List<string> tagStringList = new List<string>();
             foreach (Tag tag in tagList)
@@ -1846,7 +1956,7 @@ namespace Syncless.Core
             {
                 SwitchMode(tag.TagName, TagMode.Manual); // Unmonitor all the paths.
                 TaggingLayer.Instance.DeleteTag(tag.TagName);
-                
+
             }
             catch (TagNotFoundException te)
             {

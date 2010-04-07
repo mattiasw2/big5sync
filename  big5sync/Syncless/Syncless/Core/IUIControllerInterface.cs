@@ -13,8 +13,6 @@ namespace Syncless.Core
 {
     public interface IUIControllerInterface
     {
-
-
         List<string> GetAllTags();
         List<string> GetTags(DirectoryInfo folder);
 
@@ -48,9 +46,6 @@ namespace Syncless.Core
         bool AllowForRemoval(DriveInfo drive);
 
         int Clean(string path);
-
-        bool SetProfileName(string name);
-        string GetProfileName();
 
         List<LogData> ReadLog();
 
