@@ -5,7 +5,10 @@ using System.Text;
 
 namespace Syncless.Profiling.Exceptions
 {
-    public class ProfileGuidConflictException :Exception 
+    /// <summary>
+    /// The exception that is thrown when there is conflict in profile GUID.
+    /// </summary>
+    public class ProfileGuidConflictException : Exception
     {
     }
 }
