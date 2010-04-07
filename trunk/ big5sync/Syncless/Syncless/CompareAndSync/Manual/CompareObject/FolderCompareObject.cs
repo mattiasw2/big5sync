@@ -176,22 +176,5 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             set { _contents = value; }
         }
 
-        public bool DoRename(int index)
-        {
-            return _useNewName[index];
-        }
-
-        public bool[] UseNewName
-        {
-            get { return _useNewName; }
-            set { _useNewName = value; }
-        }
-
-        public void UpdateRename(int posNewName)
-        {
-            for (int i = 0; i < _useNewName.Length; i++)
-                _useNewName[i] = i != posNewName;
-        }
-
     }
 }

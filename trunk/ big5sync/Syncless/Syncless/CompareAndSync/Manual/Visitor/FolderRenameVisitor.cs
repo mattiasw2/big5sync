@@ -13,9 +13,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
-            //if (folder.Invalid)
-            //    return;
-
             DetectFolderRename(folder, numOfPaths);
         }
 
@@ -39,9 +36,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         unchangedIndexes.Add(i);
                         break;
                 }
-
-                //if (folder.ChangeType[i] == MetaChangeType.Delete)
-                //    deleteIndexes.Add(i);
             }
 
             //1. If there exists a folder for which meta exists is true and exists is false, it is (aka changeType.delete)
@@ -68,7 +62,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 {
                     //count++;
                     renamePos = deleteIndexes[0];
-                    MergeRenamedFolder(folder, folderObject, renamePos);
+                    MergeRenamedFolder(folder, folderObject, deleteIndexes);
                 }
 
             }
@@ -77,7 +71,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             //    MergeRenamedFolder(folder, folderObject, renamePos);
         }
 
-        private void MergeRenamedFolder(FolderCompareObject actualFolder, FolderCompareObject renamedFolder, int pos)
+        private void MergeRenamedFolder(FolderCompareObject actualFolder, FolderCompareObject renamedFolder, List<int> deleteIndexes)
         {
             Dictionary<string, BaseCompareObject>.KeyCollection renamedFolderContents = renamedFolder.Contents.Keys;
             BaseCompareObject o;
@@ -87,7 +81,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             FileCompareObject renamedFileObj;
 
             actualFolder.NewName = renamedFolder.Name;
-            actualFolder.ChangeType[pos] = MetaChangeType.Rename;
+
+            foreach (int i in deleteIndexes)
+                actualFolder.ChangeType[i] = MetaChangeType.Rename;
 
             foreach (string name in renamedFolderContents)
             {
@@ -96,13 +92,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     if ((actualFldrObj = o as FolderCompareObject) != null)
                     {
                         renamedFolderObj = renamedFolder.Contents[name] as FolderCompareObject;
-                        MergeFolder(actualFldrObj, renamedFolderObj, pos);
+                        MergeFolder(actualFldrObj, renamedFolderObj, deleteIndexes);
                     }
                     else
                     {
                         actualFileObj = o as FileCompareObject;
                         renamedFileObj = renamedFolder.Contents[name] as FileCompareObject;
-                        MergeFile(actualFileObj, renamedFileObj, pos);
+                        MergeFile(actualFileObj, renamedFileObj, deleteIndexes);
                     }
                 }
                 else
@@ -112,14 +108,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 }
             }
 
-            actualFolder.UpdateRename(pos);
-            actualFolder.ChangeType[pos] = MetaChangeType.Rename;
             actualFolder.Parent.Dirty = true; //EXP
             renamedFolder.Contents = new Dictionary<string, BaseCompareObject>();
             renamedFolder.Invalid = true;
         }
 
-        private void MergeOneLevelDown(FolderCompareObject actualFolder, FolderCompareObject renamedFolder, int pos)
+        private void MergeOneLevelDown(FolderCompareObject actualFolder, FolderCompareObject renamedFolder, List<int> deleteIndexes)
         {
             Dictionary<string, BaseCompareObject>.KeyCollection renamedFolderContents = renamedFolder.Contents.Keys;
             BaseCompareObject o;
@@ -135,13 +129,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     if ((actualFldrObj = o as FolderCompareObject) != null)
                     {
                         renamedFolderObj = renamedFolder.Contents[name] as FolderCompareObject;
-                        MergeFolder(actualFldrObj, renamedFolderObj, pos);
+                        MergeFolder(actualFldrObj, renamedFolderObj, deleteIndexes);
                     }
                     else
                     {
                         actualFileObj = o as FileCompareObject;
                         renamedFileObj = renamedFolder.Contents[name] as FileCompareObject;
-                        MergeFile(actualFileObj, renamedFileObj, pos);
+                        MergeFile(actualFileObj, renamedFileObj, deleteIndexes);
                     }
                 }
                 else
@@ -156,23 +150,27 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             renamedFolder.Invalid = true;
         }
 
-        private void MergeFile(FileCompareObject actualFileObj, FileCompareObject renamedFileObj, int pos)
+        private void MergeFile(FileCompareObject actualFileObj, FileCompareObject renamedFileObj, List<int> deleteIndexes)
         {
-            MergeFileSystemObject(actualFileObj, renamedFileObj, pos);
-            actualFileObj.Hash[pos] = renamedFileObj.Hash[pos];
-            actualFileObj.Length[pos] = renamedFileObj.Length[pos];
-            actualFileObj.LastWriteTime[pos] = renamedFileObj.LastWriteTime[pos];
-            actualFileObj.MetaHash[pos] = renamedFileObj.MetaHash[pos];
-            actualFileObj.MetaLastWriteTime[pos] = renamedFileObj.MetaLastWriteTime[pos];
-            actualFileObj.MetaLength[pos] = renamedFileObj.MetaLength[pos];
-            //List of conflicts
+            MergeFileSystemObject(actualFileObj, renamedFileObj, deleteIndexes);
+
+            foreach (int i in deleteIndexes)
+            {
+                actualFileObj.Hash[i] = renamedFileObj.Hash[i];
+                actualFileObj.Length[i] = renamedFileObj.Length[i];
+                actualFileObj.LastWriteTime[i] = renamedFileObj.LastWriteTime[i];
+                actualFileObj.MetaHash[i] = renamedFileObj.MetaHash[i];
+                actualFileObj.MetaLastWriteTime[i] = renamedFileObj.MetaLastWriteTime[i];
+                actualFileObj.MetaLength[i] = renamedFileObj.MetaLength[i];
+            }
         }
 
-        private void MergeFolder(FolderCompareObject actualFldrObj, FolderCompareObject renamedFolderObj, int pos)
+        private void MergeFolder(FolderCompareObject actualFldrObj, FolderCompareObject renamedFolderObj, List<int> deleteIndexes)
         {
-            MergeFileSystemObject(actualFldrObj, renamedFolderObj, pos);
-            actualFldrObj.UseNewName[pos] = renamedFolderObj.UseNewName[pos];
-            actualFldrObj.LastKnownState[pos] = actualFldrObj.LastKnownState[pos];
+            MergeFileSystemObject(actualFldrObj, renamedFolderObj, deleteIndexes);
+
+            foreach (int i in deleteIndexes)
+                actualFldrObj.LastKnownState[i] = actualFldrObj.LastKnownState[i];
 
             if (actualFldrObj.Contents.Count == 0)
             {
@@ -180,20 +178,23 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 ChangeFatherMother(actualFldrObj);
             }
             else
-                MergeOneLevelDown(actualFldrObj, renamedFolderObj, pos);
+                MergeOneLevelDown(actualFldrObj, renamedFolderObj, deleteIndexes);
         }
 
-        private void MergeFileSystemObject(BaseCompareObject actualObj, BaseCompareObject renameObj, int pos)
+        private void MergeFileSystemObject(BaseCompareObject actualObj, BaseCompareObject renameObj, List<int> deleteIndexes)
         {
-            actualObj.ChangeType[pos] = renameObj.ChangeType[pos];
-            actualObj.CreationTime[pos] = renameObj.CreationTime[pos];
-            actualObj.Exists[pos] = renameObj.Exists[pos];
-            actualObj.FinalState[pos] = renameObj.FinalState[pos];
-            actualObj.Invalid = renameObj.Invalid; //EXP
-            actualObj.MetaCreationTime[pos] = renameObj.MetaCreationTime[pos];
-            actualObj.MetaExists[pos] = renameObj.MetaExists[pos];
-            actualObj.MetaUpdated[pos] = renameObj.MetaUpdated[pos];
-            actualObj.LastKnownState[pos] = renameObj.LastKnownState[pos];
+            foreach (int i in deleteIndexes)
+            {
+                actualObj.ChangeType[i] = renameObj.ChangeType[i];
+                actualObj.CreationTime[i] = renameObj.CreationTime[i];
+                actualObj.Exists[i] = renameObj.Exists[i];
+                actualObj.FinalState[i] = renameObj.FinalState[i];
+                actualObj.Invalid = renameObj.Invalid; //EXP
+                actualObj.MetaCreationTime[i] = renameObj.MetaCreationTime[i];
+                actualObj.MetaExists[i] = renameObj.MetaExists[i];
+                actualObj.MetaUpdated[i] = renameObj.MetaUpdated[i];
+                actualObj.LastKnownState[i] = renameObj.LastKnownState[i];
+            }
         }
 
         private void ChangeFatherMother(FolderCompareObject actualFldrObj)
