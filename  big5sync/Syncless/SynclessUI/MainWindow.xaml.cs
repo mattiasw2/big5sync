@@ -125,6 +125,7 @@ namespace SynclessUI
 
                     InitializeTagInfoPanel();
                     InitializeTagList();
+                    Show();
                 }
                 else
                 {
@@ -361,7 +362,7 @@ namespace SynclessUI
 
         private void BtnSyncMode_Click(object sender, RoutedEventArgs e)
         {
-
+            Console.WriteLine("Hi");
             if (!_manualSyncEnabled)
             {
                 DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",

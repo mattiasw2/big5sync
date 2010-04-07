@@ -29,8 +29,6 @@ namespace SynclessUI
 
             main = new MainWindow();
 
-            main.Show();
-
             ProcessArgs(e.Args);
         }
 
