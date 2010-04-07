@@ -8,6 +8,10 @@ using Syncless.Core;
 using Syncless.Logging;
 namespace Syncless.Profiling
 {
+    /// <summary>
+    /// ProfilingGUIDHelper provides some common methods to manipulate GUID which may be used by 
+    /// other classes under the Tagging namespace
+    /// </summary>
     internal static class ProfilingGUIDHelper
     {
         #region GUID Generation
