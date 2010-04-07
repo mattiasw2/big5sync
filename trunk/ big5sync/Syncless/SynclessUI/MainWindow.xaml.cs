@@ -794,6 +794,7 @@ namespace SynclessUI
                         {
                             DialogWindow terminationWindow = DialogHelper.ShowIndeterminate(this, "Termination in Progress",
                                                                                             "Please wait for the current synchronization to complete.");
+                            TaskbarIcon.Visibility = Visibility.Hidden;
                             terminationWindow.Show();
                             var bgWorker = new BackgroundWorker();
                             bgWorker.DoWork += bw_DoWork;
