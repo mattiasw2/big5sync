@@ -204,7 +204,7 @@
     <Compile Include="Tagging\CurrentTime.cs" />
     <Compile Include="Tagging\Exceptions\CorruptedTaggingXMLException.cs" />
     <Compile Include="Tagging\Exceptions\FilterAlreadyExistException.cs" />
-    <Compile Include="Tagging\Exceptions\FilterNotExistException.cs" />
+    <Compile Include="Tagging\Exceptions\FilterNotFoundException.cs" />
     <Compile Include="Tagging\Exceptions\PathAlreadyExistsException.cs" />
     <Compile Include="Tagging\Exceptions\PathNotFoundException.cs" />
     <Compile Include="Tagging\Exceptions\RecursiveDirectoryException.cs" />
