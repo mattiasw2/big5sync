@@ -10,7 +10,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 {
     public class ComparerVisitor : IVisitor
     {
-        #region IVisitor Members
         private int _totalNodes;
 
         public int TotalNodes
@@ -18,11 +17,14 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             get { return _totalNodes; }
             set { _totalNodes = value; }
         }
+
         public ComparerVisitor()
         {
             _totalNodes = 0;
-
         }
+
+        #region IVisitor Members
+
         public void Visit(FileCompareObject file, int numOfPaths)
         {
             if (file.Invalid)
@@ -106,7 +108,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         private static void DetectFileRename(FileCompareObject file, int numOfPaths)
         {
             FileCompareObject result = null;
-            Dictionary<string, int> newNames = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, List<int>> newNames = new Dictionary<string, List<int>>(StringComparer.OrdinalIgnoreCase);
             List<int> unchangedIndexes = new List<int>();
 
             for (int i = 0; i < numOfPaths; i++)
@@ -117,9 +119,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     case MetaChangeType.Update:
                         return;
                 }
-
-                //if (file.ChangeType[i] == MetaChangeType.New || file.ChangeType[i] == MetaChangeType.Update)
-                //    return;
             }
 
             for (int i = 0; i < numOfPaths; i++)
@@ -130,9 +129,18 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         FileCompareObject f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);
                         if (f != null)
                         {
-                            if (!newNames.ContainsKey(f.Name))
+                            List<int> pos = null;
+                            if (newNames.TryGetValue(f.Name, out pos))
                             {
-                                newNames.Add(f.Name, i);
+                                //newNames.Add(f.Name, i);
+                                //result = f;
+                                pos.Add(i);
+                            }
+                            else
+                            {
+                                pos = new List<int>();
+                                pos.Add(i);
+                                newNames.Add(f.Name, pos);
                                 result = f;
                             }
                         }
@@ -148,7 +156,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 // ReSharper disable PossibleNullReferenceException
                 file.NewName = result.Name;
                 // ReSharper restore PossibleNullReferenceException
-                file.ChangeType[newNames[result.Name]] = MetaChangeType.Rename;
+                foreach (int i in newNames[result.Name])
+                    file.ChangeType[i] = MetaChangeType.Rename;
+
                 result.Invalid = true;
                 file.Parent.Dirty = true; //EXP
             }
@@ -170,20 +180,25 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             {
                 if (file.ChangeType[i] == MetaChangeType.Rename)
                 {
-                    renamePos = i;
-                    count++;
+                    if (renamePos == -1)
+                    {
+                        renamePos = i;
+                        file.SourcePosition = renamePos;
+                    }
+                    file.Priority[i] = 1;
+                    //count++;
                 }
-                else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null && file.ChangeType[i] != MetaChangeType.Delete)
-                {
-                    renamePos = -1;
-                    break;
-                }
+                //else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null && file.ChangeType[i] != MetaChangeType.Delete)
+                //{
+                //    renamePos = -1;
+                //    break;
+                //}
             }
 
-            if (renamePos > -1 && count == 1)
+            if (renamePos > -1)
             {
-                file.Priority[renamePos] = 1;
-                file.SourcePosition = renamePos;
+                //file.Priority[renamePos] = 1;
+                //file.SourcePosition = renamePos;
                 return;
             }
 
