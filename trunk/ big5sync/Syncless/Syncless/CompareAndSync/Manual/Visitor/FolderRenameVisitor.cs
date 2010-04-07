@@ -48,7 +48,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             //highly probable that it is a folder rename
             //2. We check all folders which has the same meta name but different name as the non-existent folder
             //3. If the count is 1, we shall proceed to rename
-            FolderCompareObject folderObject = null;
+            FolderCompareObject folderObject;
             int count = 0;
             int renamePos = -1;
 
