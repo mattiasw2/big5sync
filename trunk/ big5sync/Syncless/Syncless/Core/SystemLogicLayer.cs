@@ -1771,6 +1771,15 @@ namespace Syncless.Core
             {
                 //Initialize fail return false.
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                if (_queueObserver != null)
+                {
+                    _queueObserver.Stop();
+                }
+                if (_reader != null)
+                {
+                    _reader.Stop();
+                }
+
                 return false;
             }
         }
