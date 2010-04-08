@@ -62,18 +62,26 @@ namespace SynclessUI
         void _previewWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             RootCompareObject rco = e.Result as RootCompareObject;
-            Populate(rco);
-			ProgressBarAnalyzing.Foreground = (Brush) ProgressBarAnalyzing.Resources["GreenColor"];
-			ProgressBarAnalyzing.Value = 100;
-			ProgressBarAnalyzing.IsIndeterminate = false;
-			LblProgress.Content = "Analyzing Completed!";
-			LblCancel.Content = "Close";
+            if (rco != null)
+            {
+                Populate(rco);
+                ProgressBarAnalyzing.Foreground = (Brush) ProgressBarAnalyzing.Resources["GreenColor"];
+                ProgressBarAnalyzing.Value = 100;
+                ProgressBarAnalyzing.IsIndeterminate = false;
+                LblProgress.Content = "Analyzing Completed!";
+                LblCancel.Content = "Close";
+            }
         }
 
         void _previewWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             string selectedTag = e.Argument as string;
             RootCompareObject rco = _main.Gui.PreviewSync(selectedTag);
+            if (_previewWorker.CancellationPending)
+            {
+                e.Cancel = true;
+                rco = null;
+            }
             e.Result = rco;
         }
 
@@ -116,8 +124,8 @@ namespace SynclessUI
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            _previewWorker.CancelAsync();
             _main.Gui.CancelPreview(_selectedTag);
+            _previewWorker.CancelAsync();
             BtnClose.IsEnabled = false;
             Close();
         }

@@ -3,6 +3,9 @@ using Syncless.Helper;
 
 namespace Syncless.CompareAndSync.Exceptions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class CreateFolderException : ApplicationException
     {
         public CreateFolderException(Exception innerException)
