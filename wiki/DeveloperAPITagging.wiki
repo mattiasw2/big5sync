@@ -10,17 +10,11 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 
 || || *Class* || *Description* ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#Tag Tag] || Represents a container for a list of `TaggedPath` objects.  Each `Tag` object has its properties that uniquely identifies itself from other `Tag` objects. ||
-|| || [#TagConfig TagConfig] || Provides the configuration options of `Tag` object. ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [#TaggedPath TaggedPath] || Encloses properties of a folder path and provides operations to manipulate the properties. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#TaggingLayer TaggingLayer] || The main logic controller of the Tagging namespace. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#TaggingProfile TaggingProfile] || Represents a container for a list of `Tag` objects.  Each `TaggingProfile` has its properties that uniquely identifies itself from other `TaggingProfile` objects. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#TagMerger TagMerger] || Performs merging of several tagging profiles which have the same name. ||
 
 == Tag ==
-
-[#Classes_Summary Back to top]
-
-== !TagConfig ==
 
 [#Classes_Summary Back to top]
 
