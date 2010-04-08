@@ -72,11 +72,11 @@
       		<GroupBox Header="In the event of replaced/deleted files/folder" Foreground="White" BorderThickness="0.1" Margin="0" FontSize="13.333">
       			<StackPanel Margin="5,0,0,0" Orientation="Vertical">
       				<StackPanel x:Name="SendToRecycleBinGroup" Orientation="Horizontal">
-      					<CheckBox x:Name="ChkBoxSendToRecycleBin" VerticalAlignment="Center" />
+      					<CheckBox x:Name="ChkBoxSendToRecycleBin" VerticalAlignment="Center" Click="ChkBoxSendToRecycleBin_Click" />
       					<Label x:Name="RecycleBinDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Send to Recycle Bin"/>
       				</StackPanel>
       				<StackPanel x:Name="MoveToSynclessArchiveGroup" Orientation="Horizontal" Margin="0">
-      					<CheckBox x:Name="ChkBoxMoveToSynclessArchive" VerticalAlignment="Center" Checked="ChkBoxMoveToSynclessArchive_Checked" Unchecked="ChkBoxMoveToSynclessArchive_Unchecked" />
+      					<CheckBox x:Name="ChkBoxMoveToSynclessArchive" VerticalAlignment="Center" />
       					<Label x:Name="MoveToSynclessArchiveDescription1" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Move Last" Margin="0"/>
       					<Label x:Name="LblChanges" FontSize="13.333" Background="{x:Null}" Foreground="White" BorderBrush="{x:Null}" Margin="-5,0" Content="0"/>
       					<Label x:Name="MoveToSynclessArchiveDescription2" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Changes to __SynclessArchive"/>
