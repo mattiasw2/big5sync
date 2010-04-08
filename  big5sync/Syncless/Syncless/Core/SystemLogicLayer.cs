@@ -1516,7 +1516,6 @@ namespace Syncless.Core
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
             }
         }
-        
         /// <summary>
         /// Start a Manual Sync. The Sync will be queued and will be processed when it is its turn.
         /// </summary>
@@ -1655,10 +1654,9 @@ namespace Syncless.Core
             //Find and clean all the deleted folder that are still tag.
             FindAndCleanDeletedPaths();
             //Create the Tag View
-            TagView view = new TagView(t.TagName, t.LastUpdatedDate);
+            
             //Convert the path.
             List<string>[] pathList = ProfilingLayer.Instance.ConvertAndFilter(t.FilteredPathListString);
-            List<string> namedPath = ProfilingLayer.Instance.ConvertAndFilterToNamed(pathList[1]);
             //a list of available path
             PathGroupView availGrpView = new PathGroupView("Available");
             List<PathView> pathViewList = new List<PathView>();
@@ -1672,39 +1670,13 @@ namespace Syncless.Core
                 pathViewList.Add(p);
             }
             availGrpView.PathList = pathViewList;
-            //a list of unavailable path.
-            PathGroupView unavailableList = new PathGroupView("Unavailable");
-            pathViewList = new List<PathView>();
-            foreach (string path in namedPath)
-            {
-                PathView p = new PathView(path) { IsAvailable = false };
-                pathViewList.Add(p);
-
-            }
+            TagView view = new TagView(t.TagName, t.LastUpdatedDate);
             view.GroupList.Add(availGrpView);
-            view.GroupList.Add(unavailableList);
 
             view.Created = t.CreatedDate;
-
-
             view.IsQueued = CompareAndSyncController.Instance.IsQueued(t.TagName);
             view.IsSyncing = CompareAndSyncController.Instance.IsSyncing(t.TagName);
 
-            //if (t.IsSeamless)
-            //{
-            //    view.TagState = TagState.Seamless;
-            //}
-            //else
-            //{
-            //    if (view.IsLocked)
-            //    {
-            //        view.TagState = TagState.Switching;
-            //    }
-            //    else
-            //    {
-            //        view.TagState = TagState.Manual;
-            //    }
-            //}
             view.TagState = GetTagState(view.TagName);
             return view;
         }
@@ -1933,7 +1905,6 @@ namespace Syncless.Core
                 }
             }
         }
-
         /// <summary>
         /// Check the program folder if Syncless have write access.
         /// </summary>
@@ -1972,7 +1943,6 @@ namespace Syncless.Core
         /// </summary>
         /// <param name="tagList"></param>
         /// <returns></returns>
-
         private List<string> ConvertTagListToTagString(IEnumerable<Tag> tagList)
         {
             List<string> tagStringList = new List<string>();

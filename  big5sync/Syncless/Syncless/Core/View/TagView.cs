@@ -1,105 +1,92 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Syncless.Core.View;
+﻿using System.Collections.Generic;
+using Syncless.Tagging;
 
 namespace Syncless.Core.View
 {
+    /// <summary>
+    /// The TagView for <see cref="Tag"/>
+    /// </summary>
     public class TagView
     {
-        protected string _tagName;
-
-        public string TagName
-        {
-            get { return _tagName; }
-            set { this._tagName = value; }
-        }
-        
-        private List<PathGroupView> _groupList;
-
-        public List<PathGroupView> GroupList
-        {
-            get { return _groupList; }
-            set { _groupList = value; }
-        } 
+        /// <summary>
+        /// Get and Set the name of the <see cref="Tag"/>
+        /// </summary>
+        public string TagName { get; set; }
+        /// <summary>
+        /// Get the list of Path Group
+        /// </summary>
+        public List<PathGroupView> GroupList { get; private set; }
+        /// <summary>
+        /// Get the list of Path in string.
+        /// </summary>
         public List<string> PathStringList
         {
             get
             {
                 List<string> pathList = new List<string>();
-                foreach (PathGroupView grp in _groupList)
+                foreach (PathGroupView grp in GroupList)
                 {
                     pathList.AddRange(grp.PathListString);
                 }
                 return pathList;
             }
         }
-
-        protected long _lastupdated;
-
-        public long LastUpdated
-        {
-            get { return _lastupdated; }
-            set { _lastupdated = value; }
-        }
-
-        protected long _created;
-
-        public long Created
-        {
-            get { return _created; }
-            set { _created = value; }
-        }
-
-        private TagState _tagState;
-
+        /// <summary>
+        /// Get and Set the Last Updated Time
+        /// </summary>
+        public long LastUpdated { get; set; }
+        /// <summary>
+        /// Get and Set the Created Time
+        /// </summary>
+        public long Created { get; set; }
+        /// <summary>
+        /// Return if the <see cref="Tag"/> is Seamless
+        /// </summary>
         public bool IsSeamless
         {
             get { return TagState == TagState.Seamless; }
         }
-
-        private bool isQueued;
-
-        public bool IsQueued
-        {
-            get { return isQueued; }
-            set { isQueued = value; }
-        }
-        private bool isSyncing;
-
-        public bool IsSyncing
-        {
-            get { return isSyncing; }
-            set { isSyncing = value; }
-        }       
-
+        /// <summary>
+        /// Return true if the <see cref="Tag"/> is Queued
+        /// </summary>
+        public bool IsQueued { get; set; }
+        /// <summary>
+        /// Return true if the <see cref="Tag"/> is Synchronzing
+        /// </summary>
+        public bool IsSyncing { get; set; }
+        /// <summary>
+        /// Return true if the <see cref="Tag"/> is Queued or Synchronzing
+        /// </summary>
         public bool IsLocked
         {
-            get { return (isQueued || isSyncing); }
+            get { return (IsQueued || IsSyncing); }
         }
+        /// <summary>
+        /// Return true if the <see cref="Tag"/> is Switching
+        /// </summary>
         public bool IsSwitching{
             get
             {
-                return (_tagState == TagState.ManualToSeamless ||
-                        _tagState == TagState.SeamlessToManual);
+                return (TagState == TagState.ManualToSeamless ||
+                        TagState == TagState.SeamlessToManual);
             }
         }
-        
-        
-        public TagState TagState
-        {
-            get { return _tagState; }
-            set { _tagState = value; }
-        }
-
+        /// <summary>
+        /// Get and Set the State of the Tag.
+        /// </summary>
+        public TagState TagState { get; set; }
+        /// <summary>
+        /// Constructor of Tag View
+        /// </summary>
+        /// <param name="tagname">Name of the tag</param>
+        /// <param name="created">The Created date.</param>
         public TagView(string tagname, long created)
         {
-            this._tagName = tagname;
-            this._created = created;
-            this._lastupdated = created;
-            this._tagState = TagState.Seamless;
-            this._groupList = new List<PathGroupView>();
+            TagName = tagname;
+            Created = created;
+            LastUpdated = created;
+            TagState = TagState.Seamless;
+            GroupList = new List<PathGroupView>();
         }
         
     }
