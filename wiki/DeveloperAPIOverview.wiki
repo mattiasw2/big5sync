@@ -17,7 +17,7 @@ This document is the API specification for Syncless, version 2.0
 || [DeveloperAPICompareAndSyncSeamless Syncless.CompareAndSync.Seamless] || Provides classes for performing seamless synchronization. ||
 || [DeveloperAPICompareAndSyncXMLWriteObject Syncless.CompareAndSync.XMLWriteObject] || Provides classes which enclose information needed for updating XML metadata files during synchronization. ||
 || [DeveloperAPICore Syncless.Core] || Provides classes which perform the main logic of the entire logic layer. ||
-|| [DeveloperAPICoreExceptions Syncless.Core.Exceptions] || ||
+|| [DeveloperAPICoreExceptions Syncless.Core.Exceptions] || Exception classes which are thrown when there are errors in the main logic operations. ||
 || [DeveloperAPICoreView Syncless.Core.View] || ||
 || [DeveloperAPIFilter Syncless.Filters] || ||
 || [DeveloperAPIHelper Syncless.Helper] || ||
