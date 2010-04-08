@@ -19,7 +19,7 @@ namespace SynclessUI
         private MainWindow _main;
         private bool _closingAnimationNotCompleted = true;
         private bool _showApplicationLog = Settings.Default.ShowApplicationLog;
-        private bool _showSynchronizationLog = Settings.Default.ShowApplicationLog;
+        private bool _showSynchronizationLog = Settings.Default.ShowSynchronizationLog;
         private bool _showFileSystemLog = Settings.Default.ShowFileSystemLog;
 
         public LogWindow(MainWindow main)
@@ -31,8 +31,8 @@ namespace SynclessUI
             
             try
             {
-                List<LogData> log = _main.Gui.ReadLog();
-                PopulateLogData(log);
+                InitDataTable();
+                PopulateLogData();
             }
             catch (LogFileCorruptedException)
             {
@@ -52,8 +52,17 @@ namespace SynclessUI
                 ChkBoxSynchronizationLog.IsChecked = _showSynchronizationLog;
                 ChkBoxFileSystem.IsChecked = _showFileSystemLog;
                 ShowDialog();
-				datagrid.UpdateLayout();
+                datagrid.UpdateLayout();
             }
+        }
+
+        private void InitDataTable()
+        {
+            _LogData = new DataTable();
+            _LogData.Columns.Add(new DataColumn("Category", typeof(string)));
+            _LogData.Columns.Add(new DataColumn("Event Type", typeof(string)));
+            _LogData.Columns.Add(new DataColumn("Message", typeof(string)));
+            _LogData.Columns.Add(new DataColumn("Timestamp", typeof(string)));
         }
 
         public DataTable LogData
@@ -61,38 +70,35 @@ namespace SynclessUI
             get { return _LogData; }
         }
 
-        private void PopulateLogData(List<LogData> log)
+        private void PopulateLogData()
         {
-            _LogData = new DataTable();
-            _LogData.Columns.Add(new DataColumn("Category", typeof (string)));
-            _LogData.Columns.Add(new DataColumn("Event Type", typeof (string)));
-            _LogData.Columns.Add(new DataColumn("Message", typeof (string)));
-            _LogData.Columns.Add(new DataColumn("Timestamp", typeof (string)));
+            List<LogData> log = _main.Gui.ReadLog();
+            
+            _LogData.Clear();
 			
             foreach (LogData l in log)
             {
-                LogEventType @event = l.LogEvent;
-
                 DataRow row = _LogData.NewRow();
-
-
+                
                 string category = "";
                 string eventType = "";
 
                 switch (l.LogCategory)
                 {
                     case LogCategoryType.APPEVENT:
+                        if (!_showApplicationLog) continue;
                         category = "Application";
                         break;
                     case LogCategoryType.FSCHANGE:
+                        if (!_showFileSystemLog) continue;
                         category = "Filesystem";
                         break;
                     case LogCategoryType.SYNC:
+                        if (!_showSynchronizationLog) continue;
                         category = "Sync";
                         break;
                     case LogCategoryType.UNKNOWN:
-                        category = "Unknown";
-                        break;
+                        continue;
                 }
 
                 switch (l.LogEvent)
@@ -202,16 +208,22 @@ namespace SynclessUI
         private void ChkBoxApplicationLog_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             _showApplicationLog = (bool)ChkBoxApplicationLog.IsChecked;
+            PopulateLogData();
+            datagrid.UpdateLayout();
         }
 
         private void ChkBoxSynchronizationLog_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             _showSynchronizationLog = (bool)ChkBoxSynchronizationLog.IsChecked;
+            PopulateLogData();
+            datagrid.UpdateLayout();
         }
 
         private void ChkBoxFileSystem_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             _showFileSystemLog = (bool)ChkBoxFileSystem.IsChecked;
+            PopulateLogData();
+            datagrid.UpdateLayout();
         }
 
         private void BtnClearLog_Click(object sender, System.Windows.RoutedEventArgs e)
