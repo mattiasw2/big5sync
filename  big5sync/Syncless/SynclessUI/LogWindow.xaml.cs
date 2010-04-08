@@ -228,7 +228,16 @@ namespace SynclessUI
 
         private void BtnClearLog_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-        	// TODO: Add event handler implementation here.
+            try
+            {
+                _main.Gui.ClearLog();
+                _LogData.Clear();
+                datagrid.UpdateLayout();
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
+            }
         }
     }
 }
