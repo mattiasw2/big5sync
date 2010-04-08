@@ -37,7 +37,8 @@ namespace Syncless.Tagging.Exceptions
         /// ErrorMessage.FILTER_NOT_FOUND_EXCEPTION</see> string value and the filter property to the 
         /// filter that is passed as parameter
         /// </summary>
-        /// <param name="filter"></param>
+        /// <param name="filter">The <see cref="Filter">Filter</see> object that represents the filter
+        /// that is not found</param>
         public FilterNotFoundException(Filter filter)
             : base(ErrorMessage.FILTER_NOT_FOUND_EXCEPTION)
         {
