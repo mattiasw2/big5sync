@@ -39,4 +39,4 @@ This document is the API specification for Syncless, version 2.0
 || [DeveloperAPIUIHelper SynclessUI.Helper] || ||
 || [DeveloperAPIUINotification SynclessUI.Notification] || Provides classes which monitor notification events. ||
 || [DeveloperAPIUIProperties SynclessUI.Properties] || Provides properties which enclose the settings of the graphical user interface. ||
-|| [DeveloperAPIUIVisitor SynclessUI.Visitor] || ||
+|| [DeveloperAPIUIVisitor SynclessUI.Visitor] || Provides visitor classes needed for displaying comparison and synchronization results. ||
