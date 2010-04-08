@@ -97,12 +97,55 @@ namespace SynclessUI.Properties {
         [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
         public bool EnableNotificationSounds {
             get {
                 return ((bool)(this["EnableNotificationSounds"]));
             }
             set {
                 this["EnableNotificationSounds"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
+        public bool ShowApplicationLog {
+            get {
+                return ((bool)(this["ShowApplicationLog"]));
+            }
+            set {
+                this["ShowApplicationLog"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
+        public bool ShowFileSystemLog {
+            get {
+                return ((bool)(this["ShowFileSystemLog"]));
+            }
+            set {
+                this["ShowFileSystemLog"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
+        public bool ShowSynchronizationLog {
+            get {
+                return ((bool)(this["ShowSynchronizationLog"]));
+            }
+            set {
+                this["ShowSynchronizationLog"] = value;
             }
         }
     }

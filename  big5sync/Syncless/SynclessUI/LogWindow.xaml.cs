@@ -6,6 +6,7 @@ using System.Windows.Input;
 using Syncless.Core.Exceptions;
 using Syncless.Logging;
 using SynclessUI.Helper;
+using SynclessUI.Properties;
 
 namespace SynclessUI
 {
@@ -24,6 +25,10 @@ namespace SynclessUI
             _main = main;
             Owner = _main;
             ShowInTaskbar = false;
+
+            ChkBoxApplicationLog.IsChecked = Settings.Default.ShowApplicationLog;
+            ChkBoxSynchronizationLog.IsChecked = Settings.Default.ShowSynchronizationLog;
+            ChkBoxFileSystem.IsChecked = Settings.Default.ShowFileSystemLog;
             
             try
             {
@@ -176,11 +181,34 @@ namespace SynclessUI
         {   
             if (_closingAnimationNotCompleted)
             {
+                SaveLogSettings();
                 BtnOk.IsCancel = false;
 				this.IsHitTestVisible = false;
                 e.Cancel = true;
                 FormFadeOut.Begin();
             }
+        }
+		
+		private void SaveLogSettings() {
+			Settings.Default.ShowApplicationLog = (bool) ChkBoxApplicationLog.IsChecked;
+			Settings.Default.ShowSynchronizationLog = (bool) ChkBoxSynchronizationLog.IsChecked;
+			Settings.Default.ShowFileSystemLog = (bool) ChkBoxFileSystem.IsChecked;
+            Settings.Default.Save();
+		}
+
+        private void ChkBoxApplicationLog_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+			// ChkBoxApplicationLog.IsChecked;
+        }
+
+        private void ChkBoxSynchronizationLog_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            // ChkBoxSynchronizationLog.IsChecked;
+        }
+
+        private void ChkBoxFileSystem_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            // ChkBoxFileSystem.IsChecked;
         }
     }
 }
