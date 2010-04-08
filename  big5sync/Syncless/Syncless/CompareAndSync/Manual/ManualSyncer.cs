@@ -60,7 +60,7 @@ namespace Syncless.CompareAndSync.Manual
             return null;
         }
 
-        public static RootCompareObject Compare(ManualCompareRequest request)
+        public static RootCompareObject Compare(ManualCompareRequest request, SyncProgress progress)
         {
             List<Filter> filters = request.Filters.ToList();
             filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ArchiveName));
@@ -68,12 +68,12 @@ namespace Syncless.CompareAndSync.Manual
             RootCompareObject rco = new RootCompareObject(request.Paths);
             
             List<string> typeConflicts = new List<string>();
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters, typeConflicts, null), null);
-            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), null);
-            CompareObjectHelper.PreTraverseFolder(rco, new ProcessMetadataVisitor(), null);
-            CompareObjectHelper.LevelOrderTraverseFolder(rco, new FolderRenameVisitor(), null);
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters, typeConflicts, progress), progress);
+            CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), progress);
+            CompareObjectHelper.PreTraverseFolder(rco, new ProcessMetadataVisitor(), progress);
+            CompareObjectHelper.LevelOrderTraverseFolder(rco, new FolderRenameVisitor(), progress);
             ComparerVisitor comparerVisitor = new ComparerVisitor();
-            CompareObjectHelper.PostTraverseFolder(rco, comparerVisitor, null);
+            CompareObjectHelper.PostTraverseFolder(rco, comparerVisitor, progress);
 
             return rco;
         }
