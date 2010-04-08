@@ -13,9 +13,9 @@ This document is the API specification for Syncless, version 2.0
 || [DeveloperAPICompareAndSyncExceptions Syncless.CompareAndSync.Exceptions] || Exception classes which are thrown when there are errors in performing comparison and synchronization operations. ||
 || [DeveloperAPICompareAndSyncManual Syncless.CompareAndSync.Manual] || Provides classes for performing manual synchronization. ||
 || [DeveloperAPICompareAndSyncManualVisitor Syncless.CompareAndSync.Manual.Visitor] || Provides visitor classes needed to perform comparison and synchronization of files and folders. ||
-|| [DeveloperAPICompareAndSyncRequest Syncless.CompareAndSync.Request] || Provides classes which enclose information need for request for comparison and synchronization operations. ||
+|| [DeveloperAPICompareAndSyncRequest Syncless.CompareAndSync.Request] || Provides classes which enclose information needed for request for comparison and synchronization operations. ||
 || [DeveloperAPICompareAndSyncSeamless Syncless.CompareAndSync.Seamless] || Provides classes for performing seamless synchronization. ||
-|| [DeveloperAPICompareAndSyncXMLWriteObject Syncless.CompareAndSync.XMLWriteObject] || ||
+|| [DeveloperAPICompareAndSyncXMLWriteObject Syncless.CompareAndSync.XMLWriteObject] || Provides classes which enclose information needed for updating XML metadata files during synchronization. ||
 || [DeveloperAPICore Syncless.Core] || ||
 || [DeveloperAPICoreExceptions Syncless.Core.Exceptions] || ||
 || [DeveloperAPICoreView Syncless.Core.View] || ||
