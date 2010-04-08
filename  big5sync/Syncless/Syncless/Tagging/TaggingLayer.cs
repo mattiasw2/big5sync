@@ -362,7 +362,7 @@ namespace Syncless.Tagging
         /// Gets a list of tags where paths, whose logical ID is same as logical ID that is passed as parameter,
         /// are tagged to
         /// </summary>
-        /// <param name="logicalId">The string value that represents the logical ID to be used to retrieve
+        /// <param name="logicalid">The string value that represents the logical ID to be used to retrieve
         /// the list of tags</param>
         /// <returns>the list of tags containing tagged paths whose logical ID is same as the logical 
         /// ID passed as parameter</returns>
@@ -591,8 +591,8 @@ namespace Syncless.Tagging
         /// <summary>
         /// Saves the tagging profile to a xml file
         /// </summary>
-        /// <param name="xmlFilePath">The string value that represents the path that the xml file is
-        /// to be saved to</param>
+        /// <param name="savedLocation">The list of strings that represent the list of paths that the 
+        /// xml file is to be saved to</param>
         public void SaveTo(List<string> savedLocation)
         {
             TaggingXMLHelper.SaveToLocations(_taggingProfile, savedLocation);

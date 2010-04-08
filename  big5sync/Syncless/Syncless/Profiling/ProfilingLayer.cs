@@ -103,6 +103,7 @@ namespace Syncless.Profiling
         ///    will replace C:/Lectures with 001:/Lectures
         /// </summary>
         /// <param name="path">The Physical Address to be converted</param>
+        /// <param name="create">Indicates whether to create the GUID if logical ID is not found</param>
         /// <returns>The Logical Address</returns>
         public string ConvertPhysicalToLogical(string path, bool create)
         {
@@ -252,7 +253,7 @@ namespace Syncless.Profiling
         /// <summary>
         /// Initialize the profiling layer
         /// </summary>
-        /// <param name="path">The root path for the profiling configuration file.</param>
+        /// <param name="paths">The list of paths for the profiling configuration file.</param>
         /// <returns>True if the profile is load.</returns>
         public bool Init(List<string> paths)
         {
