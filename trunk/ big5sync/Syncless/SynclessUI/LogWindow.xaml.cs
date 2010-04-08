@@ -21,6 +21,8 @@ namespace SynclessUI
 
         public LogWindow(MainWindow main)
         {
+            InitializeComponent();
+
             bool encounteredError = false;
             _main = main;
             Owner = _main;
@@ -48,7 +50,6 @@ namespace SynclessUI
 
             if (!encounteredError)
             {
-                InitializeComponent();
                 ShowDialog();
 				datagrid.UpdateLayout();
             }
