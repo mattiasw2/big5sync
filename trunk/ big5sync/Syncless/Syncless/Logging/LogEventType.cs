@@ -47,6 +47,9 @@ namespace Syncless.Logging
         /// A folder is untagged.
         /// </summary>
         APPEVENT_FOLDER_UNTAGGED,
+        /// <summary>
+        /// A File/Folder is created.
+        /// </summary>
         FSCHANGE_CREATED,
         /// <summary>
         /// A File is modified.

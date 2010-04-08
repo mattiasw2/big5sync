@@ -60,7 +60,7 @@ namespace Syncless.Monitor
         /// <summary>
         /// Enqueue event and wait to be executed.
         /// </summary>
-        /// <param name="e">A <see cref="Syncless.Monitor.DTO.FileSystemEvent"/> object containing the information needed to handle a request.</param>
+        /// <param name="eventList">A <see cref="Syncless.Monitor.DTO.FileSystemEvent"/> object containing the information needed to handle a request.</param>
         public void Enqueue(List<FileSystemEvent> eventList)
         {
             lock (queue)

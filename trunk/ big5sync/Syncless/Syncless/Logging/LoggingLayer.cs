@@ -78,7 +78,7 @@ namespace Syncless.Logging
         /// <summary>
         /// Return the user logs
         /// </summary>
-        /// <returns>A <see cref="System.Collections.Generic.List<T>"/> of <see cref="Syncless.Logging.LogData"/>
+        /// <returns>A <see cref="System.Collections.Generic.List{T}"/> of <see cref="Syncless.Logging.LogData"/>
         public List<LogData> ReadLog()
         {
             return LogReaderHelper.ReadLog();
