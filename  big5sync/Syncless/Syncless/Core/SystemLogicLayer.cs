@@ -1160,6 +1160,20 @@ namespace Syncless.Core
             }
 
         }
+
+        public void CancelPreview(string tagName)
+        {
+            try
+            {
+                CompareAndSyncController.Instance.CancelPreview(tagName);
+            }
+            catch (Exception e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+
         /// <summary>
         /// Prepare the core for termination.
         /// </summary>
@@ -1397,7 +1411,6 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
-
         /// <summary>
         /// Clear the user log
         /// </summary>
@@ -1426,6 +1439,7 @@ namespace Syncless.Core
             }
         }
 
+        
         #endregion
 
         #region private /internal / delegate
