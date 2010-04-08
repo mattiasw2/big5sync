@@ -7,10 +7,10 @@ This document is the API specification for Syncless, version 2.0
 = Syncless Namespaces =
 
 || *Namespace* || *Description* ||
-|| [DeveloperAPICompareAndSync Syncless.CompareAndSync] || ||
-|| [DeveloperAPICompareAndSyncCompareObject Syncless.CompareAndSync.CompareObject] || ||
-|| [DeveloperAPICompareAndSyncEnum Syncless.CompareAndSync.Enum] || ||
-|| [DeveloperAPICompareAndSyncExceptions Syncless.CompareAndSync.Exceptions] || ||
+|| [DeveloperAPICompareAndSync Syncless.CompareAndSync] || Provides classes for performing comparison and synchronization operations for files and folders. ||
+|| [DeveloperAPICompareAndSyncCompareObject Syncless.CompareAndSync.CompareObject] || Provides classes which enclose information needed for comparison of files and folders. ||
+|| [DeveloperAPICompareAndSyncEnum Syncless.CompareAndSync.Enum] || Provides enumerations for comparison and synchronization of files and folders. ||
+|| [DeveloperAPICompareAndSyncExceptions Syncless.CompareAndSync.Exceptions] || Exception classes which are thrown when there are errors in performing comparison and synchronization operations. ||
 || [DeveloperAPICompareAndSyncManual Syncless.CompareAndSync.Manual] || ||
 || [DeveloperAPICompareAndSyncManualVisitor Syncless.CompareAndSync.Manual.Visitor] || ||
 || [DeveloperAPICompareAndSyncRequest Syncless.CompareAndSync.Request] || ||
