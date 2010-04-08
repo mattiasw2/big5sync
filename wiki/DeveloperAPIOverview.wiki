@@ -19,7 +19,7 @@ This document is the API specification for Syncless, version 2.0
 || [DeveloperAPICore Syncless.Core] || Provides classes which perform the main logic of the entire logic layer. ||
 || [DeveloperAPICoreExceptions Syncless.Core.Exceptions] || Exception classes which are thrown when there are errors in the main logic operations. ||
 || [DeveloperAPICoreView Syncless.Core.View] || Provides classes which are abstraction of some classes in the main logic layer which are required by the user interface layer. ||
-|| [DeveloperAPIFilter Syncless.Filters] || ||
+|| [DeveloperAPIFilter Syncless.Filters] || Provides classes which enclose information needed for filtering of files and folders in synchronization. ||
 || [DeveloperAPIHelper Syncless.Helper] || ||
 || [DeveloperAPILogging Syncless.Logging] || ||
 || [DeveloperAPIMonitor Syncless.Monitor] || ||
