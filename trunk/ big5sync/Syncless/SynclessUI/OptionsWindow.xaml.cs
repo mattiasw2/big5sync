@@ -20,12 +20,12 @@ namespace SynclessUI
         public OptionsWindow(MainWindow main)
         {
             _main = main;
-            
 
 
+            InitializeComponent();
 			// Get Sync Config
             _sc = _main.Gui.GetSyncConfig();
-            InitializeComponent();
+            
             InitializeOptions();
             ChkBoxSendToRecycleBin.IsChecked = _sc.Recycle;
             LblChanges.Content = "" + _sc.ArchiveLimit;
@@ -38,6 +38,9 @@ namespace SynclessUI
         		SliderChanges.Visibility = Visibility.Visible;
                 SliderChanges.Value = _sc.ArchiveLimit;
 			}
+
+            ChkBoxMoveToSynclessArchive.Checked += ChkBoxMoveToSynclessArchive_Checked;
+            ChkBoxMoveToSynclessArchive.Unchecked += ChkBoxMoveToSynclessArchive_Unchecked;
 
             Owner = _main;
             ShowInTaskbar = false;
@@ -135,8 +138,15 @@ namespace SynclessUI
 
         private void SliderChanges_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
-        	LblChanges.Content = "" + SliderChanges.Value;
-            _sc.ArchiveLimit = (int) SliderChanges.Value;
+            if(_sc != null) {
+        	    LblChanges.Content = "" + SliderChanges.Value;
+                _sc.ArchiveLimit = (int) SliderChanges.Value;
+            }
+        }
+
+        private void ChkBoxSendToRecycleBin_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+        	_sc.Recycle = (bool) ChkBoxSendToRecycleBin.IsChecked;
         }
     }
 }
