@@ -171,6 +171,7 @@ namespace SynclessUI
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
             BtnOk.IsEnabled = false;
+            SaveLogSettings();
             Close();
         }
 
@@ -189,7 +190,6 @@ namespace SynclessUI
         {   
             if (_closingAnimationNotCompleted)
             {
-                SaveLogSettings();
                 BtnOk.IsCancel = false;
 				this.IsHitTestVisible = false;
                 e.Cancel = true;

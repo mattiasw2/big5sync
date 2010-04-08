@@ -25,7 +25,7 @@
 				</LinearGradientBrush>
 			</Rectangle.Fill>
 		</Rectangle>
-		<Label x:Name="LblOptions" Content="Application Options" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" HorizontalAlignment="Left"/>
+		<Label x:Name="LblOptions" Content="Application Options" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Margin="0,0,0,10" HorizontalAlignment="Left" IsHitTestVisible="False"/>
 		<StackPanel x:Name="CommandPanel" Margin="0,10,0,0" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
 			<Button x:Name="BtnOk" IsDefault="True" Margin="0,0,5,0" Height="28" Click="BtnOk_Click">
 				<Label x:Name="LblOk" FontFamily="Century Gothic" FontSize="9.333" Content="Ok" FontWeight="Bold"/>
@@ -78,7 +78,7 @@
       				<StackPanel x:Name="MoveToSynclessArchiveGroup" Orientation="Horizontal" Margin="0">
       					<CheckBox x:Name="ChkBoxMoveToSynclessArchive" VerticalAlignment="Center" Checked="ChkBoxMoveToSynclessArchive_Checked" Unchecked="ChkBoxMoveToSynclessArchive_Unchecked" />
       					<Label x:Name="MoveToSynclessArchiveDescription1" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Move Last" Margin="0"/>
-      					<Label x:Name="LblBoxChanges" FontSize="13.333" Content="" Background="{x:Null}" Foreground="White" BorderBrush="{x:Null}" Margin="-5,0"/>
+      					<Label x:Name="LblChanges" FontSize="13.333" Background="{x:Null}" Foreground="White" BorderBrush="{x:Null}" Margin="-5,0" Content="0"/>
       					<Label x:Name="MoveToSynclessArchiveDescription2" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Changes to __SynclessArchive"/>
       					<Slider x:Name="SliderChanges" Margin="0,3,0,0" Width="40" Minimum="1" SmallChange="1" ValueChanged="SliderChanges_ValueChanged" IsSnapToTickEnabled="True"/>
       				</StackPanel>

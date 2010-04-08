@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using Syncless.CompareAndSync;
 using SynclessUI.Helper;
 using SynclessUI.Properties;
 
@@ -14,11 +15,29 @@ namespace SynclessUI
         private MainWindow _main;
         private bool _closingAnimationNotCompleted = true;
 
+        private SyncConfig _sc;
+
         public OptionsWindow(MainWindow main)
         {
             _main = main;
+            
+
+
+			// Get Sync Config
+            _sc = _main.Gui.GetSyncConfig();
             InitializeComponent();
             InitializeOptions();
+            ChkBoxSendToRecycleBin.IsChecked = _sc.Recycle;
+            LblChanges.Content = "" + _sc.ArchiveLimit;
+
+			if(_sc.ArchiveLimit == 0) {
+				ChkBoxMoveToSynclessArchive.IsChecked = false;
+        		SliderChanges.Visibility = Visibility.Hidden;
+			} else {
+				ChkBoxMoveToSynclessArchive.IsChecked = true;
+        		SliderChanges.Visibility = Visibility.Visible;
+                SliderChanges.Value = _sc.ArchiveLimit;
+			}
 
             Owner = _main;
             ShowInTaskbar = false;
@@ -36,6 +55,9 @@ namespace SynclessUI
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
+            // Get Sync Config
+            _main.Gui.UpdateSyncConfig(_sc);
+
             BtnOk.IsEnabled = false;
             bool shellIntegrationChoice = ChkBoxRegistryIntegration.IsChecked.Value;
 
@@ -100,16 +122,21 @@ namespace SynclessUI
         private void ChkBoxMoveToSynclessArchive_Checked(object sender, System.Windows.RoutedEventArgs e)
         {
         	SliderChanges.Visibility = Visibility.Visible;
+            LblChanges.Content = (int)SliderChanges.Value;
+            _sc.ArchiveLimit = (int)SliderChanges.Value;
         }
 
         private void ChkBoxMoveToSynclessArchive_Unchecked(object sender, System.Windows.RoutedEventArgs e)
         {
         	SliderChanges.Visibility = Visibility.Hidden;
+            _sc.ArchiveLimit = 0;
+            LblChanges.Content = "0";
         }
 
         private void SliderChanges_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
-        	LblBoxChanges.Content = "" + SliderChanges.Value;
+        	LblChanges.Content = "" + SliderChanges.Value;
+            _sc.ArchiveLimit = (int) SliderChanges.Value;
         }
     }
 }
