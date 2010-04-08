@@ -28,7 +28,7 @@
 				</LinearGradientBrush>
 			</Rectangle.Fill>
 		</Rectangle>
-		<Label x:Name="LblTag" Content="Tag" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Margin="0"/>
+		<Label x:Name="LblTag" Content="Tag" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Margin="0" HorizontalAlignment="Left"/>
 		<Label x:Name="LblTagNameTitle" Content="Name:" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0" Grid.Column="1" Grid.Row="3"/>
 		<StackPanel x:Name="CommandPanel" Margin="0" Grid.Column="2" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
 			<Button x:Name="BtnOk" Margin="0,0,5,0" Height="28" Click="BtnOk_Click">
