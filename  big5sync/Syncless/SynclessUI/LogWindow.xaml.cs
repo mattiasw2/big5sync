@@ -18,19 +18,16 @@ namespace SynclessUI
         private DataTable _LogData;
         private MainWindow _main;
         private bool _closingAnimationNotCompleted = true;
+        private bool _showApplicationLog = Settings.Default.ShowApplicationLog;
+        private bool _showSynchronizationLog = Settings.Default.ShowApplicationLog;
+        private bool _showFileSystemLog = Settings.Default.ShowFileSystemLog;
 
         public LogWindow(MainWindow main)
         {
-            InitializeComponent();
-
             bool encounteredError = false;
             _main = main;
             Owner = _main;
             ShowInTaskbar = false;
-
-            ChkBoxApplicationLog.IsChecked = Settings.Default.ShowApplicationLog;
-            ChkBoxSynchronizationLog.IsChecked = Settings.Default.ShowSynchronizationLog;
-            ChkBoxFileSystem.IsChecked = Settings.Default.ShowFileSystemLog;
             
             try
             {
@@ -50,6 +47,10 @@ namespace SynclessUI
 
             if (!encounteredError)
             {
+                InitializeComponent();
+                ChkBoxApplicationLog.IsChecked = _showApplicationLog;
+                ChkBoxSynchronizationLog.IsChecked = _showSynchronizationLog;
+                ChkBoxFileSystem.IsChecked = _showFileSystemLog;
                 ShowDialog();
 				datagrid.UpdateLayout();
             }
@@ -190,26 +191,27 @@ namespace SynclessUI
             }
         }
 		
-		private void SaveLogSettings() {
-			Settings.Default.ShowApplicationLog = (bool) ChkBoxApplicationLog.IsChecked;
-			Settings.Default.ShowSynchronizationLog = (bool) ChkBoxSynchronizationLog.IsChecked;
-			Settings.Default.ShowFileSystemLog = (bool) ChkBoxFileSystem.IsChecked;
+		private void SaveLogSettings() {;
+		    Settings.Default.ShowApplicationLog = _showApplicationLog;
+		    Settings.Default.ShowSynchronizationLog = _showSynchronizationLog;
+		    Settings.Default.ShowFileSystemLog = _showFileSystemLog;
+
             Settings.Default.Save();
 		}
 
         private void ChkBoxApplicationLog_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-			// ChkBoxApplicationLog.IsChecked;
+            _showApplicationLog = (bool)ChkBoxApplicationLog.IsChecked;
         }
 
         private void ChkBoxSynchronizationLog_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            // ChkBoxSynchronizationLog.IsChecked;
+            _showSynchronizationLog = (bool)ChkBoxSynchronizationLog.IsChecked;
         }
 
         private void ChkBoxFileSystem_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            // ChkBoxFileSystem.IsChecked;
+            _showFileSystemLog = (bool)ChkBoxFileSystem.IsChecked;
         }
 
         private void BtnClearLog_Click(object sender, System.Windows.RoutedEventArgs e)
