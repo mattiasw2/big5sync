@@ -4,31 +4,19 @@ using System.Threading;
 
 namespace Syncless.Notification
 {
-    public class SyncProgress
+    public class SyncProgress : Progress
     {
         private List<ISyncProgressObserver> _observerList;
-        private SyncState _state;
         private bool _notifyProgressChange;
         private bool _notifyStateChange;
         private bool _completed;
         private Thread _worker;
-        public string TagName
-        {
-            get;
-            set;
-        }
+        
         private readonly EventWaitHandle _wh = new AutoResetEvent(false);
 
-        public SyncState State
-        {
-            get { return _state; }
-        }
+        
 
-        public string Message
-        {
-            get;
-            set;
-        }
+        
 
         #region Sync
         private int _syncjobtotal;
@@ -74,23 +62,23 @@ namespace Syncless.Notification
         {
             get
             {
-                if (_state == SyncState.Analyzing)
+                if (State == SyncState.Analyzing)
                 {
                     return 0;
                 }
-                if (_state == SyncState.Synchronizing)
+                if (State == SyncState.Synchronizing)
                 {
                     double completed = _syncCompletedJobs + _syncFailedJobs;
                     double total = _syncjobtotal;
                     return completed / total * 100.0;
                 }
-                if (_state == SyncState.Finalizing)
+                if (State == SyncState.Finalizing)
                 {
                     double completed = _finalisingCompletedJobs;
                     double total = _finalisingJobTotal;
                     return completed / total * 100.0;
                 }
-                if (_state == SyncState.Finished)
+                if (State == SyncState.Finished)
                 {
                     return 100;
                 }
@@ -98,9 +86,9 @@ namespace Syncless.Notification
             }
         }
 
-        public void Complete()
+        public override void Complete()
         {
-            switch (_state)
+            switch (State)
             {
                 case SyncState.Synchronizing:
                     if (_syncCompletedJobs + _syncFailedJobs >= _syncjobtotal)
@@ -121,9 +109,9 @@ namespace Syncless.Notification
             InvokeChange();
         }
 
-        public void Fail()
+        public override void Fail()
         {
-            switch (_state)
+            switch (State)
             {
                 case SyncState.Synchronizing:
                     if (_syncCompletedJobs + _syncFailedJobs >= _syncjobtotal)
@@ -145,21 +133,18 @@ namespace Syncless.Notification
 
         }
 
-        public void Cancel()
+        public override void Cancel()
         {
-            _state = SyncState.Cancelled;
+            State = SyncState.Cancelled;
             if (_worker != null)
             {
                 _wh.Set();
             }
         }
 
-        public bool IsCancel
-        {
-            get { return _state == SyncState.Cancelled; }
-        }
+       
 
-        public void Update()
+        public override void Update()
         {
             InvokeChange();
         }
@@ -173,9 +158,9 @@ namespace Syncless.Notification
             }
         }
 
-        public SyncProgress(string tagName)
+        public SyncProgress(string tagName):base(tagName)
         {
-            _state = SyncState.Started;
+            
             _syncjobtotal = 0;
             _syncFailedJobs = 0;
             _syncCompletedJobs = 0;
@@ -183,7 +168,6 @@ namespace Syncless.Notification
             _notifyProgressChange = false;
             _notifyStateChange = false;
             _completed = false;
-            TagName = tagName;
             _worker = new Thread(Notifier);
             _worker.Start();
         }
@@ -206,11 +190,11 @@ namespace Syncless.Notification
 
         public bool ChangeToAnalyzing()
         {
-            if (_state != SyncState.Started)
+            if (State != SyncState.Started)
             {
                 return false;
             }
-            _state = SyncState.Analyzing;
+            State = SyncState.Analyzing;
 
             TriggerStateChanged();
 
@@ -220,11 +204,11 @@ namespace Syncless.Notification
         public bool ChangeToSyncing(int jobcount)
         {
             _syncjobtotal = jobcount;
-            if (_state != SyncState.Analyzing)
+            if (State != SyncState.Analyzing)
             {
                 return false;
             }
-            _state = SyncState.Synchronizing;
+            State = SyncState.Synchronizing;
 
             TriggerStateChanged();
 
@@ -234,12 +218,12 @@ namespace Syncless.Notification
         public bool ChangeToFinalizing(int jobcount)
         {
             _finalisingJobTotal = jobcount;
-            if (_state != SyncState.Synchronizing)
+            if (State != SyncState.Synchronizing)
             {
                 return false;
             }
 
-            _state = SyncState.Finalizing;
+            State = SyncState.Finalizing;
 
             TriggerStateChanged();
 
@@ -249,13 +233,13 @@ namespace Syncless.Notification
         public bool ChangeToFinished()
         {
 
-            if (_state != SyncState.Finalizing)
+            if (State != SyncState.Finalizing)
             {
                 return false;
             }
 
             _completed = true;
-            _state = SyncState.Finished;
+            State = SyncState.Finished;
             TriggerSyncComplete();
 
             _wh.Set();
@@ -281,7 +265,7 @@ namespace Syncless.Notification
         #region thread
         private void Notifier()
         {
-            while (!_completed && _state != SyncState.Cancelled)
+            while (!_completed && State != SyncState.Cancelled)
             {
                 if (_notifyStateChange)
                 {

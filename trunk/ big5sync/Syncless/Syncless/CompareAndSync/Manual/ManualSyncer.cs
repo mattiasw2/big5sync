@@ -60,7 +60,7 @@ namespace Syncless.CompareAndSync.Manual
             return null;
         }
 
-        public static RootCompareObject Compare(ManualCompareRequest request, SyncProgress progress)
+        public static RootCompareObject Compare(ManualCompareRequest request, PreviewProgress progress)
         {
             List<Filter> filters = request.Filters.ToList();
             filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ArchiveName));
