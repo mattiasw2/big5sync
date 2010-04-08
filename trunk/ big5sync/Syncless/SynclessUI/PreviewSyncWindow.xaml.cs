@@ -61,15 +61,18 @@ namespace SynclessUI
 
         void _previewWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            RootCompareObject rco = e.Result as RootCompareObject;
-            if (rco != null)
+            if (!e.Cancelled)
             {
-                Populate(rco);
-                ProgressBarAnalyzing.Foreground = (Brush) ProgressBarAnalyzing.Resources["GreenColor"];
-                ProgressBarAnalyzing.Value = 100;
-                ProgressBarAnalyzing.IsIndeterminate = false;
-                LblProgress.Content = "Analyzing Completed!";
-                LblCancel.Content = "Close";
+                RootCompareObject rco = e.Result as RootCompareObject;
+                if (rco != null)
+                {
+                    Populate(rco);
+                    ProgressBarAnalyzing.Foreground = (Brush) ProgressBarAnalyzing.Resources["GreenColor"];
+                    ProgressBarAnalyzing.Value = 100;
+                    ProgressBarAnalyzing.IsIndeterminate = false;
+                    LblProgress.Content = "Analyzing Completed!";
+                    LblCancel.Content = "Close";
+                }
             }
         }
 
