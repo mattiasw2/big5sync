@@ -150,7 +150,7 @@ namespace Syncless.Core
             //Find the similiar paths for the logical Path
             //The return is physical address
             List<string> convertedList = FindSimilarSeamlessPathForFile(logicalAddress);
-            convertedList.Remove(fe.OldPath.FullName);
+            convertedList.Remove(fe.NewPath.FullName);
 
             //////// Massive Path Table Code /////////////
             for (int i = 0; i < convertedList.Count; i++)
@@ -1428,18 +1428,23 @@ namespace Syncless.Core
             }
         }
         /// <summary>
-        /// Initiate a save.
+        /// Get a Copy of the Sync Config
         /// </summary>
-        private void InitiateSave()
+        /// <returns>A copy of Sync Config</returns>
+        public SyncConfig GetSyncConfig()
         {
-            // if the queue already contain a Save Notification , do not enqueue.
-            if (!SllNotification.Contains(new SaveNotification()))
-            {
-                SllNotification.Enqueue(new SaveNotification());
-            }
+            return SyncConfig.Copy;
+        }
+        /// <summary>
+        /// Update the Sync Config
+        /// </summary>
+        /// <param name="config">The new value of the Sync Config</param>
+        public void UpdateSyncConfig(SyncConfig config)
+        {
+            SyncConfig.Instance = config; 
         }
 
-        
+
         #endregion
 
         #region private /internal / delegate
@@ -1544,7 +1549,7 @@ namespace Syncless.Core
                 return true;
             }
             //Create the manual Sync request and send it to CompareAndSyncController.
-            ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), tag.Filters, SyncConfig.Instance, tag.TagName, switchSeamless);
+            ManualSyncRequest syncRequest = new ManualSyncRequest(filterPaths[0].ToArray(), tag.Filters, SyncConfig.Copy, tag.TagName, switchSeamless);
             CompareAndSyncController.Instance.Sync(syncRequest);
 
             return true;
@@ -1961,7 +1966,12 @@ namespace Syncless.Core
             }
             return true;
         }
-        //Convert a list of tag to a list of tagname
+        /// <summary>
+        /// Convert a list of tag to a list of tagname
+        /// </summary>
+        /// <param name="tagList"></param>
+        /// <returns></returns>
+
         private List<string> ConvertTagListToTagString(IEnumerable<Tag> tagList)
         {
             List<string> tagStringList = new List<string>();
@@ -1970,6 +1980,17 @@ namespace Syncless.Core
                 tagStringList.Add(tag.TagName);
             }
             return tagStringList;
+        }
+        /// <summary>
+        /// Initiate a Save
+        /// </summary>
+        private void InitiateSave()
+        {
+            // if the queue already contain a Save Notification , do not enqueue.
+            if (!SllNotification.Contains(new SaveNotification()))
+            {
+                SllNotification.Enqueue(new SaveNotification());
+            }
         }
 
         #endregion

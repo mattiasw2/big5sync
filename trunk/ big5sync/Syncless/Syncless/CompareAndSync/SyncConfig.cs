@@ -17,7 +17,7 @@
             _conflictDir = "_synclessConflict";
         }
 
-        public static SyncConfig Instance
+        internal static SyncConfig Instance
         {
             get
             {
@@ -45,7 +45,7 @@
             }
         }
 
-        public static SyncConfig Copy
+        internal static SyncConfig Copy
         {
             get
             {
