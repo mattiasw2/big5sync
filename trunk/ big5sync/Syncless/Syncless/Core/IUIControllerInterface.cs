@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Core.Exceptions;
-using Syncless.Tagging;
 using Syncless.CompareAndSync;
 using System.IO;
 using Syncless.Filters;
@@ -151,6 +148,10 @@ namespace Syncless.Core
         /// <exception cref="UnhandledException">Unhandled Exception</exception>
         /// <returns>The RootCompareObject representing the Preview Result. null if the tag does not exist.</returns>
         RootCompareObject PreviewSync(string tagName);
+        /// <summary>
+        /// Cancel a Preview Request
+        /// </summary>
+        /// <param name="tagName">Name of the tag to cancel Preview</param>
         void CancelPreview(string tagName);
         /// <summary>
         /// Call to release a drive so that it can be safety remove.
@@ -177,7 +178,15 @@ namespace Syncless.Core
         /// Clear the user log
         /// </summary>
         void ClearLog();
+        /// <summary>
+        /// Get a Copy of the Sync Config
+        /// </summary>
+        /// <returns>A copy of Sync Config</returns>
         SyncConfig GetSyncConfig();
+        /// <summary>
+        /// Update the Sync Config
+        /// </summary>
+        /// <param name="config">The new value of the Sync Config</param>
         void UpdateSyncConfig(SyncConfig config);
     }
 

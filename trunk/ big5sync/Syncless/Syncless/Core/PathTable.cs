@@ -186,6 +186,9 @@ namespace Syncless.Core
             get { return _createEventPathPair.Count + _updateEventPathPair.Count + _renameEventPathPair.Count; }
 
         }
+        /// <summary>
+        /// Clear the Path Table entry.
+        /// </summary>
         public void ClearEntry()
         {
             lock (this)
@@ -196,7 +199,9 @@ namespace Syncless.Core
                 _deleteEventPathPair.Clear();
             }
         }
-
+        /// <summary>
+        /// Print the Path table entry. (mainly use for debugging)
+        /// </summary>
         public void PrintAll()
         {
             lock (this)
@@ -225,25 +230,44 @@ namespace Syncless.Core
             }
         }
     }
+    /// <summary>
+    /// Contain the Path Pair ( Source and Dest )
+    /// </summary>
     internal class PathPair
     {
+        /// <summary>
+        /// Source
+        /// </summary>
         public string Source
         {
             get;
             set;
         }
+        /// <summary>
+        /// Destination
+        /// </summary>
         public string Dest
         {
             get;
             set;
         }
-
+        /// <summary>
+        /// Compare if 2 PathPair is Equals
+        /// </summary>
+        /// <param name="pair">The path pair to compare to</param>
+        /// <returns>true if the 2 path pair is equal, otherwise false. PathPair are considered Equal if they contain the same Source and Dest
+        /// </returns>
         public bool Equals(PathPair pair)
         {
             if (Dest != pair.Dest) return false;
             if (Source != pair.Source) return false;
             return true;
         }
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="dest">Destination</param>
         public PathPair(string source, string dest)
         {
             Source = source;

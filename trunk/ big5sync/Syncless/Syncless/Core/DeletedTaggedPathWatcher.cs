@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading;
 using Syncless.Notification;
 
@@ -14,13 +11,6 @@ namespace Syncless.Core
     public class DeletedTaggedPathWatcher
     {
         private Thread _watcher;
-
-        /// <summary>
-        /// Creates a new DeletedTaggedPathWatcher object
-        /// </summary>
-        public DeletedTaggedPathWatcher()
-        {
-        }
 
         /// <summary>
         /// Starts the watcher thread
