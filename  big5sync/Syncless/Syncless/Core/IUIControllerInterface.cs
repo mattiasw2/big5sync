@@ -14,6 +14,9 @@ using Syncless.Tagging.Exceptions;
 
 namespace Syncless.Core
 {
+    /// <summary>
+    /// Defines methods for GUI Component to called.
+    /// </summary>
     public interface IUIControllerInterface
     {
         /// <summary>
@@ -32,7 +35,7 @@ namespace Syncless.Core
         /// <summary>
         /// Get a <see cref="TagView"/> Representation of a <see cref="Tag"/>
         /// </summary>
-        /// <param name="tagname">The name of the tag to get.</param>
+        /// <param name="tagName">The name of the tag to get.</param>
         /// <exception cref="UnhandledException">Unhandled Exception</exception>
         /// <returns>The <see cref="TagView"/> representing the <see cref="Tag"/> Object.</returns>
         TagView GetTag(string tagName);
@@ -54,7 +57,7 @@ namespace Syncless.Core
         /// <summary>
         /// Tag a Folder to a Tag based on the tag name
         /// </summary>
-        /// <param name="tagname">name of the tag</param>
+        /// <param name="tagName">name of the tag</param>
         /// <param name="folder">the folder to tag</param>
         /// <exception cref="InvalidPathException">The Path is invalid</exception>
         /// <exception cref="RecursiveDirectoryException">Tagging the folder will cause a recursive during Synchronization.</exception>
@@ -65,7 +68,7 @@ namespace Syncless.Core
         /// <summary>
         /// Untag the folder from a tag. 
         /// </summary>
-        /// <param name="tagname">The name of the tag</param>
+        /// <param name="tagName">The name of the tag</param>
         /// <param name="folder">The folder to untag</param>
         /// <exception cref="TagNotFoundException">The tag is not found.</exception>
         /// <exception cref="UnhandledException">Unhandled Exception</exception>
@@ -75,7 +78,7 @@ namespace Syncless.Core
         /// Switch the mode of a particular Tag to a mode.
         /// Valid Mode are <see cref="TagMode.Seamless"/> and <see cref="TagMode.Manual"/>
         /// </summary>
-        /// <param name="name">The name of the tag to switch</param>
+        /// <param name="tagName">The name of the tag to switch</param>
         /// <param name="mode">The mode to switch to</param>
         /// <exception cref="ArgumentOutOfRangeException">If the TagMode Specified is not a valid TagMode</exception>
         /// <exception cref="UnhandledException">Unhandled Exception</exception>
@@ -85,7 +88,7 @@ namespace Syncless.Core
         /// Get the current Tag of a particular tag.
         /// See <see cref="TagState"/> for a list of TagState
         /// </summary>
-        /// <param name="tagname">The name of the tag</param>
+        /// <param name="tagName">The name of the tag</param>
         /// <exception cref="TagNotFoundException"><see cref="Tag"/> with the given tagname  is not found.</exception>
         /// <exception cref="UnhandledException">Unhandled Exception</exception>
         /// <returns><see cref="TagState"/> representing the state of the Tag.</returns>
@@ -115,7 +118,7 @@ namespace Syncless.Core
         /// <summary>
         /// Starts a Manual Sync. The Sync will be queued and will be processed when it is its turn.
         /// </summary>
-        /// <param name="tagname">Tagname of the Tag to sync</param>
+        /// <param name="tagName">Tagname of the Tag to sync</param>
         /// <returns>true if the sync is successfully queued. false if the tag is currently being queued/sync or the tag does not exist.  </returns>        
         /// <exception cref="UnhandledException">Unhandled Exception</exception>
         bool StartManualSync(string tagName);
@@ -129,7 +132,7 @@ namespace Syncless.Core
         /// <summary>
         /// Update the filterlist of a <see cref="Tag"/>
         /// </summary>
-        /// <param name="tagname">tagname of the <see cref="Tag"/></param>
+        /// <param name="tagName">tagname of the <see cref="Tag"/></param>
         /// <param name="filterlist">the list of filter to set to the tag.</param>
         /// <exception cref="UnhandledException">Unhandled Exception</exception>
         /// <returns>true if succeed, false if fail.</returns>
@@ -137,7 +140,7 @@ namespace Syncless.Core
         /// <summary>
         /// Get all the filters for a particular <see cref="Tag"/>
         /// </summary>
-        /// <param name="tagname">the name of the tag.</param>
+        /// <param name="tagName">the name of the tag.</param>
         /// <exception cref="UnhandledException">Unhandled Exception</exception>
         /// <returns>the list of <see cref="Filter">Filters</see></returns>
         List<Filter> GetAllFilters(string tagName);
