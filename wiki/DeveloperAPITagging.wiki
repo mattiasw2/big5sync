@@ -14,10 +14,10 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 || http://big5sync.googlecode.com/files/pubclass.gif || [#Tag Tag] || Represents a container for a list of `TaggedPath` objects.  Each `Tag` object has its properties that uniquely identifies itself from other `Tag` objects. ||
 || || [#TagConfig TagConfig] || Provides the configuration options of `Tag` object. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#TaggedPath TaggedPath] || Encloses properties of a folder path and provides operations to manipulate the properties. ||
-|| || [#TaggingHelper TaggingHelper] || Provides some common methods which may be used by other classes under the Tagging namespace. ||
+|| http://big5sync.googlecode.com/files/static.gif || [#TaggingHelper TaggingHelper] || Provides some common methods which may be used by other classes under the Tagging namespace. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#TaggingLayer TaggingLayer] || The main logic controller of the Tagging namespace. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#TaggingProfile TaggingProfile] || Represents a container for a list of `Tag` objects.  Each `TaggingProfile` has its properties that uniquely identifies itself from other `TaggingProfile` objects. ||
-|| || [#TaggingXMLHelper TaggingXMLHelper] || Provides XML-related operations to load and save tagging.xml file. ||
+|| http://big5sync.googlecode.com/files/static.gif || [#TaggingXMLHelper TaggingXMLHelper] || Provides XML-related operations to load and save tagging.xml file. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#TagMerger TagMerger] || Performs merging of several tagging profiles which have the same name. ||
 
 == [DeveloperAPITaggingCurrentTime CurrentTime] ==
