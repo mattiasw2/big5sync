@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Navigation;
 using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Core.Exceptions;
@@ -62,6 +63,11 @@ namespace SynclessUI
         {
             RootCompareObject rco = e.Result as RootCompareObject;
             Populate(rco);
+			ProgressBarAnalyzing.Foreground = (Brush) ProgressBarAnalyzing.Resources["GreenColor"];
+			ProgressBarAnalyzing.Value = 100;
+			ProgressBarAnalyzing.IsIndeterminate = false;
+			LblProgress.Content = "Analyzing Completed!";
+			LblCancel.Content = "Close";
         }
 
         void _previewWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -112,7 +118,7 @@ namespace SynclessUI
         {
             _previewWorker.CancelAsync();
             _main.Gui.CancelPreview(_selectedTag);
-            BtnCancel.IsEnabled = false;
+            BtnClose.IsEnabled = false;
             Close();
         }
 
@@ -169,7 +175,7 @@ namespace SynclessUI
         {
             if (_closingAnimationNotCompleted)
             {
-                BtnCancel.IsCancel = false;
+                BtnClose.IsCancel = false;
                 e.Cancel = true;
                 FormFadeOut.Begin();
             }

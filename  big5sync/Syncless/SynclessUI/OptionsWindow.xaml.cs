@@ -96,5 +96,20 @@ namespace SynclessUI
                 FormFadeOut.Begin();
             }
         }
+
+        private void ChkBoxMoveToSynclessArchive_Checked(object sender, System.Windows.RoutedEventArgs e)
+        {
+        	SliderChanges.Visibility = Visibility.Visible;
+        }
+
+        private void ChkBoxMoveToSynclessArchive_Unchecked(object sender, System.Windows.RoutedEventArgs e)
+        {
+        	SliderChanges.Visibility = Visibility.Hidden;
+        }
+
+        private void SliderChanges_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
+        {
+        	LblBoxChanges.Content = "" + SliderChanges.Value;
+        }
     }
 }

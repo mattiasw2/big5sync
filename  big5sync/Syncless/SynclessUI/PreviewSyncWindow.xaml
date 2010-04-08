@@ -28,10 +28,7 @@
 		</Rectangle>
 		<Label x:Name="LblPreview" Content="Preview Sync" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Margin="0"/>
 		<StackPanel x:Name="CommandPanel" Margin="0" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-			<Button x:Name="BtnOk" IsDefault="True" Margin="0,0,5,0" Height="28" Click="BtnOk_Click">
-				<Label x:Name="LblOk" FontFamily="Century Gothic" FontSize="9.333" Content="Ok" FontWeight="Bold"/>
-			</Button>
-			<Button x:Name="BtnCancel" Margin="0" Click="BtnCancel_Click" IsCancel="True">
+			<Button x:Name="BtnClose" Margin="0" Click="BtnCancel_Click" IsCancel="True" IsDefault="True">
 				<Label x:Name="LblCancel" FontFamily="Century Gothic" FontSize="9.333" Content="Cancel" FontWeight="Bold"/>
 			</Button>
 		</StackPanel>
@@ -92,6 +89,16 @@
 				<toolkit:DataGridTextColumn Binding="{Binding destsize}" Header="Size" Foreground="White" Width="0.05*" />
             </toolkit:DataGrid.Columns>
         </toolkit:DataGrid>
+        <Grid VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Width="500" HorizontalAlignment="Left" Margin="0,1,0,0">
+        	<ProgressBar x:Name="ProgressBarAnalyzing" VerticalAlignment="Center" Height="20" Foreground="{DynamicResource RedColor}" IsIndeterminate="True" Margin="5,0,0,0" >
+        		<ProgressBar.Resources>
+        			<SolidColorBrush x:Key="GreenColor" Color="#FF00D300"/>
+        			<SolidColorBrush x:Key="RedColor" Color="#FFD30000"/>
+        		</ProgressBar.Resources>
+        	</ProgressBar>
+        	<Label x:Name="LblProgress" HorizontalAlignment="Center" FontFamily="Century Gothic" FontWeight="Bold" VerticalAlignment="Center" Content="Analyzing" FontSize="10.667"/>
+			
+        </Grid>
 	</Grid>
 	
 	<Window.Triggers>
