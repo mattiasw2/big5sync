@@ -1,47 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Syncless.Core.View
+﻿namespace Syncless.Core.View
 {
+    /// <summary>
+    /// This is a View for TaggedPath
+    /// </summary>
     public class PathView
     {
-        private string _path;
-        private bool _isDeleted;
-        private bool _isAvailable;
-        private bool _isMissing;
-
-        public bool IsAvailable
-        {
-            get { return _isAvailable; }
-            set { _isAvailable = value; }
-        }
-
-        public bool IsDeleted
-        {
-            get { return _isDeleted; }
-            set { _isDeleted = value; }
-        }
-
-        public string Path
-        {
-            get { return _path; }
-            set { _path = value; }
-        }
-
-        public bool IsMissing
-        {
-            get { return _isMissing; }
-            set { _isMissing = value; }
-        }
-
+        /// <summary>
+        /// Get the value if the path is available
+        /// </summary>
+        public bool IsAvailable { get; set; }
+        /// <summary>
+        /// Get the value if the path is deleted
+        /// </summary>
+        public bool IsDeleted { get; set; }
+        /// <summary>
+        /// Get and Set the Path
+        /// </summary>
+        public string Path { get; set; }
+        /// <summary>
+        /// Get the value if the path is missing
+        /// </summary>
+        public bool IsMissing { get; set; }
+        /// <summary>
+        /// Construct the PathView
+        /// </summary>
+        /// <param name="path">the path</param>
         public PathView(string path)
         {
-            _path = path;
-            _isAvailable = true;
-            _isDeleted = false;
-            _isMissing = false;
+            Path = path;
+            IsAvailable = true;
+            IsDeleted = false;
+            IsMissing = false;
         }
     }
 }

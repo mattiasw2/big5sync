@@ -99,8 +99,6 @@
     <Compile Include="CompareAndSync\Seamless\XMLWriteObject\XMLWriteFolderObject.cs" />
     <Compile Include="CompareAndSync\Seamless\XMLWriteObject\XMLWriteFileObject.cs" />
     <Compile Include="CompareAndSync\Seamless\XMLWriteObject\BaseXMLWriteObject.cs" />
-    <Compile Include="Core\Conflict\Conflict.cs" />
-    <Compile Include="Core\Conflict\ConflictQueue.cs" />
     <Compile Include="Core\DeletedTaggedPathWatcher.cs" />
     <Compile Include="Core\Exceptions\InvalidPathException.cs" />
     <Compile Include="Core\Exceptions\UnhandledException.cs" />
