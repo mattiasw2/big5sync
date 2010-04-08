@@ -1,45 +1,65 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Syncless.Notification;
 using System.Threading;
 namespace Syncless.Core
 {
+    /// <summary>
+    /// The Notification Queue Observer for the System Logic Layer.
+    /// </summary>
     internal class LogicQueueObserver : IQueueObserver
     {
-        private SystemLogicLayer _sll;
-        private Thread workerThread;
+        /// <summary>
+        /// Store the System Logic Layer.
+        /// </summary>
+        private readonly SystemLogicLayer _sll;
+        /// <summary>
+        /// Thread in charge of reading the notification queue.
+        /// </summary>
+        private readonly Thread _workerThread;
+        /// <summary>
+        /// Initialize and start the thread.
+        /// </summary>
+        private readonly EventWaitHandle _wh = new AutoResetEvent(false);
         public LogicQueueObserver()
         {
             ServiceLocator.LogicLayerNotificationQueue().AddObserver(this);
             _sll = SystemLogicLayer.Instance;
 
-            workerThread = new Thread(Run);
+            _workerThread = new Thread(Run);
         }
+        /// <summary>
+        /// Inform the Observer that something is added to the Queue
+        /// </summary>
         public void Update()
         {
-            workerThread.Interrupt();
+            _wh.Set();
         }
         public delegate void RunDel();
-
+        /// <summary>
+        /// Start the watcher
+        /// </summary>
         public void Start()
         {
-            workerThread.Start();
+            _workerThread.Start();
         }
+        /// <summary>
+        /// Stop the Watcher.
+        /// </summary>
         public void Stop()
         {
-            workerThread.Abort();
+            _workerThread.Abort();
         }
+        //Main Thread method.
         private void Run()
         {
             while (true)
             {
+                //If the Queue does not have any notification, wait.
                 if (!ServiceLocator.LogicLayerNotificationQueue().HasNotification())
                 {
                     try
                     {
-                        Thread.Sleep(10000);
+                        _wh.WaitOne();
                         continue;
                     }
                     catch (ThreadInterruptedException)
@@ -66,58 +86,64 @@ namespace Syncless.Core
             }
 
         }
-
+        //Handle the different type of notification received.
         private void Handle(AbstractNotification notification)
         {
-            if (notification.NotificationCode.Equals(NotificationCode.MonitorPathNotification))
+            switch (notification.NotificationCode)
             {
-                MonitorPathNotification mpNotification = notification as MonitorPathNotification;
-                if (mpNotification == null)//Discard
-                    return;
-                _sll.AddTagPath(mpNotification.TargetTag, mpNotification.TargetPath);
-            }
-            else if (notification.NotificationCode == NotificationCode.UnmonitorPathNotification)
-            {
-                UnMonitorPathNotification umpNotification = notification as UnMonitorPathNotification;
-                if (umpNotification == null)//Discard
-                    return;
-                _sll.RemoveTagPath(umpNotification.TargetTag, umpNotification.TargetPath);
-            }
-            else if (notification.NotificationCode ==NotificationCode.AddTagNotification )
-            {
-                AddTagNotification atNotification = notification as AddTagNotification;
-                if (atNotification == null)//Discard
-                    return;
-                _sll.AddTag(atNotification.Tag);
-            }
-            else if (notification.NotificationCode ==NotificationCode.DeleteTagNotification )
-            {
-                RemoveTagNotification rmNotification = notification as RemoveTagNotification;
-                if (rmNotification == null)//Discard
-                    return;
+                case NotificationCode.MonitorPathNotification: //Inform the SLL that a new Path have been merged
+                    {
+                        MonitorPathNotification mpNotification = notification as MonitorPathNotification;
+                        if (mpNotification == null) //Discard
+                            return;
+                        _sll.AddTagPath(mpNotification.TargetTag, mpNotification.TargetPath);
+                    }
+                    break;
+                case NotificationCode.UnmonitorPathNotification: //Inform the SLL that a Path have been untag due to merging
+                    {
+                        UnMonitorPathNotification umpNotification = notification as UnMonitorPathNotification;
+                        if (umpNotification == null)//Discard
+                            return;
+                        _sll.RemoveTagPath(umpNotification.TargetTag, umpNotification.TargetPath);
+                    }
+                    break;
+                case NotificationCode.AddTagNotification: //Inform the SLL that a new Tag have been added due to merging
+                    {
+                        AddTagNotification atNotification = notification as AddTagNotification;
+                        if (atNotification == null)//Discard
+                            return;
+                        _sll.AddTag(atNotification.Tag);
+                    }
+                    break;
+                case NotificationCode.DeleteTagNotification: //Inform the SLL that a Tag have been deleted due to merging
+                    {
+                        RemoveTagNotification rmNotification = notification as RemoveTagNotification;
+                        if (rmNotification == null)//Discard
+                            return;
 
-                _sll.RemoveTag(rmNotification.Tag);
+                        _sll.RemoveTag(rmNotification.Tag);
+                    }
+                    break;
+                case NotificationCode.MonitorTagNotification: //Inform the SLL to start Monitoring a Tag(Called after a manual sync is completed)
+                    {
+                        MonitorTagNotification mtNotification = notification as MonitorTagNotification;
+                        if (mtNotification == null)//Discard
+                            return;
+                        _sll.MonitorTag(mtNotification.Tagname);
+                    }
+                    break;
+                case NotificationCode.TaggedPathDeletedNotification: //Inform the SLL that a tagged folder have been deleted. 
+                    {
+                        TaggedPathDeletedNotification tpdNotification = notification as TaggedPathDeletedNotification;
+                        if (tpdNotification == null) // Discard
+                            return;
+                        _sll.Untag(tpdNotification.DeletedPaths);
+                    }
+                    break;
+                case NotificationCode.SaveNotification: // Inform the SLL to save.
+                    _sll.Save();
+                    break;
             }
-            else if (notification.NotificationCode == NotificationCode.MonitorTagNotification)
-            {
-                MonitorTagNotification mtNotification = notification as MonitorTagNotification;
-                if (mtNotification == null)//Discard
-                    return;
-                _sll.MonitorTag(mtNotification.Tagname);
-            }
-            else if (notification.NotificationCode == NotificationCode.TaggedPathDeletedNotification)
-            {
-                TaggedPathDeletedNotification tpdNotification = notification as TaggedPathDeletedNotification;
-                if (tpdNotification == null) // Discard
-                    return;
-                _sll.Untag(tpdNotification.DeletedPaths);
-            }
-            else if (notification.NotificationCode == NotificationCode.SaveNotification)
-            {
-                _sll.Save();
-            }
-
-
         }
 
     }
