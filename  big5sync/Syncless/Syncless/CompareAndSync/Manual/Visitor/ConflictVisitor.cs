@@ -7,29 +7,45 @@ using Syncless.Logging;
 
 namespace Syncless.CompareAndSync.Manual.Visitor
 {
+    /// <summary>
+    /// ConflictVisitor is responsible for handling conflicted types (when file and folder have the same name, including extension.)
+    /// </summary>
     public class ConflictVisitor : IVisitor
     {
         private readonly SyncConfig _syncConfig;
 
+        /// <summary>
+        /// Instantiates an instance of <c>ConflictVisitor</c> with a sync configuration.
+        /// </summary>
+        /// <param name="syncConfig">The sync configuration to pass in.</param>
         public ConflictVisitor(SyncConfig syncConfig)
         {
             _syncConfig = syncConfig;
         }
 
+        /// <summary>
+        /// Visit implementation for <see cref="FileCompareObject"/>.
+        /// </summary>
+        /// <param name="file">The <see cref="FileCompareObject"/> to process.</param>
+        /// <param name="numOfPaths"></param>
         public void Visit(FileCompareObject file, int numOfPaths)
         {
             if (file.ConflictPositions == null || file.ConflictPositions.Count == 0)
                 return;
 
             foreach (int i in file.ConflictPositions)
-            {
                 ConflictHandler(file, i);
-            }
         }
 
-        public void Visit(FolderCompareObject folder, int numOfPaths) { }
+        // Do nothing for folder
+        public void Visit(FolderCompareObject folder, int numOfPaths)
+        {
+        }
 
-        public void Visit(RootCompareObject root) { }
+        // Do nothing for root
+        public void Visit(RootCompareObject root)
+        {
+        }
 
         private void ConflictHandler(FileCompareObject fco, int fileIndex)
         {
@@ -38,6 +54,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             if (!Directory.Exists(conflictFolder))
                 Directory.CreateDirectory(conflictFolder);
             string dest = Path.Combine(conflictFolder, fco.Name);
+
             try
             {
                 CommonMethods.CopyFile(src, dest);

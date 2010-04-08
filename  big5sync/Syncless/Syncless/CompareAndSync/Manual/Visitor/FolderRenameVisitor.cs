@@ -176,7 +176,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             if (actualFldrObj.Contents.Count == 0)
             {
                 actualFldrObj.Contents = renamedFolderObj.Contents;
-                ChangeFatherMother(actualFldrObj);
+                ChangeParent(actualFldrObj);
             }
             else
                 MergeOneLevelDown(actualFldrObj, renamedFolderObj, deleteIndexes);
@@ -198,7 +198,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
-        private void ChangeFatherMother(FolderCompareObject actualFldrObj)
+        private void ChangeParent(FolderCompareObject actualFldrObj)
         {
             Dictionary<string, BaseCompareObject>.ValueCollection values = actualFldrObj.Contents.Values;
 

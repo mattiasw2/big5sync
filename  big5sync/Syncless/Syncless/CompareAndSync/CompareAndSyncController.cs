@@ -32,37 +32,6 @@ namespace Syncless.CompareAndSync
 
         }
 
-        #region Not Implemented
-
-        /// <summary>
-        /// Sync a list of folders, without tagging or writing to metadata (if it exists).
-        /// </summary>
-        /// <param name="request">The ManualSyncRequest to sync.</param>
-        /// <returns>A RootCompareObject containing the final state of each sync.</returns>
-        public RootCompareObject SyncFolders(ManualSyncRequest request)
-        {
-            SyncStartNotification notification = new SyncStartNotification(request.TagName);
-            SyncProgress progress = notification.Progress;
-            ServiceLocator.UINotificationQueue().Enqueue(notification);
-            RootCompareObject rco = new RootCompareObject(request.Paths);
-            progress.ChangeToAnalyzing();
-            List<string> buildConflicts = new List<string>();
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(request.Filters, buildConflicts,progress), progress);
-            CompareObjectHelper.PreTraverseFolder(rco, new IgnoreMetaDataVisitor(), progress);
-            ComparerVisitor visitor = new ComparerVisitor();
-
-            CompareObjectHelper.PostTraverseFolder(rco, visitor, progress);
-            int totalJobs = visitor.TotalNodes;
-            progress.ChangeToSyncing(totalJobs);
-            CompareObjectHelper.PreTraverseFolder(rco, new SyncerVisitor(request.Config, progress), progress);
-            progress.ChangeToFinalizing(0);
-            
-            progress.ChangeToFinished();
-            return rco;
-        }
-
-        #endregion
-
         #region Manual Synchronization
 
         /// <summary>

@@ -15,6 +15,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
     {
         private int _totalNodes;
 
+        /// <summary>
+        /// Instantiates a <c>ComparerVisitor</c>, and sets the total nodes to 0.
+        /// </summary>
         public ComparerVisitor()
         {
             _totalNodes = 0;
@@ -22,6 +25,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region IVisitor Members
 
+        /// <summary>
+        /// Visit implementation for <see cref="FileCompareObject"/>.
+        /// </summary>
+        /// <param name="file">The <see cref="FileCompareObject"/> to process.</param>
+        /// <param name="numOfPaths">The total number of folders to keep in sync.</param>
         public void Visit(FileCompareObject file, int numOfPaths)
         {
             if (file.Invalid)
@@ -33,6 +41,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             _totalNodes++;
         }
 
+        /// <summary>
+        /// Visit implementation for <see cref="FolderCompareObject"/>.
+        /// </summary>
+        /// <param name="folder">The <see cref="FolderCompareObject"/> to process.</param>
+        /// <param name="numOfPaths">The total number of folders to keep in sync.</param>
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
             if (folder.Invalid)
@@ -42,9 +55,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             _totalNodes++;
         }
 
+        // Simply increase the node count
         public void Visit(RootCompareObject root)
         {
-            // Do nothing
             _totalNodes++;
         }
 
@@ -52,66 +65,23 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region Properties
 
+        /// <summary>
+        /// Gets the total number of nodes.
+        /// </summary>
         public int TotalNodes
         {
             get { return _totalNodes; }
-            set { _totalNodes = value; }
         }
 
         #endregion
 
         #region Files
 
-        private static void DetectFileRenameAndUpdate(FileCompareObject file, int numOfPaths)
-        {
-            //Get a Delete type
-            //1. Find something that is New and has the same creation time
-            //2. Check that the New is null for all other indexes
-            //3. If above is verified, check that Delete is NoChange or null for all other indexes
-            //4. If all is verified, set the ChangeType to New.
-
-            FileCompareObject f = null;
-            List<int> indexes = new List<int>();
-
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                // ReSharper disable PossibleNullReferenceException
-                if (file.ChangeType[i].HasValue && file.ChangeType[i] == MetaChangeType.Delete)
-                    // ReSharper restore PossibleNullReferenceException
-                    indexes.Add(i);
-                else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType != null)
-                    return;
-            }
-
-            if (indexes.Count < 1)
-                return;
-
-            for (int i = 0; i < indexes.Count; i++)
-            {
-                f = file.Parent.GetSameCreationTime(file.MetaCreationTime[indexes[i]], indexes[i]);
-
-                if (f != null && f.ChangeType[indexes[i]] == MetaChangeType.New)
-                {
-                    bool found = true;
-                    for (int j = 0; j < f.ChangeType.Length; j++)
-                    {
-                        if (j != indexes[i] && f.ChangeType[j] != null)
-                        {
-                            found = false;
-                            break;
-                        }
-                    }
-
-                    if (found)
-                        // ReSharper disable PossibleNullReferenceException
-                        file.ChangeType[indexes[i]] = null; //TODO: Unchanged?
-                    // ReSharper restore PossibleNullReferenceException
-
-                }
-            }
-
-        }
-
+        /// <summary>
+        /// Detects possible file renames and handles them accordingly.
+        /// </summary>
+        /// <param name="file">The <see cref="FileCompareObject"/> to process.</param>
+        /// <param name="numOfPaths">The total number of folders to sync.</param>
         private static void DetectFileRename(FileCompareObject file, int numOfPaths)
         {
             FileCompareObject result = null;
@@ -173,6 +143,61 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         }
 
+        private static void DetectFileRenameAndUpdate(FileCompareObject file, int numOfPaths)
+        {
+            //Get a Delete type
+            //1. Find something that is New and has the same creation time
+            //2. Check that the New is null for all other indexes
+            //3. If above is verified, check that Delete is NoChange or null for all other indexes
+            //4. If all is verified, set the ChangeType to New.
+
+            FileCompareObject f = null;
+            List<int> indexes = new List<int>();
+
+            for (int i = 0; i < numOfPaths; i++)
+            {
+                // ReSharper disable PossibleNullReferenceException
+                if (file.ChangeType[i].HasValue && file.ChangeType[i] == MetaChangeType.Delete)
+                    // ReSharper restore PossibleNullReferenceException
+                    indexes.Add(i);
+                else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType != null)
+                    return;
+            }
+
+            if (indexes.Count < 1)
+                return;
+
+            for (int i = 0; i < indexes.Count; i++)
+            {
+                f = file.Parent.GetSameCreationTime(file.MetaCreationTime[indexes[i]], indexes[i]);
+
+                if (f != null && f.ChangeType[indexes[i]] == MetaChangeType.New)
+                {
+                    bool found = true;
+                    for (int j = 0; j < f.ChangeType.Length; j++)
+                    {
+                        if (j != indexes[i] && f.ChangeType[j] != null)
+                        {
+                            found = false;
+                            break;
+                        }
+                    }
+
+                    if (found)
+                        // ReSharper disable PossibleNullReferenceException
+                        file.ChangeType[indexes[i]] = null; //TODO: Unchanged?
+                    // ReSharper restore PossibleNullReferenceException
+
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Compares files to propagate updates and creations.
+        /// </summary>
+        /// <param name="file">The <see cref="FileCompareObject"/> to process.</param>
+        /// <param name="numOfPaths">The total number of folders to sync.</param>
         private static void CompareFiles(FileCompareObject file, int numOfPaths)
         {
             bool isRenamed = FileRenameHelper(file, numOfPaths);
