@@ -22,9 +22,9 @@ This document is the API specification for Syncless, version 2.0
 || [DeveloperAPIFilter Syncless.Filters] || Provides classes which enclose information needed for filtering of files and folders in synchronization. ||
 || [DeveloperAPIHelper Syncless.Helper] || Provides classes which perform operations common to classes within the Tagging namespace. ||
 || [DeveloperAPILogging Syncless.Logging] || Provides classes which perform logging of events or exceptions to log files. ||
-|| [DeveloperAPIMonitor Syncless.Monitor] || ||
-|| [DeveloperAPIMonitorDTO Syncless.Monitor.DTO] || ||
-|| [DeveloperAPIMonitorExceptions Syncless.Monitor.Exceptions] || ||
+|| [DeveloperAPIMonitor Syncless.Monitor] || Provides classes which perform monitoring of real-time events in file system. ||
+|| [DeveloperAPIMonitorDTO Syncless.Monitor.DTO] || Provides classes which enclose information of real-time events in file system. ||
+|| [DeveloperAPIMonitorExceptions Syncless.Monitor.Exceptions] || Exception classes which are thrown when there are errors in monitoring real-time events in file system. ||
 || [DeveloperAPINotification Syncless.Notification] || Provides classes which enclose information needed to send notification among classes and between main logic layer and user interface layer. ||
 || [DeveloperAPINotificationUINotification Syncless.Notification.UINotification] || Provides classes which enclose information to send notification for user interface layer. ||
 || [DeveloperAPIProfiling Syncless.Profiling] || Provides classes for drive/computer recognization, conversion of a physical directory/file path to a logical address, and vice versa. ||
