@@ -2,7 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit" x:Name="Window" x:Class="SynclessUI.LogWindow"
-    Title="Log Window" WindowStyle="None" AllowsTransparency="True" Icon="Icons/logo.ico" Background="{x:Null}" WindowStartupLocation="CenterScreen" Opacity="0.95" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" Closing="Window_Closing">
+    Title="Log Window" WindowStyle="None" AllowsTransparency="True" Icon="Icons/logo.ico" Background="{x:Null}" WindowStartupLocation="CenterScreen" Opacity="0.95" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" Closing="Window_Closing" Width="700">
 	
 	<Window.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
@@ -60,7 +60,7 @@
 				<Label x:Name="LblOk" FontFamily="Century Gothic" FontSize="9.333" Content="Close" FontWeight="Bold"/>
 			</Button>
 		</StackPanel>
-		<toolkit:DataGrid x:Name="datagrid" ItemsSource="{Binding LogData, ElementName=Window}" Margin="5,0,0,0" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="3" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True" MinHeight="100" MinWidth="700" MaxHeight="300" MaxWidth="700" RowBackground="#FF666666" AlternatingRowBackground="#FF555555" HorizontalGridLinesBrush="#FF828790" VerticalGridLinesBrush="#FF828790" FontFamily="Century Gothic" Background="#FF666666">
+		<toolkit:DataGrid x:Name="datagrid" ItemsSource="{Binding LogData, ElementName=Window}" Margin="5,5,0,0" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="3" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True" MinHeight="100" MinWidth="655" MaxHeight="300" MaxWidth="655" RowBackground="#FF666666" AlternatingRowBackground="#FF555555" HorizontalGridLinesBrush="#FF828790" VerticalGridLinesBrush="#FF828790" FontFamily="Century Gothic" Background="#FF666666">
 			<toolkit:DataGrid.Columns>
 				<toolkit:DataGridTextColumn Binding="{Binding Timestamp}" Header="Timestamp" IsReadOnly="True" Foreground="White"/>
 				<toolkit:DataGridTextColumn Binding="{Binding Category}" Header="Category" IsReadOnly="True" Foreground="White"/>
@@ -74,14 +74,17 @@
 				</toolkit:DataGridTemplateColumn>
 			</toolkit:DataGrid.Columns>
 		</toolkit:DataGrid>
-		<StackPanel x:Name="FilterOptions" Orientation="Horizontal" Grid.Column="1" Grid.Row="2" d:LayoutOverrides="Height" Margin="5,5,0,0">
+		<StackPanel x:Name="FilterOptions" Orientation="Horizontal" Grid.Column="1" Grid.Row="2"  Margin="5,5,0,0">
 			<Label FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Show:"/>
 			<CheckBox x:Name="ChkBoxApplicationLog" VerticalAlignment="Top" Margin="0,7,0,0" Click="ChkBoxApplicationLog_Click" />
 			<Label x:Name="ApplicationLogDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Application Logs"/>
-			<CheckBox x:Name="ChkBoxSynchronizationLog" VerticalAlignment="Top" Margin="0,7,0,0" Click="ChkBoxSynchronizationLog_Click" />
+			<CheckBox x:Name="ChkBoxSynchronizationLog" VerticalAlignment="Top" Margin="10,7,0,0" Click="ChkBoxSynchronizationLog_Click" />
 			<Label x:Name="SynchronizationLog" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Synchronization Logs"/>
-			<CheckBox x:Name="ChkBoxFileSystem" VerticalAlignment="Top" Margin="0,7,0,0" Click="ChkBoxFileSystem_Click" />
+			<CheckBox x:Name="ChkBoxFileSystem" VerticalAlignment="Top" Margin="10,7,0,0" Click="ChkBoxFileSystem_Click" />
 			<Label x:Name="FileSystemLogDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="File System Logs"/>
 		</StackPanel>
+		<Button x:Name="BtnClearLog" HorizontalAlignment="Right" Margin="0" FontFamily="Century Gothic" FontSize="9.333" Grid.Column="1" Grid.Row="2" Height="28">
+			<Label x:Name="LblClear" FontFamily="Century Gothic" FontSize="9.333" Content="Clear Logs" FontWeight="Bold"/>
+		</Button>
 	</Grid>
 </Window>
