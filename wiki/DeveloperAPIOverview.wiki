@@ -21,7 +21,7 @@ This document is the API specification for Syncless, version 2.0
 || [DeveloperAPICoreView Syncless.Core.View] || Provides classes which are abstraction of some classes in the main logic layer which are required by the user interface layer. ||
 || [DeveloperAPIFilter Syncless.Filters] || Provides classes which enclose information needed for filtering of files and folders in synchronization. ||
 || [DeveloperAPIHelper Syncless.Helper] || Provides classes which perform operations common to classes within the Tagging namespace. ||
-|| [DeveloperAPILogging Syncless.Logging] || ||
+|| [DeveloperAPILogging Syncless.Logging] || Provides classes which perform logging of events or exceptions to log files. ||
 || [DeveloperAPIMonitor Syncless.Monitor] || ||
 || [DeveloperAPIMonitorDTO Syncless.Monitor.DTO] || ||
 || [DeveloperAPIMonitorExceptions Syncless.Monitor.Exceptions] || ||
