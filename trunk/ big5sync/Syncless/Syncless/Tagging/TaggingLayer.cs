@@ -160,7 +160,8 @@ namespace Syncless.Tagging
         /// <param name="tagname">The string value that represents the name that is to be given to the tag
         /// </param>
         /// <returns>the created tag</returns>
-        /// <exception cref="TagAlreadyExistsException">TagAlreadyExistsException</exception>
+        /// <exception cref="TagAlreadyExistsException">thrown if the name that is passed as parameter
+        /// is already used by another tag in the existing list of tags</exception>
         public Tag CreateTag(string tagname)
         {
             Tag tag = _taggingProfile.AddTag(tagname);
