@@ -148,6 +148,7 @@ namespace Syncless.Core
         /// <exception cref="UnhandledException">Unhandled Exception</exception>
         /// <returns>The RootCompareObject representing the Preview Result. null if the tag does not exist.</returns>
         RootCompareObject PreviewSync(string tagName);
+        void CancelPreview(string tagName);
         /// <summary>
         /// Call to release a drive so that it can be safety remove.
         /// </summary>
