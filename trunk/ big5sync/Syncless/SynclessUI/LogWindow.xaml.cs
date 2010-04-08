@@ -211,5 +211,10 @@ namespace SynclessUI
         {
             // ChkBoxFileSystem.IsChecked;
         }
+
+        private void BtnClearLog_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+        	// TODO: Add event handler implementation here.
+        }
     }
 }
