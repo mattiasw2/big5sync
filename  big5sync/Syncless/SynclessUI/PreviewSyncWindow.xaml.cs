@@ -111,6 +111,7 @@ namespace SynclessUI
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             _previewWorker.CancelAsync();
+            _main.Gui.CancelPreview(_selectedTag);
             BtnCancel.IsEnabled = false;
             Close();
         }
