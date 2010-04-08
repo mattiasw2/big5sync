@@ -128,6 +128,8 @@
     <Compile Include="Notification\NotificationFactory.cs" />
     <Compile Include="Notification\AddTagNotification.cs" />
     <Compile Include="Notification\MonitorTagNotification.cs" />
+    <Compile Include="Notification\PreviewProgress.cs" />
+    <Compile Include="Notification\Progress.cs" />
     <Compile Include="Notification\SaveNotification.cs" />
     <Compile Include="Notification\TaggedPathDeletedNotification.cs" />
     <Compile Include="Notification\SyncState.cs" />

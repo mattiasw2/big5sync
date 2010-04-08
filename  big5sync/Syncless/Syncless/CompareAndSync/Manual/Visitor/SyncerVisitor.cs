@@ -13,9 +13,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region IVisitor Members
         private readonly SyncConfig _syncConfig;
-        private readonly SyncProgress _syncProgress;
+        private readonly Progress _syncProgress;
 
-        public SyncerVisitor(SyncConfig syncConfig, SyncProgress progress)
+        public SyncerVisitor(SyncConfig syncConfig, Progress progress)
         {
             _syncConfig = syncConfig;
             _syncProgress = progress;

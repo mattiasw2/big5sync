@@ -13,12 +13,12 @@ namespace Syncless.CompareAndSync
             Pre
         }
 
-        public static void LevelOrderTraverseFolder(RootCompareObject root, IVisitor visitor, SyncProgress syncProgress)
+        public static void LevelOrderTraverseFolder(RootCompareObject root, IVisitor visitor, Progress syncProgress)
         {
             LevelOrderTraverseFolder(root, root.Paths.Length, visitor, syncProgress);
         }
 
-        private static void LevelOrderTraverseFolder(RootCompareObject root, int numOfPaths, IVisitor visitor, SyncProgress syncProgress)
+        private static void LevelOrderTraverseFolder(RootCompareObject root, int numOfPaths, IVisitor visitor, Progress syncProgress)
         {
             Queue<BaseCompareObject> levelQueue = new Queue<BaseCompareObject>();
             RootCompareObject rt;
@@ -57,17 +57,17 @@ namespace Syncless.CompareAndSync
             }
         }
 
-        public static void PreTraverseFolder(RootCompareObject root, IVisitor visitor, SyncProgress syncProgress)
+        public static void PreTraverseFolder(RootCompareObject root, IVisitor visitor, Progress syncProgress)
         {
             TraverseFolderHelper(root, visitor, TraverseType.Pre, syncProgress);
         }
 
-        public static void PostTraverseFolder(RootCompareObject root, IVisitor visitor, SyncProgress syncProgress)
+        public static void PostTraverseFolder(RootCompareObject root, IVisitor visitor, Progress syncProgress)
         {
             TraverseFolderHelper(root, visitor, TraverseType.Post, syncProgress);
         }
 
-        private static void TraverseFolderHelper(RootCompareObject root, IVisitor visitor, TraverseType type, SyncProgress syncProgress)
+        private static void TraverseFolderHelper(RootCompareObject root, IVisitor visitor, TraverseType type, Progress syncProgress)
         {
             if (syncProgress!=null && syncProgress.State == SyncState.Cancelled)
                 return;
@@ -92,7 +92,7 @@ namespace Syncless.CompareAndSync
                 visitor.Visit(root);
         }
 
-        private static void TraverseFolderHelper(FolderCompareObject folder, int numOfPaths, IVisitor visitor, TraverseType type, SyncProgress syncProgress)
+        private static void TraverseFolderHelper(FolderCompareObject folder, int numOfPaths, IVisitor visitor, TraverseType type, Progress syncProgress)
         {
             if (syncProgress != null && syncProgress.State == SyncState.Cancelled)
                 return;
