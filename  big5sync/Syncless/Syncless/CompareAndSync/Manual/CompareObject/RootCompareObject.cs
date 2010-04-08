@@ -3,7 +3,7 @@
 namespace Syncless.CompareAndSync.Manual.CompareObject
 {
     /// <summary>
-    /// Similar to FolderCompareObject, but it stores the list of paths to synchronize in addition.
+    /// Similar to <see cref="FolderCompareObject"/>, but it stores the list of paths to synchronize in addition.
     /// </summary>
     public class RootCompareObject : FolderCompareObject
     {
@@ -19,6 +19,8 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             _paths = paths;
         }
 
+        #region Properties
+
         /// <summary>
         /// Gets the current <see cref="Array"/> of paths.
         /// </summary>
@@ -26,5 +28,8 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         {
             get { return _paths; }
         }
+
+        #endregion
+
     }
 }

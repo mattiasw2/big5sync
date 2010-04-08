@@ -8,15 +8,12 @@ using Syncless.Logging;
 
 namespace Syncless.CompareAndSync.Manual.Visitor
 {
+    /// <summary>
+    /// ComparerVisitor is responsible for comparing and updating the states of the files and folders.
+    /// </summary>
     public class ComparerVisitor : IVisitor
     {
         private int _totalNodes;
-
-        public int TotalNodes
-        {
-            get { return _totalNodes; }
-            set { _totalNodes = value; }
-        }
 
         public ComparerVisitor()
         {
@@ -49,6 +46,16 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         {
             // Do nothing
             _totalNodes++;
+        }
+
+        #endregion
+
+        #region Properties
+
+        public int TotalNodes
+        {
+            get { return _totalNodes; }
+            set { _totalNodes = value; }
         }
 
         #endregion
@@ -129,7 +136,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         FileCompareObject f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);
                         if (f != null)
                         {
-                            List<int> pos = null;
+                            List<int> pos;
                             if (newNames.TryGetValue(f.Name, out pos))
                             {
                                 pos.Add(i);
@@ -151,9 +158,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
             if (newNames.Count == 1)
             {
-                // ReSharper disable PossibleNullReferenceException
                 file.NewName = result.Name;
-                // ReSharper restore PossibleNullReferenceException
                 foreach (int i in newNames[result.Name])
                     file.ChangeType[i] = MetaChangeType.Rename;
 
@@ -170,7 +175,24 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         private static void CompareFiles(FileCompareObject file, int numOfPaths)
         {
-            //Rename will only occur if all other changes are MetaChangeType.NoChange or null
+            bool isRenamed = FileRenameHelper(file, numOfPaths);
+            if (isRenamed)
+                return;
+
+            bool isDeleted = FileDeleteHelper(file, numOfPaths);
+            if (isDeleted)
+                return;
+
+            FileCreateUpdateHelper(file, numOfPaths);
+            SetFileParentDirty(file, numOfPaths);
+        }
+
+        #endregion
+
+        #region File Handlers
+
+        private static bool FileRenameHelper(FileCompareObject file, int numOfPaths)
+        {
             int renamePos = -1;
 
             for (int i = 0; i < numOfPaths; i++)
@@ -186,10 +208,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 }
             }
 
-            if (renamePos > -1)
-                return;
+            return renamePos > -1 ? true : false;
+        }
 
-            //Delete will only occur if all other changes are MetaChangeType.NoChange or null
+        private static bool FileDeleteHelper(FileCompareObject file, int numOfPaths)
+        {
             List<int> deletePos = new List<int>();
             bool stop = false;
             for (int i = 0; i < numOfPaths; i++)
@@ -225,10 +248,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 file.SourcePosition = deletePos[0];
                 foreach (int i in deletePos)
                     file.Priority[i] = 1;
-                return;
+                return true;
             }
+            return false;
+        }
 
-            //Update/Create handled in a similar way
+        private static void FileCreateUpdateHelper(FileCompareObject file, int numOfPaths)
+        {
             int mostUpdatedPos = 0;
 
             for (int i = 0; i < numOfPaths; i++)
@@ -273,29 +299,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
 
             file.SourcePosition = mostUpdatedPos;
+        }
 
-            //When to set parent to dirty? When the priority is not the same for all files?
-            int priority = -1;
+        private static void SetFileParentDirty(FileCompareObject file, int numOfPaths)
+        {
             int numExists = 0;
             int posExists = -1;
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                if (file.Exists[i])
-                {
-                    numExists++;
-                    posExists = i;
-                    if (priority < 0)
-                        priority = file.Priority[i];
-                    else
-                    {
-                        if (priority != file.Priority[i])
-                        {
-                            file.Parent.Dirty = true;
-                            break;
-                        }
-                    }
-                }
-            }
+            SetFileSystemObjectDirty(file, numOfPaths, ref numExists, ref posExists);
 
             if (numExists == 1)
             {
@@ -309,6 +319,24 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         #region Folders
 
         private static void CompareFolders(FolderCompareObject folder, int numOfPaths)
+        {
+            bool isRenamed = FolderRenameHelper(folder, numOfPaths);
+            if (isRenamed)
+                return;
+
+            bool isDeleted = FolderDeleteHelper(folder, numOfPaths);
+            if (isDeleted)
+                return;
+
+            FolderCreateUpdateHelper(folder, numOfPaths);
+            SetFolderParentDirty(folder, numOfPaths);
+        }
+
+        #endregion
+
+        #region Folder Handlers
+
+        private static bool FolderRenameHelper(FolderCompareObject folder, int numOfPaths)
         {
             //Rename will only occur if all other changes are MetaChangeType.NoChange or null
             int renamePos = -1;
@@ -326,9 +354,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 }
             }
 
-            if (renamePos > -1)
-                return;
+            return renamePos > -1 ? true : false;
+        }
 
+        private static bool FolderDeleteHelper(FolderCompareObject folder, int numOfPaths)
+        {
             //Delete will only occur if none of the folders are marked as dirty
             if (!folder.Dirty)
             {
@@ -368,10 +398,14 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     folder.SourcePosition = deletePos[0];
                     foreach (int i in deletePos)
                         folder.Priority[i] = 1;
-                    return;
+                    return true;
                 }
             }
+            return false;
+        }
 
+        private static void FolderCreateUpdateHelper(FolderCompareObject folder, int numOfPaths)
+        {
             int mostUpdatedPos = 0;
 
             for (int i = 0; i < numOfPaths; i++)
@@ -396,29 +430,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
 
             folder.SourcePosition = mostUpdatedPos;
+        }
 
-            //When to set parent to dirty? When the priority is not the same for all files? EXP
-            int priority = -1;
+        private static void SetFolderParentDirty(FolderCompareObject folder, int numOfPaths)
+        {
             int numExists = 0;
             int posExists = -1;
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                if (folder.Exists[i])
-                {
-                    numExists++;
-                    posExists = i;
-                    if (priority < 0)
-                        priority = folder.Priority[i];
-                    else
-                    {
-                        if (priority != folder.Priority[i])
-                        {
-                            folder.Parent.Dirty = true;
-                            break;
-                        }
-                    }
-                }
-            }
+            SetFileSystemObjectDirty(folder, numOfPaths, ref numExists, ref posExists);
 
             if (numExists == 1)
             {
@@ -428,6 +446,30 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         }
 
         #endregion
+
+        private static void SetFileSystemObjectDirty(BaseCompareObject file, int numOfPaths, ref int numExists, ref int posExists)
+        {
+            int priority = -1;
+
+            for (int i = 0; i < numOfPaths; i++)
+            {
+                if (file.Exists[i])
+                {
+                    numExists++;
+                    posExists = i;
+                    if (priority < 0)
+                        priority = file.Priority[i];
+                    else
+                    {
+                        if (priority != file.Priority[i])
+                        {
+                            file.Parent.Dirty = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
 
     }
 }
