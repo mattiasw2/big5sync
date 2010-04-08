@@ -177,6 +177,8 @@ namespace Syncless.Core
         /// Clear the user log
         /// </summary>
         void ClearLog();
+        SyncConfig GetSyncConfig();
+        void UpdateSyncConfig(SyncConfig config);
     }
 
 }
