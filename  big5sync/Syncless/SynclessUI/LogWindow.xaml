@@ -84,7 +84,7 @@
 			<Label x:Name="FileSystemLogDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="File System Logs"/>
 		</StackPanel>
 		<Button x:Name="BtnClearLog" HorizontalAlignment="Right" Margin="0" FontFamily="Century Gothic" FontSize="9.333" Grid.Column="1" Grid.Row="2" Height="28">
-			<Label x:Name="LblClear" FontFamily="Century Gothic" FontSize="9.333" Content="Clear Logs" FontWeight="Bold"/>
+			<Label x:Name="LblClear" FontFamily="Century Gothic" FontSize="9.333" Content="Clear All Logs" FontWeight="Bold"/>
 		</Button>
 	</Grid>
 </Window>
