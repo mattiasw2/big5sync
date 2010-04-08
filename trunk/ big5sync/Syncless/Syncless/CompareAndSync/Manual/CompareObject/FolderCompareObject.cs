@@ -13,7 +13,6 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         private Dictionary<string, BaseCompareObject> _contents;
         private bool _dirty;
         private string _metaName;
-        private bool[] _useNewName;
 
         /// <summary>
         /// Initializes a <c>FolderCompareObject</c> given the name of the file, the number of paths to synchronize, and the parent of this file.
@@ -25,7 +24,6 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             : base(name, numOfPaths, parent)
         {
             _contents = new Dictionary<string, BaseCompareObject>(StringComparer.OrdinalIgnoreCase);
-            _useNewName = new bool[numOfPaths];
         }
 
         /// <summary>
@@ -70,9 +68,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         /// Finds the possible folder that the previous folder was renamed to.
         /// </summary>
         /// <param name="name">The name to search for.</param>
-        /// <param name="creationTime">The creation time to match.</param>
-        /// <param name="pos"></param>
-        /// <param name="renameCount"></param>
+        /// <param name="renameCount">Outputs the number of folders found with the name to search for.</param>
         /// <returns></returns>
         public FolderCompareObject GetRenamedFolder(string name, out int renameCount)
         {
@@ -103,7 +99,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         /// <param name="name">The name to match.</param>
         /// <param name="hash">The hash to match.</param>
         /// <param name="creationTime">The creation time to match.</param>
-        /// <param name="pos"></param>
+        /// <param name="pos">The position indicating which index to match.</param>
         /// <returns></returns>
         public FileCompareObject GetIdenticalFile(string name, string hash, long creationTime, int pos)
         {
@@ -129,35 +125,55 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         }
 
         /// <summary>
-        /// 
+        /// Gets the child (file or folder) given the name.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+        /// <param name="name">The name to search for.</param>
+        /// <returns>The child object if it is found, and null if none is found.</returns>
         public BaseCompareObject GetChild(string name)
         {
             BaseCompareObject child;
 
             if (_contents.TryGetValue(name, out child))
                 return child;
-            return child;
+
+            return null;
         }
 
+        /// <summary>
+        /// Removes a child (file or folder) given a name.
+        /// </summary>
+        /// <param name="name">The name to remove.</param>
+        /// <returns>True if the child is removed, false if it is not removed or not found.</returns>
         public bool RemoveChild(string name)
         {
             return _contents.Remove(name);
         }
 
+        /// <summary>
+        /// Gets or sets the name of the folder in the metadata.
+        /// </summary>
         public string MetaName
         {
             get { return _metaName; }
             set { _metaName = value; }
         }
 
+        /// <summary>
+        /// Checks if the folder contains a given file or folder name.
+        /// </summary>
+        /// <param name="name">The name to check for.</param>
+        /// <returns>True if the folder contains the name, false otherwise.</returns>
         public bool ContainsChild(string name)
         {
             return _contents.ContainsKey(name);
         }
 
+        /// <summary>
+        /// Gets or sets the dirty bit of the parent.
+        /// </summary>
+        /// <remarks>
+        /// The parent and all ancestors will be set to dirty as well.
+        /// </remarks>
         public bool Dirty
         {
             get { return _dirty; }
@@ -170,6 +186,9 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             }
         }
 
+        /// <summary>
+        /// Gets or sets the contents inside the folder.
+        /// </summary>
         public Dictionary<string, BaseCompareObject> Contents
         {
             get { return _contents; }
