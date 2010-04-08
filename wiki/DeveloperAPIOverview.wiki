@@ -2,7 +2,7 @@
 #labels Phase-Implementation,Featured
 #sidebar DeveloperAPISidebar
 
-This document is the API specification for Syncless, version 2.0
+This document is an overview API specification for Syncless, version 2.0. For more detailed documentation, please download our Compiled HTML Help File here.
 
 = Syncless Namespaces =
 
