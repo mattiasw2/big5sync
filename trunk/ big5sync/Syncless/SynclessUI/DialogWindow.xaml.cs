@@ -23,12 +23,15 @@ namespace SynclessUI
         public DialogWindow(Window parentWindow, string caption, string message, DialogType dt)
         {
             InitializeComponent();
-            CannotBeClosed = false;
-			
+
 			try {				
 				if(dt != DialogType.Indeterminate) {
 					this.ShowInTaskbar = false;
 					this.Owner = parentWindow;
+                    CannotBeClosed = false;
+				} else
+				{
+				    CannotBeClosed = true;
 				}
 			} catch(InvalidOperationException) {
 			}
@@ -64,6 +67,7 @@ namespace SynclessUI
                     Title = (string) LblCaption.Content;
                     ProgressBarTermination.IsEnabled = true;
                     ProgressBarTermination.Visibility = Visibility.Visible;
+					MinimizePanel.Visibility = Visibility.Visible;
                     break;
             }
 
@@ -141,7 +145,10 @@ namespace SynclessUI
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             if (CannotBeClosed)
+            {
                 e.Cancel = true;
+                return;
+            }
 
             if (_closingAnimationNotCompleted)
             {
@@ -154,6 +161,11 @@ namespace SynclessUI
 
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+        }
+
+        private void BtnMin_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
         }
     }
 }

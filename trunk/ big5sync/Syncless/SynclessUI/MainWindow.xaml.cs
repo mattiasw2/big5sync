@@ -614,8 +614,8 @@ namespace SynclessUI
                         LblStatusText.Content = message;
                         _tagStatusNotificationDictionary[SelectedTag] = message;
                         BtnSyncNow.IsEnabled = true;
-                        //ProgressBarSync.IsIndeterminate = false;
-                        //LblProgress.Visibility = Visibility.Visible;
+                        ProgressBarSync.IsIndeterminate = false;
+                        LblProgress.Visibility = Visibility.Visible;
                     }
                     else
                     {
