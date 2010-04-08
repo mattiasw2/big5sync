@@ -56,6 +56,34 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 
 == !TaggingLayer ==
 
+|| *Method* || *Description* ||
+|| !AddTag(Tag) || ||
+|| !AppendProfile(List`<string>`) || ||
+|| CheckIDExists(string) || ||
+|| !CreateTag(string) || ||
+|| !DeleteTag(string) || ||
+|| !FindSimilarPathForFolder(string) || ||
+|| !GetAllPaths() || ||
+|| Init(List`<string>`) || ||
+|| Merge(string) || ||
+|| !RenameFolder(string, string) || ||
+|| !RenameTag(string, string) || ||
+|| !RetrieveAllTags(bool) || ||
+|| !RetrieveAncestors(string) || ||
+|| !RetrieveDescendants(string) || ||
+|| !RetrieveFilteredTagByLogicalId(string) || ||
+|| !RetrieveParentTagByPath(string) || ||
+|| !RetrievePathByLogicalId(string) || ||
+|| !RetrieveTag(string) || ||
+|| !RetrieveTag(string, bool) || ||
+|| !RetrieveTagByLogicalId(string) || ||
+|| !RetrieveTagByPath(string) || ||
+|| !SaveTo(List`<string>`) || ||
+|| !TagFolder(string, string) || ||
+|| !UntagFolder(string, string) || ||
+|| !UntagFolder(string) || ||
+|| !UpdateFilter(string, List`<Filter>`) || ||
+
 [#Classes_Summary Back to top]
 
 == !TaggingProfile ==
