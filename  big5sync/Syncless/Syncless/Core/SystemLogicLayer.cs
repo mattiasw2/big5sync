@@ -156,7 +156,7 @@ namespace Syncless.Core
             for (int i = 0; i < convertedList.Count; i++)
             {
                 string dest = convertedList[i];
-                if (_pathTable.JustPop(fe.OldPath.FullName, dest, TableType.Rename))
+                if (_pathTable.JustPop(fe.NewPath.FullName, dest, TableType.Rename))
                 {
                     convertedList.Remove(dest);
                     i--;
@@ -169,7 +169,7 @@ namespace Syncless.Core
             ///////////////// Create an additional Path Entry for each of the Siblings ////////////////
             for (int i = 0; i < convertedList.Count; i++)
             {
-                _pathTable.AddPathPair(convertedList[i], fe.OldPath.FullName, TableType.Rename);
+                _pathTable.AddPathPair(convertedList[i], fe.NewPath.FullName, TableType.Rename);
                 for (int j = i + 1; j < convertedList.Count; j++)
                 {
                     _pathTable.AddPathPair(convertedList[i], convertedList[j], TableType.Rename);
@@ -660,7 +660,7 @@ namespace Syncless.Core
 
         private static void SendAutoRequest(AutoSyncRequest request)
         {
-            /*            
+                        
                         if (request.ChangeType == AutoSyncRequestType.New || request.ChangeType == AutoSyncRequestType.Update)
                         {
                             string output =
@@ -694,7 +694,7 @@ namespace Syncless.Core
                             output += "\n================================================================";
                             ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
                         }
-            */
+            
             CompareAndSyncController.Instance.Sync(request);
         }
         #endregion
@@ -1160,7 +1160,10 @@ namespace Syncless.Core
             }
 
         }
-
+        /// <summary>
+        /// Cancel a Preview Request
+        /// </summary>
+        /// <param name="tagName">Name of the tag to cancel Preview</param>
         public void CancelPreview(string tagName)
         {
             try
@@ -1173,7 +1176,6 @@ namespace Syncless.Core
                 throw new UnhandledException(e);
             }
         }
-
         /// <summary>
         /// Prepare the core for termination.
         /// </summary>
@@ -1443,7 +1445,6 @@ namespace Syncless.Core
         {
             SyncConfig.Instance = config; 
         }
-
 
         #endregion
 
