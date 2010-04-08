@@ -98,7 +98,11 @@ namespace Syncless.Logging
                     throw new LogFileCorruptedException(ErrorMessage.LOG_FILE_CORRUPTED);
                 }
                 string timestamp = tokens[0].Trim();
-                LogEventType logEvent = Convert(tokens[2].Trim()); 
+                LogEventType logEvent = Convert(tokens[2].Trim());
+                if (logEvent == LogEventType.UNKNOWN)
+                {
+                    continue;
+                }
                 string message = tokens[3].Trim();
                 if (logs.Count == MAX_LOG)
                 {
