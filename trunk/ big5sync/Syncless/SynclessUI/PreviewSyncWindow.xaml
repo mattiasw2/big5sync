@@ -26,7 +26,7 @@
 				</LinearGradientBrush>
 			</Rectangle.Fill>
 		</Rectangle>
-		<Label x:Name="LblPreview" Content="Preview Sync" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Margin="0"/>
+		<Label x:Name="LblPreview" Content="Preview Sync" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Margin="0"/>
 		<StackPanel x:Name="CommandPanel" Margin="0" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
 			<Button x:Name="BtnOk" IsDefault="True" Margin="0,0,5,0" Height="28" Click="BtnOk_Click">
 				<Label x:Name="LblOk" FontFamily="Century Gothic" FontSize="9.333" Content="Ok" FontWeight="Bold"/>
