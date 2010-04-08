@@ -88,10 +88,6 @@ namespace Syncless.Core
         /// </summary>
         private readonly PathTable _pathTable;
         /// <summary>
-        /// Internal Reader, use for debugging purpose
-        /// </summary>
-        private PathTableReader _reader;
-        /// <summary>
         /// A watcher that constantly find path that are tagged but does not exist on the filesystem.
         /// </summary>
         private DeletedTaggedPathWatcher _deletedTaggedPathWatcher;
@@ -1205,7 +1201,6 @@ namespace Syncless.Core
                 DeviceWatcher.Instance.Terminate();
                 MonitorLayer.Instance.Terminate();
                 _queueObserver.Stop();
-                _reader.Stop();
                 _deletedTaggedPathWatcher.Stop();
                 //Save();
             }
@@ -1714,9 +1709,7 @@ namespace Syncless.Core
         {
             try
             {
-                //PathTableReader
-                _reader = new PathTableReader(_pathTable);
-                _reader.Start();
+                
                 //Initiate the Logic Queue Observer.
                 _queueObserver = new LogicQueueObserver();
                 _queueObserver.Start();
@@ -1726,7 +1719,6 @@ namespace Syncless.Core
                 if (!loadSuccess)
                 {
                     _queueObserver.Stop();
-                    _reader.Stop();
                     return false;
                 }
                 //Starts watching for Drive Change
@@ -1769,15 +1761,11 @@ namespace Syncless.Core
             }
             catch (Exception e)
             {
-                //Initialize fail return false.
+                //Initialize fail return false. 
                 ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                 if (_queueObserver != null)
                 {
                     _queueObserver.Stop();
-                }
-                if (_reader != null)
-                {
-                    _reader.Stop();
                 }
 
                 return false;

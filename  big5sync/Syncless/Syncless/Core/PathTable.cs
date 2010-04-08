@@ -1,21 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Collections.Generic;
 
 namespace Syncless.Core
 {
+    /// <summary>
+    /// The enum for the 4 different type of path table
+    /// </summary>
     internal enum TableType
     {
         Create, Update, Rename, Delete
     }
+    /// <summary>
+    /// PathTable contains the expected event during the handling of seamless synchronization.
+    /// This is used to reduce the number of redundant request that is send to CompareAndSyncController.
+    /// </summary>
     internal class PathTable
     {
-        private List<PathPair> _createEventPathPair;
-        private List<PathPair> _updateEventPathPair;
-        private List<PathPair> _renameEventPathPair;
-        private List<PathPair> _deleteEventPathPair;
+        /// <summary>
+        /// For Create Event
+        /// </summary>
+        private readonly List<PathPair> _createEventPathPair;
+        /// <summary>
+        /// For Update Event
+        /// </summary>
+        private readonly List<PathPair> _updateEventPathPair;
+        /// <summary>
+        /// For Rename Event
+        /// </summary>
+        private readonly List<PathPair> _renameEventPathPair;
+        /// <summary>
+        /// For Delete Event
+        /// </summary>
+        private readonly List<PathPair> _deleteEventPathPair;
 
         public PathTable()
         {
@@ -24,11 +39,18 @@ namespace Syncless.Core
             _renameEventPathPair = new List<PathPair>();
             _deleteEventPathPair = new List<PathPair>();
         }
-
+        /// <summary>
+        /// Remove a particular pair of path with a type from the table.
+        /// </summary>
+        /// <param name="source">Source of propagation</param>
+        /// <param name="dest">Destination of propagation</param>
+        /// <param name="type">Type of table</param>
+        /// <returns>The PathPair removed.</returns>
         public PathPair RemovePathPair(string source, string dest, TableType type)
         {
             PathPair returnPair = null;
             List<PathPair> usedTable = null;
+            //Use different table based on type.
             switch (type)
             {
                 case TableType.Create: usedTable = _createEventPathPair; break;
@@ -43,6 +65,8 @@ namespace Syncless.Core
             }
             lock (this)
             {
+                //Create a Copy of the Pathpair, 
+                //Find a same PathPair and return it.
                 PathPair pathPair = new PathPair(source, dest);
                 foreach (PathPair pair in usedTable)
                 {
@@ -56,17 +80,24 @@ namespace Syncless.Core
 
             return returnPair;
         }
+        /// <summary>
+        /// Remove a particular pair of path with a type from the table.
+        /// </summary>
+        /// <param name="source">Source of propagation</param>
+        /// <param name="dest">Destination of propagation</param>
+        /// <param name="type">Type of table</param>
+        /// <returns>true if something is removed. false if the pair does not exist.</returns>
         public bool JustPop(string source, string dest, TableType type)
         {
             PathPair returnPair = null;
             List<PathPair> usedTable = null;
+            //Use different table based on table type
             switch (type)
             {
                 case TableType.Create: usedTable = _createEventPathPair; break;
                 case TableType.Update: usedTable = _updateEventPathPair; break;
                 case TableType.Rename: usedTable = _renameEventPathPair; break;
                 case TableType.Delete: usedTable = _deleteEventPathPair; break;
-
             }
             if (usedTable == null)
             {
@@ -74,6 +105,8 @@ namespace Syncless.Core
             }
             lock (this)
             {
+                //Create a copy of the path pair.
+                //Find a same PathPair and return it.
                 PathPair pathPair = new PathPair(source, dest);
                 foreach (PathPair pair in usedTable)
                 {
@@ -87,9 +120,17 @@ namespace Syncless.Core
 
             return returnPair != null;
         }
+        /// <summary>
+        /// Add a new PathPair
+        /// </summary>
+        /// <param name="source">Source of propagation</param>
+        /// <param name="dest">Destination of propagation</param>
+        /// <param name="type">Type of table</param>
+        /// <returns>true if the pair is added, false if the pair isn't</returns>
         public bool AddPathPair(string source, string dest, TableType type)
         {
             List<PathPair> usedTable = null;
+            //Use the table based on the table type.
             switch (type)
             {
                 case TableType.Create: usedTable = _createEventPathPair; break;
@@ -104,6 +145,7 @@ namespace Syncless.Core
             }
             lock (this)
             {
+                //Check if the table already contain such a pair.
                 PathPair pathPair = new PathPair(source, dest);
                 if (!Contains(pathPair, type))
                 {
@@ -114,7 +156,12 @@ namespace Syncless.Core
             }
             return false;
         }
-
+        /// <summary>
+        /// Check if the PathTable contain a particular pair.
+        /// </summary>
+        /// <param name="pair">The pair to check</param>
+        /// <param name="type">The type of table to check</param>
+        /// <returns>true if the PathTable contains the pair, false if the PathTable does not contain the pair</returns>
         public bool Contains(PathPair pair, TableType type)
         {
             List<PathPair> usedTable = null;
@@ -131,7 +178,9 @@ namespace Syncless.Core
             }
             return usedTable.Contains(pair);
         }
-
+        /// <summary>
+        /// Return the number of path pair in the Path Table.
+        /// </summary>
         public int Count
         {
             get { return _createEventPathPair.Count + _updateEventPathPair.Count + _renameEventPathPair.Count; }
@@ -202,32 +251,4 @@ namespace Syncless.Core
         }
     }
 
-    internal class PathTableReader
-    {
-        private PathTable _table;
-        private Thread _reader;
-        public PathTableReader(PathTable table)
-        {
-            _table = table;
-        }
-        public void Start()
-        {
-            _reader = new Thread(Run);
-            //_reader.Start();
-        }
-        public void Stop()
-        {
-            _reader.Abort();
-        }
-        private void Run()
-        {
-            while (true)
-            {
-                _table.PrintAll();
-                
-                Thread.Sleep(5000);
-            }
-        }
-
-    }
 }
