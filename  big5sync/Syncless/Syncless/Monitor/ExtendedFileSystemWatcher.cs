@@ -18,6 +18,9 @@ namespace Syncless.Monitor
         private Thread watcherThread;
         private bool runWatcher;
         
+        /// <summary>
+        /// Occurs when a file in the specified Path has completed creating.
+        /// </summary>
         public event FileSystemEventHandler CreateComplete;
 
         /// <summary>

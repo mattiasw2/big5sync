@@ -65,7 +65,7 @@ namespace Syncless.Monitor.DTO
         /// </summary>
         /// <param name="path">A <see cref="string" /> specifying the affected path.</param>
         /// <param name="eventType">A <see cref="Syncless.Monitor.DTO.EventChangeType" /> enum specifying the event change type.</param>
-        /// <param name="fileSystemType">A <see cref="Syncless.Monitor.DTO.FileSystemChangeType" /> enum specifying the file system change type.</param>
+        /// <param name="fileSystemType">A <see cref="Syncless.Monitor.DTO.FileSystemType" /> enum specifying the file system change type.</param>
         public FileSystemEvent(string path, EventChangeType eventType, FileSystemType fileSystemType)
         {
             this._path = path;
@@ -80,7 +80,7 @@ namespace Syncless.Monitor.DTO
         /// </summary>
         /// <param name="oldPath">A <see cref="string" /> class specifying the old path.</param>
         /// <param name="newPath">A <see cref="string" /> class specifying the new path.</param>
-        /// <param name="fileSystemType">A <see cref="Syncless.Monitor.DTO.FileSystemChangeType" /> enum specifying the file system change type.</param>
+        /// <param name="fileSystemType">A <see cref="Syncless.Monitor.DTO.FileSystemType" /> enum specifying the file system change type.</param>
         public FileSystemEvent(string oldPath, string newPath, FileSystemType fileSystemType)
         {
             this._oldPath = oldPath;
