@@ -20,13 +20,13 @@ This is implemented using `FileSystemWatcher` from the C# library. The `FileSyst
 
 == Problems with `FileSystemWatcher` ==
 `FileSystemWatcher` has the following problems:
-  # ***When using the `FileSystemWatcher` to monitor a path, any operation on the folder which the path points to, will not be reported by the `FileSystemWatcher`.
+  # *New* When using the `FileSystemWatcher` to monitor a path, any operation on the folder which the path points to, will not be reported by the `FileSystemWatcher`.
   # When creating a large file, the file creation event is triggered before the file has finished the actual creation. Exceptions will occur when we attempt to perform some operations on the new file before it finishes creation.
   # When `FileSystemWatcher` is working with large volumes of file, it is unreliable. The reason is that there is a fixed buffer allocated to each `FileSystemWatcher` which is used to store information on the events raised. When a large number of files raises an event, this buffer gets full and some events might not be captured.
   # Different applications have different ways of handling a file/folder operation. Temporary files are sometimes used and this will cause some problems when we do a sync. Exception will occur when trying to sync a temporary file when the file has already been deleted.
 
 = Explanation of Algorithms =
-***To solve problem 1, another watcher will be created and assigned to monitor its parent folder but only operations on those folders assigned to be monitored will be reported.
+*New* To solve problem 1, another watcher will be created and assigned to monitor its parent folder but only operations on those folders assigned to be monitored will be reported.
 
 To solve problem 2, we reference the codes from [http://geekswithblogs.net/thibbard/articles/ExtendingFileSystemWatcher.aspx here]. This is done by extending the `FileSystemwatcher` and adding new events to trigger a complete creation event.
 
