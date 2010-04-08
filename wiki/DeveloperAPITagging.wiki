@@ -9,34 +9,12 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 = Classes Summary =
 
 || || *Class* || *Description* ||
-||  || [#CurrentTime CurrentTime] || Provides properties which enclose the `DateTime.Now` property. The object created allows for repeated use of the same `DateTime.Now` property value. ||
-|| http://big5sync.googlecode.com/files/static.gif || [#LogMessage LogMessage] || Provides static string values which are used for logging events invoked in the Tagging namespace. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#Tag Tag] || Represents a container for a list of `TaggedPath` objects.  Each `Tag` object has its properties that uniquely identifies itself from other `Tag` objects. ||
 || || [#TagConfig TagConfig] || Provides the configuration options of `Tag` object. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#TaggedPath TaggedPath] || Encloses properties of a folder path and provides operations to manipulate the properties. ||
-|| http://big5sync.googlecode.com/files/static.gif || [#TaggingHelper TaggingHelper] || Provides some common methods which may be used by other classes under the Tagging namespace. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#TaggingLayer TaggingLayer] || The main logic controller of the Tagging namespace. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#TaggingProfile TaggingProfile] || Represents a container for a list of `Tag` objects.  Each `TaggingProfile` has its properties that uniquely identifies itself from other `TaggingProfile` objects. ||
-|| http://big5sync.googlecode.com/files/static.gif || [#TaggingXMLHelper TaggingXMLHelper] || Provides XML-related operations to load and save tagging.xml file. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#TagMerger TagMerger] || Performs merging of several tagging profiles which have the same name. ||
-
-== [DeveloperAPITaggingCurrentTime CurrentTime] ==
-
-`internal class` !CurrentTime
-        Provides properties which enclose the `DateTime.Now` property. The object created allows for repeated use of the same `DateTime.Now` property value.
-
-[#Classes_Summary Back to top]
-
-----
-
-== [DeveloperAPITaggingLogMessage LogMessage] ==
-
-`internal static class` !LogMessage
-        Provides static string values which are used for logging events invoked in the Tagging namespace.
-
-[#Classes_Summary Back to top]
-
-----
 
 == Tag ==
 
@@ -47,10 +25,6 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 [#Classes_Summary Back to top]
 
 == !TaggedPath ==
-
-[#Classes_Summary Back to top]
-
-== !TaggingHelper ==
 
 [#Classes_Summary Back to top]
 
@@ -87,10 +61,6 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 [#Classes_Summary Back to top]
 
 == !TaggingProfile ==
-
-[#Classes_Summary Back to top]
-
-== TaggingXMLHelper ==
 
 [#Classes_Summary Back to top]
 
