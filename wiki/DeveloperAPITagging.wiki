@@ -18,9 +18,13 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 
 [#Classes_Summary Back to top]
 
+----
+
 == !TaggedPath ==
 
 [#Classes_Summary Back to top]
+
+----
 
 == !TaggingLayer ==
 
@@ -54,9 +58,13 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 
 [#Classes_Summary Back to top]
 
+----
+
 == !TaggingProfile ==
 
 [#Classes_Summary Back to top]
+
+----
 
 == !TagMerger ==
 
