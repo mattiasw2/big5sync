@@ -233,9 +233,7 @@ namespace Syncless.Tagging
                 if (p.IsDeleted)
                 {
                     _pathList.Remove(p);
-                    TaggedPath taggedPath = new TaggedPath(path, created);
-                    _lastUpdatedDate = TaggingHelper.GetCurrentTime();
-                    _pathList.Add(taggedPath);
+                    CreateNewPath(path, created);
                     return true;
                 }
                 else
@@ -245,9 +243,7 @@ namespace Syncless.Tagging
             }
             else
             {
-                TaggedPath taggedPath = new TaggedPath(path, created);
-                _lastUpdatedDate = TaggingHelper.GetCurrentTime();
-                _pathList.Add(taggedPath);
+                CreateNewPath(path, created);
                 return true;
             }
         }
@@ -271,8 +267,7 @@ namespace Syncless.Tagging
                 if (p.IsDeleted)
                 {
                     _pathList.Remove(p);
-                    _pathList.Add(path);
-                    _lastUpdatedDate = TaggingHelper.GetCurrentTime();
+                    AddNewPath(path);
                     return true;
                 }
                 else
@@ -282,12 +277,11 @@ namespace Syncless.Tagging
             }
             else
             {
-                _pathList.Add(path);
-                _lastUpdatedDate = TaggingHelper.GetCurrentTime();
+                AddNewPath(path);
                 return true;
             }
         }
-
+        
         /// <summary>
         /// Sets part of the full path name, contained by one or more of the tagged paths in the list 
         /// of tagged paths, represented by the old path that is passed as parameter to the new path 
@@ -343,23 +337,24 @@ namespace Syncless.Tagging
         /// <returns>true if some tagged paths are set as deleted; otherwise, false</returns>
         public bool RemovePath(string path, long lastupdated)
         {
-            foreach (TaggedPath p in _pathList)
+            TaggedPath p = FindPath(path, false);
+            if (p != null)
             {
-                if (PathHelper.EqualsIgnoreCase(p.PathName, path))
+                if (p.IsDeleted)
                 {
-                    if (p.IsDeleted)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        p.Remove(lastupdated);
-                        _lastUpdatedDate = TaggingHelper.GetCurrentTime();
-                        return true;
-                    }
+                    return false;
+                }
+                else
+                {
+                    p.Remove(lastupdated);
+                    _lastUpdatedDate = TaggingHelper.GetCurrentTime();
+                    return true;
                 }
             }
-            return false;
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -369,24 +364,25 @@ namespace Syncless.Tagging
         /// <returns>true if some tagged paths are set as deleted; otherwise, false</returns>
         public bool RemovePath(TaggedPath path)
         {
-            foreach (TaggedPath p in _pathList)
+            TaggedPath p = FindPath(path.PathName, false);
+            if (p != null)
             {
-                if (PathHelper.EqualsIgnoreCase(p.PathName, path.PathName))
+                if (p.IsDeleted)
                 {
-                    if (p.IsDeleted)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        long lastupdated = TaggingHelper.GetCurrentTime();
-                        p.Remove(lastupdated);
-                        _lastUpdatedDate = lastupdated;
-                        return true;
-                    }
+                    return false;
+                }
+                else
+                {
+                    long lastupdated = TaggingHelper.GetCurrentTime();
+                    p.Remove(lastupdated);
+                    _lastUpdatedDate = lastupdated;
+                    return true;
                 }
             }
-            return false;
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -477,14 +473,6 @@ namespace Syncless.Tagging
                 if (PathHelper.EqualsIgnoreCase(p.PathName, path))
                 {
                     return true;
-                    //if (p.IsDeleted)
-                    //{
-                    //    return false;
-                    //}
-                    //else
-                    //{
-                    //    return true;
-                    //}
                 }
             }
             return false;
@@ -673,6 +661,31 @@ namespace Syncless.Tagging
                 }
             }
             return descendants;
+        }
+
+        /// <summary>
+        /// Adds a tagged path to the list of tagged paths
+        /// </summary>
+        /// <param name="path">The <see cref="TaggedPath">TaggedPath</see> object that represents the
+        /// tagged path to be added</param>
+        private void AddNewPath(TaggedPath path)
+        {
+            _pathList.Add(path);
+            _lastUpdatedDate = TaggingHelper.GetCurrentTime();
+        }
+        
+        /// <summary>
+        /// Creates a new tagged path with a full path name and created date that are passed as 
+        /// parameters and adds to the list of tagged paths
+        /// </summary>
+        /// <param name="path">The string value that represents the full path name of the new tagged 
+        /// path</param>
+        /// <param name="created">The long value that represents the created date of the new tagged path</param>
+        private void CreateNewPath(string path, long created)
+        {
+            TaggedPath taggedPath = new TaggedPath(path, created);
+            _lastUpdatedDate = TaggingHelper.GetCurrentTime();
+            _pathList.Add(taggedPath);
         }
     }
 }
