@@ -11,6 +11,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region IVisitor Members
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="numOfPaths"></param>
         public void Visit(FileCompareObject file, int numOfPaths)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -46,6 +51,14 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             AddXmlNodes(folder, numOfPaths, xmlDoc);
         }
 
+        /// <summary>
+        /// Loads the xml documents and extracts all the files and folder nodes. After which , compare them
+        /// against the existing files and folders and minus them off. Any files or folders that exist in 
+        /// the metadata will be added to the folder node
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="numOfPaths"></param>
+        /// <param name="xmlDoc"> XmlDocument that has been loaded</param>
         private void AddXmlNodes(FolderCompareObject folder, int numOfPaths, XmlDocument xmlDoc)
         {
             List<XMLCompareObject> xmlObjList = new List<XMLCompareObject>();
@@ -79,6 +92,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
+        /// <summary>
+        /// Extracts metadata files and folders and minus them off existing files and folders. The 
+        /// difference (files and folders) will be added to the root 
+        /// </summary>
+        /// <param name="root"></param>
         public void Visit(RootCompareObject root)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -113,6 +131,14 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region Files
 
+        /// <summary>
+        /// Given the loaded xml document , it tries to retrieve the file node and populate the values
+        /// to the file compare object
+        /// </summary>
+        /// <param name="xmlDoc">Loaded xml document</param>
+        /// <param name="file"></param>
+        /// <param name="counter"></param>
+        /// <returns>the file compare object with the updated content</returns>
         private FileCompareObject PopulateFileWithMetaData(XmlDocument xmlDoc, FileCompareObject file, int counter)
         {
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(file.Name) + "]");
@@ -187,6 +213,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             return file;
         }
 
+        /// <summary>
+        /// Given a xml document that is loaded , it extracts all the file nodes
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        /// <returns> A list of XMLCompareObject in the xml document</returns>
         private List<XMLCompareObject> GetAllFilesInXML(XmlDocument xmlDoc)
         {
             string hash = "";
@@ -235,6 +266,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             return objectList;
         }
 
+        /// <summary>
+        /// Given a xml document that is loaded , it extracts all the folder nodes
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        /// <returns> A list of folder names in the xml document </returns>
         private List<string> GetAllFoldersInXML(XmlDocument xmlDoc)
         {
             List<string> folderList = new List<string>();
@@ -260,6 +296,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             return folderList;
         }
 
+        /// <summary>
+        /// Compares the XMLCompareObject and a list of FileInfo object and removes all the similar objects
+        /// by name in the list of XMLCompareObject
+        /// </summary>
+        /// <param name="xmlObjList"> A list of XMLCompareObject extracted from the xml document </param>
+        /// <param name="fileList"> A list of FileInfo object given the current directory</param>
         private void RemoveSimilarFiles(List<XMLCompareObject> xmlObjList, FileInfo[] fileList)
         {
             if (xmlObjList.Count == 0)
@@ -278,6 +320,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
+        /// <summary>
+        /// Compares the list of folder names and a list of DirectoryInfo object and removes all the similar 
+        /// objects by name in the list of XMLCompareObject
+        /// </summary>
+        /// <param name="folderNameList"> A list of folder names extracted from xml document</param>
+        /// <param name="dirList"> A list of DirectoryInfo given the current directory</param>
         private void RemoveSimilarFolders(List<string> folderNameList, DirectoryInfo[] dirList)
         {
             if (folderNameList.Count == 0)
@@ -296,7 +344,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
-
+        /// <summary>
+        /// Creates a new file node and append it to the current folder node.
+        /// </summary>
+        /// <param name="xmlFileList"> A list of XMLCompareObject that exists only in metadata </param>
+        /// <param name="folder"> The current folder node </param>
+        /// <param name="counter"></param>
+        /// <param name="length"></param>
         private void AddFileToChild(List<XMLCompareObject> xmlFileList, FolderCompareObject folder, int counter, int length)
         {
             for (int i = 0; i < xmlFileList.Count; i++)
@@ -321,6 +375,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
+        /// <summary>
+        /// Creates a new folder node and append it to the current folder node.
+        /// </summary>
+        /// <param name="folderName"> A list of folder names that exists only in metadata  </param>
+        /// <param name="folder"> The current folder node </param>
+        /// <param name="counter"></param>
+        /// <param name="length"></param>
         private void AddFolderToChild(List<string> folderName, FolderCompareObject folder, int counter, int length)
         {
             for (int i = 0; i < folderName.Count; i++)
@@ -340,7 +401,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
-
+        /// <summary>
+        /// Creates a new file node and append it to the root node.
+        /// </summary>
+        /// <param name="xmlFileList"> A list of XMLCompareObject that exists only in metadata </param>
+        /// <param name="root"> Root node </param>
+        /// <param name="counter"></param>
+        /// <param name="length"></param>
         private void AddFileToRoot(List<XMLCompareObject> xmlFileList, RootCompareObject root, int counter, int length)
         {
             if (xmlFileList.Count == 0)
@@ -368,6 +435,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
+        /// <summary>
+        /// Creates a new folder node and append it to the root node.
+        /// </summary>
+        /// <param name="folderName"> A list of folder names that exists only in metadata </param>
+        /// <param name="root"> Root node </param>
+        /// <param name="counter"></param>
+        /// <param name="length"></param>
         private void AddFolderToRoot(List<string> folderName, RootCompareObject root, int counter, int length)
         {
             if (folderName.Count == 0)

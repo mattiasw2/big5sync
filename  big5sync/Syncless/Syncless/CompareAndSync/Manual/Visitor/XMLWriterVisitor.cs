@@ -73,6 +73,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region File Operations
 
+        /// <summary>
+        /// Based on the file's final state , it will let the respective method handle the final state
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="counter"></param>
+        /// <returns></returns>
         private bool ProcessMetaChangeType(FileCompareObject file, int counter)
         {
             FinalState? changeType = file.FinalState[counter];
@@ -104,7 +110,14 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             return needLastKnownState;
         }
 
-
+        /// <summary>
+        /// Given the counter , looks into the exact position in the File attributes and create the xml node
+        /// based on the values extracted. It will then look up the todo file and remove the node with the same
+        /// name
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="counter"></param>
+        /// <param name="useNewName"></param>
         private void CreateFileObject(FileCompareObject file, int counter, bool useNewName)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -149,6 +162,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             DeleteFileLastKnownStateByName(file, counter);
         }
 
+        /// <summary>
+        /// Given the counter , it will extract the file details in the array. After loading , it will look for
+        /// the node with the file name and update the new changes accordingly. It will then look for the same
+        /// name in the todo file and delete it
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="counter"></param>
         private void UpdateFileObject(FileCompareObject file, int counter)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -196,6 +216,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             DeleteFileLastKnownStateByName(file, counter);
         }
 
+        /// <summary>
+        /// Given the counter , it will load the xml document. It will look for the file node with the old name
+        /// and changes it to the new name.It will then create the a new file node in the todo file
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="counter"></param>
         private void RenameFileObject(FileCompareObject file, int counter)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -229,6 +255,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
         }
 
+        /// <summary>
+        /// Given the counter , it will load the xml document and delete the file node by the file name
+        /// After which , it will create a new file node in the todo file
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="counter"></param>
         private void DeleteFileObject(FileCompareObject file, int counter)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -252,6 +284,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region Folder Operations
 
+        /// <summary>
+        /// Based on the folder final state , it will let the respective methods handle it
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="counter"></param>
+        /// <returns></returns>
         private bool ProcessFolderFinalState(FolderCompareObject folder, int counter)
         {
             FinalState?[] finalStateList = folder.FinalState;
@@ -281,6 +319,14 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             return needLastKnownState;
         }
 
+        /// <summary>
+        /// Given the counter , it will load the xml document and the folder details from the array. After which
+        /// it will create the folder node based on the details. Next , it will look for the same folder name
+        /// in the todo file and try to delete it
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="counter"></param>
+        /// <param name="useNewName"></param>
         private void CreateFolderObject(FolderCompareObject folder, int counter, bool useNewName)
         {
             string name = useNewName ? folder.NewName : folder.Name;
@@ -310,6 +356,14 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             DeleteFolderLastKnownStateByName(folder, counter);
         }
 
+        /// <summary>
+        /// Given the counter , it will load the xml document. After loading , it will look for the folder 
+        /// node given the name and update it to the new name.In the folder inside , it will also look for the
+        /// xml document and update the name accordingly. 
+        /// After which , it will create a new folder node entry in the todo file
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="counter"></param>
         private void RenameFolderObject(FolderCompareObject folder, int counter)
         {
             if (Directory.Exists(Path.Combine(folder.GetSmartParentPath(counter), folder.Name)))
@@ -357,6 +411,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
+        /// <summary>
+        /// Given the counter , it will load the xml document and try to delete the folder node based on the 
+        /// name. After which , it will create a new folder node in the todo file
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="counter"></param>
         private void DeleteFolderObject(FolderCompareObject folder, int counter)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -375,6 +435,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
+        /// <summary>
+        /// Based on the folder , it will create the sub folder meta data
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="subFolderPath"></param>
         private void ModifyFolderName(FolderCompareObject folder, string subFolderPath)
         {
             string name = folder.NewName ?? folder.Name;
@@ -425,6 +490,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             rootNode.AppendChild(fileElement);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        /// <param name="folder"></param>
+        /// <param name="changeType"></param>
         private void AppendActionFolderLastKnownState(XmlDocument xmlDoc, FolderCompareObject folder, string changeType)
         {
             string name = folder.MetaName ?? folder.Name;

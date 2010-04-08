@@ -11,6 +11,12 @@ namespace Syncless.CompareAndSync.Seamless
 
         #region Main Method
 
+        /// <summary>
+        /// UpdateXML is the only public static method that is accessible by other classes. Given a 
+        /// BaseXMLWriteObject , it will differentiate it between a folder and a file , then let the respective
+        /// methods handle it
+        /// </summary>
+        /// <param name="xmlWriteList"></param>
         public static void UpdateXML(BaseXMLWriteObject xmlWriteList)
         {
             if (xmlWriteList is XMLWriteFolderObject)
@@ -23,6 +29,11 @@ namespace Syncless.CompareAndSync.Seamless
 
         #region File Operations
 
+        /// <summary>
+        /// HandleFile method will take in a BaseXMLWriteObject that is of a file type. It will check the
+        /// MetaChangeType and let the respective methods handle it.
+        /// </summary>
+        /// <param name="xmlWriteList"></param>
         private static void HandleFile(BaseXMLWriteObject xmlWriteList)
         {
             switch (xmlWriteList.ChangeType)
@@ -42,6 +53,12 @@ namespace Syncless.CompareAndSync.Seamless
             }
         }
 
+        /// <summary>
+        /// Given a XMLWriteFileObject , it will load the respective xml file and then populate a new file
+        /// element in the xml file with the values in XMLWriteFileObject. Subsequently , it will remove any nodes in 
+        /// the todo file
+        /// </summary>
+        /// <param name="xmlWriteObj"></param>
         private static void CreateFile(XMLWriteFileObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -85,6 +102,13 @@ namespace Syncless.CompareAndSync.Seamless
             DeleteFileToDoByName(xmlWriteObj);
         }
 
+        /// <summary>
+        /// Given a XMLWriteFileObject , it will look for the respective xml file and load it.After which , it
+        /// will search for the node which contains the same name as XMLWriteFileObject that is passed in , and
+        /// update the different element contents. Subsequently , it will remove any nodes in the todo file 
+        /// with the same name
+        /// </summary>
+        /// <param name="xmlWriteObj"></param>
         private static void UpdateFile(XMLWriteFileObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -93,6 +117,8 @@ namespace Syncless.CompareAndSync.Seamless
             CommonMethods.LoadXML(ref xmlDoc, xmlFilePath);
 
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(xmlWriteObj.Name) + "]");
+            
+            // if the node does not exist , then create the node
             if (node == null)
             {
                 CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
@@ -132,7 +158,12 @@ namespace Syncless.CompareAndSync.Seamless
             DeleteFileToDoByName(xmlWriteObj);
         }
 
-
+        /// <summary>
+        /// Given a XMLWriteFileObject , it will look for the respective xml file and load it. It will then
+        /// rename the existing element in the xml based on the name. Upon doing so , it will create a new node
+        /// in the todo file.
+        /// </summary>
+        /// <param name="xmlWriteObj"></param>
         private static void RenameFile(XMLWriteFileObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -142,8 +173,14 @@ namespace Syncless.CompareAndSync.Seamless
             CommonMethods.LoadXML(ref xmlDoc, xmlFilePath);
 
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(xmlWriteObj.Name) + "]");
+            
+            // cif the node does not exist, then create the node
             if (node == null)
+            {
+                CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
+                CreateFile(xmlWriteObj);
                 return;
+            }
 
             tempNode = node.Clone();
             node.FirstChild.InnerText = xmlWriteObj.NewName;
@@ -152,6 +189,11 @@ namespace Syncless.CompareAndSync.Seamless
             GenerateFileToDo(xmlWriteObj, tempNode);
         }
 
+        /// <summary>
+        /// Looks for the xml file given the XMLWriteFileObject , it will delete node and generate a new node
+        /// in the todo file
+        /// </summary>
+        /// <param name="xmlWriteObj"></param>
         private static void DeleteFile(XMLWriteFileObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -175,6 +217,11 @@ namespace Syncless.CompareAndSync.Seamless
 
         #region Folder Operations
 
+        /// <summary>
+        /// Given a BaseXMLWriteObject which is a folder , checks for the MetaChangeType and let the respective
+        /// method handle it.
+        /// </summary>
+        /// <param name="xmlWriteObj"></param>
         private static void HandleFolder(BaseXMLWriteObject xmlWriteObj)
         {
             switch (xmlWriteObj.ChangeType)
@@ -191,6 +238,12 @@ namespace Syncless.CompareAndSync.Seamless
             }
         }
 
+        /// <summary>
+        /// Given a XMLWriteFolderObject , it will load the xml file. 
+        /// After which , it will create a new node based on the values given by XMLWriteFolderObject. Next , it
+        /// will try to delete the node with the same name in the todo file
+        /// </summary>
+        /// <param name="xmlWriteObj"></param>
         private static void CreateFolder(XMLWriteFolderObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -216,6 +269,11 @@ namespace Syncless.CompareAndSync.Seamless
             DeleteFolderToDoByName(xmlWriteObj);
         }
 
+        /// <summary>
+        /// Given a XMLWriteFolderObject , it will first load the xml file. Then it will locate the current node
+        /// and rename it to the new name. After which  , it will a new folder node in the todo file
+        /// </summary>
+        /// <param name="xmlWriteObj"></param>
         private static void RenameFolder(XMLWriteFolderObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -225,10 +283,15 @@ namespace Syncless.CompareAndSync.Seamless
 
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(xmlWriteObj.Name) + "]");
             if (node == null)
-                return;
-            node.FirstChild.InnerText = xmlWriteObj.NewName;
-            node.LastChild.InnerText = xmlWriteObj.MetaUpdated.ToString();
-            CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+            {
+                CreateFolder(xmlWriteObj);
+            }
+            else
+            {
+                node.FirstChild.InnerText = xmlWriteObj.NewName;
+                node.LastChild.InnerText = xmlWriteObj.MetaUpdated.ToString();
+                CommonMethods.SaveXML(ref xmlDoc, xmlPath);
+            }
 
             XmlDocument subFolderXmlDoc = new XmlDocument();
             string subFolder = Path.Combine(xmlWriteObj.Parent, xmlWriteObj.NewName);
@@ -237,14 +300,19 @@ namespace Syncless.CompareAndSync.Seamless
             CommonMethods.LoadXML(ref subFolderXmlDoc, subFolderXmlPath);
 
             XmlNode subFolderNode = subFolderXmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + "/name");
-            if (subFolderNode == null)
-                return;
-
-            subFolderNode.InnerText = xmlWriteObj.NewName;
-            CommonMethods.SaveXML(ref subFolderXmlDoc, subFolderXmlPath);
-            GenerateFolderToDo(xmlWriteObj);
+            if (subFolderNode != null)
+            {
+                subFolderNode.InnerText = xmlWriteObj.NewName;
+                CommonMethods.SaveXML(ref subFolderXmlDoc, subFolderXmlPath);
+                GenerateFolderToDo(xmlWriteObj);
+            }
         }
 
+        /// <summary>
+        /// Given the XMLWriteFolderObject , it will first load the xml file. Then it will delete the folder
+        /// node based on the name and create a new node in the todo file
+        /// </summary>
+        /// <param name="xmlWriteObj"></param>
         private static void DeleteFolder(XMLWriteFolderObject xmlWriteObj)
         {
             string xmlFilePath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.MetadataPath);
@@ -266,6 +334,12 @@ namespace Syncless.CompareAndSync.Seamless
 
         #region ToDo Operations
 
+        /// <summary>
+        /// Given a XMLWriteFileObject and an XmlNode , load the xml file and create a extra file node in the
+        /// todo file
+        /// </summary>
+        /// <param name="xmlWriteObj"></param>
+        /// <param name="deletedNode"> A cloned node </param>
         private static void GenerateFileToDo(XMLWriteFileObject xmlWriteObj, XmlNode deletedNode)
         {
             if (deletedNode == null)
@@ -280,6 +354,11 @@ namespace Syncless.CompareAndSync.Seamless
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
         }
 
+        /// <summary>
+        /// Given a XMLWriteFolderObject and an XmlNode , load the xml file and create a extra folder node
+        /// in the todo file
+        /// </summary>
+        /// <param name="xmlWriteObj"></param>
         private static void GenerateFolderToDo(XMLWriteFolderObject xmlWriteObj)
         {
             string parentPath = xmlWriteObj.Parent;
@@ -294,6 +373,14 @@ namespace Syncless.CompareAndSync.Seamless
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
         }
 
+        /// <summary>
+        /// Based on the XMLWriteFileObject , this method will extract the data and create an extra node in the
+        /// todo file
+        /// </summary>
+        /// <param name="xmlDoc"> XmlDocument that is loaded with the xml file </param>
+        /// <param name="xmlWriteObj"> The XMLWriteFileObject to be written in the todo file </param>
+        /// <param name="changeType"> Deleted Changetype </param>
+        /// <param name="node"> Node with the hash and last modified details </param>
         private static void AppendActionFileToDo(XmlDocument xmlDoc, XMLWriteFileObject xmlWriteObj, string changeType, XmlNode node)
         {
             string hash = string.Empty;
@@ -342,6 +429,11 @@ namespace Syncless.CompareAndSync.Seamless
             rootNode.AppendChild(fileElement);
         }
 
+        /// <summary>
+        /// Given an XMLWriteFileObject , it looks for the same name in the todo file and delete the node
+        /// with the same name
+        /// </summary>
+        /// <param name="xmlWriteObj"></param>
         private static void DeleteFileToDoByName(XMLWriteFileObject xmlWriteObj)
         {
             string todoXmlPath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.LastKnownStatePath);
@@ -356,6 +448,13 @@ namespace Syncless.CompareAndSync.Seamless
             CommonMethods.SaveXML(ref todoXmlDoc, todoXmlPath);
         }
 
+        /// <summary>
+        /// Based on the XMLWriteFolderObject , this method will extract the data and create an extra node in the
+        /// todo file
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        /// <param name="folder"> XMLWriteFolderObject to be written to a todo file</param>
+        /// <param name="changeType"> Deleted </param>
         private static void AppendActionFolderToDo(XmlDocument xmlDoc, XMLWriteFolderObject folder, string changeType)
         {
             XmlText nameText = xmlDoc.CreateTextNode(folder.Name);
@@ -378,6 +477,11 @@ namespace Syncless.CompareAndSync.Seamless
             rootNode.AppendChild(folderElement);
         }
 
+        /// <summary>
+        /// Given a XMLWriteFolderobject , it will search for the same name in the todo file and delete the
+        /// node
+        /// </summary>
+        /// <param name="xmlWriteObj"></param>
         private static void DeleteFolderToDoByName(XMLWriteFolderObject xmlWriteObj)
         {
             string todoXmlPath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.LastKnownStatePath);
