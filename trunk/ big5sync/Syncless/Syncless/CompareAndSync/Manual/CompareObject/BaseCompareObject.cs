@@ -51,6 +51,8 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             _lastKnownState = new LastKnownState?[numOfPaths];
         }
 
+        #region Properties
+
         /// <summary>
         /// Gets the name of this <c>BaseCompareObject</c>.
         /// </summary>
@@ -58,7 +60,6 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         {
             get { return _name; }
         }
-
 
         ///<summary>
         ///Gets or sets the <see cref="Array"/> of creation time.
@@ -177,6 +178,10 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             set { _sourcePosition = value; }
         }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
         /// This method returns the full parent path of a given <see cref="FileCompareObject"/> or <see cref="FolderCompareObject"/> based on the current state.
         /// </summary>
@@ -195,6 +200,8 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
                 return Path.Combine(Parent.GetSmartParentPath(index), Parent.NewName);
             return Path.Combine(Parent.GetSmartParentPath(index), Parent.FinalState[index] == Enum.FinalState.Renamed ? Parent.NewName : Parent.Name);
         }
+
+        #endregion
 
     }
 }

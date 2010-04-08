@@ -35,6 +35,8 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             _metaLastWriteTime = new long[numOfPaths];
         }
 
+        #region Properties
+
         /// <summary>
         /// Gets or sets the <see cref="Array"/> of file hash.
         /// </summary>
@@ -103,6 +105,8 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             }
             set { _conflictPos = value; }
         }
+
+        #endregion
 
     }
 }

@@ -26,6 +26,48 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             _contents = new Dictionary<string, BaseCompareObject>(StringComparer.OrdinalIgnoreCase);
         }
 
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the name of the folder in the metadata.
+        /// </summary>
+        public string MetaName
+        {
+            get { return _metaName; }
+            set { _metaName = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the dirty bit of the parent.
+        /// </summary>
+        /// <remarks>
+        /// The parent and all ancestors will be set to dirty as well.
+        /// </remarks>
+        public bool Dirty
+        {
+            get { return _dirty; }
+            set
+            {
+
+                if (Parent != null && value)
+                    Parent.Dirty = true;
+                _dirty = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the contents inside the folder.
+        /// </summary>
+        public Dictionary<string, BaseCompareObject> Contents
+        {
+            get { return _contents; }
+            set { _contents = value; }
+        }
+
+        #endregion
+
+        #region Folder Contents Management
+
         /// <summary>
         /// Adds a child to the <c>FolderCompareObject</c>.
         /// </summary>
@@ -34,6 +76,45 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         {
             _contents.Add(child.Name, child);
         }
+
+        /// <summary>
+        /// Removes a child (file or folder) given a name.
+        /// </summary>
+        /// <param name="name">The name to remove.</param>
+        /// <returns>True if the child is removed, false if it is not removed or not found.</returns>
+        public bool RemoveChild(string name)
+        {
+            return _contents.Remove(name);
+        }
+
+        /// <summary>
+        /// Gets the child (file or folder) given the name.
+        /// </summary>
+        /// <param name="name">The name to search for.</param>
+        /// <returns>The child object if it is found, and null if none is found.</returns>
+        public BaseCompareObject GetChild(string name)
+        {
+            BaseCompareObject child;
+
+            if (_contents.TryGetValue(name, out child))
+                return child;
+
+            return null;
+        }
+
+        /// <summary>
+        /// Checks if the folder contains a given file or folder name.
+        /// </summary>
+        /// <param name="name">The name to check for.</param>
+        /// <returns>True if the folder contains the name, false otherwise.</returns>
+        public bool ContainsChild(string name)
+        {
+            return _contents.ContainsKey(name);
+        }
+
+        #endregion
+
+        #region Search Algorithms
 
         /// <summary>
         /// Gets another <see cref="FileCompareObject"/> with the same creation time as the one passed in.
@@ -124,76 +205,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             return counter == 1 ? result : null;
         }
 
-        /// <summary>
-        /// Gets the child (file or folder) given the name.
-        /// </summary>
-        /// <param name="name">The name to search for.</param>
-        /// <returns>The child object if it is found, and null if none is found.</returns>
-        public BaseCompareObject GetChild(string name)
-        {
-            BaseCompareObject child;
-
-            if (_contents.TryGetValue(name, out child))
-                return child;
-
-            return null;
-        }
-
-        /// <summary>
-        /// Removes a child (file or folder) given a name.
-        /// </summary>
-        /// <param name="name">The name to remove.</param>
-        /// <returns>True if the child is removed, false if it is not removed or not found.</returns>
-        public bool RemoveChild(string name)
-        {
-            return _contents.Remove(name);
-        }
-
-        /// <summary>
-        /// Gets or sets the name of the folder in the metadata.
-        /// </summary>
-        public string MetaName
-        {
-            get { return _metaName; }
-            set { _metaName = value; }
-        }
-
-        /// <summary>
-        /// Checks if the folder contains a given file or folder name.
-        /// </summary>
-        /// <param name="name">The name to check for.</param>
-        /// <returns>True if the folder contains the name, false otherwise.</returns>
-        public bool ContainsChild(string name)
-        {
-            return _contents.ContainsKey(name);
-        }
-
-        /// <summary>
-        /// Gets or sets the dirty bit of the parent.
-        /// </summary>
-        /// <remarks>
-        /// The parent and all ancestors will be set to dirty as well.
-        /// </remarks>
-        public bool Dirty
-        {
-            get { return _dirty; }
-            set
-            {
-
-                if (Parent != null && value)
-                    Parent.Dirty = true;
-                _dirty = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the contents inside the folder.
-        /// </summary>
-        public Dictionary<string, BaseCompareObject> Contents
-        {
-            get { return _contents; }
-            set { _contents = value; }
-        }
+        #endregion
 
     }
 }
