@@ -10,8 +10,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 {
     public class SyncerVisitor : IVisitor
     {
-
-        #region IVisitor Members
         private readonly SyncConfig _syncConfig;
         private readonly Progress _syncProgress;
 
@@ -20,6 +18,8 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             _syncConfig = syncConfig;
             _syncProgress = progress;
         }
+
+        #region IVisitor Members
 
         public void Visit(FileCompareObject file, int numOfPaths)
         {

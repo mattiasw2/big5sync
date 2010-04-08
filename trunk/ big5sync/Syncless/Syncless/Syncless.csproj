@@ -79,7 +79,6 @@
     <Compile Include="CompareAndSync\Manual\Visitor\ConflictVisitor.cs" />
     <Compile Include="CompareAndSync\Manual\Visitor\FolderRenameVisitor.cs" />
     <Compile Include="CompareAndSync\Manual\Visitor\ProcessMetadataVisitor.cs" />
-    <Compile Include="CompareAndSync\Manual\Visitor\IgnoreMetaDataVisitor.cs" />
     <Compile Include="CompareAndSync\Request\AutoSyncRequest.cs" />
     <Compile Include="CompareAndSync\Request\ManualCompareRequest.cs" />
     <Compile Include="CompareAndSync\Request\ManualRequest.cs" />

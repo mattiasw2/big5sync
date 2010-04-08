@@ -7,11 +7,19 @@ using Syncless.Logging;
 
 namespace Syncless.CompareAndSync.Manual.Visitor
 {
+    /// <summary>
+    /// <c>ProcessMetadataVisitor</c> is in charge of processing the metadata and comparing it against the actual file or folder, as well as handle whether or not to rehash a file.
+    /// </summary>
     public class ProcessMetadataVisitor : IVisitor
     {
 
         #region IVisitor Members
 
+        /// <summary>
+        /// Visit implementation for <see cref="FileCompareObject"/>.
+        /// </summary>
+        /// <param name="file">The <see cref="FileCompareObject"/> to process.</param>
+        /// <param name="numOfPaths">The total number of folders to sync.</param>
         public void Visit(FileCompareObject file, int numOfPaths)
         {
             for (int i = 0; i < numOfPaths; i++)
@@ -21,13 +29,21 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
+        /// <summary>
+        /// Visit implementation for <see cref="FolderCompareObject"/>.
+        /// </summary>
+        /// <param name="folder">The <see cref="FolderCompareObject"/> to process.</param>
+        /// <param name="numOfPaths">The total number of folders to sync.</param>
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
             for (int i = 0; i < numOfPaths; i++)
                 ProcessFolderMetaData(folder, i);
         }
 
-        public void Visit(RootCompareObject root) { }
+        // Do nothing
+        public void Visit(RootCompareObject root)
+        {
+        }
 
         #endregion
 
