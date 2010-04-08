@@ -9,14 +9,14 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 = Classes Summary =
 
 || *Class* || *Description* ||
-|| [#CurrentTime CurrentTime] || Provides properties which enclose the `DateTime.Now` property. The object created allows for repeated use of the same `DateTime.Now` property value ||
-|| [#LogMessage LogMessage] || Provides static string values which are used for logging events invoked in the Tagging namespace ||
-|| [#Tag Tag] || Represents a container for a list of TaggedPath objects.  Each Tag object has its properties that uniquely identifies itself from other Tag objects. ||
-|| [#TagConfig TagConfig] || Provides the configuration options of Tag object. ||
+|| [#CurrentTime CurrentTime] || Provides properties which enclose the `DateTime.Now` property. The object created allows for repeated use of the same `DateTime.Now` property value. ||
+|| [#LogMessage LogMessage] || Provides static string values which are used for logging events invoked in the Tagging namespace. ||
+|| [#Tag Tag] || Represents a container for a list of `TaggedPath` objects.  Each `Tag` object has its properties that uniquely identifies itself from other `Tag` objects. ||
+|| [#TagConfig TagConfig] || Provides the configuration options of `Tag` object. ||
 || [#TaggedPath TaggedPath] || Encloses properties of a folder path and provides operations to manipulate the properties. ||
 || [#TaggingHelper TaggingHelper] || Provides some common methods which may be used by other classes under the Tagging namespace. ||
 || [#TaggingLayer TaggingLayer] || The main logic controller of the Tagging namespace. ||
-|| [#TaggingProfile TaggingProfile] || Represents a container for a list of Tag objects.  Each TaggingProfile has its properties that uniquely identifies itself from other TaggingProfile objects. ||
+|| [#TaggingProfile TaggingProfile] || Represents a container for a list of `Tag` objects.  Each `TaggingProfile` has its properties that uniquely identifies itself from other `TaggingProfile` objects. ||
 || [#TaggingXMLHelper TaggingXMLHelper] || Provides XML-related operations to load and save tagging.xml file. ||
 || [#TagMerger TagMerger] || Performs merging of several tagging profiles which have the same name. ||
 
