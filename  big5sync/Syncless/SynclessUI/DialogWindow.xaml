@@ -26,7 +26,7 @@
 				</LinearGradientBrush>
 			</Rectangle.Fill>
 		</Rectangle>
-		<Label x:Name="LblCaption" Content="Caption" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"/>
+		<Label x:Name="LblCaption" Content="Caption" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" IsHitTestVisible="False"/>
 		<TextBlock TextWrapping="Wrap" x:Name="TxtBlkMessageBoxText" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Margin="0,10,0,0" Grid.Column="2" Grid.Row="2" Background="{x:Null}" VerticalAlignment="Top"/>
 		<Image x:Name="ImgIcon" HorizontalAlignment="Left" Margin="10,0,0,0" Width="32" Grid.Column="1" Grid.Row="2" Height="32"/>
 		<StackPanel x:Name="OkCommandPanel" Margin="0,10,0,0" Grid.Column="2" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="30" Visibility="Hidden" Background="Black">

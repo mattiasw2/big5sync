@@ -31,7 +31,7 @@
 		<Grid Margin="1,0" Background="#FF626262" Grid.RowSpan="2" Grid.ColumnSpan="5" Grid.Row="3" Visibility="Hidden" />
 		<StackPanel x:Name="HeaderPanel" Grid.Column="1" Orientation="Horizontal"  VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Row="1" Grid.ColumnSpan="3">
 			<Image x:Name="SynclessLogo" Source="Icons\completelogo.ico" Height="50" Stretch="Fill" Cursor="Hand" ToolTip="Visit Syncless's Google Code Homepage" Width="50" Margin="-15,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-			<Label x:Name="AppTitle" Content="Welcome to Syncless" Foreground="#FFEEEEEE" FontSize="40" Margin="-15,0,0,0" FontFamily="Fonts/#BankGothic Md BT" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold"/>		
+			<Label x:Name="AppTitle" Content="Welcome to Syncless" Foreground="#FFEEEEEE" FontSize="40" Margin="-15,0,0,0" FontFamily="Fonts/#BankGothic Md BT" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" IsHitTestVisible="False"/>		
 			<!-- Menubar -->
 		</StackPanel>
 		<TextBlock x:Name="IntroductionMessage" Text="Thank you for choosing Syncless, your personal tool which keeps your folders in sync through tagging. We've highlighted some of Syncless's core features to help you get started. Enjoy!" TextWrapping="Wrap" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" FontFamily="Century Gothic" Foreground="White" FontSize="14.667" Margin="0,10,0,0"/>

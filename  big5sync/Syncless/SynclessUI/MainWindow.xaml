@@ -428,7 +428,7 @@
 				<Image x:Name="SynclessLogo" Source="Icons/completelogo.ico" Height="50" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Center" Stretch="Fill" MouseLeftButtonDown="SynclessLogo_MouseLeftButtonDown" Cursor="Hand" ToolTip="Visit Syncless's Google Code Homepage" Width="50" Margin="0,10,0,0"/>
 				<Ellipse x:Name="LogoHighlight" Stroke="Black" Width="10" Height="3" Fill="White" Visibility="Hidden" Margin="0"/>
 			</StackPanel>
-			<Label x:Name="AppTitle" Content="Syncless" Foreground="#FFEEEEEE" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="-15,15,0,0" FontFamily="Fonts/#BankGothic Md BT"/>		
+			<Label x:Name="AppTitle" Content="Syncless" Foreground="#FFEEEEEE" FontSize="40" FontWeight="Bold" VerticalAlignment="Center" Margin="-15,15,0,0" FontFamily="Fonts/#BankGothic Md BT" IsHitTestVisible="False"/>		
 			<!-- Menubar -->
 		</StackPanel>
 		<StackPanel  x:Name="ToolBar" OpacityMask="Black" Orientation="Horizontal" VerticalAlignment="Center" Background="#FF626262" Margin="1,0" Height="60"  Width="698" Grid.ColumnSpan="5" Grid.Row="2">

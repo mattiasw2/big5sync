@@ -26,7 +26,7 @@
 				</LinearGradientBrush>
 			</Rectangle.Fill>
 		</Rectangle>
-		<Label x:Name="LblCreateTag" Content="Create Tag" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"/>
+		<Label x:Name="LblCreateTag" Content="Create Tag" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" IsHitTestVisible="False"/>
 		<Label x:Name="LblTagNameTitle" Content="Name:" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,5,0,0" Grid.Column="1" Grid.Row="2"/>
 		<TextBox x:Name="TxtBoxTagName" TextWrapping="Wrap" Height="25" VerticalAlignment="Top" FontFamily="Century Gothic" Background="#FF666666" Foreground="White" Margin="0,5,0,0" FontSize="13.333" Grid.Column="2" Grid.Row="2" MaxLength="20">
 			<TextBox.BorderBrush>
