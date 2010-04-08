@@ -13,6 +13,7 @@ namespace Syncless.CompareAndSync
     public class CompareAndSyncController
     {
         private static CompareAndSyncController _instance;
+        private SyncProgress _currPreviewProgress;
 
         public static CompareAndSyncController Instance
         {
@@ -102,9 +103,21 @@ namespace Syncless.CompareAndSync
 
         #region Manual Preview
 
-        public RootCompareObject Compare(ManualCompareRequest request)
+        public RootCompareObject Preview(ManualCompareRequest request)
         {
-            return ManualSyncer.Compare(request);
+            _currPreviewProgress = new SyncProgress(request.TagName);
+            RootCompareObject rco = ManualSyncer.Compare(request, _currPreviewProgress);
+            _currPreviewProgress = null;
+            return rco;
+        }
+
+        public void CancelPreview(string tagName)
+        {
+            if (_currPreviewProgress != null && _currPreviewProgress.TagName == tagName)
+            {
+                _currPreviewProgress.Cancel();
+                _currPreviewProgress = null;
+            }
         }
 
         #endregion

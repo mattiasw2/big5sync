@@ -1142,8 +1142,8 @@ namespace Syncless.Core
                 //Else Return null.
                 if (filteredPaths[0].Count >=2)
                 {
-                    ManualCompareRequest request = new ManualCompareRequest(filteredPaths[0].ToArray(), tag.Filters, SyncConfig.Instance);
-                    return CompareAndSyncController.Instance.Compare(request);
+                    ManualCompareRequest request = new ManualCompareRequest(filteredPaths[0].ToArray(), tag.Filters, SyncConfig.Instance,tagName);
+                    return CompareAndSyncController.Instance.Preview(request);
                 }
 
                 return null;

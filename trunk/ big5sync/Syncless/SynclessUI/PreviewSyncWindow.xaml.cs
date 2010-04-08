@@ -30,12 +30,12 @@ namespace SynclessUI
             _selectedTag = selectedTag;
 
             _previewSyncData = new DataTable();
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Source, typeof (string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Operation, typeof (string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Dest, typeof (string)));
-			_previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Tooltip, typeof (string)));
-			_previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceIcon, typeof (string)));
-			_previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestIcon, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Source, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Operation, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Dest, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Tooltip, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceIcon, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestIcon, typeof(string)));
             _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceLastModifiedDate, typeof(string)));
             _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceLastModifiedTime, typeof(string)));
             _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceSize, typeof(string)));
@@ -46,15 +46,29 @@ namespace SynclessUI
             Owner = _main;
             ShowInTaskbar = false;
 
-            Populate(_main.Gui.PreviewSync(selectedTag));
-            InitializeDataGrid();
+            
+            //Populate(_main.Gui.PreviewSync(selectedTag));
 
-            //PreviewSyncDelegate previewDelegate = new PreviewSyncDelegate(_main.Gui.PreviewSync);
-            //previewDelegate.BeginInvoke(selectedTag, CallBack, previewDelegate);
-            //_previewWorker = new BackgroundWorker();
-            //this._previewWorker.DoWork += new DoWorkEventHandler(GetRCO);
-            //this._previewWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker1_RunWorkerCompleted);
-            //this._previewWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker1_ProgressChanged);
+            _previewWorker = new BackgroundWorker();
+            _previewWorker.DoWork += _previewWorker_DoWork;
+            _previewWorker.RunWorkerCompleted += _previewWorker_RunWorkerCompleted;
+            _previewWorker.WorkerSupportsCancellation = true;
+            _previewWorker.RunWorkerAsync(selectedTag);
+
+            InitializeComponent();
+        }
+
+        void _previewWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            RootCompareObject rco = e.Result as RootCompareObject;
+            Populate(rco);
+        }
+
+        void _previewWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            string selectedTag = e.Argument as string;
+            RootCompareObject rco = _main.Gui.PreviewSync(selectedTag);
+            e.Result = rco;
         }
 
         public DataTable PreviewSyncData
@@ -62,58 +76,23 @@ namespace SynclessUI
             get { return _previewSyncData; }
         }
 
-        private void GetRCO(object sender, DoWorkEventArgs e)
-        {
-            _rco = _main.Gui.PreviewSync(_selectedTag);
-        }
-
-        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-        }
-
-        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Populate(_rco);
-        }
-
-        private void CallBack(IAsyncResult result)
-        {
-            try {
-            if (result.IsCompleted)
-            {
-                var previewDel = result.AsyncState as PreviewSyncDelegate;
-                RootCompareObject rco = previewDel.EndInvoke(result);
-
-                Populate(rco);
-                Console.WriteLine("Populated");
-            }
-            else
-            {
-                Console.WriteLine("error");
-            }
-            }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage(this);
-            }
-        }
-
         private void Populate(RootCompareObject rco)
         {
-            try {
-            _previewSyncData.Rows.Clear();
-
-            var visitor = new PreviewVisitor(_previewSyncData);
-            if (rco != null)
+            try
             {
-                SyncUIHelper.TraverseFolderHelper(rco, visitor);
-            }
+                _previewSyncData.Rows.Clear();
+
+                var visitor = new PreviewVisitor(_previewSyncData);
+
+                if (rco != null)
+                {
+                    SyncUIHelper.TraverseFolderHelper(rco, visitor);
+                }
             }
             catch (UnhandledException)
             {
                 DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
-            //new UpdateDelegate(Data.InvalidateVisual).BeginInvoke(Test, null);
         }
 
         public void Test(IAsyncResult result)
@@ -124,11 +103,6 @@ namespace SynclessUI
             Console.WriteLine(result.AsyncWaitHandle);
         }
 
-        private void InitializeDataGrid()
-        {
-            InitializeComponent();
-        }
-
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -136,6 +110,7 @@ namespace SynclessUI
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
+            _previewWorker.CancelAsync();
             BtnCancel.IsEnabled = false;
             Close();
         }
@@ -151,14 +126,16 @@ namespace SynclessUI
 
             bool exists = false;
 
-            try {
+            try
+            {
                 DirectoryInfo di = new DirectoryInfo(path);
 
-                if(di.Exists)
+                if (di.Exists)
                     exists = true;
-            } catch
+            }
+            catch
             {
-                
+
             }
 
             try
@@ -172,8 +149,8 @@ namespace SynclessUI
             {
 
             }
-            
-            if(exists)
+
+            if (exists)
                 Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             else
                 DialogHelper.ShowError(this, "File/Folder Not Found", "The file/folder does not exist.");
