@@ -1,10 +1,19 @@
 #summary Developers' Guide - API - Syncless.CompareAndSync.Manual.CompareObject
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0
 #sidebar DeveloperGuideSidebar
 
 `[`*[DeveloperAPICompareAndSyncManual Prev - Syncless.CompareAndSync.Manual]* `|` *[DeveloperAPICompareAndSyncManualVisitor Next - Syncless.CompareAndSync.Manual.Visitor]*`]`
 
+Provides classes which enclose information needed for comparison of files and folders during manual synchronization.
+
 = Classes Summary =
+
+|| || *Class* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#BaseCompareObject BaseCompareObject] || Abstract class BaseCompareObject. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#FileCompareObject FileCompareObject] || Contains all information related to a file node. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#FolderCompareObject FolderCompareObject] || Stores all information related to a folder node. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#RootCompareObject RootCompareObject] || Similar to FolderCompareObject, but it stores the list of paths to synchronize in addition. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#XMLCompareObject XMLCompareObject] || Used by XMLMetadataVisitor for the purpose of populating and creating new BaseCompareObject nodes. ||
 
 == !BaseCompareObject ==
 
