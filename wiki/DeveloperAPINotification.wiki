@@ -27,6 +27,28 @@ Provides classes which enclose information needed to send notification among cla
 
 = Classes Summary =
 
+|| || *Class* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+
 == !AbstractNotification ==
 
 [#Classes_Summary Back to top]
