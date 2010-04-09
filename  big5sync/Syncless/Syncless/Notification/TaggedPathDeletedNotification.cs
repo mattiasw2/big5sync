@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Syncless.Tagging;
+﻿using System.Collections.Generic;
 
 namespace Syncless.Notification
 {
+    /// <summary>
+    /// Notification of a TaggedPath is deleted.
+    /// </summary>
     public class TaggedPathDeletedNotification : AbstractNotification
     {
-        private List<string> _deletedPaths;
-        public List<string> DeletedPaths
-        {
-          get { return _deletedPaths; }
-          set { _deletedPaths = value; }
-        }
-
+        /// <summary>
+        /// The list of deleted paths
+        /// </summary>
+        public List<string> DeletedPaths { get; set; }
+        /// <summary>
+        /// Initialize the TaggedPathDeletedNotification
+        /// </summary>
+        /// <param name="deletedPaths"></param>
         public TaggedPathDeletedNotification(List<string> deletedPaths)
-            : base("Tagged Path Deleted Notification", Syncless.Notification.NotificationCode.TaggedPathDeletedNotification)
+            : base("Tagged Path Deleted Notification", NotificationCode.TaggedPathDeletedNotification)
         {
-            this._deletedPaths = deletedPaths;
+            DeletedPaths = deletedPaths;
         }
     }
 }

@@ -129,9 +129,7 @@
     <Compile Include="Notification\SyncState.cs" />
     <Compile Include="Notification\AutoSyncCompleteNotification.cs" />
     <Compile Include="Notification\CancelSyncNotification.cs" />
-    <Compile Include="Notification\CompareCompleteNotification.cs" />
     <Compile Include="Notification\ISyncProgressObserver.cs" />
-    <Compile Include="Notification\NewProfileNotification.cs" />
     <Compile Include="Notification\RemoveTagNotification.cs" />
     <Compile Include="Notification\UnMonitorPathNotification.cs" />
     <Compile Include="Notification\INotificationQueue.cs" />

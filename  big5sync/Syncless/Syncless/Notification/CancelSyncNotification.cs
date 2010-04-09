@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Syncless.Notification.UINotification
+﻿namespace Syncless.Notification.UINotification
 {
     /// <summary>
     /// CancelSyncNotification class encloses properties for a notification for cancelling a sync request.

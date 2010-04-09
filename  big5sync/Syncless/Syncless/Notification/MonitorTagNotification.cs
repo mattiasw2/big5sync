@@ -1,19 +1,24 @@
-﻿namespace Syncless.Notification
+﻿using Syncless.Tagging;
+
+namespace Syncless.Notification
 {
+    /// <summary>
+    /// The notification to inform SLL to monitor a tag.
+    /// </summary>
     public class MonitorTagNotification :AbstractNotification
     {
-        private string _tagname;
-
-        public string Tagname
-        {
-            get { return _tagname; }
-            set { _tagname = value; }
-        }
-
+        /// <summary>
+        /// Get and Set the name of the <see cref="Tag"/>
+        /// </summary>
+        public string Tagname { get; set; }
+        /// <summary>
+        /// Initialize the Monitor Tag Noficiation
+        /// </summary>
+        /// <param name="tagname"></param>
         public MonitorTagNotification(string tagname)
-            : base("Monitor Tag Notification", Syncless.Notification.NotificationCode.MonitorTagNotification)
+            : base("Monitor Tag Notification", NotificationCode.MonitorTagNotification)
         {
-            _tagname = tagname;
+            Tagname = tagname;
         }
     }
 }

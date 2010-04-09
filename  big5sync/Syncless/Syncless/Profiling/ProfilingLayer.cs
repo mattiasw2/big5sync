@@ -57,7 +57,7 @@ namespace Syncless.Profiling
         {
             get { return _profile; }
         }
-        
+
         /// <summary>
         /// Creates a new ProfilingLayer object
         /// </summary>
@@ -95,7 +95,7 @@ namespace Syncless.Profiling
             return driveid + ":" + relativepath;
 
         }
-        
+
         /// <summary>
         /// Convert a Physical address to a Logical address
         ///    will replace C:/Lectures with 001:/Lectures
@@ -122,7 +122,7 @@ namespace Syncless.Profiling
             string relativepath = ProfilingHelper.ExtractRelativePath(path);
             return logicalid + ":" + relativepath;
         }
-        
+
         /// <summary>
         /// Take in a list of logical address , convert them to physical and return only those that 
         /// are currently available.
@@ -143,7 +143,7 @@ namespace Syncless.Profiling
             }
             return convertedPathList;
         }
-        
+
         /// <summary>
         /// Take in a list of logical address , convert them to named and return only those that
         /// are currently available.
@@ -163,7 +163,7 @@ namespace Syncless.Profiling
             }
             return convertedPathList;
         }
-        
+
         /// <summary>
         /// Pass in a logical path.
         /// </summary>
@@ -180,7 +180,7 @@ namespace Syncless.Profiling
             string relativepath = ProfilingHelper.ExtractRelativePath(path);
             return drive.DriveName + ":" + relativepath;
         }
-        
+
         /// <summary>
         /// Take in a list of logical address , convert them to physical and return 2 list of address
         ///   first list are the converted paths
@@ -206,9 +206,9 @@ namespace Syncless.Profiling
 
             }
 
-            return new [] { convertedPathList, unconvertedPathList };
+            return new[] { convertedPathList, unconvertedPathList };
         }
-        
+
         /// <summary>
         /// Get the Logical Id for a Drive.
         /// </summary>
@@ -220,7 +220,7 @@ namespace Syncless.Profiling
             String name = info.Name.Substring(0, info.Name.IndexOf(":"));
             return GetLogicalIdFromDrive(name);
         }
-        
+
         /// <summary>
         /// Get the Logical Id for a Drive.
         /// </summary>
@@ -231,7 +231,7 @@ namespace Syncless.Profiling
             Debug.Assert(_profile != null);
             return _profile.FindLogicalFromPhysical(name);
         }
-        
+
         /// <summary>
         /// get the Drive from Logical Id
         /// </summary>
@@ -312,14 +312,7 @@ namespace Syncless.Profiling
                 Profile profile = ProfilingXMLHelper.CreateDefaultProfile(path);
                 _profile = profile;
             }
-            if (_profile.ProfileName.Equals(ProfilingXMLHelper.DEFAULT_NAME))
-            {
-                ServiceLocator.UIPriorityQueue().Enqueue(new NewProfileNotification());
-            }
-            else
-            {
-                SetupDrives();
-            }
+            SetupDrives();
         }
 
         /// <summary>
@@ -334,7 +327,7 @@ namespace Syncless.Profiling
                 ProfileMerger.Merge(_profile, profileList);
             }
         }
-        
+
         /// <summary>
         /// Save all the profiling xml to all the various Location.
         /// </summary>
@@ -347,19 +340,19 @@ namespace Syncless.Profiling
             newLocations.Remove(savedLocation[0]);
             ProfilingXMLHelper.AppendProfile(_profile, newLocations);
         }
-        
+
         /// <summary>
         /// Set the current profile name to the given name
         /// </summary>
         /// <param name="name">The name to be set to the current profile</param>
         /// <returns>True</returns>
         public bool SetProfileName(string name)
-        {   
+        {
             _profile.ProfileName = name;
             SetupDrives();
             return true;
         }
-        
+
         /// <summary>
         /// Update a Drive with it guid and create a mapping in the profile.
         ///   used when a device is plugin or when startup.
@@ -377,7 +370,7 @@ namespace Syncless.Profiling
             }
             return false;
         }
-        
+
         /// <summary>
         /// Remove a drive from a mapping. Used when a device is pluged out.
         /// </summary>
@@ -387,7 +380,7 @@ namespace Syncless.Profiling
         {
             return _profile.RemoveDrive(driveinfo);
         }
-        
+
         /// <summary>
         /// Set the drive info's name to the given name
         /// </summary>

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Syncless.Notification
+﻿namespace Syncless.Notification
 {
     /// <summary>
     /// INotificationQueue is an interface for implementing a notification queue. Classes which implement the

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Syncless.Tagging;
 
 namespace Syncless.Notification
 {
@@ -10,27 +7,24 @@ namespace Syncless.Notification
     /// </summary>
     public class SyncStartNotification : AbstractNotification
     {
-        private SyncProgress _progress;
-
-        public SyncProgress Progress
-        {
-            get { return _progress; }
-            set { _progress = value; }
-        }
-        private string _tagName;
-
-        public string TagName
-        {
-            get { return _tagName; }
-            set { _tagName = value; }
-        }
-
+        /// <summary>
+        /// The <see cref="SyncProgress"/> for the Sync Request that is started
+        /// </summary>
+        public SyncProgress Progress { get; set; }
+        /// <summary>
+        /// Name of the <see cref="Tag"/> of the Synchronization
+        /// </summary>
+        public string TagName { get; set; }
+        /// <summary>
+        /// Initialize a Sync Start Notification
+        /// </summary>
+        /// <param name="tagName">name of the tag</param>
         public SyncStartNotification(string tagName)
-            : base("Sync Start Notification", Syncless.Notification.NotificationCode.SyncStartNotification)
+            : base("Sync Start Notification", NotificationCode.SyncStartNotification)
         {
-            _progress = new SyncProgress(tagName);
+            Progress = new SyncProgress(tagName);
             
-            _tagName = tagName;
+            TagName = tagName;
         }
 
     }

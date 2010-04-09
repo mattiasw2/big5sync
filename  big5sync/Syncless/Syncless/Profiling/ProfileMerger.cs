@@ -60,7 +60,7 @@ namespace Syncless.Profiling
                     if (drive.LastUpdated > curDrive.LastUpdated)
                     {
                         curDrive.DriveName = drive.DriveName;
-                        curDrive.LastUpdated = DateTime.Now.Ticks;
+                        curDrive.LastUpdated = DateTime.UtcNow.Ticks;
                     }
                 }
             }

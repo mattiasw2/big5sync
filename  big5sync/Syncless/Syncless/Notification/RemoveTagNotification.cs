@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Syncless.Tagging;
+﻿using Syncless.Tagging;
 
 namespace Syncless.Notification
 {
+    /// <summary>
+    /// The notification for remove tag
+    /// </summary>
     public class RemoveTagNotification : AbstractNotification 
     {
-        private Tag _tag;
-
-        public Tag Tag
-        {
-            get { return _tag; }
-            set { _tag = value; }
-        }
+        /// <summary>
+        /// Get and Set the related Tag
+        /// </summary>
+        public Tag Tag { get; set; }
+        /// <summary>
+        /// Initialize the RemoveTagNotification
+        /// </summary>
+        /// <param name="tag"></param>
         public RemoveTagNotification(Tag tag)
-            : base("Add Tag Notification", Syncless.Notification.NotificationCode.AddTagNotification)
+            : base("Add Tag Notification", NotificationCode.AddTagNotification)
         {
-            this._tag = tag;
+            Tag = tag;
         }
     }
 }
