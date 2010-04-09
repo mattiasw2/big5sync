@@ -1,10 +1,20 @@
 #summary Developers' Guide - API - Syncless.CompareAndSync.Request
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPICompareAndSyncManualVisitor Prev - Syncless.CompareAndSync.Manual.Visitor]* `|` *[DeveloperAPICompareAndSyncSeamless Next - Syncless.CompareAndSync.Seamless]*`]`
 
+Provides classes which enclose information needed for request for comparison and synchronization operations.
+
 = Classes Summary =
+
+|| || *Class* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#AutoSyncRequest AutoSyncRequest] || Used for auto/seamless requests/jobs. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#CancelSyncRequest CancelSyncRequest] || Used for cancelling sync requests. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#ManualCompareRequest ManualCompareRequest] || Used for handling compare/preview requests. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#ManualRequest ManualRequest] || Abstract class for all manual requests. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#ManualSyncRequest ManualSyncRequest] || Stores information for a manual synchronization request. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#Request Request] || Abstract base class for all requests. ||
 
 == !AutoSyncRequest ==
 
