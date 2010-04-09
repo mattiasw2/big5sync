@@ -44,8 +44,6 @@ namespace SynclessUI
         private Dictionary<string, string> _tagStatusNotificationDictionary =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-        private SyncProgress _syncProgress;
-
         public IUIControllerInterface Gui;
 
 
@@ -57,12 +55,7 @@ namespace SynclessUI
         }
 
         public SyncProgressWatcher Watcher { get; set; }
-        public SyncProgress Progress
-        {
-            get { return _syncProgress; }
-            set { _syncProgress = value; }
-        }
-
+        public SyncProgress CurrentProgress { get; set; }
 
         public string SelectedTag
         {
@@ -525,7 +518,7 @@ namespace SynclessUI
                 if (_tagStatusNotificationDictionary.ContainsKey(SelectedTag))
                 {
                     ProgressBarSync.Visibility = Visibility.Visible;
-                    if (Progress.TagName == SelectedTag && Progress.State == SyncState.Analyzing)
+                    if (CurrentProgress.TagName == SelectedTag && CurrentProgress.State == SyncState.Analyzing)
                         LblProgress.Visibility = Visibility.Hidden;
                 }
 
@@ -539,7 +532,7 @@ namespace SynclessUI
 
                     if (tv.IsLocked)
                     {
-                        if (Progress != null && Progress.TagName == SelectedTag && (Progress.State == SyncState.Analyzing || Progress.State == SyncState.Queued || Progress.State == SyncState.Started))
+                        if (CurrentProgress != null && CurrentProgress.TagName == SelectedTag && (CurrentProgress.State == SyncState.Analyzing || CurrentProgress.State == SyncState.Queued || CurrentProgress.State == SyncState.Started))
                         {
                             BtnSyncNow.Visibility = Visibility.Visible;
                             CancelButtonMode();
@@ -1133,7 +1126,7 @@ namespace SynclessUI
 
         public double GetSyncProgressPercentage(string tagname)
         {
-            return Progress.TagName == tagname ? Progress.PercentComplete : _syncProgressNotificationDictionary[tagname];
+            return CurrentProgress.TagName == tagname ? CurrentProgress.PercentComplete : _syncProgressNotificationDictionary[tagname];
         }
 
         public string GetTagStatus(string tagname)

@@ -85,7 +85,7 @@ namespace SynclessUI.Notification
                     _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
                     {
                         Console.WriteLine("Sync Start Notify");
-                        _main.Progress = ssNotification.Progress;
+                        _main.CurrentProgress = ssNotification.Progress;
                         new SyncProgressWatcher(_main, ssNotification.TagName, ssNotification.Progress);
                         Console.WriteLine("Sync Start Notify End");
                     }));
