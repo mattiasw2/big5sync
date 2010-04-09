@@ -2,26 +2,50 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPICoreView Prev - Syncless.Core.View]* `|` *[DeveloperAPIHelper Next - Syncless.Helper]*`]`
+
 = Classes Summary =
 
 == !ExtensionFilter ==
 
+[#Classes_Summary Back to top]
+
 == !FileFilter ==
+
+[#Classes_Summary Back to top]
 
 == Filter ==
 
+[#Classes_Summary Back to top]
+
 == !FilterChain ==
+
+[#Classes_Summary Back to top]
 
 == !FilterFactory ==
 
+[#Classes_Summary Back to top]
+
 == !FolderFilter ==
+
+[#Classes_Summary Back to top]
 
 == !SizeFilter ==
 
+[#Classes_Summary Back to top]
+
 == !SynclessArchiveFilter ==
 
+[#Classes_Summary Back to top]
+
 == !SynclessConfigFilter ==
+
+[#Classes_Summary Back to top]
 
 = Enumerations Summary =
 
 == !FilterMode ==
+
+[#Enumerations_Summary Back to top]
+
+`[`*[DeveloperAPICoreView Prev - Syncless.Core.View]* `|` *[DeveloperAPIHelper Next - Syncless.Helper]*`]`
