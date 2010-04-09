@@ -215,6 +215,11 @@ namespace Syncless.CompareAndSync
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Loads the xml document and it searches for the file node by the name. If it exists , then remove it
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        /// <param name="name"></param>
         public static void DoFileCleanUp(XmlDocument xmlDoc, string name)
         {
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(name) + "]");
@@ -225,6 +230,11 @@ namespace Syncless.CompareAndSync
             node.ParentNode.RemoveChild(node);
         }
 
+        /// <summary>
+        /// Loads the xml document and it searches for the folder node by the name. If it exists, then remove it
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        /// <param name="name"></param>
         public static void DoFolderCleanUp(XmlDocument xmlDoc, string name)
         {
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(name) + "]");
@@ -235,6 +245,11 @@ namespace Syncless.CompareAndSync
             node.ParentNode.RemoveChild(node);
         }
 
+        /// <summary>
+        /// Looks for the last known state document based on the path , if it exists, then return. If not , it 
+        /// will create the file
+        /// </summary>
+        /// <param name="path"></param>
         public static void CreateLastKnownStateFile(string path)
         {
             string lastKnownXML = Path.Combine(path, CommonXMLConstants.LastKnownStatePath);
@@ -245,7 +260,10 @@ namespace Syncless.CompareAndSync
             {
                 try
                 {
-                    DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, CommonXMLConstants.MetaDir));
+                    DirectoryInfo di = new DirectoryInfo(Path.Combine(path, CommonXMLConstants.MetaDir));
+                    if (!di.Exists)
+                        di.Create();
+
                     di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
                     XmlTextWriter writer = new XmlTextWriter(lastKnownXML, null);
                     writer.Formatting = Formatting.Indented;
