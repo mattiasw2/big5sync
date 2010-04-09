@@ -22,6 +22,3 @@ There are three types of logger inheriting the `Logger` class. They are `UserLog
 
 = Extending Logging =
 Logging uses factory and decorator design patterns. This allows the developers to easily add new types of loggers when necessary and extend the method to do pre-processing and post-processing tasks before writing the log. Polymorphism is used so user can just use the Write method from 'Logger' to write logs.
-
-= API =
-You can refer to the API for Logging component [http://code.google.com/p/big5sync/wiki/DeveloperAPILogging here].
