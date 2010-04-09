@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
@@ -138,9 +139,27 @@ namespace SynclessUI
             DragMove();
         }
 
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        private void FormFadeOut_Completed(object sender, EventArgs e)
         {
-            string path = e.Uri.AbsoluteUri.Substring(8);
+            _closingAnimationNotCompleted = false;
+            Close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_closingAnimationNotCompleted)
+            {
+                BtnClose.IsCancel = false;
+                e.Cancel = true;
+                FormFadeOut.Begin();
+            }
+        }
+
+        private void Path_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+			TextBlock pathBox = (TextBlock) sender;
+
+            string path = pathBox.Text;
 
             bool exists = false;
 
@@ -169,27 +188,11 @@ namespace SynclessUI
             }
 
             if (exists)
-                Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+                Process.Start(new ProcessStartInfo(path));
             else
-                DialogHelper.ShowError(this, "File/Folder Not Found", "The file/folder does not exist.");
+                DialogHelper.ShowError(this, "Error Opening File/Folder", "The file/folder may not exist.");
 
             e.Handled = true;
-        }
-
-        private void FormFadeOut_Completed(object sender, EventArgs e)
-        {
-            _closingAnimationNotCompleted = false;
-            Close();
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (_closingAnimationNotCompleted)
-            {
-                BtnClose.IsCancel = false;
-                e.Cancel = true;
-                FormFadeOut.Begin();
-            }
         }
 
         #region Nested type: PreviewSyncDelegate
