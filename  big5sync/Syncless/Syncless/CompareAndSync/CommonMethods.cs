@@ -115,7 +115,7 @@ namespace Syncless.CompareAndSync
         public static void CreateFileIfNotExist(string path)
         {
             string xmlPath = Path.Combine(path, CommonXMLConstants.MetadataPath);
-            
+
             if (File.Exists(xmlPath))
                 return;
 
@@ -276,7 +276,7 @@ namespace Syncless.CompareAndSync
         /// <exception cref="ArchiveFileException"></exception>
         public static void ArchiveFile(string path, string archiveName, int archiveLimit)
         {
-            Debug.Assert(path != null && archiveName != null && archiveLimit >= 0);
+            Debug.Assert(path != null && archiveName != null && archiveLimit > 0);
 
             try
             {
@@ -292,27 +292,20 @@ namespace Syncless.CompareAndSync
                 string currTime = String.Format("{0:MMddHHmmss}", DateTime.Now) + "_";
                 File.Copy(path, Path.Combine(archiveDir, currTime + f.Name), true); //Very rare to have same time
 
-                if (archiveLimit > 0)
+                DirectoryInfo d = new DirectoryInfo(archiveDir);
+                FileInfo[] files = d.GetFiles();
+                List<string> archivedFiles = new List<string>();
+
+                for (int i = 0; i < files.Length; i++)
                 {
-                    DirectoryInfo d = new DirectoryInfo(archiveDir);
-                    FileInfo[] files = d.GetFiles();
-                    List<string> archivedFiles = new List<string>();
-
-                    for (int i = 0; i < files.Length; i++)
-                    {
-                        if (files[i].Name.EndsWith(f.Name))
-                        {
-                            archivedFiles.Add(files[i].Name);
-                        }
-                    }
-
-                    var sorted = (from element in archivedFiles orderby element descending select element).Skip(archiveLimit);
-
-                    foreach (string s in sorted)
-                    {
-                        File.Delete(Path.Combine(archiveDir, s));
-                    }
+                    if (files[i].Name.EndsWith(f.Name))
+                        archivedFiles.Add(files[i].Name);
                 }
+
+                var sorted = (from element in archivedFiles orderby element descending select element).Skip(archiveLimit);
+
+                foreach (string s in sorted)
+                    File.Delete(Path.Combine(archiveDir, s));
             }
             catch (PathTooLongException e)
             {
@@ -527,7 +520,7 @@ namespace Syncless.CompareAndSync
         /// <exception cref="ArchiveFolderException"></exception>
         public static void ArchiveFolder(string path, string archiveName, int archiveLimit)
         {
-            Debug.Assert(path != null && archiveName != null && archiveLimit >= 0);
+            Debug.Assert(path != null && archiveName != null && archiveLimit > 0);
 
             try
             {
@@ -544,23 +537,20 @@ namespace Syncless.CompareAndSync
 
                 CopyDirectory(path, Path.Combine(archiveDir, currTime + f.Name));
 
-                if (archiveLimit > 0)
+                DirectoryInfo d = new DirectoryInfo(archiveDir);
+                DirectoryInfo[] folders = d.GetDirectories();
+                List<string> archivedFiles = new List<string>();
+
+                for (int i = 0; i < folders.Length; i++)
                 {
-                    DirectoryInfo d = new DirectoryInfo(archiveDir);
-                    DirectoryInfo[] folders = d.GetDirectories();
-                    List<string> archivedFiles = new List<string>();
-
-                    for (int i = 0; i < folders.Length; i++)
-                    {
-                        if (folders[i].Name.EndsWith(f.Name))
-                            archivedFiles.Add(folders[i].Name);
-                    }
-
-                    var sorted = (from element in archivedFiles orderby element descending select element).Skip(archiveLimit);
-
-                    foreach (string s in sorted)
-                        Directory.Delete(Path.Combine(archiveDir, s), true);
+                    if (folders[i].Name.EndsWith(f.Name))
+                        archivedFiles.Add(folders[i].Name);
                 }
+
+                var sorted = (from element in archivedFiles orderby element descending select element).Skip(archiveLimit);
+
+                foreach (string s in sorted)
+                    Directory.Delete(Path.Combine(archiveDir, s), true);
             }
             catch (CopyFolderException e)
             {

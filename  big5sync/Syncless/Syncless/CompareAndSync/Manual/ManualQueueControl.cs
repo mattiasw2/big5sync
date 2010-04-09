@@ -34,6 +34,9 @@ namespace Syncless.CompareAndSync.Manual
             }
         }
 
+        /// <summary>
+        /// Singleton pattern. Returns the current instance if not null, or a new instance if current instance is null.
+        /// </summary>
         public static ManualQueueControl Instance
         {
             get
@@ -75,7 +78,7 @@ namespace Syncless.CompareAndSync.Manual
         public bool CancelSyncJob(CancelSyncRequest item)
         {
             if (item == null)
-                throw new ArgumentNullException("CancelSyncRequest cannot be null.");
+                throw new ArgumentNullException("item");
 
             lock (Locker)
             {

@@ -9,13 +9,19 @@ using Syncless.Logging;
 namespace Syncless.CompareAndSync.Manual.Visitor
 {
     /// <summary>
-    /// 
+    /// <c>SyncerVisitor</c> is in charge of visiting the tree and synchronizing files after <see cref="ComparerVisitor"/> has updated the state of the tree.
     /// </summary>
     public class SyncerVisitor : IVisitor
     {
         private readonly SyncConfig _syncConfig;
         private readonly Progress _syncProgress;
+        private int _nodesCount;
 
+        /// <summary>
+        /// Instantiates an instance of <c>SyncerVisitor</c> with the sync configuration and progress object passed in.
+        /// </summary>
+        /// <param name="syncConfig">The sync configuration to pass in.</param>
+        /// <param name="progress">The progress object to pass in.</param>
         public SyncerVisitor(SyncConfig syncConfig, Progress progress)
         {
             _syncConfig = syncConfig;
@@ -24,6 +30,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region IVisitor Members
 
+        /// <summary>
+        /// Visit implementaton for <see cref="FileCompareObject"/>.
+        /// </summary>
+        /// <param name="file">The <see cref="FileCompareObject"/> to process.</param>
+        /// <param name="numOfPaths">The total number of folders to sync.</param>
         public void Visit(FileCompareObject file, int numOfPaths)
         {
             _nodesCount++;
@@ -55,9 +66,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 }
             }
             _syncProgress.Complete();
-            //Basic logic: Look for highest priority and propagate it.
         }
 
+        /// <summary>
+        /// Visit implementaton for <see cref="FolderCompareObject"/>.
+        /// </summary>
+        /// <param name="folder">The <see cref="FolderCompareObject"/> to process.</param>
+        /// <param name="numOfPaths">The total number of folders to sync.</param>
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
             _nodesCount++;
@@ -89,6 +104,10 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             _syncProgress.Complete();
         }
 
+        /// <summary>
+        /// The <see cref="RootCompareObject"/> to visit.
+        /// </summary>
+        /// <param name="root">The <see cref="RootCompareObject"/> to process.</param>
         public void Visit(RootCompareObject root)
         {
             _nodesCount++;
@@ -99,12 +118,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region File Methods
 
-        private int _nodesCount;
-
+        /// <summary>
+        /// Gets the total number of nodes.
+        /// </summary>
         public int NodesCount
         {
             get { return _nodesCount; }
-            set { _nodesCount = value; }
         }
 
         private void CopyFile(FileCompareObject fco, int numOfPaths, int srcFilePos)
@@ -124,7 +143,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         {
                             if (fileExists)
                             {
-                                if (_syncConfig.ArchiveLimit >= 0)
+                                if (_syncConfig.ArchiveLimit > 0)
                                 {
                                     CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
                                     ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "File archived " + destFile));
@@ -193,7 +212,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         string destFile = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
                         try
                         {
-                            if (_syncConfig.ArchiveLimit >= 0)
+                            if (_syncConfig.ArchiveLimit > 0)
                             {
                                 CommonMethods.ArchiveFile(destFile, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
                                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "File archived " + destFile));
@@ -347,7 +366,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
                         try
                         {
-                            if (_syncConfig.ArchiveLimit >= 0)
+                            if (_syncConfig.ArchiveLimit > 0)
                             {
                                 CommonMethods.ArchiveFolder(destFolder, _syncConfig.ArchiveName, _syncConfig.ArchiveLimit);
                                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "Folder archived " + destFolder));
