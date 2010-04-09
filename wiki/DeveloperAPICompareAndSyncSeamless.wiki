@@ -2,7 +2,7 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
-`[`*[DeveloperAPICompareAndSyncSeamless Prev - Syncless.CompareAndSync.Seamless]* `|` *[DeveloperAPICompareAndSyncXMLWriteObject Next - Syncless.CompareAndSync.XMLWriteObject]*`]`
+`[`*[DeveloperAPICompareAndSyncRequest Prev - Syncless.CompareAndSync.Request]* `|` *[DeveloperAPICompareAndSyncXMLWriteObject Next - Syncless.CompareAndSync.XMLWriteObject]*`]`
 
 = Classes Summary =
 
@@ -18,4 +18,4 @@
 
 [#Classes_Summary Back to top]
 
-`[`*[DeveloperAPICompareAndSyncSeamless Prev - Syncless.CompareAndSync.Seamless]* `|` *[DeveloperAPICompareAndSyncXMLWriteObject Next - Syncless.CompareAndSync.XMLWriteObject]*`]`
+`[`*[DeveloperAPICompareAndSyncRequest Prev - Syncless.CompareAndSync.Request]* `|` *[DeveloperAPICompareAndSyncXMLWriteObject Next - Syncless.CompareAndSync.XMLWriteObject]*`]`
