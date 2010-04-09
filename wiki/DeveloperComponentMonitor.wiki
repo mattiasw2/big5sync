@@ -26,7 +26,7 @@ This is implemented using `FileSystemWatcher` from the C# library. The `FileSyst
   # Different applications have different ways of handling a file/folder operation. Temporary files are sometimes used and this will cause some problems when we do a sync. Exception will occur when trying to sync a temporary file when the file has already been deleted.
 
 = Explanation of Algorithms =
-*New* For monitoring path, the algorithm will ensure that only the top most parent path will be assigned a `FileSystemWatcher`. All existing watcher for the children path will be removed. This is to prevent receiving duplicated operation events.
+For monitoring path, the algorithm will ensure that only the top most parent path will be assigned a `FileSystemWatcher`. All existing watcher for the children path will be removed. This is to prevent receiving duplicated operation events.
 
 And to solve problem 1, an additional watcher will be created and assigned to monitor its parent folder but only operations on those folders assigned to be monitored will be reported. The algorithm for this additional watcher will also ensure that only the top most parent path will be monitored.
 
@@ -36,7 +36,7 @@ And to solve problem 3, we reference the codes from [http://csharp-codesamples.c
 
 And to solve problem 4, we thought of an algorithm to transfer all the events currently in the waiting queue to another process queue if there is an idle time of 1 second with no new events added to the waiting queue. This process queue will look through all the events and produce the simplest form of events to be synchronized. The delay in the algorithm is necessary due to the way `FileSystemWatcher` works.
 
-*New* If there is any operation on a locked file, the algorithm will skip this file and process the next file and then try to sync the locked file again. If there is no next file to sync, the algorithm will instead wait for some time and then attempt to sync again.
+If there is any operation on a locked file, the algorithm will skip this file and process the next file and then try to sync the locked file again. If there is no next file to sync, the algorithm will instead wait for some time and then attempt to sync again.
 
 = Extending Monitor =
 If there are other custom events which require `FileSystemWatcher` to trigger, simply extend `ExtendedFileSystemWatcher` and replace the current `ExtendedFileSystemWatcher` calls to the newly extended class.
