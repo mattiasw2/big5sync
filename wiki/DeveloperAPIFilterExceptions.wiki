@@ -6,7 +6,7 @@
 
 = Exceptions Summary =
 
-== InvalidFilterException ==
+== !InvalidFilterException ==
 
 [#Exceptions_Summary Back to top]
 
