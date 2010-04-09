@@ -18,17 +18,17 @@ Communication between the UI and the SLL is done through a Service Locator and a
 
 [http://big5sync.googlecode.com/files/overview.png http://big5sync.googlecode.com/files/thumbnail%20overview.png]
 
-=== Data Storing ===
-      
-Syncless uses various XML files to store information. XML was chosen as it is more readable and portable. Examples are tagging.xml and profiling.xml, which are stored in the root folder of the application. On top of that, some XML is also stored on the removable devices that the user has tagged. These XML files are use to communicate information between 2 computers. 
-
-Finally, each folder that is tagged also have metadata stored in them. At the moment, the XML is stored in a folder {{{.syncless}}} and is hidden. In the future, we will move this metadata elsewhere as most users do not like seeing "unwanted" files appearing all over the place.
-
 === Interaction among Sub-Components ===
 
 To understand how the SLL interacts with the other components to perform the main operations, refer to sequence diagrams [http://code.google.com/p/big5sync/wiki/DeveloperSLLSequenceDiagrams here].
  
 == System Components ==
+
+=== Data Storing ===
+      
+Syncless uses various XML files to store information. XML was chosen as it is more readable and portable. Examples are tagging.xml and profiling.xml, which are stored in the root folder of the application. On top of that, some XML is also stored on the removable devices that the user has tagged. These XML files are use to communicate information between 2 computers. 
+
+Finally, each folder that is tagged also have metadata stored in them. At the moment, the XML is stored in a folder {{{.syncless}}} and is hidden. In the future, we will move this metadata elsewhere as most users do not like seeing "unwanted" files appearing all over the place.
 
 === Profiling ===
 
