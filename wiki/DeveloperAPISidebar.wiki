@@ -84,7 +84,6 @@
     * [DeveloperAPICoreExceptions Core.Exceptions]
       * [DeveloperAPICoreExceptions#Exceptions_Summary Exceptions Summary]
         * [DeveloperAPICoreExceptions#InvalidPathException InvalidPathException]
-        * [DeveloperAPICoreExceptions#LoggerNotFoundException LoggerNotFoundException]
         * [DeveloperAPICoreExceptions#UnhandledException UnhandledException]
     * [DeveloperAPICoreView Core.View]
       * [DeveloperAPICoreView#Classes_Summary Classes Summary]
