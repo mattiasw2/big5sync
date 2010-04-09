@@ -50,7 +50,7 @@ namespace Syncless.Tagging
             get { return _taggingProfile; }
             set { _taggingProfile = value; }
         }
-        
+
         /// <summary>
         /// Gets an immutable list of tag list
         /// </summary>
@@ -131,7 +131,7 @@ namespace Syncless.Tagging
                 }
             }
         }
-        
+
         /// <summary>
         /// Merges the profile that is loaded from the path that is passed as parameter to the current tagging
         /// profile
@@ -270,7 +270,7 @@ namespace Syncless.Tagging
                 case 1:
                     TaggingHelper.Logging(LogEventType.APPEVENT_FOLDER_UNTAGGED, LogMessage.FOLDER_UNTAGGED, path, tagname);
                     return 1;
-                default: 
+                default:
                     throw new TagNotFoundException(tagname);
             }
         }
@@ -312,7 +312,7 @@ namespace Syncless.Tagging
                 throw new TagNotFoundException(tagname);
             }
         }
-        
+
         #region retrieve tag methods
         /// <summary>
         /// Gets the tag whose name is same as the tag name that is passed as parameter
@@ -357,7 +357,7 @@ namespace Syncless.Tagging
         {
             return _taggingProfile.RetrieveTagsByPath(path);
         }
-        
+
         /// <summary>
         /// Gets a list of tags where paths, whose logical ID is same as logical ID that is passed as parameter,
         /// are tagged to
@@ -406,7 +406,7 @@ namespace Syncless.Tagging
             }
             return tagList;
         }
-        
+
         /// <summary>
         /// Gets a list of tags containing tagged paths who are parent paths of the path that is passed
         /// as parameter
@@ -418,18 +418,14 @@ namespace Syncless.Tagging
         public List<Tag> RetrieveParentTagByPath(string path)
         {
             List<Tag> parentPathList = new List<Tag>();
-
             foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
             {
                 foreach (TaggedPath p in tag.FilteredPathList)
                 {
-                    if (PathHelper.StartsWithIgnoreCase(path, p.PathName))
+                    if (PathHelper.StartsWithIgnoreCase(path, p.PathName) && !PathHelper.EqualsIgnoreCase(path, p.PathName))
                     {
-                        if (!PathHelper.EqualsIgnoreCase(path, p.PathName))
-                        {
-                            parentPathList.Add(tag);
-                            break;
-                        }
+                        parentPathList.Add(tag);
+                        break;
                     }
                 }
             }
@@ -452,12 +448,9 @@ namespace Syncless.Tagging
             {
                 foreach (TaggedPath path in tag.FilteredPathList)
                 {
-                    if (path.LogicalDriveId.Equals(logicalid))
+                    if (path.LogicalDriveId.Equals(logicalid) && !PathHelper.ContainsIgnoreCase(pathList, path.PathName))
                     {
-                        if (!PathHelper.ContainsIgnoreCase(pathList, path.PathName))
-                        {
-                            pathList.Add(path.PathName);
-                        }
+                        pathList.Add(path.PathName);
                     }
                 }
             }
@@ -480,38 +473,21 @@ namespace Syncless.Tagging
         /// </remarks>
         public List<string> FindSimilarPathForFolder(string folderPath)
         {
-            string logicalid = TaggingHelper.GetLogicalID(folderPath);
+            /**
+             * for all tags that contain tagged path same as folder path that is passed as parameter,
+             * add all the other tagged paths in the tag to the list of paths
+            **/
             List<string> pathList = new List<string>();
-            foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
-            {
-                if (tag.Contains(folderPath))
-                {
-                    foreach (TaggedPath p in tag.FilteredPathList)
-                    {
-                        if (!PathHelper.ContainsIgnoreCase(pathList, p.PathName) && !PathHelper.EqualsIgnoreCase(p.PathName, folderPath))
-                        {
-                            pathList.Add(p.PathName);
-                        }
-                    }
-                }
-            }
+            pathList.AddRange(GetAllPathStringInSameTag(folderPath));
+
+            /** 
+             * retrieve tags which have tagged path with logical ID that is same as the folder path 
+             * passed as parameter
+             **/
+            string logicalid = TaggingHelper.GetLogicalID(folderPath);
             List<Tag> matchingTag = RetrieveTagByLogicalId(logicalid);
-            foreach (Tag tag in matchingTag)
-            {
-                string appendedPath;
-                string trailingPath = tag.CreateTrailingPath(folderPath, true);
-                if (trailingPath != null)
-                {
-                    foreach (TaggedPath p in tag.FilteredPathList)
-                    {
-                        appendedPath = p.Append(trailingPath);
-                        if (!PathHelper.ContainsIgnoreCase(pathList, appendedPath) && !PathHelper.EqualsIgnoreCase(appendedPath, folderPath))
-                        {
-                            pathList.Add(appendedPath);
-                        }
-                    }
-                }
-            }
+            pathList.AddRange(GetAllAppendedPathStringInSameTag(matchingTag, folderPath));
+
             return pathList;
         }
 
@@ -742,6 +718,59 @@ namespace Syncless.Tagging
                 }
             }
             return false;
+        }
+
+        private List<string> GetAllPathStringInSameTag(string path)
+        {
+            List<string> pathList = new List<string>();
+            foreach (Tag tag in _taggingProfile.ReadOnlyTagList)
+            {
+                if (tag.Contains(path))
+                {
+                    foreach (TaggedPath p in tag.FilteredPathList)
+                    {
+                        if (!PathHelper.ContainsIgnoreCase(pathList, p.PathName) && !PathHelper.EqualsIgnoreCase(p.PathName, path))
+                        {
+                            pathList.Add(p.PathName);
+                        }
+                    }
+                }
+            }
+            return pathList;
+        }
+
+        private List<string> GetAllAppendedPathStringInSameTag(List<Tag> taglist, string path)
+        {
+            List<string> pathList = new List<string>();
+            foreach (Tag tag in taglist)
+            {
+                /**
+                 * extract the trailing end of the folder path passed as parameter
+                 * eg. folder path is D:\A\B\C\D\
+                 *     tag contains tagged paths D:\A\B\ and E:\F\B\
+                 *     trailing path will be C\D\
+                 **/
+                string trailingPath = tag.CreateTrailingPath(path, true);
+
+                /** 
+                 * if trailing path is extracted, append the trailing path to all tagged paths in the tag
+                 * eg. tag contains tagged path D:\A\B\ and E:\F\B\, append C\D\ to E:\F\B\
+                 *     appended path will be E:\F\B\C\D\
+                 **/
+                string appendedPath;
+                if (trailingPath != null)
+                {
+                    foreach (TaggedPath p in tag.FilteredPathList)
+                    {
+                        appendedPath = p.Append(trailingPath);
+                        if (!PathHelper.ContainsIgnoreCase(pathList, appendedPath) && !PathHelper.EqualsIgnoreCase(appendedPath, path))
+                        {
+                            pathList.Add(appendedPath);
+                        }
+                    }
+                }
+            }
+            return pathList;
         }
         #endregion
     }
