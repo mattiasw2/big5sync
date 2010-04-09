@@ -26,14 +26,6 @@
 
 [#Classes_Summary Back to top]
 
-== !FolderFilter ==
-
-[#Classes_Summary Back to top]
-
-== !SizeFilter ==
-
-[#Classes_Summary Back to top]
-
 == !SynclessArchiveFilter ==
 
 [#Classes_Summary Back to top]
