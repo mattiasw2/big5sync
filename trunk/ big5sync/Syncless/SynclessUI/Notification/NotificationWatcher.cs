@@ -13,7 +13,7 @@ namespace SynclessUI.Notification
         private const int SLEEP_TIME = 10000;
         private Thread workerThread;
         private readonly EventWaitHandle _wh = new AutoResetEvent(false);
-        
+
         public NotificationWatcher(MainWindow main)
         {
             _main = main;
@@ -82,21 +82,19 @@ namespace SynclessUI.Notification
                 SyncStartNotification ssNotification = notification as SyncStartNotification;
                 if (ssNotification != null)
                 {
-                    _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                        (Action)(() =>
-                        {
-                            Console.WriteLine("Sync Start Notify");
-                            _main.Progress = ssNotification.Progress;
-                            SyncProgressWatcher watcher = new SyncProgressWatcher(_main, ssNotification.TagName,
-                                                                                  ssNotification.Progress);
-                            Console.WriteLine("Sync Start Notify End");
-                        }));
+                    _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
+                    {
+                        Console.WriteLine("Sync Start Notify");
+                        _main.Progress = ssNotification.Progress;
+                        new SyncProgressWatcher(_main, ssNotification.TagName, ssNotification.Progress);
+                        Console.WriteLine("Sync Start Notify End");
+                    }));
                 }
-            } 
-            else if(notification.NotificationCode.Equals(NotificationCode.SyncCompleteNotification))
+            }
+            else if (notification.NotificationCode.Equals(NotificationCode.SyncCompleteNotification))
             {
                 SyncCompleteNotification scNotification = notification as SyncCompleteNotification;
-                if(scNotification != null)
+                if (scNotification != null)
                 {
                     _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                         (Action)(() =>
