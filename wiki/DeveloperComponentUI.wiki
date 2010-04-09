@@ -49,9 +49,6 @@ To create a UI for Syncless, the developer just need to follow a few steps.
   # Use `Syncless.Core.ServiceLocator` to get the `IUIControllerInterface`. This provide the list of methods which the UI developer can use to call from the UI.
   # Call the Initiate method in the `IUIControllerInterface` to initiate the `SystemLogicLayer`.
 
-= API =
-You can refer to the API for User Interface component [http://code.google.com/p/big5sync/wiki/DeveloperAPIUI here].
-
 = Credits =
 We would like to thank the following resources/developers for their valuable contributions to challenges that WPF developers will encounter in the course of development.
 
