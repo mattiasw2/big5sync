@@ -10,10 +10,6 @@
 
 [#Exceptions_Summary Back to top]
 
-== !LoggerNotFoundException ==
-
-[#Exceptions_Summary Back to top]
-
 == !UnhandledException ==
 
 [#Exceptions_Summary Back to top]
