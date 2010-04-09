@@ -112,6 +112,11 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        /// <summary>
+        /// Checks if the syncless.xml exists. If it does , return. Else create the xml document given the
+        /// directory
+        /// </summary>
+        /// <param name="path"> path of the directory with .syncless</param>
         public static void CreateFileIfNotExist(string path)
         {
             string xmlPath = Path.Combine(path, CommonXMLConstants.MetadataPath);
@@ -125,7 +130,10 @@ namespace Syncless.CompareAndSync
             {
                 try
                 {
-                    DirectoryInfo di = Directory.CreateDirectory(Path.Combine(path, CommonXMLConstants.MetaDir));
+                    DirectoryInfo di = new DirectoryInfo(Path.Combine(path, CommonXMLConstants.MetaDir));
+                    if (!di.Exists)
+                        di.Create();
+
                     di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
                     XmlTextWriter writer = new XmlTextWriter(xmlPath, null);
                     writer.Formatting = Formatting.Indented;
@@ -157,6 +165,7 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        //In the full path given , get the current directory and return it
         private static string GetLastFileIndex(string filePath)
         {
             string[] splitWords = filePath.Split('\\');
@@ -171,6 +180,7 @@ namespace Syncless.CompareAndSync
         }
 
         // Method credited to http://stackoverflow.com/questions/642125/encoding-xpath-expressions-with-both-single-and-double-quotes
+        // Parse any string before injecting into xml. This is to escape single quote in xpath expressions
         public static string ParseXPathString(string input)
         {
             // If we don't have any " then encase string in " 
