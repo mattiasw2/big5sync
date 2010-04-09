@@ -14,7 +14,7 @@
 
 [#Exceptions_Summary Back to top]
 
-== !FilterNotExistException ==
+== !FilterNotFoundException ==
 
 [#Exceptions_Summary Back to top]
 
