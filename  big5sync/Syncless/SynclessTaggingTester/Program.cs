@@ -18,12 +18,9 @@ namespace SynclessTaggingTester
             //a sample testresults.txt is given in the project folder
             Console.WriteLine("Starting test driver...");
             TestDriver driver = new TestDriver("testcases.txt", "testresults.txt");
-            Thread.Sleep(1000);
-            Console.WriteLine("Testing...");
-            driver.ReadTestCases();
-            driver.ExecuteTestCases();
-            driver.WriteTestResults();
-            Thread.Sleep(3000);
+            TagUnitTestDriver tagtestdriver = new TagUnitTestDriver("tagunittestcases.txt", "tagunittestresults.txt");
+            driver.Start();
+            tagtestdriver.Start();
             Console.WriteLine("Test completed.");
             Console.WriteLine("Press any key to continue...");
             Console.Read();

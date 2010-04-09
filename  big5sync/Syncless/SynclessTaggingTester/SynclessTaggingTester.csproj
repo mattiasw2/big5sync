@@ -45,10 +45,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITestDriverInterface.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TagUnitTestDriver.cs" />
     <Compile Include="TestCase.cs" />
     <Compile Include="TestDriver.cs" />
+    <Compile Include="TestReadWriteHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Syncless\Syncless\Syncless.csproj">

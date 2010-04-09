@@ -474,17 +474,17 @@ namespace Syncless.Tagging
         /// </remarks>
         public List<string> FindSimilarPathForFolder(string folderPath)
         {
-            /**
-             * for all tags that contain tagged path same as folder path that is passed as parameter,
-             * add all the other tagged paths in the tag to the list of paths
-            **/
+            /////////////////////////////////////////////////////////////////////////////////////////
+            // for all tags that contain tagged path same as folder path that is passed as parameter,
+            // add all the other tagged paths in the tag to the list of paths
+            /////////////////////////////////////////////////////////////////////////////////////////
             List<string> pathList = new List<string>();
             pathList.AddRange(GetAllPathStringInSameTag(folderPath));
 
-            /** 
-             * retrieve tags which have tagged path with logical ID that is same as the folder path 
-             * passed as parameter
-             **/
+            ///////////////////////////////////////////////////////////////////////////////////////
+            // retrieve tags which have tagged path with logical ID that is same as the folder path 
+            // passed as parameter
+            ///////////////////////////////////////////////////////////////////////////////////////
             string logicalid = TaggingHelper.GetLogicalID(folderPath);
             List<Tag> matchingTag = RetrieveTagByLogicalId(logicalid);
             pathList.AddRange(GetAllAppendedPathStringInSameTag(matchingTag, folderPath));
@@ -745,19 +745,19 @@ namespace Syncless.Tagging
             List<string> pathList = new List<string>();
             foreach (Tag tag in taglist)
             {
-                /**
-                 * extract the trailing end of the folder path passed as parameter
-                 * eg. folder path is D:\A\B\C\D\
-                 *     tag contains tagged paths D:\A\B\ and E:\F\B\
-                 *     trailing path will be C\D\
-                 **/
+                //////////////////////////////////////////////////////////////////
+                // extract the trailing end of the folder path passed as parameter
+                // eg. folder path is D:\A\B\C\D\
+                //     tag contains tagged paths D:\A\B\ and E:\F\B\
+                //     trailing path will be C\D\
+                //////////////////////////////////////////////////////////////////
                 string trailingPath = tag.CreateTrailingPath(path);
 
-                /** 
-                 * if trailing path is extracted, append the trailing path to all tagged paths in the tag
-                 * eg. tag contains tagged path D:\A\B\ and E:\F\B\, append C\D\ to E:\F\B\
-                 *     appended path will be E:\F\B\C\D\
-                 **/
+                ///////////////////////////////////////////////////////////////////////////////////////// 
+                // if trailing path is extracted, append the trailing path to all tagged paths in the tag
+                // eg. tag contains tagged path D:\A\B\ and E:\F\B\, append C\D\ to E:\F\B\
+                //     appended path will be E:\F\B\C\D\
+                /////////////////////////////////////////////////////////////////////////////////////////
                 string appendedPath;
                 if (trailingPath != null)
                 {

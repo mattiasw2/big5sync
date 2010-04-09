@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 
 namespace SynclessTaggingTester
 {
-    public class TestDriver
+    public class TestDriver : ITestDriverInterface
     {
         TaggingLayer _logic;
         List<TestCase> _testcases;
@@ -27,23 +27,16 @@ namespace SynclessTaggingTester
             _outputfile = outputfile;
         }
 
+        public void Start()
+        {
+            ReadTestCases();
+            ExecuteTestCases();
+            WriteTestResults();
+        }
+
         public void ReadTestCases()
         {
-            FileStream ifs = new FileStream(_inputfile, FileMode.Open);
-            StreamReader sr = new StreamReader(ifs);
-            string inputline = "";
-            while ((inputline = sr.ReadLine()) != null)
-            {
-                if (!inputline.Trim().Equals(""))
-                {
-                    if (!inputline.StartsWith(@"//"))
-                    {
-                        _testcases.Add(new TestCase(inputline));
-                    }
-                }
-            }
-            sr.Close();
-            ifs.Close();
+            _testcases = TestReadWriteHelper.Read(_inputfile);
         }
 
         public void ExecuteTestCases()
@@ -135,14 +128,7 @@ namespace SynclessTaggingTester
 
         public void WriteTestResults()
         {
-            FileStream ofs = new FileStream(_outputfile, FileMode.Create);
-            StreamWriter sw = new StreamWriter(ofs);
-            foreach (TestCase testcase in _testcases)
-            {
-                sw.WriteLine(testcase.ToString());
-            }
-            sw.Close();
-            ofs.Close();
+            TestReadWriteHelper.Write(_testcases, _outputfile);
         }
 
         private void TestFolderFilter(TestCase testcase)
