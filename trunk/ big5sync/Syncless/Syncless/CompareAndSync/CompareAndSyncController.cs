@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using Syncless.CompareAndSync.Manual;
+﻿using Syncless.CompareAndSync.Manual;
 using Syncless.CompareAndSync.Manual.CompareObject;
-using Syncless.CompareAndSync.Manual.Visitor;
 using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Seamless;
-using Syncless.Core;
 using Syncless.Notification;
-using Syncless.Notification.UINotification;
 
 namespace Syncless.CompareAndSync
 {
+
     public class CompareAndSyncController
     {
         private static CompareAndSyncController _instance;

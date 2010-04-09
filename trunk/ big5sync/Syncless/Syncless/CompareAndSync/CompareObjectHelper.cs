@@ -5,14 +5,26 @@ using Syncless.Notification;
 
 namespace Syncless.CompareAndSync
 {
+    /// <summary>
+    /// <c>CompareObjectHelper</c> contains methods to traverse the tree of file and folder objects.
+    /// </summary>
     public class CompareObjectHelper
     {
+        /// <summary>
+        /// Specifies whether to use pre or post traversal
+        /// </summary>
         private enum TraverseType
         {
             Post,
             Pre
         }
 
+        /// <summary>
+        /// Traverse the tree in level order, starting from the <see cref="RootCompareObject"/>.
+        /// </summary>
+        /// <param name="root">The <see cref="RootCompareObject"/> to start level-traversal from.</param>
+        /// <param name="visitor">The <see cref="IVisitor"/> that will be used to visit the tree.</param>
+        /// <param name="syncProgress">The <see cref="Progress"/> object to pass in.</param>
         public static void LevelOrderTraverseFolder(RootCompareObject root, IVisitor visitor, Progress syncProgress)
         {
             LevelOrderTraverseFolder(root, root.Paths.Length, visitor, syncProgress);
@@ -57,11 +69,23 @@ namespace Syncless.CompareAndSync
             }
         }
 
+        /// <summary>
+        /// Traverse the tree in pre-order, starting from the <see cref="RootCompareObject"/>.
+        /// </summary>
+        /// <param name="root">The <see cref="RootCompareObject"/> to start level-traversal from.</param>
+        /// <param name="visitor">The <see cref="IVisitor"/> that will be used to visit the tree.</param>
+        /// <param name="syncProgress">The <see cref="Progress"/> object to pass in.</param>
         public static void PreTraverseFolder(RootCompareObject root, IVisitor visitor, Progress syncProgress)
         {
             TraverseFolderHelper(root, visitor, TraverseType.Pre, syncProgress);
         }
 
+        /// <summary>
+        /// Traverse the tree in post-order, starting from the <see cref="RootCompareObject"/>.
+        /// </summary>
+        /// <param name="root">The <see cref="RootCompareObject"/> to start level-traversal from.</param>
+        /// <param name="visitor">The <see cref="IVisitor"/> that will be used to visit the tree.</param>
+        /// <param name="syncProgress">The <see cref="Progress"/> object to pass in.</param>
         public static void PostTraverseFolder(RootCompareObject root, IVisitor visitor, Progress syncProgress)
         {
             TraverseFolderHelper(root, visitor, TraverseType.Post, syncProgress);

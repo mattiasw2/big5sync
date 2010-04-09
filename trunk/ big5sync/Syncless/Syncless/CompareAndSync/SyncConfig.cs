@@ -7,22 +7,27 @@
     {
         
         private static SyncConfig _instance;
+        
         /// <summary>
         /// Get and Set the Archive Name
         /// </summary>
         public string ArchiveName { get; set; }
+
         /// <summary>
         /// Get and Set the Archive Limit
         /// </summary>
         public int ArchiveLimit { get; set; }
+
         /// <summary>
         /// Get and Set the Conflict Directory
         /// </summary>
         public string ConflictDir { get; set; }
+
         /// <summary>
         /// Get and Set if to Recycle deletedFiles.
         /// </summary>
         public bool Recycle { get; set; }
+
         /// <summary>
         /// Private initalizer
         /// </summary>
@@ -36,6 +41,7 @@
             Recycle = recycle;
             ConflictDir = "_synclessConflict";
         }
+
         /// <summary>
         /// Return the instance of Sync Config
         /// </summary>
@@ -66,6 +72,7 @@
                 }
             }
         }
+
         /// <summary>
         /// Return a Copy of Sync Config
         /// </summary>
@@ -80,8 +87,6 @@
                 return _instance.Clone();
             }
         }
-
-        
 
         private SyncConfig Clone()
         {

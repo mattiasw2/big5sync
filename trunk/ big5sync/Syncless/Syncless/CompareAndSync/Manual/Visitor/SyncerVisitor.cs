@@ -387,7 +387,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
                             folder.Exists[i] = false;
                             folder.FinalState[i] = FinalState.Deleted;
-                            folder.Contents.Clear(); //Experimental
+                            //folder.Contents.Clear(); EXP
                             changed = true;
 
                             if (_syncConfig.Recycle)

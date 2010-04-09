@@ -420,6 +420,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 if (deletePos.Count > 0)
                 {
                     folder.SourcePosition = deletePos[0];
+                    folder.Contents.Clear(); //EXP
                     foreach (int i in deletePos)
                         folder.Priority[i] = 1;
                     return true;
