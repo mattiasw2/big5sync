@@ -2,7 +2,7 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
-`[`*[DeveloperAPIFilter Prev - Syncless.Filters]* `|` *[DeveloperAPILogging Next - Syncless.Logging]*`]`
+`[`*[DeveloperAPIFilterExceptions Prev - Syncless.Filters.Exceptions]* `|` *[DeveloperAPILogging Next - Syncless.Logging]*`]`
 
 = Classes Summary =
 
@@ -26,4 +26,4 @@
 
 [#Classes_Summary Back to top]
 
-`[`*[DeveloperAPIFilter Prev - Syncless.Filters]* `|` *[DeveloperAPILogging Next - Syncless.Logging]*`]`
+`[`*[DeveloperAPIFilterExceptions Prev - Syncless.Filters.Exceptions]* `|` *[DeveloperAPILogging Next - Syncless.Logging]*`]`
