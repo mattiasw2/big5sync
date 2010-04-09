@@ -50,6 +50,4 @@
 
 [#Exceptions_Summary Back to top]
 
-== SynclessIOException ==
-
 `[`*[DeveloperAPICompareAndSyncEnum Prev - Syncless.CompareAndSync.Enum]* `|` *[DeveloperAPICompareAndSyncManual Next - Syncless.CompareAndSync.Manual]*`]`
