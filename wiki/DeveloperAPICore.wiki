@@ -33,7 +33,7 @@ Provides classes which perform the main logic of the entire logic layer.
 = Classes Sumamry =
 
 || || *Class* || *Description* ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [#DeletedTaggedPathWatcher DeletedTaggedPathWatcher] || Detects the list of deleted tagged paths and sends notification to SystemLogicLayer. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#DeletedTaggedPathWatcher DeletedTaggedPathWatcher] || Detects the list of deleted tagged paths and sends notification to !SystemLogicLayer. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#DeviceWatcher DeviceWatcher] || Detects the insertion and removal of USB storage device. Reference from http://dotnetslackers.com/community/blogs/basharkokash/archive/2008/03/15/USB-Detection-source-code.aspx ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#ServiceLocator ServiceLocator] || ||
 
