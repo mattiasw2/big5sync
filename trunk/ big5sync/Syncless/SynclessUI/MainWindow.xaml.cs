@@ -75,7 +75,8 @@ namespace SynclessUI
             {
                 var loading = (Storyboard)Resources["MainWindowOnLoaded"];
                 loading.Begin();
-            } else
+            }
+            else
             {
                 DisplayWelcomeScreen(this, null);
             }
@@ -103,7 +104,7 @@ namespace SynclessUI
             if (Settings.Default.DisplayWelcomeScreen)
             {
                 WelcomeScreenWindow wsw = new WelcomeScreenWindow(this);
-				wsw.ShowDialog();
+                wsw.ShowDialog();
             }
         }
 
@@ -134,6 +135,13 @@ namespace SynclessUI
                     _notificationWatcher.Start();
                     _priorityNotificationWatcher = new PriorityNotificationWatcher();
                     _priorityNotificationWatcher.Start();
+
+                    if (Settings.Default.SynchronizeTime)
+                    {
+                        BackgroundWorker timeWorker = new BackgroundWorker();
+                        timeWorker.DoWork += timeWorker_DoWork;
+                        timeWorker.RunWorkerAsync();
+                    }
                 }
                 else
                 {
@@ -150,6 +158,11 @@ namespace SynclessUI
             {
                 DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
+        }
+
+        void timeWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            InitiateTimeSyncHelper();
         }
 
         public void NotifyBalloon(string title, string text)
@@ -186,7 +199,7 @@ namespace SynclessUI
                 }
                 SelectedTag = tagname;
                 TagTitle.Text = tv.TagName;
-                
+
                 ListTaggedPath.ItemsSource = tv.PathStringList;
 
                 TagIcon.Visibility = Visibility.Visible;
@@ -215,11 +228,12 @@ namespace SynclessUI
 
                     LblStatusText.Content = tagStatus;
 
-                    if(tagStatus != "")
+                    if (tagStatus != "")
                     {
                         ProgressBarSync.Visibility = Visibility.Visible;
                         LblProgress.Visibility = Visibility.Visible;
-                    } else
+                    }
+                    else
                     {
                         ProgressBarSync.Visibility = Visibility.Hidden;
                         LblProgress.Visibility = Visibility.Hidden;
@@ -398,7 +412,7 @@ namespace SynclessUI
                             const string message = "Please Wait";
                             LblStatusText.Content = message;
                             _tagStatusNotificationDictionary[SelectedTag] = message;
-                            
+
                             Console.WriteLine("User -> Switching");
                         }
                         else
@@ -452,7 +466,7 @@ namespace SynclessUI
                 case TagState.SeamlessToManual:
                 case TagState.ManualToSeamless: SwitchingMode();
                     break;
-                
+
             }
         }
 
@@ -881,7 +895,8 @@ namespace SynclessUI
                     DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
                                            "You cannot view tag details while the tag is synchronizing.");
                 }
-            } else
+            }
+            else
             {
                 DialogHelper.ShowError(this, "No Tag Selected", "Please select a tag to show details.");
             }
@@ -1250,7 +1265,7 @@ namespace SynclessUI
             switch (Progress.State)
             {
                 case SyncState.Analyzing:
-                    
+
                     message = "Analyzing " + breakString;
                     break;
                 case SyncState.Synchronizing:
@@ -1387,7 +1402,7 @@ namespace SynclessUI
         public void TagChanged(string tagName)
         {
             UpdateTagInfo_ThreadSafe(tagName);
-            
+
         }
         private void UpdateTagInfo_ThreadSafe(string tagName)
         {
@@ -1738,7 +1753,7 @@ namespace SynclessUI
             var kg10 = new KeyGesture(Key.W, ModifierKeys.Control);
             var ib10 = new InputBinding(ExitCommand, kg10);
             InputBindings.Add(ib10);
-			
+
             // Time Sync Command
             var TimeSyncCommand = new RoutedCommand();
 
@@ -1983,7 +1998,7 @@ namespace SynclessUI
             e.CanExecute = true;
             e.Handled = true;
         }
-		
+
         private void TimeSyncCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
@@ -1996,35 +2011,38 @@ namespace SynclessUI
             e.CanExecute = true;
             e.Handled = true;
         }
-		
-		private bool InitiateTimeSyncHelper(bool async) {
-			Process timeSync = new Process();
-			timeSync.StartInfo.FileName = "SynclessTimeSync.exe";
+
+        private bool InitiateTimeSyncHelper()
+        {
+            Process timeSync = new Process();
+            timeSync.StartInfo.FileName = "SynclessTimeSync.exe";
 
             try
             {
                 timeSync.Start();
-
-                if (!async)
-                    timeSync.WaitForExit();
+                timeSync.WaitForExit();
             }
             catch (Win32Exception)
             {
                 return false;
             }
 
-		    return timeSync.ExitCode == 0 ? true: false;
-		}
-		
-		private void InitiateTimeSync() {
-			bool result = InitiateTimeSyncHelper(false);
-			
-			if(result) {
-				DialogHelper.ShowInformation(this, "Time Synchronized Successfully", "Your computer clock has been synchronized with atomic clock time.");
-			} else {
-				DialogHelper.ShowError(this, "Time Synchronized Unsuccessfully", "Your computer clock could not be synchronized  with atomic clock time.");
-			}
-		}
+            return timeSync.ExitCode == 0 ? true : false;
+        }
+
+        private void InitiateTimeSync()
+        {
+            bool result = InitiateTimeSyncHelper();
+
+            if (result)
+            {
+                DialogHelper.ShowInformation(this, "Time Synchronized Successfully", "Your computer clock has been synchronized with atomic clock time.");
+            }
+            else
+            {
+                DialogHelper.ShowError(this, "Time Synchronized Unsuccessfully", "Your computer clock could not be synchronized  with atomic clock time.");
+            }
+        }
 
         private void DisplayShortcutsWindow()
         {

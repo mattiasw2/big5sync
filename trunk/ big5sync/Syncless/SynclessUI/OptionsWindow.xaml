@@ -6,7 +6,7 @@
 	<Grid x:Name="LayoutRoot" HorizontalAlignment="Center" VerticalAlignment="Center">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="20"/>
-			<ColumnDefinition Width="400"/>
+			<ColumnDefinition Width="440"/>
 			<ColumnDefinition Width="20"/>
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
@@ -16,7 +16,7 @@
 			<RowDefinition Height="40"/>
 			<RowDefinition Height="20"/>
 		</Grid.RowDefinitions>
-		<Rectangle Grid.Row="0" x:Name="Canvas" RadiusX="10" RadiusY="10" Margin="0,1,0,0" Stroke="Black" Grid.RowSpan="6" Grid.ColumnSpan="4" MouseLeftButtonDown="Canvas_MouseLeftButtonDown">
+		<Rectangle Grid.Row="0" x:Name="Canvas" RadiusX="10" RadiusY="10" Margin="0,1,0,0" Stroke="Black" Grid.RowSpan="5" Grid.ColumnSpan="3" MouseLeftButtonDown="Canvas_MouseLeftButtonDown">
 			<Rectangle.Fill>
 				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 					<GradientStop Color="#FF707271" Offset="0"/>
@@ -35,7 +35,7 @@
 			</Button>
 		</StackPanel>
 		<Image x:Name="TagIcon" HorizontalAlignment="Right" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,-25,-25,0" Grid.ColumnSpan="2" Source="Icons/option.ico"/>
-		<Grid Grid.Column="1" Grid.Row="2" Width="400" Height="210">
+		<Grid Grid.Column="1" Grid.Row="2" Height="250">
     <Label x:Name="TabItemDescription" VerticalAlignment="Top" Content="General and User Interface Settings" Margin="0,22,0,0" FontFamily="Century Gothic" Padding="5,4,1,4" Background="White" FontWeight="Bold"/>
     <TabControl Background="{x:Null}" BorderBrush="#FF626262" BorderThickness="1" Panel.ZIndex="5">
       <TabItem x:Name="TabItemGeneral" Header="General" FontFamily="Century Gothic" FontWeight="Bold" PreviewMouseLeftButtonDown="TabItemGeneral_PreviewMouseLeftButtonDown">
@@ -64,6 +64,10 @@
 				<StackPanel x:Name="MinimizeToTrayGroup" Orientation="Horizontal">
 					<CheckBox x:Name="ChkBoxMinimizeToTray" VerticalAlignment="Center" FontWeight="Normal" />
 					<Label x:Name="MinimizeDescription" FontFamily="Century Gothic" Foreground="White" Content="When Minimizing, Minimize to Tray" FontWeight="Normal"/>
+				</StackPanel>
+				<StackPanel x:Name="SynchronizeTimeGroup" Orientation="Horizontal">
+					<CheckBox x:Name="ChkBoxSynchronizeTime" VerticalAlignment="Top" FontWeight="Normal" Margin="0,6,0,0" />
+					<Label x:Name="SynchronizeTimeDescription" FontFamily="Century Gothic" Foreground="White" Content="Attempt to Synchronize Computer Clock With an Internet Time Server&#xd;&#xa;On Application Startup - (This will require administrative rights)" FontWeight="Normal"/>
 				</StackPanel>
 			</StackPanel>
 
