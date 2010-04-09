@@ -23,7 +23,7 @@ namespace Syncless.Logging
         /// <summary>
         /// Return the user logs
         /// </summary>
-        /// <returns>A <see cref="System.Collections.Generic.List<T>"/> of <see cref="Syncless.Logging.LogData"/>
+        /// <returns>A <see cref="System.Collections.Generic.List{T}"/> of <see cref="Syncless.Logging.LogData"/></returns>
         public static List<LogData> ReadLog()
         {
             List<LogData> logs = new List<LogData>();
