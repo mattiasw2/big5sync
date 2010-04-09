@@ -23,7 +23,7 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 == !TaggedPath ==
 
 || || *Constructor* || *Description* ||
-|| http://big5sync.googlecode.com/files/pubmethod.gif || TaggedPath(string, long) || Creates a new TaggedPath object. ||
+|| http://big5sync.googlecode.com/files/pubmethod.gif || !TaggedPath(string, long) || Creates a new !TaggedPath object. ||
 
 || || *Property* || *Description* ||
 || http://big5sync.googlecode.com/files/pubproperty.gif || !CreatedDate || Gets or sets the created date of the tagged path. ||
