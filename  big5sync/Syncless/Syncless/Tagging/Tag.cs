@@ -90,7 +90,8 @@ namespace Syncless.Tagging
         /// </summary>
         public List<TaggedPath> FilteredPathList
         {
-            get {
+            get
+            {
                 List<TaggedPath> filteredList = new List<TaggedPath>();
                 foreach (TaggedPath p in _pathList)
                 {
@@ -161,7 +162,7 @@ namespace Syncless.Tagging
             get { return _config.IsSeamless; }
             set { _config.IsSeamless = value; }
         }
-        
+
         /// <summary>
         /// Creates a new Tag object
         /// </summary>
@@ -279,7 +280,7 @@ namespace Syncless.Tagging
                 return true;
             }
         }
-        
+
         /// <summary>
         /// Sets part of the full path name, contained by one or more of the tagged paths in the list 
         /// of tagged paths, represented by the old path that is passed as parameter to the new path 
@@ -313,17 +314,10 @@ namespace Syncless.Tagging
                     }
                 }
             }
-            if (newTaggedPathList.Count > 0)
-            {
-                foreach (TaggedPath toAdd in newTaggedPathList)
-                {
-                    _pathList.Add(toAdd);
-                }
-                _lastUpdatedDate = updated;
-            }
+            UpdateTaggedPathList(newTaggedPathList, updated);
             return newTaggedPathList.Count;
         }
-        
+
         /// <summary>
         /// Sets the boolean value that represents whether the tagged path, that represents the path that is
         /// passed as parameter, is deleted to true
@@ -336,18 +330,11 @@ namespace Syncless.Tagging
         public bool RemovePath(string path, long lastupdated)
         {
             TaggedPath p = FindPath(path, false);
-            if (p != null)
+            if ((p != null) && (!p.IsDeleted))
             {
-                if (p.IsDeleted)
-                {
-                    return false;
-                }
-                else
-                {
-                    p.Remove(lastupdated);
-                    _lastUpdatedDate = TaggingHelper.GetCurrentTime();
-                    return true;
-                }
+                p.Remove(lastupdated);
+                _lastUpdatedDate = TaggingHelper.GetCurrentTime();
+                return true;
             }
             else
             {
@@ -363,19 +350,12 @@ namespace Syncless.Tagging
         public bool RemovePath(TaggedPath path)
         {
             TaggedPath p = FindPath(path.PathName, false);
-            if (p != null)
+            if ((p != null) && (!p.IsDeleted))
             {
-                if (p.IsDeleted)
-                {
-                    return false;
-                }
-                else
-                {
-                    long lastupdated = TaggingHelper.GetCurrentTime();
-                    p.Remove(lastupdated);
-                    _lastUpdatedDate = lastupdated;
-                    return true;
-                }
+                long lastupdated = TaggingHelper.GetCurrentTime();
+                p.Remove(lastupdated);
+                _lastUpdatedDate = lastupdated;
+                return true;
             }
             else
             {
@@ -482,30 +462,18 @@ namespace Syncless.Tagging
         /// </summary>
         /// <param name="path">The string value that represents the path whose parent path is represented
         /// by some of the tagged paths</param>
-        /// <param name="isFolder">The boolean value that represents whether the path that is passed as 
-        /// parametere is a folder path or file path</param>
         /// <returns>the trailing end of the given path if its parent path is represented by some tagged
         /// paths in the filtered list of tagged paths; otherwise, null</returns>
         /// <remarks>Example: tag contains D:\A\B\C
         ///          Given the path is D:\A\B\C\E\F\G\
         ///          Return E\F\G\</remarks>
-        public string CreateTrailingPath(string path, bool isFolder)
+        public string CreateTrailingPath(string path)
         {
-            string[] pathTokens = path.Trim().Split('\\');
-            string logicalid = TaggingHelper.GetLogicalID(path);
             foreach (TaggedPath p in FilteredPathList)
             {
-                if (PathHelper.StartsWithIgnoreCase(path, p.PathName))
+                if (PathHelper.StartsWithIgnoreCase(path, p.PathName) && !PathHelper.EqualsIgnoreCase(path, p.PathName))
                 {
-                    if (!PathHelper.EqualsIgnoreCase(path, p.PathName))
-                    {
-                        string[] pTokens = p.PathName.Trim().Split('\\');
-                        int trailingIndex = TaggingHelper.Match(pathTokens, pTokens);
-                        if (trailingIndex > 0)
-                        {
-                            return TaggingHelper.CreatePath(trailingIndex, pathTokens);
-                        }
-                    }
+                    return CreateTrailingPath(path, p.PathName);
                 }
             }
             return null;
@@ -541,10 +509,7 @@ namespace Syncless.Tagging
                     updatedList.Add(filter);
                 }
             }
-            CurrentTime current = new CurrentTime();
-            _filters = updatedList;
-            _filtersUpdatedDate = current.CurrentTimeLong;
-            _lastUpdatedDate = current.CurrentTimeLong;
+            UpdateFilterList(updatedList);
         }
 
         /// <summary>
@@ -593,7 +558,7 @@ namespace Syncless.Tagging
             }
             return null;
         }
-        
+
         /// <summary>
         /// Finds the tagged path that represents the path that is passed as parameter from the filtered 
         /// list of tagged paths
@@ -659,6 +624,57 @@ namespace Syncless.Tagging
             return descendants;
         }
 
+        #region private methods
+        /// <summary>
+        /// Updates the list of tagged paths with newly added tagged paths
+        /// </summary>
+        /// <param name="newTaggedPathList">The list of newly created tagged paths</param>
+        /// <param name="updated">The long value that represents the updated time of the list of tagged
+        /// paths</param>
+        private void UpdateTaggedPathList(List<TaggedPath> newTaggedPathList, long updated)
+        {
+            if (newTaggedPathList.Count > 0)
+            {
+                foreach (TaggedPath toAdd in newTaggedPathList)
+                {
+                    _pathList.Add(toAdd);
+                }
+                _lastUpdatedDate = updated;
+            }
+        }
+
+        /// <summary>
+        /// Creates the trailing path by comparing a shorter path with a longer path that are passed 
+        /// as parameter
+        /// </summary>
+        /// <param name="path">The string value that represents the longer path</param>
+        /// <param name="taggedpath">The string value that represents the shorter path</param>
+        /// <returns>the trailing end of the longer path if the shorter path is a parent path of the longer
+        /// path; otherwise, null</returns>
+        private string CreateTrailingPath(string path, string taggedpath)
+        {
+            string[] pathTokens = path.Trim().Split('\\');
+            string[] pTokens = taggedpath.Trim().Split('\\');
+            int trailingIndex = TaggingHelper.Match(pathTokens, pTokens);
+            if (trailingIndex > 0)
+            {
+                return TaggingHelper.CreatePath(trailingIndex, pathTokens);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Replaces the original list of filters with an updated list of filters
+        /// </summary>
+        /// <param name="updatedList">The list of filters that is more updated</param>
+        private void UpdateFilterList(List<Filter> updatedList)
+        {
+            CurrentTime current = new CurrentTime();
+            _filters = updatedList;
+            _filtersUpdatedDate = current.CurrentTimeLong;
+            _lastUpdatedDate = current.CurrentTimeLong;
+        }
+
         /// <summary>
         /// Adds a tagged path to the list of tagged paths
         /// </summary>
@@ -668,7 +684,7 @@ namespace Syncless.Tagging
             _pathList.Add(path);
             _lastUpdatedDate = TaggingHelper.GetCurrentTime();
         }
-        
+
         /// <summary>
         /// Creates a new tagged path with a full path name and created date that are passed as 
         /// parameters and adds to the list of tagged paths
@@ -682,5 +698,6 @@ namespace Syncless.Tagging
             _lastUpdatedDate = TaggingHelper.GetCurrentTime();
             _pathList.Add(taggedPath);
         }
+        #endregion
     }
 }

@@ -751,7 +751,7 @@ namespace Syncless.Tagging
                  *     tag contains tagged paths D:\A\B\ and E:\F\B\
                  *     trailing path will be C\D\
                  **/
-                string trailingPath = tag.CreateTrailingPath(path, true);
+                string trailingPath = tag.CreateTrailingPath(path);
 
                 /** 
                  * if trailing path is extracted, append the trailing path to all tagged paths in the tag

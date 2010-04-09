@@ -1835,7 +1835,7 @@ namespace Syncless.Core
                 tempFilters.AddRange(tag.Filters);
 
                 string appendedPath;
-                string trailingPath = tag.CreateTrailingPath(filePath, false);
+                string trailingPath = tag.CreateTrailingPath(filePath);
                 if (trailingPath != null)
                 {
                     foreach (TaggedPath p in tag.FilteredPathList)
