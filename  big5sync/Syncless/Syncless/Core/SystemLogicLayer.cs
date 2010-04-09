@@ -859,7 +859,9 @@ namespace Syncless.Core
                 //if tag is seamless, start monitoring the tag.
                 if (tag.IsSeamless)
                 {
-                    StartMonitorTag(tag);
+
+                    SwitchMode(tag.TagName, TagMode.Manual);
+                    SwitchMode(tag.TagName, TagMode.Seamless);
                 }
                 //Initiate a save.
                 InitiateSave();
