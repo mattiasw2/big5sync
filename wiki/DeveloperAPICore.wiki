@@ -2,7 +2,7 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
-`[`*[DeveloperAPICompareAndSyncXMLWriteObject Prev - Syncless.CompareAndSync.XMLWriteObject]* `|` *[DeveloperAPICoreExceptions Next - Syncless.Core.Exceptions]*`]`
+`[`*[DeveloperAPICompareAndSyncSeamlessXMLWriteObject Prev - Syncless.CompareAndSync.Seamless.XMLWriteObject]* `|` *[DeveloperAPICoreExceptions Next - Syncless.Core.Exceptions]*`]`
 
 = Interfaces Summary =
 
@@ -72,4 +72,4 @@
 
 [#Enumerations_Summary Back to top]
 
-`[`*[DeveloperAPICompareAndSyncXMLWriteObject Prev - Syncless.CompareAndSync.XMLWriteObject]* `|` *[DeveloperAPICoreExceptions Next - Syncless.Core.Exceptions]*`]`
+`[`*[DeveloperAPICompareAndSyncSeamlessXMLWriteObject Prev - Syncless.CompareAndSync.Seamless.XMLWriteObject]* `|` *[DeveloperAPICoreExceptions Next - Syncless.Core.Exceptions]*`]`
