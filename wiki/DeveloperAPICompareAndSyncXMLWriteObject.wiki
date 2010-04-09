@@ -2,10 +2,20 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPICompareAndSyncSeamless Prev - Syncless.CompareAndSync.Seamless]* `|` *[DeveloperAPICore Next - Syncless.Core]*`]`
+
 = Classes Summary =
 
 == BaseXMLWriteObject ==
 
+[#Classes_Summary Back to top]
+
 == XMLWriteFileObject ==
 
+[#Classes_Summary Back to top]
+
 == XMLWriteFolderObject ==
+
+[#Classes_Summary Back to top]
+
+`[`*[DeveloperAPICompareAndSyncSeamless Prev - Syncless.CompareAndSync.Seamless]* `|` *[DeveloperAPICore Next - Syncless.Core]*`]`
