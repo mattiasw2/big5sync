@@ -100,8 +100,6 @@
         * [DeveloperAPIFilter#Filter Filter]
         * [DeveloperAPIFilter#FilterChain FilterChain]
         * [DeveloperAPIFilter#FilterFactory FilterFactory]
-        * [DeveloperAPIFilter#FolderFilter FolderFilter]
-        * [DeveloperAPIFilter#SizeFilter SizeFilter]
         * [DeveloperAPIFilter#SynclessArchiveFilter SynclessArchiveFilter]
         * [DeveloperAPIFilter#SynclessConfigFilter SynclessConfigFilter]
       * [DeveloperAPIFilter#Enumerations_Summary Enumerations Summary]
