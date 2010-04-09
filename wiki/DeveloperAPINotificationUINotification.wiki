@@ -1,9 +1,0 @@
-#summary Developers' Guide - API - Syncless.Notification.UINotification
-#labels Phase-Implementation
-#sidebar DeveloperAPISidebar
-
-= Classes Summary =
-
-== !CancelSyncNotification ==
-
-== !CompareCompleteNotification ==
