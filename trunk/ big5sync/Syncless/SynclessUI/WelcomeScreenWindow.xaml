@@ -62,9 +62,9 @@
 					</LinearGradientBrush>
 				</Rectangle.Fill>
 			</Rectangle>
-			<Label Content="Easy Accessible Tagging" Background="{x:Null}" Foreground="#FFFFCC00" FontFamily="Century Gothic" FontSize="14.667" Margin="-4,0,0,0" VerticalAlignment="Top" FontWeight="Bold" Grid.Column="1"/>
+			<Label x:Name="LblEasyTag" Content="Easy Accessible Tagging" Background="{x:Null}" Foreground="#FFFFCC00" FontFamily="Century Gothic" FontSize="14.667" Margin="-4,0,0,0" VerticalAlignment="Top" FontWeight="Bold" Grid.Column="1" Cursor="Hand" MouseLeftButtonDown="LblEasyTag_MouseLeftButtonDown"/>
 			<TextBlock Margin="0" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" LineHeight="17.333" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1"><Run Text="Syncless makes synchronization easy."/><LineBreak/><Run Text="Just right-click or drag any folder into Syncless to tag."/></TextBlock>
-			<Image Grid.Column="2" Grid.RowSpan="2" Source="Icons/tag.ico"/>
+			<Image Grid.Column="2" Grid.RowSpan="2" Source="Icons/tag-yellow.ico"/>
 		</Grid>
 		<Grid Margin="4,0,0,5" Grid.Column="2" Grid.Row="3">
 			<Grid.RowDefinitions>
@@ -84,7 +84,7 @@
 					</LinearGradientBrush>
 				</Rectangle.Fill>
 			</Rectangle>
-			<Label Margin="-4,0,0,0" VerticalAlignment="Top" Content="Synchronize Multiple Folders" Background="{x:Null}" FontFamily="Century Gothic" FontSize="14.667" FontWeight="Bold" Foreground="#FFFFCC00" Grid.Column="1"/>
+			<Label x:Name="LblMultipleSync" Margin="-4,0,0,0" VerticalAlignment="Top" Content="Synchronize Multiple Folders" Background="{x:Null}" FontFamily="Century Gothic" FontSize="14.667" FontWeight="Bold" Foreground="#FFFFCC00" Grid.Column="1" Cursor="Hand" MouseLeftButtonDown="LblMultipleSync_MouseLeftButtonDown"/>
 			<TextBlock Margin="0" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" LineHeight="17.333" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" Text="Syncless can keep &gt; 2 folders in sync. Synchronize multiple folders by giving them the same tag name."/>
 			<Image Grid.Column="2" Grid.RowSpan="2" Source="Icons/infinity.ico" Margin="0,0,5,0"/>
 		</Grid>
@@ -106,9 +106,9 @@
 					</LinearGradientBrush>
 				</Rectangle.Fill>
 			</Rectangle>
-			<Label Margin="-4,0,0,0" VerticalAlignment="Top" Content="Seamless Synchronization" Background="{x:Null}" FontFamily="Century Gothic" FontSize="14.667" FontWeight="Bold" Foreground="#FFFFCC00" Grid.Column="1"/>
+			<Label x:Name="LblSeamless" Margin="-4,0,0,0" VerticalAlignment="Top" Content="Seamless Synchronization" Background="{x:Null}" FontFamily="Century Gothic" FontSize="14.667" FontWeight="Bold" Foreground="#FFFFCC00" Grid.Column="1" Cursor="Hand" MouseLeftButtonDown="LblSeamless_MouseLeftButtonDown"/>
 			<TextBlock Margin="0" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" LineHeight="17.333" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1"><Run Text="Syncless automatically keeps your folders synchronized in real-time when tags are switched to "/><Run FontStyle="Italic" FontWeight="Bold" Foreground="#FFFFCC00" Text="Seamless "/><Run Text="mode."/></TextBlock>
-			<Image Grid.Column="2" Grid.RowSpan="2" Source="Icons\tag.ico"/>
+			<Image Grid.Column="2" Grid.RowSpan="2" Source="Icons/seamless-yellow.ico"/>
 		</Grid>
 		<Grid Margin="4,0,0,5" Grid.Column="2" Grid.Row="4">
 			<Grid.RowDefinitions>
@@ -128,9 +128,9 @@
 					</LinearGradientBrush>
 				</Rectangle.Fill>
 			</Rectangle>
-			<Label Margin="-4,0,0,0" VerticalAlignment="Top" Content="Accurate to the Second" Background="{x:Null}" FontFamily="Century Gothic" FontSize="14.667" FontWeight="Bold" Foreground="#FFFFCC00" Grid.Column="1"/>
+			<Label x:Name="LblAccurate" Margin="-4,0,0,0" VerticalAlignment="Top" Content="Accurate to the Second" Background="{x:Null}" FontFamily="Century Gothic" FontSize="14.667" FontWeight="Bold" Foreground="#FFFFCC00" Grid.Column="1" Cursor="Hand" MouseLeftButtonDown="LblAccurate_MouseLeftButtonDown"/>
 			<TextBlock Margin="0" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" LineHeight="17.333" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" Text="Syncless can automatically keep your computer clock in sync to ensure accurate synchronization."/>
-			<Image Grid.Column="2" Grid.RowSpan="2" Source="Icons/timesync-white.ico"/>
+			<Image Grid.Column="2" Grid.RowSpan="2" Source="Icons/timesync-yellow.ico"/>
 		</Grid>
 	</Grid>
 	

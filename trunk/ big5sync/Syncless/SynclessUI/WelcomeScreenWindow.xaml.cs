@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using Syncless.Core.Exceptions;
@@ -63,6 +64,26 @@ namespace SynclessUI
         {
 			Settings.Default.DisplayWelcomeScreen = (bool) this.ChkBoxWelcomeOnStartup.IsChecked;
             Settings.Default.Save();
+        }
+
+        private void LblAccurate_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#Time_Synchronization"));
+        }
+
+        private void LblSeamless_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#4._Switch_to_Seamless_Mode"));
+        }
+
+        private void LblMultipleSync_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#N-way_Synchronization"));
+        }
+
+        private void LblEasyTag_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#1._Tag_Folders"));
         }
     }
 }
