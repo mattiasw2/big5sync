@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - Syncless.Logging
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPIHelper Prev - Syncless.Helper]* `|` *[DeveloperAPIMonitor Next - Syncless.Monitor]*`]`
@@ -40,19 +40,13 @@
 
 = Exceptions Summary =
 
-== !LogFileCorruptedException ==
-
-[#Exceptions_Summary Back to top]
+|| || *Exception* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || !LogFileCorruptedException || The exception that is thrown when the log file is corrupted. ||
 
 = Enumerations Sumamry =
 
-== !LogCategoryType ==
-
-[#Enumerations_Summary Back to top]
-
-== !LogEventType ==
-
-[#Enumerations_Summary Back to top]
-
+|| || *Enumeration* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubenum.gif || !LogCategoryType || Specifies the type of event change. ||
+|| http://big5sync.googlecode.com/files/pubenum.gif || !LogEventType || Specifies the type of log event. ||
 
 `[`*[DeveloperAPIHelper Prev - Syncless.Helper]* `|` *[DeveloperAPIMonitor Next - Syncless.Monitor]*`]`
