@@ -44,7 +44,7 @@ namespace SynclessUI.Notification
 
         public void InvokeStateChanged()
         {
-            _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() => _main.ProgressNotifyChange(Progress)));
+            _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(StateChanged));
         }
 
         public void StateChanged()
