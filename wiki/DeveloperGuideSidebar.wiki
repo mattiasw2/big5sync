@@ -49,6 +49,7 @@
   * [KnownIssues10 Known Issues]
   * [SpecialCases Special Cases]
   * [TestSeamlessSyncerTester Testing Syncless]
+  * [DeveloperAPIOverview API]
   * [DeveloperGuideRecommendations Recommended Resources]
   * [DeveloperGuideReferences References]
   * [SynclessGlossary Glossary of Terms]
