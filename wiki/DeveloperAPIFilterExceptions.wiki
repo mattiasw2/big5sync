@@ -1,0 +1,13 @@
+#summary Developers' Guide - API - Syncless.Filters.Exceptions
+#labels Phase-Implementation
+#sidebar DeveloperGuideSidebar
+
+`[`*[DeveloperAPIFilter Prev - Syncless.Filters]* `|` *[DeveloperAPIHelper Next - Syncless.Helper]*`]`
+
+= Exceptions Summary =
+
+== InvalidFilterException ==
+
+[#Exceptions_Summary Back to top]
+
+`[`*[DeveloperAPIFilter Prev - Syncless.Filters]* `|` *[DeveloperAPIHelper Next - Syncless.Helper]*`]`
