@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.IO;
 using Syncless.Profiling.Exceptions;
 namespace Syncless.Profiling
@@ -13,27 +11,17 @@ namespace Syncless.Profiling
     public class Profile
     {
         #region attributes
-        private const string DEFAULT_DRIVE_NAME = "-";
+        private const string DefaultDriveName = "-";
 
-        private string _profilename;
         /// <summary>
         /// Profile name
         /// </summary>
-        public string ProfileName
-        {
-            get { return _profilename; }
-            set { _profilename = value; }
-        }
+        public string ProfileName { get; set; }
 
-        private long _lastUpdatedTime;
         /// <summary>
         /// Last Updated Time
         /// </summary>
-        public long LastUpdatedTime
-        {
-            get { return _lastUpdatedTime; }
-            set { _lastUpdatedTime = value; }
-        }
+        public long LastUpdatedTime { get; set; }
 
         private List<ProfileDrive> _fullList;
         /// <summary>
@@ -56,12 +44,12 @@ namespace Syncless.Profiling
         /// <summary>
         /// Connected list of ProfileDrive using logical id as key
         /// </summary>
-        private Dictionary<string, ProfileDrive> _logicalDict;
+        private readonly Dictionary<string, ProfileDrive> _logicalDict;
 
         /// <summary>
         /// Connected list of ProfileDrive using physical id as key
         /// </summary>
-        private Dictionary<string, ProfileDrive> _phyiscalDict;
+        private readonly Dictionary<string, ProfileDrive> _phyiscalDict;
         #endregion
 
         /// <summary>
@@ -70,7 +58,7 @@ namespace Syncless.Profiling
         /// <param name="profileName">The name of the profile for the Profile constructed</param>
         public Profile(string profileName)
         {
-            _profilename = profileName;
+            ProfileName = profileName;
             _fullList = new List<ProfileDrive>();
             _logicalDict = new Dictionary<string, ProfileDrive>();
             _phyiscalDict = new Dictionary<string, ProfileDrive>();
@@ -84,7 +72,7 @@ namespace Syncless.Profiling
         /// <returns>The corresponding logical address if it is available or found, else null</returns>
         public string FindLogicalFromPhysical(string physical)
         {
-            ProfileDrive drive = null;
+            ProfileDrive drive;
             return _phyiscalDict.TryGetValue(physical, out drive) ? drive.LogicalId : null;
         }
 
@@ -95,7 +83,7 @@ namespace Syncless.Profiling
         /// <returns>The corresponding physical address if it is available or found, else null</returns>
         public string FindPhysicalFromLogical(string logical)
         {
-            ProfileDrive drive = null;
+            ProfileDrive drive;
             return _logicalDict.TryGetValue(logical, out drive) ? drive.PhysicalId : null;
         }
 
@@ -145,7 +133,7 @@ namespace Syncless.Profiling
         /// <param name="guid">The corresponding GUID for the drive to be added</param>
         public void InsertDrive(DriveInfo info, string guid)
         {
-            ProfileDrive drive = null;
+            ProfileDrive drive;
             string driveLetter = ProfilingHelper.ExtractDriveName(info.Name);
             if (!_phyiscalDict.TryGetValue(driveLetter, out drive))
             {
@@ -177,7 +165,7 @@ namespace Syncless.Profiling
         public bool RemoveDrive(DriveInfo info)
         {
             string driveLetter = ProfilingHelper.ExtractDriveName(info.Name);
-            ProfileDrive drive = null;
+            ProfileDrive drive;
             if (_phyiscalDict.TryGetValue(driveLetter, out drive))
             {
                 Debug.Assert(drive != null);
@@ -192,10 +180,7 @@ namespace Syncless.Profiling
                 drive.Info = null;
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         /// <summary>
@@ -205,7 +190,7 @@ namespace Syncless.Profiling
         /// <returns>The ProfileDrive that is created</returns>
         public ProfileDrive CreateProfileDrive(string guid)
         {
-            ProfileDrive drive = new ProfileDrive(guid, DEFAULT_DRIVE_NAME);
+            ProfileDrive drive = new ProfileDrive(guid, DefaultDriveName);
             lock (_fullList)
             {
                 _fullList.Add(drive);
@@ -224,7 +209,7 @@ namespace Syncless.Profiling
         {
             lock (_fullList)
             {
-                this._fullList.Add(drive);
+                _fullList.Add(drive);
             }
             return true;
         }

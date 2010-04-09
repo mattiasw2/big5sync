@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Diagnostics;
 using Syncless.Profiling.Exceptions;
 using Syncless.Helper;
 using Syncless.Core;
 using Syncless.Notification;
-using Syncless.Notification.UINotification;
+
 namespace Syncless.Profiling
 {
     /// <summary>
@@ -103,7 +101,7 @@ namespace Syncless.Profiling
         ///    will replace C:/Lectures with 001:/Lectures
         /// </summary>
         /// <param name="path">The Physical Address to be converted</param>
-        /// <param name="create">Indicates whether to create the GUID if logical ID is not found</param>
+        /// <param name="create">true to create the address if it does not exist, false will return null if the address does not exist</param>
         /// <returns>The Logical Address</returns>
         public string ConvertPhysicalToLogical(string path, bool create)
         {
@@ -115,14 +113,11 @@ namespace Syncless.Profiling
                 {
                     return null;
                 }
-                else
-                {
-                    string guid = ProfilingGUIDHelper.GetGUID(driveid);
-                    //try to find a mapping
-                    _profile.InsertDrive(new DriveInfo(driveid), guid);
+                string guid = ProfilingGUIDHelper.GetGUID(driveid);
+                //try to find a mapping
+                _profile.InsertDrive(new DriveInfo(driveid), guid);
 
-                    logicalid = guid;
-                }
+                logicalid = guid;
             }
             string relativepath = ProfilingHelper.ExtractRelativePath(path);
             return logicalid + ":" + relativepath;
@@ -211,7 +206,7 @@ namespace Syncless.Profiling
 
             }
 
-            return new List<string>[2] { convertedPathList, unconvertedPathList };
+            return new [] { convertedPathList, unconvertedPathList };
         }
         
         /// <summary>
@@ -253,7 +248,7 @@ namespace Syncless.Profiling
         /// <summary>
         /// Initialize the profiling layer
         /// </summary>
-        /// <param name="paths">The list of paths for the profiling configuration file.</param>
+        /// <param name="paths">The list of paths to Init</param>
         /// <returns>True if the profile is load.</returns>
         public bool Init(List<string> paths)
         {
@@ -377,7 +372,6 @@ namespace Syncless.Profiling
             if (info.Exists)
             {
                 string guid = ProfilingGUIDHelper.ReadGUID(info);
-                string driveid = ProfilingHelper.ExtractDriveName(info.FullName);
                 _profile.InsertDrive(driveinfo, guid);
                 return true;
             }
