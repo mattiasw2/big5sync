@@ -2036,11 +2036,11 @@ namespace SynclessUI
 
             if (result)
             {
-                DialogHelper.ShowInformation(this, "Time Synchronized Successfully", "Your computer clock has been synchronized with atomic clock time.");
+                DialogHelper.ShowInformation(this, "Time Synchronized Successfully", "Your computer clock has been synchronized with an Internet Time Server.");
             }
             else
             {
-                DialogHelper.ShowError(this, "Time Synchronized Unsuccessfully", "Your computer clock could not be synchronized  with atomic clock time.");
+                DialogHelper.ShowError(this, "Time Synchronized Unsuccessfully", "Your computer clock could not be synchronized with an Internet Time Server.");
             }
         }
 
