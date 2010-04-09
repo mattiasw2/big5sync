@@ -77,8 +77,6 @@
         * [DeveloperAPICore#DeletedTaggedPathWatcher DeletedTaggedPathWatcher]
         * [DeveloperAPICore#DeviceWatcher DeviceWatcher]
         * [DeveloperAPICore#ServiceLocator ServiceLocator]
-      * [DeveloperAPICore#Delegates_Summary Delegates Summary]
-        * [DeveloperAPICore#LogicQueueObserver_._RunDel LogicQueueObserver.RunDel]
       * [DeveloperAPICore#Enumerations_Summary Enumerations Summary]
         * [DeveloperAPICore#TableType TableType]
     * [DeveloperAPICoreExceptions Core.Exceptions]
