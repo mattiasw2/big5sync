@@ -201,7 +201,7 @@
       * [DeveloperAPITaggingExceptions#Exceptions_Summary Exception Summary]
         * [DeveloperAPITaggingExceptions#CorruptedTaggingXMLException CorruptedTaggingXMLException]
         * [DeveloperAPITaggingExceptions#FitlerAlreadyExistsException FitlerAlreadyExistsException]
-        * [DeveloperAPITaggingExceptions#FilterNotExistException FilterNotExistException]
+        * [DeveloperAPITaggingExceptions#FilterNotFoundException FilterNotFoundException]
         * [DeveloperAPITaggingExceptions#PathAlreadyExistsException PathAlreadyExistsException]
         * [DeveloperAPITaggingExceptions#PathNotFoundException PathNotFoundException]
         * [DeveloperAPITaggingExceptions#RecursiveDirectoryException RecursiveDirectoryException]
