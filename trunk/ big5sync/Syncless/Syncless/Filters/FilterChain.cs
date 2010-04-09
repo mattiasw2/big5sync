@@ -8,10 +8,11 @@ namespace Syncless.Filters
     public class FilterChain
     {
         /// <summary>
-        /// Apply Filter , Include then Exclude.
+        /// Apply filter, include then exclude
         /// </summary>
-        /// <param name="filters"></param>
-        /// <param name="?"></param>
+        /// <param name="filters">The list of filters to apply</param>
+        /// <param name="patterns">The list of filter patterns to apply</param>
+        /// <returns>the list of strings where filtering is applied</returns>
         public virtual List<string> ApplyFilter(List<Filter> filters , List<string> patterns){
 
             List<string> outputList = new SynclessConfigFilter().ApplyFilter(patterns);
@@ -25,12 +26,13 @@ namespace Syncless.Filters
 
             return outputList;
         }
+        
         /// <summary>
         /// Check if a Path pass thru the filter
         /// </summary>
         /// <param name="filters">the list of filters</param>
         /// <param name="path">the path to filter</param>
-        /// <returns></returns>
+        /// <returns>true if some paths are filtered; otherwise, false</returns>
         public virtual bool ApplyFilter(List<Filter> filters, string path)
         {
             List<string> temp = new List<string>();
