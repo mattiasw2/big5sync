@@ -13,6 +13,7 @@ namespace SynclessTimeSync
         {
             SNTPClient sntpClient = new SNTPClient();
             sntpClient.UpdateLocalDateTime = true;
+            sntpClient.Timeout = 3000;
             sntpClient.QueryServerCompleted += sntpClient_QueryServerCompleted;
             sntpClient.QueryServerAsync();
 

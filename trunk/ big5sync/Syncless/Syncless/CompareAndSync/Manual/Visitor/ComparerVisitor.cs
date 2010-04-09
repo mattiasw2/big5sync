@@ -143,6 +143,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         }
 
+/*
         private static void DetectFileRenameAndUpdate(FileCompareObject file, int numOfPaths)
         {
             //Get a Delete type
@@ -184,14 +185,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     }
 
                     if (found)
-                        // ReSharper disable PossibleNullReferenceException
                         file.ChangeType[indexes[i]] = null; //TODO: Unchanged?
-                    // ReSharper restore PossibleNullReferenceException
-
                 }
             }
 
         }
+*/
 
         /// <summary>
         /// Compares files to propagate updates and creations.

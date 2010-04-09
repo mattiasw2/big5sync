@@ -4,19 +4,33 @@ using Syncless.CompareAndSync.Manual.CompareObject;
 
 namespace Syncless.CompareAndSync.Manual.Visitor
 {
+    /// <summary>
+    /// <c>FolderRenameVisitor</c> is responsible for handling folder renames, and merging the contents of the renamed folders with their previous names.
+    /// </summary>
     public class FolderRenameVisitor : IVisitor
     {
 
         #region IVisitor Members
 
-        public void Visit(FileCompareObject file, int numOfPaths) { }
+        // Do nothing for file.
+        public void Visit(FileCompareObject file, int numOfPaths)
+        {
+        }
 
+        /// <summary>
+        /// Visit implementation for <see cref="FolderCompareObject"/>.
+        /// </summary>
+        /// <param name="folder">The <see cref="FolderCompareObject"/> to process.</param>
+        /// <param name="numOfPaths">The total number of folders to sync.</param>
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
             DetectFolderRename(folder, numOfPaths);
         }
 
-        public void Visit(RootCompareObject root) { }
+        // Do nothing for root.
+        public void Visit(RootCompareObject root)
+        {
+        }
 
         #endregion
 
@@ -43,8 +57,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             //2. We check all folders which has the same meta name but different name as the non-existent folder
             //3. If the count is 1, we shall proceed to rename
             FolderCompareObject folderObject;
-            int count = 0;
-            int renamePos = -1;
 
             if (deleteIndexes.Count > 0)
             {

@@ -20,9 +20,9 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         /// <param name="name">The name from the metadata.</param>
         /// <param name="hash">The hash from the metadata.</param>
         /// <param name="size">The size from the metadata.</param>
-        /// <param name="createdTime">The created time from the metadata.</param>
-        /// <param name="modifiedTime">The modified time from the metadata.</param>
-        /// <param name="updatedTime">The updated time from the metadata.</param>
+        /// <param name="createdTimeUtc">The created time from the metadata.</param>
+        /// <param name="modifiedTimeUtc">The modified time from the metadata.</param>
+        /// <param name="updatedTimeUtc">The updated time from the metadata.</param>
         public XMLCompareObject(string name, string hash, long size, long createdTimeUtc, long modifiedTimeUtc, long updatedTimeUtc)
         {
             _size = size;
