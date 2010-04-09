@@ -2,7 +2,7 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
-`[`*[DeveloperAPICompareAndSyncExceptions Prev - Syncless.CompareAndSync.Exceptions]* `|` *[DeveloperAPICompareAndSyncManualVisitor Next - Syncless.CompareAndSync.Manual.Visitor]*`]`
+`[`*[DeveloperAPICompareAndSyncExceptions Prev - Syncless.CompareAndSync.Exceptions]* `|` *[DeveloperAPICompareAndSyncManualCompareObject Next - Syncless.CompareAndSync.Manual.CompareObject]*`]`
 
 = Classes Summary =
 
@@ -14,4 +14,4 @@
 
 [#Classes_Summary Back to top]
 
-`[`*[DeveloperAPICompareAndSyncExceptions Prev - Syncless.CompareAndSync.Exceptions]* `|` *[DeveloperAPICompareAndSyncManualVisitor Next - Syncless.CompareAndSync.Manual.Visitor]*`]`
+`[`*[DeveloperAPICompareAndSyncExceptions Prev - Syncless.CompareAndSync.Exceptions]* `|` *[DeveloperAPICompareAndSyncManualCompareObject Next - Syncless.CompareAndSync.Manual.CompareObject]*`]`
