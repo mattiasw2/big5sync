@@ -5,7 +5,7 @@ using Syncless.Helper;
 namespace Syncless.Tagging
 {
     /// <summary>
-    /// Tag class represents a container for a list of <see cref="TaggedPath">TaggedPath</see> objects.
+    /// Tag class represents a container for a list of TaggedPath objects.
     /// Each Tag object has its properties that uniquely identifies itself from other Tag objects.
     /// </summary>
     public class Tag
@@ -66,8 +66,7 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Gets a clone of the list of full path name of tagged paths whose <see cref="IsDeleted">IsDeleted
-        /// </see> property is set to false
+        /// Gets a clone of the list of full path name of tagged paths whose IsDeleted property is set to false
         /// </summary>
         public List<string> FilteredPathListString
         {
@@ -86,8 +85,8 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Gets a clone of the list of tagged paths whose <see cref="IsDeleted">IsDeleted</see> property
-        /// is set to false. Sets the list of tagged paths.
+        /// Gets a clone of the list of tagged paths whose IsDeleted property is set to false. Sets the 
+        /// list of tagged paths.
         /// </summary>
         public List<TaggedPath> FilteredPathList
         {
@@ -251,8 +250,7 @@ namespace Syncless.Tagging
         /// <summary>
         /// Adds the tagged path to the tag
         /// </summary>
-        /// <param name="path">The <see cref="TaggedPath">TaggedPath</see> that is to be added to 
-        /// the tag</param>
+        /// <param name="path">The TaggedPath object that is to be added to the tag</param>
         /// <returns>true if the tagged path is added to the tag; otherwise, false</returns>
         /// <remarks>If there already exists a tagged path whose full path name is the same as that of 
         /// the tagged path that is passed as parameter, if the boolean value that represents whether 
@@ -360,7 +358,7 @@ namespace Syncless.Tagging
         /// <summary>
         /// Sets the boolean value that represents whether the tagged path is deleted to true
         /// </summary>
-        /// <param name="path">The <see cref="TaggedPath">TaggedPath</see> to be set as deleted</param>
+        /// <param name="path">The TaggedPath object to be set as deleted</param>
         /// <returns>true if some tagged paths are set as deleted; otherwise, false</returns>
         public bool RemovePath(TaggedPath path)
         {
@@ -516,8 +514,7 @@ namespace Syncless.Tagging
         /// <summary>
         /// Adds a filter to the list of filters
         /// </summary>
-        /// <param name="filter">The <see cref="Filter">Filter</see> object that represents the filter 
-        /// to be added</param>
+        /// <param name="filter">The Filter object that represents the filter to be added</param>
         /// <param name="updated">The long value that represents the updated date of the filter list</param>
         public void AddFilter(Filter filter, long updated)
         {
@@ -553,8 +550,7 @@ namespace Syncless.Tagging
         /// <summary>
         /// Removes the filter that is passed as parameter from the existing list of filters
         /// </summary>
-        /// <param name="filter">The <see cref="Filter">Filter</see> object that represents the fitler
-        /// to be removed</param>
+        /// <param name="filter">The Filter object that represents the fitler to be removed</param>
         /// <param name="updated">The long value that represents the updated date of the filter list</param>
         /// <returns>the filter that is removed if it exists in the list of filters; otherwise, null</returns>
         public Filter RemoveFilter(Filter filter, long updated)
@@ -666,8 +662,7 @@ namespace Syncless.Tagging
         /// <summary>
         /// Adds a tagged path to the list of tagged paths
         /// </summary>
-        /// <param name="path">The <see cref="TaggedPath">TaggedPath</see> object that represents the
-        /// tagged path to be added</param>
+        /// <param name="path">The TaggedPath object that represents the tagged path to be added</param>
         private void AddNewPath(TaggedPath path)
         {
             _pathList.Add(path);
