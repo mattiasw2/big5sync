@@ -1738,6 +1738,18 @@ namespace SynclessUI
             var kg10 = new KeyGesture(Key.W, ModifierKeys.Control);
             var ib10 = new InputBinding(ExitCommand, kg10);
             InputBindings.Add(ib10);
+			
+            // Time Sync Command
+            var TimeSyncCommand = new RoutedCommand();
+
+            var cb11 = new CommandBinding(TimeSyncCommand, TimeSyncCommandExecute, TimeSyncCommandCanExecute);
+            CommandBindings.Add(cb11);
+
+            BtnTimeSync.Command = TimeSyncCommand;
+
+            var kg11 = new KeyGesture(Key.Y, ModifierKeys.Control);
+            var ib11 = new InputBinding(TimeSyncCommand, kg11);
+            InputBindings.Add(ib11);
         }
 
         private void CreateTagCommandExecute(object sender, ExecutedRoutedEventArgs e)
@@ -1971,6 +1983,32 @@ namespace SynclessUI
             e.CanExecute = true;
             e.Handled = true;
         }
+		
+        private void TimeSyncCommandExecute(object sender, ExecutedRoutedEventArgs e)
+        {
+            e.Handled = true;
+            //Actual Code
+            InitiateTimeSync();
+        }
+
+        private void TimeSyncCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+            e.Handled = true;
+        }
+		
+		private void InitiateTimeSync() {
+			Process timeSync = new Process();
+            timeSync.StartInfo.FileName = "SynclessTimeSync.exe";
+            timeSync.Start();
+            timeSync.WaitForExit();
+			
+			if(timeSync.ExitCode == 0) {
+				DialogHelper.ShowInformation(this, "Time Synchronized Successfully", "Your computer clock has been sync-ed with atomic clock time.");
+			} else {
+				DialogHelper.ShowError(this, "Time Synchronized Unsuccessfully", "Your computer clock could not be synced with atomic clock time.");
+			}
+		}
 
         private void DisplayShortcutsWindow()
         {

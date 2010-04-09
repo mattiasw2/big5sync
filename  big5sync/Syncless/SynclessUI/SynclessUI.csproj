@@ -255,6 +255,7 @@
     <Resource Include="Icons\green-sync-arrow.png" />
     <Resource Include="Icons\log.ico" />
     <Resource Include="Icons\red-sync-arrow.png" />
+    <Resource Include="Icons\timesync.ico" />
     <Resource Include="Icons\unmonitor.ico" />
     <Resource Include="Icons\filter.ico" />
     <Resource Include="Icons\folder.ico" />
