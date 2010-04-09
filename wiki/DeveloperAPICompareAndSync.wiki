@@ -10,9 +10,9 @@ Provides classes for performing comparison and synchronization operations for fi
 
 || || *Class* || *Description* ||
 || http://big5sync.googlecode.com/files/pubclass.gif http://big5sync.googlecode.com/files/static.gif || [#CommonMethods CommonMethods] || Static class that contains all common file and folder operation methods. ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [#CompareAndSyncController CompareAndSyncController] || The main logic controller of the CompareAndSync namespace. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#CompareAndSyncController CompareAndSyncController] || The main logic controller of the !CompareAndSync namespace. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#CompareObjectHelper CompareObjectHelper] || Contains methods to traverse the tree of file and folder objects. ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [#SyncConfig SyncConfig] || The object containing all the SyncConfiguration. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#SyncConfig SyncConfig] || The object containing all the !SyncConfiguration. ||
 
 == !CommonMethods ==
 
