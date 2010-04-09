@@ -49,6 +49,7 @@ namespace SynclessUI
 
         public MainWindow()
         {
+            CancellingTags = new HashSet<string>();
             InitializeComponent();
             InitializeSyncless();
             InitializeKeyboardShortcuts();
@@ -63,6 +64,7 @@ namespace SynclessUI
             set { Application.Current.Properties["SelectedTag"] = value; }
         }
 
+        public HashSet<string> CancellingTags { get; set; }
         private string TagFilter
         {
             get { return TxtBoxFilterTag.Text.Trim(); }
@@ -112,6 +114,7 @@ namespace SynclessUI
         {
             try
             {
+                CancellingTags = new HashSet<string>();
                 DisplayLoadingAnimation();
                 _appPath = Assembly.GetExecutingAssembly().Location;
                 Application.Current.Properties["AppPath"] = _appPath;
@@ -137,7 +140,7 @@ namespace SynclessUI
 
                     _notificationWatcher = new NotificationWatcher(this);
                     _notificationWatcher.Start();
-                    _priorityNotificationWatcher = new PriorityNotificationWatcher();
+                    _priorityNotificationWatcher = new PriorityNotificationWatcher(this);
                     _priorityNotificationWatcher.Start();
 
                     if (Settings.Default.SynchronizeTime)
@@ -265,6 +268,16 @@ namespace SynclessUI
                         ManualMode();
                         break;
                 }
+                if (CancellingTags.Contains(SelectedTag))
+                {
+                    BtnSyncNow.IsEnabled = false;
+                    LblSyncNow.Content = "Cancelling..";
+                }
+                else
+                {
+                    BtnSyncNow.IsEnabled = true;
+                }
+
             }
             catch (UnhandledException)
             {
@@ -633,13 +646,9 @@ namespace SynclessUI
                     bool success = Gui.CancelManualSync(SelectedTag);
                     if (success)
                     {
-                        SyncButtonMode();
-                        string message = "Synchronization Cancelled";
-                        LblStatusText.Content = message;
-                        _tagStatusNotificationDictionary[SelectedTag] = message;
-                        BtnSyncNow.IsEnabled = true;
-                        ProgressBarSync.IsIndeterminate = false;
-                        LblProgress.Visibility = Visibility.Visible;
+                        CancellingTags.Add(SelectedTag);
+                        LblSyncNow.Content = "Cancelling..";
+                        
                     }
                     else
                     {
@@ -1108,6 +1117,25 @@ namespace SynclessUI
         private void HideDropIndicator()
         {
             DropIndicator.Visibility = Visibility.Hidden;
+        }
+
+        public void NotifyCancelComplete(string tagname)
+        {
+            if (SelectedTag == tagname)
+            {
+                SyncButtonMode();
+                string message = "Synchronization Cancelled";
+                LblStatusText.Content = message;
+                _tagStatusNotificationDictionary[SelectedTag] = message;
+                BtnSyncNow.IsEnabled = true;
+                ProgressBarSync.IsIndeterminate = false;
+                LblProgress.Visibility = Visibility.Visible;
+                CancellingTags.Remove(tagname);
+            }
+            else
+            {
+                CancellingTags.Remove(tagname);
+            }
         }
 
         public void NotifyAutoSyncComplete(string path)

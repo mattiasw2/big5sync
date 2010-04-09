@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows.Threading;
 using Syncless.Notification;
 using Syncless.Core;
 
@@ -10,14 +11,13 @@ namespace SynclessUI.Notification
 {
     internal class PriorityNotificationWatcher : IQueueObserver
     {
-        private const int SLEEP_TIME = 10000;
         private Thread workerThread;
         private readonly EventWaitHandle _wh = new AutoResetEvent(false);
-
-        public PriorityNotificationWatcher()
+        private readonly MainWindow _main;
+        public PriorityNotificationWatcher(MainWindow main)
         {
             ServiceLocator.UIPriorityQueue().AddObserver(this);
-
+            _main = main;
             workerThread = new Thread(Run);
         }
         public void Update()
@@ -65,7 +65,7 @@ namespace SynclessUI.Notification
                     }
                     catch (Exception)
                     {
-                        
+
                     }
                 }
             }
@@ -73,8 +73,20 @@ namespace SynclessUI.Notification
         }
 
         private void Handle(AbstractNotification notification)
-        {   
-
+        {
+            if (notification.NotificationCode == NotificationCode.CancelSyncNotification)
+            {
+                
+                CancelSyncNotification csNotification = notification as CancelSyncNotification;
+                if (csNotification != null)
+                {
+                    if (csNotification.IsCancel)
+                        _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
+                        {
+                            _main.NotifyCancelComplete(csNotification.TagName);
+                        }));
+                }
+            }
         }
 
     }
