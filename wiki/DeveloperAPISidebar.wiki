@@ -26,7 +26,6 @@
         * [DeveloperAPICompareAndSyncExceptions#IncompatibleTypeException IncompatibleTypeException]
         * [DeveloperAPICompareAndSyncExceptions#MoveFileException MoveFileException]
         * [DeveloperAPICompareAndSyncExceptions#MoveFolderException MoveFolderException]
-        * [DeveloperAPICompareAndSyncExceptions#SynclessIOException SynclessIOException]
     * [DeveloperAPICompareAndSyncManual CompareAndSync.Manual]
       * [DeveloperAPICompareAndSyncManual#Classes_Summary Classes Summary]
         * [DeveloperAPICompareAndSync#ManualQueueControl ManualQueueControl]
