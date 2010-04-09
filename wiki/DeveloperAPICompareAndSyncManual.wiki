@@ -1,10 +1,16 @@
 #summary Developers' Guide - API - Syncless.CompareAndSync.Manual
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPICompareAndSyncExceptions Prev - Syncless.CompareAndSync.Exceptions]* `|` *[DeveloperAPICompareAndSyncManualCompareObject Next - Syncless.CompareAndSync.Manual.CompareObject]*`]`
 
+Provides classes for performing manual synchronization.
+
 = Classes Summary =
+
+|| || *Class* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#ManualQueueControl ManualQueueControl] || Class for queuing manual sync jobs. Based off http://moazzam-khan.com/blog/?p=418 ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#ManualSyncer ManualSyncer] || Contains all the methods for a manual synchronization job. ||
 
 == !ManualQueueControl ==
 
