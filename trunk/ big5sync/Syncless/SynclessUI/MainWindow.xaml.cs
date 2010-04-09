@@ -396,8 +396,12 @@ namespace SynclessUI
             Console.WriteLine("Hi");
             if (!_manualSyncEnabled)
             {
-                DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
-                                       "You cannot change the synchronization mode while it is synchronizing.");
+                bool success = Gui.CancelSwitch(SelectedTag);
+                if(!success)
+                {
+                    DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
+                                           "You cannot change the synchronization mode while it is synchronizing.");
+                }
                 return;
             }
 
