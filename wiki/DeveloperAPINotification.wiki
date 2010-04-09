@@ -32,6 +32,10 @@
 
 [#Classes_Summary Back to top]
 
+== !CancelSyncNotification ==
+
+[#Classes_Summary Back to top]
+
 == !MessageNotification ==
 
 [#Classes_Summary Back to top]
@@ -41,10 +45,6 @@
 [#Classes_Summary Back to top]
 
 == !MonitorTagNotification ==
-
-[#Classes_Summary Back to top]
-
-== !NewProfileNotification ==
 
 [#Classes_Summary Back to top]
 
@@ -60,7 +60,19 @@
 
 [#Classes_Summary Back to top]
 
+== !PreviewProgress ==
+
+[#Classes_Summary Back to top]
+
+== Progress ==
+
+[#Classes_Summary Back to top]
+
 == !RemoveTagNotification ==
+
+[#Classes_Summary Back to top]
+
+== !SaveNotification ==
 
 [#Classes_Summary Back to top]
 
