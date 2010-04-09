@@ -1,7 +1,7 @@
 namespace Syncless.Core.View
 {
     /// <summary>
-    /// Tag Mode 
+    /// Defines the list of possible Mode for a Tag.
     /// </summary>
     public enum TagMode
     {
