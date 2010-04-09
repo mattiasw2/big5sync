@@ -4,6 +4,8 @@
 
 `[`*[DeveloperAPICompareAndSync Prev - Syncless.CompareAndSync]* `|` *[DeveloperAPICompareAndSyncExceptions Next - Syncless.CompareAndSync.Exceptions]*`]`
 
+Provides enumerations for comparison and synchronization of files and folders.
+
 = Enumerations Summary =
 
 || || *Enumeration* || *Description* ||
