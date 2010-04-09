@@ -1,0 +1,29 @@
+#summary Developers' Guide - API - Syncless.CompareAndSync.Manual.CompareObject
+#labels Phase-Implementation
+#sidebar DeveloperGuideSidebar
+
+`[`*[DeveloperAPICompareAndSyncManual Prev - Syncless.CompareAndSync.Manual]* `|` *[DeveloperAPICompareAndSyncManualVisitor Next - Syncless.CompareAndSync.Manual.Visitor]*`]`
+
+= Classes Summary =
+
+== !BaseCompareObject ==
+
+[#Classes_Summary Back to top]
+
+== !FileCompareObject ==
+
+[#Classes_Summary Back to top]
+
+== !FolderCompareObject ==
+
+[#Classes_Summary Back to top]
+
+== !RootCompareObject ==
+
+[#Classes_Summary Back to top]
+
+== XMLCompareObject ==
+
+[#Classes_Summary Back to top]
+
+`[`*[DeveloperAPICompareAndSyncManual Prev - Syncless.CompareAndSync.Manual]* `|` *[DeveloperAPICompareAndSyncManualVisitor Next - Syncless.CompareAndSync.Manual.Visitor]*`]`
