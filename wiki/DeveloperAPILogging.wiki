@@ -2,24 +2,48 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPIHelper Prev - Syncless.Helper]* `|` *[DeveloperAPIMonitor Next - Syncless.Monitor]*`]`
+
 = Classes Summary =
 
 == !DebugLogger ==
 
+[#Classes_Summary Back to top]
+
 == !DeveloperLogger ==
+
+[#Classes_Summary Back to top]
 
 == !LogCategoryType ==
 
+[#Classes_Summary Back to top]
+
 == !LogData ==
+
+[#Classes_Summary Back to top]
 
 == !LogEventType ==
 
+[#Classes_Summary Back to top]
+
 == Logger ==
+
+[#Classes_Summary Back to top]
 
 == !LoggerFactory ==
 
+[#Classes_Summary Back to top]
+
 == !LoggingLayer ==
+
+[#Classes_Summary Back to top]
 
 == !LogReaderHelper ==
 
+[#Classes_Summary Back to top]
+
 == !UserLogger ==
+
+[#Classes_Summary Back to top]
+
+`[`*[DeveloperAPIHelper Prev - Syncless.Helper]* `|` *[DeveloperAPIMonitor Next - Syncless.Monitor]*`]`
