@@ -22,6 +22,14 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 
 == !TaggedPath ==
 
+|| || *Property* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !CreatedDate || Gets or sets the created date of the tagged path. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !DeletedDate || Gets or sets the deleted date of the tagged path. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !IsDeleted || Gets or sets the boolean value that represents whether the tagged path is deleted. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !LastUpdatedDate || Gets or sets the last updated date of the tagged path. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !LogicalDriveId || Gets or sets the logical drive ID of the tagged path. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !PathName || Gets or sets the full path name of the tagged path. ||
+
 [#Classes_Summary Back to top]
 
 ----
