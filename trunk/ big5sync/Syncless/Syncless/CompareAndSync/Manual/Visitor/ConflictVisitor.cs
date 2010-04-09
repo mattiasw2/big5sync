@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Exceptions;
 using Syncless.CompareAndSync.Manual.CompareObject;
@@ -53,7 +54,8 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             string conflictFolder = Path.Combine(fco.GetSmartParentPath(fileIndex), _syncConfig.ConflictDir);
             if (!Directory.Exists(conflictFolder))
                 Directory.CreateDirectory(conflictFolder);
-            string dest = Path.Combine(conflictFolder, fco.Name);
+            string currTime = String.Format("{0:MMddHHmmss}", DateTime.Now) + "_";
+            string dest = Path.Combine(conflictFolder, currTime + fco.Name);
 
             try
             {

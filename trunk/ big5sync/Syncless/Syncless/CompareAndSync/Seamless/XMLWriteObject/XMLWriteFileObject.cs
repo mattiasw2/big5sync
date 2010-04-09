@@ -6,26 +6,26 @@ namespace Syncless.CompareAndSync.Seamless.XMLWriteObject
     {
         private readonly long _size;
         private readonly string _hash;
-        private readonly long _lastModified;
+        private readonly long _lastModifiedUtc;
 
         //Update, create
-        public XMLWriteFileObject(string name, string parent, string hash, long size, long creationTime, long modifiedTime, MetaChangeType changeType, long metaUpdated)
-            : base(name, parent, creationTime, changeType, metaUpdated)
+        public XMLWriteFileObject(string name, string parent, string hash, long size, long creationTimeUtc, long modifiedTimeUtc, MetaChangeType changeType, long metaUpdatedUtc)
+            : base(name, parent, creationTimeUtc, changeType, metaUpdatedUtc)
         {
             _size = size;
             _hash = hash;
-            _lastModified = modifiedTime;
+            _lastModifiedUtc = modifiedTimeUtc;
         }
 
         //Rename
-        public XMLWriteFileObject(string name, string newName, string parent, MetaChangeType changeType, long metaUpdated)
-            : base(name, newName, parent, changeType, metaUpdated)
+        public XMLWriteFileObject(string name, string newName, string parent, MetaChangeType changeType, long metaUpdatedUtc)
+            : base(name, newName, parent, changeType, metaUpdatedUtc)
         {
         }
 
         //Delete
-        public XMLWriteFileObject(string name, string parent, MetaChangeType changeType, long metaUpdated)
-            : base(name, parent, changeType, metaUpdated)
+        public XMLWriteFileObject(string name, string parent, MetaChangeType changeType, long metaUpdatedUtc)
+            : base(name, parent, changeType, metaUpdatedUtc)
         {
         }
 
@@ -39,9 +39,9 @@ namespace Syncless.CompareAndSync.Seamless.XMLWriteObject
             get { return _hash; }
         }
 
-        public long LastModified
+        public long LastModifiedUtc
         {
-            get { return _lastModified; }
+            get { return _lastModifiedUtc; }
         }
 
     }
