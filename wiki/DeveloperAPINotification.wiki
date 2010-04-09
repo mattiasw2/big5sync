@@ -2,7 +2,7 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
-`[`*[DeveloperAPIMonitorExceptions Prev - Syncless.Monitor.Exceptions]* `|` *[DeveloperAPINotificationUINotification Next - Syncless.Notification.UINotification]*`]`
+`[`*[DeveloperAPIMonitorExceptions Prev - Syncless.Monitor.Exceptions]* `|` *[DeveloperAPIProfiling Next - Syncless.Profiling]*`]`
 
 = Interfaces Summary =
 
@@ -98,4 +98,4 @@
 
 [#Enumerations_Summary Back to top]
 
-`[`*[DeveloperAPIMonitorExceptions Prev - Syncless.Monitor.Exceptions]* `|` *[DeveloperAPINotificationUINotification Next - Syncless.Notification.UINotification]*`]`
+`[`*[DeveloperAPIMonitorExceptions Prev - Syncless.Monitor.Exceptions]* `|` *[DeveloperAPIProfiling Next - Syncless.Profiling]*`]`
