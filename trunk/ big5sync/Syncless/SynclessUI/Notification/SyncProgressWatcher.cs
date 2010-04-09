@@ -37,7 +37,7 @@ namespace SynclessUI.Notification
             _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
             (Action)(() =>
             {
-                _main.ProgressNotifySyncStart();
+                _main.ProgressNotifySyncStart(Progress);
             }));
             StateChanged();
         }
@@ -50,28 +50,28 @@ namespace SynclessUI.Notification
                     _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                                                                  (Action)(() =>
                                                                               {
-                                                                                  _main.ProgressNotifyAnalyzing();
+                                                                                  _main.ProgressNotifyAnalyzing(Progress);
                                                                               }));
                     break;
                 case SyncState.Synchronizing:
                     _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                                                                  (Action)(() =>
                                                                               {
-                                                                                  _main.ProgressNotifySynchronizing();
+                                                                                  _main.ProgressNotifySynchronizing(Progress);
                                                                               }));
                     break;
                 case SyncState.Finalizing:
                     _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                                                                  (Action)(() =>
                                                                               {
-                                                                                  _main.ProgressNotifyFinalizing();
+                                                                                  _main.ProgressNotifyFinalizing(Progress);
                                                                               }));
                     break;
                 case SyncState.Finished:
                     _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                                                                  (Action)(() =>
                                                                               {
-                                                                                  _main.ProgressNotifySyncComplete();
+                                                                                  _main.ProgressNotifySyncComplete(Progress);
                                                                               }));
                     break;
             }
@@ -85,10 +85,10 @@ namespace SynclessUI.Notification
             _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
            (Action)(() =>
             {
-                _main.ProgressNotifyChange();
+                _main.ProgressNotifyChange(Progress);
             }));
 
-            ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Current Percent : " + _progress.PercentComplete + "(" + _progress.Message + ")");
+            //ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Current Percent : " + _progress.PercentComplete + "(" + _progress.Message + ")");
         }
 
         public void SyncComplete()

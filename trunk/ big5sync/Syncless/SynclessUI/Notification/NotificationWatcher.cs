@@ -3,7 +3,6 @@ using System.Threading;
 using System.Windows.Threading;
 using Syncless.Core;
 using Syncless.Notification;
-using Syncless.Notification.UINotification;
 
 namespace SynclessUI.Notification
 {
@@ -86,12 +85,12 @@ namespace SynclessUI.Notification
                     _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                         (Action)(() =>
                         {
+                            Console.WriteLine("Sync Start Notify");
                             _main.Progress = ssNotification.Progress;
                             SyncProgressWatcher watcher = new SyncProgressWatcher(_main, ssNotification.TagName,
                                                                                   ssNotification.Progress);
+                            Console.WriteLine("Sync Start Notify End");
                         }));
-                    
-                    
                 }
             } 
             else if(notification.NotificationCode.Equals(NotificationCode.SyncCompleteNotification))
@@ -102,8 +101,9 @@ namespace SynclessUI.Notification
                     _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                         (Action)(() =>
                         {
+                            Console.WriteLine("Sync Complete Notify");
                             _main.TagChanged(scNotification.TagName);
-                            Console.WriteLine("Sync Complete: Calling Tag Changed");
+                            Console.WriteLine("Sync Complete Notify End");
                         }));
                 }
             }
@@ -115,6 +115,7 @@ namespace SynclessUI.Notification
                     _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                         (Action)(() =>
                         {
+
                             _main.NotifyNothingToSync(ntsNotification.TagName);
                         }));
                 }
