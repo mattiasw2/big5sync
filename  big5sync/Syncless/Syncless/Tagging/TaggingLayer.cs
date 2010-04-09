@@ -60,7 +60,7 @@ namespace Syncless.Tagging
         }
 
         /// <summary>
-        /// Gets a clone of the list of Tag objects which are not set as deleted
+        /// Gets a clone of the list of <see cref="Tag"/> objects which are not set as deleted
         /// </summary>
         public List<Tag> FilteredTagList
         {
@@ -258,7 +258,7 @@ namespace Syncless.Tagging
         /// <param name="path">The string value that represents the path of the folder to be untagged</param>
         /// <param name="tagname">The string value that represents the name of the tag the folder path is
         /// to be untagged from</param>
-        /// <returns>1 if the path is removed, 0 if the path is not found in the Tag</returns>
+        /// <returns>1 if the path is removed, 0 if the path is not found in the tag</returns>
         /// <exception cref="Syncless.Tagging.Exceptions.TagNotFoundException">thrown if the name that is 
         /// passed as parameter is not used by any tag in the existing list of tags</exception>
         public int UntagFolder(string path, string tagname)
@@ -590,7 +590,7 @@ namespace Syncless.Tagging
         /// <summary>
         /// Adds a tag to the current tagging profile
         /// </summary>
-        /// <param name="tag">The Tag object that represents the tag to be added</param>
+        /// <param name="tag">The <see cref="Tag"/> object that represents the tag to be added</param>
         /// <remarks>Used for merging tag objects from several tagging profiles.</remarks>
         public void AddTag(Tag tag)
         {
@@ -706,7 +706,7 @@ namespace Syncless.Tagging
         /// <summary>
         /// Determines whether the logical ID exists in any tagged path in the tag that is passed as parameter
         /// </summary>
-        /// <param name="tag">The Tag object that represents the tag to be checked</param>
+        /// <param name="tag">The <see cref="Tag"/> object that represents the tag to be checked</param>
         /// <param name="ID">The string value that represents the logical ID</param>
         /// <returns>true if the logical ID exists in any tagged path in the tag; otherwise, false</returns>
         private bool CheckID(Tag tag, string ID)
