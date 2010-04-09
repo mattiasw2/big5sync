@@ -101,6 +101,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     {
                         _progress.Message = info.FullName;
                         _progress.Update();
+                    
                     }
                     BaseCompareObject o = folder.GetChild(info.Name);
                     FileCompareObject fco = null;
