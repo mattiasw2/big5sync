@@ -10,7 +10,7 @@ Provides classes for performing seamless synchronization.
 
 || || *Class* || *Description* ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#SeamlessQueueControl SeamlessQueueControl] || Class for queuing auto-sync jobs. Based off http://moazzam-khan.com/blog/?p=418 ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [#SeamlessSyncer SeamlessSyncer] || The main logic controller of the Tagging namespace. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#SeamlessSyncer SeamlessSyncer] || Contains all the methods for a seamless/auto synchronization job. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#SeamlessXMLHelper SeamlessXMLHelper] || Contains the necessary methods for writing to XML during a seamless/auto synchronization. ||
 
 == !SeamlessQueueControl ==
