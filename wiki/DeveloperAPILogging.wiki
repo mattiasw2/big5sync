@@ -4,7 +4,19 @@
 
 `[`*[DeveloperAPIHelper Prev - Syncless.Helper]* `|` *[DeveloperAPIMonitor Next - Syncless.Monitor]*`]`
 
+Provides classes which perform logging of events or exceptions to log files.
+
 = Classes Summary =
+
+|| || *Class* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#DebugLogger DebugLogger] || Writes the debug log, which records any unhandled exception. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#DeveloperLogger DeveloperLogger] || Writes the developer log, which facilitate the developer during development, testing and debugging. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#LogData LogData] || A Data Transfer Object to pass log information. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#Logger Logger] || An abstract class for the different logger for the system. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#LoggerFactory LoggerFactory] || Helps to create the respective logger. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#LoggingLayer LoggingLayer] || The main logic controller of the Logging namespace. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#LogReaderHelper LogReaderHelper] || Reads the logs from the user log file. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#UserLogger UserLogger] || Writes the user log, which records the actions of the system performed by the user. ||
 
 == !DebugLogger ==
 
