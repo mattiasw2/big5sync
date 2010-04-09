@@ -1,10 +1,20 @@
 #summary Developers' Guide - API - Syncless.Filters
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPICoreView Prev - Syncless.Core.View]* `|` *[DeveloperAPIFilterExceptions Next - Syncless.Filters.Exceptions]*`]`
 
+Provides classes which enclose information needed for filtering of files and folders in synchronization.
+
 = Classes Summary =
+
+|| || *Class* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#ExtensionFilter ExtensionFilter] || Extension Filter for file. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#FileFilter FileFilter] || The abstract class for !FileFilter. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#FilterChain FilterChain] || The class that help apply a list of Filter to a list of pattern. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#FilterFactory FilterFactory] || Factory class for Creating Filter. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#SynclessArchiveFilter SynclessArchiveFilter] || Filter that filters the Syncless Archive (`_`synclessArchive folder) and Conflict Filter (`_`synclessConflict folder). ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#SynclessConfigFilter SynclessConfigFilter] || The Filter for Syncless Config Filter (.syncless folder). ||
 
 == !ExtensionFilter ==
 
@@ -36,8 +46,7 @@
 
 = Enumerations Summary =
 
-== !FilterMode ==
-
-[#Enumerations_Summary Back to top]
+|| || *Enumeration* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubenum.gif || !FilterMode || Defines the Filter Mode. ||
 
 `[`*[DeveloperAPICoreView Prev - Syncless.Core.View]* `|` *[DeveloperAPIFilterExceptions Next - Syncless.Filters.Exceptions]*`]`
