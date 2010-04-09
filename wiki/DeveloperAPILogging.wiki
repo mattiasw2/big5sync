@@ -14,15 +14,7 @@
 
 [#Classes_Summary Back to top]
 
-== !LogCategoryType ==
-
-[#Classes_Summary Back to top]
-
 == !LogData ==
-
-[#Classes_Summary Back to top]
-
-== !LogEventType ==
 
 [#Classes_Summary Back to top]
 
@@ -45,5 +37,22 @@
 == !UserLogger ==
 
 [#Classes_Summary Back to top]
+
+= Exceptions Summary =
+
+== !LogFileCorruptedException ==
+
+[#Exceptions_Summary Back to top]
+
+= Enumerations Sumamry =
+
+== !LogCategoryType ==
+
+[#Enumerations_Summary Back to top]
+
+== !LogEventType ==
+
+[#Enumerations_Summary Back to top]
+
 
 `[`*[DeveloperAPIHelper Prev - Syncless.Helper]* `|` *[DeveloperAPIMonitor Next - Syncless.Monitor]*`]`
