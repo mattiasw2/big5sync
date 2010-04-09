@@ -511,7 +511,7 @@ namespace SynclessUI
 
         private void SwitchingMode()
         {
-            LblSyncMode.Content = "Switching";
+            LblSyncMode.Content = "Please Wait";
             BtnSyncMode.ToolTip = "Please Wait";
             BtnPreview.Visibility = Visibility.Hidden;
             BtnSyncNow.Visibility = Visibility.Hidden;
@@ -539,8 +539,14 @@ namespace SynclessUI
                 if (_tagStatusNotificationDictionary.ContainsKey(SelectedTag))
                 {
                     ProgressBarSync.Visibility = Visibility.Visible;
-                    if (CurrentProgress.TagName == SelectedTag && CurrentProgress.State == SyncState.Analyzing)
+                    if (CurrentProgress.TagName == SelectedTag && CurrentProgress.State == SyncState.Analyzing) {
                         LblProgress.Visibility = Visibility.Hidden;
+                        ProgressBarSync.IsIndeterminate = true;
+                    }
+                    else
+                    {
+                        ProgressBarSync.IsIndeterminate = false;
+                    }
                 }
 
                 Console.WriteLine("In Manual Mode");
@@ -556,11 +562,13 @@ namespace SynclessUI
                         if (CurrentProgress != null && CurrentProgress.TagName == SelectedTag && (CurrentProgress.State == SyncState.Analyzing || CurrentProgress.State == SyncState.Queued || CurrentProgress.State == SyncState.Started))
                         {
                             BtnSyncNow.Visibility = Visibility.Visible;
+                            BtnPreview.Visibility = Visibility.Hidden;
                             CancelButtonMode();
                         }
                         else
                         {
                             BtnSyncNow.Visibility = Visibility.Hidden;
+                            BtnPreview.Visibility = Visibility.Hidden;
                         }
 
                         if (tv.IsQueued)
