@@ -410,7 +410,7 @@ namespace SynclessUI
             if (!_manualSyncEnabled)
             {
                 bool success = Gui.CancelSwitch(SelectedTag);
-                if(!success)
+                if (!success)
                 {
                     DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
                                            "You cannot change the synchronization mode while it is synchronizing.");
@@ -612,6 +612,7 @@ namespace SynclessUI
                             {
                                 ProgressBarSync.Visibility = Visibility.Visible;
                                 LblProgress.Visibility = Visibility.Visible;
+                                BtnPreview.Visibility = Visibility.Hidden;
                                 CancelButtonMode();
                                 const string message = "Synchronization Request Has Been Queued";
                                 LblStatusText.Content = message;
@@ -648,7 +649,6 @@ namespace SynclessUI
                     {
                         CancellingTags.Add(SelectedTag);
                         LblSyncNow.Content = "Cancelling..";
-                        
                     }
                     else
                     {
@@ -1124,12 +1124,13 @@ namespace SynclessUI
             if (SelectedTag == tagname)
             {
                 SyncButtonMode();
-                string message = "Synchronization Cancelled";
-                LblStatusText.Content = message;
-                _tagStatusNotificationDictionary[SelectedTag] = message;
+                LblStatusText.Content = "";
+                _tagStatusNotificationDictionary.Remove(SelectedTag);
                 BtnSyncNow.IsEnabled = true;
                 ProgressBarSync.IsIndeterminate = false;
-                LblProgress.Visibility = Visibility.Visible;
+                ProgressBarSync.Visibility = Visibility.Hidden;
+                LblProgress.Visibility = Visibility.Hidden;
+                _syncProgressNotificationDictionary.Remove(SelectedTag);
                 CancellingTags.Remove(tagname);
             }
             else
@@ -1225,6 +1226,7 @@ namespace SynclessUI
 
             if (SelectedTag == tagname)
             {
+                BtnPreview.Visibility = Visibility.Hidden;
                 LblStatusText.Content = message;
                 ProgressBarSync.Value = percentageComplete;
                 SetProgressBarColor(percentageComplete);
@@ -1240,6 +1242,7 @@ namespace SynclessUI
         {
             if (SelectedTag == progress.TagName)
             {
+                BtnPreview.Visibility = Visibility.Hidden;
                 BtnSyncNow.Visibility = Visibility.Hidden;
                 ProgressBarSync.IsIndeterminate = false;
                 LblProgress.Visibility = Visibility.Visible;
@@ -1250,6 +1253,7 @@ namespace SynclessUI
         {
             if (SelectedTag == progress.TagName)
             {
+                BtnPreview.Visibility = Visibility.Hidden;
                 BtnSyncNow.Visibility = Visibility.Hidden;
                 ProgressBarSync.IsIndeterminate = false;
                 LblProgress.Visibility = Visibility.Visible;
@@ -1266,6 +1270,7 @@ namespace SynclessUI
 
             if (SelectedTag == progress.TagName)
             {
+                ProgressBarSync.IsIndeterminate = false;
                 LblStatusText.Content = message;
                 ProgressBarSync.Value = percentageComplete;
                 SetProgressBarColor(percentageComplete);
@@ -1277,14 +1282,14 @@ namespace SynclessUI
                 if (Gui.GetTag(SelectedTag).IsSeamless)
                 {
                     BtnSyncNow.Visibility = Visibility.Hidden;
+                    BtnPreview.Visibility = Visibility.Hidden;
                 }
                 else
                 {
+                    SyncButtonMode();
                     BtnSyncNow.Visibility = Visibility.Visible;
+                    BtnPreview.Visibility = Visibility.Visible;
                 }
-
-                ProgressBarSync.IsIndeterminate = false;
-                SyncButtonMode();
             }
         }
 
@@ -1424,13 +1429,13 @@ namespace SynclessUI
         private void UpdateTagInfo_ThreadSafe(string tagName)
         {
             this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
-                                                                               {
+            {
 
-                                                                                   if (SelectedTag == tagName)
-                                                                                   {
-                                                                                       ViewTagInfo(tagName);
-                                                                                   }
-                                                                               }));
+                if (SelectedTag == tagName)
+                {
+                    ViewTagInfo(tagName);
+                }
+            }));
         }
 
         private void UpdateAllTags_ThreadSafe()
