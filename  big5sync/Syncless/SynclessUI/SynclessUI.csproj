@@ -253,8 +253,10 @@
     <Resource Include="Icons\dropindicator.ico" />
     <Resource Include="Icons\file.ico" />
     <Resource Include="Icons\green-sync-arrow.png" />
+    <Resource Include="Icons\infinity.ico" />
     <Resource Include="Icons\log.ico" />
     <Resource Include="Icons\red-sync-arrow.png" />
+    <Resource Include="Icons\timesync-white.ico" />
     <Resource Include="Icons\timesync.ico" />
     <Resource Include="Icons\unmonitor.ico" />
     <Resource Include="Icons\filter.ico" />
