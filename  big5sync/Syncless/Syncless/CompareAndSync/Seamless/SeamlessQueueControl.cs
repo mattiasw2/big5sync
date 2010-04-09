@@ -28,6 +28,9 @@ namespace Syncless.CompareAndSync.Seamless
             }
         }
 
+        /// <summary>
+        /// Singleton pattern. Returns the current instance if not null, or a new instance if current instance is null.
+        /// </summary>
         public static SeamlessQueueControl Instance
         {
             get

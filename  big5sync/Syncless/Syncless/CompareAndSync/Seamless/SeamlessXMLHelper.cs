@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Xml;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Seamless.XMLWriteObject;
