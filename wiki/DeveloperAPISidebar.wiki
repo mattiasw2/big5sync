@@ -45,7 +45,6 @@
         * [DeveloperAPICompareAndSyncManualVisitor#ComparerVisitor ComparerVisitor]
         * [DeveloperAPICompareAndSyncManualVisitor#ConflictVisitor ConflictVisitor]
         * [DeveloperAPICompareAndSyncManualVisitor#FolderRenameVisitor FolderRenameVisitor]
-        * [DeveloperAPICompareAndSyncManualVisitor#IgnoreMetaDataVisitor IgnoreMetaDataVisitor]
         * [DeveloperAPICompareAndSyncManualVisitor#ProcessMetadataVisitor ProcessMetadataVisitor]
         * [DeveloperAPICompareAndSyncManualVisitor#SyncerVisitor SyncerVisitor]
         * [DeveloperAPICompareAndSyncManualVisitor#XMLMetadataVisitor XMLMetadataVisitor]
