@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Name="Window" x:Class="SynclessUI.OptionsWindow"
     Title="Options" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Icon="Icons/logo.ico" Opacity="0.95" Unloaded="Window_Unloaded" ResizeMode="CanMinimize" Closing="Window_Closing">
-	<Grid x:Name="LayoutRoot" HorizontalAlignment="Center" VerticalAlignment="Center" Width="440" Height="315">
+	<Grid x:Name="LayoutRoot" HorizontalAlignment="Center" VerticalAlignment="Center">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="20"/>
 			<ColumnDefinition Width="400"/>
@@ -35,58 +35,58 @@
 			</Button>
 		</StackPanel>
 		<Image x:Name="TagIcon" HorizontalAlignment="Right" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,-25,-25,0" Grid.ColumnSpan="2" Source="Icons/option.ico"/>
-		<Grid Grid.Column="1" Grid.Row="2">
-    <TabControl Background="{x:Null}" BorderBrush="#FF626262" BorderThickness="1,0,1,1">
-      <TabItem Header="General" FontFamily="Century Gothic">
+		<Grid Grid.Column="1" Grid.Row="2" Width="400" Height="210">
+    <Label x:Name="TabItemDescription" VerticalAlignment="Top" Content="General and User Interface Settings" Margin="0,22,0,0" FontFamily="Century Gothic" Padding="5,4,1,4" Background="White" FontWeight="Bold"/>
+    <TabControl Background="{x:Null}" BorderBrush="#FF626262" BorderThickness="1" Panel.ZIndex="5">
+      <TabItem x:Name="TabItemGeneral" Header="General" FontFamily="Century Gothic" FontWeight="Bold" PreviewMouseLeftButtonDown="TabItemGeneral_PreviewMouseLeftButtonDown">
 
-<StackPanel x:Name="GeneralOptions" Margin="5">
+<StackPanel x:Name="GeneralOptions" Margin="5,25,5,5">
 				<StackPanel x:Name="DisplayWelcomeScreenGroup" Orientation="Horizontal">
-					<CheckBox x:Name="ChkBoxDisplayWelcomeScreen" VerticalAlignment="Center" />
-					<Label x:Name="DisplayWelcomeScreenDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Show Welcome Screen on Application Start/Exit"/>
+					<CheckBox x:Name="ChkBoxDisplayWelcomeScreen" VerticalAlignment="Center" FontWeight="Normal" />
+					<Label x:Name="DisplayWelcomeScreenDescription" FontFamily="Century Gothic" Foreground="White" Content="Show Welcome Screen on Application Start/Exit" FontWeight="Normal"/>
 				</StackPanel>
 				<StackPanel x:Name="RegistryGroup" Orientation="Horizontal">
-					<CheckBox x:Name="ChkBoxRegistryIntegration" VerticalAlignment="Center" />
-					<Label x:Name="RegistryDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Enable Shell Integration"/>
+					<CheckBox x:Name="ChkBoxRegistryIntegration" VerticalAlignment="Center" FontWeight="Normal" />
+					<Label x:Name="RegistryDescription" FontFamily="Century Gothic" Foreground="White" Content="Enable Shell Integration" FontWeight="Normal"/>
 				</StackPanel>
 				<StackPanel x:Name="EnableAnimationGroup" Orientation="Horizontal">
-					<CheckBox x:Name="ChkBoxEnableAnimation" VerticalAlignment="Center" />
-					<Label x:Name="EnableAnimationDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Enable Window Animation on Application Start/Exit"/>
+					<CheckBox x:Name="ChkBoxEnableAnimation" VerticalAlignment="Center" FontWeight="Normal" />
+					<Label x:Name="EnableAnimationDescription" FontFamily="Century Gothic" Foreground="White" Content="Enable Window Animation on Application Start/Exit" FontWeight="Normal"/>
 				</StackPanel>
 				<StackPanel x:Name="EnableTrayNotification" Orientation="Horizontal">
-					<CheckBox x:Name="ChkBoxEnableTrayNotification" VerticalAlignment="Center" />
-					<Label x:Name="EnableTrayNotificationDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Enable Tray Notifications"/>
+					<CheckBox x:Name="ChkBoxEnableTrayNotification" VerticalAlignment="Center" FontWeight="Normal" />
+					<Label x:Name="EnableTrayNotificationDescription" FontFamily="Century Gothic" Foreground="White" Content="Enable Tray Notifications" FontWeight="Normal"/>
 				</StackPanel>
 				<StackPanel x:Name="EnableNotificationSounds" Orientation="Horizontal">
-					<CheckBox x:Name="ChkBoxEnableNotificationSounds" VerticalAlignment="Center" />
-					<Label x:Name="EnableNotificationSoundsDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Enable Notification Sounds"/>
+					<CheckBox x:Name="ChkBoxEnableNotificationSounds" VerticalAlignment="Center" FontWeight="Normal" />
+					<Label x:Name="EnableNotificationSoundsDescription" FontFamily="Century Gothic" Foreground="White" Content="Enable Notification Sounds" FontWeight="Normal"/>
 				</StackPanel>
 				<StackPanel x:Name="MinimizeToTrayGroup" Orientation="Horizontal">
-					<CheckBox x:Name="ChkBoxMinimizeToTray" VerticalAlignment="Center" />
-					<Label x:Name="MinimizeDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="When Minimizing, Minimize to Tray"/>
+					<CheckBox x:Name="ChkBoxMinimizeToTray" VerticalAlignment="Center" FontWeight="Normal" />
+					<Label x:Name="MinimizeDescription" FontFamily="Century Gothic" Foreground="White" Content="When Minimizing, Minimize to Tray" FontWeight="Normal"/>
 				</StackPanel>
 			</StackPanel>
 
       </TabItem>
-      <TabItem Header="Archiving" FontFamily="Century Gothic" BorderThickness="0">
-      	<StackPanel Margin="5">
-      		<GroupBox Header="In the event of replaced/deleted files/folder" Foreground="White" BorderThickness="0.1" Margin="0" FontSize="13.333">
+      <TabItem x:Name="TabItemArchiving" Header="Archiving" FontFamily="Century Gothic" BorderThickness="0" FontWeight="Bold" PreviewMouseLeftButtonDown="TabItemArchiving_PreviewMouseLeftButtonDown">
+      	<StackPanel Margin="5,25,5,5">
+      		<GroupBox Header="In the event of deleted or replaced files/folders" Foreground="White" BorderThickness="0.1" Margin="0" FontWeight="Normal">
       			<StackPanel Margin="5,0,0,0" Orientation="Vertical">
       				<StackPanel x:Name="SendToRecycleBinGroup" Orientation="Horizontal">
       					<CheckBox x:Name="ChkBoxSendToRecycleBin" VerticalAlignment="Center" Click="ChkBoxSendToRecycleBin_Click" />
-      					<Label x:Name="RecycleBinDescription" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Send to Recycle Bin"/>
+      					<Label x:Name="RecycleBinDescription" FontFamily="Century Gothic" FontSize="12" Foreground="White" Content="Send to Recycle Bin" FontWeight="Normal"/>
       				</StackPanel>
       				<StackPanel x:Name="MoveToSynclessArchiveGroup" Orientation="Horizontal" Margin="0">
       					<CheckBox x:Name="ChkBoxMoveToSynclessArchive" VerticalAlignment="Center" />
-      					<Label x:Name="MoveToSynclessArchiveDescription1" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Move Last" Margin="0"/>
-      					<Label x:Name="LblChanges" FontSize="13.333" Background="{x:Null}" Foreground="White" BorderBrush="{x:Null}" Margin="-5,0" Content="0"/>
-      					<Label x:Name="MoveToSynclessArchiveDescription2" FontFamily="Century Gothic" FontSize="13.333" Foreground="White" Content="Changes to __SynclessArchive"/>
-      					<Slider x:Name="SliderChanges" Margin="0,3,0,0" Width="40" Minimum="1" SmallChange="1" ValueChanged="SliderChanges_ValueChanged" IsSnapToTickEnabled="True"/>
+      					<Label x:Name="MoveToSynclessArchiveDescription1" FontFamily="Century Gothic" FontSize="12" Foreground="White" Content="Move Last" Margin="0" FontWeight="Normal"/>
+      					<Label x:Name="LblChanges" FontSize="12" Background="{x:Null}" Foreground="White" BorderBrush="{x:Null}" Margin="-5,0" Content="0" FontWeight="Normal"/>
+      					<Label x:Name="MoveToSynclessArchiveDescription2" FontFamily="Century Gothic" FontSize="12" Foreground="White" Content="Changes to __SynclessArchive" FontWeight="Normal"/>
+      					<Slider x:Name="SliderChanges" Margin="0,3,0,0" Width="40" Minimum="1" SmallChange="1" IsSnapToTickEnabled="True"/>
       				</StackPanel>
       			</StackPanel>
       		</GroupBox>
       	</StackPanel>
       </TabItem>
-      <TabItem Header="About" FontFamily="Century Gothic"/>
     </TabControl>
 			
 		</Grid>

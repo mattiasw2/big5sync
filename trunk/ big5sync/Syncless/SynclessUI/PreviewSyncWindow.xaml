@@ -35,16 +35,15 @@
 		<Image x:Name="TagIcon" HorizontalAlignment="Right" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,-25,-25,0" Grid.ColumnSpan="2" Source="Icons/folder.ico"/>
         <toolkit:DataGrid ItemsSource="{Binding PreviewSyncData, ElementName=Window}" Margin="5,5,0,5" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="2" IsReadOnly="True" FontFamily="Century Gothic" MinHeight="100" MinWidth="750" Height="Auto" Width="Auto" MaxHeight="300" MaxWidth="750" RowBackground="#FF666666" AlternatingRowBackground="#FF555555" HorizontalGridLinesBrush="#FF828790" VerticalGridLinesBrush="#FF828790" CanUserResizeRows="False" FontSize="10.667">
             <toolkit:DataGrid.Columns>
-                <toolkit:DataGridTemplateColumn Header="Source" IsReadOnly="True" Width="0.30*" SortMemberPath="source" CanUserReorder="False">
+                <toolkit:DataGridTemplateColumn Header="Source" IsReadOnly="True" Width="0.255*" SortMemberPath="source" CanUserReorder="False">
                     <toolkit:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock VerticalAlignment="Center">
-							<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="{Binding source}"><Image Width="16" Height="16" Source="{Binding Path=sourceicon}" /><TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding source}"/></Hyperlink></TextBlock>
+                            <TextBlock VerticalAlignment="Center"><Image Width="16" Height="16" Source="{Binding Path=sourceicon}" /><TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding source}" MouseLeftButtonDown="Path_MouseLeftButtonDown" TextDecorations="Underline" Cursor="Hand" ToolTip="Click to Open File/Folder" /></TextBlock>
                         </DataTemplate>
                     </toolkit:DataGridTemplateColumn.CellTemplate>
                 </toolkit:DataGridTemplateColumn>
 				
-                <toolkit:DataGridTemplateColumn Header="Last Modified" IsReadOnly="True" Width="0.12*" CanUserReorder="False">
+                <toolkit:DataGridTemplateColumn Header="Last Modified" IsReadOnly="True" Width="0.105*" CanUserReorder="False">
 			        <toolkit:DataGridTemplateColumn.CellTemplate>
 			            <DataTemplate>
 						<StackPanel Orientation="Vertical">
@@ -55,7 +54,7 @@
 			        </toolkit:DataGridTemplateColumn.CellTemplate>
 				</toolkit:DataGridTemplateColumn>
 				
-				<toolkit:DataGridTextColumn Binding="{Binding sourcesize}" Header="Size" Foreground="White" Width="0.05*" CanUserReorder="False" />
+				<toolkit:DataGridTextColumn Binding="{Binding sourcesize}" Header="Size" Foreground="White" Width="0.11*" CanUserReorder="False" />
 				                
 				<toolkit:DataGridTemplateColumn Header="" IsReadOnly="True" Width="0.06*" SortMemberPath="operation" CanUserResize="False" CanUserReorder="False">
 			        <toolkit:DataGridTemplateColumn.CellTemplate>
@@ -65,17 +64,17 @@
 			        </toolkit:DataGridTemplateColumn.CellTemplate>
 				</toolkit:DataGridTemplateColumn>
 				
-                <toolkit:DataGridTemplateColumn Header="Destination" IsReadOnly="True" Width="0.30*" SortMemberPath="destination" CanUserReorder="False">
+                <toolkit:DataGridTemplateColumn Header="Destination" IsReadOnly="True" Width="0.255*" SortMemberPath="destination" CanUserReorder="False">
 			        <toolkit:DataGridTemplateColumn.CellTemplate>
 			            <DataTemplate>
 							<TextBlock VerticalAlignment="Center">
-								<Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="{Binding destination}"><Image Width="16" Height="16" Source="{Binding Path=desticon}" /><TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding destination}"/></Hyperlink>
+								<Image Width="16" Height="16" Source="{Binding Path=desticon}" /><TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding destination}" MouseLeftButtonDown="Path_MouseLeftButtonDown" TextDecorations="Underline" Cursor="Hand" ToolTip="Click to Open File/Folder" />
 	                        </TextBlock>
 			            </DataTemplate>
 			        </toolkit:DataGridTemplateColumn.CellTemplate>
 				</toolkit:DataGridTemplateColumn>
 				
-                <toolkit:DataGridTemplateColumn Header="Last Modified" IsReadOnly="True" Width="0.12*" CanUserReorder="False">
+                <toolkit:DataGridTemplateColumn Header="Last Modified" IsReadOnly="True" Width="0.105*" CanUserReorder="False">
 			        <toolkit:DataGridTemplateColumn.CellTemplate>
 			            <DataTemplate>
 						<StackPanel Orientation="Vertical">
@@ -86,7 +85,7 @@
 			        </toolkit:DataGridTemplateColumn.CellTemplate>
 				</toolkit:DataGridTemplateColumn>
 				
-				<toolkit:DataGridTextColumn Binding="{Binding destsize}" Header="Size" Foreground="White" Width="0.10*" CanUserReorder="False" />
+				<toolkit:DataGridTextColumn Binding="{Binding destsize}" Header="Size" Foreground="White" Width="0.11*" CanUserReorder="False" />
             </toolkit:DataGrid.Columns>
         </toolkit:DataGrid>
         <Grid VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Width="500" HorizontalAlignment="Left" Margin="0,1,0,0">

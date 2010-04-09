@@ -1234,7 +1234,7 @@ namespace SynclessUI
                 {
                     BtnSyncNow.Visibility = Visibility.Visible;
                 }
-                //ProgressBarSync.IsIndeterminate = false;
+                ProgressBarSync.IsIndeterminate = false;
                 SyncButtonMode();
             }
         }

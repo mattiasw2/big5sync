@@ -39,6 +39,7 @@ namespace SynclessUI
                 SliderChanges.Value = _sc.ArchiveLimit;
 			}
 
+			SliderChanges.ValueChanged += SliderChanges_ValueChanged;
             ChkBoxMoveToSynclessArchive.Checked += ChkBoxMoveToSynclessArchive_Checked;
             ChkBoxMoveToSynclessArchive.Unchecked += ChkBoxMoveToSynclessArchive_Unchecked;
 
@@ -147,6 +148,21 @@ namespace SynclessUI
         private void ChkBoxSendToRecycleBin_Click(object sender, System.Windows.RoutedEventArgs e)
         {
         	_sc.Recycle = (bool) ChkBoxSendToRecycleBin.IsChecked;
+        }
+
+        private void TabItemGeneral_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+        	TabItemDescription.Content = "General and User Interface Settings";
+        }
+
+        private void TabItemArchiving_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+        	TabItemDescription.Content = "Archiving Settings";
+        }
+
+        private void TabItemAbout_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+        	TabItemDescription.Content = "";
         }
     }
 }
