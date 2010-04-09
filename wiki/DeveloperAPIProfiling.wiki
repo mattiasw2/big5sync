@@ -2,7 +2,7 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
-`[`*[DeveloperAPINotificationUINotification Prev - Syncless.Notification.UINotification]* `|` *[DeveloperAPIProfilingExceptions Next - Syncless.Profiling.Exceptions]*`]`
+`[`*[DeveloperAPINotification Prev - Syncless.Notification]* `|` *[DeveloperAPIProfilingExceptions Next - Syncless.Profiling.Exceptions]*`]`
 
 Provides classes for drive/computer recognization, conversion of a physical directory/file path to a logical address, and vice versa.
 
@@ -45,4 +45,4 @@ Provides classes for drive/computer recognization, conversion of a physical dire
 
 [#Classes_Summary Back to top]
 
-`[`*[DeveloperAPINotificationUINotification Prev - Syncless.Notification.UINotification]* `|` *[DeveloperAPIProfilingExceptions Next - Syncless.Profiling.Exceptions]*`]`
+`[`*[DeveloperAPINotification Prev - Syncless.Notification]* `|` *[DeveloperAPIProfilingExceptions Next - Syncless.Profiling.Exceptions]*`]`
