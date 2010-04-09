@@ -9,7 +9,7 @@ using Syncless.Logging;
 namespace Syncless.CompareAndSync.Manual.Visitor
 {
     /// <summary>
-    /// ConflictVisitor is responsible for handling conflicted types (when file and folder have the same name, including extension.)
+    /// ConflictVisitor is responsible for handling conflicted types (when file and folder have the same name, including extension).
     /// </summary>
     public class ConflictVisitor : IVisitor
     {

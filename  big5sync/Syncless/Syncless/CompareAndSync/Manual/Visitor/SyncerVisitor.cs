@@ -8,6 +8,9 @@ using Syncless.Logging;
 
 namespace Syncless.CompareAndSync.Manual.Visitor
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class SyncerVisitor : IVisitor
     {
         private readonly SyncConfig _syncConfig;

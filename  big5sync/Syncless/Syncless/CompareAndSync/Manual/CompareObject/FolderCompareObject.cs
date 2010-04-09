@@ -119,7 +119,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         /// <summary>
         /// Gets another <see cref="FileCompareObject"/> with the same creation time as the one passed in.
         /// </summary>
-        /// <param name="creationTime">A <see cref="long"/> with the creation time to search for.</param>
+        /// <param name="creationTimeUtc">A <see cref="long"/> with the creation time to search for.</param>
         /// <param name="pos"></param>
         /// <returns><c>The FileCompareObject with the same creation time as that passed in.</c></returns>
         public FileCompareObject GetSameCreationTimeUtc(long creationTimeUtc, int pos)
@@ -179,7 +179,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         /// </summary>
         /// <param name="name">The name to match.</param>
         /// <param name="hash">The hash to match.</param>
-        /// <param name="creationTime">The creation time to match.</param>
+        /// <param name="creationTimeUtc">The creation time to match.</param>
         /// <param name="pos">The position indicating which index to match.</param>
         /// <returns></returns>
         public FileCompareObject GetIdenticalFile(string name, string hash, long creationTimeUtc, int pos)
