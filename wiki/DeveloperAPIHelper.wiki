@@ -2,14 +2,28 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPIFilter Prev - Syncless.Filters]* `|` *[DeveloperAPILogging Next - Syncless.Logging]*`]`
+
 = Classes Summary =
 
 == Cleaner ==
 
+[#Classes_Summary Back to top]
+
 == !CommonXmlHelper ==
+
+[#Classes_Summary Back to top]
 
 == !DriveHelper ==
 
+[#Classes_Summary Back to top]
+
 == !ErrorMessage ==
 
+[#Classes_Summary Back to top]
+
 == !PathHelper ==
+
+[#Classes_Summary Back to top]
+
+`[`*[DeveloperAPIFilter Prev - Syncless.Filters]* `|` *[DeveloperAPILogging Next - Syncless.Logging]*`]`
