@@ -30,9 +30,10 @@ Why choose Syncless over other synchronization tools? The reason is simple. Sync
 
   * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder will be archived up to 2 backups at one time. As of version 1.0, archiving is not user-configurable, but will be in the future.
 
+  * *New* *Time Synchronization*:
+
   * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving it on your computer.
 
-  * *Time Synchronization*:
 
 === N-way Synchronization ===
 The traditional way to keep a few folders in sync is to create multiple jobs because many tools provide synchronization between 2 folders only. Syncless is capable of synchronizing multiple folders without you having to create multiple jobs. Simply tag multiple folders with the same tag name and Syncless will keep them all in sync. 
@@ -45,14 +46,14 @@ With the archiving feature, you do not need to worry about losing an important f
 
 To illustrate, let us say you tag D:\Lecture and E:\Notes to a tag named 'Lecture', both containing the file Chapter1.pdf. You accidentally deleted Chapter1.pdf under D:\Lecture. Syncless will keep a copy of Chapter1.pdf in the archive folder under E:\Notes. If you need to restore that file, simply copy the archived file back to D:\Lecture. 
 
+=== *New* Time Synchronization ===
+
 === Portability ===
 Syncless can run from a removable drive such as a thumbdrive. If you frequently use your removable storage drive for the purpose of synchronizing files and folders on various computers, Syncless can automate this job for you. 
 
 For example, a student has a home computer, as well as a regular workstation in his school lab. He wishes to keep his school work synchronized across both computers. By tagging his school work folders on both his home computer and school workstation with the same tag, say "Lectures", Syncless will auto-detect and synchronize each time the removable storage drive is inserted. See the diagrams below for a clearer illustration:
 
 http://big5sync.googlecode.com/files/merging.png
-
-=== Time Synchronization ===
 
 == What is a Tag? ==
 
@@ -192,22 +193,36 @@ You can personalize Syncless through the http://big5sync.googlecode.com/files/Ap
 
 http://big5sync.googlecode.com/files/Configure_Application_Settings.jpg
 
-=== Enable Shell Integration ===
+=== *New* General and User Interface Settings ===
+
+==== *New* Show Welcome Screen on Application Start ====
+
+==== Enable Shell Integration ====
 
 Syncless makes tagging easy for you by integrating directly into Windows Explorer. You can simply right-click on any folder you wish to tag. In the case where you rather not have this function, you can deselect *Enable Shell Integration* in settings.
 
 
-=== Enable Window Animation on Application Start/Exit===
+==== Enable Window Animation on Application Start/Exit ====
 
 Syncless's main window will animate upon start up or exit. You may choose to disable the function by deselecting the *Enable Window Animation on Application Start/Exit* checkbox.
 
-=== Enable Tray Notification ===
+==== Enable Tray Notification ====
 
 Syncless notifies you through tray notification upon initialization/completion of a synchronization. Enable or disable the function by deselecting the *Enable Tray Notification* checkbox.
 
-=== When Minimizing, Minimize to Tray ===
+==== *New* Enable Notification Sounds ====
+
+==== When Minimizing, Minimize to Tray ====
 
 Syncless can minimize to tray so that your task bar will be kept as clean as possible. However, if you wish to access Syncless more quickly through the task bar, you can disable the function by deselecting the *When Minimizing, Minimize to Tray* checkbox.
+
+==== *New* Attempt to Synchronize Computer Clock on Application Startup ====
+
+=== *New* Archiving Settings ===
+
+==== *New* Send to Recycle Bin ====
+
+==== *New* Archive Last Changes ====
 
 == How is Syncless User-friendly? ==
 
@@ -264,6 +279,8 @@ Syncless allows you to perform other tasks as well when you synchronize large am
 Whenever a synchronization task is initiated or completed, Syncless will notify you through tray notifications. 
 
 http://big5sync.googlecode.com/files/Tray_Notification.jpg
+
+=== *New* Preview Synchronization Results ===
 
 === Viewing Logs ===
 
