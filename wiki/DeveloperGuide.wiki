@@ -93,6 +93,10 @@ Thus, we have come up with this seamless tester, which is quite different from a
 
 To understand more about using the tester, please click [http://code.google.com/p/big5sync/wiki/TestSeamlessSyncerTester here].
 
+= API =
+
+This [http://code.google.com/p/big5sync/wiki/DeveloperAPIOverview page] provides an overview of the API specification for Syncless, version 2.0. For more detailed documentation, please download our Compiled HTML Help File here.
+
 = Recommended Resources =
 [http://code.google.com/p/big5sync/wiki/DeveloperGuideRecommendations These] are additional resources which may help the developer in understanding how to develop for Syncless further.
 
