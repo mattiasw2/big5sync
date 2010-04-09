@@ -2,19 +2,23 @@
 
 namespace Syncless.Notification
 {
+    /// <summary>
+    /// The Notification for adding a Tag.
+    /// </summary>
     public class AddTagNotification : AbstractNotification 
     {
-        private Tag _tag;
-
-        public Tag Tag
-        {
-            get { return _tag; }
-            set { _tag = value; }
-        }
+        /// <summary>
+        /// Get and Set the related Tag.
+        /// </summary>
+        public Tag Tag { get; set; }
+        /// <summary>
+        /// Initialize the AddTagNotification
+        /// </summary>
+        /// <param name="tag"></param>
         public AddTagNotification(Tag tag)
             : base("Add Tag Notification", NotificationCode.AddTagNotification)
         {
-            this._tag = tag;
+            Tag = tag;
         }
     }
 }

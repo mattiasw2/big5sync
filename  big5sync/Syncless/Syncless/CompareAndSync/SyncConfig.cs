@@ -1,22 +1,44 @@
 ﻿namespace Syncless.CompareAndSync
 {
+    /// <summary>
+    /// The object containing all the SyncConfiguration
+    /// </summary>
     public class SyncConfig
     {
-
+        
         private static SyncConfig _instance;
-        private string _archiveName;
-        private int _archiveLimit;
-        private bool _recycle;
-        private string _conflictDir;
-
+        /// <summary>
+        /// Get and Set the Archive Name
+        /// </summary>
+        public string ArchiveName { get; set; }
+        /// <summary>
+        /// Get and Set the Archive Limit
+        /// </summary>
+        public int ArchiveLimit { get; set; }
+        /// <summary>
+        /// Get and Set the Conflict Directory
+        /// </summary>
+        public string ConflictDir { get; set; }
+        /// <summary>
+        /// Get and Set if to Recycle deletedFiles.
+        /// </summary>
+        public bool Recycle { get; set; }
+        /// <summary>
+        /// Private initalizer
+        /// </summary>
+        /// <param name="archiveName">Name of archive</param>
+        /// <param name="archiveLimit">Archive Limit</param>
+        /// <param name="recycle">Recycle enabled</param>
         private SyncConfig(string archiveName, int archiveLimit, bool recycle)
         {
-            _archiveName = archiveName;
-            _archiveLimit = archiveLimit;
-            _recycle = recycle;
-            _conflictDir = "_synclessConflict";
+            ArchiveName = archiveName;
+            ArchiveLimit = archiveLimit;
+            Recycle = recycle;
+            ConflictDir = "_synclessConflict";
         }
-
+        /// <summary>
+        /// Return the instance of Sync Config
+        /// </summary>
         internal static SyncConfig Instance
         {
             get
@@ -44,7 +66,9 @@
                 }
             }
         }
-
+        /// <summary>
+        /// Return a Copy of Sync Config
+        /// </summary>
         internal static SyncConfig Copy
         {
             get
@@ -57,33 +81,12 @@
             }
         }
 
-        public bool Recycle
-        {
-            get { return _recycle; }
-            set { _recycle = value; }
-        }
+        
+
         private SyncConfig Clone()
         {
             SyncConfig config = new SyncConfig(ArchiveName, ArchiveLimit, Recycle);
             return config;
-        }
-
-        public string ArchiveName
-        {
-            get { return _archiveName; }
-            set { _archiveName = value; }
-        }
-
-        public int ArchiveLimit
-        {
-            get { return _archiveLimit; }
-            set { _archiveLimit = value; }
-        }
-
-        public string ConflictDir
-        {
-            get { return _conflictDir; }
-            set { _conflictDir = value; }
         }
 
     }

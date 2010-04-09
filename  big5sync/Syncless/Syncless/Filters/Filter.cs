@@ -16,7 +16,7 @@ namespace Syncless.Filters
         /// Initialize a Filter object
         /// </summary>
         /// <param name="mode">The <see cref="FilterMode"/> for Filter</param>
-        public Filter(FilterMode mode){
+        protected Filter(FilterMode mode){
             Mode = mode ;
         }
 
@@ -96,21 +96,39 @@ namespace Syncless.Filters
             }
             return Equals(filter);
         }
-
+        /// <summary>
+        /// Check if two Filter is equals.
+        /// </summary>
+        /// <param name="other">the Filter to compare to</param>
+        /// <returns>true if it matches, false otherwise</returns>
         public virtual bool Equals(Filter other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return Equals(other.Mode, Mode);
         }
-
+        /// <summary>
+        /// Override the Get HashCode Method
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return Mode.GetHashCode();
         }
     }
+    /// <summary>
+    /// Define the Filter Mode
+    /// </summary>
     public enum FilterMode
     {
-        INCLUDE, EXCLUDE
+        /// <summary>
+        /// Include only files that matches
+        /// </summary>
+        INCLUDE,
+        /// <summary>
+        /// Exlcude files that matches.
+        /// </summary>
+        EXCLUDE
+
     }
 }
