@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - Syncless.CompareAndSync
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPIOverview Prev - Overview]* `|` *[DeveloperAPICompareAndSyncEnum Next - Syncless.CompareAndSync.Enum]*`]`
