@@ -35,7 +35,7 @@ namespace SynclessUI.Notification
 
         private void SyncStart()
         {
-            _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
+            _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
             {
                 _main.ProgressNotifySyncStart(Progress);
                 StateChanged();
@@ -44,7 +44,7 @@ namespace SynclessUI.Notification
 
         public void InvokeStateChanged()
         {
-            _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() => _main.ProgressNotifyChange(Progress)));
+            _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() => _main.ProgressNotifyChange(Progress)));
         }
 
         public void StateChanged()
@@ -69,13 +69,13 @@ namespace SynclessUI.Notification
 
         public void ProgressChanged()
         {
-            _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() => _main.ProgressNotifyChange(Progress)));
+            _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() => _main.ProgressNotifyChange(Progress)));
             ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Current Percent : " + _progress.PercentComplete + "(" + _progress.Message + ")");
         }
 
         public void SyncComplete()
         {
-            _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(StateChanged));
+            _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(StateChanged));
             ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Sync Complete");
         }
 
