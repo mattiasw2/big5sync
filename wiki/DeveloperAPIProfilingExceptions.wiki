@@ -4,6 +4,8 @@
 
 `[`*[DeveloperAPIProfiling Prev - Syncless.Profiling]* `|` *[DeveloperAPITagging Next - Syncless.Tagging]*`]`
 
+Exception classes which are thrown when there are errors in performing drive recognition and profiling operations.
+
 = Exceptions Summary =
 
 || || *Exception* || *Description* ||
