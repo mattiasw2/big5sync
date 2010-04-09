@@ -1,10 +1,18 @@
 #summary Developers' Guide - API - Syncless.CompareAndSync.Seamless.XMLWriteObject
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPICompareAndSyncSeamless Prev - Syncless.CompareAndSync.Seamless]* `|` *[DeveloperAPICore Next - Syncless.Core]*`]`
 
+Provides classes which enclose information needed for updating XML metadata files during seamless synchronization.
+
 = Classes Summary =
+
+|| || *Class* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#BaseXMLWriteObject
+BaseXMLWriteObject] || Abstract base class for all XML write objects. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#XMLWriteFileObject XMLWriteFileObject] || Stores information about file metadata objects. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#XMLWriteFolderObject XMLWriteFolderObject] || Stores information about folder metadata objects. ||
 
 == BaseXMLWriteObject ==
 
