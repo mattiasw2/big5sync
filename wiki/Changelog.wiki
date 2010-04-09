@@ -1,5 +1,19 @@
 #summary List of changes in different version
 #labels Featured
+
+= Changelog for version _1.5_ =
+ * List of changes
+   # Allow for Preview Changes before Synchronization.
+   # Archiving option added
+   # More general application options added.
+   # Improve stability and performance for Synchronization
+   # Time Synchronization
+   # Various UI Enhancements
+   # Allow user to Cancel during switching
+   # Fix some bug in Manual Sync/Seamless Sync
+   # Fix some UI glitches
+   # Some other changes we might have forgotten :P
+   
 = Changelog for version _1.0_ =
  * First public release of *Syncless*
 
