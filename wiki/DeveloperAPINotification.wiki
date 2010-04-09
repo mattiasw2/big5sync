@@ -2,52 +2,100 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPIMonitorExceptions Prev - Syncless.Monitor.Exceptions]* `|` *[DeveloperAPINotificationUINotification Next - Syncless.Notification.UINotification]*`]`
+
 = Interfaces Summary =
 
 == INotificationQueue ==
 
+[#Interfaces_Summary Back to top]
+
 == IQueueObserver ==
 
+[#Interfaces_Summary Back to top]
+
 == ISyncProgressObserver ==
+
+[#Interfaces_Summary Back to top]
 
 = Classes Summary =
 
 == !AbstractNotification ==
 
+[#Classes_Summary Back to top]
+
 == !AddTagNotification ==
+
+[#Classes_Summary Back to top]
 
 == !AutoSyncCompleteNotification ==
 
+[#Classes_Summary Back to top]
+
 == !MessageNotification ==
+
+[#Classes_Summary Back to top]
 
 == !MonitorPathNotification ==
 
+[#Classes_Summary Back to top]
+
 == !MonitorTagNotification ==
+
+[#Classes_Summary Back to top]
 
 == !NewProfileNotification ==
 
+[#Classes_Summary Back to top]
+
 == !NothingToSyncNotification ==
+
+[#Classes_Summary Back to top]
 
 == !NotificationFactory ==
 
+[#Classes_Summary Back to top]
+
 == !NotificationQueue ==
+
+[#Classes_Summary Back to top]
 
 == !RemoveTagNotification ==
 
+[#Classes_Summary Back to top]
+
 == !SyncCompleteNotification ==
+
+[#Classes_Summary Back to top]
 
 == !SyncProgress ==
 
+[#Classes_Summary Back to top]
+
 == !SyncStartNotification ==
+
+[#Classes_Summary Back to top]
 
 == !TaggedFolderDeletedNotification ==
 
+[#Classes_Summary Back to top]
+
 == !TaggedPathDeletedNotification ==
 
+[#Classes_Summary Back to top]
+
 == !UnMonitorPathNotification ==
+
+[#Classes_Summary Back to top]
 
 = Enumerations Summary =
 
 == !NotificationCode ==
 
+[#Enumerations_Summary Back to top]
+
 == !SyncState ==
+
+[#Enumerations_Summary Back to top]
+
+`[`*[DeveloperAPIMonitorExceptions Prev - Syncless.Monitor.Exceptions]* `|` *[DeveloperAPINotificationUINotification Next - Syncless.Notification.UINotification]*`]`
