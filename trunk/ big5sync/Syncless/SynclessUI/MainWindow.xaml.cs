@@ -1997,16 +1997,32 @@ namespace SynclessUI
             e.Handled = true;
         }
 		
-		private void InitiateTimeSync() {
+		private bool InitiateTimeSyncHelper(bool async) {
 			Process timeSync = new Process();
-            timeSync.StartInfo.FileName = "SynclessTimeSync.exe";
-            timeSync.Start();
-            timeSync.WaitForExit();
+			timeSync.StartInfo.FileName = "SynclessTimeSync.exe";
+
+            try
+            {
+                timeSync.Start();
+
+                if (!async)
+                    timeSync.WaitForExit();
+            }
+            catch (Win32Exception)
+            {
+                return false;
+            }
+
+		    return timeSync.ExitCode == 0 ? true: false;
+		}
+		
+		private void InitiateTimeSync() {
+			bool result = InitiateTimeSyncHelper(false);
 			
-			if(timeSync.ExitCode == 0) {
-				DialogHelper.ShowInformation(this, "Time Synchronized Successfully", "Your computer clock has been sync-ed with atomic clock time.");
+			if(result) {
+				DialogHelper.ShowInformation(this, "Time Synchronized Successfully", "Your computer clock has been synchronized with atomic clock time.");
 			} else {
-				DialogHelper.ShowError(this, "Time Synchronized Unsuccessfully", "Your computer clock could not be synced with atomic clock time.");
+				DialogHelper.ShowError(this, "Time Synchronized Unsuccessfully", "Your computer clock could not be synchronized  with atomic clock time.");
 			}
 		}
 
