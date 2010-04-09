@@ -43,7 +43,7 @@
 <StackPanel x:Name="GeneralOptions" Margin="5,25,5,5">
 				<StackPanel x:Name="DisplayWelcomeScreenGroup" Orientation="Horizontal">
 					<CheckBox x:Name="ChkBoxDisplayWelcomeScreen" VerticalAlignment="Center" FontWeight="Normal" />
-					<Label x:Name="DisplayWelcomeScreenDescription" FontFamily="Century Gothic" Foreground="White" Content="Show Welcome Screen on Application Start/Exit" FontWeight="Normal"/>
+					<Label x:Name="DisplayWelcomeScreenDescription" FontFamily="Century Gothic" Foreground="White" Content="Show Welcome Screen on Application Start" FontWeight="Normal"/>
 				</StackPanel>
 				<StackPanel x:Name="RegistryGroup" Orientation="Horizontal">
 					<CheckBox x:Name="ChkBoxRegistryIntegration" VerticalAlignment="Center" FontWeight="Normal" />
@@ -84,7 +84,7 @@
       					<CheckBox x:Name="ChkBoxMoveToSynclessArchive" VerticalAlignment="Center" />
       					<Label x:Name="MoveToSynclessArchiveDescription1" FontFamily="Century Gothic" FontSize="12" Foreground="White" Content="Move Last" Margin="0" FontWeight="Normal"/>
       					<Label x:Name="LblChanges" FontSize="12" Background="{x:Null}" Foreground="White" BorderBrush="{x:Null}" Margin="-5,0" Content="0" FontWeight="Normal"/>
-      					<Label x:Name="MoveToSynclessArchiveDescription2" FontFamily="Century Gothic" FontSize="12" Foreground="White" Content="Changes to __SynclessArchive" FontWeight="Normal"/>
+      					<Label x:Name="MoveToSynclessArchiveDescription2" FontFamily="Century Gothic" FontSize="12" Foreground="White" Content="Changes to __synclessArchive" FontWeight="Normal"/>
       					<Slider x:Name="SliderChanges" Margin="0,3,0,0" Width="40" Minimum="1" SmallChange="1" IsSnapToTickEnabled="True"/>
       				</StackPanel>
       			</StackPanel>

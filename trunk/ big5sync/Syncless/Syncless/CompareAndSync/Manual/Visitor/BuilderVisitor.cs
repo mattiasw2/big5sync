@@ -97,6 +97,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             {
                 if (_filterChain.ApplyFilter(_filter, info.FullName))
                 {
+                    if (_progress != null)
+                    {
+                        _progress.Message = info.FullName;
+                        _progress.Update();
+                    }
                     BaseCompareObject o = folder.GetChild(info.Name);
                     FileCompareObject fco = null;
                     bool conflict = false;
@@ -147,6 +152,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             {
                 if (_filterChain.ApplyFilter(_filter, info.FullName))
                 {
+                    if (_progress != null)
+                    {
+                        _progress.Message = info.FullName;
+                        _progress.Update();
+                    }
                     BaseCompareObject o = folder.GetChild(info.Name);
                     FolderCompareObject fco;
                     bool conflict = false;
