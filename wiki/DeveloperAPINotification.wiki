@@ -1,10 +1,17 @@
 #summary Developers' Guide - API - Syncless.Notification
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPIMonitorExceptions Prev - Syncless.Monitor.Exceptions]* `|` *[DeveloperAPIProfiling Next - Syncless.Profiling]*`]`
 
+Provides classes which enclose information needed to send notification among classes and between main logic layer and user interface layer.
+
 = Interfaces Summary =
+
+|| || *Interface* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubinterface.gif || [#INotificationQueue INotificationQueue] || Interface for implementing a notification queue. Classes which implement the interface must implement Enqueue, Dequeue, !AddObserver and !HasNotification methods. ||
+|| http://big5sync.googlecode.com/files/pubinterface.gif || [#IQueueObserver IQueueObserver] || Interface which provides a mechanism for receiving notifications from classes implementing INotificationQueue interface. ||
+|| http://big5sync.googlecode.com/files/pubinterface.gif || [#ISyncProgressObserver ISyncProgressObserver] || Interface to observe a synchronization progress. ||
 
 == INotificationQueue ==
 
@@ -102,12 +109,8 @@
 
 = Enumerations Summary =
 
-== !NotificationCode ==
-
-[#Enumerations_Summary Back to top]
-
-== !SyncState ==
-
-[#Enumerations_Summary Back to top]
+|| || *Enumeration* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubenum.gif || !NotificationCode || Provides the enumerations of notification type. ||
+|| http://big5sync.googlecode.com/files/pubenum.gif || !SyncState || Provides the enumerations of sync state. ||
 
 `[`*[DeveloperAPIMonitorExceptions Prev - Syncless.Monitor.Exceptions]* `|` *[DeveloperAPIProfiling Next - Syncless.Profiling]*`]`
