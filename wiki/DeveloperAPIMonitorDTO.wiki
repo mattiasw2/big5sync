@@ -4,7 +4,16 @@
 
 `[`*[DeveloperAPIMonitor Prev - Syncless.Monitor]* `|` *[DeveloperAPIMonitorExceptions Next - Syncless.Monitor.Exceptions]*`]`
 
+Provides classes which enclose information of real-time events in file system.
+
 = Classes Summary =
+
+|| || *Class* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#DeleteChangeEvent DeleteChangeEvent] || A Data Transfer Object to pass information regarding a delete event. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#DriveChangeEvent DriveChangeEvent] || A Data Transfer Object to pass information regarding a drive event. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#FileChangeEvent FileChangeEvent] || A Data Transfer Object to pass information regarding a file event. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#FileSystemEvent FileSystemEvent] || A Data Transfer Object to pass information regarding a file system event. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#FolderChangeEvent FolderChangeEvent] || A Data Transfer Object to pass information regarding a folder event. ||
 
 == !DeleteChangeEvent ==
 
