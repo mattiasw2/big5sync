@@ -2,7 +2,7 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
-`[`*[DeveloperAPILogging Prev - Syncless.Logging]* `|` *[DeveloperAPIMonitorDTO Next - Syncless.MonitorDTO]*`]`
+`[`*[DeveloperAPILogging Prev - Syncless.Logging]* `|` *[DeveloperAPIMonitorDTO Next - Syncless.Monitor.DTO]*`]`
 
 = Classes Summary =
 
@@ -26,4 +26,4 @@
 
 [#Classes_Summary Back to top]
 
-`[`*[DeveloperAPILogging Prev - Syncless.Logging]* `|` *[DeveloperAPIMonitorDTO Next - Syncless.MonitorDTO]*`]`
+`[`*[DeveloperAPILogging Prev - Syncless.Logging]* `|` *[DeveloperAPIMonitorDTO Next - Syncless.Monitor.DTO]*`]`
