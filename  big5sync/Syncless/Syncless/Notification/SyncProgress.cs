@@ -314,21 +314,21 @@ namespace Syncless.Notification
         {
             while (!_completed && State != SyncState.Cancelled)
             {
-                if (_notifyStateChange)
-                {
-                    _notifyStateChange = false;
-                    foreach (ISyncProgressObserver obs in _observerList)
-                    {
-                        obs.StateChanged();
-                    }
-                    continue;
-                }
                 if (_notifyProgressChange)
                 {
                     _notifyProgressChange = false;
                     foreach (ISyncProgressObserver obs in _observerList)
                     {
                         obs.ProgressChanged();
+                    }
+                    continue;
+                }
+                if (_notifyStateChange)
+                {
+                    _notifyStateChange = false;
+                    foreach (ISyncProgressObserver obs in _observerList)
+                    {
+                        obs.InvokeStateChanged();
                     }
                     continue;
                 }
