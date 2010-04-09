@@ -206,6 +206,8 @@ namespace SynclessUI
                     f.Mode = FilterMode.INCLUDE;
                 else if (CmbBoxMode.SelectedIndex == 1)
                     f.Mode = FilterMode.EXCLUDE;
+				
+				PopulateFilterStringList(true);
             }
         }
 

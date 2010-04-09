@@ -3,8 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Name="Window" x:Class="SynclessUI.PreviewSyncWindow"
-    Title="Preview Sync" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}" WindowStartupLocation="CenterScreen" Icon="Icons/logo.ico" ResizeMode="CanMinimize" Closing="Window_Closing">
-	<Grid x:Name="LayoutRoot" HorizontalAlignment="Center" VerticalAlignment="Center">
+    Title="Preview Sync" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}" WindowStartupLocation="CenterScreen" Icon="Icons/logo.ico" ResizeMode="CanMinimize" Closing="Window_Closing" Width="1000">
+	<Grid x:Name="LayoutRoot" HorizontalAlignment="Center" VerticalAlignment="Center" Width="795">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="20"/>
 			<ColumnDefinition Width="*"/>
@@ -26,7 +26,7 @@
 				</LinearGradientBrush>
 			</Rectangle.Fill>
 		</Rectangle>
-		<Label x:Name="LblPreview" Content="Preview Sync" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Margin="0" IsHitTestVisible="False"/>
+		<Label x:Name="LblPreview" Content="Preview Synchronization changes" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Margin="0" IsHitTestVisible="False"/>
 		<StackPanel x:Name="CommandPanel" Margin="0" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
 			<Button x:Name="BtnClose" Margin="0" Click="BtnCancel_Click" IsCancel="True" IsDefault="True">
 				<Label x:Name="LblCancel" FontFamily="Century Gothic" FontSize="9.333" Content="Cancel" FontWeight="Bold"/>
@@ -54,7 +54,7 @@
 			        </toolkit:DataGridTemplateColumn.CellTemplate>
 				</toolkit:DataGridTemplateColumn>
 				
-				<toolkit:DataGridTextColumn Binding="{Binding sourcesize}" Header="Size" Foreground="White" Width="0.11*" CanUserReorder="False" />
+				<toolkit:DataGridTextColumn Binding="{Binding sourcesize}" Header="Size (Bytes)" Foreground="White" Width="0.11*" CanUserReorder="False" />
 				                
 				<toolkit:DataGridTemplateColumn Header="" IsReadOnly="True" Width="0.06*" SortMemberPath="operation" CanUserResize="False" CanUserReorder="False">
 			        <toolkit:DataGridTemplateColumn.CellTemplate>
@@ -85,7 +85,7 @@
 			        </toolkit:DataGridTemplateColumn.CellTemplate>
 				</toolkit:DataGridTemplateColumn>
 				
-				<toolkit:DataGridTextColumn Binding="{Binding destsize}" Header="Size" Foreground="White" Width="0.11*" CanUserReorder="False" />
+				<toolkit:DataGridTextColumn Binding="{Binding destsize}" Header="Size (Bytes)" Foreground="White" Width="0.11*" CanUserReorder="False" />
             </toolkit:DataGrid.Columns>
         </toolkit:DataGrid>
         <Grid VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Width="500" HorizontalAlignment="Left" Margin="0,1,0,0">

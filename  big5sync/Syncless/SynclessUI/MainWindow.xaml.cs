@@ -76,10 +76,6 @@ namespace SynclessUI
                 var loading = (Storyboard)Resources["MainWindowOnLoaded"];
                 loading.Begin();
             }
-            else
-            {
-                DisplayWelcomeScreen(this, null);
-            }
         }
 
         private void DisplayUnloadingAnimation()
@@ -105,6 +101,8 @@ namespace SynclessUI
             {
                 WelcomeScreenWindow wsw = new WelcomeScreenWindow(this);
                 wsw.ShowDialog();
+                this.Topmost = true;
+                this.Topmost = false;
             }
         }
 
@@ -122,7 +120,7 @@ namespace SynclessUI
 
                 if (Gui.Initiate(this))
                 {
-                    if (Settings.Default.EnableShellIntegration == true)
+                    if (Settings.Default.EnableShellIntegration)
                     {
                         RegistryHelper.CreateRegistry(_appPath);
                     }
@@ -130,6 +128,13 @@ namespace SynclessUI
                     InitializeTagInfoPanel();
                     InitializeTagList();
                     Show();
+                    this.Topmost = true;
+                    this.Topmost = false;
+
+                    if (!Settings.Default.EnableAnimation)
+                    {
+                        DisplayWelcomeScreen(this, null);
+                    }
 
                     _notificationWatcher = new NotificationWatcher(this);
                     _notificationWatcher.Start();
@@ -151,8 +156,6 @@ namespace SynclessUI
 
                     Close();
                 }
-
-
             }
             catch (UnhandledException)
             {

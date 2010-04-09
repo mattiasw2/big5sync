@@ -104,11 +104,11 @@
 			</ObjectAnimationUsingKeyFrames>
 			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagInfoLayoutRoot" Storyboard.TargetProperty="(UIElement.Visibility)">
 				<DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Hidden}"/>
-				<DiscreteObjectKeyFrame KeyTime="00:00:02" Value="{x:Static Visibility.Visible}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:02.1000000" Value="{x:Static Visibility.Visible}"/>
 			</ObjectAnimationUsingKeyFrames>
 			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagListLayoutRoot" Storyboard.TargetProperty="(UIElement.Visibility)">
 				<DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Hidden}"/>
-				<DiscreteObjectKeyFrame KeyTime="00:00:01.9000000" Value="{x:Static Visibility.Visible}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:02" Value="{x:Static Visibility.Visible}"/>
 			</ObjectAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Canvas" Storyboard.TargetProperty="(FrameworkElement.Height)">
 				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
@@ -178,48 +178,48 @@
 				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="50"/>
 			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagInfoCanvas" Storyboard.TargetProperty="(FrameworkElement.Height)">
-				<SplineDoubleKeyFrame KeyTime="00:00:02" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:02.3000000" Value="255"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.1000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.4000000" Value="255"/>
 			</DoubleAnimationUsingKeyFrames>
 			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagTitle" Storyboard.TargetProperty="(UIElement.Visibility)">
-				<DiscreteObjectKeyFrame KeyTime="00:00:02" Value="{x:Static Visibility.Hidden}"/>
-				<DiscreteObjectKeyFrame KeyTime="00:00:02.3000000" Value="{x:Static Visibility.Visible}"/>
-				<DiscreteObjectKeyFrame KeyTime="00:00:02.5000000" Value="{x:Static Visibility.Visible}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:02.1000000" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:02.4000000" Value="{x:Static Visibility.Visible}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:02.6000000" Value="{x:Static Visibility.Visible}"/>
 			</ObjectAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagTitle" Storyboard.TargetProperty="(UIElement.Opacity)">
-				<SplineDoubleKeyFrame KeyTime="00:00:02" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:02.3000000" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:02.5000000" Value="1"/>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagIcon" Storyboard.TargetProperty="(UIElement.Opacity)">
-				<SplineDoubleKeyFrame KeyTime="00:00:02" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.1000000" Value="0"/>
 				<SplineDoubleKeyFrame KeyTime="00:00:02.4000000" Value="0"/>
 				<SplineDoubleKeyFrame KeyTime="00:00:02.6000000" Value="1"/>
 			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagIcon" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:02.1000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.5000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.7000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TagStatusPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
-				<SplineDoubleKeyFrame KeyTime="00:00:02" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:02.9000000" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:03.1000000" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.1000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.2000000" Value="1"/>
 			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ProgressBarSync" Storyboard.TargetProperty="(UIElement.Opacity)">
-				<SplineDoubleKeyFrame KeyTime="00:00:02" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:02.7000000" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:02.9000000" Value="1"/>
-			</DoubleAnimationUsingKeyFrames>
-			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LblProgress" Storyboard.TargetProperty="(UIElement.Opacity)">
-				<SplineDoubleKeyFrame KeyTime="00:00:02" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.1000000" Value="0"/>
 				<SplineDoubleKeyFrame KeyTime="00:00:02.8000000" Value="0"/>
 				<SplineDoubleKeyFrame KeyTime="00:00:03" Value="1"/>
 			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LblProgress" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:02.1000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.9000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.1000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="SyncPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
-				<SplineDoubleKeyFrame KeyTime="00:00:02" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:02.6000000" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:02.8000000" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.1000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.7000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.9000000" Value="1"/>
 			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BdrTaggedPath" Storyboard.TargetProperty="(UIElement.Opacity)">
-				<SplineDoubleKeyFrame KeyTime="00:00:02" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:02.5000000" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:02.7000000" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.1000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.6000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.8000000" Value="1"/>
 			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="LblTagList" Storyboard.TargetProperty="(UIElement.Opacity)">
 				<SplineDoubleKeyFrame KeyTime="00:00:01.9000000" Value="0"/>
@@ -292,13 +292,22 @@
 			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="OptionMinClosePanel" Storyboard.TargetProperty="(UIElement.Opacity)">
 				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:03" Value="0"/>
-				<SplineDoubleKeyFrame KeyTime="00:00:03.2000000" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.2000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03.4000000" Value="1"/>
 			</DoubleAnimationUsingKeyFrames>
 			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="Canvas" Storyboard.TargetProperty="(FrameworkElement.Width)">
 				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
 				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="700"/>
 				<SplineDoubleKeyFrame KeyTime="00:00:01" Value="700"/>
+			</DoubleAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnTimeSyncPanel" Storyboard.TargetProperty="(UIElement.Visibility)">
+				<DiscreteObjectKeyFrame KeyTime="00:00:00.4000000" Value="{x:Static Visibility.Hidden}"/>
+				<DiscreteObjectKeyFrame KeyTime="00:00:01.9000000" Value="{x:Static Visibility.Visible}"/>
+			</ObjectAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="BtnTimeSyncPanel" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00.4000000" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01.9000000" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:02.1000000" Value="1"/>
 			</DoubleAnimationUsingKeyFrames>
 		</Storyboard>
 		<Storyboard x:Key="SynclessLogoJumps">
@@ -575,7 +584,7 @@
 						</Label.Resources>
 					</Label>
 				</Button>
-				<Button x:Name="BtnPreview" Height="35" Margin="0,0,0,5" Click="BtnPreview_Click" ToolTip="Preview Synchronization" Width="90">
+				<Button x:Name="BtnPreview" Height="35" Margin="0,0,0,5" Click="BtnPreview_Click" ToolTip="Preview Synchronization Changes" Width="90">
 					<Label x:Name="LblPreview" FontFamily="Century Gothic" FontSize="10.667" Content="Preview"/>
 				</Button>
 				<Button x:Name="BtnSyncNow" Height="35" Margin="0,0,0,5" Click="BtnSyncNow_Click" Width="90">
