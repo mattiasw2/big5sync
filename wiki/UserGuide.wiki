@@ -32,6 +32,8 @@ Why choose Syncless over other synchronization tools? The reason is simple. Sync
 
   * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving it on your computer.
 
+  * *Time Synchronization*:
+
 === N-way Synchronization ===
 The traditional way to keep a few folders in sync is to create multiple jobs because many tools provide synchronization between 2 folders only. Syncless is capable of synchronizing multiple folders without you having to create multiple jobs. Simply tag multiple folders with the same tag name and Syncless will keep them all in sync. 
 
@@ -50,6 +52,7 @@ For example, a student has a home computer, as well as a regular workstation in 
 
 http://big5sync.googlecode.com/files/merging.png
 
+=== Time Synchronization ===
 
 == What is a Tag? ==
 
