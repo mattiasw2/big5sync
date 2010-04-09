@@ -37,14 +37,14 @@ namespace SynclessUI.Notification
         {
             _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
             {
-                _main.ProgressNotifySyncStart();
+                _main.ProgressNotifySyncStart(Progress);
                 StateChanged();
             }));
         }
 
         public void InvokeStateChanged()
         {
-            _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() => _main.ProgressNotifyChange()));
+            _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() => _main.ProgressNotifyChange(Progress)));
         }
 
         public void StateChanged()
@@ -52,16 +52,16 @@ namespace SynclessUI.Notification
             switch (_progress.State)
             {
                 case SyncState.Analyzing:
-                    _main.ProgressNotifyAnalyzing();
+                    _main.ProgressNotifyAnalyzing(Progress);
                     break;
                 case SyncState.Synchronizing:
-                    _main.ProgressNotifySynchronizing();
+                    _main.ProgressNotifySynchronizing(Progress);
                     break;
                 case SyncState.Finalizing:
-                    _main.ProgressNotifyFinalizing();
+                    _main.ProgressNotifyFinalizing(Progress);
                     break;
                 case SyncState.Finished:
-                    _main.ProgressNotifySyncComplete();
+                    _main.ProgressNotifySyncComplete(Progress);
                     break;
             }
             Console.WriteLine("State Changed (New State : " + _progress.State + ")");
@@ -69,7 +69,7 @@ namespace SynclessUI.Notification
 
         public void ProgressChanged()
         {
-            _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() => _main.ProgressNotifyChange()));
+            _main.ProgressBarSync.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() => _main.ProgressNotifyChange(Progress)));
             ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write("Current Percent : " + _progress.PercentComplete + "(" + _progress.Message + ")");
         }
 
