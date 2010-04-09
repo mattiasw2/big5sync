@@ -160,8 +160,9 @@ namespace Syncless.Tagging
         /// <param name="tagname">The string value that represents the name that is to be given to the tag
         /// </param>
         /// <returns>the created tag</returns>
-        /// <exception cref="TagAlreadyExistsException">thrown if the name that is passed as parameter
-        /// is already used by another tag in the existing list of tags</exception>
+        /// <exception cref="Syncless.Tagging.Exceptions.TagAlreadyExistsException">thrown if the 
+        /// name that is passed as parameter is already used by another tag in the existing list 
+        /// of tags</exception>
         public Tag CreateTag(string tagname)
         {
             Tag tag = _taggingProfile.AddTag(tagname);
@@ -181,9 +182,9 @@ namespace Syncless.Tagging
         /// </summary>
         /// <param name="oldname">The string value that represents the old name of a tag</param>
         /// <param name="newname">The string value that represents the new name to be given to the tag</param>
-        /// <exception cref="TagAlreadyExistsException">thrown if the new name
+        /// <exception cref="Syncless.Tagging.Exceptions.TagAlreadyExistsException">thrown if the new name
         /// that is passed as parameter is already used by another tag in the existing list of tags</exception>
-        /// <exception cref="TagNotFoundException">thrown if the old name that is
+        /// <exception cref="Syncless.Tagging.Exceptions.TagNotFoundException">thrown if the old name that is
         /// passed as parameter is not used by any tag in the existing list of tags</exception>
         public void RenameTag(string oldname, string newname)
         {
@@ -205,8 +206,8 @@ namespace Syncless.Tagging
         /// <param name="tagname">The string value that represents the name that is to be used to retrieve
         /// the tag to be deleted</param>
         /// <returns>the tag that is deleted</returns>
-        /// <exception cref="TagNotFoundException">thrown if the name that is passed as parameter is
-        /// not used by any tag in the existing list of tags</exception>
+        /// <exception cref="Syncless.Tagging.Exceptions.TagNotFoundException">thrown if the name that 
+        /// is passed as parameter is not used by any tag in the existing list of tags</exception>
         public Tag DeleteTag(string tagname)
         {
             Tag toremove = _taggingProfile.DeleteTag(tagname);
@@ -228,11 +229,11 @@ namespace Syncless.Tagging
         /// <param name="tagname">The string value that represents the name of the tag the folder path is
         /// to be tagged to</param>
         /// <returns>the tag where the folder path is tagged to</returns>
-        /// <exception cref="PathAlreadyExistsException">thrown if the folder path that is passed as 
-        /// parameter is already tagged to the tag</exception>
-        /// <exception cref="RecursiveDirectoryException">thrown if the folder path that is passed as 
-        /// parameter is a parent path or a child path of another path that is already tagged to 
-        /// the tag</exception>
+        /// <exception cref="Syncless.Tagging.Exceptions.PathAlreadyExistsException">thrown if the folder 
+        /// path that is passed as parameter is already tagged to the tag</exception>
+        /// <exception cref="Syncless.Tagging.Exceptions.RecursiveDirectoryException">thrown if the folder 
+        /// path that is passed as parameter is a parent path or a child path of another path that is 
+        /// already tagged to the tag</exception>
         public Tag TagFolder(string path, string tagname)
         {
             try
@@ -258,8 +259,8 @@ namespace Syncless.Tagging
         /// <param name="tagname">The string value that represents the name of the tag the folder path is
         /// to be untagged from</param>
         /// <returns>1 if the path is removed, 0 if the path is not found in the Tag</returns>
-        /// <exception cref="TagNotFoundException">thrown if the name that is passed as parameter is
-        /// not used by any tag in the existing list of tags</exception>
+        /// <exception cref="Syncless.Tagging.Exceptions.TagNotFoundException">thrown if the name that is 
+        /// passed as parameter is not used by any tag in the existing list of tags</exception>
         public int UntagFolder(string path, string tagname)
         {
             int result = _taggingProfile.UntagFolder(path, tagname);
@@ -303,8 +304,8 @@ namespace Syncless.Tagging
         /// <param name="tagname">The string value that represents the name that is to be used to retrieve
         /// the tag</param>
         /// <param name="newFilterList">The list of filters that is to be updated to the tag</param>
-        /// <exception cref="TagNotFoundException">thrown if the name that is passed as parameter is
-        /// not used by any tag in the existing list of tags</exception>
+        /// <exception cref="Syncless.Tagging.Exceptions.TagNotFoundException">thrown if the name that is 
+        /// passed as parameter is not used by any tag in the existing list of tags</exception>
         public void UpdateFilter(string tagname, List<Filter> newFilterList)
         {
             if (!_taggingProfile.UpdateFilter(tagname, newFilterList))
@@ -589,7 +590,7 @@ namespace Syncless.Tagging
         /// <summary>
         /// Adds a tag to the current tagging profile
         /// </summary>
-        /// <param name="tag">The <see cref="Tag">Tag</see> object that represents the tag to be added</param>
+        /// <param name="tag">The Tag object that represents the tag to be added</param>
         /// <remarks>Used for merging tag objects from several tagging profiles.</remarks>
         public void AddTag(Tag tag)
         {
@@ -705,7 +706,7 @@ namespace Syncless.Tagging
         /// <summary>
         /// Determines whether the logical ID exists in any tagged path in the tag that is passed as parameter
         /// </summary>
-        /// <param name="tag">The <see cref="Tag">Tag</see> object that represents the tag to be checked</param>
+        /// <param name="tag">The Tag object that represents the tag to be checked</param>
         /// <param name="ID">The string value that represents the logical ID</param>
         /// <returns>true if the logical ID exists in any tagged path in the tag; otherwise, false</returns>
         private bool CheckID(Tag tag, string ID)
