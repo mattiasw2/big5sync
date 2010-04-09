@@ -16,7 +16,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         public XMLWriterVisitor(SyncProgress progress)
         {
             _progress = progress;
-            _dateTime = DateTime.Now.Ticks;
+            _dateTime = DateTime.UtcNow.Ticks;
         }
 
         #region IVisitor Members
@@ -129,8 +129,8 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             XmlText hashText = xmlDoc.CreateTextNode(file.Hash[counter]);
             XmlText nameText = xmlDoc.CreateTextNode(useNewName ? file.NewName : file.Name);
             XmlText sizeText = xmlDoc.CreateTextNode(file.Length[counter].ToString());
-            XmlText lastModifiedText = xmlDoc.CreateTextNode(file.LastWriteTime[counter].ToString());
-            XmlText lastCreatedText = xmlDoc.CreateTextNode(file.CreationTime[counter].ToString());
+            XmlText lastModifiedText = xmlDoc.CreateTextNode(file.LastWriteTimeUtc[counter].ToString());
+            XmlText lastCreatedText = xmlDoc.CreateTextNode(file.CreationTimeUtc[counter].ToString());
             XmlText lastUpdated = xmlDoc.CreateTextNode(_dateTime.ToString());
 
             XmlElement fileElement = xmlDoc.CreateElement(CommonXMLConstants.NodeFile);
@@ -196,10 +196,10 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         nodes.InnerText = file.Name;
                         break;
                     case CommonXMLConstants.NodeLastModified:
-                        nodes.InnerText = file.LastWriteTime[counter].ToString();
+                        nodes.InnerText = file.LastWriteTimeUtc[counter].ToString();
                         break;
                     case CommonXMLConstants.NodeLastCreated:
-                        nodes.InnerText = file.CreationTime[counter].ToString();
+                        nodes.InnerText = file.CreationTimeUtc[counter].ToString();
                         break;
                     case CommonXMLConstants.NodeLastUpdated:
                         nodes.InnerText = _dateTime.ToString();
@@ -421,7 +421,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         {
             XmlText hashText = xmlDoc.CreateTextNode(file.MetaHash[counter]);
             XmlText actionText = xmlDoc.CreateTextNode(changeType);
-            XmlText lastModifiedText = xmlDoc.CreateTextNode(file.MetaLastWriteTime[counter].ToString());
+            XmlText lastModifiedText = xmlDoc.CreateTextNode(file.MetaLastWriteTimeUtc[counter].ToString());
             XmlText nameText = xmlDoc.CreateTextNode(file.Name);
             XmlText lastUpdatedText = xmlDoc.CreateTextNode(_dateTime.ToString());
 

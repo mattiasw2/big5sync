@@ -35,7 +35,7 @@ namespace Syncless.CompareAndSync
                     {
                         XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr);
                         if (node != null)
-                            node.FirstChild.InnerText = DateTime.Now.Ticks.ToString();
+                            node.FirstChild.InnerText = DateTime.UtcNow.Ticks.ToString();
                         xmlDoc.Save(xmlPath);
                     }
                     break;
@@ -131,7 +131,7 @@ namespace Syncless.CompareAndSync
                     writer.Formatting = Formatting.Indented;
                     writer.WriteStartDocument();
                     writer.WriteStartElement(CommonXMLConstants.NodeMetaData);
-                    writer.WriteElementString(CommonXMLConstants.NodeLastModified, (DateTime.Now.Ticks).ToString());
+                    writer.WriteElementString(CommonXMLConstants.NodeLastModified, (DateTime.UtcNow.Ticks).ToString());
                     writer.WriteElementString(CommonXMLConstants.NodeName, GetLastFileIndex(path));
                     writer.WriteEndElement();
                     writer.WriteEndDocument();

@@ -103,7 +103,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 switch (file.ChangeType[i])
                 {
                     case MetaChangeType.Delete:
-                        FileCompareObject f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTime[i], i);
+                        FileCompareObject f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTimeUtc[i], i);
                         if (f != null)
                         {
                             List<int> pos;
@@ -169,7 +169,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
             for (int i = 0; i < indexes.Count; i++)
             {
-                f = file.Parent.GetSameCreationTime(file.MetaCreationTime[indexes[i]], indexes[i]);
+                f = file.Parent.GetSameCreationTimeUtc(file.MetaCreationTimeUtc[indexes[i]], indexes[i]);
 
                 if (f != null && f.ChangeType[indexes[i]] == MetaChangeType.New)
                 {
@@ -303,12 +303,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
                 if (file.Length[mostUpdatedPos] != file.Length[i] || file.Hash[mostUpdatedPos] != file.Hash[i])
                 {
-                    if (file.LastWriteTime[i] > file.LastWriteTime[mostUpdatedPos])
+                    if (file.LastWriteTimeUtc[i] > file.LastWriteTimeUtc[mostUpdatedPos])
                     {
                         file.Priority[i] = file.Priority[mostUpdatedPos] + 1;
                         mostUpdatedPos = i;
                     }
-                    else if (file.LastWriteTime[i] == file.LastWriteTime[mostUpdatedPos])
+                    else if (file.LastWriteTimeUtc[i] == file.LastWriteTimeUtc[mostUpdatedPos])
                     {
                         //Conflict
                         file.Priority[i] = file.Priority[mostUpdatedPos] - 1;

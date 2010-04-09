@@ -11,12 +11,12 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
     {
         //Actual
         private readonly string _name;
-        private long[] _creationTime;
+        private long[] _creationTimeUtc;
         private bool[] _exists;
         private int _sourcePosition;
 
         //Meta
-        private long[] _metaCreationTime;
+        private long[] _metaCreationTimeUtc;
         private bool[] _metaExists;
         private long[] _metaUpdated;
 
@@ -38,10 +38,10 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         protected BaseCompareObject(string name, int numOfPaths, FolderCompareObject parent)
         {
             _name = name;
-            _creationTime = new long[numOfPaths];
+            _creationTimeUtc = new long[numOfPaths];
             _exists = new bool[numOfPaths];
             _finalState = new FinalState?[numOfPaths];
-            _metaCreationTime = new long[numOfPaths];
+            _metaCreationTimeUtc = new long[numOfPaths];
             _metaExists = new bool[numOfPaths];
             _metaUpdated = new long[numOfPaths];
             _changeType = new MetaChangeType?[numOfPaths];
@@ -64,19 +64,19 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         ///<summary>
         ///Gets or sets the <see cref="Array"/> of creation time.
         ///</summary>
-        public long[] CreationTime
+        public long[] CreationTimeUtc
         {
-            get { return _creationTime; }
-            set { _creationTime = value; }
+            get { return _creationTimeUtc; }
+            set { _creationTimeUtc = value; }
         }
 
         /// <summary>
         /// Gets or sets the <see cref="Array"/> of metadata creation time.
         /// </summary>
-        public long[] MetaCreationTime
+        public long[] MetaCreationTimeUtc
         {
-            get { return _metaCreationTime; }
-            set { _metaCreationTime = value; }
+            get { return _metaCreationTimeUtc; }
+            set { _metaCreationTimeUtc = value; }
         }
 
         /// <summary>

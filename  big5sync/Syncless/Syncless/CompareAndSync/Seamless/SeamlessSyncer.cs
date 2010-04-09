@@ -19,7 +19,7 @@ namespace Syncless.CompareAndSync.Seamless
         {
             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STARTED, "Started Auto Sync for " + request.SourceName));
 
-            _metaUpdated = DateTime.Now.Ticks;
+            _metaUpdated = DateTime.UtcNow.Ticks;
             bool? isFolder = request.IsFolder;
             bool isFldr;
 
@@ -73,10 +73,10 @@ namespace Syncless.CompareAndSync.Seamless
                 switch (request.ChangeType)
                 {
                     case AutoSyncRequestType.New:
-                        SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.New, _metaUpdated));
+                        SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTimeUtc.Ticks, currFile.LastWriteTimeUtc.Ticks, MetaChangeType.New, _metaUpdated));
                         break;
                     case AutoSyncRequestType.Update:
-                        SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTime.Ticks, currFile.LastWriteTime.Ticks, MetaChangeType.Update, _metaUpdated));
+                        SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent, CommonMethods.CalculateMD5Hash(currFile), currFile.Length, currFile.CreationTimeUtc.Ticks, currFile.LastWriteTimeUtc.Ticks, MetaChangeType.Update, _metaUpdated));
                         break;
                     default:
                         break;
@@ -125,7 +125,7 @@ namespace Syncless.CompareAndSync.Seamless
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "File copied from " + sourceFullPath + " to " + destFullPath));
 
                         FileInfo destFile = new FileInfo(destFullPath);
-                        SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, CommonMethods.CalculateMD5Hash(destFile), destFile.Length, destFile.CreationTime.Ticks, destFile.LastWriteTime.Ticks, request.ChangeType == AutoSyncRequestType.New ? MetaChangeType.New : MetaChangeType.Update, _metaUpdated));
+                        SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, CommonMethods.CalculateMD5Hash(destFile), destFile.Length, destFile.CreationTimeUtc.Ticks, destFile.LastWriteTimeUtc.Ticks, request.ChangeType == AutoSyncRequestType.New ? MetaChangeType.New : MetaChangeType.Update, _metaUpdated));
                     }
                     catch (CopyFileException)
                     {
@@ -264,7 +264,7 @@ namespace Syncless.CompareAndSync.Seamless
 
         private static void HandleFolderCreate(AutoSyncRequest request, string sourceFullPath)
         {
-            SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, request.SourceParent, Directory.GetCreationTime(sourceFullPath).Ticks, MetaChangeType.New, _metaUpdated));
+            SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, request.SourceParent, Directory.GetCreationTimeUtc(sourceFullPath).Ticks, MetaChangeType.New, _metaUpdated));
 
             foreach (string dest in request.DestinationFolders)
             {
@@ -274,7 +274,7 @@ namespace Syncless.CompareAndSync.Seamless
                 {
                     CommonMethods.CreateFolder(destFullPath);
                     ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "Folder created " + destFullPath));
-                    SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, dest, Directory.GetCreationTime(destFullPath).Ticks, MetaChangeType.New, _metaUpdated));
+                    SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, dest, Directory.GetCreationTimeUtc(destFullPath).Ticks, MetaChangeType.New, _metaUpdated));
                 }
                 catch (CreateFolderException)
                 {

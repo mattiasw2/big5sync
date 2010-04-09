@@ -12,8 +12,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         #region IVisitor Members
 
         /// <summary>
-        ///  Based on each file node visited , this method will call the PopulateFileWithMetaData method
-        ///  to populate the values stored in the xml to the node.
+        /// 
         /// </summary>
         /// <param name="file"></param>
         /// <param name="numOfPaths"></param>
@@ -33,14 +32,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
-        /// <summary>
-        /// Based on each folder node visited , this method will call the PopulateFolderWithMetaData method
-        /// to populate the values stored in the xml document to the folder node. After which , it will check 
-        /// for any files or folder that exist in the meta data and not in the actual directory and add it to 
-        /// folder node 
-        /// </summary>
-        /// <param name="folder"></param>
-        /// <param name="numOfPaths"></param>
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -60,8 +51,14 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             AddXmlNodes(folder, numOfPaths, xmlDoc);
         }
 
-        //Called by Visit ( Folder ) to append any files or folders that exist in the meta data and
-        //not in the current directory. 
+        /// <summary>
+        /// Loads the xml documents and extracts all the files and folder nodes. After which , compare them
+        /// against the existing files and folders and minus them off. Any files or folders that exist in 
+        /// the metadata will be added to the folder node
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="numOfPaths"></param>
+        /// <param name="xmlDoc"> XmlDocument that has been loaded</param>
         private void AddXmlNodes(FolderCompareObject folder, int numOfPaths, XmlDocument xmlDoc)
         {
             List<XMLCompareObject> xmlObjList = new List<XMLCompareObject>();
@@ -96,8 +93,8 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         }
 
         /// <summary>
-        /// Checks for any files or folders that exist in the meta data but not in the root directory , and 
-        /// then append it to the root node
+        /// Extracts metadata files and folders and minus them off existing files and folders. The 
+        /// difference (files and folders) will be added to the root 
         /// </summary>
         /// <param name="root"></param>
         public void Visit(RootCompareObject root)
@@ -134,95 +131,93 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region Files
 
-        //Given the FileCompareObject and a counter , populate the node with it's meta data values if there are 
-        //any. If not found , try to populate it from the last known state.
+        /// <summary>
+        /// Given the loaded xml document , it tries to retrieve the file node and populate the values
+        /// to the file compare object
+        /// </summary>
+        /// <param name="xmlDoc">Loaded xml document</param>
+        /// <param name="file"></param>
+        /// <param name="counter"></param>
+        /// <returns>the file compare object with the updated content</returns>
         private FileCompareObject PopulateFileWithMetaData(XmlDocument xmlDoc, FileCompareObject file, int counter)
         {
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(file.Name) + "]");
             if (node != null)
             {
 
-                PopulateFromMeta(file, node, counter);
+                XmlNodeList childNodeList = node.ChildNodes;
+                for (int i = 0; i < childNodeList.Count; i++)
+                {
+                    XmlNode childNode = childNodeList[i];
+
+                    switch (childNode.Name)
+                    {
+                        case CommonXMLConstants.NodeSize:
+                            file.MetaLength[counter] = long.Parse(childNode.InnerText);
+                            break;
+                        case CommonXMLConstants.NodeHash:
+                            file.MetaHash[counter] = childNode.InnerText;
+                            break;
+                        case CommonXMLConstants.NodeLastModified:
+                            file.MetaLastWriteTimeUtc[counter] = long.Parse(childNode.InnerText);
+                            break;
+                        case CommonXMLConstants.NodeLastCreated:
+                            file.MetaCreationTimeUtc[counter] = long.Parse(childNode.InnerText);
+                            break;
+                        case CommonXMLConstants.NodeLastUpdated:
+                            file.MetaUpdated[counter] = long.Parse(childNode.InnerText);
+                            break;
+                    }
+                }
+
+                file.MetaExists[counter] = true;
+
             }
             else
             {
-                PopulateFromLastKnownState(file, counter);
+                string path = Path.Combine(file.GetSmartParentPath(counter), CommonXMLConstants.LastKnownStatePath);
+
+                if (File.Exists(path))
+                {
+                    XmlDocument lastKnownXMLDoc = new XmlDocument();
+                    CommonMethods.LoadXML(ref lastKnownXMLDoc, path);
+                    XmlNode fileNode = lastKnownXMLDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(file.Name) + "]");
+
+                    if (fileNode != null)
+                    {
+                        XmlNodeList nodeList = fileNode.ChildNodes;
+                        for (int i = 0; i < nodeList.Count; i++)
+                        {
+                            XmlNode childNode = nodeList[i];
+                            switch (childNode.Name)
+                            {
+                                case CommonXMLConstants.NodeAction:
+                                    string action = childNode.InnerText;
+                                    file.LastKnownState[counter] = action.Equals(CommonXMLConstants.ActionDeleted) ? LastKnownState.Deleted : LastKnownState.Renamed;
+                                    break;
+                                case CommonXMLConstants.NodeLastModified:
+                                    file.MetaLastWriteTimeUtc[counter] = long.Parse(childNode.InnerText);
+                                    break;
+                                case CommonXMLConstants.NodeHash:
+                                    file.MetaHash[counter] = childNode.InnerText;
+                                    break;
+                                case CommonXMLConstants.NodeLastUpdated:
+                                    file.MetaUpdated[counter] = long.Parse(childNode.InnerText);
+                                    break;
+                            }
+                        }
+                    }
+                }
             }
 
             return file;
         }
 
-        // Given a file compare object , look for the last known state document and populate the contents from
-        // there
-        private void PopulateFromLastKnownState(FileCompareObject file, int counter)
-        {
-            string path = Path.Combine(file.GetSmartParentPath(counter), CommonXMLConstants.LastKnownStatePath);
-
-            if (File.Exists(path))
-            {
-                XmlDocument lastKnownXMLDoc = new XmlDocument();
-                CommonMethods.LoadXML(ref lastKnownXMLDoc, path);
-                XmlNode fileNode = lastKnownXMLDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(file.Name) + "]");
-
-                if (fileNode != null)
-                {
-                    XmlNodeList nodeList = fileNode.ChildNodes;
-                    for (int i = 0; i < nodeList.Count; i++)
-                    {
-                        XmlNode childNode = nodeList[i];
-                        switch (childNode.Name)
-                        {
-                            case CommonXMLConstants.NodeAction:
-                                string action = childNode.InnerText;
-                                file.LastKnownState[counter] = action.Equals(CommonXMLConstants.ActionDeleted) ? LastKnownState.Deleted : LastKnownState.Renamed;
-                                break;
-                            case CommonXMLConstants.NodeLastModified:
-                                file.MetaLastWriteTime[counter] = long.Parse(childNode.InnerText);
-                                break;
-                            case CommonXMLConstants.NodeHash:
-                                file.MetaHash[counter] = childNode.InnerText;
-                                break;
-                            case CommonXMLConstants.NodeLastUpdated:
-                                file.MetaUpdated[counter] = long.Parse(childNode.InnerText);
-                                break;
-                        }
-                    }
-                }
-            }
-        }
-
-        // Given the file compare object , look for the meta data document and populate the contents from there
-        private void PopulateFromMeta(FileCompareObject file, XmlNode node, int counter)
-        {
-            XmlNodeList childNodeList = node.ChildNodes;
-            for (int i = 0; i < childNodeList.Count; i++)
-            {
-                XmlNode childNode = childNodeList[i];
-
-                switch (childNode.Name)
-                {
-                    case CommonXMLConstants.NodeSize:
-                        file.MetaLength[counter] = long.Parse(childNode.InnerText);
-                        break;
-                    case CommonXMLConstants.NodeHash:
-                        file.MetaHash[counter] = childNode.InnerText;
-                        break;
-                    case CommonXMLConstants.NodeLastModified:
-                        file.MetaLastWriteTime[counter] = long.Parse(childNode.InnerText);
-                        break;
-                    case CommonXMLConstants.NodeLastCreated:
-                        file.MetaCreationTime[counter] = long.Parse(childNode.InnerText);
-                        break;
-                    case CommonXMLConstants.NodeLastUpdated:
-                        file.MetaUpdated[counter] = long.Parse(childNode.InnerText);
-                        break;
-                }
-            }
-
-            file.MetaExists[counter] = true;
-        }
-
-        //Extract all the files in the meta data document and return them as a list of XMLCompareObjects
+        /// <summary>
+        /// Given a xml document that is loaded , it extracts all the file nodes
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        /// <returns> A list of XMLCompareObject in the xml document</returns>
         private List<XMLCompareObject> GetAllFilesInXML(XmlDocument xmlDoc)
         {
             string hash = "";
@@ -271,7 +266,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             return objectList;
         }
 
-        //Extracts the list of folders in the meta data and returns them as a string of folder names
+        /// <summary>
+        /// Given a xml document that is loaded , it extracts all the folder nodes
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        /// <returns> A list of folder names in the xml document </returns>
         private List<string> GetAllFoldersInXML(XmlDocument xmlDoc)
         {
             List<string> folderList = new List<string>();
@@ -297,8 +296,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             return folderList;
         }
 
-        //Given a list of FileInfo objects and XMLCompareObjects, eliminate the similarities by name
-        // and return the list of new XMLCompareObject that exist only in the meta data
+        /// <summary>
+        /// Compares the XMLCompareObject and a list of FileInfo object and removes all the similar objects
+        /// by name in the list of XMLCompareObject
+        /// </summary>
+        /// <param name="xmlObjList"> A list of XMLCompareObject extracted from the xml document </param>
+        /// <param name="fileList"> A list of FileInfo object given the current directory</param>
         private void RemoveSimilarFiles(List<XMLCompareObject> xmlObjList, FileInfo[] fileList)
         {
             if (xmlObjList.Count == 0)
@@ -317,8 +320,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
-        //Given a list of DirectoryInfo objects and folder names , eliminate the similarities by name
-        // and return the list of folder names that exist only in the meta data
+        /// <summary>
+        /// Compares the list of folder names and a list of DirectoryInfo object and removes all the similar 
+        /// objects by name in the list of XMLCompareObject
+        /// </summary>
+        /// <param name="folderNameList"> A list of folder names extracted from xml document</param>
+        /// <param name="dirList"> A list of DirectoryInfo given the current directory</param>
         private void RemoveSimilarFolders(List<string> folderNameList, DirectoryInfo[] dirList)
         {
             if (folderNameList.Count == 0)
@@ -337,7 +344,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
-        // Given the XMLCompareObject , append all these objects as nodes to the folder node that is passed in
+        /// <summary>
+        /// Creates a new file node and append it to the current folder node.
+        /// </summary>
+        /// <param name="xmlFileList"> A list of XMLCompareObject that exists only in metadata </param>
+        /// <param name="folder"> The current folder node </param>
+        /// <param name="counter"></param>
+        /// <param name="length"></param>
         private void AddFileToChild(List<XMLCompareObject> xmlFileList, FolderCompareObject folder, int counter, int length)
         {
             for (int i = 0; i < xmlFileList.Count; i++)
@@ -350,11 +363,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 else
                     fco = (FileCompareObject)o;
 
-                fco.MetaCreationTime[counter] = xmlFileList[i].CreatedTime;
+                fco.MetaCreationTimeUtc[counter] = xmlFileList[i].CreatedTimeUtc;
                 fco.MetaHash[counter] = xmlFileList[i].Hash;
-                fco.MetaLastWriteTime[counter] = xmlFileList[i].LastModifiedTime;
+                fco.MetaLastWriteTimeUtc[counter] = xmlFileList[i].LastModifiedTimeUtc;
                 fco.MetaLength[counter] = xmlFileList[i].Size;
-                fco.MetaUpdated[counter] = xmlFileList[i].LastUpdatedTime;
+                fco.MetaUpdated[counter] = xmlFileList[i].LastUpdatedTimeUtc;
                 fco.MetaExists[counter] = true;
 
                 if (o == null)
@@ -362,8 +375,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
-        // For each folder names in the list , create a new folder node and append them to an existing folder
-        // node
+        /// <summary>
+        /// Creates a new folder node and append it to the current folder node.
+        /// </summary>
+        /// <param name="folderName"> A list of folder names that exists only in metadata  </param>
+        /// <param name="folder"> The current folder node </param>
+        /// <param name="counter"></param>
+        /// <param name="length"></param>
         private void AddFolderToChild(List<string> folderName, FolderCompareObject folder, int counter, int length)
         {
             for (int i = 0; i < folderName.Count; i++)
@@ -383,7 +401,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
-        // For each XMLCompareObject , create a new file node and append them to the root node
+        /// <summary>
+        /// Creates a new file node and append it to the root node.
+        /// </summary>
+        /// <param name="xmlFileList"> A list of XMLCompareObject that exists only in metadata </param>
+        /// <param name="root"> Root node </param>
+        /// <param name="counter"></param>
+        /// <param name="length"></param>
         private void AddFileToRoot(List<XMLCompareObject> xmlFileList, RootCompareObject root, int counter, int length)
         {
             if (xmlFileList.Count == 0)
@@ -399,11 +423,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 else
                     fco = (FileCompareObject)o;
 
-                fco.MetaCreationTime[counter] = xmlFileList[i].CreatedTime;
+                fco.MetaCreationTimeUtc[counter] = xmlFileList[i].CreatedTimeUtc;
                 fco.MetaHash[counter] = xmlFileList[i].Hash;
-                fco.MetaLastWriteTime[counter] = xmlFileList[i].LastModifiedTime;
+                fco.MetaLastWriteTimeUtc[counter] = xmlFileList[i].LastModifiedTimeUtc;
                 fco.MetaLength[counter] = xmlFileList[i].Size;
-                fco.MetaUpdated[counter] = xmlFileList[i].LastUpdatedTime;
+                fco.MetaUpdated[counter] = xmlFileList[i].LastUpdatedTimeUtc;
                 fco.MetaExists[counter] = true;
 
                 if (o == null)
@@ -411,7 +435,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
-        //For each folder name , create a new folder node and append it to the root node
+        /// <summary>
+        /// Creates a new folder node and append it to the root node.
+        /// </summary>
+        /// <param name="folderName"> A list of folder names that exists only in metadata </param>
+        /// <param name="root"> Root node </param>
+        /// <param name="counter"></param>
+        /// <param name="length"></param>
         private void AddFolderToRoot(List<string> folderName, RootCompareObject root, int counter, int length)
         {
             if (folderName.Count == 0)
@@ -438,7 +468,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region Folders
 
-        // Populate the folder with the meta data name
         private void PopulateFolderMetaName(FolderCompareObject folder, int numOfPaths)
         {
             for (int i = 0; i < numOfPaths; i++)
@@ -454,8 +483,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
-        // if the folder exists , set the meta exists to true. Else extract it from the last known state 
-        // document
         private FolderCompareObject PopulateFolderWithMetaData(XmlDocument xmlDoc, FolderCompareObject folder, int counter)
         {
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
@@ -465,46 +492,40 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
             else
             {
-                PopulateFolderFromLastKnownState(folder, counter);
-            }
+                string path = Path.Combine(folder.GetSmartParentPath(counter), CommonXMLConstants.LastKnownStatePath);
 
-            return folder;
-        }
-
-        // looks for the last known state document and populate the details
-        private void PopulateFolderFromLastKnownState(FolderCompareObject folder, int counter)
-        {
-            string path = Path.Combine(folder.GetSmartParentPath(counter), CommonXMLConstants.LastKnownStatePath);
-
-            if (File.Exists(path))
-            {
-                XmlDocument lastKnownXmlDoc = new XmlDocument();
-                CommonMethods.LoadXML(ref lastKnownXmlDoc, path);
-                XmlNode folderNode = lastKnownXmlDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
-
-                if (folderNode != null)
+                if (File.Exists(path))
                 {
-                    XmlNodeList nodeList = folderNode.ChildNodes;
-                    for (int i = 0; i < nodeList.Count; i++)
-                    {
-                        XmlNode childNode = nodeList[i];
+                    XmlDocument lastKnownXmlDoc = new XmlDocument();
+                    CommonMethods.LoadXML(ref lastKnownXmlDoc, path);
+                    XmlNode folderNode = lastKnownXmlDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(folder.Name) + "]");
 
-                        switch (childNode.Name)
+                    if (folderNode != null)
+                    {
+                        XmlNodeList nodeList = folderNode.ChildNodes;
+                        for (int i = 0; i < nodeList.Count; i++)
                         {
-                            case CommonXMLConstants.NodeAction:
-                                string action = childNode.InnerText;
-                                if (action.Equals("deleted"))
-                                    folder.LastKnownState[counter] = LastKnownState.Deleted;
-                                else
-                                    folder.LastKnownState[counter] = LastKnownState.Renamed;
-                                break;
-                            case CommonXMLConstants.NodeLastUpdated:
-                                folder.MetaUpdated[counter] = long.Parse(childNode.InnerText);
-                                break;
+                            XmlNode childNode = nodeList[i];
+
+                            switch (childNode.Name)
+                            {
+                                case CommonXMLConstants.NodeAction:
+                                    string action = childNode.InnerText;
+                                    if (action.Equals("deleted"))
+                                        folder.LastKnownState[counter] = LastKnownState.Deleted;
+                                    else
+                                        folder.LastKnownState[counter] = LastKnownState.Renamed;
+                                    break;
+                                case CommonXMLConstants.NodeLastUpdated:
+                                    folder.MetaUpdated[counter] = long.Parse(childNode.InnerText);
+                                    break;
+                            }
                         }
                     }
                 }
             }
+
+            return folder;
         }
 
         #endregion

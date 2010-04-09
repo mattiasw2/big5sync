@@ -146,8 +146,8 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         try
                         {
                             CommonMethods.CopyFile(src, destFile);
-                            fco.CreationTime[i] = File.GetCreationTime(destFile).Ticks;
-                            fco.LastWriteTime[i] = File.GetLastWriteTime(destFile).Ticks;
+                            fco.CreationTimeUtc[i] = File.GetCreationTimeUtc(destFile).Ticks;
+                            fco.LastWriteTimeUtc[i] = File.GetLastWriteTimeUtc(destFile).Ticks;
                             fco.Exists[i] = true;
                             fco.FinalState[i] = fileExists ? FinalState.Updated : FinalState.Created;
                             fco.Hash[i] = fco.Hash[srcFilePos];
@@ -260,8 +260,8 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                             {
                                 CommonMethods.CopyFile(srcName, newName);
                                 FileCompareObject srcFile = fco.Parent.GetChild(fco.NewName) as FileCompareObject;
-                                fco.CreationTime[i] = File.GetCreationTime(newName).Ticks;
-                                fco.LastWriteTime[i] = File.GetLastWriteTime(newName).Ticks;
+                                fco.CreationTimeUtc[i] = File.GetCreationTimeUtc(newName).Ticks;
+                                fco.LastWriteTimeUtc[i] = File.GetLastAccessTimeUtc(newName).Ticks;
                                 fco.Exists[i] = true;
                                 fco.Hash[i] = srcFile.Hash[srcFilePos];
                                 fco.Length[i] = srcFile.Length[srcFilePos];
@@ -310,7 +310,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                             {
                                 CommonMethods.CreateFolder(folderToCreate);
                                 folder.Exists[i] = true;
-                                folder.CreationTime[i] = Directory.GetCreationTime(folderToCreate).Ticks;
+                                folder.CreationTimeUtc[i] = Directory.GetCreationTimeUtc(folderToCreate).Ticks;
                                 folder.FinalState[i] = FinalState.Created;
                                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "Folder created " + folderToCreate));
                             }
@@ -415,7 +415,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                             {
                                 CommonMethods.CopyDirectory(srcFolderName, newFolderName);
                                 folder.Exists[i] = true;
-                                folder.CreationTime[i] = Directory.GetCreationTime(newFolderName).Ticks;
+                                folder.CreationTimeUtc[i] = Directory.GetCreationTimeUtc(newFolderName).Ticks;
                                 folder.FinalState[i] = FinalState.CreatedRenamed;
                                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "Folder copied from " + srcFolderName + " to " + newFolderName));
                             }
