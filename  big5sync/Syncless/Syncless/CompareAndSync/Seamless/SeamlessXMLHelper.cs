@@ -12,9 +12,8 @@ namespace Syncless.CompareAndSync.Seamless
         #region Main Method
 
         /// <summary>
-        /// UpdateXML is the only public static method that is accessible by other classes. Given a 
-        /// BaseXMLWriteObject , it will differentiate it between a folder and a file , then let the respective
-        /// methods handle it
+        /// This method will differentiate between an XMLWriteFolderObject or an XMLWriteFileObject. Then 
+        /// base on it's MetaChangeType , it will update the xml document accordingly
         /// </summary>
         /// <param name="xmlWriteList"></param>
         public static void UpdateXML(BaseXMLWriteObject xmlWriteList)
@@ -29,11 +28,7 @@ namespace Syncless.CompareAndSync.Seamless
 
         #region File Operations
 
-        /// <summary>
-        /// HandleFile method will take in a BaseXMLWriteObject that is of a file type. It will check the
-        /// MetaChangeType and let the respective methods handle it.
-        /// </summary>
-        /// <param name="xmlWriteList"></param>
+        // Handle the different MetaChangeType of the XMLWriteFileObject
         private static void HandleFile(BaseXMLWriteObject xmlWriteList)
         {
             switch (xmlWriteList.ChangeType)
@@ -53,12 +48,7 @@ namespace Syncless.CompareAndSync.Seamless
             }
         }
 
-        /// <summary>
-        /// Given a XMLWriteFileObject , it will load the respective xml file and then populate a new file
-        /// element in the xml file with the values in XMLWriteFileObject. Subsequently , it will remove any nodes in 
-        /// the todo file
-        /// </summary>
-        /// <param name="xmlWriteObj"></param>
+        //Create a new file node in the xml document
         private static void CreateFile(XMLWriteFileObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -99,16 +89,10 @@ namespace Syncless.CompareAndSync.Seamless
             XmlNode rootNode = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr);
             rootNode.AppendChild(fileElement);
             CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
-            DeleteFileToDoByName(xmlWriteObj);
+            DeleteFileLastKnownState(xmlWriteObj);
         }
 
-        /// <summary>
-        /// Given a XMLWriteFileObject , it will look for the respective xml file and load it.After which , it
-        /// will search for the node which contains the same name as XMLWriteFileObject that is passed in , and
-        /// update the different element contents. Subsequently , it will remove any nodes in the todo file 
-        /// with the same name
-        /// </summary>
-        /// <param name="xmlWriteObj"></param>
+        //Update the existing file node in the xml document 
         private static void UpdateFile(XMLWriteFileObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -155,15 +139,10 @@ namespace Syncless.CompareAndSync.Seamless
             }
 
             CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
-            DeleteFileToDoByName(xmlWriteObj);
+            DeleteFileLastKnownState(xmlWriteObj);
         }
 
-        /// <summary>
-        /// Given a XMLWriteFileObject , it will look for the respective xml file and load it. It will then
-        /// rename the existing element in the xml based on the name. Upon doing so , it will create a new node
-        /// in the todo file.
-        /// </summary>
-        /// <param name="xmlWriteObj"></param>
+        //Rename the existing file node in the xml document
         private static void RenameFile(XMLWriteFileObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -186,14 +165,10 @@ namespace Syncless.CompareAndSync.Seamless
             node.FirstChild.InnerText = xmlWriteObj.NewName;
             node.LastChild.InnerText = xmlWriteObj.MetaUpdated.ToString();
             CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
-            GenerateFileToDo(xmlWriteObj, tempNode);
+            GenerateFileLastKnownState(xmlWriteObj, tempNode);
         }
 
-        /// <summary>
-        /// Looks for the xml file given the XMLWriteFileObject , it will delete node and generate a new node
-        /// in the todo file
-        /// </summary>
-        /// <param name="xmlWriteObj"></param>
+        // Delete the file node in the xml document
         private static void DeleteFile(XMLWriteFileObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -210,18 +185,14 @@ namespace Syncless.CompareAndSync.Seamless
                 CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
             }
 
-            GenerateFileToDo(xmlWriteObj, tempNode);
+            GenerateFileLastKnownState(xmlWriteObj, tempNode);
         }
 
         #endregion
 
         #region Folder Operations
 
-        /// <summary>
-        /// Given a BaseXMLWriteObject which is a folder , checks for the MetaChangeType and let the respective
-        /// method handle it.
-        /// </summary>
-        /// <param name="xmlWriteObj"></param>
+        // Handles the different folder MetaChangeType
         private static void HandleFolder(BaseXMLWriteObject xmlWriteObj)
         {
             switch (xmlWriteObj.ChangeType)
@@ -238,12 +209,7 @@ namespace Syncless.CompareAndSync.Seamless
             }
         }
 
-        /// <summary>
-        /// Given a XMLWriteFolderObject , it will load the xml file. 
-        /// After which , it will create a new node based on the values given by XMLWriteFolderObject. Next , it
-        /// will try to delete the node with the same name in the todo file
-        /// </summary>
-        /// <param name="xmlWriteObj"></param>
+        // Create a new folder node in the xml document
         private static void CreateFolder(XMLWriteFolderObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -266,14 +232,10 @@ namespace Syncless.CompareAndSync.Seamless
             XmlNode rootNode = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr);
             rootNode.AppendChild(folder);
             CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
-            DeleteFolderToDoByName(xmlWriteObj);
+            DeleteFolderLastKnownState(xmlWriteObj);
         }
 
-        /// <summary>
-        /// Given a XMLWriteFolderObject , it will first load the xml file. Then it will locate the current node
-        /// and rename it to the new name. After which  , it will a new folder node in the todo file
-        /// </summary>
-        /// <param name="xmlWriteObj"></param>
+        // Rename the folder node in the xml document
         private static void RenameFolder(XMLWriteFolderObject xmlWriteObj)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -304,15 +266,11 @@ namespace Syncless.CompareAndSync.Seamless
             {
                 subFolderNode.InnerText = xmlWriteObj.NewName;
                 CommonMethods.SaveXML(ref subFolderXmlDoc, subFolderXmlPath);
-                GenerateFolderToDo(xmlWriteObj);
+                GenerateFolderLastKnownState(xmlWriteObj);
             }
         }
 
-        /// <summary>
-        /// Given the XMLWriteFolderObject , it will first load the xml file. Then it will delete the folder
-        /// node based on the name and create a new node in the todo file
-        /// </summary>
-        /// <param name="xmlWriteObj"></param>
+        // Delete the folder node in the existing xml document
         private static void DeleteFolder(XMLWriteFolderObject xmlWriteObj)
         {
             string xmlFilePath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.MetadataPath);
@@ -327,20 +285,15 @@ namespace Syncless.CompareAndSync.Seamless
                 CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
             }
 
-            GenerateFolderToDo(xmlWriteObj);
+            GenerateFolderLastKnownState(xmlWriteObj);
         }
 
         #endregion
 
-        #region ToDo Operations
+        #region LastKnownState Operations
 
-        /// <summary>
-        /// Given a XMLWriteFileObject and an XmlNode , load the xml file and create a extra file node in the
-        /// todo file
-        /// </summary>
-        /// <param name="xmlWriteObj"></param>
-        /// <param name="deletedNode"> A cloned node </param>
-        private static void GenerateFileToDo(XMLWriteFileObject xmlWriteObj, XmlNode deletedNode)
+        // Generates a new file node in the last known state file based on the XMLWriteFileObject and deleted node
+        private static void GenerateFileLastKnownState(XMLWriteFileObject xmlWriteObj, XmlNode deletedNode)
         {
             if (deletedNode == null)
                 return;
@@ -350,16 +303,12 @@ namespace Syncless.CompareAndSync.Seamless
             string todoPath = Path.Combine(fullPath, CommonXMLConstants.LastKnownStatePath);
             CommonMethods.CreateLastKnownStateFile(fullPath);
             CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
-            AppendActionFileToDo(xmlTodoDoc, xmlWriteObj, CommonXMLConstants.ActionDeleted, deletedNode);
+            AppendActionFileLastKnownState(xmlTodoDoc, xmlWriteObj, CommonXMLConstants.ActionDeleted, deletedNode);
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
         }
 
-        /// <summary>
-        /// Given a XMLWriteFolderObject and an XmlNode , load the xml file and create a extra folder node
-        /// in the todo file
-        /// </summary>
-        /// <param name="xmlWriteObj"></param>
-        private static void GenerateFolderToDo(XMLWriteFolderObject xmlWriteObj)
+        // Generates a new folder node in the last known state file based on the XMLWriteFolderObject
+        private static void GenerateFolderLastKnownState(XMLWriteFolderObject xmlWriteObj)
         {
             string parentPath = xmlWriteObj.Parent;
             if (!Directory.Exists(parentPath))
@@ -369,19 +318,13 @@ namespace Syncless.CompareAndSync.Seamless
             string todoPath = Path.Combine(parentPath, CommonXMLConstants.LastKnownStatePath);
             CommonMethods.CreateLastKnownStateFile(parentPath);
             CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
-            AppendActionFolderToDo(xmlTodoDoc, xmlWriteObj, CommonXMLConstants.ActionDeleted);
+            AppendActionFolderLastKnownState(xmlTodoDoc, xmlWriteObj, CommonXMLConstants.ActionDeleted);
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
         }
 
-        /// <summary>
-        /// Based on the XMLWriteFileObject , this method will extract the data and create an extra node in the
-        /// todo file
-        /// </summary>
-        /// <param name="xmlDoc"> XmlDocument that is loaded with the xml file </param>
-        /// <param name="xmlWriteObj"> The XMLWriteFileObject to be written in the todo file </param>
-        /// <param name="changeType"> Deleted Changetype </param>
-        /// <param name="node"> Node with the hash and last modified details </param>
-        private static void AppendActionFileToDo(XmlDocument xmlDoc, XMLWriteFileObject xmlWriteObj, string changeType, XmlNode node)
+        // Called by method GenerateFileLastKnownState to access the xml document and add a new file node in the last
+        // known state file
+        private static void AppendActionFileLastKnownState(XmlDocument xmlDoc, XMLWriteFileObject xmlWriteObj, string changeType, XmlNode node)
         {
             string hash = string.Empty;
             string lastModified = string.Empty;
@@ -429,12 +372,8 @@ namespace Syncless.CompareAndSync.Seamless
             rootNode.AppendChild(fileElement);
         }
 
-        /// <summary>
-        /// Given an XMLWriteFileObject , it looks for the same name in the todo file and delete the node
-        /// with the same name
-        /// </summary>
-        /// <param name="xmlWriteObj"></param>
-        private static void DeleteFileToDoByName(XMLWriteFileObject xmlWriteObj)
+        //Deletes a file node in the last known state file by searching for the name
+        private static void DeleteFileLastKnownState(XMLWriteFileObject xmlWriteObj)
         {
             string todoXmlPath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.LastKnownStatePath);
             if (!File.Exists(todoXmlPath))
@@ -448,14 +387,8 @@ namespace Syncless.CompareAndSync.Seamless
             CommonMethods.SaveXML(ref todoXmlDoc, todoXmlPath);
         }
 
-        /// <summary>
-        /// Based on the XMLWriteFolderObject , this method will extract the data and create an extra node in the
-        /// todo file
-        /// </summary>
-        /// <param name="xmlDoc"></param>
-        /// <param name="folder"> XMLWriteFolderObject to be written to a todo file</param>
-        /// <param name="changeType"> Deleted </param>
-        private static void AppendActionFolderToDo(XmlDocument xmlDoc, XMLWriteFolderObject folder, string changeType)
+        // Called by GenerateFolderLastKnownState to add a new folder node into the last known state file
+        private static void AppendActionFolderLastKnownState(XmlDocument xmlDoc, XMLWriteFolderObject folder, string changeType)
         {
             XmlText nameText = xmlDoc.CreateTextNode(folder.Name);
             XmlText action = xmlDoc.CreateTextNode(changeType);
@@ -477,12 +410,8 @@ namespace Syncless.CompareAndSync.Seamless
             rootNode.AppendChild(folderElement);
         }
 
-        /// <summary>
-        /// Given a XMLWriteFolderobject , it will search for the same name in the todo file and delete the
-        /// node
-        /// </summary>
-        /// <param name="xmlWriteObj"></param>
-        private static void DeleteFolderToDoByName(XMLWriteFolderObject xmlWriteObj)
+        // Deletes a folder node in the last known state document by searching for its name
+        private static void DeleteFolderLastKnownState(XMLWriteFolderObject xmlWriteObj)
         {
             string todoXmlPath = Path.Combine(xmlWriteObj.Parent, CommonXMLConstants.LastKnownStatePath);
             if (!File.Exists(todoXmlPath))
