@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.IO;
 using System.Xml;
 
 namespace SynclessSeamlessTester

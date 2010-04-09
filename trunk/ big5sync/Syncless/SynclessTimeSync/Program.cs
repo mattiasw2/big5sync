@@ -1,4 +1,5 @@
-﻿// Icon source: http://www.iconfinder.net/icondetails/10407/24/
+﻿// Source: http://www.codeproject.com/KB/datetime/SNTPClient.aspx
+// Icon source: http://www.iconfinder.net/icondetails/10407/24/
 // Icon source: http://www.webdesignerdepot.com/2009/03/200-free-exclusive-icons-siena/
 
 using DaveyM69.Components;

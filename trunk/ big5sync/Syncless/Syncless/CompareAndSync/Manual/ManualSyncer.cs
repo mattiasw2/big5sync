@@ -13,6 +13,9 @@ using Syncless.Notification;
 
 namespace Syncless.CompareAndSync.Manual
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ManualSyncer
     {
         public static RootCompareObject Sync(ManualSyncRequest request, SyncProgress progress)
@@ -24,7 +27,7 @@ namespace Syncless.CompareAndSync.Manual
             filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ConflictDir));
             RootCompareObject rco = new RootCompareObject(request.Paths);
 
-            //Analyzing
+            // Analyzing
             progress.ChangeToAnalyzing();
             List<string> typeConflicts = new List<string>();
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters, typeConflicts,progress), progress);
@@ -36,14 +39,14 @@ namespace Syncless.CompareAndSync.Manual
 
             if (progress.State != SyncState.Cancelled)
             {
-                //Syncing
+                // Syncing
                 progress.ChangeToSyncing(comparerVisitor.TotalNodes);
                 HandleBuildConflicts(typeConflicts, request.Config);
                 CompareObjectHelper.PreTraverseFolder(rco, new ConflictVisitor(request.Config), progress);
                 SyncerVisitor syncerVisitor = new SyncerVisitor(request.Config, progress);
                 CompareObjectHelper.PreTraverseFolder(rco, syncerVisitor, progress);
 
-                //XML Writer
+                // XML Writer
                 progress.ChangeToFinalizing(syncerVisitor.NodesCount);
                 CompareObjectHelper.PreTraverseFolder(rco, new XMLWriterVisitor(progress), progress);
                 progress.ChangeToFinished();
@@ -51,7 +54,7 @@ namespace Syncless.CompareAndSync.Manual
                 if (request.Notify)
                     ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorTagNotification(request.TagName));
 
-                //Finished
+                // Finished
                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STOPPED, "Completed Manual Sync for " + request.TagName));
                 return rco;
             }
