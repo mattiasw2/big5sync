@@ -283,7 +283,6 @@ namespace Syncless.Notification
             State = SyncState.Finished;
             TriggerSyncComplete();
 
-            _wh.Set();
             return true;
         }
         /// <summary>
