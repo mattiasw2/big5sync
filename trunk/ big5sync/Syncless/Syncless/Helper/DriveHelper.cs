@@ -3,6 +3,9 @@ using System.Management;
 
 namespace Syncless.Helper
 {
+    /// <summary>
+    /// The class that help to handle Drive operation.
+    /// </summary>
     public class DriveHelper
     {
         // Credits of Team 2: SyncButler. With this method, it enables us to find all USB drives regardless of whether they are removable or fixed.

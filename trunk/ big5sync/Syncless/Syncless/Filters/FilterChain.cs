@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 namespace Syncless.Filters
 {
+    /// <summary>
+    /// The class that help apply a list of Filter to a list of pattern.
+    /// </summary>
     public class FilterChain
     {
         /// <summary>

@@ -5,7 +5,13 @@
     /// </summary>
     public class FilterFactory
     {
+        /// <summary>
+        /// Reference to <see cref="FilterMode.INCLUDE"/>
+        /// </summary>
         public const FilterMode INCLUDE = FilterMode.INCLUDE;
+        /// <summary>
+        /// Reference to <see cref="FilterMode.EXCLUDE"/>
+        /// </summary>
         public const FilterMode EXCLUDE = FilterMode.EXCLUDE;
         /// <summary>
         /// Factory Method to create Extension Filter

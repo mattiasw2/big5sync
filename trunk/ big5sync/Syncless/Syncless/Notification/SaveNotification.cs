@@ -17,7 +17,7 @@
         /// Override the Equal method
         /// </summary>
         /// <param name="obj">object to compare</param>
-        /// <returns></returns>
+        /// <returns>true if it is Equals, false otherwise</returns>
         public override bool Equals(object obj)
         {
             //       
@@ -36,7 +36,10 @@
 
         }
 
-        // override object.GetHashCode
+        /// <summary>
+        /// override object.GetHashCode
+        /// </summary>
+        /// <returns>the int of the HashCode of this object</returns>
         public override int GetHashCode()
         {
             return base.GetHashCode();

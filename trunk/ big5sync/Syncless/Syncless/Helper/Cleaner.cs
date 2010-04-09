@@ -1,14 +1,18 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace Syncless.Helper
 {
+    /// <summary>
+    /// Cleaner class to clean the .syncless meta data
+    /// </summary>
     public static class Cleaner
     {
+        /// <summary>
+        /// Delete all the .syncless metadata inside a directory
+        /// </summary>
+        /// <param name="info">The DirectoryInfo object representing the folder</param>
+        /// <returns>the number of folder deleted</returns>
         public static int CleanSynclessMeta(DirectoryInfo info)
         {
             DirectoryInfo[] infos = info.GetDirectories("*", SearchOption.AllDirectories);
@@ -29,6 +33,12 @@ namespace Syncless.Helper
             }
             return count;
         }
+        /// <summary>
+        /// Delete all the .syncless metadata inside a directory, ignoring a list of subfolder
+        /// </summary>
+        /// <param name="info">The DirectoryInfo object representing the folder</param>
+        /// <param name="childPaths">The list of child paths to ignore</param>
+        /// <returns>the number of folder deleted</returns>
         public static int CleanSynclessMeta(DirectoryInfo info, List<string> childPaths)
         {
             if (!info.Exists)
