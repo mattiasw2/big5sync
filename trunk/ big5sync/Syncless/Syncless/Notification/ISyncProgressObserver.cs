@@ -6,6 +6,10 @@
     public interface ISyncProgressObserver
     {
         /// <summary>
+        /// Provided for Progress to inform Progress State changed by invoking it
+        /// </summary>
+        void InvokeStateChanged();
+        /// <summary>
         /// Provided for Progress to inform Progress State changed
         /// </summary>
         void StateChanged();

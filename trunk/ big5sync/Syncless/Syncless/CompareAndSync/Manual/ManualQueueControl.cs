@@ -63,7 +63,7 @@ namespace Syncless.CompareAndSync.Manual
             {
                 if (!_queuedJobsLookup.Contains(item.TagName))
                 {
-                    _jobs.Insert(0, item);
+                    _jobs.Add(item);
                     _queuedJobsLookup.Add(item.TagName);
                 }
             }
