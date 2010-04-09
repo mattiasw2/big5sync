@@ -971,6 +971,40 @@ namespace Syncless.Core
             }
         }
         /// <summary>
+        /// Cancel a Mode swtich
+        /// </summary>
+        /// <param name="tagName">the name of the tag to cancel</param>
+        /// <returns>true if is possible to cancel the switch, otherwise false</returns>
+        public bool CancelSwitch(string tagName)
+        {
+            try
+            {
+                TagState state = GetTagState(tagName);
+                if (!(state == TagState.SeamlessToManual || state == TagState.ManualToSeamless))
+                {
+                    return false;
+                }
+                if (!CompareAndSyncController.Instance.IsQueuedOrSyncing(tagName))
+                {
+                    _switchingTable.Remove(tagName);
+                    _userInterface.TagChanged(tagName);
+                    return true;
+                }
+                if (CompareAndSyncController.Instance.Cancel(new CancelSyncRequest(tagName)))
+                {
+                    _switchingTable.Remove(tagName);
+                    _userInterface.TagChanged(tagName);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+        }
+        /// <summary>
         /// Get the current Tag of a particular tag.
         /// See <see cref="TagState"/> for a list of TagState
         /// </summary>

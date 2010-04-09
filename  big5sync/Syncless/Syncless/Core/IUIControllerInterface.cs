@@ -82,6 +82,12 @@ namespace Syncless.Core
         /// <returns>true if the mode can be switch.</returns>
         bool SwitchMode(string tagName , TagMode mode);
         /// <summary>
+        /// Cancel a Mode swtich
+        /// </summary>
+        /// <param name="tagName">the name of the tag to cancel</param>
+        /// <returns>true if is possible to cancel the switch, otherwise false</returns>
+        bool CancelSwitch(string tagName);
+        /// <summary>
         /// Get the current Tag of a particular tag.
         /// See <see cref="TagState"/> for a list of TagState
         /// </summary>
