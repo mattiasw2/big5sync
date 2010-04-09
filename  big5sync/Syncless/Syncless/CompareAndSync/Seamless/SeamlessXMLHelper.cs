@@ -60,16 +60,16 @@ namespace Syncless.CompareAndSync.Seamless
             XmlText nameText = xmlDoc.CreateTextNode(xmlWriteObj.Name);
             XmlText hashText = xmlDoc.CreateTextNode(xmlWriteObj.Hash);
             XmlText sizeText = xmlDoc.CreateTextNode(xmlWriteObj.Size.ToString());
-            XmlText createdTimeText = xmlDoc.CreateTextNode(xmlWriteObj.CreationTime.ToString());
-            XmlText lastModifiedText = xmlDoc.CreateTextNode(xmlWriteObj.LastModified.ToString());
-            XmlText lastUpdatedText = xmlDoc.CreateTextNode(xmlWriteObj.MetaUpdated.ToString());
+            XmlText createdTimeText = xmlDoc.CreateTextNode(xmlWriteObj.CreationTimeUtc.ToString());
+            XmlText lastModifiedText = xmlDoc.CreateTextNode(xmlWriteObj.LastModifiedUtc.ToString());
+            XmlText lastUpdatedText = xmlDoc.CreateTextNode(xmlWriteObj.MetaUpdatedUtc.ToString());
 
             XmlElement nameElement = xmlDoc.CreateElement(CommonXMLConstants.NodeName);
             XmlElement hashElement = xmlDoc.CreateElement(CommonXMLConstants.NodeHash);
             XmlElement sizeElement = xmlDoc.CreateElement(CommonXMLConstants.NodeSize);
-            XmlElement createdTimeElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastCreated);
-            XmlElement lastModifiedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastModified);
-            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdated);
+            XmlElement createdTimeElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastCreatedUtc);
+            XmlElement lastModifiedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastModifiedUtc);
+            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdatedUtc);
             XmlElement fileElement = xmlDoc.CreateElement(CommonXMLConstants.NodeFile);
 
             nameElement.AppendChild(nameText);
@@ -126,14 +126,14 @@ namespace Syncless.CompareAndSync.Seamless
                     case CommonXMLConstants.NodeName:
                         nodes.InnerText = xmlWriteObj.Name;
                         break;
-                    case CommonXMLConstants.NodeLastModified:
-                        nodes.InnerText = xmlWriteObj.LastModified.ToString();
+                    case CommonXMLConstants.NodeLastModifiedUtc:
+                        nodes.InnerText = xmlWriteObj.LastModifiedUtc.ToString();
                         break;
-                    case CommonXMLConstants.NodeLastCreated:
-                        nodes.InnerText = xmlWriteObj.CreationTime.ToString();
+                    case CommonXMLConstants.NodeLastCreatedUtc:
+                        nodes.InnerText = xmlWriteObj.CreationTimeUtc.ToString();
                         break;
-                    case CommonXMLConstants.NodeLastUpdated:
-                        nodes.InnerText = xmlWriteObj.MetaUpdated.ToString();
+                    case CommonXMLConstants.NodeLastUpdatedUtc:
+                        nodes.InnerText = xmlWriteObj.MetaUpdatedUtc.ToString();
                         break;
                 }
             }
@@ -163,7 +163,7 @@ namespace Syncless.CompareAndSync.Seamless
 
             tempNode = node.Clone();
             node.FirstChild.InnerText = xmlWriteObj.NewName;
-            node.LastChild.InnerText = xmlWriteObj.MetaUpdated.ToString();
+            node.LastChild.InnerText = xmlWriteObj.MetaUpdatedUtc.ToString();
             CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
             GenerateFileLastKnownState(xmlWriteObj, tempNode);
         }
@@ -219,10 +219,10 @@ namespace Syncless.CompareAndSync.Seamless
 
             CommonMethods.DoFolderCleanUp(xmlDoc, xmlWriteObj.Name);
             XmlText nameText = xmlDoc.CreateTextNode(xmlWriteObj.Name);
-            XmlText lastUpdatedText = xmlDoc.CreateTextNode(xmlWriteObj.MetaUpdated.ToString());
+            XmlText lastUpdatedText = xmlDoc.CreateTextNode(xmlWriteObj.MetaUpdatedUtc.ToString());
 
             XmlElement nameElement = xmlDoc.CreateElement(CommonXMLConstants.NodeName);
-            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdated);
+            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdatedUtc);
             XmlElement folder = xmlDoc.CreateElement(CommonXMLConstants.NodeFolder);
             nameElement.AppendChild(nameText);
             lastUpdatedElement.AppendChild(lastUpdatedText);
@@ -251,7 +251,7 @@ namespace Syncless.CompareAndSync.Seamless
             else
             {
                 node.FirstChild.InnerText = xmlWriteObj.NewName;
-                node.LastChild.InnerText = xmlWriteObj.MetaUpdated.ToString();
+                node.LastChild.InnerText = xmlWriteObj.MetaUpdatedUtc.ToString();
                 CommonMethods.SaveXML(ref xmlDoc, xmlPath);
             }
 
@@ -337,7 +337,7 @@ namespace Syncless.CompareAndSync.Seamless
                     case CommonXMLConstants.NodeHash:
                         hash = childNode.InnerText;
                         break;
-                    case CommonXMLConstants.NodeLastModified:
+                    case CommonXMLConstants.NodeLastModifiedUtc:
                         lastModified = childNode.InnerText;
                         break;
                 }
@@ -347,14 +347,14 @@ namespace Syncless.CompareAndSync.Seamless
             XmlText actionText = xmlDoc.CreateTextNode(changeType);
             XmlText lastModifiedText = xmlDoc.CreateTextNode(lastModified);
             XmlText nameText = xmlDoc.CreateTextNode(xmlWriteObj.Name);
-            XmlText lastUpdatedText = xmlDoc.CreateTextNode(xmlWriteObj.MetaUpdated.ToString());
+            XmlText lastUpdatedText = xmlDoc.CreateTextNode(xmlWriteObj.MetaUpdatedUtc.ToString());
 
             XmlElement fileElement = xmlDoc.CreateElement(CommonXMLConstants.NodeFile);
             XmlElement nameElement = xmlDoc.CreateElement(CommonXMLConstants.NodeName);
             XmlElement hashElement = xmlDoc.CreateElement(CommonXMLConstants.NodeHash);
             XmlElement actionElement = xmlDoc.CreateElement(CommonXMLConstants.NodeAction);
-            XmlElement lastModifiedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastModified);
-            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdated);
+            XmlElement lastModifiedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastModifiedUtc);
+            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdatedUtc);
 
             hashElement.AppendChild(hashText);
             actionElement.AppendChild(actionText);
@@ -392,12 +392,12 @@ namespace Syncless.CompareAndSync.Seamless
         {
             XmlText nameText = xmlDoc.CreateTextNode(folder.Name);
             XmlText action = xmlDoc.CreateTextNode(changeType);
-            XmlText lastUpdatedText = xmlDoc.CreateTextNode(folder.MetaUpdated.ToString());
+            XmlText lastUpdatedText = xmlDoc.CreateTextNode(folder.MetaUpdatedUtc.ToString());
 
             XmlElement folderElement = xmlDoc.CreateElement(CommonXMLConstants.NodeFolder);
             XmlElement nameElement = xmlDoc.CreateElement(CommonXMLConstants.NodeName);
             XmlElement actionElement = xmlDoc.CreateElement(CommonXMLConstants.NodeAction);
-            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdated);
+            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdatedUtc);
 
             nameElement.AppendChild(nameText);
             actionElement.AppendChild(action);

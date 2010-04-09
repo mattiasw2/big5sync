@@ -23,14 +23,14 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         /// <param name="createdTime">The created time from the metadata.</param>
         /// <param name="modifiedTime">The modified time from the metadata.</param>
         /// <param name="updatedTime">The updated time from the metadata.</param>
-        public XMLCompareObject(string name, string hash, long size, long createdTime, long modifiedTime , long updatedTime)
+        public XMLCompareObject(string name, string hash, long size, long createdTimeUtc, long modifiedTimeUtc, long updatedTimeUtc)
         {
             _size = size;
             _name = name;
             _hash = hash;
-            _createdTimeUtc = createdTime;
-            _lastModifiedTimeUtc = modifiedTime;
-            _lastUpdatedTimeUtc = updatedTime;
+            _createdTimeUtc = createdTimeUtc;
+            _lastModifiedTimeUtc = modifiedTimeUtc;
+            _lastUpdatedTimeUtc = updatedTimeUtc;
         }
 
         #region Properties
@@ -50,7 +50,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         public long Size
         {
             get { return _size; }
-            set { _size = value;}
+            set { _size = value; }
         }
 
         /// <summary>

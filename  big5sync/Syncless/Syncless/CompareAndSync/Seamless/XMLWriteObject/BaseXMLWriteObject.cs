@@ -5,26 +5,26 @@ namespace Syncless.CompareAndSync.Seamless.XMLWriteObject
     public abstract class BaseXMLWriteObject
     {
         private readonly string _name, _parent, _newName;
-        private readonly long _creationTime;
+        private readonly long _creationTimeUtc;
         private readonly MetaChangeType _changeType;
-        private readonly long _metaUpdated;
+        private readonly long _metaUpdatedUtc;
 
-        protected BaseXMLWriteObject(string name, string parent, MetaChangeType changeType, long metaUpdated)
+        protected BaseXMLWriteObject(string name, string parent, MetaChangeType changeType, long metaUpdatedUtc)
         {
             _name = name;
             _parent = parent;
             _changeType = changeType;
-            _metaUpdated = metaUpdated;
+            _metaUpdatedUtc = metaUpdatedUtc;
         }
 
-        protected BaseXMLWriteObject(string name, string parent, long creationTime, MetaChangeType changeType, long metaUpdated)
-            : this(name, parent, changeType, metaUpdated)
+        protected BaseXMLWriteObject(string name, string parent, long creationTimeUtc, MetaChangeType changeType, long metaUpdatedUtc)
+            : this(name, parent, changeType, metaUpdatedUtc)
         {
-            _creationTime = creationTime;
+            _creationTimeUtc = creationTimeUtc;
         }
 
-        protected BaseXMLWriteObject(string name, string newName, string parent, MetaChangeType changeType, long metaUpdated)
-            : this(name, parent, changeType, metaUpdated)
+        protected BaseXMLWriteObject(string name, string newName, string parent, MetaChangeType changeType, long metaUpdatedUtc)
+            : this(name, parent, changeType, metaUpdatedUtc)
         {
             _newName = newName;
         }
@@ -39,9 +39,9 @@ namespace Syncless.CompareAndSync.Seamless.XMLWriteObject
             get { return _parent; }
         }
 
-        public long CreationTime
+        public long CreationTimeUtc
         {
-            get { return _creationTime; }
+            get { return _creationTimeUtc; }
         }
 
         public MetaChangeType ChangeType
@@ -54,9 +54,9 @@ namespace Syncless.CompareAndSync.Seamless.XMLWriteObject
             get { return _newName; }
         }
 
-        public long MetaUpdated
+        public long MetaUpdatedUtc
         {
-            get { return _metaUpdated; }
+            get { return _metaUpdatedUtc; }
         }
 
     }

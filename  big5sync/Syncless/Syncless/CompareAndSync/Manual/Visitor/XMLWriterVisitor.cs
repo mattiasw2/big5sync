@@ -129,24 +129,24 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             XmlText hashText = xmlDoc.CreateTextNode(file.Hash[counter]);
             XmlText nameText = xmlDoc.CreateTextNode(useNewName ? file.NewName : file.Name);
             XmlText sizeText = xmlDoc.CreateTextNode(file.Length[counter].ToString());
-            XmlText lastModifiedText = xmlDoc.CreateTextNode(file.LastWriteTimeUtc[counter].ToString());
-            XmlText lastCreatedText = xmlDoc.CreateTextNode(file.CreationTimeUtc[counter].ToString());
-            XmlText lastUpdated = xmlDoc.CreateTextNode(_dateTime.ToString());
+            XmlText lastModifiedUtcText = xmlDoc.CreateTextNode(file.LastWriteTimeUtc[counter].ToString());
+            XmlText lastCreatedUtcText = xmlDoc.CreateTextNode(file.CreationTimeUtc[counter].ToString());
+            XmlText lastUpdatedUtcText = xmlDoc.CreateTextNode(_dateTime.ToString());
 
             XmlElement fileElement = xmlDoc.CreateElement(CommonXMLConstants.NodeFile);
             XmlElement hashElement = xmlDoc.CreateElement(CommonXMLConstants.NodeHash);
             XmlElement nameElement = xmlDoc.CreateElement(CommonXMLConstants.NodeName);
             XmlElement sizeElement = xmlDoc.CreateElement(CommonXMLConstants.NodeSize);
-            XmlElement lastModifiedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastModified);
-            XmlElement lastCreatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastCreated);
-            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdated);
+            XmlElement lastModifiedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastModifiedUtc);
+            XmlElement lastCreatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastCreatedUtc);
+            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdatedUtc);
 
             hashElement.AppendChild(hashText);
             nameElement.AppendChild(nameText);
             sizeElement.AppendChild(sizeText);
-            lastModifiedElement.AppendChild(lastModifiedText);
-            lastCreatedElement.AppendChild(lastCreatedText);
-            lastUpdatedElement.AppendChild(lastUpdated);
+            lastModifiedElement.AppendChild(lastModifiedUtcText);
+            lastCreatedElement.AppendChild(lastCreatedUtcText);
+            lastUpdatedElement.AppendChild(lastUpdatedUtcText);
 
             fileElement.AppendChild(nameElement);
             fileElement.AppendChild(sizeElement);
@@ -195,13 +195,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     case CommonXMLConstants.NodeName:
                         nodes.InnerText = file.Name;
                         break;
-                    case CommonXMLConstants.NodeLastModified:
+                    case CommonXMLConstants.NodeLastModifiedUtc:
                         nodes.InnerText = file.LastWriteTimeUtc[counter].ToString();
                         break;
-                    case CommonXMLConstants.NodeLastCreated:
+                    case CommonXMLConstants.NodeLastCreatedUtc:
                         nodes.InnerText = file.CreationTimeUtc[counter].ToString();
                         break;
-                    case CommonXMLConstants.NodeLastUpdated:
+                    case CommonXMLConstants.NodeLastUpdatedUtc:
                         nodes.InnerText = _dateTime.ToString();
                         break;
                 }
@@ -236,7 +236,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     case CommonXMLConstants.NodeName:
                         nodes.InnerText = file.NewName;
                         break;
-                    case CommonXMLConstants.NodeLastUpdated:
+                    case CommonXMLConstants.NodeLastUpdatedUtc:
                         nodes.InnerText = _dateTime.ToString();
                         break;
                 }
@@ -309,13 +309,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             CommonMethods.LoadXML(ref xmlDoc, xmlPath);
             CommonMethods.DoFolderCleanUp(xmlDoc, name);
             XmlText nameText = xmlDoc.CreateTextNode(name);
-            XmlText lastUpdatedText = xmlDoc.CreateTextNode(_dateTime.ToString());
+            XmlText lastUpdatedUtcText = xmlDoc.CreateTextNode(_dateTime.ToString());
             XmlElement nameElement = xmlDoc.CreateElement(CommonXMLConstants.NodeName);
-            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdated);
+            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdatedUtc);
             XmlElement folderElement = xmlDoc.CreateElement(CommonXMLConstants.NodeFolder);
 
             nameElement.AppendChild(nameText);
-            lastUpdatedElement.AppendChild(lastUpdatedText);
+            lastUpdatedElement.AppendChild(lastUpdatedUtcText);
             folderElement.AppendChild(nameElement);
             folderElement.AppendChild(lastUpdatedElement);
 
@@ -421,22 +421,22 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         {
             XmlText hashText = xmlDoc.CreateTextNode(file.MetaHash[counter]);
             XmlText actionText = xmlDoc.CreateTextNode(changeType);
-            XmlText lastModifiedText = xmlDoc.CreateTextNode(file.MetaLastWriteTimeUtc[counter].ToString());
+            XmlText lastModifiedUtcText = xmlDoc.CreateTextNode(file.MetaLastWriteTimeUtc[counter].ToString());
             XmlText nameText = xmlDoc.CreateTextNode(file.Name);
-            XmlText lastUpdatedText = xmlDoc.CreateTextNode(_dateTime.ToString());
+            XmlText lastUpdatedUtcText = xmlDoc.CreateTextNode(_dateTime.ToString());
 
             XmlElement fileElement = xmlDoc.CreateElement(CommonXMLConstants.NodeFile);
             XmlElement nameElement = xmlDoc.CreateElement(CommonXMLConstants.NodeName);
             XmlElement hashElement = xmlDoc.CreateElement(CommonXMLConstants.NodeHash);
             XmlElement actionElement = xmlDoc.CreateElement(CommonXMLConstants.NodeAction);
-            XmlElement lastModifiedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastModified);
-            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdated);
+            XmlElement lastModifiedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastModifiedUtc);
+            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdatedUtc);
 
             hashElement.AppendChild(hashText);
             actionElement.AppendChild(actionText);
-            lastModifiedElement.AppendChild(lastModifiedText);
+            lastModifiedElement.AppendChild(lastModifiedUtcText);
             nameElement.AppendChild(nameText);
-            lastUpdatedElement.AppendChild(lastUpdatedText);
+            lastUpdatedElement.AppendChild(lastUpdatedUtcText);
 
             fileElement.AppendChild(nameElement);
             fileElement.AppendChild(actionElement);
@@ -455,16 +455,16 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
             XmlText nameText = xmlDoc.CreateTextNode(name);
             XmlText action = xmlDoc.CreateTextNode(changeType);
-            XmlText lastUpdatedText = xmlDoc.CreateTextNode(_dateTime.ToString());
+            XmlText lastUpdatedUtcText = xmlDoc.CreateTextNode(_dateTime.ToString());
 
             XmlElement folderElement = xmlDoc.CreateElement(CommonXMLConstants.NodeFolder);
             XmlElement nameElement = xmlDoc.CreateElement(CommonXMLConstants.NodeName);
             XmlElement actionElement = xmlDoc.CreateElement(CommonXMLConstants.NodeAction);
-            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdated);
+            XmlElement lastUpdatedElement = xmlDoc.CreateElement(CommonXMLConstants.NodeLastUpdatedUtc);
 
             nameElement.AppendChild(nameText);
             actionElement.AppendChild(action);
-            lastUpdatedElement.AppendChild(lastUpdatedText);
+            lastUpdatedElement.AppendChild(lastUpdatedUtcText);
 
             folderElement.AppendChild(nameElement);
             folderElement.AppendChild(actionElement);

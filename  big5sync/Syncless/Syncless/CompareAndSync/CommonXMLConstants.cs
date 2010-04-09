@@ -14,7 +14,7 @@
         public const string NodeName = "name";
         public const string NodeSize = "size";
         public const string NodeHash = "hash";
-        public const string NodeLastCreated = "last_created";
+        public const string NodeLastCreatedUtc = "last_created_utc";
 
         //Last Known State Metadata (lastknownstate.xml)
         public const string NodeLastKnownState = "last_known_state";
@@ -24,15 +24,15 @@
         //Common Elements in Metadatas
         public const string NodeFolder = "folder";
         public const string NodeFile = "file";
-        public const string NodeLastModified = "last_modified";
-        public const string NodeLastUpdated = "last_updated";
+        public const string NodeLastModifiedUtc = "last_modified_utc";
+        public const string NodeLastUpdatedUtc = "last_updated_utc";
         
         //XML Metadata XPath (syncless.xml)
         public const string XPathExpr = "/meta-data";
         public const string XPathName = "/" + NodeName;
         public const string XPathSize = "/" + NodeSize;
         public const string XPathHash = "/" + NodeHash;
-        public const string XPathLastCreated = "/" + NodeLastCreated;
+        public const string XPathLastCreated = "/" + NodeLastCreatedUtc;
 
         //Last Known State Metadata XPath
         public const string XPathLastKnownState = "/" + NodeLastKnownState;
@@ -41,8 +41,8 @@
         //Common XPath
         public const string XPathFolder = "/" + NodeFolder;
         public const string XPathFile = "/" + NodeFile;
-        public const string XPathLastModified = "/" + NodeLastModified;
-        public const string XPathLastUpdated = "/" + NodeLastUpdated;
+        public const string XPathLastModified = "/" + NodeLastModifiedUtc;
+        public const string XPathLastUpdated = "/" + NodeLastUpdatedUtc;
 
     }
 

@@ -158,13 +158,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         case CommonXMLConstants.NodeHash:
                             file.MetaHash[counter] = childNode.InnerText;
                             break;
-                        case CommonXMLConstants.NodeLastModified:
+                        case CommonXMLConstants.NodeLastModifiedUtc:
                             file.MetaLastWriteTimeUtc[counter] = long.Parse(childNode.InnerText);
                             break;
-                        case CommonXMLConstants.NodeLastCreated:
+                        case CommonXMLConstants.NodeLastCreatedUtc:
                             file.MetaCreationTimeUtc[counter] = long.Parse(childNode.InnerText);
                             break;
-                        case CommonXMLConstants.NodeLastUpdated:
+                        case CommonXMLConstants.NodeLastUpdatedUtc:
                             file.MetaUpdated[counter] = long.Parse(childNode.InnerText);
                             break;
                     }
@@ -195,13 +195,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                                     string action = childNode.InnerText;
                                     file.LastKnownState[counter] = action.Equals(CommonXMLConstants.ActionDeleted) ? LastKnownState.Deleted : LastKnownState.Renamed;
                                     break;
-                                case CommonXMLConstants.NodeLastModified:
+                                case CommonXMLConstants.NodeLastModifiedUtc:
                                     file.MetaLastWriteTimeUtc[counter] = long.Parse(childNode.InnerText);
                                     break;
                                 case CommonXMLConstants.NodeHash:
                                     file.MetaHash[counter] = childNode.InnerText;
                                     break;
-                                case CommonXMLConstants.NodeLastUpdated:
+                                case CommonXMLConstants.NodeLastUpdatedUtc:
                                     file.MetaUpdated[counter] = long.Parse(childNode.InnerText);
                                     break;
                             }
@@ -223,9 +223,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             string hash = "";
             string name = "";
             long size = 0;
-            long createdTime = 0;
-            long modifiedTime = 0;
-            long updatedTime = 0;
+            long createdTimeUtc = 0;
+            long modifiedTimeUtc = 0;
+            long updatedTimeUtc = 0;
 
             List<XMLCompareObject> objectList = new List<XMLCompareObject>();
             XmlNodeList xmlNodeList = xmlDoc.SelectNodes(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFile);
@@ -249,18 +249,18 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         case CommonXMLConstants.NodeHash:
                             hash = node.InnerText;
                             break;
-                        case CommonXMLConstants.NodeLastCreated:
-                            createdTime = long.Parse(node.InnerText);
+                        case CommonXMLConstants.NodeLastCreatedUtc:
+                            createdTimeUtc = long.Parse(node.InnerText);
                             break;
-                        case CommonXMLConstants.NodeLastModified:
-                            modifiedTime = long.Parse(node.InnerText);
+                        case CommonXMLConstants.NodeLastModifiedUtc:
+                            modifiedTimeUtc = long.Parse(node.InnerText);
                             break;
-                        case CommonXMLConstants.NodeLastUpdated:
-                            updatedTime = long.Parse(node.InnerText);
+                        case CommonXMLConstants.NodeLastUpdatedUtc:
+                            updatedTimeUtc = long.Parse(node.InnerText);
                             break;
                     }
                 }
-                objectList.Add(new XMLCompareObject(name, hash, size, createdTime, modifiedTime, updatedTime));
+                objectList.Add(new XMLCompareObject(name, hash, size, createdTimeUtc, modifiedTimeUtc, updatedTimeUtc));
             }
 
             return objectList;
@@ -516,7 +516,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                                     else
                                         folder.LastKnownState[counter] = LastKnownState.Renamed;
                                     break;
-                                case CommonXMLConstants.NodeLastUpdated:
+                                case CommonXMLConstants.NodeLastUpdatedUtc:
                                     folder.MetaUpdated[counter] = long.Parse(childNode.InnerText);
                                     break;
                             }

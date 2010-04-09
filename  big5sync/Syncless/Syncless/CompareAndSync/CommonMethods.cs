@@ -131,7 +131,7 @@ namespace Syncless.CompareAndSync
                     writer.Formatting = Formatting.Indented;
                     writer.WriteStartDocument();
                     writer.WriteStartElement(CommonXMLConstants.NodeMetaData);
-                    writer.WriteElementString(CommonXMLConstants.NodeLastModified, (DateTime.UtcNow.Ticks).ToString());
+                    writer.WriteElementString(CommonXMLConstants.NodeLastModifiedUtc, (DateTime.UtcNow.Ticks).ToString());
                     writer.WriteElementString(CommonXMLConstants.NodeName, GetLastFileIndex(path));
                     writer.WriteEndElement();
                     writer.WriteEndDocument();
@@ -289,7 +289,7 @@ namespace Syncless.CompareAndSync
                 string archiveDir = Path.Combine(parent, archiveName);
                 if (!Directory.Exists(archiveDir))
                     Directory.CreateDirectory(archiveDir);
-                string currTime = String.Format("{0:yyyyMMddHHmmss}", DateTime.Now) + "_";
+                string currTime = String.Format("{0:MMddHHmmss}", DateTime.Now) + "_";
                 File.Copy(path, Path.Combine(archiveDir, currTime + f.Name), true); //Very rare to have same time
 
                 if (archiveLimit > 0)
@@ -540,7 +540,7 @@ namespace Syncless.CompareAndSync
                 string archiveDir = Path.Combine(parent, archiveName);
                 if (!Directory.Exists(archiveDir))
                     Directory.CreateDirectory(archiveDir);
-                string currTime = String.Format("{0:yyyyMMddHHmmss}", DateTime.Now) + "_";
+                string currTime = String.Format("{0:MMddHHmmss}", DateTime.Now) + "_";
 
                 CopyDirectory(path, Path.Combine(archiveDir, currTime + f.Name));
 
