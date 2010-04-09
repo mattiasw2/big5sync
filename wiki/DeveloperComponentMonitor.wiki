@@ -36,6 +36,8 @@ And to solve problem 3, we reference the codes from [http://csharp-codesamples.c
 
 *Revised* And to solve problem 4, we thought of an algorithm to transfer all the events currently in the waiting queue to another process queue if there is an idle time of 1 second with no new events added to the waiting queue. This process queue will look through all the events and produce the simplest form of events to be synchronized. The delay in the algorithm is necessary due to the way `FileSystemWatcher` works.
 
+*New* If there is any operations on a locked file, the algorithm will skip this file and process the next file and then try to sync the locked file again. If there is no next file to sync, the algorithm will instead wait for sometime and then attempt to sync again.
+
 = Extending Monitor =
 If there are other custom events which require `FileSystemWatcher` to trigger, simply extend `ExtendedFileSystemWatcher` and replace the current `ExtendedFileSystemWatcher` calls to the newly extended class.
 
