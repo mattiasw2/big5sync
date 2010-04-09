@@ -97,14 +97,14 @@ namespace SynclessUI.Visitor
                         row[Tooltip] = tooltip;
                         row[SourceIcon] = FileIcon;
                         row[DestIcon] = FileIcon;
-                        DateTime sourceDateTime = new DateTime(fco.LastWriteTime[maxPriorityPos]);
+                        DateTime sourceDateTime = new DateTime(fco.LastWriteTimeUtc[maxPriorityPos]);
                         row[SourceLastModifiedDate] = sourceDateTime.ToShortDateString();
                         row[SourceLastModifiedTime] = sourceDateTime.ToShortTimeString();
                         row[SourceSize] = fco.Length[maxPriorityPos];
 
                         if (fco.Exists[i])
                         {
-                            DateTime destDateTime = new DateTime(fco.LastWriteTime[i]);
+                            DateTime destDateTime = new DateTime(fco.LastWriteTimeUtc[i]);
                             row[DestLastModifiedDate] = destDateTime.ToShortDateString();
                             row[DestLastModifiedTime] = destDateTime.ToShortTimeString();
 

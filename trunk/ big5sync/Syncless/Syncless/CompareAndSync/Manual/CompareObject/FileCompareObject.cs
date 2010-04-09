@@ -10,12 +10,12 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
     {
         //Actual file information
         private string[] _hash;
-        private long[] _length, _lastWriteTime;
+        private long[] _length, _lastWriteTimeUtc;
         private List<int> _conflictPos; //Stores a list of conflicted files
 
         //Metadata file information
         private string[] _metaHash;
-        private long[] _metaLength, _metaLastWriteTime;
+        private long[] _metaLength, _metaLastWriteTimeUtc;
 
         /// <summary>
         /// Initializes a <c>FileCompareObject</c> given the name of the file, the number of paths to synchronize, and the parent of this file.
@@ -28,11 +28,11 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         {
             _hash = new string[numOfPaths];
             _length = new long[numOfPaths];
-            _lastWriteTime = new long[numOfPaths];
+            _lastWriteTimeUtc = new long[numOfPaths];
 
             _metaHash = new string[numOfPaths];
             _metaLength = new long[numOfPaths];
-            _metaLastWriteTime = new long[numOfPaths];
+            _metaLastWriteTimeUtc = new long[numOfPaths];
         }
 
         #region Properties
@@ -58,10 +58,10 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         /// <summary>
         /// Gets or sets the <see cref="Array"/> of file last write time.
         /// </summary>
-        public long[] LastWriteTime
+        public long[] LastWriteTimeUtc
         {
-            get { return _lastWriteTime; }
-            set { _lastWriteTime = value; }
+            get { return _lastWriteTimeUtc; }
+            set { _lastWriteTimeUtc = value; }
         }
 
         /// <summary>
@@ -85,10 +85,10 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         /// <summary>
         /// Gets or sets the <see cref="Array"/> of metadata last write time.
         /// </summary>
-        public long[] MetaLastWriteTime
+        public long[] MetaLastWriteTimeUtc
         {
-            get { return _metaLastWriteTime; }
-            set { _metaLastWriteTime = value; }
+            get { return _metaLastWriteTimeUtc; }
+            set { _metaLastWriteTimeUtc = value; }
         }
 
         /// <summary>

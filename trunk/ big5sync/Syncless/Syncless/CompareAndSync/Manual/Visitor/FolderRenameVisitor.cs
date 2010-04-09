@@ -159,9 +159,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             {
                 actualFileObj.Hash[i] = renamedFileObj.Hash[i];
                 actualFileObj.Length[i] = renamedFileObj.Length[i];
-                actualFileObj.LastWriteTime[i] = renamedFileObj.LastWriteTime[i];
+                actualFileObj.LastWriteTimeUtc[i] = renamedFileObj.LastWriteTimeUtc[i];
                 actualFileObj.MetaHash[i] = renamedFileObj.MetaHash[i];
-                actualFileObj.MetaLastWriteTime[i] = renamedFileObj.MetaLastWriteTime[i];
+                actualFileObj.MetaLastWriteTimeUtc[i] = renamedFileObj.MetaLastWriteTimeUtc[i];
                 actualFileObj.MetaLength[i] = renamedFileObj.MetaLength[i];
             }
         }
@@ -187,11 +187,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             foreach (int i in deleteIndexes)
             {
                 actualObj.ChangeType[i] = renameObj.ChangeType[i];
-                actualObj.CreationTime[i] = renameObj.CreationTime[i];
+                actualObj.CreationTimeUtc[i] = renameObj.CreationTimeUtc[i];
                 actualObj.Exists[i] = renameObj.Exists[i];
                 actualObj.FinalState[i] = renameObj.FinalState[i];
                 actualObj.Invalid = renameObj.Invalid;
-                actualObj.MetaCreationTime[i] = renameObj.MetaCreationTime[i];
+                actualObj.MetaCreationTimeUtc[i] = renameObj.MetaCreationTimeUtc[i];
                 actualObj.MetaExists[i] = renameObj.MetaExists[i];
                 actualObj.MetaUpdated[i] = renameObj.MetaUpdated[i];
                 actualObj.LastKnownState[i] = renameObj.LastKnownState[i];

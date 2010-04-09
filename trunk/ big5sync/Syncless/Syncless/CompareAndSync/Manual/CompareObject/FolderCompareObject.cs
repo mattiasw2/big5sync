@@ -122,7 +122,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         /// <param name="creationTime">A <see cref="long"/> with the creation time to search for.</param>
         /// <param name="pos"></param>
         /// <returns><c>The FileCompareObject with the same creation time as that passed in.</c></returns>
-        public FileCompareObject GetSameCreationTime(long creationTime, int pos)
+        public FileCompareObject GetSameCreationTimeUtc(long creationTimeUtc, int pos)
         {
             Dictionary<string, BaseCompareObject>.ValueCollection objects = _contents.Values;
             FileCompareObject f, result = null;
@@ -133,7 +133,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
                 {
                     if ((f = objects.ElementAt(i) as FileCompareObject) != null)
                     {
-                        if (f.CreationTime[pos] == creationTime)
+                        if (f.CreationTimeUtc[pos] == creationTimeUtc)
                         {
                             result = f;
                             counter++;
@@ -182,7 +182,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         /// <param name="creationTime">The creation time to match.</param>
         /// <param name="pos">The position indicating which index to match.</param>
         /// <returns></returns>
-        public FileCompareObject GetIdenticalFile(string name, string hash, long creationTime, int pos)
+        public FileCompareObject GetIdenticalFile(string name, string hash, long creationTimeUtc, int pos)
         {
             Dictionary<string, BaseCompareObject>.ValueCollection objects = _contents.Values;
             FileCompareObject f, result = null;
@@ -193,7 +193,7 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
                 {
                     if ((f = objects.ElementAt(i) as FileCompareObject) != null)
                     {
-                        if (f.Name != name && f.CreationTime[pos] == creationTime && f.Hash[pos] == hash && f.ChangeType[pos] == MetaChangeType.New)
+                        if (f.Name != name && f.CreationTimeUtc[pos] == creationTimeUtc && f.Hash[pos] == hash && f.ChangeType[pos] == MetaChangeType.New)
                         {
                             result = f;
                             counter++;

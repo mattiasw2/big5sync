@@ -9,10 +9,10 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
     {
         private long _size;
         private string _name;
-        private long _createdTime;
-        private long _lastModifiedTime;
+        private long _createdTimeUtc;
+        private long _lastModifiedTimeUtc;
         private string _hash;
-        private long _lastUpdatedTime;
+        private long _lastUpdatedTimeUtc;
 
         /// <summary>
         /// Instantiates an XMLCompareObject.
@@ -28,9 +28,9 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
             _size = size;
             _name = name;
             _hash = hash;
-            _createdTime = createdTime;
-            _lastModifiedTime = modifiedTime;
-            _lastUpdatedTime = updatedTime;
+            _createdTimeUtc = createdTime;
+            _lastModifiedTimeUtc = modifiedTime;
+            _lastUpdatedTimeUtc = updatedTime;
         }
 
         #region Properties
@@ -65,28 +65,28 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         /// <summary>
         /// Gets or sets the last modified time of the <c>XMLCompareObject</c>.
         /// </summary>
-        public long LastModifiedTime
+        public long LastModifiedTimeUtc
         {
-            get { return _lastModifiedTime; }
-            set { _lastModifiedTime = value; }
+            get { return _lastModifiedTimeUtc; }
+            set { _lastModifiedTimeUtc = value; }
         }
 
         /// <summary>
         /// Gets or sets the created time of the <c>XMLCompareObject</c>.
         /// </summary>
-        public long CreatedTime
+        public long CreatedTimeUtc
         {
-            get { return _createdTime; }
-            set { _createdTime = value; }
+            get { return _createdTimeUtc; }
+            set { _createdTimeUtc = value; }
         }
 
         /// <summary>
         /// Gets or sets the last updated time of the <c>XMLCompareObject</c>.
         /// </summary>
-        public long LastUpdatedTime
+        public long LastUpdatedTimeUtc
         {
-            get { return _lastUpdatedTime; }
-            set { _lastUpdatedTime = value; }
+            get { return _lastUpdatedTimeUtc; }
+            set { _lastUpdatedTimeUtc = value; }
         }
 
         #endregion

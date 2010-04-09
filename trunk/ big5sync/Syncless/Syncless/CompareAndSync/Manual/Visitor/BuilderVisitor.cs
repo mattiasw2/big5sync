@@ -119,8 +119,8 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
                     if (!conflict)
                     {
-                        fco.CreationTime[index] = info.CreationTime.Ticks;
-                        fco.LastWriteTime[index] = info.LastWriteTime.Ticks;
+                        fco.CreationTimeUtc[index] = info.CreationTimeUtc.Ticks;
+                        fco.LastWriteTimeUtc[index] = info.LastWriteTimeUtc.Ticks;
                         fco.Length[index] = info.Length;
                         fco.Exists[index] = true;
 
@@ -169,7 +169,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         }
                     }
 
-                    fco.CreationTime[index] = info.CreationTime.Ticks;
+                    fco.CreationTimeUtc[index] = info.CreationTimeUtc.Ticks;
                     fco.Exists[index] = true;
 
                     if (o == null || conflict)

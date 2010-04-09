@@ -53,7 +53,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         {
             if (file.Exists[index])
             {
-                if (file.MetaExists[index] && file.CreationTime[index] == file.MetaCreationTime[index] && file.LastWriteTime[index] == file.MetaLastWriteTime[index] && file.Length[index] == file.MetaLength[index])
+                if (file.MetaExists[index] && file.CreationTimeUtc[index] == file.MetaCreationTimeUtc[index] && file.LastWriteTimeUtc[index] == file.MetaLastWriteTimeUtc[index] && file.Length[index] == file.MetaLength[index])
                 {
                     file.Hash[index] = file.MetaHash[index];
                 }
