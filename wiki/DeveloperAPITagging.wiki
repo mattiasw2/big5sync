@@ -26,7 +26,7 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 || http://big5sync.googlecode.com/files/pubproperty.gif || !DeletedDate || Gets or sets the deleted date of the tag. ||
 || http://big5sync.googlecode.com/files/pubproperty.gif || !FilteredPathList || Gets a clone of the list of tagged paths whose !IsDeleted property is set to false. Sets the list of tagged paths. ||
 || http://big5sync.googlecode.com/files/pubproperty.gif || !FilteredPathListString || Gets a clone of the list of full path name of tagged paths whose !IsDeleted property is set to false. ||
-|| http://big5sync.googlecode.com/files/pubproperty.gif || !Filters || Gets or sets the list of filters of the tag. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || Filters || Gets or sets the list of filters of the tag. ||
 || http://big5sync.googlecode.com/files/pubproperty.gif || !FiltersUpdatedDate || Gets or sets the updated date of the filters of the tag. ||
 || http://big5sync.googlecode.com/files/pubproperty.gif || !IsDeleted || Gets or sets the boolean value that represents whether the tag is deleted. ||
 || http://big5sync.googlecode.com/files/pubproperty.gif || !IsSeamless || Gets or sets the boolean value which represents whether the tag is in seamless mode. ||
