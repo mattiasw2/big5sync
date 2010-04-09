@@ -1,53 +1,24 @@
 #summary Developers' Guide - API - Syncless.CompareAndSync.Exceptions
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPICompareAndSyncEnum Prev - Syncless.CompareAndSync.Enum]* `|` *[DeveloperAPICompareAndSyncManual Next - Syncless.CompareAndSync.Manual]*`]`
 
+Exception classes which are thrown when there are errors in performing comparison and synchronization operations.
+
 = Exceptions Summary =
 
-== !ArchiveFileException ==
-
-[#Exceptions_Summary Back to top]
-
-== !ArchiveFolderException ==
-
-[#Exceptions_Summary Back to top]
-
-== !CopyFileException ==
-
-[#Exceptions_Summary Back to top]
-
-== !CopyFolderException ==
-
-[#Exceptions_Summary Back to top]
-
-== !CreateFolderException ==
-
-[#Exceptions_Summary Back to top]
-
-== !DeleteFileException ==
-
-[#Exceptions_Summary Back to top]
-
-== !DeleteFolderException ==
-
-[#Exceptions_Summary Back to top]
-
-== !HashFileException ==
-
-[#Exceptions_Summary Back to top]
-
-== !IncompatibleTypeException ==
-
-[#Exceptions_Summary Back to top]
-
-== !MoveFileException ==
-
-[#Exceptions_Summary Back to top]
-
-== !MoveFolderException ==
-
-[#Exceptions_Summary Back to top]
+|| || *Class* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#ArchiveFileException ArchiveFileException] || The exception is thrown when there is an error with file archiving. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#ArchiveFolderException ArchiveFolderException] || The exception is thrown when there is an error archiving a folder. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#CopyFileException CopyFileException] || The exception is thrown when there is an error copying a file. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#CopyFolderException CopyFolderException] || The exception is thrown when there is an error copying a folder. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#CreateFolderException CreateFolderException] || The exception is thrown when there is an error creating a folder. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#DeleteFileException DeleteFileException] || The exception is thrown when there is an error deleting a file. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#DeleteFolderException DeleteFolderException] || The exception is thrown when there is an error deleting a folder. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#HashFileException HashFileException] || The exception is thrown when there is an error hashing a file. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#IncompatibleTypeException IncompatibleTypeException] || The exception is thrown when incompatible types are detected. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#MoveFileException MoveFileException] || The exception is thrown when there is an error moving or renaming a file. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#MoveFolderException MoveFolderException] || The exception is thrown when there is an error moving or renaming a folder. ||
 
 `[`*[DeveloperAPICompareAndSyncEnum Prev - Syncless.CompareAndSync.Enum]* `|` *[DeveloperAPICompareAndSyncManual Next - Syncless.CompareAndSync.Manual]*`]`
