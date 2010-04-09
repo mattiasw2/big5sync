@@ -1,25 +1,15 @@
 #summary Developers' Guide - API - Syncless.Profiling.Exceptions
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPIProfiling Prev - Syncless.Profiling]* `|` *[DeveloperAPITagging Next - Syncless.Tagging]*`]`
 
 = Exceptions Summary =
 
-== !ProfileDriveConflictException ==
-
-[#Exceptions_Summary Back to top]
-
-== !ProfileGuidConflictException ==
-
-[#Exceptions_Summary Back to top]
-
-== !ProfileLoadException ==
-
-[#Exceptions_Summary Back to top]
-
-== !ProfileNameDifferentException ==
-
-[#Exceptions_Summary Back to top]
+|| || *Exception* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || !ProfileDriveConflictException || The exception that is thrown when there is conflict between profile drives. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || !ProfileGuidConflictException || The exception that is thrown when there is conflict between profile GUIDs. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || !ProfileLoadException || The exception that is thrown when an attempt to load a profile fails. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || !ProfileNameDifferentException || The exception that is thrown when there is conflict in profile name between profiles. ||
 
 `[`*[DeveloperAPIProfiling Prev - Syncless.Profiling]* `|` *[DeveloperAPITagging Next - Syncless.Tagging]*`]`
