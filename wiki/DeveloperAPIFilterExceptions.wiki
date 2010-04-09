@@ -1,13 +1,14 @@
 #summary Developers' Guide - API - Syncless.Filters.Exceptions
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0
 #sidebar DeveloperGuideSidebar
 
 `[`*[DeveloperAPIFilter Prev - Syncless.Filters]* `|` *[DeveloperAPIHelper Next - Syncless.Helper]*`]`
 
+Exception classes which are thrown when there are errors in filtering operations.
+
 = Exceptions Summary =
 
-== !InvalidFilterException ==
-
-[#Exceptions_Summary Back to top]
+|| || *Exception* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || !InvalidFilterException || The exception that is thrown when a filter is invalid. ||
 
 `[`*[DeveloperAPIFilter Prev - Syncless.Filters]* `|` *[DeveloperAPIHelper Next - Syncless.Helper]*`]`
