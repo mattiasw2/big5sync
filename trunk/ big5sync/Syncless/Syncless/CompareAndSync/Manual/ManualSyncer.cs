@@ -14,14 +14,21 @@ using Syncless.Notification;
 namespace Syncless.CompareAndSync.Manual
 {
     /// <summary>
-    /// 
+    /// <c>ManualSyncer</c> contains all the methods for a manual synchronization job.
     /// </summary>
     public static class ManualSyncer
     {
+        /// <summary>
+        /// Synchronizes a job given a <see cref="ManualSyncRequest"/> and a <see cref="SyncProgress"/>.
+        /// </summary>
+        /// <param name="request">The <see cref="ManualSyncRequest"/> to pass in.</param>
+        /// <param name="progress">The <see cref="SyncProgress"/> to pass in.</param>
+        /// <returns></returns>
         public static RootCompareObject Sync(ManualSyncRequest request, SyncProgress progress)
         {
             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STARTED, "Started Manual Sync for " + request.TagName));
 
+            //Initialize and add filters conflict and archive filters to it
             List<Filter> filters = request.Filters.ToList();
             filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ArchiveName));
             filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ConflictDir));
@@ -63,6 +70,12 @@ namespace Syncless.CompareAndSync.Manual
             return null;
         }
 
+        /// <summary>
+        /// Compares/previews a job given a <see cref="ManualCompareRequest"/> and a <see cref="PreviewProgress"/>.
+        /// </summary>
+        /// <param name="request">The <see cref="ManualCompareRequest"/> to pass in.</param>
+        /// <param name="progress">The <see cref="PreviewProgress"/> to pass in.</param>
+        /// <returns></returns>
         public static RootCompareObject Compare(ManualCompareRequest request, PreviewProgress progress)
         {
             List<Filter> filters = request.Filters.ToList();
