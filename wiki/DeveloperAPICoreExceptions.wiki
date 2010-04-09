@@ -2,10 +2,20 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPICore Prev - Syncless.Core]* `|` *[DeveloperAPICoreView Next - Syncless.Core.View]*`]`
+
 = Exceptions Summary =
 
 == !InvalidPathException ==
 
+[#Exceptions_Summary Back to top]
+
 == !LoggerNotFoundException ==
 
+[#Exceptions_Summary Back to top]
+
 == !UnhandledException ==
+
+[#Exceptions_Summary Back to top]
+
+`[`*[DeveloperAPICore Prev - Syncless.Core]* `|` *[DeveloperAPICoreView Next - Syncless.Core.View]*`]`
