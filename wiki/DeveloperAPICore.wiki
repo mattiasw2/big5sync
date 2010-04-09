@@ -2,40 +2,74 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPICore Prev - Syncless.Core]* `|` *[DeveloperAPICoreView Next - Syncless.Core.View]*`]`
+
 = Interfaces Summary =
 
 == ICommandLineControllerInterface ==
 
+[#Interfaces_Summary Back to top]
+
 == IMonitorControllerInterface ==
+
+[#Interfaces_Summary Back to top]
 
 == IUIControllerInterface ==
 
+[#Interfaces_Summary Back to top]
+
 == IUIInterface =
+
+[#Interfaces_Summary Back to top]
 
 = Classes Sumamry =
 
 == !DeletedTaggedPathWatcher ==
 
+[#Classes_Summary Back to top]
+
 == !DeviceWatcher ==
+
+[#Classes_Summary Back to top]
 
 == !LogicQueueObserver ==
 
+[#Classes_Summary Back to top]
+
 == !PathPair ==
+
+[#Classes_Summary Back to top]
 
 == !PathTable ==
 
+[#Classes_Summary Back to top]
+
 == !PathTableReader ==
+
+[#Classes_Summary Back to top]
 
 == !SaveLoadHelper ==
 
+[#Classes_Summary Back to top]
+
 == !ServerLocator ==
 
+[#Classes_Summary Back to top]
+
 == !SystemLogicLayer ==
+
+[#Classes_Summary Back to top]
 
 = Delegates Summary =
 
 == !LogicQueueObserver.!RunDel ==
 
+[#Delegates_Summary Back to top]
+
 = Enumerations Summary =
 
 == !TableType ==
+
+[#Enumerations_Summary Back to top]
+
+`[`*[DeveloperAPICore Prev - Syncless.Core]* `|` *[DeveloperAPICoreView Next - Syncless.Core.View]*`]`
