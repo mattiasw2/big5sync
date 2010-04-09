@@ -4,14 +4,11 @@
 
 `[`*[DeveloperAPICore Prev - Syncless.Core]* `|` *[DeveloperAPICoreView Next - Syncless.Core.View]*`]`
 
+Exception classes which are thrown when there are errors in the main logic operations.
+
 = Exceptions Summary =
-
-== !InvalidPathException ==
-
-[#Exceptions_Summary Back to top]
-
-== !UnhandledException ==
-
-[#Exceptions_Summary Back to top]
+|| || *Exception* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || !InvalidPathException || The exception that is thrown when the path is invalid. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || !UnhandledException || The exception that is thrown when the system catch a exception that is not handled. ||
 
 `[`*[DeveloperAPICore Prev - Syncless.Core]* `|` *[DeveloperAPICoreView Next - Syncless.Core.View]*`]`
