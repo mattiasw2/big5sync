@@ -76,7 +76,7 @@ namespace Syncless.Monitor
         /// </summary>
         /// <param name="path">A <see cref="string"/> specifying the path to be monitored.</param>
         /// <returns><see cref="bool"/> stating if a path will be monitored</returns>
-        /// <exception cref="Syncless.Monitor.Exception.MonitorPathNotFoundException">Throw when the path is not found.</exception>
+        /// <exception cref="Syncless.Monitor.Exceptions.MonitorPathNotFoundException">Throw when the path is not found.</exception>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public bool MonitorPath(string path)
         {

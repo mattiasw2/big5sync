@@ -64,7 +64,7 @@ namespace Syncless.Monitor
         /// <summary>
         /// Enqueue events and wait to be processed.
         /// </summary>
-        /// <param name="e">A <see cref="Queue<T>"/> object containing the information needed to handle a request.</param>
+        /// <param name="eventList">A <see cref="Queue{T}"/> object containing the information needed to handle a request.</param>
         public void Enqueue(Queue<FileSystemEvent> eventList)
         {
             lock (queue)
