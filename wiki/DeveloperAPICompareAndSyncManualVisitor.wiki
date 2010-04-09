@@ -28,10 +28,6 @@
 
 [#Classes_Summary Back to top]
 
-== !IgnoreMetaDataVisitor ==
-
-[#Classes_Summary Back to top]
-
 == !ProcessMetadataVisitor ==
 
 [#Classes_Summary Back to top]
