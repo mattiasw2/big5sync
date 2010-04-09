@@ -148,5 +148,19 @@ namespace SynclessUI.Properties {
                 this["ShowSynchronizationLog"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(PortableSettingsProvider))]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
+        public bool SynchronizeTime {
+            get {
+                return ((bool)(this["SynchronizeTime"]));
+            }
+            set {
+                this["SynchronizeTime"] = value;
+            }
+        }
     }
 }
