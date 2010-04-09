@@ -101,7 +101,7 @@ namespace Syncless.CompareAndSync
                             break;
                         }
                     }
-                    string synclessfolder = @"\.syncless\syncless.xml";
+                    string synclessfolder = "\\" + CommonXMLConstants.MetadataPath;
                     string parentfolder = xmlPath.Replace(synclessfolder, string.Empty);
                     CreateFileIfNotExist(parentfolder);
                 }

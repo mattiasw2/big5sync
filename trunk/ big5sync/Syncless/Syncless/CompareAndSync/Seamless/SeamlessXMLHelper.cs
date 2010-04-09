@@ -5,6 +5,9 @@ using Syncless.CompareAndSync.Seamless.XMLWriteObject;
 
 namespace Syncless.CompareAndSync.Seamless
 {
+    /// <summary>
+    /// Contains the necessary methods for writing to XML during a seamless/auto synchronization.
+    /// </summary>
     public class SeamlessXMLHelper
     {
 

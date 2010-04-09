@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Exceptions;
@@ -11,10 +10,17 @@ using Syncless.Logging;
 
 namespace Syncless.CompareAndSync.Seamless
 {
+    /// <summary>
+    /// <c>SeamlessSyncer</c> contains all the methods for a seamless/auto synchronization job.
+    /// </summary>
     public static class SeamlessSyncer
     {
         private static long _metaUpdated;
 
+        /// <summary>
+        /// Handles some basic logic to decide whether the incoming request is a file or folder request.
+        /// </summary>
+        /// <param name="request">The <see cref="AutoSyncRequest"/> to process.</param>
         public static void Sync(AutoSyncRequest request)
         {
             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STARTED, "Started Auto Sync for " + request.SourceName));
