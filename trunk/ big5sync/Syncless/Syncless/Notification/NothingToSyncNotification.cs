@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Syncless.Notification
+﻿namespace Syncless.Notification
 {
+    /// <summary>
+    /// Notification to inform the UI that there is nothing to Synchronzing.
+    /// </summary>
     public class NothingToSyncNotification : AbstractNotification
     {
-        private string _tagName;
-
-        public string TagName
-        {
-            get { return _tagName; }
-            set { _tagName = value; }
-        }
-
+        /// <summary>
+        /// Get and Set the name of the Tag
+        /// </summary>
+        public string TagName { get; set; }
+        /// <summary>
+        /// Initialize the NothingToSyncNotification
+        /// </summary>
+        /// <param name="tagName"></param>
         public NothingToSyncNotification(string tagName):base("Nothing to Sync" , Syncless.Notification.NotificationCode.NothingToSyncNotification)
         {
-            _tagName = tagName;
-
+            TagName = tagName;
         }
     }
 }

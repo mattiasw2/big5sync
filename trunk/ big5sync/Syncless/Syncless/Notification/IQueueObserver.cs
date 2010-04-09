@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Syncless.Notification
+﻿namespace Syncless.Notification
 {
     /// <summary>
     /// IQueueObserver is an interface which provides a mechanism for receiving notifications from classes

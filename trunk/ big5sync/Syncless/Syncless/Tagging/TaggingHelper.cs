@@ -59,7 +59,7 @@ namespace Syncless.Tagging
         /// <returns>the current date time in long format</returns>
         internal static long GetCurrentTime()
         {
-            return DateTime.Now.Ticks;
+            return DateTime.UtcNow.Ticks;
         }
 
         /// <summary>

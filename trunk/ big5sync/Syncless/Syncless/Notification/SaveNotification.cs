@@ -1,18 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Syncless.Notification
+﻿namespace Syncless.Notification
 {
+    /// <summary>
+    /// The Nofication for saving all the data.
+    /// </summary>
     public class SaveNotification : AbstractNotification
     {
+        /// <summary>
+        /// Initialize SaveNotification
+        /// </summary>
         public SaveNotification()
-            : base("Save Notification", Notification.NotificationCode.SaveNotification)
+            : base("Save Notification", NotificationCode.SaveNotification)
         {
 
         }
-
+        /// <summary>
+        /// Override the Equal method
+        /// </summary>
+        /// <param name="obj">object to compare</param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             //       

@@ -1,32 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Syncless.Tagging;
+﻿using Syncless.Tagging;
 
 namespace Syncless.Notification
 {
+    /// <summary>
+    /// Notification to inform logic to monitor a path
+    /// </summary>
     public class MonitorPathNotification : AbstractNotification
     {
-        private Tag _targetTag;
-
-        public Tag TargetTag
-        {
-            get { return _targetTag; }
-            set { _targetTag = value; }
-        }
-        private TaggedPath _targetPath;
-
-        public TaggedPath TargetPath
-        {
-            get { return _targetPath; }
-            set { _targetPath = value; }
-        }
-
+        /// <summary>
+        /// Get and Set the target <see cref="Tag"/>
+        /// </summary>
+        public Tag TargetTag { get; set; }
+        /// <summary>
+        /// Get and Set the target <see cref="TaggedPath"/>
+        /// </summary>
+        public TaggedPath TargetPath { get; set; }
+        /// <summary>
+        /// Initalize the MonitorPathNotificaiton
+        /// </summary>
+        /// <param name="tag">The target <see cref="Tag"/></param>
+        /// <param name="path">The target <see cref="TaggedPath"/></param>
         public MonitorPathNotification(Tag tag, TaggedPath path):base("Monitor Path Notification" , Syncless.Notification.NotificationCode.MonitorPathNotification)
         {
-            this._targetTag = tag;
-            this._targetPath = path;
+            TargetTag = tag;
+            TargetPath = path;
         }
     }
 }

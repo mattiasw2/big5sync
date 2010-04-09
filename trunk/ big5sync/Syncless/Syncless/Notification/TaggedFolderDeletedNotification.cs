@@ -1,32 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Syncless.Notification
+﻿namespace Syncless.Notification
 {
+    /// <summary>
+    /// Notification for a Tagged Folder Deleted
+    /// </summary>
     public class TaggedFolderDeletedNotification : AbstractNotification
     {
-        private string _path;
-        private string _tagName;
-
-        public string Path
-        {
-            get { return _path; }
-            set { _path = value; }
-        }
-
-        public string TagName
-        {
-            get { return _tagName; }
-            set { _tagName = value; }
-        }
-
+        /// <summary>
+        /// Get and Set the Path of the Folder
+        /// </summary>
+        public string Path { get; set; }
+        /// <summary>
+        /// Get and Set the Name of the tag associated with the Path
+        /// </summary>
+        public string TagName { get; set; }
+        /// <summary>
+        /// Initalize the TaggedFolderDeletedNotification
+        /// </summary>
+        /// <param name="path">the path of folder</param>
+        /// <param name="tagName">the name of the tag</param>
         public TaggedFolderDeletedNotification(string path,string tagName)
-            : base("Tagged Folder Delete Notification", Syncless.Notification.NotificationCode.TaggedFolderDeletedNotification)
+            : base("Tagged Folder Delete Notification", NotificationCode.TaggedFolderDeletedNotification)
         {
-            _path = path;
-            _tagName = tagName;
+            Path = path;
+            TagName = tagName;
         }
     }
 }
