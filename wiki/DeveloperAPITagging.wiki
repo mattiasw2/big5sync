@@ -14,7 +14,26 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 || http://big5sync.googlecode.com/files/pubclass.gif || [#TaggingProfile TaggingProfile] || Represents a container for a list of `Tag` objects.  Each `TaggingProfile` has its properties that uniquely identifies itself from other `TaggingProfile` objects. ||
 || http://big5sync.googlecode.com/files/pubclass.gif http://big5sync.googlecode.com/files/static.gif || [#TagMerger TagMerger] || Performs merging of several tagging profiles which have the same name. ||
 
+----
+
 == Tag ==
+
+|| || *Constructor* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubmethod.gif || Tag(string, long) || Creates a new Tag object. ||
+
+|| || *Property* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !CreatedDate || Gets or sets the created date of the tag. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !DeletedDate || Gets or sets the deleted date of the tag. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !FilteredPathList || Gets a clone of the list of tagged paths whose !IsDeleted property is set to false. Sets the list of tagged paths. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !FilteredPathListString || Gets a clone of the list of full path name of tagged paths whose !IsDeleted property is set to false. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !Filters || Gets or sets the list of filters of the tag. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !FiltersUpdatedDate || Gets or sets the updated date of the filters of the tag. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !IsDeleted || Gets or sets the boolean value that represents whether the tag is deleted. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !IsSeamless || Gets or sets the boolean value which represents whether the tag is in seamless mode. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !LastUpdatedDate || Gets or sets the last updated date of the tag. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !ReadOnlyFilters || Gets a clone of the list of filters of the tag. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !TagName || Gets or sets the name of the tag. ||
+|| http://big5sync.googlecode.com/files/pubproperty.gif || !UnfilteredPathList || Gets or sets the list of tagged paths. ||
 
 [#Classes_Summary Back to top]
 
