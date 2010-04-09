@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{58E56B65-AA7B-44DB-AD71-3D36A069F5EF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -296,6 +296,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SynclessTimeSync\SynclessTimeSync.csproj">
+      <Project>{45A5307C-F362-4E51-A447-B42240C9E019}</Project>
+      <Name>SynclessTimeSync</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Syncless\Syncless.csproj">
       <Project>{79C1CBE7-297A-4820-A2D9-BE3507B8EF19}</Project>
       <Name>Syncless</Name>
