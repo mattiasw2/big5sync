@@ -28,26 +28,26 @@ Provides classes which enclose information needed to send notification among cla
 = Classes Summary =
 
 || || *Class* || *Description* ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [# ] ||  ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#AbstractNotification AbstractNotification] || The abstract parent file for all notification. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#AddTagNotification AddTagNotification] || The notification for adding a Tag. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#AutoSyncCompleteNotification AutoSyncCompleteNotification] || The notification for automatic synchronization completed. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#CancelSyncNotification CancelSyncNotification] || The notification for cancelling a sync request. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#MessageNotification MessageNotification] || The notification for sending message. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#MonitorPathNotification MonitorPathNotification] || The notification to inform logic to monitor a path. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#MonitorTagNotification MonitorTagNotification] || The notification to inform SLL to monitor a tag. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#NothingToSyncNotification NothingToSyncNotification] || The notification to inform the User Interface that there is nothing to synchronize. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#NotificationFactory NotificationFactory] || Provides abstraction to create instances of classes which extend the !AbstractNotification class. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#NotificationQueue NotificationQueue] || Provides implementation for Enqueuing and !DeQueuing of Notification. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#PreviewProgress PreviewProgress] || The class representing a preview progress. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#Progress Progress] || The abstract class for Progress. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#RemoveTagNotification RemoveTagNotification] || The notification for removing tag. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#SaveNotification SaveNotification] || The nofication for saving all the data. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#SyncCompleteNotification SyncCompleteNotification] || The nofication for Sync Complete. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#SyncProgress SyncProgress] || The class representing a synchronization progress ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#SyncStartNotification SyncStartNotification] || The notification to the User Interface that a Sync Request have been accepted and started. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#TaggedFolderDeletedNotification TaggedFolderDeletedNotification] || The notification for a tagged folder deleted. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#TaggedPathDeletedNotification TaggedPathDeletedNotification] || The notification for a tagged path deleted. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#UnMonitorPathNotification UnMonitorPathNotification] || The notification for unmonitor path. ||
 
 == !AbstractNotification ==
 
