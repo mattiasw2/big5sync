@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{79C1CBE7-297A-4820-A2D9-BE3507B8EF19}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Syncless</RootNamespace>
+    <AssemblyName>Syncless</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Syncless.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Syncless.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.TeamSystem.Data.UnitTesting, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CompareAndSync\CommonXMLConstants.cs" />
+    <Compile Include="CompareAndSync\Request\CancelSyncRequest.cs" />
+    <Compile Include="CompareAndSync\CommonMethods.cs" />
+    <Compile Include="CompareAndSync\CompareAndSyncController.cs" />
+    <Compile Include="CompareAndSync\CompareObjectHelper.cs" />
+    <Compile Include="CompareAndSync\Manual\CompareObject\BaseCompareObject.cs" />
+    <Compile Include="CompareAndSync\Manual\CompareObject\FileCompareObject.cs" />
+    <Compile Include="CompareAndSync\Manual\CompareObject\FolderCompareObject.cs" />
+    <Compile Include="CompareAndSync\Manual\CompareObject\RootCompareObject.cs" />
+    <Compile Include="CompareAndSync\Enum\AutoSyncRequestType.cs" />
+    <Compile Include="CompareAndSync\Enum\FinalState.cs" />
+    <Compile Include="CompareAndSync\Enum\MetaChangeType.cs" />
+    <Compile Include="CompareAndSync\Enum\LastKnownState.cs" />
+    <Compile Include="CompareAndSync\Exceptions\ArchiveFileException.cs" />
+    <Compile Include="CompareAndSync\Exceptions\ArchiveFolderException.cs" />
+    <Compile Include="CompareAndSync\Exceptions\CopyFileException.cs" />
+    <Compile Include="CompareAndSync\Exceptions\CopyFolderException.cs" />
+    <Compile Include="CompareAndSync\Exceptions\CreateFolderException.cs" />
+    <Compile Include="CompareAndSync\Exceptions\DeleteFileException.cs" />
+    <Compile Include="CompareAndSync\Exceptions\DeleteFolderException.cs" />
+    <Compile Include="CompareAndSync\Exceptions\HashFileException.cs" />
+    <Compile Include="CompareAndSync\Exceptions\IncompatibleTypeException.cs" />
+    <Compile Include="CompareAndSync\Exceptions\MoveFileException.cs" />
+    <Compile Include="CompareAndSync\Exceptions\MoveFolderException.cs" />
+    <Compile Include="CompareAndSync\Manual\ManualQueueControl.cs" />
+    <Compile Include="CompareAndSync\Manual\ManualSyncer.cs" />
+    <Compile Include="CompareAndSync\Manual\Visitor\ConflictVisitor.cs" />
+    <Compile Include="CompareAndSync\Manual\Visitor\FolderRenameVisitor.cs" />
+    <Compile Include="CompareAndSync\Manual\Visitor\ProcessMetadataVisitor.cs" />
+    <Compile Include="CompareAndSync\Request\AutoSyncRequest.cs" />
+    <Compile Include="CompareAndSync\Request\ManualCompareRequest.cs" />
+    <Compile Include="CompareAndSync\Request\ManualRequest.cs" />
+    <Compile Include="CompareAndSync\Request\ManualSyncRequest.cs" />
+    <Compile Include="CompareAndSync\Request\Request.cs" />
+    <Compile Include="CompareAndSync\Seamless\SeamlessQueueControl.cs" />
+    <Compile Include="CompareAndSync\Seamless\SeamlessSyncer.cs" />
+    <Compile Include="CompareAndSync\SyncConfig.cs" />
+    <Compile Include="CompareAndSync\Manual\Visitor\BuilderVisitor.cs" />
+    <Compile Include="CompareAndSync\Manual\Visitor\ComparerVisitor.cs" />
+    <Compile Include="CompareAndSync\Manual\Visitor\IVisitor.cs" />
+    <Compile Include="CompareAndSync\Manual\Visitor\SyncerVisitor.cs" />
+    <Compile Include="CompareAndSync\Manual\Visitor\XMLMetadataVisitor.cs" />
+    <Compile Include="CompareAndSync\Manual\Visitor\XMLWriterVisitor.cs" />
+    <Compile Include="CompareAndSync\Seamless\SeamlessXMLHelper.cs" />
+    <Compile Include="CompareAndSync\Manual\CompareObject\XMLCompareObject.cs" />
+    <Compile Include="CompareAndSync\Seamless\XMLWriteObject\XMLWriteFolderObject.cs" />
+    <Compile Include="CompareAndSync\Seamless\XMLWriteObject\XMLWriteFileObject.cs" />
+    <Compile Include="CompareAndSync\Seamless\XMLWriteObject\BaseXMLWriteObject.cs" />
+    <Compile Include="Core\DeletedTaggedPathWatcher.cs" />
+    <Compile Include="Core\Exceptions\InvalidPathException.cs" />
+    <Compile Include="Core\Exceptions\UnhandledException.cs" />
+    <Compile Include="Core\LogicQueueObserver.cs" />
+    <Compile Include="Core\PathTable.cs" />
+    <Compile Include="Core\View\PathGroupView.cs" />
+    <Compile Include="Core\View\PathView.cs" />
+    <Compile Include="Core\View\TagMode.cs" />
+    <Compile Include="Core\View\TagState.cs" />
+    <Compile Include="Filters\Exceptions\InvalidFilterException.cs" />
+    <Compile Include="Helper\DriveHelper.cs" />
+    <Compile Include="Logging\DeveloperLogger.cs" />
+    <Compile Include="Logging\LogFileCorruptedException.cs" />
+    <Compile Include="Logging\LogCategoryType.cs" />
+    <Compile Include="Logging\LogEventType.cs" />
+    <Compile Include="Logging\DebugLogger.cs" />
+    <Compile Include="Logging\LogData.cs" />
+    <Compile Include="Logging\LoggerFactory.cs" />
+    <Compile Include="Logging\LogReaderHelper.cs" />
+    <Compile Include="Logging\UserLogger.cs" />
+    <Compile Include="Monitor\FileSystemEventExecutor.cs" />
+    <Compile Include="Notification\NotificationFactory.cs" />
+    <Compile Include="Notification\AddTagNotification.cs" />
+    <Compile Include="Notification\MonitorTagNotification.cs" />
+    <Compile Include="Notification\PreviewProgress.cs" />
+    <Compile Include="Notification\Progress.cs" />
+    <Compile Include="Notification\SaveNotification.cs" />
+    <Compile Include="Notification\TaggedPathDeletedNotification.cs" />
+    <Compile Include="Notification\SyncState.cs" />
+    <Compile Include="Notification\AutoSyncCompleteNotification.cs" />
+    <Compile Include="Notification\CancelSyncNotification.cs" />
+    <Compile Include="Notification\ISyncProgressObserver.cs" />
+    <Compile Include="Notification\RemoveTagNotification.cs" />
+    <Compile Include="Notification\UnMonitorPathNotification.cs" />
+    <Compile Include="Notification\INotificationQueue.cs" />
+    <Compile Include="Core\IUIInterface.cs" />
+    <Compile Include="Core\DeviceWatcher.cs" />
+    <Compile Include="Core\Exceptions\LoggerNotFoundException.cs" />
+    <Compile Include="Core\ICommandLineControllerInterface.cs" />
+    <Compile Include="Core\IMonitorControllerInterface.cs" />
+    <Compile Include="Core\IUIControllerInterface.cs" />
+    <Compile Include="Notification\AbstractNotification.cs" />
+    <Compile Include="Notification\MessageNotification.cs" />
+    <Compile Include="Notification\MonitorPathNotification.cs" />
+    <Compile Include="Notification\NotificationCode.cs" />
+    <Compile Include="Notification\NotificationQueue.cs" />
+    <Compile Include="Core\SaveLoadHelper.cs" />
+    <Compile Include="Core\ServiceLocater.cs" />
+    <Compile Include="Core\SystemLogicLayer.cs" />
+    <Compile Include="Core\View\TagView.cs" />
+    <Compile Include="Filters\ExtensionFilter.cs" />
+    <Compile Include="Filters\FileFilter.cs" />
+    <Compile Include="Filters\Filter.cs" />
+    <Compile Include="Filters\FilterChain.cs" />
+    <Compile Include="Filters\FilterFactory.cs" />
+    <Compile Include="Filters\SynclessArchiveFilter.cs" />
+    <Compile Include="Filters\SynclessConfigFilter.cs" />
+    <Compile Include="Helper\Cleaner.cs" />
+    <Compile Include="Helper\CommonXmlHelper.cs" />
+    <Compile Include="Helper\ErrorMessage.cs" />
+    <Compile Include="Helper\PathHelper.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LoggingLayer.cs" />
+    <Compile Include="Monitor\DTO\FileSystemEvent.cs" />
+    <Compile Include="Monitor\DTO\FileSystemType.cs" />
+    <Compile Include="Monitor\FileSystemEventDispatcher.cs" />
+    <Compile Include="Monitor\ExtendedFileSystemWatcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Monitor\DTO\DeleteChangeEvent.cs" />
+    <Compile Include="Monitor\DTO\DriveChangeEvent.cs" />
+    <Compile Include="Monitor\DTO\DriveChangeType.cs" />
+    <Compile Include="Monitor\DTO\EventChangeType.cs" />
+    <Compile Include="Monitor\Exceptions\MonitorDriveNotFoundException.cs" />
+    <Compile Include="Monitor\Exceptions\MonitorPathNotFoundException.cs" />
+    <Compile Include="Monitor\DTO\FileChangeEvent.cs" />
+    <Compile Include="Monitor\DTO\FolderChangeEvent.cs" />
+    <Compile Include="Monitor\FileSystemEventProcessor.cs" />
+    <Compile Include="Monitor\MonitorLayer.cs" />
+    <Compile Include="Notification\IQueueObserver.cs" />
+    <Compile Include="Notification\NothingToSyncNotification.cs" />
+    <Compile Include="Notification\SyncCompleteNotification.cs" />
+    <Compile Include="Notification\SyncProgress.cs" />
+    <Compile Include="Notification\SyncStartNotification.cs" />
+    <Compile Include="Notification\TaggedFolderDeletedNotification.cs" />
+    <Compile Include="Profiling\Exceptions\ProfileDriveConflictException.cs" />
+    <Compile Include="Profiling\Exceptions\ProfileLoadException.cs" />
+    <Compile Include="Profiling\Exceptions\ProfileNameDifferentException.cs" />
+    <Compile Include="Profiling\Profile.cs" />
+    <Compile Include="Profiling\Exceptions\ProfileGuidConflictException.cs" />
+    <Compile Include="Profiling\ProfileDrive.cs" />
+    <Compile Include="Profiling\ProfileMerger.cs" />
+    <Compile Include="Profiling\ProfilingGUIDHelper.cs" />
+    <Compile Include="Profiling\ProfilingHelper.cs" />
+    <Compile Include="Profiling\ProfilingLayer.cs" />
+    <Compile Include="Profiling\ProfilingXMLHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tagging\CurrentTime.cs" />
+    <Compile Include="Tagging\Exceptions\CorruptedTaggingXMLException.cs" />
+    <Compile Include="Tagging\Exceptions\FilterAlreadyExistException.cs" />
+    <Compile Include="Tagging\Exceptions\FilterNotFoundException.cs" />
+    <Compile Include="Tagging\Exceptions\PathAlreadyExistsException.cs" />
+    <Compile Include="Tagging\Exceptions\PathNotFoundException.cs" />
+    <Compile Include="Tagging\Exceptions\RecursiveDirectoryException.cs" />
+    <Compile Include="Tagging\Exceptions\TagAlreadyExistsException.cs" />
+    <Compile Include="Tagging\Exceptions\TagNotFoundException.cs" />
+    <Compile Include="Tagging\LogMessage.cs" />
+    <Compile Include="Tagging\Tag.cs" />
+    <Compile Include="Tagging\TagConfig.cs" />
+    <Compile Include="Tagging\TaggedPath.cs" />
+    <Compile Include="Tagging\TaggingHelper.cs" />
+    <Compile Include="Tagging\TaggingLayer.cs" />
+    <Compile Include="Tagging\TaggingProfile.cs" />
+    <Compile Include="Tagging\TaggingXMLHelper.cs" />
+    <Compile Include="Tagging\TagMerger.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\log4net.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Notification\Exceptions\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
