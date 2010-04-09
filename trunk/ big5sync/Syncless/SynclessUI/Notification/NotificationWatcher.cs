@@ -83,9 +83,14 @@ namespace SynclessUI.Notification
                 SyncStartNotification ssNotification = notification as SyncStartNotification;
                 if (ssNotification != null)
                 {
-                    _main.Progress = ssNotification.Progress;
-                    SyncProgressWatcher watcher = new SyncProgressWatcher(_main, ssNotification.TagName,
-                                                                          ssNotification.Progress);
+                    _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                        (Action)(() =>
+                        {
+                            _main.Progress = ssNotification.Progress;
+                            SyncProgressWatcher watcher = new SyncProgressWatcher(_main, ssNotification.TagName,
+                                                                                  ssNotification.Progress);
+                        }));
+                    
                     
                 }
             } 
@@ -94,7 +99,7 @@ namespace SynclessUI.Notification
                 SyncCompleteNotification scNotification = notification as SyncCompleteNotification;
                 if(scNotification != null)
                 {
-                    _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                    _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                         (Action)(() =>
                         {
                             _main.TagChanged(scNotification.TagName);
@@ -107,7 +112,7 @@ namespace SynclessUI.Notification
                 NothingToSyncNotification ntsNotification = notification as NothingToSyncNotification;
                 if (ntsNotification != null)
                 {
-                    _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                    _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                         (Action)(() =>
                         {
                             _main.NotifyNothingToSync(ntsNotification.TagName);
@@ -119,7 +124,7 @@ namespace SynclessUI.Notification
                 AutoSyncCompleteNotification ascNotification = notification as AutoSyncCompleteNotification;
                 if (ascNotification != null)
                 {
-                    _main.LblStatusText.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                    _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                         (Action)(() =>
                         {
                             _main.NotifyAutoSyncComplete(ascNotification.Path);
