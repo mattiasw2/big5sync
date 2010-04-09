@@ -5,7 +5,11 @@ using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Manual.CompareObject;
 
 namespace Syncless.CompareAndSync.Manual.Visitor
-{
+{   
+    /// <summary>
+    /// Based on the trees built by the BuilderVistor , XMLMetadataVistor will populate the data based on
+    /// the meta data documents or the last known state
+    /// </summary>
     public class XMLMetadataVisitor : IVisitor
     {
 

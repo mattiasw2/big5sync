@@ -8,6 +8,10 @@ using Syncless.Notification;
 
 namespace Syncless.CompareAndSync.Manual.Visitor
 {
+    /// <summary>
+    /// Based on each node after the SyncerVisitor , it will write the values in the nodes of the tree
+    /// to the xml documents based on the FinalState
+    /// </summary>
     public class XMLWriterVisitor : IVisitor
     {
         private readonly long _dateTime;
@@ -75,6 +79,10 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             _progress.Complete();
         }
 
+        /// <summary>
+        /// Increases the SyncProgress when it visits the root node
+        /// </summary>
+        /// <param name="root"></param>
         public void Visit(RootCompareObject root)
         {
             _progress.Complete();
