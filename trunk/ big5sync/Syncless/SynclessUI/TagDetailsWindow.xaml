@@ -174,7 +174,7 @@
 			<Button x:Name="BtnOk" IsDefault="True" Margin="0,0,5,0" Click="BtnOk_Click">
 				<Label x:Name="LblOk" FontFamily="Century Gothic" FontSize="9.333" Content="Ok" FontWeight="Bold"/>
 			</Button>
-			<Button x:Name="BtnCancel" Margin="0" Click="BtnCancel_Click" IsCancel="True">
+			<Button x:Name="BtnCancel" Margin="0" Click="BtnCancel_Click">
 				<Label x:Name="LblCancel" FontFamily="Century Gothic" FontSize="9.333" Content="Cancel" FontWeight="Bold"/>
 			</Button>
 		</StackPanel>
@@ -242,7 +242,7 @@
 					    <ComboBoxItem>Inclusion</ComboBoxItem>
 					    <ComboBoxItem>Exclusion</ComboBoxItem>
 					</ComboBox>
-					<TextBox x:Name="TxtBoxPattern" Margin="0" MaxLines="1" MaxWidth="330" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" FontSize="10.667" FontFamily="Century Gothic"  HorizontalAlignment="Left" Width="320" LostFocus="TxtBoxPattern_LostFocus"/>
+					<TextBox x:Name="TxtBoxPattern" Margin="0" MaxLines="1" MaxWidth="330" TextWrapping="Wrap" Grid.Column="1" Grid.Row="1" FontSize="10.667" FontFamily="Century Gothic"  HorizontalAlignment="Left" Width="320" LostFocus="TxtBoxPattern_LostFocus" PreviewLostKeyboardFocus="TxtBoxPattern_PreviewLostKeyboardFocus"/>
 				</Grid>
 			</ScrollViewer>
 		</Grid>

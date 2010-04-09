@@ -111,11 +111,6 @@ namespace SynclessUI
                         bool result = _main.Gui.UpdateFilterList(_tagname, filters);
                         Close();
                     }
-
-                    /*
-                    bool result = _main.Gui.UpdateFilterList(_tagname, filters);
-                    Close();
-                    */
                 }
                 else
                 {
@@ -133,11 +128,11 @@ namespace SynclessUI
 
         private bool CheckRedundantFilters()
         {
-            for(int i = 0; i < filters.Count; i++)
+            for (int i = 0; i < filters.Count; i++)
             {
                 Filter fi = filters[i];
                 filters.RemoveAt(i);
-                if(filters.Contains(fi))
+                if (filters.Contains(fi))
                 {
                     filters.Insert(i, fi);
                     return true;
@@ -228,12 +223,8 @@ namespace SynclessUI
 
         private void TxtBoxPattern_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (ListFilters.SelectedIndex != -1)
-            {
-                /*
-                if(!CheckIfFilterExist(TxtBoxPattern.Text))
+                if (ListFilters.SelectedIndex != -1)
                 {
-                */
                     Filter f = filters[ListFilters.SelectedIndex];
                     if (f is ExtensionFilter)
                     {
@@ -241,26 +232,8 @@ namespace SynclessUI
                         ef.Pattern = TxtBoxPattern.Text;
                     }
 
-                    PopulateFilterStringList(true);
-                //}                
-            }
-        }
-
-        private bool CheckIfFilterExist(string pattern)
-        {
-            bool exist = false;
-
-            foreach(Filter f in filters)
-            {
-                ExtensionFilter ef = (ExtensionFilter) f;
-                if(ef.Pattern == pattern)
-                {
-                    exist = true;
-                    break;
+                    PopulateFilterStringList(true);              
                 }
-            }
-
-            return exist;
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -282,6 +255,16 @@ namespace SynclessUI
                 e.Cancel = true;
                 FormFadeOut.Begin();
             }
+        }
+
+        private void TxtBoxPattern_PreviewLostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
+        {
+            if (TxtBoxPattern.Text.Trim() == string.Empty && BtnCancel != e.NewFocus)
+			{
+				e.Handled = true;
+                
+				DialogHelper.ShowError(this, "Extension Mask Cannot be Empty", "Please input a valid extension mask.");
+			}
         }
     }
 }
