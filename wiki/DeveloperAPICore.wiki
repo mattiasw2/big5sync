@@ -52,8 +52,7 @@ Provides classes which perform the main logic of the entire logic layer.
 
 = Enumerations Summary =
 
-== !TableType ==
-
-[#Enumerations_Summary Back to top]
+|| || *Enumeration* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubenum.gif || !TableType || The enum for the 4 different type of path table. ||
 
 `[`*[DeveloperAPICompareAndSyncSeamlessXMLWriteObject Prev - Syncless.CompareAndSync.Seamless.XMLWriteObject]* `|` *[DeveloperAPICoreExceptions Next - Syncless.Core.Exceptions]*`]`
