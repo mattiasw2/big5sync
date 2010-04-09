@@ -10,7 +10,6 @@ namespace SynclessUI.Notification
     {
         private MainWindow _main;
 
-        private const int SLEEP_TIME = 10000;
         private Thread workerThread;
         private readonly EventWaitHandle _wh = new AutoResetEvent(false);
 

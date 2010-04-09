@@ -90,6 +90,7 @@ namespace Syncless.CompareAndSync.Manual
                         {
                             _jobs.RemoveAt(i);
                             _queuedJobsLookup.Remove(item.TagName);
+                            ServiceLocator.UIPriorityQueue().Enqueue(new CancelSyncNotification(item.TagName, true));
                             return true;
                         }
                     }
