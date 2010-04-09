@@ -13,6 +13,10 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         private readonly long _dateTime;
         private readonly SyncProgress _progress;
 
+        /// <summary>
+        /// Instantiates the XMLWriterVisitor by taking in a SyncProgress object
+        /// </summary>
+        /// <param name="progress"></param>
         public XMLWriterVisitor(SyncProgress progress)
         {
             _progress = progress;
