@@ -447,7 +447,8 @@ namespace SynclessUI
                             _syncProgressNotificationDictionary.Remove(SelectedTag);
                             _tagStatusNotificationDictionary.Remove(SelectedTag);
                             LblStatusText.Content = "";
-
+                            ProgressBarSync.Visibility = Visibility.Hidden;
+                            LblProgress.Visibility = Visibility.Hidden;
                         }
                         else
                         {
@@ -520,6 +521,26 @@ namespace SynclessUI
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOffForeground");
             ProgressBarSync.Visibility = Visibility.Visible;
             LblProgress.Visibility = Visibility.Visible;
+
+            TagView tv = Gui.GetTag(SelectedTag);
+            if(tv.TagState == TagState.ManualToSeamless)
+            {
+                if(CurrentProgress != null && CurrentProgress.TagName == SelectedTag && CurrentProgress.State == SyncState.Analyzing)
+                {
+                    ProgressBarSync.Visibility = Visibility.Visible;
+                    LblProgress.Visibility = Visibility.Hidden;
+                    ProgressBarSync.IsIndeterminate = true;
+                } else
+                {
+                    ProgressBarSync.Visibility = Visibility.Hidden;
+                    LblProgress.Visibility = Visibility.Hidden;
+                }
+            } else if(tv.TagState == TagState.SeamlessToManual)
+            {
+                ProgressBarSync.Visibility = Visibility.Visible;
+                LblProgress.Visibility = Visibility.Visible;
+            }
+
             Console.WriteLine("In Switching Mode");
             LblStatusTitle.Visibility = Visibility.Visible;
             LblStatusText.Visibility = Visibility.Visible;
@@ -1331,11 +1352,16 @@ namespace SynclessUI
 
             if (SelectedTag == tagname)
             {
+                
                 LblStatusText.Content = message;
                 ProgressBarSync.Value = percentageComplete;
                 SetProgressBarColor(percentageComplete);
+                if (Gui.GetTagState(SelectedTag) == TagState.ManualToSeamless || Gui.GetTagState(SelectedTag) == TagState.SeamlessToManual)
+                {
+                    SwitchingMode();
+                }
             }
-
+            
             _syncProgressNotificationDictionary[tagname] = percentageComplete;
             _tagStatusNotificationDictionary[tagname] = message;
         }
