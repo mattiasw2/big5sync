@@ -2,22 +2,42 @@
 #labels Phase-Implementation
 #sidebar DeveloperAPISidebar
 
+`[`*[DeveloperAPIMonitor Prev - Syncless.Monitor]* `|` *[DeveloperAPIMonitorExceptions Next - Syncless.Monitor.Exceptions]*`]`
+
 = Classes Summary =
 
 == !DeleteChangeEvent ==
 
+[#Classes_Summary Back to top]
+
 == !DriveChangeEvent ==
+
+[#Classes_Summary Back to top]
 
 == !FileChangeEvent ==
 
+[#Classes_Summary Back to top]
+
 == !FileSystemEvent ==
 
+[#Classes_Summary Back to top]
+
 == !FolderChangeEvent ==
+
+[#Classes_Summary Back to top]
 
 = Enumerations Summary =
 
 == !DriveChangeType ==
 
+[#Enumerations_Summary Back to top]
+
 == !EventChageType ==
 
+[#Enumerations_Summary Back to top]
+
 == !FileSystemType ==
+
+[#Enumerations_Summary Back to top]
+
+`[`*[DeveloperAPIMonitor Prev - Syncless.Monitor]* `|` *[DeveloperAPIMonitorExceptions Next - Syncless.Monitor.Exceptions]*`]`
