@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - Syncless.Monitor.DTO
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPIMonitor Prev - Syncless.Monitor]* `|` *[DeveloperAPIMonitorExceptions Next - Syncless.Monitor.Exceptions]*`]`
@@ -28,16 +28,9 @@
 
 = Enumerations Summary =
 
-== !DriveChangeType ==
-
-[#Enumerations_Summary Back to top]
-
-== !EventChageType ==
-
-[#Enumerations_Summary Back to top]
-
-== !FileSystemType ==
-
-[#Enumerations_Summary Back to top]
+|| || *Enumeration* || *Description* ||
+|| http://big5sync.googlecode.com/files/pubenum.gif ||  !DriveChangeType || Specifies the type of drive change. ||
+|| http://big5sync.googlecode.com/files/pubenum.gif || !EventChageType || Specifies the type of event change. ||
+|| http://big5sync.googlecode.com/files/pubenum.gif || !FileSystemType || Specifies the type of file system change. ||
 
 `[`*[DeveloperAPIMonitor Prev - Syncless.Monitor]* `|` *[DeveloperAPIMonitorExceptions Next - Syncless.Monitor.Exceptions]*`]`
