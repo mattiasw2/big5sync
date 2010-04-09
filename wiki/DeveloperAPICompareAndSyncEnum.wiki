@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - Syncless.CompareAndSync.Enum
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPICompareAndSync Prev - Syncless.CompareAndSync]* `|` *[DeveloperAPICompareAndSyncExceptions Next - Syncless.CompareAndSync.Exceptions]*`]`
@@ -7,7 +7,7 @@
 = Enumerations Summary =
 
 || || *Enumeration* || *Description* ||
-|| http://big5sync.googlecode.com/files/pubenum.gif || [#AutoSyncRequestType AutoSyncRequestType] || Specifies the type of AutoSyncRequest. ||
+|| http://big5sync.googlecode.com/files/pubenum.gif || [#AutoSyncRequestType AutoSyncRequestType] || Specifies the type of !AutoSyncRequest. ||
 || http://big5sync.googlecode.com/files/pubenum.gif || [#FinalState FinalState] || Specifies the final state of a file after a manual synchronization. ||
 || http://big5sync.googlecode.com/files/pubenum.gif || [#LastKnownState LastKnownState] || Specifies the last known state of a file that no longer exists in name, eg. a deleted or renamed file. ||
 || http://big5sync.googlecode.com/files/pubenum.gif || [#MetaChangeType MetaChangeType] || Specifies the change of a file or folder with respect to its own metadata. ||
