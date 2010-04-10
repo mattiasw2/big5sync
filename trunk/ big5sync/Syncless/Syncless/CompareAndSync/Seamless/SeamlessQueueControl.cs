@@ -88,7 +88,7 @@ namespace Syncless.CompareAndSync.Seamless
             }
         }
 
-        // <summary>
+        /// <summary>
         /// Gets a boolean indicating if the queue is empty.
         /// </summary>
         public bool IsEmpty
