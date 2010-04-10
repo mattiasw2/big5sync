@@ -10,7 +10,7 @@ The *Notification* component provides a low coupling medium for the control laye
 
 = Classes =
 
-The main important classes for Notification include `NotificationQueue` and `INotificationQueue`. Many notification is implemented in both UI and *System Logic Layer*. At UI layer, it needs to implement watchers to watch all notifications which belong to the `Notification.UINotification` namespace.
+The main important classes for Notification include `NotificationQueue` and `INotificationQueue`. Many notifications are implemented in both UI and *System Logic Layer*. At UI layer, it needs to implement watchers to watch all notifications which belong to the `Notification.UINotification` namespace.
 
 == Notification that is currently Implemented(User Interface) ==
  #  `AutoSyncCompleteNotification` - informs the User Interface that a seamless synchronization request is completed.
@@ -28,7 +28,7 @@ The main important classes for Notification include `NotificationQueue` and `INo
 
 = Description of Design =
 
-The Notification component makes use of the observer pattern to notify its watchers to resume their threads if new notification is added to the queue. 
+The Notification component makes use of the observer pattern to notify its watchers to resume their threads if new notification is added to the queue. Besides, factory pattern is also used to create notification objects. A NotificationFactory class provides methods to create such notification objects such that the whichever method that performs the call does not need to know the exact class that is used to create the object.
 
 = Extending Notification =
 
