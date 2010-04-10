@@ -8,6 +8,8 @@ http://big5sync.googlecode.com/files/mainpagelogosmall.png
 
 <wiki:toc max_depth="6" />
 
+----
+
 = System Overview =
 
 == Architecture ==
