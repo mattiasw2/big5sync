@@ -50,7 +50,9 @@
       * [DeveloperComponentUI User Interface]
   * [KnownIssues10 Known Issues]
   * [SpecialCases Special Cases]
-  * [TestSeamlessSyncerTester Testing Syncless]
+  * Testing Syncless
+    * [TestSeamlessSyncerTester Using Test Driver]
+    * [TestCases Test Cases]
   * [DeveloperAPIOverview API]
   * [DeveloperGuideRecommendations Recommended Resources]
   * [DeveloperGuideReferences References]
