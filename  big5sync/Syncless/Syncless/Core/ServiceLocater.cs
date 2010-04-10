@@ -1,11 +1,13 @@
-﻿using System;
-using Syncless.Core.Exceptions;
+﻿using Syncless.Core.Exceptions;
 using Syncless.Helper;
 using Syncless.Logging;
 using Syncless.Notification;
 
 namespace Syncless.Core
 {
+    /// <summary>
+    /// The class provide the interface to get all the services provided by Syncless Logic Layer.
+    /// </summary>
     public class ServiceLocator
     {
         /// <summary>
@@ -37,7 +39,6 @@ namespace Syncless.Core
         {
             get { 
                 return SystemLogicLayer.Instance;
-                //return null;
             }
         }
         /// <summary>
