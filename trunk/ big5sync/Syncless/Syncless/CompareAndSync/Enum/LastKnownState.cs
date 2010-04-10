@@ -5,7 +5,14 @@
     /// </summary>
     public enum LastKnownState
     {
+        /// <summary>
+        /// File has been renamed
+        /// </summary>
         Renamed,
+
+        /// <summary>
+        /// File has been deleted
+        /// </summary>
         Deleted
     }
 }

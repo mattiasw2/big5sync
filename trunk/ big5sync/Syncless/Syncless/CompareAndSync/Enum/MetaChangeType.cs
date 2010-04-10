@@ -5,10 +5,29 @@
     /// </summary>
     public enum MetaChangeType
     {
-        Delete, //File, Folder
-        New, //File, Folder
-        NoChange, //File, Folder
-        Rename, //File, Folder
+        /// <summary>
+        /// A folder or file is deleted
+        /// </summary>
+        Delete,
+
+        /// <summary>
+        /// A folder or file is created
+        /// </summary>
+        New,
+
+        /// <summary>
+        /// A folder or file is unchanged
+        /// </summary>
+        NoChange,
+
+        /// <summary>
+        /// A folder or file is renamed
+        /// </summary>
+        Rename,
+
+        /// <summary>
+        /// A file is updated
+        /// </summary>
         Update //File
     }
 }

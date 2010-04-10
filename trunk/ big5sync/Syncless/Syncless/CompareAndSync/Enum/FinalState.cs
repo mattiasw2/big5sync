@@ -6,13 +6,44 @@
     /// </summary>
     public enum FinalState
     {
+        /// <summary>
+        /// File is deleted
+        /// </summary>
         Deleted,
+
+        /// <summary>
+        /// File is updated
+        /// </summary>
         Updated,
+
+        /// <summary>
+        /// File is created
+        /// </summary>
         Created,
+
+        /// <summary>
+        /// File is renamed
+        /// </summary>
         Renamed,
+
+        /// <summary>
+        /// File is created and renamed
+        /// </summary>
         CreatedRenamed,
+
+        /// <summary>
+        /// File is unchanged
+        /// </summary>
         Unchanged,
+
+        /// <summary>
+        /// Error handling file
+        /// </summary>
         Error,
+
+        /// <summary>
+        /// File conflict
+        /// </summary>
         Conflict
     }
 }
