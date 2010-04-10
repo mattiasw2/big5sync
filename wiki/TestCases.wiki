@@ -4,6 +4,8 @@
 
 <wiki:toc max_depth="3">
 
+= Test Cases =
+
 == Manual Sync (File) ==
 
 || *No.* || *Summary* || *Steps* || *Expected Output* ||
@@ -20,6 +22,8 @@
 || 11. || Rename a file from 2 folder || 1) Rename a file from 2 folders<br>2) Sync over || The file that is non-renamed will have syncless archive ||
 || 12. || Delete the same file in every folder || 1) Delete the file in each folder<br>2) Sync them || XML will be updated ||
 || 13. || Untag a folder and tag it again || 1) Untag a folder<br>2) Delete the files in it<br>3) Tag the folder removed in (1)<br>4) Sync again || The file will be repropagated again ||
+
+[#Test_Cases Back to top]
 
 == Manual Sync (Folder) ==
 
@@ -39,6 +43,7 @@
 || 13. || Rename all the folders || 1) Rename all the folder<br>2) Sync them || XML should reflect all the created folders ||
 || 14. || Untag the folder and tag it again || 1) Create a folder in all and sync<br>2) Untag the folder , delete the folder in the rest<br>3) Retag the folder and sync || Will repropagate the deleted folder ||
 
+[#Test_Cases Back to top]
 
 == Manual Sync (File + Folder) ==
 
@@ -56,6 +61,7 @@
 || 11. || Create a folder with a file inside in all folders || 1) Create a folder and file in all different folders<br>2) Sync over || XML will be updated in all folders ||
 || 12. || Sync files/ folders with large file size / large number of files || 1) Sync it over || All changes will be propagated ||
 
+[#Test_Cases Back to top]
 
 == TODO ==
 
@@ -65,6 +71,8 @@
 || 3. || Update to thumb drive || 1) Create a file in folders and sync over<br>2) Remove the thumb drive and delete the file and sync<br>3) Plug in the thumb drive and sync again || The file in the thumb drive will be deleted or renamed again ||
 || 4. || Delete a file and update the file in thumbdrive || 1) Create a file in folders and sync over<br>2) Remove the thumb drive and delete the file and sync<br>3) Update the file content in the thumbdrive<br>4) Plug the thumbdrive back and sync || The newly modified file in the thumbdrive will propagate to the rest ||
 
+[#Test_Cases Back to top]
+
 ==  Seamless ==
 
 || *No.* || *Summary* || *Steps* || *Expected Output* ||
@@ -73,3 +81,5 @@
 || 3. || Rename a file || 1) Rename a file || File rename will be propagated ||
 || 4. || Update a file || 1) Update a file || File update will be propagated ||
 || 5. || Copy a folder with a file into any of the tagged folder || 1) Copy a folder with a file || Folder will be propagated with the file inside ||
+
+[#Test_Cases Back to top]
