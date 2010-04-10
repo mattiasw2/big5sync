@@ -1,5 +1,5 @@
-#summary Quick Navigation
-#labels Phase-Implementation
+#summary User Guide/Developer Guide - Quick Navigation
+#labels Phase-Implementation,V2.0
 
   * [UserGuide User Guide]
     * [UserGuide#Preface Preface]
