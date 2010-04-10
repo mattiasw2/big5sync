@@ -1,4 +1,6 @@
+#summary Quick Navigation
 #labels Phase-Implementation
+
   * [UserGuide User Guide]
     * [UserGuide#Preface Preface]
     * [UserGuide#Welcome_to_Syncless Welcome to Syncless]
