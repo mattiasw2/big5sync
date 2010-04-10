@@ -21,16 +21,16 @@ namespace Syncless.Notification
         }
 
         /// <summary>
-        /// Creates a auto sync completed notification
+        /// Creates a auto sync complete notification
         /// </summary>
-        /// <param name="path">The string value that represents the path that is synced</param>
+        /// <param name="path">The string value that represents the path that is synchronized</param>
         /// <returns>the <see cref="AutoSyncCompleteNotification">AutoSyncCompleteNotification</see> 
         /// object</returns>
         public static AbstractNotification CreateAutoSyncCompleteNotification(string path)
         {
             return new AutoSyncCompleteNotification(path);
         }
-
+        
         /// <summary>
         /// Creates a message notification
         /// </summary>
