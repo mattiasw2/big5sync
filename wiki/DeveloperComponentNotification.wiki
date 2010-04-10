@@ -14,6 +14,7 @@ The main important classes for Notification include `NotificationQueue` and `INo
 
 == Notification that is currently Implemented(User Interface) ==
  #  `AutoSyncCompleteNotification` - informs the User Interface that a seamless synchronization request is completed.
+ #  `CancelSyncNotification` - informs the User Interface that a synchronization request is cancelled.
  #  `NothingToSyncNotification` - informs the User Interface that there is nothing to synchronize.
  #  `SyncCompleteNotification` - informs the User Interface that the synchronization is completed.
  #  `SyncStartNotification` - informs the User Interface that the synchronization is started.
@@ -23,6 +24,8 @@ The main important classes for Notification include `NotificationQueue` and `INo
  #  `MonitorPathNotification` - informs the Logic Layer to start monitoring a path. Called after switching from manual to seamless mode.
  #  `MonitorTagNotification` - informs the Logic Layer to start monitoring a tag. Used during merging of tags.
  #  `RemoveTagNotification` - informs the Logic Layer to remove a tag. Used during removing of a tag.
+ #  `SaveNotification` - informs the Logic Layer to perform a save on Xml files. Used when `SystemLogicLayer` is initiated, terminated or when there are changes made to the file system.
+ #  `TaggedFolderDeletedNotification` - informs the Logic Layer that a tagged folder is deleted. Used during merging of tagging profiles.
  #  `TaggedPathDeletedNotification` - informs the Logic Layer that a tagged path is deleted. Used during merging of tagging profiles.
  #  `UnMonitorPathNotification` - informs the Logic Layer to start unmonitoring a path. Called after switching from manual to seamless mode.
 
