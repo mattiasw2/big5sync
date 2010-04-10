@@ -1,5 +1,8 @@
 #summary Developers' Guide - Test Cases
 #labels Phase-QA
+#sidebar DeveloperGuideSidebar
+
+<wiki:toc max_depth="3">
 
 == Manual Sync (File) ==
 
