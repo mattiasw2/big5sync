@@ -10,7 +10,7 @@ Provides classes necessary for creating/removing tags, tagging/untagging folders
 
 || || *Class* || *Description* ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#Tag Tag] || Represents a container for a list of !TaggedPath objects.<br>Each Tag object has its properties that uniquely identifies itself from other Tag objects. ||
-|| http://big5sync.googlecode.com/files/pubclass.gif || [http://big5sync.googlecode.com/files/Syncless.Tagging.TaggingLayer.rar TaggingLayer] || The main logic controller of the Tagging namespace. ||
+|| http://big5sync.googlecode.com/files/pubclass.gif || [#TaggingLayer TaggingLayer] || The main logic controller of the Tagging namespace. ||
 || http://big5sync.googlecode.com/files/pubclass.gif || [#TaggingProfile TaggingProfile] || Represents a container for a list of Tag objects.<br>Each !TaggingProfile has its properties that uniquely identifies itself from other !TaggingProfile objects. ||
 || http://big5sync.googlecode.com/files/pubclass.gif http://big5sync.googlecode.com/files/static.gif || [#TagMerger TagMerger] || Performs merging of several tagging profiles which have the same name. ||
 
