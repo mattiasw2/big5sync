@@ -10,8 +10,19 @@ using Syncless.Core;
 
 namespace Syncless.Helper
 {
+    /// <summary>
+    /// CommonXmlHelper class provides common Xml-related operations, such as loading and saving Xml files,
+    /// which can be called by other classes in the Syncless.Tagging namespace.
+    /// </summary>
     public static class CommonXmlHelper
     {
+        /// <summary>
+        /// Saves a XmlDocument object to a Xml file at a location specified by the path that is passed 
+        /// as parameter
+        /// </summary>
+        /// <param name="xml">The XmlDocument object that is to be saved to a Xml file</param>
+        /// <param name="path">The path where the Xml file is to be saved to</param>
+        /// <remarks>This method can only be executed by one thread at any one time.</remarks>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public static void SaveXml(XmlDocument xml, string path)
         {
@@ -81,6 +92,14 @@ namespace Syncless.Helper
             }
 
         }
+
+        /// <summary>
+        /// Loads a XmlDocument object from a Xml file that is saved at a location specified by the path 
+        /// that is passed as parameter
+        /// </summary>
+        /// <param name="path">The path where the Xml file is to be loaded from</param>
+        /// <returns>the XmlDocument object that is saved as a Xml file at the location specified</returns>
+        /// <remarks>This method can only be executed by one thread at any one time.</remarks>
         [MethodImpl(MethodImplOptions.Synchronized)]
         public static XmlDocument LoadXml(string path)
         {
