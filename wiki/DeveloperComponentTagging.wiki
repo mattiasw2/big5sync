@@ -157,4 +157,4 @@ If the updated time of _newPath_ is earlier than that of _currentPath_, the syst
 
 = Extending Tagging =
 
-As a tag object is configurable, developers can extend the `TagConfig` classes to include more properties. Currently, existing properties include `IsSeamless`, `ArchiveName`, `ArchiveCount` and `Recycle`.
+As a tag object is configurable, developers can extend the `TagConfig` classes to include more properties. Currently, existing property includes `IsSeamless`.
