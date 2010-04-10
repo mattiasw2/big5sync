@@ -28,7 +28,11 @@ The main important classes for Notification include `NotificationQueue` and `INo
 
 = Description of Design =
 
-The Notification component makes use of the observer pattern to notify its watchers to resume their threads if new notification is added to the queue. Besides, factory pattern is also used to create notification objects. A NotificationFactory class provides methods to create such notification objects such that the whichever method that performs the call does not need to know the exact class that is used to create the object.
+== Observer Pattern ==
+The Notification component makes use of the observer pattern to notify its watchers to resume their threads if new notification is added to the queue. 
+
+== Factory Pattern ==
+Besides, factory pattern is also used to create notification objects. A !NotificationFactory class provides methods to create such notification objects such that the whichever method that performs the call does not need to know the exact class that is used to create the object.
 
 = Extending Notification =
 
