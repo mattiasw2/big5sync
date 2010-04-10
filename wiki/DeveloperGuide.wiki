@@ -87,11 +87,18 @@ There are some known issues with V1.0, and they can be found [http://code.google
 Syncless aims not to throw any kind of file or folder synchronization, and although it generally works as expected in most cases, there may be some sequence of actions that are handled differently. A list of these special cases can be found [http://code.google.com/p/big5sync/wiki/SpecialCases here].        
 
 = Testing Syncless =
+
+== Using Test Driver ==
 It is a difficult process to test the seamless (real-time) mode in Syncless, as it would require a the tester to simulate a sequence of events randomly. Moreover, seamless mode depends on !FileSystemWatcher, and the events thrown by !FileSystemWatcher are largely undeterministic, and depending on the application that caused !FileSystemChange, the events thrown can be completely different, even for a simple action such as "Save".
 
 Thus, we have come up with this seamless tester, which is quite different from a conventional test driver. It takes in a list of source folders, and a list of destination folders, and through a lot of randomization, changes will be simulated in the destination folders. At the end of the whole simulation (duration can be specified), all the files/folders in all the destination folders will be checked to see if the content is equal.
 
 To understand more about using the tester, please click [http://code.google.com/p/big5sync/wiki/TestSeamlessSyncerTester here].
+
+== Test Cases ==
+Alternatively, if you want to see the real results of the synchronization, you can go through a step-by-step test case to test Syncless.
+
+You can see a set of test cases [http://code.google.com/p/big5sync/wiki/TestCases here].
 
 = API =
 
