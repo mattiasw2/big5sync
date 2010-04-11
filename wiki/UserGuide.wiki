@@ -224,7 +224,7 @@ Syncless's main window will animate upon start up or exit. You may choose to dis
 
 ==== Enable Tray Notifications ====
 
-Syncless notifies you through tray notification upon initialization/completion of a synchronization. Enable/disable the function by checking/unchecking the option.
+Syncless notifies you through tray notification upon initialization/completion of synchronization. Enable/disable the function by checking/unchecking the option.
 
 
 ==== Enable Notification Sounds ====
