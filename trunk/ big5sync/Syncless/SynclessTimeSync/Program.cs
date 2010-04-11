@@ -3,12 +3,15 @@
 // Icon source: http://www.webdesignerdepot.com/2009/03/200-free-exclusive-icons-siena/
 
 using DaveyM69.Components;
+using System.Threading;
 
 namespace SynclessTimeSync
 {
-    public class Program
+    public static class Program
     {
         private static int? _returnValue;
+        private static bool _canWork;
+        private static EventWaitHandle _wh = new ManualResetEvent(false);
 
         public static int Main()
         {
@@ -16,11 +19,12 @@ namespace SynclessTimeSync
             sntpClient.UpdateLocalDateTime = true;
             sntpClient.Timeout = 3000;
             sntpClient.QueryServerCompleted += sntpClient_QueryServerCompleted;
-            sntpClient.QueryServerAsync();
+            _canWork = sntpClient.QueryServerAsync();
 
-            while (!_returnValue.HasValue)
-            {
-            }
+            if (_canWork)
+                _wh.WaitOne();
+            else
+                return -1;
 
             return (int)_returnValue;
         }
@@ -28,6 +32,8 @@ namespace SynclessTimeSync
         public static void sntpClient_QueryServerCompleted(object sender, DaveyM69.Components.SNTP.QueryServerCompletedEventArgs e)
         {
             _returnValue = e.Succeeded && e.LocalDateTimeUpdated ? 0 : -1;
+            if (_canWork)
+                _wh.Set();
         }
     }
 }
