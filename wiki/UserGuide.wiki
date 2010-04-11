@@ -92,19 +92,21 @@ Before you continue, you may want to find out what each button in Syncless does.
 
 === Main Toolbar ===
 
-  * http://big5sync.googlecode.com/files/createbuttonicon.jpg : Create a tag
+  * http://big5sync.googlecode.com/files/CreateTagButton.png : Create a tag
 
-  * http://big5sync.googlecode.com/files/removebuttonicon.jpg : Remove a tag
+  * http://big5sync.googlecode.com/files/RemoveTagButton.png : Remove a tag
 
-  * http://big5sync.googlecode.com/files/tagbuttonicon.jpg : Tag a folder
+  * http://big5sync.googlecode.com/files/TagFolderButton.png : Tag a folder
 
-  * http://big5sync.googlecode.com/files/untagbuttonicon.jpg : Untag a folder
+  * http://big5sync.googlecode.com/files/UntagFolderButton.png : Untag a folder
 
-  * http://big5sync.googlecode.com/files/detailsbuttonicon.jpg : View tag properties
+  * http://big5sync.googlecode.com/files/TagDetailsButton.png : View tag properties
 
-  * http://big5sync.googlecode.com/files/logbuttonicon.jpg : View log
+  * http://big5sync.googlecode.com/files/ViewLogButton.png : View log
 
-  * http://big5sync.googlecode.com/files/unmonitorbuttonicon.jpg : Unmonitor removable drives
+  * http://big5sync.googlecode.com/files/UnmonitorButton.png : Unmonitor removable drives
+
+  * http://big5sync.googlecode.com/files/TimeSyncButton.png : Synchronize computer time
 
 === Tag Info Panel ===
 
@@ -127,7 +129,7 @@ To synchronize 2 or more folders, you must first tag them with the same name. Th
 
 ==== Tagging from Syncless ==== 
 
-Tag a folder through the http://big5sync.googlecode.com/files/tagbuttonicon.jpg button (You can also use the keyboard shortcut equivalent Ctrl-T.)
+Tag a folder through the http://big5sync.googlecode.com/files/TagFolderButton.png button (You can also use the keyboard shortcut equivalent Ctrl-T.)
     http://big5sync.googlecode.com/files/Tag_From_Syncless.jpg
 
 ==== Drag-and-Drop Folder(s) into the Main Window ====
@@ -139,7 +141,7 @@ Tag a folder through the http://big5sync.googlecode.com/files/tagbuttonicon.jpg 
 === 2. View Tag Information ===
     http://big5sync.googlecode.com/files/Tag_Info_Panel_Edited.jpg
 
-After tagging the folders, you may view the details under the tag information panel through the http://big5sync.googlecode.com/files/detailsbuttonicon.jpg button. You will see a list of folder paths associated with the selected tag. On the right of the folder path list, there are a few options for synchronization. During synchronization, the progress bar will show the percentage of completion and status of the synchronization.
+After tagging the folders, you may view the details under the tag information panel through the http://big5sync.googlecode.com/files/TagDetailsButton.png button. You will see a list of folder paths associated with the selected tag. On the right of the folder path list, there are a few options for synchronization. During synchronization, the progress bar will show the percentage of completion and status of the synchronization.
 
 === 3. Synchronize the Folders ===
     http://big5sync.googlecode.com/files/Sync_Complete.jpg
@@ -156,14 +158,14 @@ Switching to seamless mode is a simple matter of pressing the button. After clic
 
 http://big5sync.googlecode.com/files/Unmonitor_Drive.jpg
 
-You can access this through the http://big5sync.googlecode.com/files/unmonitorbuttonicon.jpg button or by using its keyboard shortcut equivalent (Ctrl-I).
+You can access this through the http://big5sync.googlecode.com/files/UnmonitorButton.png button or by using its keyboard shortcut equivalent (Ctrl-I).
 
 Syncless cares about the safety of your removable drives. Unmonitoring will stop all monitoring actions on any folders that are currently in seamless mode, thus allowing the removable drive to be safely removed.
 
 === 6. Configure Filter Properties ===
 
 ==== Create a Filter ====
-Click the http://big5sync.googlecode.com/files/detailsbuttonicon.jpg button in the toolbar to open up the tag properties panel. Inside the properties panel, choose the *Filtering* property. You should see a list of filters and it will likely be blank since no filters have been added yet.
+Click the http://big5sync.googlecode.com/files/TagDetailsButton.png button in the toolbar to open up the tag properties panel. Inside the properties panel, choose the *Filtering* property. You should see a list of filters and it will likely be blank since no filters have been added yet.
 
 http://big5sync.googlecode.com/files/Tag_Configuration1.jpg
 
@@ -286,7 +288,7 @@ http://big5sync.googlecode.com/files/Tray_Notification.jpg
 
 You do not have to remember the changes you have made to your folders and files. Syncless keeps a log of the changes in your folders and files and lets you view them easily.
 
-Access the event log through the http://big5sync.googlecode.com/files/logbuttonicon.jpg button.
+Access the event log through the http://big5sync.googlecode.com/files/ViewLogButton.png button.
 
 http://big5sync.googlecode.com/files/Log_Panel.jpg
 
