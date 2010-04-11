@@ -1,3 +1,4 @@
+#labels Deprecated
 =<font color="red">Some Screenshot</font>=
 ==Our main Screen==
 http://big5sync.googlecode.com/files/mainscreen.JPG
