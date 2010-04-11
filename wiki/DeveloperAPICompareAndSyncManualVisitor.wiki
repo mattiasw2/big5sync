@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - Syncless.CompareAndSync.Manual.Visitor
-#labels Phase-Implementation,V2.0
+#labels Phase-Implementation,Deprecated
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPICompareAndSyncManualCompareObject Prev - Syncless.CompareAndSync.Manual.CompareObject]* `|` *[DeveloperAPICompareAndSyncRequest Next - Syncless.CompareAndSync.Request]*`]`
