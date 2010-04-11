@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Syncless.CompareAndSync.Exceptions;
@@ -26,6 +27,7 @@ namespace Syncless.CompareAndSync.Manual
         /// <returns></returns>
         public static RootCompareObject Sync(ManualSyncRequest request, SyncProgress progress)
         {
+            DateTime startTime = DateTime.Now;
             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STARTED, "Started Manual Sync for " + request.TagName));
 
             //Initialize and add filters conflict and archive filters to it
@@ -88,6 +90,8 @@ namespace Syncless.CompareAndSync.Manual
 
                 // Finished
                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STOPPED, "Completed Manual Sync for " + request.TagName));
+                TimeSpan timeTaken = DateTime.Now - startTime;
+                Console.WriteLine(timeTaken);
                 return rco;
             }
 
