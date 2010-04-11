@@ -199,7 +199,7 @@ As seen from the above, creating a filter is a simple and intuitive task in Sync
 
 You can personalize Syncless through the http://big5sync.googlecode.com/files/ApplicationSettingsButton.png button. After which, you will see a window with a list of settings.
 
-http://big5sync.googlecode.com/files/Configure_Application_Settings.jpg
+http://big5sync.googlecode.com/files/Application_Settings_Window.png
 
 === *New* General and User Interface Settings ===
 
@@ -242,7 +242,7 @@ Syncless makes your user experience as pleasant as possible by providing several
 
 Do you have a tag with a long name? Syncless understands the inconvenience you experience when trying to tag folders to a tag with a long name. As such, Syncless provides an auto-completion function when you type in a tag name.
 
-http://big5sync.googlecode.com/files/Tagname_Auto_Complete.jpg
+http://big5sync.googlecode.com/files/Auto_Complete_Tag_Name.png
 
 Simply type in part of the tag name and Syncless will display the full name for you.
 
@@ -252,11 +252,11 @@ Do you have many tags to maintain and have difficulty finding that exact tag fro
 
 Let us say you have many tags in the tag list. 
 
-http://big5sync.googlecode.com/files/Zoom_In_All_Tag_List.jpg
+http://big5sync.googlecode.com/files/Multiple_Tag_Names.png
 
 You want to filter out only tags related to your photo folders. Simply enter the word 'Photos' in the http://big5sync.googlecode.com/files/Search_Tag_Text_Box.jpg text box and only tag names containing 'Photos' will be displayed.
 
-http://big5sync.googlecode.com/files/Zoom_In_Filter_Tag_List.jpg
+http://big5sync.googlecode.com/files/Filtered_Tag_Names.png
 
 === Keyboard Shortcuts ===
 
@@ -270,7 +270,7 @@ If you forget the shortcut keys, simply go to http://big5sync.googlecode.com/fil
 
 If you prefer right-clicking to clicking buttons, Syncless provides you the option to access your tags through context menu.
 
-http://big5sync.googlecode.com/files/Right_Click_Tag_List.jpg
+http://big5sync.googlecode.com/files/Tag_Context_Menu.png
 
 Simply right-click on the tag under the tag list and you can choose to tag more folders, view tag properties or remove the tag.
 
@@ -278,7 +278,7 @@ Simply right-click on the tag under the tag list and you can choose to tag more 
 
 Suppose you have many folders tagged with the same tag. When you want to view the folders in Windows Explorer, you will most probably have to go through Start Menu -> My Computer -> D: -> Your folders many times to open up the various folders. Why go through the hassle when you can simply open up the folders in Syncless?
 
-http://big5sync.googlecode.com/files/Right_Click_Tagged_Path.jpg
+http://big5sync.googlecode.com/files/Tagged_Path_Context_Menu.png
 
 Simply right-click on the tagged path in the tag info panel and choose to Open in Windows Explorer or just double-click on it. The folder will be opened in Explorer Window. 
 
@@ -298,7 +298,7 @@ You do not have to remember the changes you have made to your folders and files.
 
 Access the event log through the http://big5sync.googlecode.com/files/ViewLogButton.png button.
 
-http://big5sync.googlecode.com/files/Log_Panel.jpg
+http://big5sync.googlecode.com/files/Log_Window.png
 
 
 = Ending Note =
