@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - Syncless.Monitor
-#labels Phase-Implementation,V2.0
+#labels Phase-Implementation,Deprecated
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPILogging Prev - Syncless.Logging]* `|` *[DeveloperAPIMonitorDTO Next - Syncless.Monitor.DTO]*`]`
