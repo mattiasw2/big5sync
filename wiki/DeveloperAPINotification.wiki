@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - Syncless.Notification
-#labels Phase-Implementation,V2.0
+#labels Phase-Implementation,Deprecated
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPIMonitorExceptions Prev - Syncless.Monitor.Exceptions]* `|` *[DeveloperAPIProfiling Next - Syncless.Profiling]*`]`
