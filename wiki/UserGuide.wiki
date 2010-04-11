@@ -292,6 +292,12 @@ http://big5sync.googlecode.com/files/Tray_Notification.png
 
 === *New* Preview Synchronization Results ===
 
+Want to know what changes will be made to your files and folders before committing the changes? Syncless allows you to preview the synchronization result so that you can confirm the changes you want to make, just in case unintended operation is performed on your files and folders.
+
+Access the preview result window through the http://big5sync.googlecode.com/files/Preview_Sync_Button.png button.
+
+http://big5sync.googlecode.com/files/Preview_Sync_Window.png
+
 === Viewing Logs ===
 
 You do not have to remember the changes you have made to your folders and files. Syncless keeps a log of the changes in your folders and files and lets you view them easily.
