@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Navigation;
 using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Core.Exceptions;
 using SynclessUI.Helper;
@@ -25,30 +24,30 @@ namespace SynclessUI
         private readonly string _selectedTag;
         private BackgroundWorker _previewWorker;
         private RootCompareObject _rco;
-        private bool _closingAnimationNotCompleted = true;
+        private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
 
         public PreviewSyncWindow(MainWindow main, string selectedTag)
         {
             _selectedTag = selectedTag;
 
             _previewSyncData = new DataTable();
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Source, typeof(string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Operation, typeof(string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Dest, typeof(string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Tooltip, typeof(string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceIcon, typeof(string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestIcon, typeof(string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceLastModifiedDate, typeof(string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceLastModifiedTime, typeof(string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceSize, typeof(string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestLastModifiedDate, typeof(string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestLastModifiedTime, typeof(string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestSize, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Source, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Operation, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Dest, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Tooltip, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceIcon, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestIcon, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceLastModifiedDate, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceLastModifiedTime, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceSize, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestLastModifiedDate, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestLastModifiedTime, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestSize, typeof (string)));
             _main = main;
             Owner = _main;
             ShowInTaskbar = false;
 
-            
+
             //Populate(_main.Gui.PreviewSync(selectedTag));
 
             _previewWorker = new BackgroundWorker();
@@ -60,7 +59,7 @@ namespace SynclessUI
             InitializeComponent();
         }
 
-        void _previewWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void _previewWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (!e.Cancelled)
             {
@@ -77,7 +76,7 @@ namespace SynclessUI
             }
         }
 
-        void _previewWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void _previewWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             string selectedTag = e.Argument as string;
             RootCompareObject rco = _main.Gui.PreviewSync(selectedTag);
@@ -157,7 +156,7 @@ namespace SynclessUI
 
         private void Path_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-			TextBlock pathBox = (TextBlock) sender;
+            TextBlock pathBox = (TextBlock) sender;
 
             string path = pathBox.Text;
 
@@ -172,7 +171,6 @@ namespace SynclessUI
             }
             catch
             {
-
             }
 
             try
@@ -184,7 +182,6 @@ namespace SynclessUI
             }
             catch
             {
-
             }
 
             if (exists)

@@ -23,7 +23,7 @@ namespace SynclessUI
         private readonly MainWindow _main;
         private bool _cancelstatus = false;
         private bool _notifyUser;
-        private bool _closingAnimationNotCompleted = true;
+        private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
         private FolderBrowserDialog _ofd = new FolderBrowserDialog();
 
         private string _path;
@@ -41,7 +41,7 @@ namespace SynclessUI
             Owner = _main;
             ShowInTaskbar = false;
 
-            if(tagname != null)
+            if (tagname != null)
             {
                 int maxlength = tagname.Length > 20 ? 20 : tagname.Length;
                 tagname = tagname.Substring(0, maxlength);
@@ -53,7 +53,7 @@ namespace SynclessUI
             InitializeFolderDialogs();
 
             ACBName.IsEnabled = false;
-            
+
             _isTagNormally = path == "" ? true : false;
             _isInvalidFolder = false;
             _path = path == "" ? SelectPath() : path;
@@ -74,11 +74,10 @@ namespace SynclessUI
                     try
                     {
                         ShowDialog();
-                    } catch(InvalidOperationException)
-                    {
-                        
                     }
-                        
+                    catch (InvalidOperationException)
+                    {
+                    }
                 }
             }
         }
@@ -96,7 +95,7 @@ namespace SynclessUI
         {
             vistafolderDialog.Description = DialogDescription;
             vistafolderDialog.UseDescriptionForTitle = true;
-                // This applies to the Vista style dialog only, not the old dialog.
+            // This applies to the Vista style dialog only, not the old dialog.
             vistafolderDialog.ShowNewFolderButton = true;
             _ofd.Description = DialogDescription;
             _ofd.ShowNewFolderButton = true;
@@ -145,7 +144,8 @@ namespace SynclessUI
                     {
                         if (FileHelper.IsCDRomDrive(path))
                         {
-                            DialogHelper.ShowError(this, "Invalid Folder", "You cannot tag any folder from a CD/DVD-Rom drive.");
+                            DialogHelper.ShowError(this, "Invalid Folder",
+                                                   "You cannot tag any folder from a CD/DVD-Rom drive.");
                             if (!_isTagNormally)
                             {
                                 _isInvalidFolder = true;
@@ -203,41 +203,46 @@ namespace SynclessUI
                         {
                             try
                             {
-								var di = new DirectoryInfo(_path);
-                   				if (di.Exists && !FileHelper.IsFile(_path)) {
-									_main.CreateTag(Tagname);
-		
-									TagView tv1 = null;
-									
-									if (!_main.Gui.GetTag(Tagname).IsLocked)
-									{
-										tv1 = _main.Gui.Tag(Tagname, new DirectoryInfo(_path));
-	
-										if (tv1 != null)
-										{
-											_main.InitializeTagList();
-											_main.SelectTag(Tagname);
-											if (_notifyUser)
-												_main.NotifyBalloon("Folder Tagged",
-																	_path + " has been tagged to " + Tagname);
-											Close();
-										}
-										else
-										{
-                                            DialogHelper.ShowError(this, "Tag Error", "Tag Error Occured. Please Try Again.");
-											BtnOk.IsEnabled = true;
-										}
-									}
-									else
-									{
+                                var di = new DirectoryInfo(_path);
+                                if (di.Exists && !FileHelper.IsFile(_path))
+                                {
+                                    _main.CreateTag(Tagname);
+
+                                    TagView tv1 = null;
+
+                                    if (!_main.Gui.GetTag(Tagname).IsLocked)
+                                    {
+                                        tv1 = _main.Gui.Tag(Tagname, new DirectoryInfo(_path));
+
+                                        if (tv1 != null)
+                                        {
+                                            _main.InitializeTagList();
+                                            _main.SelectTag(Tagname);
+                                            if (_notifyUser)
+                                                _main.NotifyBalloon("Folder Tagged",
+                                                                    _path + " has been tagged to " + Tagname);
+                                            Close();
+                                        }
+                                        else
+                                        {
+                                            DialogHelper.ShowError(this, "Tag Error",
+                                                                   "Tag Error Occured. Please Try Again.");
+                                            BtnOk.IsEnabled = true;
+                                        }
+                                    }
+                                    else
+                                    {
                                         DialogHelper.ShowError(this, Tagname + " is Synchronizing",
-															"You cannot tag a folder while the tag is synchronizing.");
-										BtnOk.IsEnabled = true;
-									}
-								} else {
-                                    DialogHelper.ShowError(this, "Invalid/Missing Folder", "You cannot tag the specified folder");
-									BtnOk.IsEnabled = true;
-								}
+                                                               "You cannot tag a folder while the tag is synchronizing.");
+                                        BtnOk.IsEnabled = true;
+                                    }
+                                }
+                                else
+                                {
+                                    DialogHelper.ShowError(this, "Invalid/Missing Folder",
+                                                           "You cannot tag the specified folder");
+                                    BtnOk.IsEnabled = true;
+                                }
                             }
                             catch (RecursiveDirectoryException)
                             {
@@ -251,7 +256,8 @@ namespace SynclessUI
                                                        "The path you tried to tag is already tagged.");
                                 BtnOk.IsEnabled = true;
                             }
-                        } else
+                        }
+                        else
                         {
                             BtnOk.IsEnabled = true;
                         }

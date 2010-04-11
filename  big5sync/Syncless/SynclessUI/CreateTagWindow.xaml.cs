@@ -11,7 +11,7 @@ namespace SynclessUI
     /// </summary>
     public partial class CreateTagWindow : Window
     {
-        private bool _closingAnimationNotCompleted = true;
+        private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
         private MainWindow _main;
 
         public CreateTagWindow(MainWindow main)

@@ -1,26 +1,23 @@
-﻿/*
- * Credits:
- * Referenced from Portable Settings Provider
- * http://www.codeproject.com/KB/vb/CustomSettingsProvider.aspx  (C# version by gpgemini) 
-*/
-
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
-using System.Configuration;
-using System.Configuration.Provider;
-using System.Windows.Forms;
 using System.Collections.Specialized;
-using Microsoft.Win32;
-using System.Xml;
+using System.Configuration;
 using System.IO;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace SynclessUI
 {
+    /// <summary>
+    /// PortableSettingsProvider class ensures that application settings can be saved to the application folder itself
+    /// instead of the user profile. Used in the configuration of Application Settings.
+    /// Code of Portable Settings Provider from
+    /// http://www.codeproject.com/KB/vb/CustomSettingsProvider.aspx  (C# version by gpgemini) 
+    /// </summary>
+
     public class PortableSettingsProvider : SettingsProvider
     {
-        const string SETTINGSROOT = "Settings";
+        private const string SETTINGSROOT = "Settings";
         //XML Root Node
 
         public override void Initialize(string name, NameValueCollection col)
@@ -50,6 +47,7 @@ namespace SynclessUI
         {
             get { return "PortableSettingsProvider"; }
         }
+
         public virtual string GetAppSettingsPath()
         {
             //Used to determine where to store the settings
@@ -78,12 +76,12 @@ namespace SynclessUI
             }
             catch (Exception)
             {
-
             }
             //Ignore if cant save, device been ejected
         }
 
-        public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext context, SettingsPropertyCollection props)
+        public override SettingsPropertyValueCollection GetPropertyValues(SettingsContext context,
+                                                                          SettingsPropertyCollection props)
         {
             //Create new collection of values
             SettingsPropertyValueCollection values = new SettingsPropertyValueCollection();
@@ -91,7 +89,6 @@ namespace SynclessUI
             //Iterate through the settings to be retrieved
             foreach (SettingsProperty setting in props)
             {
-
                 SettingsPropertyValue value = new SettingsPropertyValue(setting);
                 value.IsDirty = false;
                 value.SerializedValue = GetValue(setting);
@@ -145,7 +142,9 @@ namespace SynclessUI
                 }
                 else
                 {
-                    ret = SettingsXML.SelectSingleNode(SETTINGSROOT + "/" + Environment.MachineName + "/" + setting.Name).InnerText;
+                    ret =
+                        SettingsXML.SelectSingleNode(SETTINGSROOT + "/" + Environment.MachineName + "/" + setting.Name).
+                            InnerText;
                 }
             }
 
@@ -166,7 +165,6 @@ namespace SynclessUI
 
         private void SetValue(SettingsPropertyValue propVal)
         {
-
             XmlElement MachineNode = default(XmlElement);
             XmlElement SettingNode = default(XmlElement);
 
@@ -177,11 +175,13 @@ namespace SynclessUI
             {
                 if (IsRoaming(propVal.Property))
                 {
-                    SettingNode = (XmlElement)SettingsXML.SelectSingleNode(SETTINGSROOT + "/" + propVal.Name);
+                    SettingNode = (XmlElement) SettingsXML.SelectSingleNode(SETTINGSROOT + "/" + propVal.Name);
                 }
                 else
                 {
-                    SettingNode = (XmlElement)SettingsXML.SelectSingleNode(SETTINGSROOT + "/" + Environment.MachineName + "/" + propVal.Name);
+                    SettingNode =
+                        (XmlElement)
+                        SettingsXML.SelectSingleNode(SETTINGSROOT + "/" + Environment.MachineName + "/" + propVal.Name);
                 }
             }
             catch (Exception)
@@ -209,8 +209,8 @@ namespace SynclessUI
                     //creating a new machine name node if one doesnt exist.
                     try
                     {
-
-                        MachineNode = (XmlElement)SettingsXML.SelectSingleNode(SETTINGSROOT + "/" + Environment.MachineName);
+                        MachineNode =
+                            (XmlElement) SettingsXML.SelectSingleNode(SETTINGSROOT + "/" + Environment.MachineName);
                     }
                     catch (Exception)
                     {
@@ -236,7 +236,7 @@ namespace SynclessUI
             //Determine if the setting is marked as Roaming
             foreach (DictionaryEntry d in prop.Attributes)
             {
-                Attribute a = (Attribute)d.Value;
+                Attribute a = (Attribute) d.Value;
                 if (a is System.Configuration.SettingsManageabilityAttribute)
                 {
                     return true;
@@ -245,5 +245,4 @@ namespace SynclessUI
             return false;
         }
     }
-
 }

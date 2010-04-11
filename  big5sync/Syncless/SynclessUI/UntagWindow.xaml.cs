@@ -15,7 +15,7 @@ namespace SynclessUI
     {
         private readonly MainWindow _main;
         private bool _notifyUser;
-        private bool _closingAnimationNotCompleted = true;
+        private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
 
         public UntagWindow(MainWindow main, string clipath, bool notifyUser)
         {
@@ -56,7 +56,8 @@ namespace SynclessUI
                 }
                 else
                 {
-                    DialogHelper.ShowError(this, "No Tags Found", "The folder you were trying to untag had no tags on it.");
+                    DialogHelper.ShowError(this, "No Tags Found",
+                                           "The folder you were trying to untag had no tags on it.");
 
                     Close();
                 }
