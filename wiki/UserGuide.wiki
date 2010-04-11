@@ -176,7 +176,7 @@ Click the http://big5sync.googlecode.com/files/TagDetailsButton.png button in th
 
 http://big5sync.googlecode.com/files/Filtering.png
 
-Now, click on the http://big5sync.googlecode.com/files/Add_Filter_Button.jpg button to add a new filter. You can now set the "Ext. Mask" and the "Mode".
+Now, click on the http://big5sync.googlecode.com/files/Add_Filter_Button.png button to add a new filter. You can now set the "Ext. Mask" and the "Mode".
 
 ==== Construct a Filter ====
 Ext. mask can be an actual filename, or simply a name with wildcards. Some examples will be "Storyboard.ppt", "`*`.exe" or "File?.txt".
