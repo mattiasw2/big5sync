@@ -288,7 +288,7 @@ Syncless allows you to perform other tasks as well when you synchronize large am
 
 Whenever a synchronization task is initiated or completed, Syncless will notify you through tray notifications. 
 
-http://big5sync.googlecode.com/files/Tray_Notification.jpg
+http://big5sync.googlecode.com/files/Tray_Notification.png
 
 === *New* Preview Synchronization Results ===
 
