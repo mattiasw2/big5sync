@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - Syncless.Core
-#labels Phase-Implementation,V2.0
+#labels Phase-Implementation,Deprecated
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPICompareAndSyncSeamlessXMLWriteObject Prev - Syncless.CompareAndSync.Seamless.XMLWriteObject]* `|` *[DeveloperAPICoreExceptions Next - Syncless.Core.Exceptions]*`]`
