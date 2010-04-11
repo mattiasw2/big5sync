@@ -1,4 +1,6 @@
+#summary Developers' API - Quick Navigation
 #labels Phase-Implementation
+
   * Syncless Namespaces
     * [DeveloperAPICompareAndSync CompareAndSync]
       * [DeveloperAPICompareAndSync#Classes_Summary Classes Summary]
