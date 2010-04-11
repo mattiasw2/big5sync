@@ -28,9 +28,9 @@ Why choose Syncless over other synchronization tools? The reason is simple. Sync
 
   * *Filtering*:  Use Syncless's filtering features for the ultimate control in synchronization. Currently, Syncless is able to include or exclude files and folders by extension and path. Other filters will be available in later versions.
 
-  * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder will be archived up to 2 backups at one time. As of version 1.0, archiving is not user-configurable, but will be in the future.
+  * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder can be either sent to Recycle Bin or archived up to 10 copies. 
 
-  * *New* *Time Synchronization*:
+  * *Time Synchronization*: Why worry that your files be out-of-sync when you can actually synchronize the system clocks across all your computers?
 
   * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving it on your computer.
 
@@ -42,11 +42,12 @@ The traditional way to keep a few folders in sync is to create multiple jobs bec
 Syncless currently provides basic filtering capabilities for files. There are 2 main kinds of filters, inclusion and exclusion filters. Exclusion filters will always have a higher priority over inclusion filters. In this section, we are going to take a look at how we can construct filters to suit our needs.
 
 === Archiving ===
-With the archiving feature, you do not need to worry about losing an important file if you accidentally delete it and the change is propagated to other folders in the same tag. Syncless will keep up to 2 copies of the deleted file in an archive folder. This folder will be created in all the other folders in the same tag. Note that the file itself will not be archived in the folder where the file deletion is initiated by the user.
+With the archiving feature, you do not need to worry about losing an important file if you accidentally delete it and the change is propagated to other folders in the same tag. Syncless will either send the deleted file to Recycle Bin, or keep up to 10 copies of the deleted file in an archive folder, depending on your preference. This archive folder will be created in all the other folders in the same tag. Note that the file itself will not be archived in the folder where the file deletion is initiated by the user.
 
 To illustrate, let us say you tag D:\Lecture and E:\Notes to a tag named 'Lecture', both containing the file Chapter1.pdf. You accidentally deleted Chapter1.pdf under D:\Lecture. Syncless will keep a copy of Chapter1.pdf in the archive folder under E:\Notes. If you need to restore that file, simply copy the archived file back to D:\Lecture. 
 
-=== *New* Time Synchronization ===
+=== Time Synchronization ===
+Files may be out-of-sync if the system clocks are not consistent across multiple computers. Why worry that your most updated file be overwritten because the system clock is set earlier than the actual time? Simply allow Syncless to synchronize your system clock with the Internet Time Server and you can be assured that the file will remain as the most updated version across all your computers.
 
 === Portability ===
 Syncless can run from a removable drive such as a thumbdrive. If you frequently use your removable storage drive for the purpose of synchronizing files and folders on various computers, Syncless can automate this job for you. 
