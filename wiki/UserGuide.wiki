@@ -203,49 +203,36 @@ You can personalize Syncless through the http://big5sync.googlecode.com/files/Ap
 
 http://big5sync.googlecode.com/files/Application_Settings_Window.png
 
-==== Show Welcome Screen on Application Start ====
 
 http://big5sync.googlecode.com/files/Show_Welcome_Screen_Option.png
 
 Syncless has a informative welcome screen which highlights the unique features of Syncless. Each feature has a link to the Synclses online User Guide where the feature is explained in more details. You can choose to show the welcome screen on startup by checking the *Show Welcome Screen on Application Start* option.
 
 
-==== Enable Shell Integration ====
-
 http://big5sync.googlecode.com/files/Enable_Shell_Integration_Option.png
 
 Syncless makes tagging easy for you by integrating directly into Windows Explorer. You can simply right-click on any folder you wish to tag. In the case where you rather not have this function, you can uncheck the *Enable Shell Integration* option.
 
-
-==== Enable Window Animation on Application Start/Exit ====
 
 http://big5sync.googlecode.com/files/Enable_Window_Animation_Option.png
 
 Syncless's main window will animate upon start up or exit. You may choose to disable the function by unchecking the *Enable Window Animation on Application Start/Exit* option.
 
 
-==== Enable Tray Notification ====
-
 http://big5sync.googlecode.com/files/Enable_Tray_Notification_Option.png
 
 Syncless notifies you through tray notification upon initialization/completion of a synchronization. Enable/disable the function by checking/unchecking the *Enable Tray Notifications* option.
 
-
-==== Enable Notification Sounds ====
 
 http://big5sync.googlecode.com/files/Enable_Notification_Sound_Option.png
 
 Syncless not only notifies you synchronization initialization/completion through tray notification. It also plays notification sounds to notify you when you are not viewing the screen. You are always updated of synchronization progress! Enable the function by checking the *Enable Notification Sounds* option.
 
 
-==== When Minimizing, Minimize to Tray ====
-
 http://big5sync.googlecode.com/files/Minimize_To_Tray_Option.png
 
 Syncless can minimize to tray so that your task bar will be kept as clean as possible. However, if you wish to access Syncless more quickly through the task bar, you can disable the function by unchecking the *When Minimizing, Minimize to Tray* option.
 
-
-==== Attempt to Synchronize Computer Clock on Application Startup ====
 
 http://big5sync.googlecode.com/files/Attempt_Time_Sync_Option.png
 
@@ -258,13 +245,11 @@ Syncless makes synchronization even safer by providing archiving option. Just in
 
 http://big5sync.googlecode.com/files/Archiving_Option_Window.png
 
-==== Send to Recycle Bin ====
 
 http://big5sync.googlecode.com/files/Send_To_Recycle_Bin_Option.png
 
 To send deleted files to Recycle Bin, simply check the *Send to Recycle Bin* option. Uncheck the option if you do not wish to send any file to Recycle Bin.
 
-==== Archive Last Changes ====
 
 http://big5sync.googlecode.com/files/Move_To_Syncless_Archive_Option.png
 
