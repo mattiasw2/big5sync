@@ -161,7 +161,7 @@ Switching to seamless mode is a simple matter of pressing the button. After clic
 
 === 5. Unmonitor Removable Drive to Prepare for Removal ===
 
-http://big5sync.googlecode.com/files/Unmonitor_Drive.jpg
+http://big5sync.googlecode.com/files/Unmonitor_Drive.png
 
 You can access this through the http://big5sync.googlecode.com/files/UnmonitorButton.png button or by using its keyboard shortcut equivalent (Ctrl-I).
 
