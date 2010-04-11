@@ -181,7 +181,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="App.config" />
-    <Resource Include="Fonts\MyriadPro-Regular.otf" />
     <None Include="Properties\app.manifest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
