@@ -1,5 +1,5 @@
-#summary Developers' Guide
-#labels Phase-Implementation,Featured
+#summary *Featured* - Developers' Guide : Your Essential Guide to Developing Syncless
+#labels Phase-Implementation,Featured,V2.0
 #sidebar DeveloperGuideSidebar
 
 http://big5sync.googlecode.com/files/mainpagelogosmall.png
