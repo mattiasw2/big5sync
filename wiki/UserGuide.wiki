@@ -227,12 +227,19 @@ Syncless can minimize to tray so that your task bar will be kept as clean as pos
 ==== *New* Attempt to Synchronize Computer Clock on Application Startup ====
 
 
-=== *New* Archiving Settings ===
+=== Archiving Settings ===
 
-==== *New* Send to Recycle Bin ====
+Syncless makes synchronization even safer by providing archiving option. Just in case you accidentally delete a file and perform synchronization on this file, you can still retrieve it from either the Recycle Bin or the Syncless' archive folder.
 
-==== *New* Archive Last Changes ====
+http://big5sync.googlecode.com/files/Archiving_Option_Window.png
 
+==== Send to Recycle Bin ====
+
+To send deleted files to Recycle Bin, simply check the http://big5sync.googlecode.com/files/Send_To_Recycle_Bin_Option.png option. Uncheck the option if you do not wish to send any file to Recycle Bin.
+
+==== Archive Last Changes ====
+
+To move deleted files to Syncless' archive folder (`_`synclessArchive), simply check the http://big5sync.googlecode.com/files/Move_To_Syncless_Archive_Option.png option. You can select up to 10 archive files to keep by moving the track bar. Uncheck the option if you do not wish to move any file to Syncless' archive folder.
 
 == How is Syncless User-friendly? ==
 
@@ -290,7 +297,7 @@ Whenever a synchronization task is initiated or completed, Syncless will notify 
 
 http://big5sync.googlecode.com/files/Tray_Notification.png
 
-=== *New* Preview Synchronization Results ===
+=== Preview Synchronization Results ===
 
 Want to know what changes will be made to your files and folders before committing the changes? Syncless allows you to preview the synchronization result so that you can confirm the changes you want to make, just in case unintended operation is performed on your files and folders.
 
