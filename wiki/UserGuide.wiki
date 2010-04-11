@@ -262,6 +262,26 @@ To move deleted files to Syncless' archive folder (`_`synclessArchive), simply c
 
 Syncless makes your user experience as pleasant as possible by providing several user-friendly functionalities.
 
+=== Preview Synchronization Results ===
+
+Want to know what changes will be made to your files and folders before committing the changes? Syncless allows you to preview the synchronization result so that you can confirm the changes you want to make, just in case unintended operation is performed on your files and folders.
+
+Access the preview result window through the http://big5sync.googlecode.com/files/Preview_Sync_Button.png button.
+
+http://big5sync.googlecode.com/files/Preview_Sync_Window.png
+
+=== Viewing Logs ===
+
+You do not have to remember the changes you have made to your folders and files. Syncless keeps a log of the changes in your folders and files and lets you view them easily.
+
+Access the event log through the http://big5sync.googlecode.com/files/ViewLogButton.png button.
+
+http://big5sync.googlecode.com/files/Log_Window.png
+
+You can filter out log messages by checking/unchecking the following options.
+
+http://big5sync.googlecode.com/files/Application_Log_Option.png http://big5sync.googlecode.com/files/Synchronization_Log_Option.png http://big5sync.googlecode.com/files/Filesystem_Log_Option.png
+
 === Tag Name Auto Completion ===
 
 Do you have a tag with a long name? Syncless understands the inconvenience you experience when trying to tag folders to a tag with a long name. As such, Syncless provides an auto-completion function when you type in a tag name.
@@ -313,22 +333,6 @@ Syncless allows you to perform other tasks as well when you synchronize large am
 Whenever a synchronization task is initiated or completed, Syncless will notify you through tray notifications. 
 
 http://big5sync.googlecode.com/files/Tray_Notification.png
-
-=== Preview Synchronization Results ===
-
-Want to know what changes will be made to your files and folders before committing the changes? Syncless allows you to preview the synchronization result so that you can confirm the changes you want to make, just in case unintended operation is performed on your files and folders.
-
-Access the preview result window through the http://big5sync.googlecode.com/files/Preview_Sync_Button.png button.
-
-http://big5sync.googlecode.com/files/Preview_Sync_Window.png
-
-=== Viewing Logs ===
-
-You do not have to remember the changes you have made to your folders and files. Syncless keeps a log of the changes in your folders and files and lets you view them easily.
-
-Access the event log through the http://big5sync.googlecode.com/files/ViewLogButton.png button.
-
-http://big5sync.googlecode.com/files/Log_Window.png
 
 ----
 
