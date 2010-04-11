@@ -1,4 +1,4 @@
-#summary Definitions of common terms used in Syncless
+#summary *Featured* - Definitions of common terms used in Syncless
 #labels Phase-Implementation
 #sidebar DeveloperGuideSidebar
 
