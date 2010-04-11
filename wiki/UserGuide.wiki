@@ -316,6 +316,8 @@ If you forget the shortcut keys, simply go to http://big5sync.googlecode.com/fil
 
 === Accessing Syncless Through Tray ===
 
+If you have chosen the option to minimize Syncless to tray, you can still access the application easily through tray options. Simply go to the tray, right-click on the Syncless icon, and select the operation you wish to perform. You can modify application settings, tag a folder, unmonitor a drive or exit Syncless.
+
 http://big5sync.googlecode.com/files/Access_Thru_Tray.png
 
 === Accessing Tags Through Right-clicking ===
