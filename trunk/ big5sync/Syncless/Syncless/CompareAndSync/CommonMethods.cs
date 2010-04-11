@@ -245,6 +245,26 @@ namespace Syncless.CompareAndSync
             node.ParentNode.RemoveChild(node);
         }
 
+        public static void DoFileLastKnownCleanUp(XmlDocument xmlDoc , string name)
+        {
+            XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(name) + "]");
+
+            if (node == null)
+                return;
+
+            node.ParentNode.RemoveChild(node);
+        }
+
+        public static void DoFolderLastKnownCleanUp(XmlDocument xmlDoc, string name)
+        {
+            XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(name) + "]");
+
+            if (node == null)
+                return;
+
+            node.ParentNode.RemoveChild(node);
+        }
+
         /// <summary>
         /// Looks for the last known state document based on the path , if it exists, then return. If not , it 
         /// will create the file

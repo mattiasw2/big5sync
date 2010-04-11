@@ -17,13 +17,13 @@ namespace Syncless.CompareAndSync.Seamless
         /// This method will differentiate between an XMLWriteFolderObject or an XMLWriteFileObject. Then 
         /// base on it's MetaChangeType , it will update the xml document accordingly
         /// </summary>
-        /// <param name="xmlWriteList"></param>
-        public static void UpdateXML(BaseXMLWriteObject xmlWriteList)
+        /// <param name="xmlWriteObject"></param>
+        public static void UpdateXML(BaseXMLWriteObject xmlWriteObject)
         {
-            if (xmlWriteList is XMLWriteFolderObject)
-                HandleFolder(xmlWriteList);
+            if (xmlWriteObject is XMLWriteFolderObject)
+                HandleFolder(xmlWriteObject);
             else
-                HandleFile(xmlWriteList);
+                HandleFile(xmlWriteObject);
         }
 
         #endregion
@@ -31,21 +31,21 @@ namespace Syncless.CompareAndSync.Seamless
         #region File Operations
 
         // Handle the different MetaChangeType of the XMLWriteFileObject
-        private static void HandleFile(BaseXMLWriteObject xmlWriteList)
+        private static void HandleFile(BaseXMLWriteObject xmlWriteObject)
         {
-            switch (xmlWriteList.ChangeType)
+            switch (xmlWriteObject.ChangeType)
             {
                 case MetaChangeType.New:
-                    CreateFile((XMLWriteFileObject)xmlWriteList);
+                    CreateFile((XMLWriteFileObject)xmlWriteObject);
                     break;
                 case MetaChangeType.Delete:
-                    DeleteFile((XMLWriteFileObject)xmlWriteList);
+                    DeleteFile((XMLWriteFileObject)xmlWriteObject);
                     break;
                 case MetaChangeType.Rename:
-                    RenameFile((XMLWriteFileObject)xmlWriteList);
+                    RenameFile((XMLWriteFileObject)xmlWriteObject);
                     break;
                 case MetaChangeType.Update:
-                    UpdateFile((XMLWriteFileObject)xmlWriteList);
+                    UpdateFile((XMLWriteFileObject)xmlWriteObject);
                     break;
             }
         }
@@ -305,6 +305,7 @@ namespace Syncless.CompareAndSync.Seamless
             string todoPath = Path.Combine(fullPath, CommonXMLConstants.LastKnownStatePath);
             CommonMethods.CreateLastKnownStateFile(fullPath);
             CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
+            CommonMethods.DoFileLastKnownCleanUp(xmlTodoDoc, xmlWriteObj.Name);
             AppendActionFileLastKnownState(xmlTodoDoc, xmlWriteObj, CommonXMLConstants.ActionDeleted, deletedNode);
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
         }
@@ -320,6 +321,7 @@ namespace Syncless.CompareAndSync.Seamless
             string todoPath = Path.Combine(parentPath, CommonXMLConstants.LastKnownStatePath);
             CommonMethods.CreateLastKnownStateFile(parentPath);
             CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
+            CommonMethods.DoFolderLastKnownCleanUp(xmlTodoDoc, xmlWriteObj.Name);
             AppendActionFolderLastKnownState(xmlTodoDoc, xmlWriteObj, CommonXMLConstants.ActionDeleted);
             CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
         }
