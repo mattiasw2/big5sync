@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - SynclessUI.Visitor
-#labels Phase-Implementation
+#labels Phase-Implementation,Deprecated
 #sidebar DeveloperAPISidebar
 
 = Interfaces Summary =
