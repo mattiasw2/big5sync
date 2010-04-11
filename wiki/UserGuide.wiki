@@ -83,13 +83,13 @@ Before you continue, you may want to find out what each button in Syncless does.
 
 === Window Toolbar ===
 
-  * http://big5sync.googlecode.com/files/Shortcut_Button.jpg : Displays the list of shortcut keys in Syncless
+  * http://big5sync.googlecode.com/files/ShortcutButton.png : Displays the list of shortcut keys in Syncless
 
-  * http://big5sync.googlecode.com/files/App_Settings_Button.jpg : Configure Syncless settings
+  * http://big5sync.googlecode.com/files/ApplicationSettingsButton.png : Configure Syncless settings
 
-  * http://big5sync.googlecode.com/files/Minimize_Button.jpg : Minimize Syncless main window
+  * http://big5sync.googlecode.com/files/MinimizeWindowButton.png : Minimize Syncless main window
 
-  * http://big5sync.googlecode.com/files/Exit_Button.jpg : Exit Syncless
+  * http://big5sync.googlecode.com/files/ExitWindowButton.png : Exit Syncless
 
 === Main Toolbar ===
 
@@ -197,7 +197,7 @@ As seen from the above, creating a filter is a simple and intuitive task in Sync
 
 == How to Configure Syncless? ==
 
-You can personalize Syncless through the http://big5sync.googlecode.com/files/App_Settings_Button.jpg button. After which, you will see a window with a list of settings.
+You can personalize Syncless through the http://big5sync.googlecode.com/files/ApplicationSettingsButton.png button. After which, you will see a window with a list of settings.
 
 http://big5sync.googlecode.com/files/Configure_Application_Settings.jpg
 
@@ -262,9 +262,9 @@ http://big5sync.googlecode.com/files/Zoom_In_Filter_Tag_List.jpg
 
 Syncless helps you to save time and increase productivity by providing keyboard shortcuts to the many commonly used operations. Below is the list of keyboard shortcuts provided by Syncless.
 
-http://big5sync.googlecode.com/files/Shortcut1.jpg
+http://big5sync.googlecode.com/files/Shortcut_Window.png
 
-If you forget the shortcut keys, simply go to http://big5sync.googlecode.com/files/Shortcut_Button.jpg at the window toolbar and view the list again.
+If you forget the shortcut keys, simply go to http://big5sync.googlecode.com/files/ShortcutButton.png at the window toolbar and view the list again.
 
 === Accessing Tags Through Right-clicking ===
 
