@@ -197,34 +197,45 @@ As seen from the above, creating a filter is a simple and intuitive task in Sync
 
 == How to Configure Syncless? ==
 
-You can personalize Syncless through the http://big5sync.googlecode.com/files/ApplicationSettingsButton.png button. After which, you will see a window with a list of settings.
+You can personalize Syncless through the http://big5sync.googlecode.com/files/ApplicationSettingsButton.png button. After which, you will see a window with two settings to choose from, *General and User Interface Settings* and *Archiving Settings*.
+
+=== General and User Interface Settings ===
 
 http://big5sync.googlecode.com/files/Application_Settings_Window.png
 
-=== *New* General and User Interface Settings ===
+==== Show Welcome Screen on Application Start ====
 
-==== *New* Show Welcome Screen on Application Start ====
+Syncless has a informative welcome screen which highlights the unique features of Syncless. Each feature has a link to the Synclses online User Guide where the feature is explained in more details. You can choose to show the welcome screen on startup by checking the *Show Welcome Screen on Application Start* option.
+
 
 ==== Enable Shell Integration ====
 
-Syncless makes tagging easy for you by integrating directly into Windows Explorer. You can simply right-click on any folder you wish to tag. In the case where you rather not have this function, you can deselect *Enable Shell Integration* in settings.
+Syncless makes tagging easy for you by integrating directly into Windows Explorer. You can simply right-click on any folder you wish to tag. In the case where you rather not have this function, you can uncheck the *Enable Shell Integration* option.
 
 
 ==== Enable Window Animation on Application Start/Exit ====
 
-Syncless's main window will animate upon start up or exit. You may choose to disable the function by deselecting the *Enable Window Animation on Application Start/Exit* checkbox.
+Syncless's main window will animate upon start up or exit. You may choose to disable the function by unchecking the *Enable Window Animation on Application Start/Exit* option.
+
 
 ==== Enable Tray Notification ====
 
-Syncless notifies you through tray notification upon initialization/completion of a synchronization. Enable or disable the function by deselecting the *Enable Tray Notification* checkbox.
+Syncless notifies you through tray notification upon initialization/completion of a synchronization. Enable/disable the function by checking/unchecking the *Enable Tray Notifications* option.
 
-==== *New* Enable Notification Sounds ====
+
+==== Enable Notification Sounds ====
+
+Syncless not only notifies you synchronization initialization/completion through tray notification. It also plays notification sounds to notify you when you are not viewing the screen. You are always updated of synchronization progress! Enable the function by checking the *Enable Notification Sounds* option.
+
 
 ==== When Minimizing, Minimize to Tray ====
 
-Syncless can minimize to tray so that your task bar will be kept as clean as possible. However, if you wish to access Syncless more quickly through the task bar, you can disable the function by deselecting the *When Minimizing, Minimize to Tray* checkbox.
+Syncless can minimize to tray so that your task bar will be kept as clean as possible. However, if you wish to access Syncless more quickly through the task bar, you can disable the function by unchecking the *When Minimizing, Minimize to Tray* option.
 
-==== *New* Attempt to Synchronize Computer Clock on Application Startup ====
+
+==== Attempt to Synchronize Computer Clock on Application Startup ====
+
+Worried that your files are out-of-sync because the system clocks are not consistent across your computers? Syncless provides the option of synchronizing your system clock with the Internet Time Server on startup so that the system clock is always consistent. Enable time synchronization by checking the *Attempt to Synchronize Computer Clock On Application Startup* option. Note that administrative right is required to synchronize your system clock.
 
 
 === Archiving Settings ===
@@ -235,11 +246,11 @@ http://big5sync.googlecode.com/files/Archiving_Option_Window.png
 
 ==== Send to Recycle Bin ====
 
-To send deleted files to Recycle Bin, simply check the http://big5sync.googlecode.com/files/Send_To_Recycle_Bin_Option.png option. Uncheck the option if you do not wish to send any file to Recycle Bin.
+To send deleted files to Recycle Bin, simply check the *Send to Recycle Bin* option. Uncheck the option if you do not wish to send any file to Recycle Bin.
 
 ==== Archive Last Changes ====
 
-To move deleted files to Syncless' archive folder (`_`synclessArchive), simply check the http://big5sync.googlecode.com/files/Move_To_Syncless_Archive_Option.png option. You can select up to 10 archive files to keep by moving the track bar. Uncheck the option if you do not wish to move any file to Syncless' archive folder.
+To move deleted files to Syncless' archive folder (`_`synclessArchive), simply check the *Move Last N Changes to `_`synclessArchive* option. You can select up to 10 archive files to keep by moving the track bar. Uncheck the option if you do not wish to move any file to Syncless' archive folder.
 
 == How is Syncless User-friendly? ==
 
