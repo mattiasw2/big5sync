@@ -333,6 +333,10 @@ http://big5sync.googlecode.com/files/Log_Window.png
 
 = Ending Note =
 
+http://big5sync.googlecode.com/files/Exit_Window_Message.png
+
+Thank you for taking time to read through the User Guide! We hope that you find it informative in guiding you through using Syncless' unique features.
+
 Please report any bugs you find to http://code.google.com/p/big5sync/issues/list, thank you! You may wish to take a look at http://code.google.com/p/big5sync/wiki/KnownIssues10 for the known bugs in version 1.0. You may also contact us at *_big5.syncless@gmail.com_*.
 
 Interested in what is coming after version 1.0? Take a look [http://code.google.com/p/big5sync/wiki/ComingSoon here]!
