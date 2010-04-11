@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - SynclessUI.Notification
-#labels Phase-Implementation
+#labels Phase-Implementation,Deprecated
 #sidebar DeveloperAPISidebar
 
 = Classes Summary =
