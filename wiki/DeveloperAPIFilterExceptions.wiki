@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - Syncless.Filters.Exceptions
-#labels Phase-Implementation,V2.0
+#labels Phase-Implementation,Deprecated
 #sidebar DeveloperGuideSidebar
 
 `[`*[DeveloperAPIFilter Prev - Syncless.Filters]* `|` *[DeveloperAPIHelper Next - Syncless.Helper]*`]`
