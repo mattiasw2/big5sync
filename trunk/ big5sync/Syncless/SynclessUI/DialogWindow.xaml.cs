@@ -2,14 +2,12 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Media;
-using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using SynclessUI.Helper;
-using SynclessUI.Properties;
 
 namespace SynclessUI
 {
@@ -18,24 +16,29 @@ namespace SynclessUI
     /// </summary>
     public partial class DialogWindow : Window
     {
-        private bool _closingAnimationNotCompleted = true;
+        private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
 
         public DialogWindow(Window parentWindow, string caption, string message, DialogType dt)
         {
             InitializeComponent();
 
-			try {				
-				if(dt != DialogType.Indeterminate) {
-					this.ShowInTaskbar = false;
-					this.Owner = parentWindow;
+            try
+            {
+                if (dt != DialogType.Indeterminate)
+                {
+                    this.ShowInTaskbar = false;
+                    this.Owner = parentWindow;
                     CannotBeClosed = false;
-				} else
-				{
-				    CannotBeClosed = true;
-				}
-			} catch(InvalidOperationException) {
-			}
-					
+                }
+                else
+                {
+                    CannotBeClosed = true;
+                }
+            }
+            catch (InvalidOperationException)
+            {
+            }
+
             Application.Current.Properties["DialogWindowChoice"] = false;
             LblCaption.Content = caption;
             TxtBlkMessageBoxText.Text = message;
@@ -67,7 +70,7 @@ namespace SynclessUI
                     Title = (string) LblCaption.Content;
                     ProgressBarTermination.IsEnabled = true;
                     ProgressBarTermination.Visibility = Visibility.Visible;
-					MinimizePanel.Visibility = Visibility.Visible;
+                    MinimizePanel.Visibility = Visibility.Visible;
                     break;
             }
 

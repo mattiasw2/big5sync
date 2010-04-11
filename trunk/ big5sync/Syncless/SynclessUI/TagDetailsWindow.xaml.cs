@@ -17,7 +17,7 @@ namespace SynclessUI
         private MainWindow _main;
         private string _tagname;
         private List<Filter> filters;
-        private bool _closingAnimationNotCompleted = true;
+        private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
 
         public TagDetailsWindow(MainWindow main, string tagname)
         {
@@ -58,15 +58,18 @@ namespace SynclessUI
                 if (f is ExtensionFilter)
                 {
                     var ef = (ExtensionFilter) f;
-                    
-					string mode = "";
-					
-                    if(ef.Mode == FilterMode.INCLUDE) {
-						mode = "[Inclusion] ";
-					} else if(ef.Mode == FilterMode.EXCLUDE) {
-						mode = "[Exclusion] ";
-					}
-						
+
+                    string mode = "";
+
+                    if (ef.Mode == FilterMode.INCLUDE)
+                    {
+                        mode = "[Inclusion] ";
+                    }
+                    else if (ef.Mode == FilterMode.EXCLUDE)
+                    {
+                        mode = "[Exclusion] ";
+                    }
+
                     generatedFilterStringList.Add(i + ". " + mode + " " + ef.Pattern);
                 }
                 i++;
@@ -102,11 +105,12 @@ namespace SynclessUI
             {
                 if (!_main.Gui.GetTag(_tagname).IsLocked)
                 {
-                    if(CheckRedundantFilters())
+                    if (CheckRedundantFilters())
                     {
                         DialogHelper.ShowError(this, "Duplicate Filters", "Please remove all duplicate filters.");
                         BtnOk.IsEnabled = true;
-                    } else
+                    }
+                    else
                     {
                         bool result = _main.Gui.UpdateFilterList(_tagname, filters);
                         Close();
@@ -201,8 +205,8 @@ namespace SynclessUI
                     f.Mode = FilterMode.INCLUDE;
                 else if (CmbBoxMode.SelectedIndex == 1)
                     f.Mode = FilterMode.EXCLUDE;
-				
-				PopulateFilterStringList(true);
+
+                PopulateFilterStringList(true);
             }
         }
 
@@ -223,17 +227,17 @@ namespace SynclessUI
 
         private void TxtBoxPattern_LostFocus(object sender, RoutedEventArgs e)
         {
-                if (ListFilters.SelectedIndex != -1)
+            if (ListFilters.SelectedIndex != -1)
+            {
+                Filter f = filters[ListFilters.SelectedIndex];
+                if (f is ExtensionFilter)
                 {
-                    Filter f = filters[ListFilters.SelectedIndex];
-                    if (f is ExtensionFilter)
-                    {
-                        var ef = (ExtensionFilter)f;
-                        ef.Pattern = TxtBoxPattern.Text;
-                    }
-
-                    PopulateFilterStringList(true);              
+                    var ef = (ExtensionFilter) f;
+                    ef.Pattern = TxtBoxPattern.Text;
                 }
+
+                PopulateFilterStringList(true);
+            }
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -257,14 +261,15 @@ namespace SynclessUI
             }
         }
 
-        private void TxtBoxPattern_PreviewLostKeyboardFocus(object sender, System.Windows.Input.KeyboardFocusChangedEventArgs e)
+        private void TxtBoxPattern_PreviewLostKeyboardFocus(object sender,
+                                                            System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
             if (TxtBoxPattern.Text.Trim() == string.Empty && BtnCancel != e.NewFocus)
-			{
-				e.Handled = true;
-                
-				DialogHelper.ShowError(this, "Extension Mask Cannot be Empty", "Please input a valid extension mask.");
-			}
+            {
+                e.Handled = true;
+
+                DialogHelper.ShowError(this, "Extension Mask Cannot be Empty", "Please input a valid extension mask.");
+            }
         }
     }
 }

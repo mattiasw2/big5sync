@@ -17,7 +17,7 @@ namespace SynclessUI
     {
         private DataTable _LogData;
         private MainWindow _main;
-        private bool _closingAnimationNotCompleted = true;
+        private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
         private bool _showApplicationLog = Settings.Default.ShowApplicationLog;
         private bool _showSynchronizationLog = Settings.Default.ShowSynchronizationLog;
         private bool _showFileSystemLog = Settings.Default.ShowFileSystemLog;
@@ -28,7 +28,7 @@ namespace SynclessUI
             _main = main;
             Owner = _main;
             ShowInTaskbar = false;
-            
+
             try
             {
                 InitDataTable();
@@ -37,7 +37,8 @@ namespace SynclessUI
             catch (LogFileCorruptedException)
             {
                 encounteredError = true;
-                DialogHelper.ShowError(this, "Log File Corrupted", "Stored log files have been corrupted and will be deleted.");
+                DialogHelper.ShowError(this, "Log File Corrupted",
+                                       "Stored log files have been corrupted and will be deleted.");
             }
             catch (UnhandledException)
             {
@@ -59,10 +60,10 @@ namespace SynclessUI
         private void InitDataTable()
         {
             _LogData = new DataTable();
-            _LogData.Columns.Add(new DataColumn("Category", typeof(string)));
-            _LogData.Columns.Add(new DataColumn("Event Type", typeof(string)));
-            _LogData.Columns.Add(new DataColumn("Message", typeof(string)));
-            _LogData.Columns.Add(new DataColumn("Timestamp", typeof(string)));
+            _LogData.Columns.Add(new DataColumn("Category", typeof (string)));
+            _LogData.Columns.Add(new DataColumn("Event Type", typeof (string)));
+            _LogData.Columns.Add(new DataColumn("Message", typeof (string)));
+            _LogData.Columns.Add(new DataColumn("Timestamp", typeof (string)));
         }
 
         public DataTable LogData
@@ -73,13 +74,13 @@ namespace SynclessUI
         private void PopulateLogData()
         {
             List<LogData> log = _main.Gui.ReadLog();
-            
+
             _LogData.Clear();
-			
+
             foreach (LogData l in log)
             {
                 DataRow row = _LogData.NewRow();
-                
+
                 string category = "";
                 string eventType = "";
 
@@ -187,41 +188,43 @@ namespace SynclessUI
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {   
+        {
             if (_closingAnimationNotCompleted)
             {
                 BtnOk.IsCancel = false;
-				this.IsHitTestVisible = false;
+                this.IsHitTestVisible = false;
                 e.Cancel = true;
                 FormFadeOut.Begin();
             }
         }
-		
-		private void SaveLogSettings() {;
-		    Settings.Default.ShowApplicationLog = _showApplicationLog;
-		    Settings.Default.ShowSynchronizationLog = _showSynchronizationLog;
-		    Settings.Default.ShowFileSystemLog = _showFileSystemLog;
+
+        private void SaveLogSettings()
+        {
+            ;
+            Settings.Default.ShowApplicationLog = _showApplicationLog;
+            Settings.Default.ShowSynchronizationLog = _showSynchronizationLog;
+            Settings.Default.ShowFileSystemLog = _showFileSystemLog;
 
             Settings.Default.Save();
-		}
+        }
 
         private void ChkBoxApplicationLog_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            _showApplicationLog = (bool)ChkBoxApplicationLog.IsChecked;
+            _showApplicationLog = (bool) ChkBoxApplicationLog.IsChecked;
             PopulateLogData();
             datagrid.UpdateLayout();
         }
 
         private void ChkBoxSynchronizationLog_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            _showSynchronizationLog = (bool)ChkBoxSynchronizationLog.IsChecked;
+            _showSynchronizationLog = (bool) ChkBoxSynchronizationLog.IsChecked;
             PopulateLogData();
             datagrid.UpdateLayout();
         }
 
         private void ChkBoxFileSystem_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            _showFileSystemLog = (bool)ChkBoxFileSystem.IsChecked;
+            _showFileSystemLog = (bool) ChkBoxFileSystem.IsChecked;
             PopulateLogData();
             datagrid.UpdateLayout();
         }
