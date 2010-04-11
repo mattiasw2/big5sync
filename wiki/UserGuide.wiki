@@ -74,6 +74,7 @@ When you run Syncless, you will be greeted with the main window, which allows yo
 
 http://big5sync.googlecode.com/files/Main_Window_Overview_Edited.jpg
 
+----
 
 = Getting Started =
 
@@ -192,6 +193,7 @@ Now, let us look at some real-world examples. For example, if you want to includ
 
 As seen from the above, creating a filter is a simple and intuitive task in Syncless.
 
+----
 
 = Continue to Explore Syncless =
 
@@ -327,6 +329,7 @@ Access the event log through the http://big5sync.googlecode.com/files/ViewLogBut
 
 http://big5sync.googlecode.com/files/Log_Window.png
 
+----
 
 = Ending Note =
 
