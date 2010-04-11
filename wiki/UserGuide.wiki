@@ -277,7 +277,7 @@ Let us say you have many tags in the tag list.
 
 http://big5sync.googlecode.com/files/Multiple_Tag_Names.png
 
-You want to filter out only tags related to your photo folders. Simply enter the word 'Photos' in the http://big5sync.googlecode.com/files/Search_Tag_Text_Box.jpg text box and only tag names containing 'Photos' will be displayed.
+You want to filter out only tags related to your photo folders. Simply enter the word 'Photos' in http://big5sync.googlecode.com/files/Search_Tag_Text_Box.png text box and only tag names containing 'Photos' will be displayed.
 
 http://big5sync.googlecode.com/files/Filtered_Tag_Names.png
 
