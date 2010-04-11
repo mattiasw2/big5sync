@@ -1,4 +1,4 @@
-#summary User's Guide : A Comprehensive Guide to Using Syncless
+#summary *Featured* - User's Guide : A Comprehensive Guide to Using Syncless
 #labels Phase-Implementation,Featured,V2.0
 #sidebar DeveloperGuideSidebar
 
