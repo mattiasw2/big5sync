@@ -270,6 +270,10 @@ Access the preview result window through the http://big5sync.googlecode.com/file
 
 http://big5sync.googlecode.com/files/Preview_Sync_Window.png
 
+The arrow indicates the direction of synchronization and type of operation to be performed. For instance, green arrow indicates that the file/folder is new in the destination. To find out what each arrow indicates, simply point your mouse over the arrow and read the tool tip.
+
+http://big5sync.googlecode.com/files/Sync_Preview_Arrow_Tool_Tip.png
+
 === Viewing Logs ===
 
 You do not have to remember the changes you have made to your folders and files. Syncless keeps a log of the changes in your folders and files and lets you view them easily.
