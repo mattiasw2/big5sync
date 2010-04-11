@@ -531,6 +531,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 string todoPath = Path.Combine(parentPath, CommonXMLConstants.LastKnownStatePath);
                 CommonMethods.CreateLastKnownStateFile(parentPath);
                 CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
+                CommonMethods.DoFileLastKnownCleanUp(xmlTodoDoc,file.Name);
                 AppendActionFileLastKnownState(xmlTodoDoc, file, i, CommonXMLConstants.ActionDeleted);
                 CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
             }
@@ -546,6 +547,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 string todoPath = Path.Combine(parentPath, CommonXMLConstants.LastKnownStatePath);
                 CommonMethods.CreateLastKnownStateFile(parentPath);
                 CommonMethods.LoadXML(ref xmlTodoDoc, todoPath);
+                CommonMethods.DoFolderLastKnownCleanUp(xmlTodoDoc, folder.Name);
                 AppendActionFolderLastKnownState(xmlTodoDoc, folder, CommonXMLConstants.ActionDeleted);
                 CommonMethods.SaveXML(ref xmlTodoDoc, todoPath);
             }
