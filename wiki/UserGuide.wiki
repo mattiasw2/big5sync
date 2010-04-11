@@ -209,7 +209,7 @@ http://big5sync.googlecode.com/files/Show_Welcome_Screen_Option.png
 Syncless has a informative welcome screen which highlights the unique features of Syncless. Each feature has a link to the Synclses online User Guide where the feature is explained in more details. You can choose to show the welcome screen on startup by checking the *Show Welcome Screen on Application Start* option.
 
 
-http://big5sync.googlecode.com/files/Enable_Shell_Integration_Option.png
+http://big5sync.googlecode.com/files/Enable_Shell_Integration_Option2.png
 
 Syncless makes tagging easy for you by integrating directly into Windows Explorer. You can simply right-click on any folder you wish to tag. In the case where you rather not have this function, you can uncheck the *Enable Shell Integration* option.
 
