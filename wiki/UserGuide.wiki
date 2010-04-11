@@ -314,6 +314,10 @@ http://big5sync.googlecode.com/files/Shortcut_Window.png
 
 If you forget the shortcut keys, simply go to http://big5sync.googlecode.com/files/ShortcutButton.png at the window toolbar and view the list again.
 
+=== Accessing Syncless Through Tray ===
+
+http://big5sync.googlecode.com/files/Access_Thru_Tray.png
+
 === Accessing Tags Through Right-clicking ===
 
 If you prefer right-clicking to clicking buttons, Syncless provides you the option to access your tags through context menu.
