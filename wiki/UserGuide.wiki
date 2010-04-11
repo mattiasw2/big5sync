@@ -172,7 +172,7 @@ Syncless cares about the safety of your removable drives. Unmonitoring will stop
 ==== Create a Filter ====
 Click the http://big5sync.googlecode.com/files/TagDetailsButton.png button in the toolbar to open up the tag properties panel. Inside the properties panel, choose the *Filtering* property. You should see a list of filters and it will likely be blank since no filters have been added yet.
 
-http://big5sync.googlecode.com/files/Tag_Configuration1.jpg
+http://big5sync.googlecode.com/files/Filtering.png
 
 Now, click on the http://big5sync.googlecode.com/files/Add_Filter_Button.jpg button to add a new filter. You can now set the "Ext. Mask" and the "Mode".
 
