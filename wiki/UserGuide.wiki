@@ -135,7 +135,7 @@ To synchronize 2 or more folders, you must first tag them with the same name. Th
 ==== Tagging from Syncless ==== 
 
 Tag a folder through the http://big5sync.googlecode.com/files/TagFolderButton.png button (You can also use the keyboard shortcut equivalent Ctrl-T.)
-    http://big5sync.googlecode.com/files/Tag_From_Syncless.jpg
+    http://big5sync.googlecode.com/files/Tag_Thru_Syncless.png
 
 ==== Drag-and-Drop Folder(s) into the Main Window ====
     http://big5sync.googlecode.com/files/Drag_And_Drop_Tag_Edited.jpg
