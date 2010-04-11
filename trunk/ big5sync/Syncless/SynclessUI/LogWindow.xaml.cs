@@ -18,35 +18,46 @@ namespace SynclessUI
         private DataTable _LogData;
         private MainWindow _main;
         private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
+
+        // Settings to decide if the particular log should be showed.
         private bool _showApplicationLog = Settings.Default.ShowApplicationLog;
         private bool _showSynchronizationLog = Settings.Default.ShowSynchronizationLog;
         private bool _showFileSystemLog = Settings.Default.ShowFileSystemLog;
 
+
+        /// <summary>
+        /// Initializes the LogWindow. LogWindow will not show upon any error during Initialization
+        /// </summary>
+        /// <param name="main">Reference of the Main Window</param>
         public LogWindow(MainWindow main)
         {
-            bool encounteredError = false;
+            bool encounteredInitError = false;
             _main = main;
+
+            // Sets up general window properties
             Owner = _main;
             ShowInTaskbar = false;
 
+            // Attemps to initialize and populate the Log DataTable
             try
             {
-                InitDataTable();
-                PopulateLogData();
+                InitializeLogDataTable();
+                PopulateLogDataTable();
             }
             catch (LogFileCorruptedException)
             {
-                encounteredError = true;
+                encounteredInitError = true;
                 DialogHelper.ShowError(this, "Log File Corrupted",
                                        "Stored log files have been corrupted and will be deleted.");
             }
             catch (UnhandledException)
             {
-                encounteredError = true;
+                encounteredInitError = true;
                 DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
 
-            if (!encounteredError)
+            // If no error, proceed on to display the window and its components
+            if (!encounteredInitError)
             {
                 InitializeComponent();
                 ChkBoxApplicationLog.IsChecked = _showApplicationLog;
@@ -57,7 +68,12 @@ namespace SynclessUI
             }
         }
 
-        private void InitDataTable()
+        #region LogDataTable
+
+        /// <summary>
+        /// Initializes the Log DataTable
+        /// </summary>
+        private void InitializeLogDataTable()
         {
             _LogData = new DataTable();
             _LogData.Columns.Add(new DataColumn("Category", typeof (string)));
@@ -66,17 +82,24 @@ namespace SynclessUI
             _LogData.Columns.Add(new DataColumn("Timestamp", typeof (string)));
         }
 
+        /// <summary>
+        /// Gets the Log DataTable
+        /// </summary>
         public DataTable LogData
         {
             get { return _LogData; }
         }
 
-        private void PopulateLogData()
+        /// <summary>
+        /// Populates the Log DataTable with data from the log file
+        /// </summary>
+        private void PopulateLogDataTable()
         {
             List<LogData> log = _main.Gui.ReadLog();
 
             _LogData.Clear();
 
+            // For each row in LogData, add to LogDataTable
             foreach (LogData l in log)
             {
                 DataRow row = _LogData.NewRow();
@@ -84,6 +107,7 @@ namespace SynclessUI
                 string category = "";
                 string eventType = "";
 
+                // Gets Log Category Information
                 switch (l.LogCategory)
                 {
                     case LogCategoryType.APPEVENT:
@@ -102,6 +126,7 @@ namespace SynclessUI
                         continue;
                 }
 
+                // Gets Log Event Information
                 switch (l.LogEvent)
                 {
                     case LogEventType.SYNC_STARTED:
@@ -169,6 +194,15 @@ namespace SynclessUI
             }
         }
 
+        #endregion
+
+        #region Command Panel
+
+        /// <summary>
+        /// Saves the Log Settings
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
             BtnOk.IsEnabled = false;
@@ -176,31 +210,11 @@ namespace SynclessUI
             Close();
         }
 
-        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
-        }
-
-        private void FormFadeOut_Completed(object sender, EventArgs e)
-        {
-            _closingAnimationNotCompleted = false;
-            Close();
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (_closingAnimationNotCompleted)
-            {
-                BtnOk.IsCancel = false;
-                this.IsHitTestVisible = false;
-                e.Cancel = true;
-                FormFadeOut.Begin();
-            }
-        }
-
+        /// <summary>
+        /// Saves logs options into Application Settings
+        /// </summary>
         private void SaveLogSettings()
         {
-            ;
             Settings.Default.ShowApplicationLog = _showApplicationLog;
             Settings.Default.ShowSynchronizationLog = _showSynchronizationLog;
             Settings.Default.ShowFileSystemLog = _showFileSystemLog;
@@ -208,27 +222,98 @@ namespace SynclessUI
             Settings.Default.Save();
         }
 
+        #endregion
+
+        #region General Window Components & Related Events
+
+        /// <summary>
+        /// Event handler for Canvas_MouseLeftButtonDown event. Allows user to drag the canvas.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        /// <summary>
+        /// On closing animation complete, set the boolean to false and closes the window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FormFadeOut_Completed(object sender, EventArgs e)
+        {
+            _closingAnimationNotCompleted = false;
+            Close();
+        }
+
+        /// <summary>
+        /// Event handler for Window_Closing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_closingAnimationNotCompleted)
+            {
+                BtnOk.IsCancel = false;
+                IsHitTestVisible = false;
+                e.Cancel = true;
+                FormFadeOut.Begin();
+            }
+        }
+
+        #endregion
+
+        #region LogDataGrid & Related Components
+
+        /// <summary>
+        /// Saves log options and repopulates datagrid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChkBoxApplicationLog_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             _showApplicationLog = (bool) ChkBoxApplicationLog.IsChecked;
-            PopulateLogData();
-            datagrid.UpdateLayout();
+            PopulatesDataGrid();
         }
 
+        /// <summary>
+        /// Saves log options and repopulates datagrid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChkBoxSynchronizationLog_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             _showSynchronizationLog = (bool) ChkBoxSynchronizationLog.IsChecked;
-            PopulateLogData();
-            datagrid.UpdateLayout();
+            PopulatesDataGrid();
         }
 
+        /// <summary>
+        /// Saves log options and repopulates datagrid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChkBoxFileSystem_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             _showFileSystemLog = (bool) ChkBoxFileSystem.IsChecked;
-            PopulateLogData();
+            PopulatesDataGrid();
+        }
+
+        /// <summary>
+        /// Repopulates the datagrid and updates its layout
+        /// </summary>
+        private void PopulatesDataGrid()
+        {
+            PopulateLogDataTable();
             datagrid.UpdateLayout();
         }
 
+        /// <summary>
+        /// Clear the current log file and the datagrid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnClearLog_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             try
@@ -242,5 +327,7 @@ namespace SynclessUI
                 DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
         }
+
+        #endregion
     }
 }

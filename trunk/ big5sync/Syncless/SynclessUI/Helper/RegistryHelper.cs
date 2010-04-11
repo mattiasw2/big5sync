@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Microsoft.Win32;
 
 namespace SynclessUI.Helper
@@ -8,52 +7,26 @@ namespace SynclessUI.Helper
     {
         private static string _appPath;
 
+        #region Registry Creation
         /// <summary>
-        /// Create the context Menu for Syncless
+        /// Modifies the Registry to Enable Syncless Shell Integration, by creating registry keys/values
         /// </summary>
-        /// <param name="path">The location of Syncless</param>
+        /// <param name="path">Location of Syncless Executable</param>
         public static void CreateRegistry(string path)
         {
             _appPath = path;
 
-            try
-            {
-                RegistryKey tagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessTag");
-                tagKey.SetValue(null, "Syncless - Tag");
-            }
-            catch
-            {
-            }
+            CreateTagRegistryKey(path);
+            CreateUntagRegistryKey(path);
+            CreateCleanMetaDataRegistryKey(path);
+        }
 
-            try
-            {
-                RegistryKey tagKeyCommand =
-                    Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessTag\command");
-                tagKeyCommand.SetValue(null, path + " -TFolder %1");
-            }
-            catch
-            {
-            }
-
-            try
-            {
-                RegistryKey untagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessUntag");
-                untagKey.SetValue(null, "Syncless - Untag");
-            }
-            catch
-            {
-            }
-
-            try
-            {
-                RegistryKey untagKeyCommand =
-                    Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessUntag\command");
-                untagKeyCommand.SetValue(null, path + " -UTFolder %1");
-            }
-            catch
-            {
-            }
-
+        /// <summary>
+        /// // Creates the Clean Meta Data Registry Entry, only if debug mode is on
+        /// </summary>
+        /// <param name="path">Location of Syncless Executable</param>
+        private static void CreateCleanMetaDataRegistryKey(string path)
+        {
             if (CheckDebugModeOn())
             {
                 try
@@ -62,9 +35,7 @@ namespace SynclessUI.Helper
                         Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessClean");
                     cleanKey.SetValue(null, "Syncless - Clean");
                 }
-                catch
-                {
-                }
+                catch { }
 
                 try
                 {
@@ -72,12 +43,58 @@ namespace SynclessUI.Helper
                         Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessClean\command");
                     cleanKeyCommand.SetValue(null, path + " -CleanMeta %1");
                 }
-                catch
-                {
-                }
+                catch { }
             }
         }
 
+        /// <summary>
+        /// Creates the Untag Registry Entry
+        /// </summary>
+        /// <param name="path">Location of Syncless Executable</param>
+        private static void CreateUntagRegistryKey(string path)
+        {
+            try
+            {
+                RegistryKey untagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessUntag");
+                untagKey.SetValue(null, "Syncless - Untag");
+            }
+            catch { }
+
+            try
+            {
+                RegistryKey untagKeyCommand =
+                    Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessUntag\command");
+                untagKeyCommand.SetValue(null, path + " -UTFolder %1");
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// Creates the Tag Registry Entry
+        /// </summary>
+        /// <param name="path">Location of Syncless Executable</param>
+        private static void CreateTagRegistryKey(string path)
+        {
+            try
+            {
+                RegistryKey tagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessTag");
+                tagKey.SetValue(null, "Syncless - Tag");
+            }
+            catch { }
+
+            try
+            {
+                RegistryKey tagKeyCommand =
+                    Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessTag\command");
+                tagKeyCommand.SetValue(null, path + " -TFolder %1");
+            }
+            catch { }
+        } 
+        #endregion
+
+        /// <summary>
+        /// Removes Tag/Untag registry keys and Clean Meta Data if debug mode is on
+        /// </summary>
         public static void RemoveRegistry()
         {
             try
@@ -108,6 +125,10 @@ namespace SynclessUI.Helper
             }
         }
 
+        /// <summary>
+        /// Checks if the debug file is in the application folder
+        /// </summary>
+        /// <returns></returns>
         public static bool CheckDebugModeOn()
         {
             FileInfo fi1 = null;
