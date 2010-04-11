@@ -204,7 +204,7 @@ You can personalize Syncless through the http://big5sync.googlecode.com/files/Ap
 http://big5sync.googlecode.com/files/Application_Settings_Window.png
 
 
-==== Show Welcome Screen on Application Start
+==== Show Welcome Screen on Application Start ====
 
 Syncless has a informative welcome screen which highlights the unique features of Syncless. Each feature has a link to the Synclses online User Guide where the feature is explained in more details. You can choose to show the welcome screen on startup by checking the option.
 
