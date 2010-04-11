@@ -1,4 +1,4 @@
-#summary List of changes in different version
+#summary *Featured* - List of changes in different version
 #labels Featured
 
 = Changelog for version _1.5_ =
