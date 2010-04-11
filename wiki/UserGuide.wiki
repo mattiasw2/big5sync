@@ -149,7 +149,7 @@ After tagging the folders, you may view the details under the tag information pa
 === 3. Synchronize the Folders ===
     http://big5sync.googlecode.com/files/Sync_Complete.jpg
 
-After you have tagged the required folders, click on the http://big5sync.googlecode.com/files/Sync_Now_Button.jpg button. Syncless will take care of the rest and keep the folders in sync.
+After you have tagged the required folders, click on the http://big5sync.googlecode.com/files/Sync_Now_Button.png button. Syncless will take care of the rest and keep the folders in sync.
 
 === 4. Switch to Seamless Mode ===
 
