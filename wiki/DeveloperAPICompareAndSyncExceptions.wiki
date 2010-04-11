@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - Syncless.CompareAndSync.Exceptions
-#labels Phase-Implementation,V2.0
+#labels Phase-Implementation,Deprecated
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPICompareAndSyncEnum Prev - Syncless.CompareAndSync.Enum]* `|` *[DeveloperAPICompareAndSyncManual Next - Syncless.CompareAndSync.Manual]*`]`
