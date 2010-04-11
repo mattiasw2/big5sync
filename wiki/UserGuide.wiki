@@ -138,10 +138,10 @@ Tag a folder through the http://big5sync.googlecode.com/files/TagFolderButton.pn
     http://big5sync.googlecode.com/files/Tag_Thru_Syncless.png
 
 ==== Drag-and-Drop Folder(s) into the Main Window ====
-    http://big5sync.googlecode.com/files/Drag_And_Drop_Tag_Edited.jpg
+    http://big5sync.googlecode.com/files/Drag_And_Drop_Tag.png
 
 ==== Tag Directly from Windows Explorer ====
-    http://big5sync.googlecode.com/files/Tag_From_Context_Menu_Edited.png
+    http://big5sync.googlecode.com/files/Context_Menu_Tag.png
 
 === 2. View Tag Information ===
     http://big5sync.googlecode.com/files/Tag_Info_Panel_Edited.jpg
@@ -155,9 +155,9 @@ After you have tagged the required folders, click on the http://big5sync.googlec
 
 === 4. Switch to Seamless Mode ===
 
-http://big5sync.googlecode.com/files/Switching_To_Seamless.jpg
+http://big5sync.googlecode.com/files/Switching_To_Seamless_Window.png
 
-Switching to seamless mode is a simple matter of pressing the button. After clicking the synchronization mode button, Syncless will automatically perform an initial synchronization. After which, it will monitor any changes in the tagged folders and keep them in sync without you having to do it manually.
+Switching to seamless mode is a simple matter of pressing the button. After clicking the synchronization mode button, Syncless will automatically perform an initial synchronization. At the moment, http://big5sync.googlecode.com/files/Please_Wait_Button.png button is shown to indicate that switching is in progress. After which, it will monitor any changes in the tagged folders and keep them in sync without you having to do it manually.
 
 === 5. Unmonitor Removable Drive to Prepare for Removal ===
 
