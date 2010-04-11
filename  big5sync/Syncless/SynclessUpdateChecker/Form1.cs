@@ -25,10 +25,10 @@ namespace SynclessUpdateChecker
             switch (newUpdate)
             {
                 case 0:
-                    MessageBox.Show("New Update!" + "\n" + updateChecker.GetUpdateUrl);
-                    break;
-                case 1:
                     MessageBox.Show("You Are Currently Running The Latest Version!");
+                    break;
+                case 1:                   
+                    MessageBox.Show("New Update!" + "\n" + updateChecker.GetUpdateUrl);
                     break;
                 case -1:
                     MessageBox.Show("Error!");
