@@ -55,13 +55,11 @@ For example, a student has a home computer, as well as a regular workstation in 
 
 http://big5sync.googlecode.com/files/merging.png
 
-[#Table_of_Content Back to top]
 
 == What is a Tag? ==
 
 The concept of *tagging* is not uncommon today. In Syncless's context, it is simply an identity or a label associated with folders you want to keep in sync. Associate several folders to the same tag name, and Syncless will keep them all in sync for you. It is as simple as that. You simply tag the folders you want to keep in sync, and Syncless will handle everything else. We will discuss the various ways of tagging folders in the subsequent section of this tutorial.
 
-[#Table_of_Content Back to top]
 
 == What You'll Need ==
 Before continuing, make sure you have the following:
@@ -70,14 +68,12 @@ Before continuing, make sure you have the following:
 
 To download Syncless, please visit http://code.google.com/p/big5sync/downloads/list to get the latest version (ver 1.0) of Syncless. After that, unzip the package to a location of your choice and run SynclessUI.exe. Absolutely no installation of Syncless is required.
 
-[#Table_of_Content Back to top]
 
 == The Syncless Interface ==
 When you run Syncless, you will be greeted with the main window, which allows you to choose what you want to do next, such as creating a tag, tagging a folder or viewing tag details. The interface also incorporates a lot of useful shortcuts to speed up productivity.
 
 http://big5sync.googlecode.com/files/Main_Window_Overview_Edited.jpg
 
-[#Table_of_Content Back to top]
 
 = Getting Started =
 
@@ -123,7 +119,6 @@ Before you continue, you may want to find out what each button in Syncless does.
 
   * http://big5sync.googlecode.com/files/Sync_Now_Button.jpg : Start synchronization for currently selected tag, only available in manual mode
 
-[#Table_of_Content Back to top]
 
 == How to Tag and Synchronize? ==
 
@@ -193,7 +188,6 @@ Now, let us look at some real-world examples. For example, if you want to includ
 
 As seen from the above, creating a filter is a simple and intuitive task in Syncless.
 
-[#Table_of_Content Back to top]
 
 = Continue to Explore Syncless =
 
@@ -228,7 +222,6 @@ Syncless can minimize to tray so that your task bar will be kept as clean as pos
 
 ==== *New* Attempt to Synchronize Computer Clock on Application Startup ====
 
-[#Table_of_Content Back to top]
 
 === *New* Archiving Settings ===
 
@@ -236,7 +229,6 @@ Syncless can minimize to tray so that your task bar will be kept as clean as pos
 
 ==== *New* Archive Last Changes ====
 
-[#Table_of_Content Back to top]
 
 == How is Syncless User-friendly? ==
 
@@ -304,7 +296,6 @@ Access the event log through the http://big5sync.googlecode.com/files/ViewLogBut
 
 http://big5sync.googlecode.com/files/Log_Panel.jpg
 
-[#Table_of_Content Back to top]
 
 = Ending Note =
 
