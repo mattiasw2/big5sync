@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - Syncless.CompareAndSync.Seamless
-#labels Phase-Implementation,V2.0
+#labels Phase-Implementation,Deprecated
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPICompareAndSyncRequest Prev - Syncless.CompareAndSync.Request]* `|` *[DeveloperAPICompareAndSyncSeamlessXMLWriteObject Next - Syncless.CompareAndSync.Seamless.XMLWriteObject]*`]`
