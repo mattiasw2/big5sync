@@ -1,5 +1,5 @@
 #summary Developers' Guide - API - Syncless.Profiling.Exceptions
-#labels Phase-Implementation,V2.0
+#labels Phase-Implementation,Deprecated
 #sidebar DeveloperAPISidebar
 
 `[`*[DeveloperAPIProfiling Prev - Syncless.Profiling]* `|` *[DeveloperAPITagging Next - Syncless.Tagging]*`]`
