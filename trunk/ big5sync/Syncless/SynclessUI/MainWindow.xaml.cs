@@ -726,6 +726,7 @@ namespace SynclessUI
             catch (UnhandledException)
             {
                 DialogHelper.DisplayUnhandledExceptionMessage(this);
+                return false;
             }
 
             return true;
