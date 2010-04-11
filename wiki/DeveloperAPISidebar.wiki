@@ -1,5 +1,5 @@
 #summary Developers' API - Quick Navigation
-#labels Phase-Implementation
+#labels Phase-Implementation,Deprecated
 
   * Syncless Namespaces
     * [DeveloperAPICompareAndSync CompareAndSync]
