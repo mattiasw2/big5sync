@@ -1,5 +1,5 @@
 #summary User's Guide : A Comprehensive Guide to Using Syncless
-#labels Phase-Implementation,Featured
+#labels Phase-Implementation,Featured,V2.0
 #sidebar DeveloperGuideSidebar
 
 http://big5sync.googlecode.com/files/mainpagelogosmall.png
@@ -112,7 +112,7 @@ Before you continue, you may want to find out what each button in Syncless does.
 
   * http://big5sync.googlecode.com/files/Seamless_Mode_Button.jpg : Indicates that the current synchronization is in seamless mode, click to switch to manual mode
 
-  * http://big5sync.googlecode.com/files/Sync_Preview_Button.jpg : Preview synchronization result, only available in manual mode (currently not implemented in version 1.0)
+  * http://big5sync.googlecode.com/files/Sync_Preview_Button.jpg : Preview synchronization result, only available in manual mode
 
   * http://big5sync.googlecode.com/files/Sync_Now_Button.jpg : Start synchronization for currently selected tag, only available in manual mode
 
