@@ -19,18 +19,27 @@ namespace SynclessUI
         private List<Filter> filters;
         private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
 
+        /// <summary>
+        /// Initializes the Tag Details Window
+        /// </summary>
+        /// <param name="main">Reference to the Main Window</param>
+        /// <param name="tagname">Tag to show in the Details Window</param>
         public TagDetailsWindow(MainWindow main, string tagname)
         {
             try
             {
                 InitializeComponent();
                 _main = main;
+                _tagname = tagname;
+
+                // Sets up general window properties
                 Owner = _main;
                 ShowInTaskbar = false;
-                _tagname = tagname;
-                LblTag_Details.Content = "Tag Details for " + _tagname;
+
+                // Sets up all components to their default state
                 filters = _main.Gui.GetAllFilters(_tagname);
                 PopulateFilterStringList(false);
+                LblTag_Details.Content = "Tag Details for " + _tagname;
                 TxtBoxPattern.IsEnabled = false;
                 CmbBoxMode.IsEnabled = false;
             }
@@ -38,6 +47,27 @@ namespace SynclessUI
             {
                 DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
+        }
+
+        /// <summary>
+        /// Event handler for Canvas_MouseLeftButtonDown event. Allows user to drag the canvas.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        /// <summary>
+        /// On closing animation complete, set the boolean to false and closes the window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FormFadeOut_Completed(object sender, EventArgs e)
+        {
+            _closingAnimationNotCompleted = false;
+            Close();
         }
 
         private void PopulateFilterStringList(bool selectoriginal)
@@ -195,6 +225,12 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Event handler for CmbBoxMode_SelectionChanged. If the mode changes, update the corresponding filter
+        /// and repopulate the UI filter list.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CmbBoxMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ListFilters.SelectedIndex != -1 && ListFilters.SelectedIndex <= filters.Count)
@@ -210,21 +246,21 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Event handler for TabItemFiltering_GotFocus. If tabitem gets focus, shows the filter grid on the RHS
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TabItemFiltering_GotFocus(object sender, RoutedEventArgs e)
         {
             SpecificFilterGrid.Visibility = Visibility.Visible;
         }
 
-        private void TabItemProperties_GotFocus(object sender, RoutedEventArgs e)
-        {
-            SpecificFilterGrid.Visibility = Visibility.Hidden;
-        }
-
-        private void TabItemVersioning_GotFocus(object sender, RoutedEventArgs e)
-        {
-            SpecificFilterGrid.Visibility = Visibility.Hidden;
-        }
-
+        /// <summary>
+        /// Event handler for TxtBoxPattern_LostFocus. Updates the filterlist and repopulates the corresponding UI ListBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TxtBoxPattern_LostFocus(object sender, RoutedEventArgs e)
         {
             if (ListFilters.SelectedIndex != -1)
@@ -240,17 +276,11 @@ namespace SynclessUI
             }
         }
 
-        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
-        }
-
-        private void FormFadeOut_Completed(object sender, EventArgs e)
-        {
-            _closingAnimationNotCompleted = false;
-            Close();
-        }
-
+        /// <summary>
+        /// Event handler for Window_Closing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (_closingAnimationNotCompleted)
@@ -261,6 +291,12 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Event Handler for TxtBoxPattern_PreviewLostKeyboardFocus. Detects if pattern is empty, and stops users from
+        /// changing focus.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TxtBoxPattern_PreviewLostKeyboardFocus(object sender,
                                                             System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {

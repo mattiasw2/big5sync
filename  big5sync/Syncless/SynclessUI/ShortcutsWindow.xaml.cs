@@ -15,7 +15,7 @@ namespace SynclessUI
         /// <summary>
         /// Initializes the ShortcutsWindow
         /// </summary>
-        /// <param name="main">Reference of the Main Window</param>
+        /// <param name="main">Reference to the Main Window</param>
         public ShortcutsWindow(MainWindow main)
         {
             InitializeComponent();
