@@ -36,7 +36,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 return;
 
             DetectFileRename(file, numOfPaths);
-            //DetectFileRenameAndUpdate(file, numOfPaths);
             CompareFiles(file, numOfPaths);
             _totalNodes++;
         }
@@ -142,55 +141,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
 
         }
-
-/*
-        private static void DetectFileRenameAndUpdate(FileCompareObject file, int numOfPaths)
-        {
-            //Get a Delete type
-            //1. Find something that is New and has the same creation time
-            //2. Check that the New is null for all other indexes
-            //3. If above is verified, check that Delete is NoChange or null for all other indexes
-            //4. If all is verified, set the ChangeType to New.
-
-            FileCompareObject f = null;
-            List<int> indexes = new List<int>();
-
-            for (int i = 0; i < numOfPaths; i++)
-            {
-                // ReSharper disable PossibleNullReferenceException
-                if (file.ChangeType[i].HasValue && file.ChangeType[i] == MetaChangeType.Delete)
-                    // ReSharper restore PossibleNullReferenceException
-                    indexes.Add(i);
-                else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType != null)
-                    return;
-            }
-
-            if (indexes.Count < 1)
-                return;
-
-            for (int i = 0; i < indexes.Count; i++)
-            {
-                f = file.Parent.GetSameCreationTimeUtc(file.MetaCreationTimeUtc[indexes[i]], indexes[i]);
-
-                if (f != null && f.ChangeType[indexes[i]] == MetaChangeType.New)
-                {
-                    bool found = true;
-                    for (int j = 0; j < f.ChangeType.Length; j++)
-                    {
-                        if (j != indexes[i] && f.ChangeType[j] != null)
-                        {
-                            found = false;
-                            break;
-                        }
-                    }
-
-                    if (found)
-                        file.ChangeType[indexes[i]] = null; //TODO: Unchanged?
-                }
-            }
-
-        }
-*/
 
         /// <summary>
         /// Compares files to propagate updates and creations.
@@ -311,7 +261,6 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     {
                         //Conflict
                         file.Priority[i] = file.Priority[mostUpdatedPos] - 1;
-                        file.FinalState[i] = FinalState.Conflict;
                         file.ConflictPositions.Add(i);
                         ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CONFLICT, "Conflicted file detected " + Path.Combine(file.GetSmartParentPath(i), file.Name)));
                     }

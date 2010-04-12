@@ -39,10 +39,10 @@ namespace Syncless.CompareAndSync.Manual
             // Analyzing
             progress.ChangeToAnalyzing();
             List<string> typeConflicts = new List<string>();
-            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters, typeConflicts,progress), progress);
+            CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters, typeConflicts, progress), progress);
             if (progress.State == SyncState.Cancelled)
             {
-                ServiceLocator.UIPriorityQueue().Enqueue(new CancelSyncNotification(request.TagName,true));
+                ServiceLocator.UIPriorityQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
                 return null;
             }
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), progress);
@@ -111,7 +111,7 @@ namespace Syncless.CompareAndSync.Manual
             filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ArchiveName));
             filters.Add(FilterFactory.CreateArchiveFilter(request.Config.ConflictDir));
             RootCompareObject rco = new RootCompareObject(request.Paths);
-            
+
             List<string> typeConflicts = new List<string>();
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters, typeConflicts, progress), progress);
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), progress);
@@ -127,30 +127,7 @@ namespace Syncless.CompareAndSync.Manual
         {
             foreach (string s in typeConflicts)
             {
-                if (Directory.Exists(s))
-                {
-                    DirectoryInfo info = new DirectoryInfo(s);
-                    // ReSharper disable PossibleNullReferenceException
-                    string conflictPath = Path.Combine(info.Parent.FullName, config.ConflictDir);
-                    // ReSharper restore PossibleNullReferenceException
-                    if (!Directory.Exists(conflictPath))
-                        Directory.CreateDirectory(conflictPath);
-                    string dest = Path.Combine(conflictPath, info.Name);
-
-                    try
-                    {
-                        CommonMethods.CopyDirectory(s, dest);
-                        CommonMethods.DeleteFolder(s);
-                    }
-                    catch (CopyFolderException)
-                    {
-                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error copying folder: " + s + " to " + dest));
-                    }
-                    catch (DeleteFolderException)
-                    {
-                    }
-                }
-                else if (File.Exists(s))
+                if (File.Exists(s))
                 {
                     FileInfo info = new FileInfo(s);
                     // ReSharper disable AssignNullToNotNullAttribute
@@ -158,7 +135,8 @@ namespace Syncless.CompareAndSync.Manual
                     // ReSharper restore AssignNullToNotNullAttribute
                     if (!Directory.Exists(conflictPath))
                         Directory.CreateDirectory(conflictPath);
-                    string dest = Path.Combine(conflictPath, info.Name);
+                    string currTime = String.Format("{0:MMddHHmmss}", DateTime.Now) + "_";
+                    string dest = Path.Combine(conflictPath, currTime + info.Name);
 
                     try
                     {
