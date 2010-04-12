@@ -1481,7 +1481,9 @@ namespace Syncless.Core
         {
             SyncConfig.Instance = config; 
         }
-
+        /// <summary>
+        /// Check if any drive is not detected by syncless and update them into the system.
+        /// </summary>
         public void UpdateAllDrive()
         {
             try
