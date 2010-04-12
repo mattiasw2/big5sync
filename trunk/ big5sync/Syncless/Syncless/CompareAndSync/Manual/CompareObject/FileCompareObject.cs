@@ -9,13 +9,15 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
     public class FileCompareObject : BaseCompareObject
     {
         //Actual file information
-        private string[] _hash;
-        private long[] _length, _lastWriteTimeUtc;
-        private List<int> _conflictPos; //Stores a list of conflicted files
+        private string[] _hash; // Array to store the hash of each file.
+        private long[] _length; // Array to store the length/size of each file.
+        private long[] _lastWriteTimeUtc; // Array to store the last write/modified time of each file.
+        private List<int> _conflictPos; //Stores a list of conflicted files.
 
         //Metadata file information
-        private string[] _metaHash;
-        private long[] _metaLength, _metaLastWriteTimeUtc;
+        private string[] _metaHash; // Array to store the hash of each file based on metadata.
+        private long[] _metaLength; // Array to store the length/size of each file based on metadata.
+        private long[] _metaLastWriteTimeUtc; // Array to store the last write time of each file based on metadata.
 
         /// <summary>
         /// Initializes a <c>FileCompareObject</c> given the name of the file, the number of paths to synchronize, and the parent of this file.

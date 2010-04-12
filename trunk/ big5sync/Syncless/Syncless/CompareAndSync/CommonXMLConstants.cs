@@ -1,48 +1,48 @@
 ﻿namespace Syncless.CompareAndSync
 {
-    public static class CommonXMLConstants
+    internal static class CommonXMLConstants
     {
         //XML Paths
-        public const string MetaDir = ".syncless";
-        public const string XMLName = "syncless.xml";
-        public const string LastKnownStateName = "lastknownstate.xml";
-        public const string MetadataPath = MetaDir + "\\" + XMLName;
-        public const string LastKnownStatePath = MetaDir + "\\" + LastKnownStateName;
+        internal const string MetaDir = ".syncless";
+        internal const string XMLName = "syncless.xml";
+        internal const string LastKnownStateName = "lastknownstate.xml";
+        internal const string MetadataPath = MetaDir + "\\" + XMLName;
+        internal const string LastKnownStatePath = MetaDir + "\\" + LastKnownStateName;
 
         //XML Metadata (syncless.xml)
-        public const string NodeMetaData = "meta-data";
-        public const string NodeName = "name";
-        public const string NodeSize = "size";
-        public const string NodeHash = "hash";
-        public const string NodeLastCreatedUtc = "last_created_utc";
+        internal const string NodeMetaData = "meta-data";
+        internal const string NodeName = "name";
+        internal const string NodeSize = "size";
+        internal const string NodeHash = "hash";
+        internal const string NodeLastCreatedUtc = "last_created_utc";
 
         //Last Known State Metadata (lastknownstate.xml)
-        public const string NodeLastKnownState = "last_known_state";
-        public const string NodeAction = "action";
-        public const string ActionDeleted = "deleted";
+        internal const string NodeLastKnownState = "last_known_state";
+        internal const string NodeAction = "action";
+        internal const string ActionDeleted = "deleted";
 
         //Common Elements in Metadatas
-        public const string NodeFolder = "folder";
-        public const string NodeFile = "file";
-        public const string NodeLastModifiedUtc = "last_modified_utc";
-        public const string NodeLastUpdatedUtc = "last_updated_utc";
+        internal const string NodeFolder = "folder";
+        internal const string NodeFile = "file";
+        internal const string NodeLastModifiedUtc = "last_modified_utc";
+        internal const string NodeLastUpdatedUtc = "last_updated_utc";
         
         //XML Metadata XPath (syncless.xml)
-        public const string XPathExpr = "/meta-data";
-        public const string XPathName = "/" + NodeName;
-        public const string XPathSize = "/" + NodeSize;
-        public const string XPathHash = "/" + NodeHash;
-        public const string XPathLastCreated = "/" + NodeLastCreatedUtc;
+        internal const string XPathExpr = "/meta-data";
+        internal const string XPathName = "/" + NodeName;
+        internal const string XPathSize = "/" + NodeSize;
+        internal const string XPathHash = "/" + NodeHash;
+        internal const string XPathLastCreated = "/" + NodeLastCreatedUtc;
 
         //Last Known State Metadata XPath
-        public const string XPathLastKnownState = "/" + NodeLastKnownState;
-        public const string XPathAction = "/" + NodeAction;
+        internal const string XPathLastKnownState = "/" + NodeLastKnownState;
+        internal const string XPathAction = "/" + NodeAction;
 
         //Common XPath
-        public const string XPathFolder = "/" + NodeFolder;
-        public const string XPathFile = "/" + NodeFile;
-        public const string XPathLastModified = "/" + NodeLastModifiedUtc;
-        public const string XPathLastUpdated = "/" + NodeLastUpdatedUtc;
+        internal const string XPathFolder = "/" + NodeFolder;
+        internal const string XPathFile = "/" + NodeFile;
+        internal const string XPathLastModified = "/" + NodeLastModifiedUtc;
+        internal const string XPathLastUpdated = "/" + NodeLastUpdatedUtc;
 
     }
 
