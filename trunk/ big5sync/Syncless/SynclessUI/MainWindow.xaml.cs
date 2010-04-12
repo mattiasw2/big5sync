@@ -723,10 +723,9 @@ namespace SynclessUI
                     return false;
                 }
             }
-            catch (UnhandledException)
+            catch (UnhandledException ue)
             {
-                DialogHelper.DisplayUnhandledExceptionMessage(this);
-                return false;
+                throw ue;
             }
 
             return true;

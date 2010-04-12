@@ -28,7 +28,7 @@ namespace SynclessUI
         /// <summary>
         /// Initializes the LogWindow. LogWindow will not show upon any error during Initialization
         /// </summary>
-        /// <param name="main">Reference of the Main Window</param>
+        /// <param name="main">Reference to the Main Window</param>
         public LogWindow(MainWindow main)
         {
             bool encounteredInitError = false;

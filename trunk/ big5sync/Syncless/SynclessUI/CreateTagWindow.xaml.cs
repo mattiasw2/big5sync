@@ -17,7 +17,7 @@ namespace SynclessUI
         /// <summary>
         /// Initializes the CreateTagWindow
         /// </summary>
-        /// <param name="main">Reference of the Main Window</param>
+        /// <param name="main">Reference to the Main Window</param>
         public CreateTagWindow(MainWindow main)
         {
             InitializeComponent();
@@ -29,7 +29,7 @@ namespace SynclessUI
             ShowInTaskbar = false;
         }
 
-        #region MyRegion
+        #region Command Panel
         
         /// <summary>
         /// Event handler for BtnOk_Click event. Creates tag based on specified tag name.
@@ -45,25 +45,21 @@ namespace SynclessUI
                 string tagName = TxtBoxTagName.Text.Trim();
 
                 // Check for empty tagname
-                if (tagName != string.Empty)
-                {
-                    bool tagNotExist = _main.CreateTag(tagName);
-
-                    if (!tagNotExist)
-                    {
-                        DialogHelper.ShowError(this, "Tag Already Exist", "Please specify another tagname.");
-                        BtnOk.IsEnabled = true;
-                    }
-                    else
-                    {
-                        Close();
-                    }
-                }
-                else
-                {
+                if (tagName == string.Empty) {
                     DialogHelper.ShowError(this, "Tagname Empty", "Please specify a tagname.");
                     BtnOk.IsEnabled = true;
+                    return;
                 }
+
+                // if tag already exists
+                if (!_main.CreateTag(tagName))
+                {
+                    DialogHelper.ShowError(this, "Tag Already Exist", "Please specify another tagname.");
+                    BtnOk.IsEnabled = true;
+                    return;
+                }
+
+                Close();
             }
             catch (UnhandledException)
             {

@@ -217,12 +217,6 @@
 	                	</StackPanel>
 	                </Grid>
 	            </TabItem>
-	            <TabItem x:Name="TabItemProperties" Header="Properties" Height="30" Style="{DynamicResource TabItemStyle}" Background="{DynamicResource TabButtonBackground}" Foreground="{DynamicResource TabButtonForeground}" GotFocus="TabItemProperties_GotFocus" Visibility="Collapsed">
-	            	<Grid/>
-	            </TabItem>
-	            <TabItem x:Name="TabItemVersioning" Header="Versioning" Height="30" Style="{DynamicResource TabItemStyle}" Background="{DynamicResource TabButtonBackground}" Foreground="{DynamicResource TabButtonForeground}" GotFocus="TabItemVersioning_GotFocus" Visibility="Collapsed">
-	                <Grid/>
-	            </TabItem>
         	</TabControl>
 			<ScrollViewer Margin="0" Grid.Column="1" Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Width="400" Height="280">
 				<Grid x:Name="SpecificFilterGrid">
