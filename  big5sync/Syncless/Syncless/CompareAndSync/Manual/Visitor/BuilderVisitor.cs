@@ -101,23 +101,23 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     {
                         _progress.Message = info.FullName;
                         _progress.Update();
-                    
                     }
-                    BaseCompareObject o = folder.GetChild(info.Name);
+
+                    BaseCompareObject o = folder.GetChild(info.Name); // Gets a child with the same name.
                     FileCompareObject fco = null;
                     bool conflict = false;
 
-                    if (o == null)
+                    if (o == null) // If o is null, create a new file compare object
                         fco = new FileCompareObject(info.Name, numOfPaths, folder);
                     else
                     {
                         try
                         {
-                            fco = (FileCompareObject)o;
+                            fco = (FileCompareObject)o; // Case o to a FileCompareObject is o is not null
                         }
-                        catch (InvalidCastException)
+                        catch (InvalidCastException) // If invalid cast, it means there is a FolderCompareObject with the exact same name.
                         {
-                            _typeConflicts.Add(info.FullName);
+                            _typeConflicts.Add(info.FullName); // Add to to conflicts
                             conflict = true;
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CONFLICT, "Conflicted file detected " + info.FullName));
                         }
@@ -131,7 +131,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         fco.Exists[index] = true;
 
                         if (o == null)
-                            folder.AddChild(fco);
+                            folder.AddChild(fco); // Add the newly created FileCompareObject to this current folder
                     }
                 }
             }
@@ -158,12 +158,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         _progress.Message = info.FullName;
                         _progress.Update();
                     }
+
                     BaseCompareObject o = folder.GetChild(info.Name); // Gets a child with the same name.
                     FolderCompareObject fco;
                     bool conflict = false;
 
                     if (o == null) // If o is null, create a new folder compare object.
-                        fco = new FolderCompareObject(info.Name, numOfPaths, folder);
+                        fco = new FolderCompareObject(info.Name, numOfPaths, folder); // Create a new folder compare object
                     else
                     {
                         try
@@ -174,7 +175,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         {
                             _typeConflicts.Add(info.FullName);
                             folder.RemoveChild(info.Name); //Remove file object
-                            fco = new FolderCompareObject(info.Name, numOfPaths, folder);
+                            fco = new FolderCompareObject(info.Name, numOfPaths, folder); // Create a new folder compare object
                             conflict = true;
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CONFLICT, "Conflicted file detected " + info.FullName));
                         }
@@ -184,7 +185,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     fco.Exists[index] = true;
 
                     if (o == null || conflict)
-                        folder.AddChild(fco);
+                        folder.AddChild(fco); // Add the newly created FolderCompareObject to this current folder
                 }
             }
         }

@@ -39,11 +39,6 @@
         /// <summary>
         /// Error handling file
         /// </summary>
-        Error,
-
-        /// <summary>
-        /// File conflict
-        /// </summary>
-        Conflict
+        Error
     }
 }
