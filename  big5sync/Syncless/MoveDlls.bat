@@ -1,0 +1,12 @@
+mkdir  "lib"
+move /y "*.dll" "lib"
+move /y "de" "lib"
+move /y "en" "lib"
+move /y "es" "lib"
+move /y "fr" "lib"
+move /y "it" "lib"
+move /y "ja" "lib"
+move /y "ko" "lib"
+move /y "zh-Hans" "lib"
+move /y "zh-Hant" "lib"
+
