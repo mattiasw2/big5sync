@@ -194,6 +194,10 @@ namespace Syncless.Core
         /// </summary>
         /// <param name="config">The new value of the Sync Config</param>
         void UpdateSyncConfig(SyncConfig config);
+        /// <summary>
+        /// Check if any drive is not detected by syncless and update them into the system.
+        /// </summary>
+        void UpdateAllDrive();
     }
 
 }
