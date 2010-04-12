@@ -27,7 +27,6 @@ namespace Syncless.CompareAndSync.Manual
         /// <returns></returns>
         public static RootCompareObject Sync(ManualSyncRequest request, SyncProgress progress)
         {
-            DateTime startTime = DateTime.Now;
             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STARTED, "Started Manual Sync for " + request.TagName));
 
             //Initialize and add filters conflict and archive filters to it
@@ -90,8 +89,6 @@ namespace Syncless.CompareAndSync.Manual
 
                 // Finished
                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.SYNC_STOPPED, "Completed Manual Sync for " + request.TagName));
-                TimeSpan timeTaken = DateTime.Now - startTime;
-                Console.WriteLine(timeTaken);
                 return rco;
             }
 
@@ -130,11 +127,11 @@ namespace Syncless.CompareAndSync.Manual
                 if (File.Exists(s))
                 {
                     FileInfo info = new FileInfo(s);
-                    // ReSharper disable AssignNullToNotNullAttribute
                     string conflictPath = Path.Combine(info.DirectoryName, config.ConflictDir);
-                    // ReSharper restore AssignNullToNotNullAttribute
+
                     if (!Directory.Exists(conflictPath))
                         Directory.CreateDirectory(conflictPath);
+                    
                     string currTime = String.Format("{0:MMddHHmmss}", DateTime.Now) + "_";
                     string dest = Path.Combine(conflictPath, currTime + info.Name);
 
