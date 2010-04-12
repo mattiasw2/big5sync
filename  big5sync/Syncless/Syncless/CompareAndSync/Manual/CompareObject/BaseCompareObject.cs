@@ -7,27 +7,33 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
     /// <summary>
     /// Abstract class <c>BaseCompareObject</c>.
     /// </summary>
+    /// <remarks>
+    /// A BaseCompareObject stores all information of a file system object at a particular directory by name.
+    /// For example, C:\FolderToSync\1.txt and D:\Folder2Sync\1.txt will both be the same BaseCompareObject with name "1.txt"
+    /// if C:\FolderToSync and D:\Folder2Sync are to be synchronized. Arrays of various types are then used to keep information
+    /// of each individual file.
+    /// </remarks>
     public abstract class BaseCompareObject
     {
-        //Actual
-        private readonly string _name;
-        private long[] _creationTimeUtc;
-        private bool[] _exists;
-        private int _sourcePosition;
+        // Actual
+        private readonly string _name; // Name of file system object (file or folder).
+        private long[] _creationTimeUtc; // Array to store the creation time in UTC of each actual object.
+        private bool[] _exists; // Array to state whether the file system object actually exists.
+        private int _sourcePosition; // Used to indicate the position of source, to be propagated to all the other positions.
 
-        //Meta
-        private long[] _metaCreationTimeUtc;
-        private bool[] _metaExists;
-        private long[] _metaUpdated;
+        // Meta
+        private long[] _metaCreationTimeUtc; // Array to store the creation time in UTC from the metadata.
+        private bool[] _metaExists; // Array to state whether metadata exists for the given file system object.
+        private long[] _metaUpdated; // Array that stores when the metadata for the file system object was last updated.
 
-        //All       
-        private MetaChangeType?[] _changeType;
-        private FinalState?[] _finalState;
-        private int[] _priority;
-        private FolderCompareObject _parent;
-        private bool _invalid;
-        private string _newName;
-        private LastKnownState?[] _lastKnownState;
+        // All       
+        private MetaChangeType?[] _changeType; // Array to store the metadata change type after being populated with actual and meta information.
+        private FinalState?[] _finalState; // Array to store the final state of each file system object after synchronization.
+        private int[] _priority; // Array to store the priority of each file system object. Highest priority indicates source position.
+        private FolderCompareObject _parent; // Parent of the file system object.
+        private bool _invalid; // Specifies if this node is invalid.
+        private string _newName; // Stores the new name of the file system object, in the case of rename.
+        private LastKnownState?[] _lastKnownState; // Stores the last known state, eg. delete, if the file system object is no longer found.
 
         /// <summary>
         /// Initializes a <c>BaseCompareObject</c> given the name, the number of paths to synchronize, and the parent of it.
@@ -191,14 +197,14 @@ namespace Syncless.CompareAndSync.Manual.CompareObject
         public string GetSmartParentPath(int index)
         {
             if (Parent == null)
-                return "ROOT"; //Will throw exception in future
+                return "ROOT"; // Will throw exception in future
 
             RootCompareObject rco;
             if ((rco = Parent as RootCompareObject) != null)
-                return rco.Paths[index];
+                return rco.Paths[index]; // If the parent is already a root compare object, simply return it.
             if (Parent.ChangeType[index] == MetaChangeType.Rename)
-                return Path.Combine(Parent.GetSmartParentPath(index), Parent.NewName);
-            return Path.Combine(Parent.GetSmartParentPath(index), Parent.FinalState[index] == Enum.FinalState.Renamed ? Parent.NewName : Parent.Name);
+                return Path.Combine(Parent.GetSmartParentPath(index), Parent.NewName); // If the parent has a MetaChangeType of rename, recursively call it and use the parent's new name.
+            return Path.Combine(Parent.GetSmartParentPath(index), Parent.FinalState[index] == Enum.FinalState.Renamed ? Parent.NewName : Parent.Name); // If the parent's final state is renamed, use the new name, else use the name.
         }
 
         #endregion

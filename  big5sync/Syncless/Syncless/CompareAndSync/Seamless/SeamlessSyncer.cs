@@ -165,11 +165,16 @@ namespace Syncless.CompareAndSync.Seamless
                         string newFullPath = Path.Combine(dest, request.NewName);
 
                         if (!File.Exists(oldFullPath))
+                        {
                             CommonMethods.CopyFile(sourceFullPath, newFullPath);
+                            FileInfo destFile = new FileInfo(destFullPath);
+                            SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, CommonMethods.CalculateMD5Hash(destFile), destFile.Length, destFile.CreationTimeUtc.Ticks, destFile.LastWriteTimeUtc.Ticks, MetaChangeType.New, _metaUpdated));
+                        }
                         else
+                        {
                             CommonMethods.MoveFile(oldFullPath, newFullPath);
-
-                        SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName, dest, MetaChangeType.Rename, _metaUpdated));
+                            SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName, dest, MetaChangeType.Rename, _metaUpdated));
+                        }
                     }
                     catch (CopyFileException)
                     {
@@ -178,6 +183,10 @@ namespace Syncless.CompareAndSync.Seamless
                     catch (MoveFileException)
                     {
                         ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error renaming file from " + sourceFullPath + " to " + destFullPath));
+                    }
+                    catch (HashFileException)
+                    {
+                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error hashing " + sourceFullPath + "."));
                     }
                 }
             }
@@ -195,8 +204,6 @@ namespace Syncless.CompareAndSync.Seamless
                 {
                     try
                     {
-                        CommonMethods.CalculateMD5Hash(new FileInfo(destFullPath));
-
                         if (request.Config.ArchiveLimit >= 0)
                         {
                             CommonMethods.ArchiveFile(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);

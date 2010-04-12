@@ -158,19 +158,19 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         _progress.Message = info.FullName;
                         _progress.Update();
                     }
-                    BaseCompareObject o = folder.GetChild(info.Name);
+                    BaseCompareObject o = folder.GetChild(info.Name); // Gets a child with the same name.
                     FolderCompareObject fco;
                     bool conflict = false;
 
-                    if (o == null)
+                    if (o == null) // If o is null, create a new folder compare object.
                         fco = new FolderCompareObject(info.Name, numOfPaths, folder);
                     else
                     {
                         try
                         {
-                            fco = (FolderCompareObject)o;
+                            fco = (FolderCompareObject)o; // Cast o to a FolderCompareObject.
                         }
-                        catch (InvalidCastException)
+                        catch (InvalidCastException) // Happens when a file has the same name as the folder.
                         {
                             _typeConflicts.Add(info.FullName);
                             folder.RemoveChild(info.Name); //Remove file object
