@@ -331,19 +331,8 @@
   -->
   <!-- <Import Project="$(MSBuildExtensionsPath)\Microsoft\Expression\Blend\3.0\WPF\Microsoft.Expression.Blend.WPF.targets" /> -->
   <PropertyGroup>
-    <PostBuildEvent>mkdir  "lib"
-move /y "*.dll" "lib"
-move /y "de" "lib"
-move /y "en" "lib"
-move /y "es" "lib"
-move /y "fr" "lib"
-move /y "it" "lib"
-move /y "ja" "lib"
-move /y "ko" "lib"
-move /y "zh-Hans" "lib"
-move /y "zh-Hant" "lib"
-
-</PostBuildEvent>
-    <PreBuildEvent>rmdir /s /q "lib"</PreBuildEvent>
+    <PostBuildEvent>call "MoveDlls.bat"</PostBuildEvent>
+    <PreBuildEvent>copy "$(SolutionDir)MoveDlls.bat" "."
+rmdir /s /q "lib"</PreBuildEvent>
   </PropertyGroup>
 </Project>
