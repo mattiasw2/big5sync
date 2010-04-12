@@ -91,9 +91,10 @@ namespace Syncless.CompareAndSync
             TraverseFolderHelper(root, visitor, TraverseType.Post, syncProgress);
         }
 
+        // Method will return any time the state of the sync progress becomes cancelled.
         private static void TraverseFolderHelper(RootCompareObject root, IVisitor visitor, TraverseType type, Progress syncProgress)
         {
-            if (syncProgress!=null && syncProgress.State == SyncState.Cancelled)
+            if (syncProgress != null && syncProgress.State == SyncState.Cancelled)
                 return;
 
             if (type == TraverseType.Pre)
@@ -116,6 +117,7 @@ namespace Syncless.CompareAndSync
                 visitor.Visit(root);
         }
 
+        // Method will return any time the state of the sync progress becomes cancelled.
         private static void TraverseFolderHelper(FolderCompareObject folder, int numOfPaths, IVisitor visitor, TraverseType type, Progress syncProgress)
         {
             if (syncProgress != null && syncProgress.State == SyncState.Cancelled)
