@@ -1482,6 +1482,23 @@ namespace Syncless.Core
             SyncConfig.Instance = config; 
         }
 
+        public void UpdateAllDrive()
+        {
+            try
+            {
+                CheckAndUpdateDrive();
+                _userInterface.TagsChanged();
+                _userInterface.PathChanged();
+            }
+            catch (Exception e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                throw new UnhandledException(e);
+            }
+
+        }
+
+
         #endregion
 
         #region private /internal / delegate
@@ -1997,6 +2014,19 @@ namespace Syncless.Core
             if (!SllNotification.Contains(new SaveNotification()))
             {
                 SllNotification.Enqueue(new SaveNotification());
+            }
+        }
+
+        private void CheckAndUpdateDrive()
+        {
+            DriveInfo[] infos = DriveInfo.GetDrives();
+            foreach (DriveInfo info in infos)
+            {
+                string logicalid = ProfilingLayer.Instance.GetLogicalIdFromDrive(info);
+                if (logicalid == null)
+                {
+                    ProfilingLayer.Instance.UpdateDrive(info);
+                }
             }
         }
 
