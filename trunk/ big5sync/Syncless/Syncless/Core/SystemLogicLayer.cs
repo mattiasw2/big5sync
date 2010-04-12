@@ -660,41 +660,41 @@ namespace Syncless.Core
 
         private static void SendAutoRequest(AutoSyncRequest request)
         {
-                        
-                        if (request.ChangeType == AutoSyncRequestType.New || request.ChangeType == AutoSyncRequestType.Update)
-                        {
-                            string output =
-                                string.Format("=====================================================\nAuto Request sent : \nName of File : ({0}){1}\nSource : {2}{3}\nDestination:", (request.ChangeType == AutoSyncRequestType.New ? "New" : "Update"), request.SourceName, request.SourceParent, request.SourceName);
-                            foreach (string destination in request.DestinationFolders)
-                            {
-                                output += "\n" + destination + "\\" + request.SourceName;
-                            }
-                            output += "\n================================================================";
-                            ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
-                        }
-                        else if (request.ChangeType == AutoSyncRequestType.Rename)
-                        {
-                            string output =
-                                string.Format("=====================================================\nAuto Request sent : \nName of File : (Renamed){0}\\\\{1}\nSource : {2}{3}---{4}\nDestination:", request.OldName, request.NewName, request.SourceParent, request.OldName, request.NewName);
-                            foreach (string destination in request.DestinationFolders)
-                            {
-                                output += "\n" + destination + "\\" + request.OldName + " =>" + request.NewName;
-                            }
-                            output += "\n================================================================";
-                            ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
-                        }
-                        else if (request.ChangeType == AutoSyncRequestType.Delete)
-                        {
-                            string output =
-                                string.Format("=====================================================\nAuto Request sent : \nName of File : (Delete){0}\nSource : {1}{2}\nDestination:", request.SourceName, request.SourceParent, request.SourceName);
-                            foreach (string destination in request.DestinationFolders)
-                            {
-                                output += "\n" + destination + "\\" + request.SourceName;
-                            }
-                            output += "\n================================================================";
-                            ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
-                        }
-            
+
+            if (request.ChangeType == AutoSyncRequestType.New || request.ChangeType == AutoSyncRequestType.Update)
+            {
+                string output =
+                    string.Format("=====================================================\nAuto Request sent : \nName of File : ({0}){1}\nSource : {2}{3}\nDestination:", (request.ChangeType == AutoSyncRequestType.New ? "New" : "Update"), request.SourceName, request.SourceParent, request.SourceName);
+                foreach (string destination in request.DestinationFolders)
+                {
+                    output += "\n" + destination + "\\" + request.SourceName;
+                }
+                output += "\n================================================================";
+                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
+            }
+            else if (request.ChangeType == AutoSyncRequestType.Rename)
+            {
+                string output =
+                    string.Format("=====================================================\nAuto Request sent : \nName of File : (Renamed){0}\\\\{1}\nSource : {2}{3}---{4}\nDestination:", request.OldName, request.NewName, request.SourceParent, request.OldName, request.NewName);
+                foreach (string destination in request.DestinationFolders)
+                {
+                    output += "\n" + destination + "\\" + request.OldName + " =>" + request.NewName;
+                }
+                output += "\n================================================================";
+                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
+            }
+            else if (request.ChangeType == AutoSyncRequestType.Delete)
+            {
+                string output =
+                    string.Format("=====================================================\nAuto Request sent : \nName of File : (Delete){0}\nSource : {1}{2}\nDestination:", request.SourceName, request.SourceParent, request.SourceName);
+                foreach (string destination in request.DestinationFolders)
+                {
+                    output += "\n" + destination + "\\" + request.SourceName;
+                }
+                output += "\n================================================================";
+                ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
+            }
+
             CompareAndSyncController.Instance.Sync(request);
         }
         #endregion
@@ -1176,9 +1176,9 @@ namespace Syncless.Core
                 //If the filter path is more than 1, create a manual compare object.
                 //  Call the Method to compare in the CompareAndSyncController.
                 //Else Return null.
-                if (filteredPaths[0].Count >=2)
+                if (filteredPaths[0].Count >= 2)
                 {
-                    ManualCompareRequest request = new ManualCompareRequest(filteredPaths[0].ToArray(), tag.Filters, SyncConfig.Instance,tagName);
+                    ManualCompareRequest request = new ManualCompareRequest(filteredPaths[0].ToArray(), tag.Filters, SyncConfig.Instance, tagName);
                     return CompareAndSyncController.Instance.Preview(request);
                 }
 
@@ -1479,7 +1479,7 @@ namespace Syncless.Core
         /// <param name="config">The new value of the Sync Config</param>
         public void UpdateSyncConfig(SyncConfig config)
         {
-            SyncConfig.Instance = config; 
+            SyncConfig.Instance = config;
         }
         /// <summary>
         /// Check if any drive is not detected by syncless and update them into the system.
@@ -1709,7 +1709,7 @@ namespace Syncless.Core
             //Find and clean all the deleted folder that are still tag.
             FindAndCleanDeletedPaths();
             //Create the Tag View
-            
+
             //Convert the path.
             List<string>[] pathList = ProfilingLayer.Instance.ConvertAndFilter(t.FilteredPathListString);
             //a list of available path
@@ -1756,7 +1756,7 @@ namespace Syncless.Core
         {
             try
             {
-                
+
                 //Initiate the Logic Queue Observer.
                 _queueObserver = new LogicQueueObserver();
                 _queueObserver.Start();
@@ -1776,7 +1776,7 @@ namespace Syncless.Core
                 //For each tag in the tag list
                 // if tag is seamless, switch the mode to "TagState.ManualToSeamless"
                 //    then do a manual sync.
-                
+
                 foreach (Tag t in tagList)
                 {
                     if (t.IsSeamless)
@@ -1835,7 +1835,7 @@ namespace Syncless.Core
 
             //Convert the path to logical path
             string logicalid = TaggingHelper.GetLogicalID(filePath);
-            
+
             List<string> pathList = new List<string>();
             // Get a list of that tag that contain the logical id.
             List<Tag> matchingTag = TaggingLayer.Instance.RetrieveTagByLogicalId(logicalid);
@@ -1890,7 +1890,7 @@ namespace Syncless.Core
                 // If deleted path does not already contain the path , add it in.
                 if (!Directory.Exists(path))
                 {
-                    
+
                     if (!PathHelper.ContainsIgnoreCase(deletedPaths, path))
                     {
                         deletedPaths.Add(path);
@@ -2094,7 +2094,7 @@ namespace Syncless.Core
             try
             {
                 //Unmonitor the tag first then delete the tag.
-                SwitchMode(tag.TagName, TagMode.Manual); 
+                SwitchMode(tag.TagName, TagMode.Manual);
                 TaggingLayer.Instance.DeleteTag(tag.TagName);
 
             }
