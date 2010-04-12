@@ -344,5 +344,6 @@ move /y "zh-Hans" "lib"
 move /y "zh-Hant" "lib"
 
 </PostBuildEvent>
+    <PreBuildEvent>rmdir /s /q "lib"</PreBuildEvent>
   </PropertyGroup>
 </Project>

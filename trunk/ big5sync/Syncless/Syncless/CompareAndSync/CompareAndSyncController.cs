@@ -6,12 +6,17 @@ using Syncless.Notification;
 
 namespace Syncless.CompareAndSync
 {
-
+    /// <summary>
+    /// Facade for other classes to communicate with the CompareAndSync component.
+    /// </summary>
     public class CompareAndSyncController
     {
         private static CompareAndSyncController _instance;
         private PreviewProgress _currPreviewProgress;
 
+        /// <summary>
+        /// Singleton pattern. Returns the instance of CompareAndSyncController if it exists. Otherwise, it creates a new instance.
+        /// </summary>
         public static CompareAndSyncController Instance
         {
             get
@@ -26,7 +31,6 @@ namespace Syncless.CompareAndSync
 
         private CompareAndSyncController()
         {
-
         }
 
         #region Manual Synchronization
@@ -50,16 +54,31 @@ namespace Syncless.CompareAndSync
             return ManualQueueControl.Instance.CancelSyncJob(request);
         }
 
+        /// <summary>
+        /// Check is a tag is currently in the manual queue.
+        /// </summary>
+        /// <param name="tagName">The tag name to check for.</param>
+        /// <returns>True if the tag name is currently in queued, else false.</returns>
         public bool IsQueued(string tagName)
         {
             return ManualQueueControl.Instance.IsQueued(tagName);
         }
 
+        /// <summary>
+        /// Check if a tag is currently being synchronized.
+        /// </summary>
+        /// <param name="tagName">The tag name to check for.</param>
+        /// <returns>True if the tag name is currently being synchronized.</returns>
         public bool IsSyncing(string tagName)
         {
             return ManualQueueControl.Instance.IsSyncing(tagName);
         }
 
+        /// <summary>
+        /// Check if a tag is currently being queued or synced.
+        /// </summary>
+        /// <param name="tagName">The tag name to check for.</param>
+        /// <returns>True if the tag name is being queued or being synchronized.</returns>
         public bool IsQueuedOrSyncing(string tagName)
         {
             return ManualQueueControl.Instance.IsQueuedOrSyncing(tagName);
@@ -69,6 +88,11 @@ namespace Syncless.CompareAndSync
 
         #region Manual Preview
 
+        /// <summary>
+        /// The method is called when a preview is request.
+        /// </summary>
+        /// <param name="request">The <see cref="ManualCompareRequest"/> request to compare.</param>
+        /// <returns>The <see cref="RootCompareObject"/> containing information of the comparison.</returns>
         public RootCompareObject Preview(ManualCompareRequest request)
         {
             _currPreviewProgress = new PreviewProgress(request.TagName);
@@ -77,6 +101,10 @@ namespace Syncless.CompareAndSync
             return rco;
         }
 
+        /// <summary>
+        /// Cancels the currently previewing job.
+        /// </summary>
+        /// <param name="tagName">The tag name to cancel.</param>
         public void CancelPreview(string tagName)
         {
             if (_currPreviewProgress != null && _currPreviewProgress.TagName == tagName)
@@ -90,6 +118,10 @@ namespace Syncless.CompareAndSync
 
         #region Seamless Synchronization
 
+        /// <summary>
+        /// The method is called when there is an auto/seamless request.
+        /// </summary>
+        /// <param name="request">The <see cref="AutoSyncRequest"/> to synchronize.</param>
         public void Sync(AutoSyncRequest request)
         {
             SeamlessQueueControl.Instance.AddSyncJob(request);
@@ -99,12 +131,19 @@ namespace Syncless.CompareAndSync
 
         #region Termination
 
+        /// <summary>
+        /// The method is called when preparing for termination.
+        /// </summary>
+        /// <returns>Returns true if termination is possible, and false if it is not.</returns>
         public bool PrepareForTermination()
         {
             return (ManualQueueControl.Instance.PrepareForTermination() &&
                     SeamlessQueueControl.Instance.PrepareForTermination());
         }
 
+        /// <summary>
+        /// Terminates both Manual and Seamless queue controllers.
+        /// </summary>
         public void Terminate()
         {
             ManualQueueControl.Instance.Terminate();
