@@ -53,6 +53,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         {
             if (file.Exists[index])
             {
+                // If the metadata exists, and the creation time of the file is equals to that of the metadata, and the last write time is also the same,
+                // as well as the length, we assume that the file is unchanged, and simply use the hash info from the metadata instead of re-hashing. This
+                // saves a lot of time.
                 if (file.MetaExists[index] && file.CreationTimeUtc[index] == file.MetaCreationTimeUtc[index] && file.LastWriteTimeUtc[index] == file.MetaLastWriteTimeUtc[index] && file.Length[index] == file.MetaLength[index])
                 {
                     file.Hash[index] = file.MetaHash[index];
@@ -61,10 +64,13 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 {
                     try
                     {
+                        // Calculate the hash of the file
                         file.Hash[index] = CommonMethods.CalculateMD5Hash(Path.Combine(file.GetSmartParentPath(index), file.Name));
                     }
                     catch (HashFileException)
                     {
+                        // If there is an error hashing, we set the FinalState to error, and make it invalid so it is excluded from all comparison and
+                        // syncing.
                         ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error hashing " + Path.Combine(file.GetSmartParentPath(index), file.Name + ".")));
                         file.FinalState[index] = FinalState.Error;
                         file.Invalid = true;
@@ -73,6 +79,8 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
+        // Compare the metadata of each file with respects to itself,
+        // without concerning itself with any other file.
         private void ProcessFileMetaData(FileCompareObject file, int index)
         {
             if (file.Exists[index] && !file.MetaExists[index])
@@ -97,6 +105,8 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region Folder Operations
 
+        // Compare the metadata of each folder with respects to itself,
+        // without concerning itself with any other file.
         private void ProcessFolderMetaData(FolderCompareObject folder, int index)
         {
             if (folder.Exists[index] && !folder.MetaExists[index])
