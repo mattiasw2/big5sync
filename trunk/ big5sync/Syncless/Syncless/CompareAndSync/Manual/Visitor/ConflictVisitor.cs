@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Exceptions;
 using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Core;
@@ -52,24 +51,25 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         {
             string src = Path.Combine(fco.GetSmartParentPath(fileIndex), fco.Name);
             string conflictFolder = Path.Combine(fco.GetSmartParentPath(fileIndex), _syncConfig.ConflictDir);
+           
             if (!Directory.Exists(conflictFolder))
                 Directory.CreateDirectory(conflictFolder);
+
             string currTime = String.Format("{0:MMddHHmmss}", DateTime.Now) + "_";
             string dest = Path.Combine(conflictFolder, currTime + fco.Name);
 
             try
             {
-                CommonMethods.CopyFile(src, dest);
-                CommonMethods.DeleteFile(src);
-                fco.FinalState[fileIndex] = null; //Set back to null
+                CommonMethods.CopyFile(src, dest); // Copy conflicted file from to the conflict folder
+                CommonMethods.DeleteFile(src); // Delete conflicted file
             }
             catch (CopyFileException)
             {
-                fco.FinalState[fileIndex] = FinalState.Error;
                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error copying file from " + src + " to " + dest));
             }
             catch (DeleteFileException)
             {
+                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error deleting file " + src));
             }
         }
     }
