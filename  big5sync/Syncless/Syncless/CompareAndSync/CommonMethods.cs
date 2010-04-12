@@ -245,6 +245,12 @@ namespace Syncless.CompareAndSync
             node.ParentNode.RemoveChild(node);
         }
 
+        /// <summary>
+        /// Loads the last known state document and searches for the file node by the given name. If it exists ,
+        /// then delete it
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        /// <param name="name"></param>
         public static void DoFileLastKnownCleanUp(XmlDocument xmlDoc , string name)
         {
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(name) + "]");
@@ -255,6 +261,12 @@ namespace Syncless.CompareAndSync
             node.ParentNode.RemoveChild(node);
         }
 
+        /// <summary>
+        /// Loads the last known state document and searches for the folder node given the name. If it exists,
+        /// then remove it.
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        /// <param name="name"></param>
         public static void DoFolderLastKnownCleanUp(XmlDocument xmlDoc, string name)
         {
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState + CommonXMLConstants.XPathFolder + "[name=" + CommonMethods.ParseXPathString(name) + "]");
