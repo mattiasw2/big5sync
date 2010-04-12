@@ -38,7 +38,7 @@ namespace SynclessUI
 
                 // Sets up all components to their default state
                 filters = _main.Gui.GetAllFilters(_tagname);
-                PopulateFilterStringList(false);
+                PopulateListBoxFilter(false);
                 LblTag_Details.Content = "Tag Details for " + _tagname;
                 TxtBoxPattern.IsEnabled = false;
                 CmbBoxMode.IsEnabled = false;
@@ -49,6 +49,7 @@ namespace SynclessUI
             }
         }
 
+        #region General Window Components & Related Events
         /// <summary>
         /// Event handler for Canvas_MouseLeftButtonDown event. Allows user to drag the canvas.
         /// </summary>
@@ -70,50 +71,49 @@ namespace SynclessUI
             Close();
         }
 
-        private void PopulateFilterStringList(bool selectoriginal)
+        /// <summary>
+        /// Event handler for Window_Closing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_closingAnimationNotCompleted)
+            {
+                BtnCancel.IsCancel = false;
+                e.Cancel = true;
+                FormFadeOut.Begin();
+            }
+        } 
+        #endregion
+
+        #region Filters
+        /// <summary>
+        /// Populates the ListBoxFilter by generating the new list and updates other elements of the UI correspondingly
+        /// </summary>
+        /// <param name="selectOriginal">Specifies if the original list selection shld be selected after repopulation</param>
+        private void PopulateListBoxFilter(bool selectOriginal)
         {
             int index = -1;
 
-            if (selectoriginal)
+            if (selectOriginal)
             {
-                index = ListFilters.SelectedIndex;
+                index = ListBoxFilters.SelectedIndex;
             }
 
-            var generatedFilterStringList = new List<string>();
+            List<string> filterList = GenerateFilterListHelper();
 
-            int i = 1;
+            // Resets the ListBox with the new List
+            ListBoxFilters.ItemsSource = null;
+            ListBoxFilters.ItemsSource = filterList;
 
-            foreach (Filter f in filters)
+            if (selectOriginal)
             {
-                if (f is ExtensionFilter)
-                {
-                    var ef = (ExtensionFilter) f;
-
-                    string mode = "";
-
-                    if (ef.Mode == FilterMode.INCLUDE)
-                    {
-                        mode = "[Inclusion] ";
-                    }
-                    else if (ef.Mode == FilterMode.EXCLUDE)
-                    {
-                        mode = "[Exclusion] ";
-                    }
-
-                    generatedFilterStringList.Add(i + ". " + mode + " " + ef.Pattern);
-                }
-                i++;
+                ListBoxFilters.SelectedIndex = index;
             }
 
-            ListFilters.ItemsSource = null;
-            ListFilters.ItemsSource = generatedFilterStringList;
-
-            if (selectoriginal)
-            {
-                ListFilters.SelectedIndex = index;
-            }
-
-            if (generatedFilterStringList.Count == 0)
+            // if no filters present, disable filter information
+            if (filters.Count == 0)
             {
                 TxtBoxPattern.IsEnabled = false;
                 TxtBoxPattern.Text = "";
@@ -122,45 +122,55 @@ namespace SynclessUI
             }
         }
 
-        private void SelectFilter(Filter f)
+        /// <summary>
+        /// Generates the filter list for the ListBoxFilter
+        /// </summary>
+        /// <returns>The generated filter list</returns>
+        private List<string> GenerateFilterListHelper()
+        {
+            var filterList = new List<string>();
+            int filterIndex = 1;
+            foreach (Filter f in filters)
+            {
+                if (f is ExtensionFilter)
+                {
+                    var ef = (ExtensionFilter)f;
+
+                    string mode = string.Empty;
+
+                    switch (ef.Mode)
+                    {
+                        case FilterMode.INCLUDE:
+                            mode = "[Inclusion] ";
+                            break;
+                        case FilterMode.EXCLUDE:
+                            mode = "[Exclusion] ";
+                            break;
+                    }
+
+                    filterList.Add(filterIndex + ". " + mode + " " + ef.Pattern);
+                }
+                filterIndex++;
+            }
+            return filterList;
+        }
+
+        /// <summary>
+        /// Selects the filter in ListBoxFilter by Filter
+        /// </summary>
+        /// <param name="f">Filter to select</param>
+        private void SelectFilterInListBoxFilter(Filter f)
         {
             int index = filters.IndexOf(f);
-            ListFilters.SelectedIndex = index;
+            ListBoxFilters.SelectedIndex = index;
         }
 
-        private void BtnOk_Click(object sender, RoutedEventArgs e)
-        {
-            BtnOk.IsEnabled = false;
-            try
-            {
-                if (!_main.Gui.GetTag(_tagname).IsLocked)
-                {
-                    if (CheckRedundantFilters())
-                    {
-                        DialogHelper.ShowError(this, "Duplicate Filters", "Please remove all duplicate filters.");
-                        BtnOk.IsEnabled = true;
-                    }
-                    else
-                    {
-                        bool result = _main.Gui.UpdateFilterList(_tagname, filters);
-                        Close();
-                    }
-                }
-                else
-                {
-                    BtnOk.IsEnabled = true;
-                    DialogHelper.ShowError(this, _tagname + " is Synchronizing",
-                                           "You cannot update tag details while the tag is synchronizing.");
-                }
-            }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage(this);
-                Close();
-            }
-        }
-
-        private bool CheckRedundantFilters()
+        /// <summary>
+        /// Checks if there are redudant filters. Does this by removing all filters one by one and checking if a similar
+        /// filter can be found.
+        /// </summary>
+        /// <returns>Returns true if a duplicate filter is found. Else returns false.</returns>
+        private bool CheckDuplicateFilters()
         {
             for (int i = 0; i < filters.Count; i++)
             {
@@ -177,35 +187,44 @@ namespace SynclessUI
             return false;
         }
 
-        private void BtnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            BtnCancel.IsEnabled = false;
-            Close();
-        }
-
+        /// <summary>
+        /// Adds a default filter to the filters and updates the ListBoxFilter
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnAddFilter_Click(object sender, RoutedEventArgs e)
         {
-            var ef = (ExtensionFilter) FilterFactory.CreateExtensionFilter("*.*", FilterMode.INCLUDE);
+            var ef = (ExtensionFilter)FilterFactory.CreateExtensionFilter("*.*", FilterMode.INCLUDE);
             filters.Add(ef);
 
-            PopulateFilterStringList(true);
-            SelectFilter(ef);
+            PopulateListBoxFilter(true);
+            SelectFilterInListBoxFilter(ef);
         }
 
+        /// <summary>
+        /// Removes the filter from filters and repopulates the ListBoxFilter
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnRemoveFilter_Click(object sender, RoutedEventArgs e)
         {
-            if (ListFilters.SelectedIndex != -1)
+            if (ListBoxFilters.SelectedIndex != -1)
             {
-                int index = ListFilters.SelectedIndex;
+                int index = ListBoxFilters.SelectedIndex;
                 filters.RemoveAt(index);
 
-                PopulateFilterStringList(false);
+                PopulateListBoxFilter(false);
             }
         }
 
-        private void ListFilters_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        /// <summary>
+        /// On selection change, update the filter information.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListBoxFilters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            int index = ListFilters.SelectedIndex;
+            int index = ListBoxFilters.SelectedIndex;
 
             if (index != -1)
             {
@@ -215,7 +234,7 @@ namespace SynclessUI
                 Filter f = filters[index];
                 if (f is ExtensionFilter)
                 {
-                    var ef = (ExtensionFilter) f;
+                    var ef = (ExtensionFilter)f;
                     TxtBoxPattern.Text = ef.Pattern;
                     if (ef.Mode == FilterMode.INCLUDE)
                         CmbBoxMode.SelectedIndex = 0;
@@ -226,34 +245,23 @@ namespace SynclessUI
         }
 
         /// <summary>
-        /// Event handler for CmbBoxMode_SelectionChanged. If the mode changes, update the corresponding filter
-        /// and repopulate the UI filter list.
+        /// On mode change, update the filter and repopulate the ListBoxFilter
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void CmbBoxMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ListFilters.SelectedIndex != -1 && ListFilters.SelectedIndex <= filters.Count)
+            if (ListBoxFilters.SelectedIndex != -1 && ListBoxFilters.SelectedIndex <= filters.Count)
             {
-                Filter f = filters[ListFilters.SelectedIndex];
+                Filter f = filters[ListBoxFilters.SelectedIndex];
 
                 if (CmbBoxMode.SelectedIndex == 0)
                     f.Mode = FilterMode.INCLUDE;
                 else if (CmbBoxMode.SelectedIndex == 1)
                     f.Mode = FilterMode.EXCLUDE;
 
-                PopulateFilterStringList(true);
+                PopulateListBoxFilter(true);
             }
-        }
-
-        /// <summary>
-        /// Event handler for TabItemFiltering_GotFocus. If tabitem gets focus, shows the filter grid on the RHS
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TabItemFiltering_GotFocus(object sender, RoutedEventArgs e)
-        {
-            SpecificFilterGrid.Visibility = Visibility.Visible;
         }
 
         /// <summary>
@@ -263,31 +271,16 @@ namespace SynclessUI
         /// <param name="e"></param>
         private void TxtBoxPattern_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (ListFilters.SelectedIndex != -1)
+            if (ListBoxFilters.SelectedIndex != -1)
             {
-                Filter f = filters[ListFilters.SelectedIndex];
+                Filter f = filters[ListBoxFilters.SelectedIndex];
                 if (f is ExtensionFilter)
                 {
-                    var ef = (ExtensionFilter) f;
+                    var ef = (ExtensionFilter)f;
                     ef.Pattern = TxtBoxPattern.Text;
                 }
 
-                PopulateFilterStringList(true);
-            }
-        }
-
-        /// <summary>
-        /// Event handler for Window_Closing
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (_closingAnimationNotCompleted)
-            {
-                BtnCancel.IsCancel = false;
-                e.Cancel = true;
-                FormFadeOut.Begin();
+                PopulateListBoxFilter(true);
             }
         }
 
@@ -306,6 +299,70 @@ namespace SynclessUI
 
                 DialogHelper.ShowError(this, "Extension Mask Cannot be Empty", "Please input a valid extension mask.");
             }
+        } 
+        #endregion
+
+        #region TabMenu
+        /// <summary>
+        /// Show the grid for filter information upon selection
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TabItemFiltering_GotFocus(object sender, RoutedEventArgs e)
+        {
+            GridFilterInformation.Visibility = Visibility.Visible;
+        } 
+        #endregion
+
+        #region Command Panel
+        /// <summary>
+        /// Checks to see if the tag's filters can be updated, if so, updates it.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnOk_Click(object sender, RoutedEventArgs e)
+        {
+            BtnOk.IsEnabled = false;
+            try
+            {
+                // Check if particular tag is locked
+                if (_main.Gui.GetTag(_tagname).IsLocked)
+                {
+                    BtnOk.IsEnabled = true;
+                    DialogHelper.ShowError(this, _tagname + " is Synchronizing",
+                                           "You cannot update tag details while the tag is synchronizing.");
+                    return;
+                }
+
+                // Check if there are duplicate filters 
+                if (CheckDuplicateFilters())
+                {
+                    DialogHelper.ShowError(this, "Duplicate Filters", "Please remove all duplicate filters.");
+                    BtnOk.IsEnabled = true;
+                    return;
+                }
+
+                // Update filter list
+                _main.Gui.UpdateFilterList(_tagname, filters);
+                Close();
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
+                Close();
+            }
         }
+
+        /// <summary>
+        /// Event handler for BtnCancel_Click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            BtnCancel.IsEnabled = false;
+            Close();
+        } 
+        #endregion
     }
 }
