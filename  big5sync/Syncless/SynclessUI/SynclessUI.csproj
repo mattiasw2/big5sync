@@ -114,7 +114,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Settings.cs" />
     <Compile Include="WelcomeScreenWindow.xaml.cs">
       <DependentUpon>WelcomeScreenWindow.xaml</DependentUpon>
     </Compile>
