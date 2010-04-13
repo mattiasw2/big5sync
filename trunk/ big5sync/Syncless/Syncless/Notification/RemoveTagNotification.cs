@@ -16,7 +16,7 @@ namespace Syncless.Notification
         /// </summary>
         /// <param name="tag"></param>
         public RemoveTagNotification(Tag tag)
-            : base("Add Tag Notification", NotificationCode.AddTagNotification)
+            : base("Remove Tag Notification", NotificationCode.DeleteTagNotification)
         {
             Tag = tag;
         }
