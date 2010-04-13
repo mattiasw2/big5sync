@@ -76,6 +76,7 @@ namespace SynclessUI.Visitor
                                 source = Path.Combine(fco.GetSmartParentPath(maxPriorityPos), fco.Name);
                                 dest = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
                                 operation = fco.Exists[i] ? UpdateConstant : CopyConstant;
+                                tooltip = fco.Exists[i] ? UpdateToolTip : CopyToolTip;
                                 break;
                             case MetaChangeType.Delete:
                                 source = Path.Combine(fco.GetSmartParentPath(maxPriorityPos), fco.Name);
@@ -149,7 +150,7 @@ namespace SynclessUI.Visitor
                                 source = Path.Combine(folder.GetSmartParentPath(maxPriorityPos), folder.Name);
                                 dest = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
                                 operation = CopyConstant;
-                                tooltip = CopyToolTip;
+                                tooltip = folder.Exists[i] ? UpdateToolTip : CopyToolTip;
                                 break;
                             case MetaChangeType.Delete:
                                 source = Path.Combine(folder.GetSmartParentPath(maxPriorityPos), folder.Name);
