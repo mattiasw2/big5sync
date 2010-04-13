@@ -89,8 +89,8 @@ namespace Syncless.Logging
         /// </summary>
         public void ClearLog()
         {
-            File.Delete(LogReaderHelper.USER_LOG_BACKUP_PATH);
             File.Delete(LogReaderHelper.USER_LOG_PATH);
+            File.Delete(LogReaderHelper.USER_LOG_BACKUP_PATH);
         }
     }
 }
