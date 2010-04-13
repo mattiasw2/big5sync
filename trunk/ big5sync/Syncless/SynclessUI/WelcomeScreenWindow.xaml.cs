@@ -103,47 +103,26 @@ namespace SynclessUI
         #endregion
 
         #region Web Page Links
-
-        /// <summary>
-        /// Event handler for LblAccurate_MouseLeftButtonDown. Opens the link in the user's browser.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void LblAccurate_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		
+        private void GridTimeSync_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#Time_Synchronization"));
+        	Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#Time_Synchronization"));
         }
 
-
-        /// <summary>
-        /// Event handler for LblSeamless_MouseLeftButtonDown. Opens the link in the user's browser.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void LblSeamless_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void GridSeamless_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Process.Start(
+        	Process.Start(
                 new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#4._Switch_to_Seamless_Mode"));
         }
 
-        /// <summary>
-        /// Event handler for LblMultipleSync_MouseLeftButtonDown. Opens the link in the user's browser.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void LblMultipleSync_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void GridMultipleFolders_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#N-way_Synchronization"));
+			Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#N-way_Synchronization"));
         }
 
-        /// <summary>
-        /// Event handler for LblEasyTag_MouseLeftButtonDown. Opens the link in the user's browser.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void LblEasyTag_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void GridEasyTag_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#1._Tag_Folders"));
+			Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#1._Tag_Folders"));
         }
 
         #endregion
