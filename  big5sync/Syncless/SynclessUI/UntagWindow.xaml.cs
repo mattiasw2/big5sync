@@ -102,7 +102,11 @@ namespace SynclessUI
                         else
                         {
                             if (_notifyUser)
+                            {
                                 _main.NotifyBalloon("Untagging Successful", Path + " has been untagged from " + t);
+                                //success
+                                _main.ResetTagSyncStatus(t);
+                            }
                         }
                     }
                     else

@@ -795,9 +795,7 @@ namespace SynclessUI
                                     if (count == 1)
                                     {
                                         //success
-                                        _syncProgressNotificationDictionary.Remove(currentTag);
-                                        _tagStatusNotificationDictionary.Remove(currentTag);
-                                        LblStatusText.Content = "";
+                                        ResetTagSyncStatus(currentTag);
                                     }
                                     else
                                     {
@@ -836,6 +834,13 @@ namespace SynclessUI
             {
                 DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
+        }
+
+        public void ResetTagSyncStatus(string currentTag)
+        {
+            _syncProgressNotificationDictionary.Remove(currentTag);
+            _tagStatusNotificationDictionary.Remove(currentTag);
+            LblStatusText.Content = "";
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
