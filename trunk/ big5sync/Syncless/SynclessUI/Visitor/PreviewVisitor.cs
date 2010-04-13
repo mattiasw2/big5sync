@@ -117,7 +117,7 @@ namespace SynclessUI.Visitor
 
 
                         SyncData.Rows.Add(row);
-                        SyncData.AcceptChanges();
+                        //SyncData.AcceptChanges();
                     }
                 }
 
