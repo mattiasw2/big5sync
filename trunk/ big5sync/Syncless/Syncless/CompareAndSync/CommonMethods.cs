@@ -179,8 +179,14 @@ namespace Syncless.CompareAndSync
             return folderPath;
         }
 
-        // Method credited to http://stackoverflow.com/questions/642125/encoding-xpath-expressions-with-both-single-and-double-quotes
-        // Parse any string before injecting into xml. This is to escape single quote in xpath expressions
+        
+        /// <summary>
+        /// Method credited to http://stackoverflow.com/questions/642125/encoding-xpath-expressions-with-both-single-and-double-quotes
+        /// Parse any string before injecting into xml. This is to escape single quote in xpath expressions
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+ 
         public static string ParseXPathString(string input)
         {
             // If we don't have any " then encase string in " 
