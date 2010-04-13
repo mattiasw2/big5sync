@@ -179,7 +179,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             {
                 if (file.ChangeType[i] == MetaChangeType.Rename)
                 {
-                    if (renamePos == -1)
+                    if (renamePos == -1) // Only set the position if renamePos is -1
                     {
                         renamePos = i; // Set rename position to i.
                         file.SourcePosition = renamePos; // Set the source position of the file to be the rename position.
@@ -194,8 +194,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         // Helper method to handle file deletes.
         private static bool FileDeleteHelper(FileCompareObject file, int numOfPaths)
         {
-            List<int> deletePos = new List<int>();
+            List<int> deleteIndexes = new List<int>(); // Used to store the indexes of deleted files
             bool stop = false;
+
             for (int i = 0; i < numOfPaths; i++)
             {
                 if (stop)
@@ -203,14 +204,15 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
                 if (file.ChangeType[i] == MetaChangeType.Delete)
                 {
-                    deletePos.Add(i);
+                    deleteIndexes.Add(i);
+
                     for (int j = 0; j < numOfPaths; j++)
                     {
-                        if (file.Exists[j])
+                        if (file.Exists[j]) // If file exists in one of the indexes
                         {
-                            if (file.MetaUpdated[j] > file.MetaUpdated[i])
+                            if (file.MetaUpdated[j] > file.MetaUpdated[i]) // If the meta updated of j is more than i, void the delete
                             {
-                                deletePos.Clear();
+                                deleteIndexes.Clear(); // Clear all delete indexes
                                 stop = true;
                                 break;
                             }
@@ -219,21 +221,24 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 }
                 else if (file.ChangeType[i] != MetaChangeType.NoChange && file.ChangeType[i] != null)
                 {
-                    deletePos.Clear();
+                    deleteIndexes.Clear(); // Clear the delete indexes as long as there's a rename/update/new detected
                     break;
                 }
             }
 
-            if (deletePos.Count > 0)
+            if (deleteIndexes.Count > 0)
             {
-                file.SourcePosition = deletePos[0];
-                foreach (int i in deletePos)
-                    file.Priority[i] = 1;
-                return true;
+                file.SourcePosition = deleteIndexes[0]; // Set the source position to the first delete index found (convenience)
+
+                foreach (int i in deleteIndexes)
+                    file.Priority[i] = 1; // Set all delete indexes to priority 1.
+
+                return true; // Return true since delete operation will occur
             }
-            return false;
+            return false; // Return false since delete operation will not occur
         }
 
+        // Helper method to handle file creations and updates
         private static void FileCreateUpdateHelper(FileCompareObject file, int numOfPaths)
         {
             int mostUpdatedPos = 0;
@@ -242,45 +247,47 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             {
                 if (file.Exists[i])
                 {
-                    mostUpdatedPos = i;
+                    mostUpdatedPos = i; // Set the most update position to the first file that exists
                     break;
                 }
             }
 
-            file.Priority[mostUpdatedPos] = 1;
+            file.Priority[mostUpdatedPos] = 1; // Set the priority of the first file that exists to 1. All other indexes will be 0.
 
             for (int i = mostUpdatedPos + 1; i < numOfPaths; i++)
             {
                 if (!file.Exists[i])
                 {
-                    file.Priority[i] = -1;
+                    file.Priority[i] = -1; // If file does not exists we set the priority to -1.
                     continue;
                 }
 
                 if (file.Length[mostUpdatedPos] != file.Length[i] || file.Hash[mostUpdatedPos] != file.Hash[i])
                 {
+                    // If last write time of i is more updated than that of the most updated position
                     if (file.LastWriteTimeUtc[i] > file.LastWriteTimeUtc[mostUpdatedPos])
                     {
-                        file.Priority[i] = file.Priority[mostUpdatedPos] + 1;
-                        mostUpdatedPos = i;
+                        file.Priority[i] = file.Priority[mostUpdatedPos] + 1; // Set the priority of i as the priority of most updated position + 1
+                        mostUpdatedPos = i; // Set the most updated position to i
                     }
-                    else if (file.LastWriteTimeUtc[i] == file.LastWriteTimeUtc[mostUpdatedPos])
+                    else if (file.LastWriteTimeUtc[i] == file.LastWriteTimeUtc[mostUpdatedPos]) // If the hash/length is not equal but the last modified time is, it is a conflict.
                     {
                         //Conflict
-                        file.Priority[i] = file.Priority[mostUpdatedPos] - 1;
-                        file.ConflictPositions.Add(i);
+                        file.Priority[i] = file.Priority[mostUpdatedPos] - 1; // Decrement the priority of this conflicted file
+                        file.ConflictPositions.Add(i); // Add this conflicted file to the list of conflict positions
                         ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CONFLICT, "Conflicted file detected " + Path.Combine(file.GetSmartParentPath(i), file.Name)));
                     }
                 }
                 else
                 {
-                    file.Priority[i] = file.Priority[mostUpdatedPos];
+                    file.Priority[i] = file.Priority[mostUpdatedPos]; // If length and hash are equal, set the priority of i to the priority of most updated position
                 }
             }
 
-            file.SourcePosition = mostUpdatedPos;
+            file.SourcePosition = mostUpdatedPos; // Set the source position to the most updated position
         }
 
+        // Sets the parent of a file to dirty if necessary
         private static void SetFileParentDirty(FileCompareObject file, int numOfPaths)
         {
             int numExists = 0;
@@ -316,6 +323,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region Folder Handlers
 
+        // Helper method to handle folder renames.
         private static bool FolderRenameHelper(FolderCompareObject folder, int numOfPaths)
         {
             //Rename will only occur if all other changes are MetaChangeType.NoChange or null
@@ -325,25 +333,27 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             {
                 if (folder.ChangeType[i] == MetaChangeType.Rename)
                 {
-                    if (renamePos == -1)
+                    if (renamePos == -1) // Only set the position if renamePos is -1
                     {
                         renamePos = i;
                         folder.SourcePosition = renamePos;
                     }
-                    folder.Priority[i] = 1;
+                    folder.Priority[i] = 1; // Set the priority to 1.
                 }
             }
 
-            return renamePos > -1 ? true : false;
+            return renamePos > -1 ? true : false; // Only return true if rename pos > -1.
         }
 
+        // Helper method to handle folder deletes.
         private static bool FolderDeleteHelper(FolderCompareObject folder, int numOfPaths)
         {
             //Delete will only occur if none of the folders are marked as dirty
             if (!folder.Dirty)
             {
-                List<int> deletePos = new List<int>();
+                List<int> deleteIndexes = new List<int>(); // Create a list to store all the deleted indexes
                 bool stop = false;
+
                 for (int i = 0; i < numOfPaths; i++)
                 {
                     if (stop)
@@ -351,15 +361,15 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
                     if (folder.ChangeType[i] == MetaChangeType.Delete)
                     {
-                        deletePos.Add(i);
+                        deleteIndexes.Add(i);
 
                         for (int j = 0; j < numOfPaths; j++)
                         {
                             if (folder.Exists[j])
                             {
-                                if (folder.MetaUpdated[j] > folder.MetaUpdated[i])
+                                if (folder.MetaUpdated[j] > folder.MetaUpdated[i]) // If the meta updated of j is more than that of i, void the delete operation
                                 {
-                                    deletePos.Clear();
+                                    deleteIndexes.Clear();
                                     stop = true;
                                     break;
                                 }
@@ -368,23 +378,26 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                     }
                     else if (folder.ChangeType[i] != MetaChangeType.NoChange && folder.ChangeType[i] != null)
                     {
-                        deletePos.Clear();
+                        deleteIndexes.Clear();
                         break;
                     }
                 }
 
-                if (deletePos.Count > 0)
+                if (deleteIndexes.Count > 0)
                 {
-                    folder.SourcePosition = deletePos[0];
-                    folder.Contents.Clear(); //EXP
-                    foreach (int i in deletePos)
-                        folder.Priority[i] = 1;
-                    return true;
+                    folder.SourcePosition = deleteIndexes[0]; // Set the source position to the first delete index found (convenience)
+                    folder.Contents.Clear(); // Clear the contents of folder since it will be deleted anyway
+
+                    foreach (int i in deleteIndexes)
+                        folder.Priority[i] = 1; // Set all priority of deleted indexes to 1.
+
+                    return true; // Return true.
                 }
             }
-            return false;
+            return false; // Return false.
         }
 
+        // Helper method to handle folder creations and updates
         private static void FolderCreateUpdateHelper(FolderCompareObject folder, int numOfPaths)
         {
             int mostUpdatedPos = 0;
@@ -393,26 +406,27 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             {
                 if (folder.Exists[i])
                 {
-                    mostUpdatedPos = i;
+                    mostUpdatedPos = i; // Set most updated pos to the first folder that exists
                     break;
                 }
             }
 
-            folder.Priority[mostUpdatedPos] = 1;
+            folder.Priority[mostUpdatedPos] = 1; // Set the priority of the folder with the most updated pos to 1.
 
             for (int i = mostUpdatedPos + 1; i < numOfPaths; i++)
             {
                 if (!folder.Exists[i])
                 {
-                    folder.Priority[i] = -1;
+                    folder.Priority[i] = -1; // If folder does not exist, set the priority to -1.
                     continue;
                 }
-                folder.Priority[i] = folder.Priority[mostUpdatedPos];
+                folder.Priority[i] = folder.Priority[mostUpdatedPos]; // Set the priority of the folder to the same as the most updated pos.
             }
 
-            folder.SourcePosition = mostUpdatedPos;
+            folder.SourcePosition = mostUpdatedPos; // Set the source position to the most updated pos.
         }
 
+        // Sets the parent of a folder to dirty if necessary
         private static void SetFolderParentDirty(FolderCompareObject folder, int numOfPaths)
         {
             int numExists = 0;
@@ -428,23 +442,27 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #endregion
 
-        private static void SetFileSystemObjectDirty(BaseCompareObject file, int numOfPaths, ref int numExists, ref int posExists)
+        // Set the file system object to dirty if necssary.
+        // The general logic is to set the parent to dirty as long as the priority is not the same for all the objects.
+        // It is sound at this point since renamed and deleted files will never enter this method.
+        private static void SetFileSystemObjectDirty(BaseCompareObject obj, int numOfPaths, ref int numExists, ref int posExists)
         {
             int priority = -1;
 
             for (int i = 0; i < numOfPaths; i++)
             {
-                if (file.Exists[i])
+                if (obj.Exists[i])
                 {
                     numExists++;
                     posExists = i;
+
                     if (priority < 0)
-                        priority = file.Priority[i];
+                        priority = obj.Priority[i];
                     else
                     {
-                        if (priority != file.Priority[i])
+                        if (priority != obj.Priority[i])
                         {
-                            file.Parent.Dirty = true;
+                            obj.Parent.Dirty = true;
                             break;
                         }
                     }

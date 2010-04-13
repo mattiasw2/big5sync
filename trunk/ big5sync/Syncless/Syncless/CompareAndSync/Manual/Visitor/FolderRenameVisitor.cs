@@ -34,10 +34,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #endregion
 
+        // Detect folder renames, if any.
         private void DetectFolderRename(FolderCompareObject folder, int numOfPaths)
         {
-            List<int> deleteIndexes = new List<int>();
-            List<int> unchangedIndexes = new List<int>();
+            List<int> deleteIndexes = new List<int>(); // Keeps a list of deleted indexes
+            List<int> unchangedIndexes = new List<int>(); // Keeps a list of unchanged indexes
 
             for (int i = 0; i < numOfPaths; i++)
             {
@@ -63,20 +64,19 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 int renameCount;
                 folderObject = folder.Parent.GetRenamedFolder(folder.Name, out renameCount);
 
-                if (renameCount > 1)
+                if (renameCount > 1) // Multiple renames detected, set all unchanged to New so they will be propagated again
                 {
                     foreach (int j in unchangedIndexes)
                         folder.ChangeType[j] = MetaChangeType.New;
-                    return;
+                    return; // Exit
                 }
 
-                if (folderObject != null)
+                if (folderObject != null) // If folderObject != null and we reach here implies renameCounter is 1.
                 {
-
                     for (int i = 0; i < numOfPaths; i++)
                     {
-                        if (!folderObject.Exists[i])
-                            deleteIndexes.Remove(i);
+                        if (!folderObject.Exists[i]) // Remove all delete indexes if folder object does not exist at specified index
+                            deleteIndexes.Remove(i); // so that only those that exist will be merged
                     }
 
                     MergeRenamedFolder(folder, folderObject, deleteIndexes);
@@ -85,6 +85,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
+        // Merge renamed folder
         private void MergeRenamedFolder(FolderCompareObject actualFolder, FolderCompareObject renamedFolder, List<int> deleteIndexes)
         {
             Dictionary<string, BaseCompareObject>.KeyCollection renamedFolderContents = renamedFolder.Contents.Keys;
@@ -94,39 +95,44 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             FileCompareObject actualFileObj;
             FileCompareObject renamedFileObj;
 
+            // Set new name of actual folder to the found renamed folder
             actualFolder.NewName = renamedFolder.Name;
 
+            // Set each of the delete indexes to rename instead
             foreach (int i in deleteIndexes)
                 actualFolder.ChangeType[i] = MetaChangeType.Rename;
 
             foreach (string name in renamedFolderContents)
             {
+                // If name is found in contents
                 if (actualFolder.Contents.TryGetValue(name, out o))
                 {
+                    // If actualFldrObj is a folder
                     if ((actualFldrObj = o as FolderCompareObject) != null)
                     {
-                        renamedFolderObj = renamedFolder.Contents[name] as FolderCompareObject;
+                        renamedFolderObj = renamedFolder.Contents[name] as FolderCompareObject; // Set renamedFolderObj to the one found in renamedFolder
                         MergeFolder(actualFldrObj, renamedFolderObj, deleteIndexes);
                     }
                     else
                     {
-                        actualFileObj = o as FileCompareObject;
-                        renamedFileObj = renamedFolder.Contents[name] as FileCompareObject;
+                        actualFileObj = o as FileCompareObject; // Assign o as a FileCompareObject
+                        renamedFileObj = renamedFolder.Contents[name] as FileCompareObject; // Set renamedFileObj to the one found in renamed folder object
                         MergeFile(actualFileObj, renamedFileObj, deleteIndexes);
                     }
                 }
-                else
+                else // If not found, add as child to renamedFolder
                 {
                     actualFolder.AddChild(renamedFolder.Contents[name]);
                     renamedFolder.Contents[name].Parent = actualFolder;
                 }
             }
 
-            actualFolder.Parent.Dirty = true;
-            renamedFolder.Contents = new Dictionary<string, BaseCompareObject>();
-            renamedFolder.Invalid = true;
+            actualFolder.Parent.Dirty = true; // Set parent of actual folder as Dirty
+            renamedFolder.Contents = new Dictionary<string, BaseCompareObject>(); // "Clear" the contents
+            renamedFolder.Invalid = true; // Set renamed folder to invalid
         }
 
+        // Similar to MergeRenamedFolder, without setting the new name or changing the change type.
         private void MergeOneLevelDown(FolderCompareObject actualFolder, FolderCompareObject renamedFolder, List<int> deleteIndexes)
         {
             Dictionary<string, BaseCompareObject>.KeyCollection renamedFolderContents = renamedFolder.Contents.Keys;
@@ -163,10 +169,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             renamedFolder.Invalid = true;
         }
 
+        // Merge the files
         private void MergeFile(FileCompareObject actualFileObj, FileCompareObject renamedFileObj, List<int> deleteIndexes)
         {
             MergeFileSystemObject(actualFileObj, renamedFileObj, deleteIndexes);
 
+            // Copy the information from the renamed file object to the actual file object.
             foreach (int i in deleteIndexes)
             {
                 actualFileObj.Hash[i] = renamedFileObj.Hash[i];
@@ -182,20 +190,22 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         {
             MergeFileSystemObject(actualFldrObj, renamedFolderObj, deleteIndexes);
 
+            // Copy the information from the renamed object to the actual object.
             foreach (int i in deleteIndexes)
                 actualFldrObj.LastKnownState[i] = actualFldrObj.LastKnownState[i];
 
-            if (actualFldrObj.Contents.Count == 0)
+            if (actualFldrObj.Contents.Count == 0) // If actual folder has no contents
             {
-                actualFldrObj.Contents = renamedFolderObj.Contents;
+                actualFldrObj.Contents = renamedFolderObj.Contents; // Point its contents to that of the renamed folder
                 ChangeParent(actualFldrObj);
             }
             else
-                MergeOneLevelDown(actualFldrObj, renamedFolderObj, deleteIndexes);
+                MergeOneLevelDown(actualFldrObj, renamedFolderObj, deleteIndexes); // Merge one level down recursively
         }
 
         private void MergeFileSystemObject(BaseCompareObject actualObj, BaseCompareObject renameObj, List<int> deleteIndexes)
         {
+            // Copy the information from the renamed object to the actual object.
             foreach (int i in deleteIndexes)
             {
                 actualObj.ChangeType[i] = renameObj.ChangeType[i];
@@ -210,6 +220,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             }
         }
 
+        // Set/ensure that the child's parent is correct.
         private void ChangeParent(FolderCompareObject actualFldrObj)
         {
             Dictionary<string, BaseCompareObject>.ValueCollection values = actualFldrObj.Contents.Values;
