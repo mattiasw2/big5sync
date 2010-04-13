@@ -173,7 +173,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                         }
                         catch (InvalidCastException) // Happens when a file has the same name as the folder.
                         {
-                            _typeConflicts.Add(info.FullName);
+                            for (int i = 0; i < numOfPaths; i++)
+                            {
+                                if (o.Exists[i])
+                                    _typeConflicts.Add(Path.Combine(o.GetSmartParentPath(i), o.Name));
+                            }
                             folder.RemoveChild(info.Name); //Remove file object
                             fco = new FolderCompareObject(info.Name, numOfPaths, folder); // Create a new folder compare object
                             conflict = true;
