@@ -61,11 +61,7 @@ namespace SynclessUI.Visitor
                 {
                     if (i != maxPriorityPos && fco.Priority[i] != fco.Priority[maxPriorityPos])
                     {
-                        string operation = string.Empty,
-                               source = string.Empty,
-                               dest = string.Empty,
-                               tooltip = string.Empty;
-
+                        string operation = string.Empty, source = string.Empty, dest = string.Empty, tooltip = string.Empty;
                         var row = SyncData.NewRow();
 
                         switch (fco.ChangeType[maxPriorityPos])
@@ -108,17 +104,15 @@ namespace SynclessUI.Visitor
                             DateTime destDateTime = new DateTime(fco.LastWriteTimeUtc[i]);
                             row[DestLastModifiedDate] = destDateTime.ToShortDateString();
                             row[DestLastModifiedTime] = destDateTime.ToShortTimeString();
-
                             row[DestSize] = fco.Length[i];
-                        } else
+                        }
+                        else
                         {
                             row[DestLastModifiedDate] = "-";
                             row[DestSize] = "-";
                         }
 
-
                         SyncData.Rows.Add(row);
-                        //SyncData.AcceptChanges();
                     }
                 }
 

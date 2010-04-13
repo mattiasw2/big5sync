@@ -174,7 +174,18 @@ namespace SynclessUI
             }
 
             if (exists)
-                Process.Start(new ProcessStartInfo(path));
+            {
+                try
+                {
+                    ProcessStartInfo openWithInfo = new ProcessStartInfo(path);
+                    openWithInfo.ErrorDialog = true;
+                    Process.Start(openWithInfo);
+                }
+                catch (Win32Exception)
+                {
+                    //YC: Display some error msg?
+                }
+            }
             else
                 DialogHelper.ShowError(this, "Error Opening File/Folder", "The file/folder may not exist.");
 
