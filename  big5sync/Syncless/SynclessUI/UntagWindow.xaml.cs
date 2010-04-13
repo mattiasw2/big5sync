@@ -53,6 +53,8 @@ namespace SynclessUI
                         taglist.Focus();
                     }
                     ShowDialog();
+                    Topmost = true;
+                    Topmost = false;
                 }
                 else
                 {
