@@ -11,7 +11,6 @@ using Syncless.Filters;
 using Syncless.Logging;
 using Syncless.Notification;
 
-
 namespace Syncless.CompareAndSync.Manual
 {
     /// <summary>
