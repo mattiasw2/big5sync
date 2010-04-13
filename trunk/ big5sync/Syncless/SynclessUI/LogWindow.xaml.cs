@@ -64,7 +64,7 @@ namespace SynclessUI
                 ChkBoxSynchronizationLog.IsChecked = _showSynchronizationLog;
                 ChkBoxFileSystem.IsChecked = _showFileSystemLog;
                 ShowDialog();
-                datagrid.UpdateLayout();
+                dataGrid.UpdateLayout();
             }
         }
 
@@ -306,7 +306,7 @@ namespace SynclessUI
         private void PopulatesDataGrid()
         {
             PopulateLogDataTable();
-            datagrid.UpdateLayout();
+            dataGrid.UpdateLayout();
         }
 
         /// <summary>
@@ -320,7 +320,7 @@ namespace SynclessUI
             {
                 _main.Gui.ClearLog();
                 _LogData.Clear();
-                datagrid.UpdateLayout();
+                dataGrid.UpdateLayout();
             }
             catch (UnauthorizedAccessException)
             {

@@ -60,7 +60,7 @@
 				<Label x:Name="LblOk" FontFamily="Century Gothic" FontSize="9.333" Content="Close" FontWeight="Bold"/>
 			</Button>
 		</StackPanel>
-		<toolkit:DataGrid x:Name="datagrid" ItemsSource="{Binding LogData, ElementName=Window}" Margin="5,5,0,0" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="3" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True" MinHeight="100" MinWidth="655" MaxHeight="300" MaxWidth="655" RowBackground="#FF666666" AlternatingRowBackground="#FF555555" HorizontalGridLinesBrush="#FF828790" VerticalGridLinesBrush="#FF828790" FontFamily="Century Gothic" Background="#FF666666">
+		<toolkit:DataGrid x:Name="dataGrid" ItemsSource="{Binding LogData, ElementName=Window}" Margin="5,5,0,0" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="3" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True" MinHeight="100" MinWidth="655" MaxHeight="300" MaxWidth="655" RowBackground="#FF666666" AlternatingRowBackground="#FF555555" HorizontalGridLinesBrush="#FF828790" VerticalGridLinesBrush="#FF828790" FontFamily="Century Gothic" Background="#FF666666" ClipboardCopyMode="None">
 			<toolkit:DataGrid.Columns>
 				<toolkit:DataGridTextColumn Binding="{Binding Timestamp}" Header="Timestamp" IsReadOnly="True" Foreground="White"/>
 				<toolkit:DataGridTextColumn Binding="{Binding Category}" Header="Category" IsReadOnly="True" Foreground="White"/>
@@ -86,5 +86,6 @@
 		<Button x:Name="BtnClearLog" HorizontalAlignment="Right" Margin="0" FontFamily="Century Gothic" FontSize="9.333" Grid.Column="1" Grid.Row="2" Height="28" Click="BtnClearLog_Click">
 			<Label x:Name="LblClear" FontFamily="Century Gothic" FontSize="9.333" Content="Clear All Logs" FontWeight="Bold"/>
 		</Button>
+		<Label x:Name="LblChanges" HorizontalAlignment="Left" Content="{Binding Items.Count, ElementName=dataGrid, Mode=Default}" Grid.Column="1" Grid.Row="4" Foreground="White" Margin="0,2,0,0" FontFamily="Century Gothic" FontSize="10.667" ContentStringFormat="{}{0} Selected Log Entries" VerticalAlignment="Center"/>
 	</Grid>
 </Window>

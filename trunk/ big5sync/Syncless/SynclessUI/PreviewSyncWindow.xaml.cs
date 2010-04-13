@@ -26,6 +26,7 @@ namespace SynclessUI
         private BackgroundWorker _previewWorker;
         private RootCompareObject _rco;
         private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
+		private TextBlock pathBox;
 
         public PreviewSyncWindow(MainWindow main, string selectedTag)
         {
@@ -69,6 +70,7 @@ namespace SynclessUI
                     ProgressBarAnalyzing.Value = 100;
                     ProgressBarAnalyzing.IsIndeterminate = false;
                     LblProgress.Content = "Analyzing Completed!";
+					LblChanges.Visibility = Visibility.Visible;
                     LblCancel.Content = "Close";
                 }
             }
@@ -145,12 +147,57 @@ namespace SynclessUI
             }
         }
 
+        private void OpenInExplorerRightClick_Click(object sender, RoutedEventArgs e)
+        {
+            if(pathBox == null)
+                return;
+
+            string path = pathBox.Text;
+
+            if (CheckPathExist(path))
+            {
+                var runExplorer = new ProcessStartInfo();
+                runExplorer.FileName = "explorer.exe";
+                runExplorer.Arguments = path;
+                Process.Start(runExplorer);
+            } else
+            {
+                DialogHelper.ShowError(this, "Error Opening File/Folder", "The file/folder may not exist.");
+            }
+        }
+
+        private void Path_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+		{
+			pathBox = (TextBlock) sender;
+		}
+
         private void Path_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             TextBlock pathBox = (TextBlock) sender;
             string path = pathBox.Text;
-            bool exists = false;
 
+            if (CheckPathExist(path))
+            {
+                try
+                {
+                    ProcessStartInfo openWithInfo = new ProcessStartInfo(path);
+                    openWithInfo.ErrorDialog = true;
+                    Process.Start(openWithInfo);
+                }
+                catch (Win32Exception)
+                {
+                    //YC: Display some error msg?
+                }
+            }
+            else
+                DialogHelper.ShowError(this, "Error Opening File/Folder", "The file/folder may not exist.");
+
+            e.Handled = true;
+        }
+
+        private bool CheckPathExist(string path)
+        {
+            bool exists = false;
             try
             {
                 DirectoryInfo di = new DirectoryInfo(path);
@@ -172,24 +219,7 @@ namespace SynclessUI
             catch
             {
             }
-
-            if (exists)
-            {
-                try
-                {
-                    ProcessStartInfo openWithInfo = new ProcessStartInfo(path);
-                    openWithInfo.ErrorDialog = true;
-                    Process.Start(openWithInfo);
-                }
-                catch (Win32Exception)
-                {
-                    //YC: Display some error msg?
-                }
-            }
-            else
-                DialogHelper.ShowError(this, "Error Opening File/Folder", "The file/folder may not exist.");
-
-            e.Handled = true;
+            return exists;
         }
     }
 }
