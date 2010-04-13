@@ -90,6 +90,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #endregion
 
+        /// <summary>
+        /// Returns the current sync progress
+        /// </summary>
         public SyncProgress Progress
         {
             get { return _progress; }
