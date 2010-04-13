@@ -272,6 +272,7 @@ namespace SynclessUI
                 if (CancellingTags.Contains(SelectedTag))
                 {
                     BtnSyncNow.IsEnabled = false;
+                    BtnPreview.Visibility = Visibility.Hidden;
                     LblSyncNow.Content = "Cancelling..";
                 }
                 else
@@ -1803,7 +1804,10 @@ namespace SynclessUI
 
             var kg8 = new KeyGesture(Key.S, ModifierKeys.Control);
             var ib8 = new InputBinding(ShortcutsCommand, kg8);
+            var kg81 = new KeyGesture(Key.OemQuestion, ModifierKeys.Shift);
+            var ib81 = new InputBinding(ShortcutsCommand, kg81);
             InputBindings.Add(ib8);
+            InputBindings.Add(ib81);
 
             // Log Command
             var LogCommand = new RoutedCommand();
