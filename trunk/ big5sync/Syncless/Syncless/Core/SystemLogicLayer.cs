@@ -1458,6 +1458,10 @@ namespace Syncless.Core
             {
                 LoggingLayer.Instance.ClearLog();
             }
+            catch (UnauthorizedAccessException e)
+            {
+                throw e;
+            }
             catch (Exception e)
             {
                 //Handle some unexpected exception so that it does not hang the UI.

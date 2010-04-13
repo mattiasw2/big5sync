@@ -322,6 +322,10 @@ namespace SynclessUI
                 _LogData.Clear();
                 datagrid.UpdateLayout();
             }
+            catch (UnauthorizedAccessException)
+            {
+                DialogHelper.ShowError(this, "Clear Log Failed", "Unable to clear log at the moment. Please try again later.");
+            }
             catch (UnhandledException)
             {
                 DialogHelper.DisplayUnhandledExceptionMessage(this);
