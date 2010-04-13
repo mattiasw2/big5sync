@@ -163,10 +163,11 @@ namespace SynclessUI
         {
             int index = filters.IndexOf(f);
             ListBoxFilters.SelectedIndex = index;
+            TxtBoxPattern.Focus();
         }
 
         /// <summary>
-        /// Checks if there are redudant filters. Does this by removing all filters one by one and checking if a similar
+        /// Checks if there are redundant filters. Does this by removing all filters one by one and checking if a similar
         /// filter can be found.
         /// </summary>
         /// <returns>Returns true if a duplicate filter is found. Else returns false.</returns>
@@ -182,6 +183,27 @@ namespace SynclessUI
                     return true;
                 }
                 filters.Insert(i, fi);
+            }
+
+            return false;
+        }
+
+        private bool CheckDuplicateFilters(Filter f, int indexOfFilter)
+        {
+            for (int i = 0; i < filters.Count; i++)
+            {
+                Filter tempFilter = filters[i];
+
+                // if duplicate filter found
+                if (tempFilter.Equals(f))
+                {
+                    // if duplicate filter found is not the filter supplied
+                    if(indexOfFilter != i)
+                        return true;
+                    // else if continue searching
+                    else
+                        continue;
+                }
             }
 
             return false;
@@ -213,7 +235,7 @@ namespace SynclessUI
                 int index = ListBoxFilters.SelectedIndex;
                 filters.RemoveAt(index);
 
-                PopulateListBoxFilter(false);
+                PopulateListBoxFilter(true);
             }
         }
 
@@ -293,11 +315,31 @@ namespace SynclessUI
         private void TxtBoxPattern_PreviewLostKeyboardFocus(object sender,
                                                             System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
-            if (TxtBoxPattern.Text.Trim() == string.Empty && BtnCancel != e.NewFocus)
+            if (BtnCancel != e.NewFocus && BtnRemoveFilter != e.NewFocus)
             {
-                e.Handled = true;
+                string pattern = TxtBoxPattern.Text.Trim();
+                FilterMode mode = FilterMode.INCLUDE;
 
-                DialogHelper.ShowError(this, "Extension Mask Cannot be Empty", "Please input a valid extension mask.");
+                if (CmbBoxMode.SelectedIndex == 0)
+                    mode = FilterMode.INCLUDE;
+                else if (CmbBoxMode.SelectedIndex == 1)
+                    mode = FilterMode.EXCLUDE;
+
+                if (pattern == string.Empty)
+                {
+                    DialogHelper.ShowError(this, "Extension Mask Cannot be Empty", "Please input a valid extension mask.");
+                    e.Handled = true;
+
+                    return;
+                }
+
+                Filter tempFilter = FilterFactory.CreateExtensionFilter(pattern, mode);
+
+                if (CheckDuplicateFilters(tempFilter, ListBoxFilters.SelectedIndex))
+                {
+                    DialogHelper.ShowError(this, "Duplicate Filters Not Allowed", "Change the extension mask first.");
+                    e.Handled = true;
+                }
             }
         } 
         #endregion
@@ -362,7 +404,8 @@ namespace SynclessUI
         {
             BtnCancel.IsEnabled = false;
             Close();
-        } 
-        #endregion
+        }
+		
+		#endregion
     }
 }
