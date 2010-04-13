@@ -2100,7 +2100,7 @@ namespace Syncless.Core
                 //Unmonitor the tag first then delete the tag.
                 SwitchMode(tag.TagName, TagMode.Manual);
                 TaggingLayer.Instance.DeleteTag(tag.TagName);
-
+                _userInterface.TagsChanged();
             }
             catch (TagNotFoundException te)
             {
