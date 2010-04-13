@@ -54,7 +54,7 @@
     <Compile Include="TestReadWriteHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Syncless\Syncless\Syncless.csproj">
+    <ProjectReference Include="..\Syncless\Syncless.csproj">
       <Project>{79C1CBE7-297A-4820-A2D9-BE3507B8EF19}</Project>
       <Name>Syncless</Name>
     </ProjectReference>
