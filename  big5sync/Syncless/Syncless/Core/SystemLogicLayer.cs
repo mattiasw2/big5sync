@@ -2073,25 +2073,20 @@ namespace Syncless.Core
         /// <param name="tag">Tag that was added</param>
         internal void AddTag(Tag tag)
         {
-            Tag tagTemp = TaggingLayer.Instance.RetrieveTag(tag.TagName);
-            if (tagTemp == null || tagTemp.IsDeleted)
+            //if tag is deleted, nothing needs to be done.
+            if (tag.IsDeleted)
             {
-                TaggingLayer.Instance.AddTag(tag);
-                //if tag is deleted, nothing needs to be done.
-                if (tag.IsDeleted)
-                {
-                    return;
-                }
-                //If the tag is seamless, re-set the mode to seamless
-                if (tag.IsSeamless)
-                {
-                    SwitchMode(tag.TagName, TagMode.Manual);
-                    SwitchMode(tag.TagName, TagMode.Seamless);
-                }
-                else //set the mode to manual
-                {
-                    SwitchMode(tag.TagName, TagMode.Manual);
-                }
+                return;
+            }
+            //If the tag is seamless, re-set the mode to seamless
+            if (tag.IsSeamless)
+            {
+                SwitchMode(tag.TagName, TagMode.Manual);
+                SwitchMode(tag.TagName, TagMode.Seamless);
+            }
+            else //set the mode to manual
+            {
+                SwitchMode(tag.TagName, TagMode.Manual);
             }
         }
         /// <summary>

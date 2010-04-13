@@ -106,6 +106,7 @@ namespace Syncless.Tagging
                 {
                     if (newTag.CreatedDate > current.DeletedDate)
                     {
+                        TaggingLayer.Instance.AddTag(newTag);
                         ServiceLocator.LogicLayerNotificationQueue().Enqueue(new AddTagNotification(newTag));
                         return true;
                         //SystemLogicLayer.Instance.AddTag(newTag);
