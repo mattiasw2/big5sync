@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Core.Exceptions;
 using SynclessUI.Helper;
@@ -31,24 +32,21 @@ namespace SynclessUI
             _selectedTag = selectedTag;
 
             _previewSyncData = new DataTable();
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Source, typeof (string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Operation, typeof (string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Dest, typeof (string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Tooltip, typeof (string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceIcon, typeof (string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestIcon, typeof (string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceLastModifiedDate, typeof (string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceLastModifiedTime, typeof (string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceSize, typeof (string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestLastModifiedDate, typeof (string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestLastModifiedTime, typeof (string)));
-            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestSize, typeof (string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Source, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Operation, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Dest, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Tooltip, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceIcon, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestIcon, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceLastModifiedDate, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceLastModifiedTime, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.SourceSize, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestLastModifiedDate, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestLastModifiedTime, typeof(string)));
+            _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestSize, typeof(string)));
             _main = main;
             Owner = _main;
             ShowInTaskbar = false;
-
-
-            //Populate(_main.Gui.PreviewSync(selectedTag));
 
             _previewWorker = new BackgroundWorker();
             _previewWorker.DoWork += _previewWorker_DoWork;
@@ -66,7 +64,7 @@ namespace SynclessUI
                 RootCompareObject rco = e.Result as RootCompareObject;
                 if (rco != null)
                 {
-                    Populate(rco);
+                    
                     ProgressBarAnalyzing.Foreground = (Brush) ProgressBarAnalyzing.Resources["GreenColor"];
                     ProgressBarAnalyzing.Value = 100;
                     ProgressBarAnalyzing.IsIndeterminate = false;
@@ -83,9 +81,13 @@ namespace SynclessUI
             if (_previewWorker.CancellationPending)
             {
                 e.Cancel = true;
-                rco = null;
             }
-            e.Result = rco;
+            else
+            {
+                e.Result = rco;
+                Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() => Populate(rco)));
+            }
+           
         }
 
         public DataTable PreviewSyncData
@@ -105,24 +107,13 @@ namespace SynclessUI
                 {
                     SyncUIHelper.TraverseFolderHelper(rco, visitor);
                 }
+
+                _previewSyncData.AcceptChanges();
             }
             catch (UnhandledException)
             {
                 DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
-        }
-
-        public void Test(IAsyncResult result)
-        {
-            Console.WriteLine("Call back Hit");
-            Console.WriteLine(result.CompletedSynchronously);
-            Console.WriteLine(result.IsCompleted);
-            Console.WriteLine(result.AsyncWaitHandle);
-        }
-
-        private void BtnOk_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
@@ -144,7 +135,7 @@ namespace SynclessUI
             Close();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             if (_closingAnimationNotCompleted)
             {
@@ -154,12 +145,10 @@ namespace SynclessUI
             }
         }
 
-        private void Path_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Path_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             TextBlock pathBox = (TextBlock) sender;
-
             string path = pathBox.Text;
-
             bool exists = false;
 
             try
@@ -191,17 +180,5 @@ namespace SynclessUI
 
             e.Handled = true;
         }
-
-        #region Nested type: PreviewSyncDelegate
-
-        private delegate RootCompareObject PreviewSyncDelegate(string tagname);
-
-        #endregion
-
-        #region Nested type: UpdateDelegate
-
-        private delegate void UpdateDelegate();
-
-        #endregion
     }
 }

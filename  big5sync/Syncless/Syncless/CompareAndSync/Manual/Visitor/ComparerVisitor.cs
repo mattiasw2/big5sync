@@ -93,7 +93,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 {
                     case MetaChangeType.New:
                     case MetaChangeType.Update:
-                        return;
+                        return; // Return as long as one of the meta change type is new or updated.
                 }
             }
 
@@ -102,20 +102,24 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 switch (file.ChangeType[i])
                 {
                     case MetaChangeType.Delete:
+                        // All deletes are also possible renames, thus we call GetIdenticalFile to look for an identical file with a different name, if any
                         FileCompareObject f = file.Parent.GetIdenticalFile(file.Name, file.MetaHash[i], file.MetaCreationTimeUtc[i], i);
+                        
+                        // If an identical file is found
                         if (f != null)
                         {
                             List<int> pos;
                             if (newNames.TryGetValue(f.Name, out pos))
                             {
-                                pos.Add(i);
+                                pos.Add(i); // Add the position to the existing list of names
                             }
                             else
                             {
+                                // Create a new list to add the position if the name does not currently exist
                                 pos = new List<int>();
                                 pos.Add(i);
                                 newNames.Add(f.Name, pos);
-                                result = f;
+                                result = f; // Point result to f
                             }
                         }
                         break;
@@ -125,19 +129,20 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 }
             }
 
-            if (newNames.Count == 1)
+            if (newNames.Count == 1) // Meaning only one new/possible rename was detected, proceed with the rename.
             {
-                file.NewName = result.Name;
-                foreach (int i in newNames[result.Name])
-                    file.ChangeType[i] = MetaChangeType.Rename;
+                file.NewName = result.Name; // Set the new name of this file to the name of the found file.
 
-                result.Invalid = true;
-                file.Parent.Dirty = true;
+                foreach (int i in newNames[result.Name])
+                    file.ChangeType[i] = MetaChangeType.Rename; // Set all the positions to change type rename.
+
+                result.Invalid = true; // Set the found file to invalid, no need to process it.
+                file.Parent.Dirty = true; // Set the current file's parent to dirty.
             }
-            else if (newNames.Count > 1)
+            else if (newNames.Count > 1) // Meaning multiple renames are detected, void all the renames and treat each type as new.
             {
                 foreach (int i in unchangedIndexes)
-                    file.ChangeType[i] = MetaChangeType.New;
+                    file.ChangeType[i] = MetaChangeType.New; // Set all the unchanged to new since they will be treated as new,
             }
 
         }
@@ -151,11 +156,11 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         {
             bool isRenamed = FileRenameHelper(file, numOfPaths);
             if (isRenamed)
-                return;
+                return; // Exit the method since a rename has been detected and handled for this file.
 
             bool isDeleted = FileDeleteHelper(file, numOfPaths);
             if (isDeleted)
-                return;
+                return; // Exit the method since a delete has been detected and handled for this file.
 
             FileCreateUpdateHelper(file, numOfPaths);
             SetFileParentDirty(file, numOfPaths);
@@ -165,6 +170,7 @@ namespace Syncless.CompareAndSync.Manual.Visitor
 
         #region File Handlers
 
+        // Helper method to handle file renames.
         private static bool FileRenameHelper(FileCompareObject file, int numOfPaths)
         {
             int renamePos = -1;
@@ -175,16 +181,17 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 {
                     if (renamePos == -1)
                     {
-                        renamePos = i;
-                        file.SourcePosition = renamePos;
+                        renamePos = i; // Set rename position to i.
+                        file.SourcePosition = renamePos; // Set the source position of the file to be the rename position.
                     }
-                    file.Priority[i] = 1;
+                    file.Priority[i] = 1; // Set the file priority to 1 if change type is rename.
                 }
             }
 
-            return renamePos > -1 ? true : false;
+            return renamePos > -1 ? true : false; // Return true only if renamePos has been set, i.e., more than -1.
         }
 
+        // Helper method to handle file deletes.
         private static bool FileDeleteHelper(FileCompareObject file, int numOfPaths)
         {
             List<int> deletePos = new List<int>();
