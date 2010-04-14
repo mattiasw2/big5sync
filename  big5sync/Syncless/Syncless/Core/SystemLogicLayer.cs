@@ -1465,6 +1465,10 @@ namespace Syncless.Core
             {
                 LoggingLayer.Instance.ClearLog();
             }
+            catch (IOException)
+            {
+                throw;
+            }
             catch (UnauthorizedAccessException)
             {
                 throw;

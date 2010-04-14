@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using Syncless.Core.Exceptions;
@@ -321,6 +322,10 @@ namespace SynclessUI
                 _main.Gui.ClearLog();
                 _LogData.Clear();
                 dataGrid.UpdateLayout();
+            }
+            catch (IOException)
+            {
+                DialogHelper.ShowError(this, "Clear Log Failed", "Unable to clear log at the moment. Please try again later.");
             }
             catch (UnauthorizedAccessException)
             {
