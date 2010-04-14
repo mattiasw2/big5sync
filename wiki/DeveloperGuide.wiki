@@ -32,6 +32,11 @@ Syncless uses various XML files to store information. XML was chosen as it is mo
 
 Finally, each folder that is tagged also have metadata stored in them. At the moment, the XML is stored in a folder {{{.syncless}}} and is hidden. In the future, we will move this metadata elsewhere as most users do not like seeing "unwanted" files appearing all over the place.
 
+=== Core ===
+
+To understand more about Core component, please click
+[http://code.google.com/p/big5sync/wiki/DeveloperComponentCore here].
+
 === Profiling ===
 
 The Profiling component performs drive/computer recognization. It makes Syncless truly portable because of its ability to recognize different drives/computers by creating a Globally Unique IDentifier (GUID) in each of them. It also performs conversion of a physical directory/file path to a logical address, and vice versa. This conversion is necessary, because !CompareAndSync only recognizes physical path while Tagging recognizes a logical path.
