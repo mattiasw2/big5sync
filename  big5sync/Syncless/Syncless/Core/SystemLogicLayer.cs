@@ -1146,7 +1146,7 @@ namespace Syncless.Core
                 //if it is null , return null
                 //else Convert the tag into TagView and return it.
                 Tag t = TaggingLayer.Instance.RetrieveTag(tagname);
-                if (t == null)
+                if (t == null || t.IsDeleted)
                 {
                     return null;
                 }
