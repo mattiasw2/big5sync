@@ -1,4 +1,10 @@
-﻿using System.IO;
+﻿/*
+ * 
+ * Author: Gordon Hoi Chi Kit
+ * 
+ */
+
+using System.IO;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Exceptions;
 using Syncless.CompareAndSync.Manual.CompareObject;

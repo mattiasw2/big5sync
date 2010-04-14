@@ -1,4 +1,10 @@
-﻿namespace Syncless.CompareAndSync.Enum
+﻿/*
+ * 
+ * Author: Soh Yuan Chin
+ * 
+ */
+
+namespace Syncless.CompareAndSync.Enum
 {
     /// <summary>
     /// This enum specifies the change of a file or folder with respect to its own metadata.

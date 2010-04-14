@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Soh Yuan Chin
+ * 
+ */
+
+using System;
 using System.IO;
 using Syncless.CompareAndSync.Exceptions;
 using Syncless.CompareAndSync.Manual.CompareObject;

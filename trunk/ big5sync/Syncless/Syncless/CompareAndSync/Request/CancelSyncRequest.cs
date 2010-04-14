@@ -1,4 +1,10 @@
-﻿namespace Syncless.CompareAndSync.Request
+﻿/*
+ * 
+ * Author: Soh Yuan Chin
+ * 
+ */
+
+namespace Syncless.CompareAndSync.Request
 {
     /// <summary>
     /// <c>CancelSyncRequest</c> is used for cancelling sync requests.

@@ -1,4 +1,10 @@
-﻿using Syncless.CompareAndSync.Manual;
+﻿/*
+ * 
+ * Author: Soh Yuan Chin
+ * 
+ */
+
+using Syncless.CompareAndSync.Manual;
 using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.CompareAndSync.Request;
 using Syncless.CompareAndSync.Seamless;

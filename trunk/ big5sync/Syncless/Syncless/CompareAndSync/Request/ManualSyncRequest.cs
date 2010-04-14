@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * 
+ * Author: Soh Yuan Chin
+ * 
+ */
+
+using System.Collections.Generic;
 using Syncless.Filters;
 
 namespace Syncless.CompareAndSync.Request

@@ -1,4 +1,10 @@
-﻿using Syncless.CompareAndSync.Manual.CompareObject;
+﻿/*
+ * 
+ * Author: Soh Yuan Chin
+ * 
+ */
+
+using Syncless.CompareAndSync.Manual.CompareObject;
 
 namespace Syncless.CompareAndSync.Manual.Visitor
 {

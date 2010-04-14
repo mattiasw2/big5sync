@@ -1,4 +1,10 @@
-﻿using System.IO;
+﻿/*
+ * 
+ * Author: Gordon Hoi Chi Kit
+ * 
+ */
+
+using System.IO;
 using System.Xml;
 using Syncless.CompareAndSync.Enum;
 using Syncless.CompareAndSync.Seamless.XMLWriteObject;

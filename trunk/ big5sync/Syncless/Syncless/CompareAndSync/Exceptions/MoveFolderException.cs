@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Soh Yuan Chin
+ * 
+ */
+
+using System;
 using Syncless.Helper;
 
 namespace Syncless.CompareAndSync.Exceptions
