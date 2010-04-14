@@ -6,7 +6,7 @@
 N here refers to any number. Most of the synchronization tools in the market are only capable of 2-way synchronization, that is, they can only keep 2 folders in sync under each sync job. N-way means that each job, or in the case of Syncless, tag, can have any number of folders under it, and all of them will be kept in sync.
 
 
-==== Origin ====
+==== Origin \ Source ====
 An origin is one of the folders to be kept in sync. For example, if a user keeps {{{C:\Documents\Lecture Notes}}} and {{{E:\School\Lectures}}} in sync, then these 2 folders are both origins.
 
 
