@@ -33,7 +33,7 @@ We will now take a look at the main components of !CompareAndSync, which can be 
 *!CompareAndSyncController* is a facade for the other layers to interact with, hiding the underlying implementations and exposing only the necessary methods for syncing.
 
 === Enums, Exceptions, Data Transfer Objects (DTOs) and Entities ===
-Enums, exceptions, DTOs and entities will not be discussed in detail in this guide. Please refer to the comments in the source code for more details. However, let us take a brief look at Requests, which are DTOs used in requesting for a manual synchronization or comparison job, or a auto synchronization job.
+Enums, exceptions, DTOs and entities will not be discussed in detail in this guide. Please refer to the comments in the source code for more details. However, let us take a brief look at *Requests*, which are DTOs used in requesting for a manual synchronization or comparison job, or an auto synchronization job.
 
   * Request Namespace
     * !AutoSyncRequest
@@ -46,7 +46,7 @@ Enums, exceptions, DTOs and entities will not be discussed in detail in this gui
 *!AutoSyncRequest* is sent when an automatic synchronization job is to be performed. *!ManualCompareRequest* and *!ManualSyncRequest* both inherit from the abstract class *!ManualRequest*, and are sent when a manual comparison or synchronization is to be performed respectively. *!CancelSyncRequest* is sent when a *!ManualSyncRequest* is to be cancelled. *Request* is an abstract class from which all the other request classes inherit from.
 
 == Manual Components ==
-As stated in the overview, the manual portion of the !CompareAndSync component is done using the Tree Visitor Pattern. Although the Tree Visitor Pattern is considered a bad design pattern in some cases, the usage of this pattern in our implementation of !CompareAndSync greatly enhances extensibility, as you will see later.
+As stated in the overview, the manual portion of the !CompareAndSync component is done using the Tree Visitor Pattern. The usage of this pattern in our implementation of !CompareAndSync greatly enhances extensibility, as you will see later.
 
 The classes of concern to us are:
 
@@ -105,7 +105,7 @@ Assuming a user wants to compare and analyze the results, but not do any actual 
 
 The classes of concern to us for the seamless portion are as follows:
 
-  * !XMLWriteObject Namespace
+  * XMLWriteObject Namespace
     * BaseXMLWriteObject
     * XMLWriteFileObject
     * XMLWriteFolderObject
@@ -116,9 +116,8 @@ The classes of concern to us for the seamless portion are as follows:
 *!SeamlessQueueControl* is a class that contains a single queue to ensure the requests are handled in order, so as to prevent any possible conflicts. *!SeamlessSyncer* contains the necessary methods to handle seamless file synchronization, and upon each successful synchronization, *SeamlessXMLHelper* will be called to update the metadata.
 
 = Explanation of Algorithms =
-The main algorithm we are going to discuss here is the manual component comparison. Yes, Syncless' main aim is seamless synchronization, but the manual synchronization is in fact activated every time a user launches the application, or connects a removable storage drive to it. In a way, it is "seamless" too. Thus, it is as important as the seamless component.
-
-Using pre-traversal, !BuilderVisitor will build a tree based on the given root paths. However, instead of a node for each and every folder, it groups files and folders of the same name at each level into single node. For example, if we want to synchronize "Lectures", "Notes" and "School", and the content of the folders are as follows:
+== Manual Mode ==
+Using pre-traversal, !BuilderVisitor will build a tree based on the given root paths. However, instead of a node for each and every folder, it groups files and folders of the same name at each level into single node. A list of string to store conflicts is also passed into the constructor for !BuilderVisitor. The purpose of this list is to store [DeveloperComponentCompareAndSync#Conflicts incompatible type conflicts]. If we want to synchronize "Lectures", "Notes" and "School", and the content of the folders are as follows:
 
 *Lectures*
   * SWEN.pdf
@@ -136,68 +135,115 @@ From the above, we can see that "SWEN.pdf" exists only in Lectures, "!BizComm.pp
 
 http://big5sync.googlecode.com/files/DeveloperCompareAndSyncDiagTreeSmall.png
 
-With the above tree, it is very easy to compare as we only need to concern ourselves with a single node for every file. Now that the tree is built and populated with files, the XMLMetadataVisitor will populate each node with metadata, as well as create nodes if the file exists in the metadata but not in the folder. The metadata is very important in detecting if a file or folder has been renamed or deleted, so that the changes will be propagated across.
+With the above tree, it is very easy to compare as we only need to concern ourselves with a single node for every file or folder. Now that the tree is built and populated with files, the XMLMetadataVisitor will populate each node with metadata, as well as create nodes if the file exists in the metadata but not in the folder. The metadata is very important in detecting if a file or folder has been renamed or deleted, so that the changes will be propagated across.
 
-The !FolderRenameVisitor will now visit the tree, and detect for folder renames. The reason why it has to occur before any file comparison can take place is due to the fact that the algorithm attempts to merge any renamed folder with folders that have the old name, so that files can still be compared. There are two main methods in !FolderRenameVisitor, namely {{{!DetectFolderRename}}} and  {{{!MergeRenamedFolder}}}, that handles this. The code for {{{!DetectFolderRename}}} is as follows.
+The !FolderRenameVisitor will now visit the tree in level-order, and detect for folder renames. The reason why it has to occur before any file comparison can take place is due to the fact that the algorithm attempts to merge any renamed folder with folders that have the old name, so that files can still be compared. There are two main methods in !FolderRenameVisitor, namely `DetectFolderRename` and  `MergeRenamedFolder`, that handles this. The code for `DetectFolderRename` is as follows:
 
 {{{
-        private void DetectFolderRename(FolderCompareObject folder, string[] currentPaths)
+        // Detect folder renames, if any.
+        private void DetectFolderRename(FolderCompareObject folder, int numOfPaths)
         {
-            //Count the number of items which are marked as delete inside this FolderCompareObject
-            List<int> deletePos = new List<int>();
-            for (int i = 0; i < currentPaths.Length; i++)
-            {
-                if (folder.ChangeType[i] == MetaChangeType.Delete)
-                    deletePos.Add(i);
-            }
+            List<int> deleteIndexes = new List<int>(); // Keeps a list of deleted indexes
+            List<int> unchangedIndexes = new List<int>(); // Keeps a list of unchanged indexes
 
-            //If the number of items are not exactly 1, exit current method
-            if (deletePos.Count != 1)
+            for (int i = 0; i < numOfPaths; i++)
             {
-                //If the number of items are more than one, mark each of their ChangeType to null, 
-                //so that changes will propagate back to it
-                foreach (int i in deletePos)
-                    folder.ChangeType[i] = null;
-                return;
-            }
-
-            FolderCompareObject f = null;
-
-            for (int i = 0; i < currentPaths.Length; i++)
-            {
-                if (folder.ChangeType[i] == MetaChangeType.Delete)
+                switch (folder.ChangeType[i])
                 {
-                    //Find the possible renamed folder based on metadata
-                    f = folder.Parent.GetRenamedFolder(folder.Name, folder.CreationTime[i], i);
-
-                    if (f != null)
-                    {
-                        int counter = 0;
-
-                        for (int j = 0; j < f.ChangeType.Length; j++)
-                        {
-                            //Count the number of items marked as New, should have exactly one
-                            if (f.ChangeType[j].HasValue && f.ChangeType[j] == MetaChangeType.New)
-                                counter++;
-                        }
-
-                        //If number of items marked is not exactly one, mark the ChangeType as null,
-                        //so that changes will propagate over, and exit the method
-                        if (counter != 1)
-                        {
-                            folder.ChangeType[i] = null;                         
-                            return;
-                        }
-
-                        //Merge renamed folder with deleted folder
-                        MergeRenamedFolder(folder, f, i);
-                    }
+                    case MetaChangeType.Delete:
+                        deleteIndexes.Add(i);
+                        break;
+                    case MetaChangeType.NoChange:
+                        unchangedIndexes.Add(i);
+                        break;
                 }
+            }
+
+            // 1. If there exists a folder for which meta exists is true and exists is false, it is (aka changeType.delete)
+            //    highly probable that it is a folder rename
+            // 2. We check all folders which has the same meta name but different name as the non-existent folder
+            // 3. If the count is 1, we shall proceed to rename
+            FolderCompareObject folderObject;
+
+            if (deleteIndexes.Count > 0)
+            {
+                int renameCount;
+                folderObject = folder.Parent.GetRenamedFolder(folder.Name, out renameCount);
+
+                if (renameCount > 1) // Multiple renames detected, set all unchanged to New so they will be propagated again
+                {
+                    foreach (int j in unchangedIndexes)
+                        folder.ChangeType[j] = MetaChangeType.New;
+                    return; // Exit
+                }
+
+                if (folderObject != null) // If folderObject != null and we reach here implies renameCounter is 1.
+                {
+                    for (int i = 0; i < numOfPaths; i++)
+                    {
+                        if (!folderObject.Exists[i]) // Remove all delete indexes if folder object does not exist at specified index
+                            deleteIndexes.Remove(i); // so that only those that exist will be merged
+                    }
+
+                    MergeRenamedFolder(folder, folderObject, deleteIndexes);
+                }
+
             }
         }
 }}}
 
-After !FolderRenameVisitor is done with its job, !ComparerVisitor, the only visitor to use post-traversal instead of pre-traversal, will visit the tree. There are various methods in !ComparerVisitor that handles the detection of renamed files, as well as the comparing of files and folders. Let us take a look at the main function, `!CompareFiles`.
+If it is determined that a folder rename has occurred, we will merge it by calling `MergeRenamedFolder`. The main purpose of this method is to combine the contents in the renamed folders with the contents on the un-renamed folders. The code for `MergedRenamedFolder` is as follows:
+
+{{{
+        // Merge renamed folder
+        private void MergeRenamedFolder(FolderCompareObject actualFolder, FolderCompareObject renamedFolder, List<int> deleteIndexes)
+        {
+            Dictionary<string, BaseCompareObject>.KeyCollection renamedFolderContents = renamedFolder.Contents.Keys;
+            BaseCompareObject o;
+            FolderCompareObject actualFldrObj;
+            FolderCompareObject renamedFolderObj;
+            FileCompareObject actualFileObj;
+            FileCompareObject renamedFileObj;
+
+            // Set new name of actual folder to the found renamed folder
+            actualFolder.NewName = renamedFolder.Name;
+
+            // Set each of the delete indexes to rename instead
+            foreach (int i in deleteIndexes)
+                actualFolder.ChangeType[i] = MetaChangeType.Rename;
+
+            foreach (string name in renamedFolderContents)
+            {
+                // If name is found in contents
+                if (actualFolder.Contents.TryGetValue(name, out o))
+                {
+                    // If actualFldrObj is a folder
+                    if ((actualFldrObj = o as FolderCompareObject) != null)
+                    {
+                        renamedFolderObj = renamedFolder.Contents[name] as FolderCompareObject; // Set renamedFolderObj to the one found in renamedFolder
+                        MergeFolder(actualFldrObj, renamedFolderObj, deleteIndexes);
+                    }
+                    else
+                    {
+                        actualFileObj = o as FileCompareObject; // Assign o as a FileCompareObject
+                        renamedFileObj = renamedFolder.Contents[name] as FileCompareObject; // Set renamedFileObj to the one found in renamed folder object
+                        MergeFile(actualFileObj, renamedFileObj, deleteIndexes);
+                    }
+                }
+                else // If not found, add as child to renamedFolder
+                {
+                    actualFolder.AddChild(renamedFolder.Contents[name]);
+                    renamedFolder.Contents[name].Parent = actualFolder;
+                }
+            }
+
+            actualFolder.Parent.Dirty = true; // Set parent of actual folder as Dirty
+            renamedFolder.Contents = new Dictionary<string, BaseCompareObject>(); // "Clear" the contents
+            renamedFolder.Invalid = true; // Set renamed folder to invalid
+        }
+}}}
+
+`MergeFile` and `MergeFolder` are helper methods to assist with the merging of content. After !FolderRenameVisitor is done with its job, !ComparerVisitor will visit the tree in post-order. It is essential that it visits in post-order since any changes to a file or folder will imply that the parent folder is dirty, and thus we have to visit the children before the parent. There are various methods in !ComparerVisitor that handles the detection of renamed files, as well as the comparing of files and folders. Let us take a look at the main function, `!CompareFiles`.
 
 {{{
         private void CompareFiles(FileCompareObject file, string[] currentPaths)
@@ -258,7 +304,6 @@ After !FolderRenameVisitor is done with its job, !ComparerVisitor, the only visi
             }
         }
 }}}
-
 
 To summarize, !ComparerVisitor simply assigns a priority of 1 to the first file that it determines exist. Subsequently, it will iterate through, and files which are less updated than it will be untouched (thus, 0, since that is the default int value), and when it comes across a file which is more updated, the most updated position will be set to this file, with the priority incremented by one. Files which are determined to be equal to the one with the most updated position will be given the same priority. In other words, if all files in the given !FileCompareObject are equal, then all files will have priority 1. Let us further illustrate with the following example, using just the time of the day to represent how updated the file is:
 
