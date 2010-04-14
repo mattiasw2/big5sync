@@ -211,13 +211,13 @@ Let's take a look at the pseudo-code for the merging the tags:
 {{{
   if currentTag and newTag share the same name && both tags were modified at different time
       if newTag was deleted && currentTag exists
-          if both tags were created at the same time
+          if deleted date of newTag is later than created date of currentTag
               enqueue RemoveTagNotification for newTag to LogicLayerNotificationQueue
               return true
           else
               return false
       if currentTag was deleted && newTag exists
-          if newTag was created later than currentTag
+          if created date of newTag is later than deleted date of currentTag
               add newTag to TaggingLayer
               enqueue AddTagNotification for newTag to LogicLayerNotificationQueue
               return true
