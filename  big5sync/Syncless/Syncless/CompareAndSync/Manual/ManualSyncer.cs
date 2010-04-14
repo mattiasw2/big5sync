@@ -44,31 +44,40 @@ namespace Syncless.CompareAndSync.Manual
             progress.ChangeToAnalyzing();
             List<string> typeConflicts = new List<string>();
             CompareObjectHelper.PreTraverseFolder(rco, new BuilderVisitor(filters, typeConflicts, progress), progress);
+            
             if (progress.State == SyncState.Cancelled)
             {
                 ServiceLocator.UIPriorityQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
                 return null;
             }
+
             CompareObjectHelper.PreTraverseFolder(rco, new XMLMetadataVisitor(), progress);
+            
             if (progress.State == SyncState.Cancelled)
             {
                 ServiceLocator.UIPriorityQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
                 return null;
             }
+
             CompareObjectHelper.PreTraverseFolder(rco, new ProcessMetadataVisitor(), progress);
+           
             if (progress.State == SyncState.Cancelled)
             {
                 ServiceLocator.UIPriorityQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
                 return null;
             }
+
             CompareObjectHelper.LevelOrderTraverseFolder(rco, new FolderRenameVisitor(), progress);
+            
             if (progress.State == SyncState.Cancelled)
             {
                 ServiceLocator.UIPriorityQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
                 return null;
             }
+
             ComparerVisitor comparerVisitor = new ComparerVisitor();
             CompareObjectHelper.PostTraverseFolder(rco, comparerVisitor, progress);
+            
             if (progress.State == SyncState.Cancelled)
             {
                 ServiceLocator.UIPriorityQueue().Enqueue(new CancelSyncNotification(request.TagName, true));
