@@ -1,4 +1,10 @@
-﻿namespace SynclessUI.Helper
+﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * 
+ */
+
+namespace SynclessUI.Helper
 {
     public enum DialogType
     {

@@ -1,4 +1,10 @@
-﻿using System.IO;
+﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * 
+ */
+
+using System.IO;
 using Shell32;
 
 namespace SynclessUI.Helper
@@ -13,7 +19,7 @@ namespace SynclessUI.Helper
         {
             try
             {
-                var fi = new FileInfo(path);
+                FileInfo fi = new FileInfo(path);
                 if (fi.Exists)
                     return true;
 
@@ -41,7 +47,7 @@ namespace SynclessUI.Helper
                 FolderItem folderItem = folder.ParseName(filenameOnly);
                 if (folderItem != null)
                 {
-                    var link =
+                    ShellLinkObject link =
                         (ShellLinkObject) folderItem.GetLink;
                     return link.Path;
                 }

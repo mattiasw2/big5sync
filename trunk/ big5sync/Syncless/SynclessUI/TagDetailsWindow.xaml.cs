@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,7 +43,7 @@ namespace SynclessUI
                 ShowInTaskbar = false;
 
                 // Sets up all components to their default state
-                filters = _main.Gui.GetAllFilters(_tagname);
+                filters = _main.LogicLayer.GetAllFilters(_tagname);
                 PopulateListBoxFilter(false);
                 LblTag_Details.Content = "Tag Details for " + _tagname;
                 TxtBoxPattern.IsEnabled = false;
@@ -128,13 +134,13 @@ namespace SynclessUI
         /// <returns>The generated filter list</returns>
         private List<string> GenerateFilterListHelper()
         {
-            var filterList = new List<string>();
+            List<string> filterList = new List<string>();
             int filterIndex = 1;
             foreach (Filter f in filters)
             {
                 if (f is ExtensionFilter)
                 {
-                    var ef = (ExtensionFilter)f;
+                    ExtensionFilter ef = (ExtensionFilter)f;
 
                     string mode = string.Empty;
 
@@ -216,7 +222,7 @@ namespace SynclessUI
         /// <param name="e"></param>
         private void BtnAddFilter_Click(object sender, RoutedEventArgs e)
         {
-            var ef = (ExtensionFilter)FilterFactory.CreateExtensionFilter("*.*", FilterMode.INCLUDE);
+            ExtensionFilter ef = (ExtensionFilter)FilterFactory.CreateExtensionFilter("*.*", FilterMode.INCLUDE);
             filters.Add(ef);
 
             PopulateListBoxFilter(true);
@@ -267,7 +273,7 @@ namespace SynclessUI
                 Filter f = filters[index];
                 if (f is ExtensionFilter)
                 {
-                    var ef = (ExtensionFilter)f;
+                    ExtensionFilter ef = (ExtensionFilter)f;
                     TxtBoxPattern.Text = ef.Pattern;
                     if (ef.Mode == FilterMode.INCLUDE)
                         CmbBoxMode.SelectedIndex = 0;
@@ -309,7 +315,7 @@ namespace SynclessUI
                 Filter f = filters[ListBoxFilters.SelectedIndex];
                 if (f is ExtensionFilter)
                 {
-                    var ef = (ExtensionFilter)f;
+                    ExtensionFilter ef = (ExtensionFilter)f;
                     ef.Pattern = TxtBoxPattern.Text;
                 }
 
@@ -379,7 +385,7 @@ namespace SynclessUI
             try
             {
                 // Check if particular tag is locked
-                if (_main.Gui.GetTag(_tagname).IsLocked)
+                if (_main.LogicLayer.GetTag(_tagname).IsLocked)
                 {
                     BtnOk.IsEnabled = true;
                     DialogHelper.ShowError(this, _tagname + " is Synchronizing",
@@ -396,7 +402,7 @@ namespace SynclessUI
                 }
 
                 // Update filter list
-                _main.Gui.UpdateFilterList(_tagname, filters);
+                _main.LogicLayer.UpdateFilterList(_tagname, filters);
                 Close();
             }
             catch (UnhandledException)

@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * 
+ */
+
+using System;
 using System.Windows;
 using System.Windows.Input;
 

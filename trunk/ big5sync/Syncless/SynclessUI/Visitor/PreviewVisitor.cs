@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * 
+ */
+
+using System;
 using System.Data;
 using System.IO;
 using Syncless.CompareAndSync.Enum;
@@ -67,7 +73,7 @@ namespace SynclessUI.Visitor
                     if (i != maxPriorityPos && fco.Priority[i] != fco.Priority[maxPriorityPos])
                     {
                         string operation = string.Empty, source = string.Empty, dest = string.Empty, tooltip = string.Empty;
-                        var row = SyncData.NewRow();
+                        DataRow row = SyncData.NewRow();
 
                         switch (fco.ChangeType[maxPriorityPos])
                         {
@@ -139,7 +145,7 @@ namespace SynclessUI.Visitor
                     {
                         string operation = string.Empty, source = string.Empty, dest = string.Empty, tooltip = string.Empty;
 
-                        var row = SyncData.NewRow();
+                        DataRow row = SyncData.NewRow();
 
                         switch (folder.ChangeType[maxPriorityPos])
                         {

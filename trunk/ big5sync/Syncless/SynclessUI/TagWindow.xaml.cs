@@ -145,7 +145,7 @@ namespace SynclessUI
             {
                 if (path != "")
                 {
-                    var di = new DirectoryInfo(path);
+                    DirectoryInfo di = new DirectoryInfo(path);
                     if (di.Exists && !FileHelper.IsFile(path))
                     {
                         if (FileHelper.IsCDRomDrive(path))
@@ -169,7 +169,7 @@ namespace SynclessUI
                         {
                             TxtBoxPath.Text = path;
                             ACBName.IsEnabled = true;
-                            ACBName.ItemsSource = _main.Gui.GetAllTags();
+                            ACBName.ItemsSource = _main.LogicLayer.GetAllTags();
                             if (selectedTag == null)
                             {
                                 ACBName.Text = di.Name;
@@ -209,16 +209,16 @@ namespace SynclessUI
                         {
                             try
                             {
-                                var di = new DirectoryInfo(_path);
+                                DirectoryInfo di = new DirectoryInfo(_path);
                                 if (di.Exists && !FileHelper.IsFile(_path))
                                 {
                                     _main.CreateTag(Tagname);
 
                                     TagView tv1 = null;
 
-                                    if (!_main.Gui.GetTag(Tagname).IsLocked)
+                                    if (!_main.LogicLayer.GetTag(Tagname).IsLocked)
                                     {
-                                        tv1 = _main.Gui.Tag(Tagname, new DirectoryInfo(_path));
+                                        tv1 = _main.LogicLayer.Tag(Tagname, new DirectoryInfo(_path));
 
                                         if (tv1 != null)
                                         {
@@ -289,7 +289,7 @@ namespace SynclessUI
 
         private bool TriggerDriveWarning()
         {
-            var di = new DriveInfo(_path);
+            DriveInfo di = new DriveInfo(_path);
             if (di.Name == _path)
             {
                 bool result = DialogHelper.ShowWarning(this, "Tag Drive Warning",

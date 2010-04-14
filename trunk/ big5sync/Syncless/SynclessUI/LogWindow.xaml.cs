@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -96,7 +102,7 @@ namespace SynclessUI
         /// </summary>
         private void PopulateLogDataTable()
         {
-            List<LogData> log = _main.Gui.ReadLog();
+            List<LogData> log = _main.LogicLayer.ReadLog();
 
             _LogData.Clear();
 
@@ -319,7 +325,7 @@ namespace SynclessUI
         {
             try
             {
-                _main.Gui.ClearLog();
+                _main.LogicLayer.ClearLog();
                 _LogData.Clear();
                 dataGrid.UpdateLayout();
             }

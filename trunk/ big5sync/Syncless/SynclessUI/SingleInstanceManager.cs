@@ -1,4 +1,7 @@
 ﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * 
  * Credits:
  * Adapted from Singleton Application
  * http://www.switchonthecode.com/tutorials/wpf-writing-a-single-instance-application

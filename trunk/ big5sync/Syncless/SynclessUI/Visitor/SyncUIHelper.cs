@@ -1,8 +1,11 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data;
 using Syncless.CompareAndSync.Manual.CompareObject;
 
 namespace SynclessUI.Visitor
