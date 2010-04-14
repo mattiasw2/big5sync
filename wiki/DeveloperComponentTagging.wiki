@@ -10,6 +10,8 @@ The *Tagging* component provides the underlying operations of creating and remov
 
 = Classes =
 
+[http://big5sync.googlecode.com/files/Tagging%20-%20v2.png http://big5sync.googlecode.com/files/Tagging%20-%20v2%20-%20thumb.png]
+
 The Tagging component consists of several important sub-components, including a main logic layer - `TaggingLayer`, model objects - `TaggingProfile`, `Tag`, `TaggedPath` and `TagConfig`, helper components - `TagMerger`, `TaggingHelper` and `TaggingXMLHelper`.
 
 == !TaggingLayer ==
