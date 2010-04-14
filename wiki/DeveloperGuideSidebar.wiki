@@ -20,6 +20,7 @@
       * [DeveloperGuide#Architecture Architecture]
     * [DeveloperGuide#System_Components Detailed Description of Sub-Components]
       * [DeveloperGuide#Data_Storing Data Storing]
+      * [DeveloperComponentCore Core]
       * [DeveloperComponentProfiling Profiling]
       * [DeveloperComponentTagging Tagging]
       * [DeveloperComponentCompareAndSync CompareAndSync]
