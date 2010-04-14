@@ -7,11 +7,10 @@
 = Overview =
 The *!CompareAndSync* component in *Syncless* is the part of the system that handles the comparison and syncing of files and folders. From a logical point of view, it can be briefly split into 2 subcomponents; the manual subcomponent that handles all manual operations, and the seamless subcomponent that handles all the automated synchronization requests from another component, the *Monitor*.
 
-Both sub-components are implemented very differently, as manual synchronization and automated synchronization are largely different. The manual subcomponent is implemented using a *Tree* in conjunction with the *Visitor Pattern*, while the seamless subcomponent is implemented using a *Queue*.
-
+Both sub-components are implemented very differently, as manual synchronization and automated synchronization are largely different. For the manual component, a *tree* is built containing the directory structure and files of all the folders to be kept in sync. Using the *Tree Visitor Pattern*, various *Visitors* will then "visit" the tree and do various tasks. A queue is used to ensure only one synchronization job can occur at any one time. On the other hand, each file/folder change is handled independently in the seamless subcomponent. Similarly, a queue is used to ensure only one synchronization job can occur at any one time.
 
 = Classes =
-[http://big5sync.googlecode.com/files/compareandsync.png http://big5sync.googlecode.com/files/compareandsync_th.png]
+PUT IMAGE HERE (CLASS DIAGRAM)
 
 
 We will now take a look at the main components of !CompareAndSync, which can be broadly divided to the controller layer, the manual component and the seamless component.
@@ -26,14 +25,25 @@ As stated in the overview, the manual portion of the !CompareAndSync component i
 
 The classes of concern to us are:
 
-  * !CompareObjectHelper
-  * !BuilderVisitor
-  * !ComparerVisitor
-  * !FolderRenameVisitor
-  * IVisitor
-  * !SyncerVisitor
-  * XMLMetadataVisitor
-  * XMLWriterVisitor
+  * CompareObject Namespace
+    * BaseCompareObject
+    * FileCompareObject
+    * FolderCompareObject
+    * RootCompareObject
+    * XMLCompareObject
+  * Visitor Namespace
+    * BuilderVisitor
+    * ComparerVisitor
+    * ConflictVisitor
+    * FolderRenameVisitor
+    * IVisitor
+    * ProcessMetadataVisitor
+    * SyncerVisitor
+    * XMLMetadataVisitor
+    * XMLWriterVisitor
+  * CompareObjectHelper
+  * ManualQueueControl
+  * ManualSyncer
 
 *!CompareObjectHelper* is the class that contains the various traversal methods, namely, pre-traversal, post-traversal, and level-order traversal for traversing the tree. All the Visitor classes implement IVisitor interface. The general course of actions that occur for each synchronization are as follows:
 
