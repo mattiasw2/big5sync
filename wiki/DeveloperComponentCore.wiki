@@ -19,7 +19,7 @@ The table is in charge of keeping a history of seamless Sync Requests, to reduce
 
 == !LogicQueueObserver == 
 
-The observer for the `SystemLogicNotificationQueue`. Process the notification and inform the System Logic Layer about the notification received.
+The observer for the `SystemLogicNotificationQueue`. Processes the notifications and informs the `SystemLogicLayer` about the notifications received.
 
 == !SaveLoadHelper == 
 
