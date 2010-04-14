@@ -347,24 +347,24 @@ There are 2 XML files that are stored in a ".syncless" folder (hidden attribute)
 === Description of XML ===
 From the root node, there are the following:
 
-*last_modified_utc*: The time the metadata file was updated, only one element of `last_modified_utc` will be in root.
-*name*: The name of the folder the metadata belongs to, only one element of `name` will be in root.
-*folder*: Each folder element stores information about a folder, multiple elements to represent multiple folders.
-*file*: Each file element stores information about a file, multiple elements to represent multiple files.
+  * *last_modified_utc*: The time the metadata file was updated, only one element of `last_modified_utc` will be in root.
+  * *name*: The name of the folder the metadata belongs to, only one element of `name` will be in root.
+  * *folder*: Each folder element stores information about a folder, multiple elements to represent multiple folders.
+  * *file*: Each file element stores information about a file, multiple elements to represent multiple files.
 
 For a folder node, it will contain the following child nodes:
 
-*name:* The name of the folder
-*last_updated_utc*: The time the metadata was written for this particular `folder` element
+  * *name:* The name of the folder
+  * *last_updated_utc*: The time the metadata was written for this particular `folder` element
 
 For a file node, it will contain the following child nodes:
 
-*name:* The name of the file
-*size:* The size of the file in bytes
-*hash:* The hash of the file in MD5
-*last_modified_utc* : The last modified/written time of the file
-*last_created_utc*: The creation time of the file
-*last_updated_utc*: The time the metadata was written for this particular `file` element
+  * *name:* The name of the file
+  * *size:* The size of the file in bytes
+  * *hash:* The hash of the file in MD5
+  * *last_modified_utc* : The last modified/written time of the file
+  * *last_created_utc*: The creation time of the file
+  * *last_updated_utc*: The time the metadata was written for this particular `file` element
 
 == lastknownstate.xml ==
 === Sample XML ===
@@ -391,17 +391,17 @@ This XML simply stores the last known state of a file or folder when it no longe
 
 For a folder node, it will contain the following child nodes:
 
-*name:* The name of the folder
-*action:* Specifies whether it is a deleted or renamed action. Only deleted is used for now.
-*last_updated_utc*: The time the metadata was written for this particular `file` element
+  * *name:* The name of the folder
+  * *action:* Specifies whether it is a deleted or renamed action. Only deleted is used for now.
+  * *last_updated_utc*: The time the metadata was written for this particular `file` element
 
 For a file node, it will contain the following child nodes:
 
-*name:* The name of the file
-*action:* Specifies whether it is a deleted or renamed action. Only deleted is used for now.
-*hash:* The hash of the file in MD5
-*last_modified_utc* : The last modified/written time of the file
-*last_updated_utc*: The time the metadata was written for this particular `file` element
+  * *name:* The name of the file
+  * *action:* Specifies whether it is a deleted or renamed action. Only deleted is used for now.
+  * *hash:* The hash of the file in MD5
+  * *last_modified_utc* : The last modified/written time of the file
+  * *last_updated_utc*: The time the metadata was written for this particular `file` element
 
 = Extending !CompareAndSync =
 Further functionality can be added into !CompareAndSync should a developer wish to. He can simply create his own visitor that visits each node and performs the action he decides. A good example would be to generate a report after a synchronization. A developer can simply code a visitor to create a report based on the attributes of each node.
