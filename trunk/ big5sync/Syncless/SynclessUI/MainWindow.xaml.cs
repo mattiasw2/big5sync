@@ -523,18 +523,26 @@ namespace SynclessUI
             BtnSyncMode.SetResourceReference(BackgroundProperty, "ToggleOffBrush");
             LblSyncMode.SetResourceReference(MarginProperty, "ToggleOffMargin");
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOffForeground");
-            ProgressBarSync.Visibility = Visibility.Visible;
-            LblProgress.Visibility = Visibility.Visible;
 
             TagView tv = Gui.GetTag(SelectedTag);
             if (tv.TagState == TagState.ManualToSeamless)
             {
-                if (CurrentProgress != null && CurrentProgress.TagName == SelectedTag &&
-                    CurrentProgress.State == SyncState.Analyzing)
+                if (CurrentProgress != null && CurrentProgress.TagName == SelectedTag)
                 {
-                    ProgressBarSync.Visibility = Visibility.Visible;
-                    LblProgress.Visibility = Visibility.Hidden;
-                    ProgressBarSync.IsIndeterminate = true;
+                    switch (CurrentProgress.State)
+                    {
+                        case SyncState.Analyzing:
+                            ProgressBarSync.Visibility = Visibility.Visible;
+                            LblProgress.Visibility = Visibility.Hidden;
+                            ProgressBarSync.IsIndeterminate = true;
+                            break;
+                        case SyncState.Finalizing:
+                        case SyncState.Synchronizing:
+                            ProgressBarSync.IsIndeterminate = false;
+                            ProgressBarSync.Visibility = Visibility.Visible;
+                            LblProgress.Visibility = Visibility.Visible;
+                            break;
+                    }
                 }
                 else
                 {
