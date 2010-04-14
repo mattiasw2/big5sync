@@ -8,7 +8,7 @@
 The *Monitor* component provides a set of classes to detect file system changes. There are 2 roles for the Monitor component. The first role is to detect the insertion and removal of USB removable drives, such as external hard disks and flash drives, and the second role is to capture any changes to a file or folder within a tagged folder.
 
 = Classes =
-[http://big5sync.googlecode.com/files/monitor.png http://big5sync.googlecode.com/files/thumbnail%20monitor.png]
+[http://big5sync.googlecode.com/files/Monitor%20-%20v2.png http://big5sync.googlecode.com/files/Tagging%20-%20v2%20-%20thumb.png]
 
 = Description of Design =
 
