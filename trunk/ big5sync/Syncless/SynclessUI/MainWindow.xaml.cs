@@ -29,8 +29,6 @@ namespace SynclessUI
     /// </summary>
     public partial class MainWindow : Window, IUIInterface
     {
-        private const string BI_DIRECTIONAL = "Bi-Dir..";
-        private const string UNI_DIRECTIONAL = "Uni-Dir..";
         private string _appPath;
         private bool _closenormally = true;
         private bool _manualSyncEnabled = true;
@@ -104,8 +102,8 @@ namespace SynclessUI
             {
                 WelcomeScreenWindow wsw = new WelcomeScreenWindow(this);
                 wsw.ShowDialog();
-                this.Topmost = true;
-                this.Topmost = false;
+                Topmost = true;
+                Topmost = false;
             }
         }
 
@@ -132,8 +130,8 @@ namespace SynclessUI
                     InitializeTagInfoPanel();
                     InitializeTagList();
                     Show();
-                    this.Topmost = true;
-                    this.Topmost = false;
+                    Topmost = true;
+                    Topmost = false;
 
                     if (!Settings.Default.EnableAnimation)
                     {
@@ -393,18 +391,6 @@ namespace SynclessUI
             Topmost = true;
             Topmost = false;
             Focus();
-        }
-
-        private void BtnDirection_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.Compare((string) LblDirection.Content, UNI_DIRECTIONAL) == 0)
-            {
-                LblDirection.Content = BI_DIRECTIONAL;
-            }
-            else
-            {
-                LblDirection.Content = UNI_DIRECTIONAL;
-            }
         }
 
         private void BtnSyncMode_Click(object sender, RoutedEventArgs e)
@@ -1016,8 +1002,6 @@ namespace SynclessUI
 
         private void BtnPreview_Click(object sender, RoutedEventArgs e)
         {
-            // DialogHelper.ShowInformation(this, "Feature In Progress", "This feature will be presented in a future version of Syncless.");
-
             if (!_manualSyncEnabled || Gui.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
             {
                 DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
@@ -1481,12 +1465,12 @@ namespace SynclessUI
 
         public void DriveChanged()
         {
-            UpdateAllTags_ThreadSafe();
+            UpdateTagList_ThreadSafe();
         }
 
         public void TagsChanged()
         {
-            UpdateAllTags_ThreadSafe();
+            UpdateTagList_ThreadSafe();
         }
 
         public void TagChanged(string tagName)
@@ -1496,16 +1480,16 @@ namespace SynclessUI
 
         private void UpdateTagInfo_ThreadSafe(string tagName)
         {
-            this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action) (() =>
-                                                                                 {
-                                                                                     if (SelectedTag == tagName)
-                                                                                     {
-                                                                                         ViewTagInfo(tagName);
-                                                                                     }
-                                                                                 }));
+            Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action) (() =>
+            {
+                if (SelectedTag == tagName)
+                {
+                    ViewTagInfo(tagName);
+                }
+            }));
         }
 
-        private void UpdateAllTags_ThreadSafe()
+        private void UpdateTagList_ThreadSafe()
         {
             try
             {
@@ -1517,42 +1501,6 @@ namespace SynclessUI
                                                                     LblTagCount.Content = "[" + taglist.Count + "/" +
                                                                                           taglist.Count + "]";
                                                                 }));
-                /*
-                ListTaggedPath.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                                                      (Action)(() =>
-                                                                    {
-                                                                        if (SelectedTag == null)
-                                                                        {
-                                                                            return;
-                                                                        }
-                                                                        TagView tv = Gui.GetTag(SelectedTag);
-                                                                        switch (tv.TagState)
-                                                                        {
-                                                                            case TagState.SeamlessToManual:
-                                                                            case TagState.ManualToSeamless:
-                                                                                Console.WriteLine(
-                                                                                    "Tag Changed: Switching");
-                                                                                SwitchingMode();
-                                                                                break;
-                                                                            case TagState.Seamless:
-                                                                                Console.WriteLine(
-                                                                                    "Tag Changed: Seamless");
-                                                                                SeamlessMode();
-                                                                                break;
-                                                                            case TagState.Manual:
-                                                                                _manualSyncEnabled = !tv.IsLocked;
-                                                                                Console.WriteLine("Tag Changed: Manual");
-                                                                                ManualMode();
-                                                                                break;
-                                                                        }
-
-                                                                        ListTaggedPath.ItemsSource = tv.PathStringList;
-                                                                        BdrTaggedPath.Visibility =
-                                                                            tv.PathStringList.Count == 0
-                                                                                ? Visibility.Hidden
-                                                                                : Visibility.Visible;
-                                                                    }));
-                 */
             }
             catch (UnhandledException)
             {
@@ -1624,7 +1572,6 @@ namespace SynclessUI
 
         public void CliUntag(string clipath)
         {
-            WindowState currentWindowState = WindowState;
             if (FileHelper.IsFile(clipath))
             {
                 DialogHelper.ShowError(this, "Untagging not Allowed", "You cannot tag a file.");
@@ -1635,7 +1582,7 @@ namespace SynclessUI
 
             try
             {
-                di = new DirectoryInfo(clipath);
+                new DirectoryInfo(clipath);
             }
             catch (ArgumentException)
             {
@@ -1666,51 +1613,8 @@ namespace SynclessUI
                 return;
             }
 
-            //TODO 
-            int count = ServiceLocator.GUI.Clean(clipath);
+            ServiceLocator.GUI.Clean(clipath);
             DialogHelper.ShowInformation(this, "Folder Cleaned", "The folder has been cleared of all meta-data files.");
-        }
-
-        #endregion
-
-        #region TagTitle Functionality: Renaming
-
-        private bool RenameTag(String oldtagname, String newtagname)
-        {
-            /*
-            if (Gui.RenameTag(oldtagname, newtagname))
-            {
-                InitializeTagList();
-                SelectTag(newtagname);
-                return true;
-            }
-            else
-            {
-                string messageBoxText = "Tag could not be renamed. There might be another tag with the same name.";
-                string caption = "Rename Tag Error";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Error;
-
-                MessageBox.Show(messageBoxText, caption, button, icon);
-
-                return false;
-            }
-            */
-            return true;
-        }
-
-        private void TagTitle_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (SelectedTag == TagTitle.Text) return;
-            if (!RenameTag(SelectedTag, TagTitle.Text)) TagTitle.Text = SelectedTag;
-        }
-
-        private void TagTitleOnKeyDownHandler(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Return)
-            {
-                TagTitle.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-            }
         }
 
         #endregion
@@ -1719,7 +1623,171 @@ namespace SynclessUI
 
         private void InitializeKeyboardShortcuts()
         {
-            // Create Tag Command
+            InitializeCreateTagCommand();
+            InitializeRemoveTagCommand();
+            InitializeTagCommand();
+            InitializeUntagCommand();
+            InitializeTagDetailsCommand();
+            InitializeUnmonitorCommand();
+            InitializeOptionsCommand();
+            InitializeMinimizeCommand();
+            InitializeShortcutsCommand();
+            InitializeLogCommand();
+            InitializeExitCommand();
+            InitializeTimeSyncCommand();
+        }
+
+        private void InitializeTimeSyncCommand()
+        {
+            var TimeSyncCommand = new RoutedCommand();
+
+            var cb = new CommandBinding(TimeSyncCommand, TimeSyncCommandExecute, TimeSyncCommandCanExecute);
+            CommandBindings.Add(cb);
+
+            BtnTimeSync.Command = TimeSyncCommand;
+
+            var kg = new KeyGesture(Key.Y, ModifierKeys.Control);
+            var ib = new InputBinding(TimeSyncCommand, kg);
+            InputBindings.Add(ib);
+        }
+
+        private void InitializeExitCommand()
+        {
+            var ExitCommand = new RoutedCommand();
+
+            var cb = new CommandBinding(ExitCommand, ExitCommandExecute, ExitCommandCanExecute);
+            CommandBindings.Add(cb);
+
+            var kg = new KeyGesture(Key.W, ModifierKeys.Control);
+            var ib = new InputBinding(ExitCommand, kg);
+            InputBindings.Add(ib);
+        }
+
+        private void InitializeLogCommand()
+        {
+            var LogCommand = new RoutedCommand();
+
+            var cb = new CommandBinding(LogCommand, LogCommandExecute, LogCommandCanExecute);
+            CommandBindings.Add(cb);
+
+            BtnLog.Command = LogCommand;
+
+            var kg = new KeyGesture(Key.L, ModifierKeys.Control);
+            var ib = new InputBinding(LogCommand, kg);
+            InputBindings.Add(ib);
+        }
+
+        private void InitializeShortcutsCommand()
+        {
+            var ShortcutsCommand = new RoutedCommand();
+
+            var cb = new CommandBinding(ShortcutsCommand, ShortcutsCommandExecute, ShortcutsCommandCanExecute);
+            CommandBindings.Add(cb);
+
+            var kg = new KeyGesture(Key.S, ModifierKeys.Control);
+            var ib = new InputBinding(ShortcutsCommand, kg);
+            var kg1 = new KeyGesture(Key.OemQuestion, ModifierKeys.Shift);
+            var ib1 = new InputBinding(ShortcutsCommand, kg1);
+            InputBindings.Add(ib);
+            InputBindings.Add(ib1);
+        }
+
+        private void InitializeMinimizeCommand()
+        {
+            var MinimizeCommand = new RoutedCommand();
+
+            var cb = new CommandBinding(MinimizeCommand, MinimizeCommandExecute, MinimizeCommandCanExecute);
+            CommandBindings.Add(cb);
+
+            var kg = new KeyGesture(Key.M, ModifierKeys.Control);
+            var ib = new InputBinding(MinimizeCommand, kg);
+            InputBindings.Add(ib);
+        }
+
+        private void InitializeOptionsCommand()
+        {
+            var OptionsCommand = new RoutedCommand();
+
+            var cb = new CommandBinding(OptionsCommand, OptionsCommandExecute, OptionsCommandCanExecute);
+            CommandBindings.Add(cb);
+
+            var kg = new KeyGesture(Key.O, ModifierKeys.Control);
+            var ib = new InputBinding(OptionsCommand, kg);
+            InputBindings.Add(ib);
+        }
+
+        private void InitializeUnmonitorCommand()
+        {
+            var UnmonitorCommand = new RoutedCommand();
+
+            var cb = new CommandBinding(UnmonitorCommand, UnmonitorCommandExecute, UnmonitorCommandCanExecute);
+            CommandBindings.Add(cb);
+
+            BtnUnmonitor.Command = UnmonitorCommand;
+
+            var kg = new KeyGesture(Key.I, ModifierKeys.Control);
+            var ib = new InputBinding(UnmonitorCommand, kg);
+            InputBindings.Add(ib);
+        }
+
+        private void InitializeTagDetailsCommand()
+        {
+            var DetailsCommand = new RoutedCommand();
+
+            var cb = new CommandBinding(DetailsCommand, DetailsCommandExecute, DetailsCommandCanExecute);
+            CommandBindings.Add(cb);
+
+            BtnDetails.Command = DetailsCommand;
+
+            var kg = new KeyGesture(Key.D, ModifierKeys.Control);
+            var ib = new InputBinding(DetailsCommand, kg);
+            InputBindings.Add(ib);
+        }
+
+        private void InitializeUntagCommand()
+        {
+            var UntagCommand = new RoutedCommand();
+
+            var cb = new CommandBinding(UntagCommand, UntagCommandExecute, UntagCommandCanExecute);
+            CommandBindings.Add(cb);
+
+            btnUntag.Command = UntagCommand;
+
+            var kg = new KeyGesture(Key.U, ModifierKeys.Control);
+            var ib = new InputBinding(UntagCommand, kg);
+            InputBindings.Add(ib);
+        }
+
+        private void InitializeTagCommand()
+        {
+            var TagCommand = new RoutedCommand();
+
+            var cb = new CommandBinding(TagCommand, TagCommandExecute, TagCommandCanExecute);
+            CommandBindings.Add(cb);
+
+            btnTag.Command = TagCommand;
+
+            var kg = new KeyGesture(Key.T, ModifierKeys.Control);
+            var ib = new InputBinding(TagCommand, kg);
+            InputBindings.Add(ib);
+        }
+
+        private void InitializeRemoveTagCommand()
+        {
+            var RemoveTagCommand = new RoutedCommand();
+
+            var cb = new CommandBinding(RemoveTagCommand, RemoveTagCommandExecute, RemoveTagCommandCanExecute);
+            CommandBindings.Add(cb);
+
+            btnRemove.Command = RemoveTagCommand;
+
+            var kg = new KeyGesture(Key.R, ModifierKeys.Control);
+            var ib = new InputBinding(RemoveTagCommand, kg);
+            InputBindings.Add(ib);
+        }
+
+        private void InitializeCreateTagCommand()
+        {
             var CreateTagCommand = new RoutedCommand();
 
             var cb = new CommandBinding(CreateTagCommand, CreateTagCommandExecute, CreateTagCommandCanExecute);
@@ -1730,139 +1798,11 @@ namespace SynclessUI
             var kg = new KeyGesture(Key.N, ModifierKeys.Control);
             var ib = new InputBinding(CreateTagCommand, kg);
             InputBindings.Add(ib);
-
-            // Remove Tag Command
-            var RemoveTagCommand = new RoutedCommand();
-
-            var cb1 = new CommandBinding(RemoveTagCommand, RemoveTagCommandExecute, RemoveTagCommandCanExecute);
-            CommandBindings.Add(cb1);
-
-            btnRemove.Command = RemoveTagCommand;
-
-            var kg1 = new KeyGesture(Key.R, ModifierKeys.Control);
-            var ib1 = new InputBinding(RemoveTagCommand, kg1);
-            InputBindings.Add(ib1);
-
-            // Tag Command
-            var TagCommand = new RoutedCommand();
-
-            var cb2 = new CommandBinding(TagCommand, TagCommandExecute, TagCommandCanExecute);
-            CommandBindings.Add(cb2);
-
-            btnTag.Command = TagCommand;
-
-            var kg2 = new KeyGesture(Key.T, ModifierKeys.Control);
-            var ib2 = new InputBinding(TagCommand, kg2);
-            InputBindings.Add(ib2);
-
-            // Untag Command
-            var UntagCommand = new RoutedCommand();
-
-            var cb3 = new CommandBinding(UntagCommand, UntagCommandExecute, UntagCommandCanExecute);
-            CommandBindings.Add(cb3);
-
-            btnUntag.Command = UntagCommand;
-
-            var kg3 = new KeyGesture(Key.U, ModifierKeys.Control);
-            var ib3 = new InputBinding(UntagCommand, kg3);
-            InputBindings.Add(ib3);
-
-            // Details Command
-            var DetailsCommand = new RoutedCommand();
-
-            var cb4 = new CommandBinding(DetailsCommand, DetailsCommandExecute, DetailsCommandCanExecute);
-            CommandBindings.Add(cb4);
-
-            BtnDetails.Command = DetailsCommand;
-
-            var kg4 = new KeyGesture(Key.D, ModifierKeys.Control);
-            var ib4 = new InputBinding(DetailsCommand, kg4);
-            InputBindings.Add(ib4);
-
-            // Unmonitor Command
-            var UnmonitorCommand = new RoutedCommand();
-
-            var cb5 = new CommandBinding(UnmonitorCommand, UnmonitorCommandExecute, UnmonitorCommandCanExecute);
-            CommandBindings.Add(cb5);
-
-            BtnUnmonitor.Command = UnmonitorCommand;
-
-            var kg5 = new KeyGesture(Key.I, ModifierKeys.Control);
-            var ib5 = new InputBinding(UnmonitorCommand, kg5);
-            InputBindings.Add(ib5);
-
-            // Options Command
-            var OptionsCommand = new RoutedCommand();
-
-            var cb6 = new CommandBinding(OptionsCommand, OptionsCommandExecute, OptionsCommandCanExecute);
-            CommandBindings.Add(cb6);
-
-            var kg6 = new KeyGesture(Key.O, ModifierKeys.Control);
-            var ib6 = new InputBinding(OptionsCommand, kg6);
-            InputBindings.Add(ib6);
-
-            // Minimize Command
-            var MinimizeCommand = new RoutedCommand();
-
-            var cb7 = new CommandBinding(MinimizeCommand, MinimizeCommandExecute, MinimizeCommandCanExecute);
-            CommandBindings.Add(cb7);
-
-            var kg7 = new KeyGesture(Key.M, ModifierKeys.Control);
-            var ib7 = new InputBinding(MinimizeCommand, kg7);
-            InputBindings.Add(ib7);
-
-            // Shortcuts Command
-            var ShortcutsCommand = new RoutedCommand();
-
-            var cb8 = new CommandBinding(ShortcutsCommand, ShortcutsCommandExecute, ShortcutsCommandCanExecute);
-            CommandBindings.Add(cb8);
-
-            var kg8 = new KeyGesture(Key.S, ModifierKeys.Control);
-            var ib8 = new InputBinding(ShortcutsCommand, kg8);
-            var kg81 = new KeyGesture(Key.OemQuestion, ModifierKeys.Shift);
-            var ib81 = new InputBinding(ShortcutsCommand, kg81);
-            InputBindings.Add(ib8);
-            InputBindings.Add(ib81);
-
-            // Log Command
-            var LogCommand = new RoutedCommand();
-
-            var cb9 = new CommandBinding(LogCommand, LogCommandExecute, LogCommandCanExecute);
-            CommandBindings.Add(cb9);
-
-            BtnLog.Command = LogCommand;
-
-            var kg9 = new KeyGesture(Key.L, ModifierKeys.Control);
-            var ib9 = new InputBinding(LogCommand, kg9);
-            InputBindings.Add(ib9);
-
-            // Exit Command
-            var ExitCommand = new RoutedCommand();
-
-            var cb10 = new CommandBinding(ExitCommand, ExitCommandExecute, ExitCommandCanExecute);
-            CommandBindings.Add(cb10);
-
-            var kg10 = new KeyGesture(Key.W, ModifierKeys.Control);
-            var ib10 = new InputBinding(ExitCommand, kg10);
-            InputBindings.Add(ib10);
-
-            // Time Sync Command
-            var TimeSyncCommand = new RoutedCommand();
-
-            var cb11 = new CommandBinding(TimeSyncCommand, TimeSyncCommandExecute, TimeSyncCommandCanExecute);
-            CommandBindings.Add(cb11);
-
-            BtnTimeSync.Command = TimeSyncCommand;
-
-            var kg11 = new KeyGesture(Key.Y, ModifierKeys.Control);
-            var ib11 = new InputBinding(TimeSyncCommand, kg11);
-            InputBindings.Add(ib11);
         }
 
         private void CreateTagCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            //Actual Code
             var ctw = new CreateTagWindow(this);
             ctw.ShowDialog();
         }
@@ -1876,8 +1816,6 @@ namespace SynclessUI
         private void RemoveTagCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            //Actual Code
-
             RemoveTag();
         }
 
@@ -1946,7 +1884,6 @@ namespace SynclessUI
         private void TagCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            //Actual Code
             DisplayTagWindow();
         }
 
@@ -1964,7 +1901,6 @@ namespace SynclessUI
         private void UntagCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            //Actual Code
             Untag();
         }
 
@@ -1977,7 +1913,6 @@ namespace SynclessUI
         private void DetailsCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            //Actual Code
             DisplayTagDetailsWindow();
         }
 
@@ -1990,7 +1925,6 @@ namespace SynclessUI
         private void LogCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            //Actual Code
             DisplayLogWindow();
         }
 
@@ -2003,7 +1937,6 @@ namespace SynclessUI
         private void ExitCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            //Actual Code
             Close();
         }
 
@@ -2016,7 +1949,6 @@ namespace SynclessUI
         private void UnmonitorCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            //Actual Code
             DisplayUnmonitorContextMenu();
         }
 
@@ -2037,7 +1969,7 @@ namespace SynclessUI
                 {
                     var driveMenuItem = new MenuItem();
                     driveMenuItem.Header = letter;
-                    driveMenuItem.Click += new RoutedEventHandler(driveMenuItem_Click);
+                    driveMenuItem.Click += driveMenuItem_Click;
                     driveMenu.Items.Add(driveMenuItem);
                 }
             }
@@ -2055,7 +1987,6 @@ namespace SynclessUI
         private void OptionsCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            //Actual Code
             DisplayOptionsWindow();
         }
 
@@ -2068,7 +1999,6 @@ namespace SynclessUI
         private void MinimizeCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            //Actual Code
             MinimizeWindow();
         }
 
@@ -2081,7 +2011,6 @@ namespace SynclessUI
         private void ShortcutsCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            //Actual Code
             DisplayShortcutsWindow();
         }
 
@@ -2094,7 +2023,6 @@ namespace SynclessUI
         private void TimeSyncCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            //Actual Code
             InitiateTimeSync();
         }
 
@@ -2142,8 +2070,6 @@ namespace SynclessUI
         {
             var sw = new ShortcutsWindow(this);
 
-            //YC: Set owner to the main window, and hide the taskbar. This will stop mainwindow from being on top.
-            //Even better, disable mainwindow so drag and drop stops working.
             sw.ShowDialog();
         }
 
