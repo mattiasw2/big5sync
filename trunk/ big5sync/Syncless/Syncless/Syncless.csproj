@@ -55,7 +55,7 @@
     <Compile Include="CompareAndSync\Request\CancelSyncRequest.cs" />
     <Compile Include="CompareAndSync\CommonMethods.cs" />
     <Compile Include="CompareAndSync\CompareAndSyncController.cs" />
-    <Compile Include="CompareAndSync\CompareObjectHelper.cs" />
+    <Compile Include="CompareAndSync\Manual\CompareObjectHelper.cs" />
     <Compile Include="CompareAndSync\Manual\CompareObject\BaseCompareObject.cs" />
     <Compile Include="CompareAndSync\Manual\CompareObject\FileCompareObject.cs" />
     <Compile Include="CompareAndSync\Manual\CompareObject\FolderCompareObject.cs" />
