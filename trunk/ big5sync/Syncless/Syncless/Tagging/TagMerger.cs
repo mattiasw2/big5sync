@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * 
+ * Author: Goh Khoon Hiang
+ * 
+ */
+
+using System.Collections.Generic;
 using Syncless.Core;
 using Syncless.Notification;
 namespace Syncless.Tagging
@@ -59,7 +65,6 @@ namespace Syncless.Tagging
             foreach (Tag tag in monitorList)//start monitoring each new tag
             {
                 ServiceLocator.LogicLayerNotificationQueue().Enqueue(new AddTagNotification(tag));
-                //SystemLogicLayer.Instance.StartMonitorTag(tag, tag.IsDeleted);
             }
 
             return updateCount;
@@ -94,7 +99,6 @@ namespace Syncless.Tagging
                     if (newTag.CreatedDate == current.CreatedDate)
                     {
                         ServiceLocator.LogicLayerNotificationQueue().Enqueue(new RemoveTagNotification(newTag));
-                        //SystemLogicLayer.Instance.DeleteTag(newTag.TagName);
                         return true;
                     }
                     return false;
@@ -109,7 +113,6 @@ namespace Syncless.Tagging
                         TaggingLayer.Instance.AddTag(newTag);
                         ServiceLocator.LogicLayerNotificationQueue().Enqueue(new AddTagNotification(newTag));
                         return true;
-                        //SystemLogicLayer.Instance.AddTag(newTag);
                     }
                 }
                 foreach (TaggedPath newPath in newTag.UnfilteredPathList)
@@ -118,7 +121,6 @@ namespace Syncless.Tagging
                     if (currentPath == null)
                     {
                         ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorPathNotification(current,newPath));
-                        //SystemLogicLayer.Instance.AddTagPath(current, newPath);
                         current.AddPath(newPath);
                     }
                     else
@@ -133,7 +135,6 @@ namespace Syncless.Tagging
                                 {
                                     current.RemovePath(newPath);
                                     ServiceLocator.LogicLayerNotificationQueue().Enqueue(new UnMonitorPathNotification(current,newPath));
-                                    //SystemLogicLayer.Instance.RemoveTagPath(current, newPath);
                                 }
                             }
                             else if (!newPath.IsDeleted && currentPath.IsDeleted)
@@ -143,7 +144,6 @@ namespace Syncless.Tagging
                                     //a new path is created in the new tag but is deleted in the old tag.
                                     current.AddPath(newPath);
                                     ServiceLocator.LogicLayerNotificationQueue().Enqueue(new MonitorPathNotification(current,newPath));
-                                    //SystemLogicLayer.Instance.AddTagPath(current, newPath);
                                 }
                             }
                         }

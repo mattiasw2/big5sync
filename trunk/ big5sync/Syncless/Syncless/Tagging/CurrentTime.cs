@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Goh Khoon Hiang
+ * 
+ */
+
+using System;
 
 namespace Syncless.Tagging
 {
