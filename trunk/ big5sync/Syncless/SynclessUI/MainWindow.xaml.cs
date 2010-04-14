@@ -548,6 +548,7 @@ namespace SynclessUI
                 if (tv == null)
                 {
                     ResetTagInfoPanel();
+                    InitializeTagList();
                     return;
                 }
                 SelectedTag = tagname;
@@ -1153,8 +1154,8 @@ namespace SynclessUI
                                     _syncProgressNotificationDictionary.Remove(SelectedTag);
                                     _tagStatusNotificationDictionary.Remove(SelectedTag);
 
-                                    InitializeTagList();
                                     ResetTagInfoPanel();
+                                    InitializeTagList();
                                 }
                                 else
                                 {
@@ -1241,6 +1242,7 @@ namespace SynclessUI
                                                        "The tag which you tried to untag does not exist.");
 
                                 ResetTagInfoPanel();
+                                InitializeTagList();
 
                                 return;
                             }
