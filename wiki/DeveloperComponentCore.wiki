@@ -20,7 +20,7 @@ The Core layer provide the main functionality of the system and provide a interf
 
 = Explanation of Algorithms =
 
-== PathTable ==
+== !PathTable ==
 The main reason for the implementation of path table is due to how file system watcher works and how our seamless works.
 Take 3 Folder for example , Folder A , B and C.
 
@@ -44,5 +44,9 @@ This greatly reduces the number of events that `CompareAndSyncController` receiv
 
 However, this also brings in a number of issues. One of which is when events happens too fast, some of the entries in the pathtable may not be cleared. To clear the pathtable, we will clear the path table after a certain time of inactivity.
 
+== !SaveLoadHelper ==
 
-= Extending Core =
+Save the data into different location. The locations saved include the follow :
+1) The Directory contains the executable.
+2) All local drives if the local drive contains a guid attached to it.
+3) All external drives if the drive contains a guid attached to it.
