@@ -34,18 +34,18 @@ The main reason for the implementation of the path table is due to how `FileSyst
 Take 3 Folders for example , Folder A , B and C.
 
 If a new file is added to Folder A , the following events will be generated
-Folder A(new) -> Folder B
-Folder A(new) -> Folder C
+ *  Folder A(new) -> Folder B
+ *  Folder A(new) -> Folder C
 
 Due to how `FileSystemWatcher` works, after the file is copied, Folder B will also detect a change and at almost the same time , Folder C will also detect a change.
 
 The changes detected in the 2 folders may not come in any particular order.
 
 The following events need to be filtered away :
-Folder B(New) -> Folder A
-Folder B(New) -> Folder C
-Folder C(New) -> Folder A
-Folder C(New) -> Folder B
+ *  Folder B(New) -> Folder A
+ *  Folder B(New) -> Folder C
+ *  Folder C(New) -> Folder A
+ *  Folder C(New) -> Folder B
 
 Therefore, when an event is detected, all possible expected events need to be added to the path table and when the events occur, the events will be removed from the path table and `CompareAndSyncController` will not be informed of the events.
 
