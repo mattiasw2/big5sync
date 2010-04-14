@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Goh Khoon Hiang
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Xml;
 using System.IO;

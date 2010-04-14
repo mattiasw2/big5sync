@@ -1,4 +1,10 @@
-﻿namespace Syncless.Tagging
+﻿/*
+ * 
+ * Author: Goh Khoon Hiang
+ * 
+ */
+
+namespace Syncless.Tagging
 {
     /// <summary>
     /// LogMessage provides formatted string values for logging events in Tagging component

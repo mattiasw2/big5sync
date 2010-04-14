@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Goh Khoon Hiang
+ * 
+ */
+
+using System;
 using Syncless.Logging;
 using Syncless.Helper;
 using Syncless.Core;

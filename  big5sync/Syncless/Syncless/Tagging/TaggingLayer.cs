@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * 
+ * Author: Goh Khoon Hiang
+ * 
+ */
+
+using System.Collections.Generic;
 using System.IO;
 using Syncless.Helper;
 using Syncless.Tagging.Exceptions;

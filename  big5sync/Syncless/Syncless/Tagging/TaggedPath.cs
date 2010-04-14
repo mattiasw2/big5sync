@@ -1,4 +1,10 @@
-﻿using Syncless.Helper;
+﻿/*
+ * 
+ * Author: Goh Khoon Hiang
+ * 
+ */
+
+using Syncless.Helper;
 
 namespace Syncless.Tagging
 {

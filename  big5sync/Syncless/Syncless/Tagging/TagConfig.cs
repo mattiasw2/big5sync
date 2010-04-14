@@ -1,4 +1,9 @@
-﻿
+﻿/*
+ * 
+ * Author: Goh Khoon Hiang
+ * 
+ */
+
 namespace Syncless.Tagging
 {
     /// <summary>
