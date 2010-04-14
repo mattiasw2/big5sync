@@ -27,7 +27,7 @@ The helper is in charge of saving the profiling data and tagging data to the var
 
 == !ServiceLocator ==
 
-The class that allow different component to locate the different functions provided. It also allow the different component to get the message channel.
+The class that allows different components to locate the different functions provided. It also allows the different components to access the message channel.
 
 
 
