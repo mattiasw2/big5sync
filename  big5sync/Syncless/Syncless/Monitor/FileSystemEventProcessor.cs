@@ -38,7 +38,7 @@ namespace Syncless.Monitor
         }
 
         private Queue<Queue<FileSystemEvent>> queue;
-        private List<string> createingList;
+        private List<string> creatingList;
         private List<FileSystemEvent> processList;
         private List<FileSystemEvent> waitingList;
         private Thread processorThread;
@@ -47,7 +47,7 @@ namespace Syncless.Monitor
         private FileSystemEventProcessor()
         {
             queue = new Queue<Queue<FileSystemEvent>>();
-            createingList = new List<string>();
+            creatingList = new List<string>();
             processList = new List<FileSystemEvent>();
             waitingList = new List<FileSystemEvent>();
             waitHandle = new AutoResetEvent(true);
@@ -144,7 +144,7 @@ namespace Syncless.Monitor
             switch (fse.EventType)
             {
                 case EventChangeType.CREATING:
-                    createingList.Add(fse.Path);
+                    creatingList.Add(fse.Path);
                     break;
                 case EventChangeType.CREATED:
                     FileCreated(fse);
@@ -166,12 +166,12 @@ namespace Syncless.Monitor
 
         private void FileCreated(FileSystemEvent fse)
         {
-            for (int i = 0; i < createingList.Count; i++) // remove from the creating list since it is created.
+            for (int i = 0; i < creatingList.Count; i++) // remove from the creating list since it is created.
             {
-                string path = createingList[i];
+                string path = creatingList[i];
                 if (path.ToLower().Equals(fse.Path.ToLower()))
                 {
-                    createingList.RemoveAt(i);
+                    creatingList.RemoveAt(i);
                     processList.Add(fse);
                     return;
                 }
@@ -180,7 +180,7 @@ namespace Syncless.Monitor
 
         private bool FileModified(FileSystemEvent fse)
         {
-            foreach (string path in createingList) // ignore this event if it is still creating
+            foreach (string path in creatingList) // ignore this event if it is still creating
             {
                 if (path.ToLower().Equals(fse.Path.ToLower()))
                 {
@@ -251,12 +251,12 @@ namespace Syncless.Monitor
 
         private bool DeletedHasCreating(FileSystemEvent fse)
         {
-            for (int i = 0; i < createingList.Count; i++) // ignore this event if it is still creating
+            for (int i = 0; i < creatingList.Count; i++) // ignore this event if it is still creating
             {
-                string path = createingList[i];
+                string path = creatingList[i];
                 if (path.ToLower().Equals(fse.Path.ToLower()))
                 {
-                    createingList.RemoveAt(i); // file is deleted so no need to wait for the created event
+                    creatingList.RemoveAt(i); // file is deleted so no need to wait for the created event
                     return false;
                 }
             }
@@ -310,9 +310,9 @@ namespace Syncless.Monitor
 
         private void RenamedHasCreating(FileSystemEvent fse, List<FileSystemEvent> eventList, ref bool hasCreating, ref bool foundCreated)
         {
-            for (int i = 0; i < createingList.Count; i++) // wait for the created event if a creating event exist
+            for (int i = 0; i < creatingList.Count; i++) // wait for the created event if a creating event exist
             {
-                string path = createingList[i];
+                string path = creatingList[i];
                 if (path.ToLower().Equals(fse.OldPath.ToLower())) // still creating
                 {
                     hasCreating = true;
