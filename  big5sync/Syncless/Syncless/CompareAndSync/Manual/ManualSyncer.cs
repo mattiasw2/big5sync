@@ -134,6 +134,7 @@ namespace Syncless.CompareAndSync.Manual
             return rco;
         }
 
+        // Handle build conflicts, that is, when a file and folder has the same name.
         private static void HandleBuildConflicts(List<string> typeConflicts, SyncConfig config)
         {
             foreach (string s in typeConflicts)
