@@ -1,0 +1,34 @@
+File description for MetaData
+
+For the Meta Data (syncless.xml) document , it will contain the last modified time element top and the name of the folder where the .syncless folder resides
+
+It can either contain a folder or a file node.
+For a file node , it will contain the following child nodes -
+
+name : the name of the file
+size : size of the file in bytes
+hash : hash of the file in MD5
+last modified : the last time the file has been modified
+last created : the time when the file has been created
+last updated : the time when the file node has been added to the meta data.
+
+For a folder node , it will contain the following child nodes -
+
+name : the name of the folder
+last updated : the time when the folder node has been added to the meta data
+
+The last known state document will either contain a folder node or a file node.
+
+Each folder node will contain the following child nodes -
+
+name : the name of the folder 
+action : deleted
+last updated : the time that the folder node has been written to the last known state                 document
+
+Each file node will contain the following child nodes -
+
+name : name of the file
+action : deleted
+hash : the hash of the file in MD5
+last modified time : the time that the file has been modified
+last updated time : the time that the file node is added to the last known state document
