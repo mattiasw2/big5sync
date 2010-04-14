@@ -334,13 +334,13 @@ namespace SynclessUI
         }
 
         /// <summary>
-        ///	Ugly Hack for Overwritting the ACB Enter Behavior because it does not accept the Enter Key
+        ///	Ugly Hack for Overwritting the AutoCompleteBox Enter Behavior because it does not accept the Enter Key
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Text_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && _popupclosed == true)
+            if (e.Key == Key.Enter && _popupclosed)
             {
                 BtnOk.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             }

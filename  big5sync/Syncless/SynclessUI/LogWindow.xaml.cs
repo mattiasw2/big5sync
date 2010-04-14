@@ -31,7 +31,6 @@ namespace SynclessUI
         private bool _showSynchronizationLog = Settings.Default.ShowSynchronizationLog;
         private bool _showFileSystemLog = Settings.Default.ShowFileSystemLog;
 
-
         /// <summary>
         /// Initializes the LogWindow. LogWindow will not show upon any error during Initialization
         /// </summary>
