@@ -8,6 +8,8 @@
 
 The *Notification* component provides a low coupling medium for the control layer to pass information to the *User Interface*. It also allows the lower facade layer to pass information to the Logic layer.
 
+The main reason for this implementation is to have the message come in a particular order for processing and at the same time, allow other function in the system to work asynchronously.
+
 = Classes =
 
 The main important classes for Notification include `NotificationQueue` and `INotificationQueue`. Many notifications are implemented in both UI and *System Logic Layer*. At UI layer, it needs to implement watchers to watch all notifications which belong to the `Notification.UINotification` namespace.
@@ -35,8 +37,7 @@ The main important classes for Notification include `NotificationQueue` and `INo
 The Notification component makes use of the observer pattern to notify its watchers to resume their threads if new notification is added to the queue. 
 
 == Factory Pattern ==
-Besides, factory pattern is also used to create notification objects. A `NotificationFactory` class provides methods to create such notification objects such that the whichever method that performs the call does not need to know the exact class that is used to create the object.
+Factory pattern is also used to create notification objects. A `NotificationFactory` class provides methods to create such notification objects such that the whichever method that performs the call does not need to know the exact class that is used to create the object.
 
 = Extending Notification =
-
-To include more notifications, developers can add more enumerators to the `NotificationCode` enumeration and extend the `AbstractNotification` class.
+To include more notifications, developers can add more enumerators to the `NotificationCode` enumeration and extend the `AbstractNotification` class. The developer should also add a Create method for the notification inside NotificationFactory.
