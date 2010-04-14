@@ -1,4 +1,10 @@
-﻿namespace Syncless.CompareAndSync
+﻿/*
+ * 
+ * Author: Soh Yuan Chin
+ * 
+ */
+
+namespace Syncless.CompareAndSync
 {
     /// <summary>
     /// The object containing all the SyncConfiguration

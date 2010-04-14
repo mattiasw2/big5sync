@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * 
+ * Author: Soh Yuan Chin
+ * 
+ */
+
+using System.Collections.Generic;
 using Syncless.CompareAndSync.Enum;
 
 namespace Syncless.CompareAndSync.Request

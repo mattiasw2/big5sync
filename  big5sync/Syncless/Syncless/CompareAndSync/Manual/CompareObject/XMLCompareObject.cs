@@ -1,4 +1,10 @@
-﻿using Syncless.CompareAndSync.Manual.Visitor;
+﻿/*
+ * 
+ * Author: Gordon Hoi Chi Kit
+ * 
+ */
+
+using Syncless.CompareAndSync.Manual.Visitor;
 
 namespace Syncless.CompareAndSync.Manual.CompareObject
 {

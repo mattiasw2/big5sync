@@ -1,4 +1,10 @@
-﻿namespace Syncless.CompareAndSync
+﻿/*
+ * 
+ * Author: Gordon Hoi Chi Kit
+ * 
+ */
+
+namespace Syncless.CompareAndSync
 {
     internal static class CommonXMLConstants
     {

@@ -1,4 +1,10 @@
-﻿namespace Syncless.CompareAndSync.Enum
+﻿/*
+ * 
+ * Author: Soh Yuan Chin
+ * 
+ */
+
+namespace Syncless.CompareAndSync.Enum
 {
 
     /// <summary>

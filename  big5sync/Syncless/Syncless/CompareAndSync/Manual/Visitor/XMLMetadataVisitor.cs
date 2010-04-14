@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * 
+ * Author: Gordon Hoi Chi Kit
+ * 
+ */
+
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Syncless.CompareAndSync.Enum;

@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Soh Yuan Chin
+ * 
+ */
+
+using System;
 
 namespace Syncless.CompareAndSync.Manual.CompareObject
 {

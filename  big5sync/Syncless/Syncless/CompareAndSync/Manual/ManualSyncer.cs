@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Soh Yuan Chin
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

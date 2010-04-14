@@ -1,4 +1,10 @@
-﻿using Syncless.CompareAndSync.Enum;
+﻿/*
+ * 
+ * Author: Gordon Hoi Chi Kit
+ * 
+ */
+
+using Syncless.CompareAndSync.Enum;
 
 namespace Syncless.CompareAndSync.Seamless.XMLWriteObject
 {
