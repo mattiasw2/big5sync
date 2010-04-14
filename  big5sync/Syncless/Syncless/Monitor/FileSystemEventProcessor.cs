@@ -1,9 +1,13 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Koh Cher Guan
+ * 
+ */
+
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using Syncless.Core;
 using Syncless.Monitor.DTO;
 using ThreadState = System.Threading.ThreadState;
 

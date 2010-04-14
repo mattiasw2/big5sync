@@ -1,11 +1,18 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Koh Cher Guan
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Management;
 using System.Threading;
-using Syncless.Monitor;
+using Syncless.Core;
 using Syncless.Monitor.DTO;
-namespace Syncless.Core
+
+namespace Syncless.Monitor
 {
     /// <summary>
     /// This class will detect the insertion and removal of USB storage device.

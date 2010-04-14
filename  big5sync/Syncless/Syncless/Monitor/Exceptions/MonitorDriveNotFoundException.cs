@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Koh Cher Guan
+ * 
+ */
+
+using System;
 
 namespace Syncless.Monitor.Exceptions
 {
