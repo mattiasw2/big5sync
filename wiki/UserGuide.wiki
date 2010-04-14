@@ -65,9 +65,9 @@ The concept of *tagging* is not uncommon today. In Syncless's context, it is sim
 == What You'll Need ==
 Before continuing, make sure you have the following:
   * Windows Operating System (XP and above)
-  * .NET 3.5 SP2 Framework (Get it from http://msdn.microsoft.com/en-us/netframework/default.aspx)
+  * .NET 3.5 SP1 Framework (Get it from http://msdn.microsoft.com/en-us/netframework/cc378097.aspx)
 
-To download Syncless, please visit http://code.google.com/p/big5sync/downloads/list to get the latest version (ver 1.0) of Syncless. After that, unzip the package to a location of your choice and run SynclessUI.exe. Absolutely no installation of Syncless is required.
+To download Syncless, please visit http://code.google.com/p/big5sync/downloads/list to get the latest version (ver 2.0) of Syncless. After that, unzip the package to a location of your choice and run SynclessUI.exe. Absolutely no installation of Syncless is required.
 
 
 == The Syncless Interface ==
