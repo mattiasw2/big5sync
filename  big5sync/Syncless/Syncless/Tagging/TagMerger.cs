@@ -96,7 +96,7 @@ namespace Syncless.Tagging
                 if (newTag.IsDeleted && !current.IsDeleted)
                 {
                     //check the creation date is the same , then delete
-                    if (newTag.CreatedDate == current.CreatedDate)
+                    if (newTag.DeletedDate > current.CreatedDate)
                     {
                         ServiceLocator.LogicLayerNotificationQueue().Enqueue(new RemoveTagNotification(newTag));
                         return true;
