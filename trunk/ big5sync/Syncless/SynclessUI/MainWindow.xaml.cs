@@ -2064,7 +2064,7 @@ namespace SynclessUI
             try
             {
                 Close();
-            } catch() {}
+            } catch {}
         }
 
         private void ExitCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
