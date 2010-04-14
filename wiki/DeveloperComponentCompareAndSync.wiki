@@ -9,7 +9,18 @@ The *!CompareAndSync* component in *Syncless* is the part of the system that han
 
 Both sub-components are implemented very differently, as manual synchronization and automated synchronization are largely different. For the manual component, a *tree* is built containing the directory structure and files of all the folders to be kept in sync. Using the *Tree Visitor Pattern*, various *Visitors* will then "visit" the tree and do various tasks. A queue is used to ensure only one synchronization job can occur at any one time. On the other hand, each file/folder change is handled independently in the seamless subcomponent. Similarly, a queue is used to ensure only one synchronization job can occur at any one time.
 
-=== Conflicts ===
+== Conflicts ==
+In Syncless, our vision is to as much as possible, discard the idea of conflicts. However, there are 2 cases which we cannot automatically resolve, and they are:
+
+  # Incompatible Type Conflict - This happens when you have a file and a folder with the same name in two or more different folders. For example, C:\A\Temp, where Temp is a file, and C:\B\Temp, where Temp is a folder, and you attempt to synchronize C:\A and C:\B.
+
+  # Date Time Conflict - This happens when you have 2 or more files of different hash or length, but with the same name and last modified time. In such a case, it is not possible to determine which to use.
+
+For the *Incompatible Type Conflict*, Syncless will automatically prioritize the folder over the file, and all the files will be thrown into a "_synclessConflict" folder, while the folders will be synchronized as usual.
+
+For *Date Time Conflict*, Syncless will automatically synchronize the first file it comes across, and all the others will be thrown into a "_synclessConflict" folder.
+
+In both cases, we guarantee that no data will be lost.
 
 = Classes =
 PUT IMAGE HERE (CLASS DIAGRAM)
@@ -71,13 +82,17 @@ Assuming a user wants to compare and analyze the results, but not do any actual 
 
 
 == Seamless Components ==
-!CompareAndSync is made such that the seamless component is completely separated from the manual component. There are various design and implementation issues for this, with one of them being that the seamless component is largely depending on receiving information from other objects. Moreover, in seamless mode, the file to sync is already know, with little to no need of doing a comparison. As such, there is no need to do the tedious job of building a tree.
+!CompareAndSync is made such that the seamless component is completely separated from the manual component. There are various design and implementation issues for this, with one of them being that the seamless component is largely depending on receiving information from other objects. Moreover, in seamless mode, the file to sync is already known, with little to no need of doing a comparison. As such, there is no need to do the tedious job of building a tree.
 
 The classes of concern to us for the seamless portion are as follows:
 
-  * !SeamlessQueueControl
+  * !XMLWriteObject Namespace
+    * BaseXMLWriteObject
+    * XMLWriteFileObject
+    * XMLWriteFolderObject
+  * SeamlessQueueControl
   * !SeamlessSyncer
-  * XMLHelper
+  * SeamlessXMLHelper
 
 *!SeamlessQueueControl* is a class that contains a single queue to ensure the requests are handled in order, so as to prevent any possible conflicts. *!SeamlessSyncer* contains the necessary methods to handle seamless file synchronization, and upon each successful synchronization, *XMLHelper* will be called to update the metadata stored in side.
 
