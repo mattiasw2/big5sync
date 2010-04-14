@@ -18,7 +18,7 @@ Following the Model-View-Controller (MVC) model, the system is split into User I
 
 Communication between the UI and the SLL is done through a Service Locator and an Interface. This allows us to change the SLL without affecting the UI. On top of that, this also allows other developers to create their own user interfaces to work with SLL.
 
-http://big5sync.googlecode.com/files/System%20Overview%20-%20v2.png
+[http://big5sync.googlecode.com/files/System%20Overview%20-%20v2.png http://big5sync.googlecode.com/files/System%20Overview%20-%20v2%20-%20thumb.png]
 
 === Interaction among Sub-Components ===
 
