@@ -115,7 +115,36 @@ The Tagging component makes use of metadata with file name _tagging.xml_ to keep
 
 == Explanation of Xml Tag Names ==
 
-
+|| *Tag name/value* || *Description* ||
+|| tagging || Represents the tag name for tagging.xml root element ||
+|| profile || Represents the tag name for profile root element ||
+|| name || Represents the attribute name for profile name attribute ||
+|| createdDate || Represents the attribtue name for profile created date attribute ||
+|| lastUpdatedDate || Represents the attribute name for profile last updated date attribute ||
+|| tag || Represents the tag name for tag root element ||
+|| name || Represents the attribute name for tag name attribute ||
+|| createdDate || Represents the attribute name for tag created date attribute ||
+|| lastUpdatedDate || Represents the attribute name for tag last updated date attribute ||
+|| isDeleted || Represents the attribute name for tag is deleted attribute ||
+|| deletedDate || Represents the attribute name for tag deleted date attribute ||
+|| folders || Represents the tag name for folders root element ||
+|| taggedFolder || Represents the tag name for tagged folder root element ||
+|| createdDate || Represents the attribute name for tagged folder created date attribute ||
+|| lastUpdatedDate || Represents the attribute name for tagged folder last updated date attribute ||
+|| isDeleted || Represents the attribute name for tagged folder is deleted date attribute ||
+|| deletedDate || Represents the attribute name for tagged folder deleted date attribute ||
+|| path || Represents the tag name for tagged folder path element ||
+|| filters || Represents the tag name for filter root element ||
+|| filter || Represents the tag name for filter child element ||
+|| lastUpdatedDate || Represents the attribute name for filter last updated date attribute ||
+|| type || Represents the attribute name for filter type attribute ||
+|| Extension || Represents the attribute value for filter type extension attribute || 
+|| mode || Represents the attribute name for filter mode attribute ||
+|| Include || Represents the attribute value for include filter mode attribute ||
+|| Exclude || Represents the attribute value for exclude filter mode attribute ||
+|| pattern || Represents the tag name for filter type extension pattern element ||
+|| config || Represents the tag name for config root element ||
+|| seamless || Represents the tag name for config seamless element ||
 
 = Explanation of Algorithms =
 
