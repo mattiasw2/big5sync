@@ -5,7 +5,7 @@
 <wiki:toc max_depth="4">
 
 = Overview =
-The *Core* component provides the main functionality of the system and provides a interface for the *User Interface* component to interact with the system.
+The *Core* component provides the main functionality of the system and provides an interface for the *User Interface* component to interact with the system.
 
 = Classes =
 
