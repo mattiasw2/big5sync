@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+using System;
 using System.IO;
 using System.Diagnostics;
 

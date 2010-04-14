@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * 
+ * Author: Goh Khoon Hiang
+ * 
+ */
+using System.Collections.Generic;
 using System.Threading;
 using Syncless.Notification;
 

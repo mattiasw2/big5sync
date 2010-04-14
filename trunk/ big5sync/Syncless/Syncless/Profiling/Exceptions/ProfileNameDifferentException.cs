@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+using System;
 
 namespace Syncless.Profiling.Exceptions
 {

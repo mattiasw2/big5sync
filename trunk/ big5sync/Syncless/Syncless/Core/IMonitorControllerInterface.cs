@@ -1,4 +1,9 @@
-﻿using Syncless.Monitor.DTO;
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+using Syncless.Monitor.DTO;
 
 namespace Syncless.Core
 {

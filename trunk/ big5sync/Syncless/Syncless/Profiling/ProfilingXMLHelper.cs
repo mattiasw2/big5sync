@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
-using System.IO;
-using System.Diagnostics;
+/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
 using Syncless.Helper;
 using Syncless.Logging;
-using Syncless.Profiling.Exceptions;
 using Syncless.Core;
 namespace Syncless.Profiling
 {

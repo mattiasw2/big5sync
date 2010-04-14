@@ -1,4 +1,9 @@
-﻿using Syncless.Tagging;
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+using Syncless.Tagging;
 
 namespace Syncless.Notification
 {

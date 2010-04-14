@@ -1,4 +1,9 @@
-﻿namespace Syncless.Filters
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+namespace Syncless.Filters
 {
     /// <summary>
     /// Filter that filter the Syncless Archive and Conflict Filter

@@ -1,4 +1,9 @@
-﻿namespace Syncless.Notification
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+namespace Syncless.Notification
 {
     /// <summary>
     /// The Nofication for saving all the data.

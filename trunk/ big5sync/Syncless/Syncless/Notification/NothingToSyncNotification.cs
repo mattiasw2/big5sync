@@ -1,4 +1,9 @@
-﻿namespace Syncless.Notification
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+namespace Syncless.Notification
 {
     /// <summary>
     /// Notification to inform the UI that there is nothing to Synchronzing.
