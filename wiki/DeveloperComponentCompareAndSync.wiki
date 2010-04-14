@@ -13,7 +13,6 @@ Both sub-components are implemented very differently, as manual synchronization 
 In Syncless, our vision is to as much as possible, discard the idea of conflicts. However, there are 2 cases which we cannot automatically resolve, and they are:
 
   # Incompatible Type Conflict - This happens when you have a file and a folder with the same name in two or more different folders. For example, C:\A\Temp, where Temp is a file, and C:\B\Temp, where Temp is a folder, and you attempt to synchronize C:\A and C:\B.
-
   # Date Time Conflict - This happens when you have 2 or more files of different hash or length, but with the same name and last modified time. In such a case, it is not possible to determine which to use.
 
 For the *Incompatible Type Conflict*, Syncless will automatically prioritize the folder over the file, and all the files will be thrown into a "_synclessConflict" folder, while the folders will be synchronized as usual.
