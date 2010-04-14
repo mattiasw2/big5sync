@@ -36,14 +36,14 @@ We will now take a look at the main components of !CompareAndSync, which can be 
 Enums, exceptions, DTOs and entities will not be discussed in detail in this guide. Please refer to the comments in the source code for more details. However, let us take a brief look at Requests, which are DTOs used in requesting for a manual synchronization or comparison job, or a auto synchronization job.
 
   * Request Namespace
-    * AutoSyncRequest
-    * CancelSyncRequest
-    * ManualCompareRequest
-    * ManualRequest
-    * ManualSyncRequest
+    * !AutoSyncRequest
+    * !CancelSyncRequest
+    * !ManualCompareRequest
+    * !ManualRequest
+    * !ManualSyncRequest
     * Request
 
-*AutoSyncRequest* is sent when an automatic synchronization job is to be performed. *ManualCompareRequest* and *ManualSyncRequest* both inherit from the abstract class *ManualRequest*, and are sent when a manual comparison or synchronization is to be performed respectively. *CancelSyncRequest* is sent when a *ManualSyncRequest* is to be cancelled. *Request* is an abstract class from which all the other request classes inherit from.
+*!AutoSyncRequest* is sent when an automatic synchronization job is to be performed. *!ManualCompareRequest* and *!ManualSyncRequest* both inherit from the abstract class *!ManualRequest*, and are sent when a manual comparison or synchronization is to be performed respectively. *!CancelSyncRequest* is sent when a *!ManualSyncRequest* is to be cancelled. *Request* is an abstract class from which all the other request classes inherit from.
 
 == Manual Components ==
 As stated in the overview, the manual portion of the !CompareAndSync component is done using the Tree Visitor Pattern. Although the Tree Visitor Pattern is considered a bad design pattern in some cases, the usage of this pattern in our implementation of !CompareAndSync greatly enhances extensibility, as you will see later.
@@ -55,7 +55,7 @@ The classes of concern to us are:
     * !FileCompareObject
     * !FolderCompareObject
     * !RootCompareObject
-    * !XMLCompareObject
+    * XMLCompareObject
   * Visitor Namespace
     * !BuilderVisitor
     * !ComparerVisitor
@@ -75,7 +75,7 @@ The classes of concern to us are:
 !CompareObjects are entities which are used during manual comparison and synchronization. There are basically 2 main kinds of !CompareObjects, the *!FileCompareObject* and the *!FolderCompareObject*. *!RootCompareObject* is a specific kind of !FolderCompareObject used to represent the root paths to be compared. There is also the *XMLCompareObject* which is used to store the file metadata and then used to populate the main !CompareObjects.
 
 === Details ===
-When a request for synchronization is received, it will be enqueued into the single-instance *ManualQueueControl*. Once that is done, only one job will be dequeued at any one time, and processed. When a request for comparison or previewing is received, it will immediately be processed, since by default, only one comparison can be done at a time. In both cases, *ManualSyncer* will be called. ManualSyncer contains all the methods needed for comparison or synchronization of manual requests.
+When a request for synchronization is received, it will be enqueued into the single-instance *!ManualQueueControl*. Once that is done, only one job will be dequeued at any one time, and processed. When a request for comparison or previewing is received, it will immediately be processed, since by default, only one comparison can be done at a time. In both cases, *!ManualSyncer* will be called. !ManualSyncer contains all the methods needed for comparison or synchronization of manual requests.
 
 *!CompareObjectHelper* is the class that contains the various traversal methods, namely, pre-traversal, post-traversal, and level-order traversal for traversing the tree. All the Visitor classes implement IVisitor interface. 
 
@@ -84,14 +84,14 @@ This portion is in charge of analyzing and generating data, without affecting an
 
   # *!BuilderVisitor* takes in a !RootCompareObject, and builds the directory trees for it under the given root paths.
   # *XMLMetadataVisitor* will then visit this built tree, and populate it with metadata about each file, if the file exists.
-  # *ProcessMetadataVisitor* will then visit the tree and compare each file against its metadata, and update certain states if necessary.
+  # *!ProcessMetadataVisitor* will then visit the tree and compare each file against its metadata, and update certain states if necessary.
   # *!FolderRenameVisitor* is a very specific class that will then check for folder renames.
   # Next, *!ComparerVisitor* visits the tree and updates the state of each !CompareObject based on certain attributes like the last time the file was modified.
 
 ==== Syncing ====
 From this portion onwards, actual changes will be made to the files and folders.
 
-  # Once all that is done, `HandleBuildConflicts`, a method in *ManualSyncer* will be called to handle build conflicts encountered during building of tree. *ConflictVisitor* will also be called to handle datetime conflicts.
+  # Once all that is done, `HandleBuildConflicts`, a method in *!ManualSyncer* will be called to handle build conflicts encountered during building of tree. *!ConflictVisitor* will also be called to handle datetime conflicts.
   # *!SyncerVisitor* will then traverse the tree and carry out the necessary file or folder actions based on the states updated by !ComparerVisitor, as well as update the final state of each folder and file.
   # Finally, *XMLWriterVisitor* will traverse the tree, and write the updated information of each folder and file to XML.
 
@@ -109,7 +109,7 @@ The classes of concern to us for the seamless portion are as follows:
     * BaseXMLWriteObject
     * XMLWriteFileObject
     * XMLWriteFolderObject
-  * SeamlessQueueControl
+  * !SeamlessQueueControl
   * !SeamlessSyncer
   * SeamlessXMLHelper
 
