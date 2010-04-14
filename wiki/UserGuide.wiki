@@ -26,7 +26,7 @@ Why choose Syncless over other synchronization tools? The reason is simple. Sync
 
   * *N-way Synchronization*: Why restrict yourself to just syncing two folders? Let Syncless perform n-way synchronization between multiple folders for you.
 
-  * *Seamless Synchronisation*: Any discrepancies in the tag can be detected and synchronised without any human intervention  
+  * *Seamless Synchronization*: Any changes in the tagged folders can be detected and synchronized without any human intervention.
 
   * *Filtering*:  Use Syncless's filtering features for the ultimate control in synchronization. Currently, Syncless is able to include or exclude files and folders by extension and path. Other filters will be available in later versions.
 
@@ -39,8 +39,8 @@ Why choose Syncless over other synchronization tools? The reason is simple. Sync
 === N-way Synchronization ===
 The traditional way to keep a few folders in sync is to create multiple jobs because many tools provide synchronization between 2 folders only. Syncless is capable of synchronizing multiple folders without you having to create multiple jobs. Simply tag multiple folders with the same tag name and Syncless will keep them all in sync. 
 
-=== Seamless Synchronisation ===
-Seamless synchronisation allows folders that are tagged to be synchronised automatically if there are any file changes within any of the folder. Users can just leave it running while attending to any other tasks at hand. At the end of the day , they will find that their folders will be in sync !  
+=== Seamless Synchronization ===
+Seamless synchronization allows folders that are tagged to be synchronized automatically if there are changes to the files within the folders. You can just leave the program running while attending to other tasks at hand. At the end of the day, you will find that all your folders are in sync!  
 
 === Filtering ===
 Syncless currently provides basic filtering capabilities for files. There are 2 main kinds of filters, inclusion and exclusion filters. Exclusion filters will always have a higher priority over inclusion filters. In this section, we are going to take a look at how we can construct filters to suit our needs.
