@@ -23,7 +23,7 @@ For *Date Time Conflict*, Syncless will automatically synchronize the first file
 In both cases, we guarantee that no data will be lost.
 
 = Classes =
-PUT IMAGE HERE (CLASS DIAGRAM)
+[http://big5sync.googlecode.com/files/CompareAndSync%20-%20v2.png http://big5sync.googlecode.com/files/CompareAndSync%20-%20v2%20-%20thumb.png]
 
 
 We will now take a look at the main components of !CompareAndSync, which can be broadly divided to the controller layer, the manual component and the seamless component.
