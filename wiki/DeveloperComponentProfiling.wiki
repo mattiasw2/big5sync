@@ -25,7 +25,8 @@ When a drive-in event is detected, `ProfilingLayer` will create a mapping profil
 Likewise, when a drive-out event is detected, `ProfilingLayer` will remove the mapping profile of that particular drive and mark it as unavailable.
 
 = Description of Metadata File =
-Example of Structure
+== General Structure ==
+
 {{{
 <profiling> 
   <profile profilename="" last_updated="0">
@@ -33,6 +34,9 @@ Example of Structure
   </profile>
 </profiling>
 }}}
+
+== Explanation of Xml Tag Names == 
+|| *Tag name/value* || *Description* ||
 || profiling || the root node of the xml ||
 || profile || the node representing a profile object. can contain multiple profile ||
 || profilename || the name of the profile ||
