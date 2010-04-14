@@ -243,7 +243,7 @@ If it is determined that a folder rename has occurred, we will merge it by calli
         }
 }}}
 
-`MergeFile` and `MergeFolder` are helper methods to assist with the merging of content. After !FolderRenameVisitor is done with its job, !ComparerVisitor will visit the tree in post-order. It is essential that it visits in post-order since any changes to a file or folder will imply that the parent folder is dirty, and thus we have to visit the children before the parent. There are various methods in !ComparerVisitor that handles the detection of renamed files, as well as the comparing of files and folders. Let us take a look at the main function, `!CompareFiles`.
+`MergeFile` and `MergeFolder` are helper methods to assist with the merging of content. After !FolderRenameVisitor is done with its job, !ComparerVisitor will visit the tree in post-order. It is essential that it visits in post-order since any changes to a file or folder will imply that the parent folder is dirty, and thus we have to visit the children before the parent. There are various methods in !ComparerVisitor that handles the detection of renamed files, as well as the comparing of files and folders. Let us take a look at the main function, `CompareFiles`.
 
 {{{
         private void CompareFiles(FileCompareObject file, string[] currentPaths)
@@ -316,7 +316,7 @@ After applying the above algorithm, we should get the following, with the priori
 Clearly, D\Note.txt is the most updated file. To end it off, !SyncerVisitor will then look for the file or folder with the highest priority at each node, and execute the necessary action base on the !ChangeType. Once that is done, XMLWriterVisitor will visit it and write the updated values, such as the hash and last modified date, back to the metadata. For a more detailed overview of how the tree and the visitors work, please take a look at this [http://big5sync.googlecode.com/files/%5BTeam1%5DMerged_Tree_Overview_2.0.pps presentation].
 
 == Seamless Mode ==
-Seamless mode is much more simpler than manual mode. It simply receives *AutoSyncRequest* objects, and processes them accordingly.
+Seamless mode is much more simpler than manual mode. It simply receives *!AutoSyncRequest* objects, and processes them accordingly.
 
 = Extending !CompareAndSync =
 Further functionality can be added into !CompareAndSync should a developer wish to. He can simply create his own visitor that visits each node and performs the action he decides. A good example would be to generate a report after a synchronization. A developer can simply code a visitor to create a report based on the attributes of each node.
