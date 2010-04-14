@@ -25,6 +25,12 @@ The observer for the `SystemLogicNotificationQueue`. Process the notification an
 
 The helper is in charge of saving the profiling data and tagging data to the various locations (see below).
 
+== !ServiceLocator ==
+
+The class that allow different component to locate the different functions provided. It also allow the different component to get the message channel.
+
+
+
 = Explanation of Algorithms/Implementation =
 
 == !PathTable ==
