@@ -32,3 +32,55 @@ action : deleted
 hash : the hash of the file in MD5
 last modified time : the time that the file has been modified
 last updated time : the time that the file node is added to the last known state document
+
+
+
+== XML Metadata (syncless.xml) ==
+=== Sample XML ===
+{{{
+<?xml version="1.0"?>
+<meta-data>
+  <last_modified_utc>634068154959990000</last_modified_utc>
+  <name>jdk-6u18-docs</name>
+  <folder>
+    <name>docs</name>
+    <last_updated_utc>634068153616650000</last_updated_utc>
+  </folder>
+  <file>
+    <name>15 - Master Plan (Bonus Track).mp3</name>
+    <size>5640045</size>
+    <hash>0AA40E362C9509774E3CA3E84F8F3E63</hash>
+    <last_modified_utc>633940776114069966</last_modified_utc>
+    <last_created_utc>634068153616460000</last_created_utc>
+    <last_updated_utc>634068153616650000</last_updated_utc>
+  </file>
+</meta-data>
+}}}
+
+=== Description of XML ===
+From the root node, there are the following:
+
+*last_modified_utc*: The time the metadata file was updated, only one element of `last_modified_utc` will be in root.
+*name*: The name of the folder the metadata belongs to, only one element of `name` will be in root.
+*folder*: Each folder element stores information about a folder, multiple elements to represent multiple folders.
+*file*: Each file element stores information about a file, multiple elements to represent multiple files.
+
+For a folder node , it will contain the following child nodes -
+
+name : the name of the folder
+last updated : the time when the folder node has been added to the meta data
+
+For a file node , it will contain the following child nodes -
+
+*name:* The name of the file
+*size:* The size of the file in bytes
+*hash:* The hash of the file in MD5
+*last_modified_utc* : The last modified/written time of the file
+*last_created_utc*: The creation time of the file
+*last_updated_utc*: The time the metadata was written for this particular `file` element
+
+
+
+
+
+=== 
