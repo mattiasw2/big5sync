@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{79C1CBE7-297A-4820-A2D9-BE3507B8EF19}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -134,7 +134,7 @@
     <Compile Include="Notification\UnMonitorPathNotification.cs" />
     <Compile Include="Notification\INotificationQueue.cs" />
     <Compile Include="Core\IUIInterface.cs" />
-    <Compile Include="Core\DeviceWatcher.cs" />
+    <Compile Include="Monitor\DeviceWatcher.cs" />
     <Compile Include="Core\Exceptions\LoggerNotFoundException.cs" />
     <Compile Include="Core\ICommandLineControllerInterface.cs" />
     <Compile Include="Core\IMonitorControllerInterface.cs" />

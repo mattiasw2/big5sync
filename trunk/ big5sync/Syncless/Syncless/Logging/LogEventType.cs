@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Koh Cher Guan
+ * 
+ */
 
 namespace Syncless.Logging
 {

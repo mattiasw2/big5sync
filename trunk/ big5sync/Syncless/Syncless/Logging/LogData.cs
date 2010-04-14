@@ -1,6 +1,8 @@
-﻿using System;
-using System.Text;
-using System.Diagnostics;
+﻿/*
+ * 
+ * Author: Koh Cher Guan
+ * 
+ */
 
 namespace Syncless.Logging
 {

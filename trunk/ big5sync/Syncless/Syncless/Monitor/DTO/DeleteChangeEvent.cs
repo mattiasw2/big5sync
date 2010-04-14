@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Koh Cher Guan
+ * 
+ */
+
 using System.IO;
 
 namespace Syncless.Monitor.DTO

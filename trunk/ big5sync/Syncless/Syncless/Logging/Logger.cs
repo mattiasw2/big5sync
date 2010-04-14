@@ -1,6 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Koh Cher Guan
+ * 
+ */
+
 using log4net;
-using Syncless.Core;
 
 namespace Syncless.Logging
 {

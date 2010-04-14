@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Koh Cher Guan
+ * 
+ */
+
 using System.Diagnostics;
 using Syncless.Core;
 

@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Koh Cher Guan
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -8,6 +14,7 @@ using Syncless.Filters;
 using Syncless.Helper;
 using Syncless.Monitor.DTO;
 using Syncless.Monitor.Exceptions;
+
 namespace Syncless.Monitor
 {
     /// <summary>
