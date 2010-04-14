@@ -2119,6 +2119,7 @@ namespace Syncless.Core
                 SwitchMode(tag.TagName, TagMode.Manual);
                 TaggingLayer.Instance.DeleteTag(tag.TagName);
                 _userInterface.TagsChanged();
+                _userInterface.TagChanged(tag.TagName);
             }
             catch (TagNotFoundException te)
             {
