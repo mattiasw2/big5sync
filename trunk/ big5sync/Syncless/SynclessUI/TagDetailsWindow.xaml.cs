@@ -44,10 +44,13 @@ namespace SynclessUI
 
                 // Sets up all components to their default state
                 filters = _main.LogicLayer.GetAllFilters(_tagname);
-                PopulateListBoxFilter(false);
-                LblTag_Details.Content = "Tag Details for " + _tagname;
-                TxtBoxPattern.IsEnabled = false;
-                CmbBoxMode.IsEnabled = false;
+                if(filters != null)
+                {
+                    PopulateListBoxFilter(false);
+                    LblTag_Details.Content = "Tag Details for " + _tagname;
+                    TxtBoxPattern.IsEnabled = false;
+                    CmbBoxMode.IsEnabled = false;
+                }
             }
             catch (UnhandledException)
             {

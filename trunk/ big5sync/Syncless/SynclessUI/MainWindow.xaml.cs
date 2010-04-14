@@ -130,7 +130,10 @@ namespace SynclessUI
                                            "Syncless has failed to initialize and will now exit.");
                     _closenormally = false;
 
-                    Close();
+                    try
+                    {
+                        Close();
+                    } catch(InvalidOperationException) {}
                 }
             }
             catch (UnhandledException)
@@ -283,17 +286,22 @@ namespace SynclessUI
             try
             {
                 TagFilter = string.Empty;
+
                 List<string> taglist = LogicLayer.GetAllTags();
 
-                ListBoxTag.ItemsSource = taglist;
-                LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
-                SelectedTag = (string)ListBoxTag.SelectedItem;
-
-                if (taglist.Count != 0)
+                if(taglist != null)
                 {
-                    SelectedTag = taglist[0];
-                    SelectTag(SelectedTag);
+                    ListBoxTag.ItemsSource = taglist;
+                    LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
+                    SelectedTag = (string)ListBoxTag.SelectedItem;
+
+                    if (taglist.Count != 0)
+                    {
+                        SelectedTag = taglist[0];
+                        SelectTag(SelectedTag);
+                    }
                 }
+
             }
             catch (UnhandledException)
             {
@@ -324,22 +332,26 @@ namespace SynclessUI
                 if (LogicLayer != null)
                 {
                     List<string> taglist = LogicLayer.GetAllTags();
-                    List<string> filteredtaglist = new List<string>();
 
-                    int initial = taglist.Count;
-
-                    foreach (string x in taglist)
+                    if(taglist != null)
                     {
-                        if (x.ToLower().Contains(TagFilter.ToLower()))
-                            filteredtaglist.Add(x);
+                        List<string> filteredtaglist = new List<string>();
+
+                        int initial = taglist.Count;
+
+                        foreach (string x in taglist)
+                        {
+                            if (x.ToLower().Contains(TagFilter.ToLower()))
+                                filteredtaglist.Add(x);
+                        }
+
+                        int after = filteredtaglist.Count;
+
+                        LblTagCount.Content = "[" + after + "/" + initial + "]";
+
+                        ListBoxTag.ItemsSource = null;
+                        ListBoxTag.ItemsSource = filteredtaglist;
                     }
-
-                    int after = filteredtaglist.Count;
-
-                    LblTagCount.Content = "[" + after + "/" + initial + "]";
-
-                    ListBoxTag.ItemsSource = null;
-                    ListBoxTag.ItemsSource = filteredtaglist;
                 }
             }
             catch (UnhandledException)
@@ -355,9 +367,13 @@ namespace SynclessUI
                 if (tagname != null)
                 {
                     List<string> taglist = LogicLayer.GetAllTags();
-                    int index = taglist.IndexOf(tagname);
-                    ListBoxTag.SelectedIndex = index;
-                    ViewTagInfo(tagname);
+                    
+                    if(taglist != null)
+                    {
+                        int index = taglist.IndexOf(tagname);
+                        ListBoxTag.SelectedIndex = index;
+                        ViewTagInfo(tagname);
+                    }
                 }
             }
             catch (UnhandledException)
@@ -439,7 +455,10 @@ namespace SynclessUI
         /// <param name="e"></param>
         private void BtnClose_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Close();
+            try
+            {
+                Close();
+            } catch(InvalidOperationException) {}
         }
 
         /// <summary>
@@ -491,7 +510,7 @@ namespace SynclessUI
             {
                 List<string> taglist = LogicLayer.GetAllTags();
 
-                if (taglist.Count == 0)
+                if (taglist != null & taglist.Count == 0)
                 {
                     TagTitle.Text = "Select a Tag";
                     TagIcon.Visibility = Visibility.Hidden;
@@ -797,35 +816,38 @@ namespace SynclessUI
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOffForeground");
 
             TagView tv = LogicLayer.GetTag(SelectedTag);
-            if (tv.TagState == TagState.ManualToSeamless)
+            if(tv != null)
             {
-                if (CurrentProgress != null && CurrentProgress.TagName == SelectedTag)
+                if (tv.TagState == TagState.ManualToSeamless)
                 {
-                    switch (CurrentProgress.State)
+                    if (CurrentProgress != null && CurrentProgress.TagName == SelectedTag)
                     {
-                        case SyncState.Analyzing:
-                            ProgressBarSync.Visibility = Visibility.Visible;
-                            LblProgress.Visibility = Visibility.Hidden;
-                            ProgressBarSync.IsIndeterminate = true;
-                            break;
-                        case SyncState.Finalizing:
-                        case SyncState.Synchronizing:
-                            ProgressBarSync.IsIndeterminate = false;
-                            ProgressBarSync.Visibility = Visibility.Visible;
-                            LblProgress.Visibility = Visibility.Visible;
-                            break;
+                        switch (CurrentProgress.State)
+                        {
+                            case SyncState.Analyzing:
+                                ProgressBarSync.Visibility = Visibility.Visible;
+                                LblProgress.Visibility = Visibility.Hidden;
+                                ProgressBarSync.IsIndeterminate = true;
+                                break;
+                            case SyncState.Finalizing:
+                            case SyncState.Synchronizing:
+                                ProgressBarSync.IsIndeterminate = false;
+                                ProgressBarSync.Visibility = Visibility.Visible;
+                                LblProgress.Visibility = Visibility.Visible;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        ProgressBarSync.Visibility = Visibility.Hidden;
+                        LblProgress.Visibility = Visibility.Hidden;
                     }
                 }
-                else
+                else if (tv.TagState == TagState.SeamlessToManual)
                 {
-                    ProgressBarSync.Visibility = Visibility.Hidden;
-                    LblProgress.Visibility = Visibility.Hidden;
+                    ProgressBarSync.Visibility = Visibility.Visible;
+                    LblProgress.Visibility = Visibility.Visible;
                 }
-            }
-            else if (tv.TagState == TagState.SeamlessToManual)
-            {
-                ProgressBarSync.Visibility = Visibility.Visible;
-                LblProgress.Visibility = Visibility.Visible;
             }
 
             Console.WriteLine("In Switching Mode");
@@ -866,32 +888,35 @@ namespace SynclessUI
                 {
                     TagView tv = LogicLayer.GetTag(SelectedTag);
 
-                    if (tv.IsLocked)
+                    if(tv != null)
                     {
-                        if (CurrentProgress != null && CurrentProgress.TagName == SelectedTag &&
-                            (CurrentProgress.State == SyncState.Analyzing || CurrentProgress.State == SyncState.Queued ||
-                             CurrentProgress.State == SyncState.Started))
+                        if (tv.IsLocked)
                         {
-                            BtnSyncNow.Visibility = Visibility.Visible;
-                            BtnPreview.Visibility = Visibility.Hidden;
-                            CancelButtonMode();
+                            if (CurrentProgress != null && CurrentProgress.TagName == SelectedTag &&
+                                (CurrentProgress.State == SyncState.Analyzing || CurrentProgress.State == SyncState.Queued ||
+                                 CurrentProgress.State == SyncState.Started))
+                            {
+                                BtnSyncNow.Visibility = Visibility.Visible;
+                                BtnPreview.Visibility = Visibility.Hidden;
+                                CancelButtonMode();
+                            }
+                            else
+                            {
+                                BtnSyncNow.Visibility = Visibility.Hidden;
+                                BtnPreview.Visibility = Visibility.Hidden;
+                            }
+
+                            if (tv.IsQueued)
+                            {
+                                BtnSyncNow.Visibility = Visibility.Visible;
+                                CancelButtonMode();
+                            }
                         }
                         else
                         {
-                            BtnSyncNow.Visibility = Visibility.Hidden;
-                            BtnPreview.Visibility = Visibility.Hidden;
-                        }
-
-                        if (tv.IsQueued)
-                        {
+                            SyncButtonMode();
                             BtnSyncNow.Visibility = Visibility.Visible;
-                            CancelButtonMode();
                         }
-                    }
-                    else
-                    {
-                        SyncButtonMode();
-                        BtnSyncNow.Visibility = Visibility.Visible;
                     }
                 }
             }
@@ -1111,8 +1136,7 @@ namespace SynclessUI
                     if (!LogicLayer.GetTag(SelectedTag).IsLocked)
                     {
                         bool result = DialogHelper.ShowWarning(this, "Remove Tag",
-                                                               "Are you sure you want to remove " + SelectedTag +
-                                                               "?");
+                                                               "Are you sure you want to remove " + SelectedTag + "?");
 
                         if (result)
                         {
@@ -1546,9 +1570,7 @@ namespace SynclessUI
             {
                 Close();
             }
-            catch (InvalidOperationException)
-            {
-            }
+            catch (InvalidOperationException) {}
         }
 
         private void TaskbarOptionsItem_Click(object sender, RoutedEventArgs e)
@@ -1644,11 +1666,15 @@ namespace SynclessUI
                                                           }
                                                           TagView tv = LogicLayer.GetTag(SelectedTag);
 
-                                                          ListTaggedPath.ItemsSource = tv.PathStringList;
-                                                          BdrTaggedPath.Visibility =
-                                                              tv.PathStringList.Count == 0
-                                                                  ? Visibility.Hidden
-                                                                  : Visibility.Visible;
+                                                          if(tv != null)
+                                                          {
+                                                              ListTaggedPath.ItemsSource = tv.PathStringList;
+                                                              BdrTaggedPath.Visibility =
+                                                                  tv.PathStringList.Count == 0
+                                                                      ? Visibility.Hidden
+                                                                      : Visibility.Visible;
+                                                          }
+
                                                       }));
             }
             catch (UnhandledException)
@@ -1677,8 +1703,11 @@ namespace SynclessUI
                                                                 {
                                                                     List<string> taglist = LogicLayer.GetAllTags();
                                                                     ListBoxTag.ItemsSource = taglist;
-                                                                    LblTagCount.Content = "[" + taglist.Count + "/" +
-                                                                                          taglist.Count + "]";
+                                                                    if(taglist != null)
+                                                                    {
+                                                                        LblTagCount.Content = "[" + taglist.Count + "/" +
+                                                                                              taglist.Count + "]";
+                                                                    }
                                                                 }));
             }
             catch (UnhandledException)
@@ -2032,7 +2061,10 @@ namespace SynclessUI
         private void ExitCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            Close();
+            try
+            {
+                Close();
+            } catch() {}
         }
 
         private void ExitCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)

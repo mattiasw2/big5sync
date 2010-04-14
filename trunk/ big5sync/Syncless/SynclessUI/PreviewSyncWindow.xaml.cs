@@ -27,15 +27,42 @@ namespace SynclessUI
     public partial class PreviewSyncWindow : Window
     {
         private readonly MainWindow _main;
-        private readonly DataTable _previewSyncData;
+        private DataTable _previewSyncData;
         private readonly string _selectedTag;
         private BackgroundWorker _previewWorker;
         private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
+
+        public DataTable PreviewSyncData
+        {
+            get { return _previewSyncData; }
+        }
 
         public PreviewSyncWindow(MainWindow main, string selectedTag)
         {
             _selectedTag = selectedTag;
 
+            InitializePreviewSyncDataTable();
+
+            _main = main;
+            Owner = _main;
+            ShowInTaskbar = false;
+
+            InitializePreviewWorker(selectedTag);
+
+            InitializeComponent();
+        }
+
+        private void InitializePreviewWorker(string selectedTag)
+        {
+            _previewWorker = new BackgroundWorker();
+            _previewWorker.DoWork += _previewWorker_DoWork;
+            _previewWorker.RunWorkerCompleted += _previewWorker_RunWorkerCompleted;
+            _previewWorker.WorkerSupportsCancellation = true;
+            _previewWorker.RunWorkerAsync(selectedTag);
+        }
+
+        private void InitializePreviewSyncDataTable()
+        {
             _previewSyncData = new DataTable();
             _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Source, typeof(string)));
             _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.Operation, typeof(string)));
@@ -49,17 +76,6 @@ namespace SynclessUI
             _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestLastModifiedDate, typeof(string)));
             _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestLastModifiedTime, typeof(string)));
             _previewSyncData.Columns.Add(new DataColumn(PreviewVisitor.DestSize, typeof(string)));
-            _main = main;
-            Owner = _main;
-            ShowInTaskbar = false;
-
-            _previewWorker = new BackgroundWorker();
-            _previewWorker.DoWork += _previewWorker_DoWork;
-            _previewWorker.RunWorkerCompleted += _previewWorker_RunWorkerCompleted;
-            _previewWorker.WorkerSupportsCancellation = true;
-            _previewWorker.RunWorkerAsync(selectedTag);
-
-            InitializeComponent();
         }
 
         private void _previewWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -82,23 +98,23 @@ namespace SynclessUI
 
         private void _previewWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            string selectedTag = e.Argument as string;
-            RootCompareObject rco = _main.LogicLayer.PreviewSync(selectedTag);
-            if (_previewWorker.CancellationPending)
+            try
             {
-                e.Cancel = true;
-            }
-            else
+                string selectedTag = e.Argument as string;
+                RootCompareObject rco = _main.LogicLayer.PreviewSync(selectedTag);
+                if (_previewWorker.CancellationPending)
+                {
+                    e.Cancel = true;
+                }
+                else
+                {
+                    e.Result = rco;
+                    Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() => Populate(rco)));
+                }
+            } catch(UnhandledException)
             {
-                e.Result = rco;
-                Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() => Populate(rco)));
+                DialogHelper.DisplayUnhandledExceptionMessage();
             }
-           
-        }
-
-        public DataTable PreviewSyncData
-        {
-            get { return _previewSyncData; }
         }
 
         private void Populate(RootCompareObject rco)
@@ -182,10 +198,7 @@ namespace SynclessUI
 
                 if (di.Exists)
                     exists = true;
-            }
-            catch
-            {
-            }
+            } catch {} // Do nothing since it will return false, and the desired behavior is to return false
 
             try
             {
@@ -193,10 +206,8 @@ namespace SynclessUI
 
                 if (fi.Exists)
                     exists = true;
-            }
-            catch
-            {
-            }
+            } catch { } // Do nothing since it will return false, and the desired behavior is to return false
+
             return exists;
         }
     }
