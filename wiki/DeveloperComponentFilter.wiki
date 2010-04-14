@@ -18,3 +18,4 @@ Extending Filter can be easily done. It can be done by creating a custom `Filter
 
 = Miscellaneous =
 Ideally, filtering should only be applied to the physical address (i.e. C:\Lecture\) and not the logical address (address stored in the *Tagging* component).
+However, some filter can be applied to logical address.
