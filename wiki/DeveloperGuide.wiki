@@ -40,7 +40,7 @@ To understand more about Profiling component, please click [http://code.google.c
 
 === Tagging ===
 
-The Tagging component provides the underlying operations of creating and removing tags, as well as tagging and untagging folders from tags. It also manages other settings such as the filter settings per tag.
+The Tagging component provides the underlying operations of creating and removing tags, as well as tagging and untagging folders from tags.It will store the logical address of the path.
 
 To understand more about Tagging component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentTagging here].
 
@@ -52,8 +52,7 @@ To understand more about !CompareAndSync component, please click [http://code.go
 
 === Monitor ===
 
-The Monitor Component provides a set of classes to detect file system changes. There are 2 roles for the Monitor Component. The first role is to detect the insertion and removal of USB removable drives, such as external hard disk and flash drive, and the second role is to capture any changes to a file or folder.
-
+The Monitor Component provides a set of classes to detect file system changes and drive changes. There are 2 roles for the Monitor Component. The first role is to detect the insertion and removal of USB removable drives, such as external hard disk and flash drive, and the second role is to capture any changes to a file or folder.
  
 To understand more about Monitor component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentMonitor here].
 
