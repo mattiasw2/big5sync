@@ -530,6 +530,7 @@ namespace Syncless.Core
                 }
                 _userInterface.DriveChanged();
                 _userInterface.PathChanged();
+                _userInterface.TagsChanged();
             }
             catch (Exception e)
             {
