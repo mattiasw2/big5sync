@@ -76,12 +76,14 @@ namespace Syncless.CompareAndSync.Seamless
             }
         }
 
+        // Helper method to handle created and updated files.
         private static void HandleCreateUpdate(AutoSyncRequest request, string sourceFullPath)
         {
             try
             {
                 FileInfo currFile = new FileInfo(sourceFullPath);
 
+                // Write the source file to XML first.
                 switch (request.ChangeType)
                 {
                     case AutoSyncRequestType.New:
@@ -103,18 +105,21 @@ namespace Syncless.CompareAndSync.Seamless
             {
                 string destFullPath = Path.Combine(dest, request.SourceName);
 
+                // If do sync is true
                 if (DoSync(sourceFullPath, destFullPath))
                 {
                     try
                     {
                         try
                         {
-                            if (request.Config.ArchiveLimit >= 0 && File.Exists(destFullPath))
+                            // Archive file if required
+                            if (request.Config.ArchiveLimit > 0 && File.Exists(destFullPath))
                             {
                                 CommonMethods.ArchiveFile(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
                                 ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "File archived " + destFullPath));
                             }
 
+                            // Delete file to recycle bin if needed
                             if (request.Config.Recycle && File.Exists(destFullPath))
                             {
                                 CommonMethods.DeleteFileToRecycleBin(destFullPath);
@@ -129,13 +134,18 @@ namespace Syncless.CompareAndSync.Seamless
                         {
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error deleting file " + destFullPath));
                         }
+
+                        bool fileExists = File.Exists(destFullPath);
+
+                        // Copy the file over
                         CommonMethods.CopyFile(sourceFullPath, destFullPath);
 
-                        if (File.Exists(destFullPath))
+                        if (fileExists)
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_MODIFIED, "File updated from " + sourceFullPath + " to " + destFullPath));
                         else
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CREATED, "File copied from " + sourceFullPath + " to " + destFullPath));
 
+                        // Update the XML for this file
                         FileInfo destFile = new FileInfo(destFullPath);
                         SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, CommonMethods.CalculateMD5Hash(destFile), destFile.Length, destFile.CreationTimeUtc.Ticks, destFile.LastWriteTimeUtc.Ticks, request.ChangeType == AutoSyncRequestType.New ? MetaChangeType.New : MetaChangeType.Update, _metaUpdated));
                     }
@@ -155,62 +165,67 @@ namespace Syncless.CompareAndSync.Seamless
             }
         }
 
+        // Helper method to handle file renames
         private static void HandleFileRename(AutoSyncRequest request, string sourceFullPath)
         {
+            // Update the XML for the source first
             SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName, request.SourceParent, MetaChangeType.Rename, _metaUpdated));
 
             foreach (string dest in request.DestinationFolders)
             {
-                string destFullPath = Path.Combine(dest, request.SourceName);
+                //string destFullPath = Path.Combine(dest, request.SourceName);
+                string oldFullPath = Path.Combine(dest, request.OldName);
+                string newFullPath = Path.Combine(dest, request.NewName);
 
-                if (DoSync(sourceFullPath, destFullPath))
+                try
                 {
-                    try
+                    // If the file with the old name in the destination directory does not exist
+                    if (!File.Exists(oldFullPath))
                     {
-                        string oldFullPath = Path.Combine(dest, request.OldName);
-                        string newFullPath = Path.Combine(dest, request.NewName);
-
-                        if (!File.Exists(oldFullPath))
-                        {
-                            CommonMethods.CopyFile(sourceFullPath, newFullPath);
-                            FileInfo destFile = new FileInfo(destFullPath);
-                            SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, CommonMethods.CalculateMD5Hash(destFile), destFile.Length, destFile.CreationTimeUtc.Ticks, destFile.LastWriteTimeUtc.Ticks, MetaChangeType.New, _metaUpdated));
-                        }
-                        else
-                        {
-                            CommonMethods.MoveFile(oldFullPath, newFullPath);
-                            SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName, dest, MetaChangeType.Rename, _metaUpdated));
-                        }
+                        CommonMethods.CopyFile(sourceFullPath, newFullPath); // Copy over the file
+                        FileInfo destFile = new FileInfo(newFullPath);
+                        SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, dest, CommonMethods.CalculateMD5Hash(destFile), destFile.Length, destFile.CreationTimeUtc.Ticks, destFile.LastWriteTimeUtc.Ticks, MetaChangeType.New, _metaUpdated));
+                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_MODIFIED, "File copied from " + sourceFullPath + " to " + newFullPath));
                     }
-                    catch (CopyFileException)
+                    else
                     {
-                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error copying file from " + sourceFullPath + " to " + destFullPath));
+                        // If the file with the old name in the destination directory exists
+                        CommonMethods.MoveFile(oldFullPath, newFullPath); // Rename the file
+                        SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.OldName, request.NewName, dest, MetaChangeType.Rename, _metaUpdated));
+                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_MODIFIED, "File renamed from " + oldFullPath + " to " + newFullPath));
                     }
-                    catch (MoveFileException)
-                    {
-                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error renaming file from " + sourceFullPath + " to " + destFullPath));
-                    }
-                    catch (HashFileException)
-                    {
-                        ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error hashing " + sourceFullPath + "."));
-                    }
+                }
+                catch (CopyFileException)
+                {
+                    ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error copying file from " + sourceFullPath + " to " + newFullPath));
+                }
+                catch (MoveFileException)
+                {
+                    ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error renaming file from " + oldFullPath + " to " + newFullPath));
+                }
+                catch (HashFileException)
+                {
+                    ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ERROR, "Error hashing " + newFullPath + "."));
                 }
             }
         }
 
+        // Handle file delete
         private static void HandleFileDelete(AutoSyncRequest request)
         {
+            // Update the XML for the source of deletion
             SeamlessXMLHelper.UpdateXML(new XMLWriteFileObject(request.SourceName, request.SourceParent, MetaChangeType.Delete, _metaUpdated));
 
             foreach (string dest in request.DestinationFolders)
             {
                 string destFullPath = Path.Combine(dest, request.SourceName);
 
+                // If the file exists in the destination, then we proceed with the deletion
                 if (File.Exists(destFullPath))
                 {
                     try
                     {
-                        if (request.Config.ArchiveLimit >= 0)
+                        if (request.Config.ArchiveLimit > 0)
                         {
                             CommonMethods.ArchiveFile(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "File archived " + destFullPath));
@@ -377,6 +392,7 @@ namespace Syncless.CompareAndSync.Seamless
 
         #endregion
 
+        // Determines if a given path is a file or folder
         private static bool IsFolder(string sourceName, List<string> destinations)
         {
             bool result = false;
