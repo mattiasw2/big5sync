@@ -17,7 +17,7 @@ In Syncless, our vision is to as much as possible, discard the idea of conflicts
 
 For the *Incompatible Type Conflict*, Syncless will automatically prioritize the folder over the file, and all the files will be thrown into a "`_`synclessConflict" folder, while the folders will be synchronized as usual.
 
-For *Date Time Conflict*, Syncless will automatically synchronize the first file it comes across, and all the others will be thrown into a "*_synclessConflict" folder.
+For *Date Time Conflict*, Syncless will automatically synchronize the first file it comes across, and all the others will be thrown into a "`_`synclessConflict" folder.
 
 In both cases, we guarantee that no data will be lost.
 
