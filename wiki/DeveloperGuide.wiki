@@ -34,6 +34,8 @@ Finally, each folder that is tagged also have metadata stored in them. At the mo
 
 === Core ===
 
+The Core component provides the main functionality of the system and provides a interface for the User Interface component to interact with the system.
+
 To understand more about Core component, please click
 [http://code.google.com/p/big5sync/wiki/DeveloperComponentCore here].
 
