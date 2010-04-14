@@ -95,6 +95,9 @@ namespace Syncless.CompareAndSync.Seamless
             fileElement.AppendChild(lastUpdatedElement);
 
             XmlNode rootNode = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr);
+            if(rootNode == null)
+                return;
+
             rootNode.AppendChild(fileElement);
             CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
             DeleteFileLastKnownState(xmlWriteObj);
@@ -161,7 +164,7 @@ namespace Syncless.CompareAndSync.Seamless
 
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + CommonXMLConstants.XPathFile + "[name=" + CommonMethods.ParseXPathString(xmlWriteObj.Name) + "]");
             
-            // cif the node does not exist, then create the node
+            // if the node does not exist, then create the node
             if (node == null)
             {
                 CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
@@ -238,6 +241,9 @@ namespace Syncless.CompareAndSync.Seamless
             folder.AppendChild(lastUpdatedElement);
 
             XmlNode rootNode = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr);
+            if(rootNode == null)
+                return;
+
             rootNode.AppendChild(folder);
             CommonMethods.SaveXML(ref xmlDoc, xmlFilePath);
             DeleteFolderLastKnownState(xmlWriteObj);
@@ -379,6 +385,9 @@ namespace Syncless.CompareAndSync.Seamless
             fileElement.AppendChild(lastUpdatedElement);
 
             XmlNode rootNode = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState);
+            if(rootNode == null)
+                return;
+
             rootNode.AppendChild(fileElement);
         }
 
@@ -417,6 +426,9 @@ namespace Syncless.CompareAndSync.Seamless
             folderElement.AppendChild(actionElement);
             folderElement.AppendChild(lastUpdatedElement);
             XmlNode rootNode = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState);
+            if(rootNode == null)
+                return;
+
             rootNode.AppendChild(folderElement);
         }
 

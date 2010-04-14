@@ -177,9 +177,12 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             fileElement.AppendChild(lastUpdatedElement);
 
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr);
+
+            if (node == null)
+                return;
+
             node.AppendChild(fileElement);
             CommonMethods.SaveXML(ref xmlDoc, xmlPath);
-
             DeleteFileLastKnownState(file, counter);
         }
 
@@ -341,6 +344,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             folderElement.AppendChild(lastUpdatedElement);
 
             XmlNode node = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr);
+
+            if (node == null)
+                return;
             node.AppendChild(folderElement);
 
             string subFolderXML = Path.Combine(folder.GetSmartParentPath(counter), name);
@@ -466,6 +472,8 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             fileElement.AppendChild(lastUpdatedElement);
 
             XmlNode rootNode = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState);
+            if (rootNode == null)
+                return;
             rootNode.AppendChild(fileElement);
         }
 
@@ -491,6 +499,9 @@ namespace Syncless.CompareAndSync.Manual.Visitor
             folderElement.AppendChild(actionElement);
             folderElement.AppendChild(lastUpdatedElement);
             XmlNode rootNode = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathLastKnownState);
+            
+            if(rootNode == null)
+                return;
             rootNode.AppendChild(folderElement);
         }
 

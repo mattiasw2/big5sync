@@ -453,7 +453,10 @@ namespace Syncless.CompareAndSync.Manual.Visitor
                 {
                     XmlDocument xmlDoc = new XmlDocument();
                     CommonMethods.LoadXML(ref xmlDoc, currMetaData);
-                    folder.MetaName = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + "/name").InnerText;
+                    XmlNode xmlNode = xmlDoc.SelectSingleNode(CommonXMLConstants.XPathExpr + "/name");
+                    if (xmlNode != null)
+                        folder.MetaName = xmlNode.InnerText;
+                    
                 }
             }
         }
