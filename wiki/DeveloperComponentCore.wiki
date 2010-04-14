@@ -1,0 +1,15 @@
+#summary Developers' Guide - Component - Core
+#labels Phase-Implementation
+#sidebar DeveloperGuideSidebar
+
+<wiki:toc max_depth="4">
+
+= Overview =
+
+= Classes =
+
+= Description of Design =
+
+= Explanation of Algorithms =
+
+= Extending Core =
