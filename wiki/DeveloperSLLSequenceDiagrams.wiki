@@ -3,16 +3,16 @@
 #sidebar DeveloperGuideSidebar
 == !CreateTag ==
 
-<img src = "http://big5sync.googlecode.com/files/SLLCreateTag.jpg" />
+http://big5sync.googlecode.com/files/SLLCreateTag.jpg
 
 == !TagFolder ==
 
-<img src = "http://big5sync.googlecode.com/files/SLLTagFolder.jpg" />
+http://big5sync.googlecode.com/files/SLLTagFolderSequenceDiagram.jpg
 
 == !UntagFolder ==
 
-<img src = "http://big5sync.googlecode.com/files/SLLUntagFolder.jpg" />
+http://big5sync.googlecode.com/files/SLLUntagFolder.jpg
 
 == !DeleteTag ==
 
-<img src = "http://big5sync.googlecode.com/files/SLLDeleteTag.jpg" />
+http://big5sync.googlecode.com/files/SLLDeleteTag.jpg
