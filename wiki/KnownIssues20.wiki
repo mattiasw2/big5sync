@@ -3,4 +3,5 @@
 #sidebar DeveloperGuideSidebar
 <wiki:toc max_depth="6">
 
-Coming soon.
+== Removable Drive ==
+Plugging in a drive or plugging out a drive while a sync is in progress may produce a unexpected synchronization result.
