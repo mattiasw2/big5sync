@@ -258,6 +258,7 @@ namespace Syncless.CompareAndSync.Seamless
             }
         }
 
+        // Return true only if the hash is different
         private static bool DoSync(string sourceFullPath, string destFullPath)
         {
             try
@@ -296,8 +297,10 @@ namespace Syncless.CompareAndSync.Seamless
             }
         }
 
+        // Helper method to handle folder creations
         private static void HandleFolderCreate(AutoSyncRequest request, string sourceFullPath)
         {
+            // Update the xml for the source folder first
             SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, request.SourceParent, Directory.GetCreationTimeUtc(sourceFullPath).Ticks, MetaChangeType.New, _metaUpdated));
 
             foreach (string dest in request.DestinationFolders)
@@ -317,6 +320,7 @@ namespace Syncless.CompareAndSync.Seamless
             }
         }
 
+        // Helper method to handle folder renames
         private static void HandleFolderRename(AutoSyncRequest request)
         {
             SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.OldName, request.NewName, request.SourceParent, MetaChangeType.Rename, _metaUpdated));
@@ -346,6 +350,7 @@ namespace Syncless.CompareAndSync.Seamless
 
         }
 
+        // Helper method to handle folder deletions
         private static void HandleFolderDelete(AutoSyncRequest request)
         {
             SeamlessXMLHelper.UpdateXML(new XMLWriteFolderObject(request.SourceName, request.SourceParent, MetaChangeType.Delete, _metaUpdated));
@@ -357,7 +362,7 @@ namespace Syncless.CompareAndSync.Seamless
                 {
                     try
                     {
-                        if (request.Config.ArchiveLimit >= 0)
+                        if (request.Config.ArchiveLimit > 0)
                         {
                             CommonMethods.ArchiveFolder(destFullPath, request.Config.ArchiveName, request.Config.ArchiveLimit);
                             ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_ARCHIVED, "Folder archived " + destFullPath));
