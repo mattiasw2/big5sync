@@ -1,11 +1,14 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
 using Syncless.Profiling.Exceptions;
 using Syncless.Helper;
-using Syncless.Core;
-using Syncless.Notification;
 
 namespace Syncless.Profiling
 {

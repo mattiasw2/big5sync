@@ -1,4 +1,9 @@
-﻿namespace Syncless.Notification
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+namespace Syncless.Notification
 {
     /// <summary>
     /// IQueueObserver is an interface which provides a mechanism for receiving notifications from classes

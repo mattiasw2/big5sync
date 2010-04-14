@@ -1,5 +1,8 @@
-﻿using System;
-
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
 namespace Syncless.Filters
 {
     /// <summary>

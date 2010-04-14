@@ -1,4 +1,9 @@
-﻿using Syncless.Core.Exceptions;
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+using Syncless.Core.Exceptions;
 using Syncless.Helper;
 using Syncless.Logging;
 using Syncless.Notification;

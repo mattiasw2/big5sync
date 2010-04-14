@@ -1,4 +1,9 @@
-﻿namespace Syncless.Core
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+namespace Syncless.Core
 {
     /// <summary>
     /// All User Interface interacting with Logic Layer is required to implement this interface.

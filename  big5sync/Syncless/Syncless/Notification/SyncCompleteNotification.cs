@@ -1,4 +1,9 @@
-﻿using Syncless.CompareAndSync.Manual.CompareObject;
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Tagging;
 
 namespace Syncless.Notification

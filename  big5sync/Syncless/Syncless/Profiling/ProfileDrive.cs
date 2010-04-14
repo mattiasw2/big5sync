@@ -1,4 +1,9 @@
-﻿using System.IO;
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+using System.IO;
 namespace Syncless.Profiling
 {
     /// <summary>

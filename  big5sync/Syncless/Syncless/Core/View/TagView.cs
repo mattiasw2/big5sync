@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+using System.Collections.Generic;
 using Syncless.Tagging;
 
 namespace Syncless.Core.View

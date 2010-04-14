@@ -1,4 +1,9 @@
-﻿namespace Syncless.Core.View
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+namespace Syncless.Core.View
 {
     /// <summary>
     /// This is a View for TaggedPath

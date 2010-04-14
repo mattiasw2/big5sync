@@ -1,4 +1,9 @@
-﻿namespace Syncless.Filters
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+namespace Syncless.Filters
 {
     /// <summary>
     /// Factory class for Creating Filter.

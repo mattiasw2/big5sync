@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+using System;
 using System.Collections.Generic;
 using Syncless.CompareAndSync.Manual.CompareObject;
 using Syncless.Core.Exceptions;

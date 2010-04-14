@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -658,9 +663,10 @@ namespace Syncless.Core
             _userInterface.TagsChanged();
         }
 
-        private static void SendAutoRequest(AutoSyncRequest request)
+        private void SendAutoRequest(AutoSyncRequest request)
         {
-
+            #region debug region
+            /*
             if (request.ChangeType == AutoSyncRequestType.New || request.ChangeType == AutoSyncRequestType.Update)
             {
                 string output =
@@ -694,7 +700,8 @@ namespace Syncless.Core
                 output += "\n================================================================";
                 ServiceLocator.GetLogger(ServiceLocator.DEVELOPER_LOG).Write(output);
             }
-
+            */
+            #endregion
             CompareAndSyncController.Instance.Sync(request);
         }
         #endregion
@@ -1458,9 +1465,9 @@ namespace Syncless.Core
             {
                 LoggingLayer.Instance.ClearLog();
             }
-            catch (UnauthorizedAccessException e)
+            catch (UnauthorizedAccessException)
             {
-                throw e;
+                throw;
             }
             catch (Exception e)
             {

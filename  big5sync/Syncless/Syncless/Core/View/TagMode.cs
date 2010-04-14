@@ -1,3 +1,8 @@
+/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
 namespace Syncless.Core.View
 {
     /// <summary>

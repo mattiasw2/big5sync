@@ -1,4 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
+using System.Text.RegularExpressions;
 namespace Syncless.Filters
 {
     /// <summary>

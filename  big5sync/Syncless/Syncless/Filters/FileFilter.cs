@@ -1,7 +1,9 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Eric Ng Jun Feng
+ * 
+ */
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 namespace Syncless.Filters
 {
