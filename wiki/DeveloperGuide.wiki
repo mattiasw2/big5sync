@@ -57,7 +57,7 @@ To understand more about !CompareAndSync component, please click [http://code.go
 
 === Monitor ===
 
-The Monitor Component provides a set of classes to detect file system changes and drive changes. There are 2 roles for the Monitor Component. The first role is to detect the insertion and removal of USB removable drives, such as external hard disk and flash drive, and the second role is to capture any changes to a file or folder.
+The Monitor component provides a set of classes to detect file system changes. There are 2 roles for the Monitor component. The first role is to detect the insertion and removal of USB removable drives, such as external hard disks and flash drives, and the second role is to capture any changes to a file or folder within a tagged folder.
  
 To understand more about Monitor component, please click [http://code.google.com/p/big5sync/wiki/DeveloperComponentMonitor here].
 
