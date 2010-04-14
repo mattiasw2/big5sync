@@ -25,28 +25,36 @@ namespace SynclessUI
     /// </summary>
     public partial class TagWindow : Window
     {
-        private const string DialogDescription = "Please select a folder to tag.";
         private readonly MainWindow _main;
-        private bool _cancelstatus = false;
-        private bool _notifyUser;
+        private bool _cancelstatus = false; // if user wishes to cancel the browser dialog
+        private bool _notifyUser; // tray notification
         private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
-        private FolderBrowserDialog _ofd = new FolderBrowserDialog();
 
-        private string _path;
-        private bool _popupclosed = true;
-        private string _selectedTag;
+        private string _path; // initial path input into the tag window by shell/dragdrop
+        private bool _popupclosed = true; // Keeps track whether the popup is open/closed
+        private string _selectedTag; // Tag which is selected to be tagged
+        private FolderBrowserDialog _oldFolderDialog = new FolderBrowserDialog();
         private VistaFolderBrowserDialog vistafolderDialog = new VistaFolderBrowserDialog();
-        private bool _isTagNormally;
-        private bool _isInvalidFolder;
+        private bool _isTaggedNormally;
+        private bool _isInvalidFolder; // Check if folder browsed is an invalid folder
 
+        /// <summary>
+        /// Initialize the Tag Window
+        /// </summary>
+        /// <param name="main">Reference to MainWindow</param>
+        /// <param name="path">Path to initially use if user tags from the shell or drag a folder into Syncless</param>
+        /// <param name="tagname">A pre-specified tagname to use</param>
+        /// <param name="notifyUser">Whether or not to notify the user through tray notification</param>
         public TagWindow(MainWindow main, string path, string tagname, bool notifyUser)
         {
             InitializeComponent();
 
+            // Set up Tag Window Properties
             _main = main;
             Owner = _main;
             ShowInTaskbar = false;
 
+            // Trim the length of the Tag to 20 characters at most.
             if (tagname != null)
             {
                 int maxlength = tagname.Length > 20 ? 20 : tagname.Length;
@@ -56,22 +64,31 @@ namespace SynclessUI
             _selectedTag = tagname;
             _notifyUser = notifyUser;
 
+            // Initialize the two different folder dialogs used
             InitializeFolderDialogs();
 
+            // Disable the AutoCompleteBox at the startup
             ACBName.IsEnabled = false;
-
-            _isTagNormally = path == "" ? true : false;
+            
+            // if there is already a specified, the tagging operation has not been done through the Tag button on MainWindow
+            _isTaggedNormally = path == "" ? true : false;
             _isInvalidFolder = false;
+
+            // if no specified path onstartup, choose a path, if not use the specified paths
             _path = path == "" ? SelectPath() : path;
 
+            // if user cancels the tagging operation, close the window
             if (_cancelstatus)
             {
                 Close();
             }
             else
             {
+                // Processes the path to see if the autocomplete box can be enabled
                 ProcessPath(_path, _selectedTag);
-                if (!_isTagNormally && _isInvalidFolder)
+                //if the path is an invalid folder and not tagged normally, it must have come from shell/drag and drop,
+                // thus close the screen
+                if (!_isTaggedNormally && _isInvalidFolder)
                 {
                     Close();
                 }
@@ -88,25 +105,40 @@ namespace SynclessUI
             }
         }
 
-        private string Tagname
+        /// <summary>
+        /// Easy to use way to get/set the AutoCompleteBox; by using it the property to get set it
+        /// </summary>
+        private string TagToUse
         {
             get
             {
                 if (ACBName.Text != null) return ACBName.Text.Trim();
-                else return "";
+                return "";
+            }
+            set
+            {
+                ACBName.Text = value;
             }
         }
 
+        /// <summary>
+        /// Initialize all folder dialogs, both the Vista/Old Folder Dialog
+        /// </summary>
         private void InitializeFolderDialogs()
         {
+            string DialogDescription = "Please select a folder to tag.";
             vistafolderDialog.Description = DialogDescription;
             vistafolderDialog.UseDescriptionForTitle = true;
             // This applies to the Vista style dialog only, not the old dialog.
             vistafolderDialog.ShowNewFolderButton = true;
-            _ofd.Description = DialogDescription;
-            _ofd.ShowNewFolderButton = true;
+            _oldFolderDialog.Description = DialogDescription;
+            _oldFolderDialog.ShowNewFolderButton = true;
         }
 
+        /// <summary>
+        /// Check if the new vista folder browser dialog is support by vista and above, if not displays the old folder browser dialog
+        /// </summary>
+        /// <returns>Path Choosen</returns>
         private string SelectPath()
         {
             string path = "";
@@ -119,19 +151,21 @@ namespace SynclessUI
                 }
                 else
                 {
+                    // Cancelled the browsing process
                     _cancelstatus = true;
                 }
             }
             else
             {
-                DialogResult result = _ofd.ShowDialog();
+                DialogResult result = _oldFolderDialog.ShowDialog();
 
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
-                    path = _ofd.SelectedPath;
+                    path = _oldFolderDialog.SelectedPath;
                 }
                 else
                 {
+                    // Cancelled the browsing process
                     _cancelstatus = true;
                 }
             }
@@ -139,6 +173,12 @@ namespace SynclessUI
             return path;
         }
 
+        /// <summary>
+        /// Takes the path and the selected tag, Checks if the path is a valid path (not zip, cdrom, synclessfolder)
+        /// and if it is, check if the tag exists. If all is ready, enable the autocompletebox, if not disable it
+        /// </summary>
+        /// <param name="path">Path Selected</param>
+        /// <param name="selectedTag">Tag Selected</param>
         private void ProcessPath(string path, string selectedTag)
         {
             try
@@ -146,13 +186,13 @@ namespace SynclessUI
                 if (path != "")
                 {
                     DirectoryInfo di = new DirectoryInfo(path);
-                    if (di.Exists && !FileHelper.IsFile(path))
+                    if (di.Exists && !FileHelper.IsFile(path)) // detect zip files and such files
                     {
                         if (FileHelper.IsCDRomDrive(path))
                         {
                             DialogHelper.ShowError(this, "Invalid Folder",
                                                    "You cannot tag any folder from a CD/DVD-Rom drive.");
-                            if (!_isTagNormally)
+                            if (!_isTaggedNormally)
                             {
                                 _isInvalidFolder = true;
                             }
@@ -160,7 +200,7 @@ namespace SynclessUI
                         else if (FileHelper.IsSynclessFolder(path))
                         {
                             DialogHelper.ShowError(this, "Invalid Folder", "You cannot tag this folder.");
-                            if (!_isTagNormally)
+                            if (!_isTaggedNormally)
                             {
                                 _isInvalidFolder = true;
                             }
@@ -169,14 +209,14 @@ namespace SynclessUI
                         {
                             TxtBoxPath.Text = path;
                             ACBName.IsEnabled = true;
-                            ACBName.ItemsSource = _main.LogicLayer.GetAllTags();
-                            if (selectedTag == null)
+                            ACBName.ItemsSource = _main.LogicLayer.GetAllTags(); // get all tags pre-defined in the system
+                            if (selectedTag == null) // if no pre-defined tag
                             {
-                                ACBName.Text = di.Name;
+                                TagToUse = di.Name; // use directory name
                             }
                             else
                             {
-                                ACBName.Text = selectedTag;
+                                TagToUse = selectedTag; // use the pre-defined selection
                             }
                         }
                     }
@@ -193,54 +233,73 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Button to initiate the Tagging Process
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
             BtnOk.IsEnabled = false;
             try
             {
-                if (Tagname != "")
+                if (TagToUse != "")
                 {
+                    // Make sure path has substance and is not a file
                     if (_path != "" && !FileHelper.IsFile(_path))
                     {
+                        // trigger the warning choices
                         bool tocontinue1 = TriggerLongPathWarning();
                         bool tocontinue2 = TriggerDriveWarning();
 
+                        // if user happens to encounter both warnings and click yes/true, proceed
                         if (tocontinue1 && tocontinue2)
                         {
                             try
                             {
                                 DirectoryInfo di = new DirectoryInfo(_path);
+                                // Check once again if the folder exists and that the path selected is not a File
                                 if (di.Exists && !FileHelper.IsFile(_path))
                                 {
-                                    _main.CreateTag(Tagname);
+                                    _main.CreateTag(TagToUse);
 
-                                    TagView tv1 = null;
+                                    TagView tv = _main.LogicLayer.GetTag(TagToUse);
 
-                                    if (!_main.LogicLayer.GetTag(Tagname).IsLocked)
+                                    if(tv != null)
                                     {
-                                        tv1 = _main.LogicLayer.Tag(Tagname, new DirectoryInfo(_path));
-
-                                        if (tv1 != null)
+                                        // if Tag is not synchronizing
+                                        if (!tv.IsLocked)
                                         {
-                                            _main.InitializeTagList();
-                                            _main.SelectTag(Tagname);
-                                            if (_notifyUser)
-                                                _main.NotifyBalloon("Folder Tagged",
-                                                                    _path + " has been tagged to " + Tagname);
-                                            Close();
+                                            tv = _main.LogicLayer.Tag(TagToUse, new DirectoryInfo(_path));
+
+                                            // if tagview not empty, tag it
+                                            if (tv != null)
+                                            {
+                                                _main.InitializeTagList();
+                                                _main.SelectTag(TagToUse);
+                                                if (_notifyUser)
+                                                    _main.NotifyBalloon("Folder Tagged",
+                                                                        _path + " has been tagged to " + TagToUse);
+                                                Close();
+                                            }
+                                            else
+                                            {
+                                                DialogHelper.ShowError(this, "Tag Error",
+                                                                       "Tag Error Occured. Please Try Again.");
+                                                Close();
+                                            }
                                         }
                                         else
                                         {
-                                            DialogHelper.ShowError(this, "Tag Error",
-                                                                   "Tag Error Occured. Please Try Again.");
+                                            DialogHelper.ShowError(this, TagToUse + " is Synchronizing",
+                                                                   "You cannot tag a folder while the tag is synchronizing.");
                                             BtnOk.IsEnabled = true;
                                         }
-                                    }
-                                    else
+                                    } else
                                     {
-                                        DialogHelper.ShowError(this, Tagname + " is Synchronizing",
-                                                               "You cannot tag a folder while the tag is synchronizing.");
-                                        BtnOk.IsEnabled = true;
+                                        DialogHelper.ShowError(this, "Tag Error",
+                                                               "Tag Error Occured. Please Try Again.");
+                                        Close();
                                     }
                                 }
                                 else
@@ -276,7 +335,7 @@ namespace SynclessUI
                 }
                 else
                 {
-                    DialogHelper.ShowError(this, "Tagname Empty", "Please specify a tagname.");
+                    DialogHelper.ShowError(this, "TagToUse Empty", "Please specify a tagname.");
                     BtnOk.IsEnabled = true;
                 }
             }
@@ -287,6 +346,10 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Display a dialog warning choice window when user chooses a drive itself to see if user wants to proceed.
+        /// </summary>
+        /// <returns></returns>
         private bool TriggerDriveWarning()
         {
             DriveInfo di = new DriveInfo(_path);
@@ -302,6 +365,10 @@ namespace SynclessUI
             return true;
         }
 
+        /// <summary>
+        /// Display a dialog warning choice window for long path names to see if user wants to proceed.
+        /// </summary>
+        /// <returns></returns>
         private bool TriggerLongPathWarning()
         {
             if (_path.Length > 200)
@@ -315,26 +382,44 @@ namespace SynclessUI
             return true;
         }
 
+        /// <summary>
+        /// Event handler for BtnCancel_Click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             BtnCancel.IsEnabled = false;
             Close();
         }
 
+        /// <summary>
+        /// On Windows Load, Focus on AutocompleteBox so that user can type tagname
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Keyboard.Focus(ACBName);
         }
 
+        /// <summary>
+        /// Initiates the SelectPath Process, by taking in a new path, then takes that with the tagname
+        /// and Processes the Path
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnBrowse_Click(object sender, RoutedEventArgs e)
         {
-            _selectedTag = ACBName.Text;
+            _selectedTag = TagToUse;
             _path = SelectPath();
             ProcessPath(_path, _selectedTag);
         }
 
         /// <summary>
         ///	Ugly Hack for Overwritting the AutoCompleteBox Enter Behavior because it does not accept the Enter Key
+        /// If the enter key is entered and the popup is closed, it would imply that the user wishes to proceed
+        /// to finalizing tagging by simulating a click on the BtnOk button.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -346,27 +431,54 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Sets the _popupclosed to false everytime the popup is opened. This is to assist Text_PreviewKeyDown
+        /// to know if the popup menu is opened/closed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Popup_Opened(object sender, EventArgs e)
         {
             _popupclosed = false;
         }
 
+        /// <summary>
+        /// Sets the _popupclosed to true everytime the popup is closed. This is to assist Text_PreviewKeyDown
+        /// to know if the popup menu is opened/closed..
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Popup_Closed(object sender, EventArgs e)
         {
             _popupclosed = true;
         }
 
+        /// <summary>
+        /// Event handler for Canvas_MouseLeftButtonDown event. Allows user to drag the canvas.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
         }
 
+        /// <summary>
+        /// On closing animation complete, set the boolean to false and closes the window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
             _closingAnimationNotCompleted = false;
             Close();
         }
 
+        /// <summary>
+        /// Event handler for Window_Closing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (_closingAnimationNotCompleted)

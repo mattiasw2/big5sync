@@ -11,15 +11,15 @@ using Syncless.CompareAndSync.Manual.Visitor;
 namespace SynclessUI.Visitor
 {
     /// <summary>
-    /// Helper class to Traverse Files & Folder to visit the tree
+    /// Helper class to Traverse Files & Folder traverse the whole tree so as to allow the visitor to visit each node
     /// </summary>
     public class SyncUIHelper
     {
         /// <summary>
-        /// 
+        /// Helper Method to traverse a rootcompareobject and all foldercompareobjects and filecompareobjects under it
         /// </summary>
-        /// <param name="root"></param>
-        /// <param name="visitor"></param>
+        /// <param name="root">RootCompareObject from the previous visitor in order to start the traversal</param>
+        /// <param name="visitor">A particular visit to visit the RCOs. In this case, it will be the PreviewVisitor</param>
         public static void TraverseFolderHelper(RootCompareObject root, IVisitor visitor)
         {
             visitor.Visit(root);
@@ -35,6 +35,12 @@ namespace SynclessUI.Visitor
             }
         }
 
+        /// <summary>
+        /// Helper Method to traverse a FolderCompareObjects and all foldercompareobjects and filecompareobjects under it
+        /// </summary>
+        /// <param name="folder">FolderCompareObject to start the traversal</param>
+        /// <param name="numOfPaths">No. of paths available</param>
+        /// <param name="visitor">A particular visit to visit the RCOs. In this case, it will be the PreviewVisitor</param>
         private static void TraverseFolderHelper(FolderCompareObject folder, int numOfPaths, IVisitor visitor)
         {
             visitor.Visit(folder, numOfPaths);
