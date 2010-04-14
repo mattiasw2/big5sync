@@ -1,4 +1,10 @@
-﻿using System.Windows;
+﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * 
+ */
+
+using System.Windows;
 
 namespace SynclessUI.Helper
 {
@@ -6,19 +12,19 @@ namespace SynclessUI.Helper
     {
         public static void ShowError(Window window, string caption, string message)
         {
-            var dw = new DialogWindow(window, caption, message, DialogType.Error);
+            DialogWindow dw = new DialogWindow(window, caption, message, DialogType.Error);
             dw.ShowDialog();
         }
 
         public static void ShowInformation(Window window, string caption, string message)
         {
-            var dw = new DialogWindow(window, caption, message, DialogType.Information);
+            DialogWindow dw = new DialogWindow(window, caption, message, DialogType.Information);
             dw.ShowDialog();
         }
 
         public static bool ShowWarning(Window window, string caption, string message)
         {
-            var dw = new DialogWindow(window, caption, message, DialogType.Warning);
+            DialogWindow dw = new DialogWindow(window, caption, message, DialogType.Warning);
             dw.ShowDialog();
 
             if(Application.Current == null)
@@ -30,7 +36,7 @@ namespace SynclessUI.Helper
 
         public static DialogWindow ShowIndeterminate(Window window, string caption, string message)
         {
-            var dw = new DialogWindow(window, caption, message, DialogType.Indeterminate);
+            DialogWindow dw = new DialogWindow(window, caption, message, DialogType.Indeterminate);
             return dw;
         }
 

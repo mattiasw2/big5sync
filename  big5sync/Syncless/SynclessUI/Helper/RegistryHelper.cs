@@ -1,4 +1,10 @@
-﻿using System.IO;
+﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * 
+ */
+
+using System.IO;
 using Microsoft.Win32;
 
 namespace SynclessUI.Helper
@@ -148,7 +154,7 @@ namespace SynclessUI.Helper
 
                 try
                 {
-                    var fi = new FileInfo(path);
+                    FileInfo fi = new FileInfo(path);
                     exists = fi.Exists;
                 } catch {}
             }

@@ -34,7 +34,7 @@ namespace SynclessUI
                 Owner = _main;
                 ShowInTaskbar = false;
 
-                var tagListByFolder = new List<string>();
+                List<string> tagListByFolder = new List<string>();
                 DirectoryInfo di = null;
                 try
                 {
@@ -46,7 +46,7 @@ namespace SynclessUI
 
                 if (di != null)
                 {
-                    tagListByFolder = _main.Gui.GetTags(di);
+                    tagListByFolder = _main.LogicLayer.GetTags(di);
                 }
 
                 if (tagListByFolder != null && tagListByFolder.Count != 0)
@@ -97,9 +97,9 @@ namespace SynclessUI
 
                 foreach (string t in taglist.SelectedItems)
                 {
-                    if (!_main.Gui.GetTag(t).IsLocked)
+                    if (!_main.LogicLayer.GetTag(t).IsLocked)
                     {
-                        int result = _main.Gui.Untag(t, new DirectoryInfo(Path));
+                        int result = _main.LogicLayer.Untag(t, new DirectoryInfo(Path));
                         lasttagged = t;
                         if (result != 1)
                         {

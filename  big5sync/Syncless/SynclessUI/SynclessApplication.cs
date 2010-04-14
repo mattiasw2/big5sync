@@ -1,12 +1,16 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * Adapted from Singleton Application: http://www.switchonthecode.com/tutorials/wpf-writing-a-single-instance-application
+ */
+
+using System;
 using System.Windows;
 
 namespace SynclessUI
 {
     /// <summary>
     /// SynclessApplication is the Application class which calls on the MainWindow everytime it is initialized.
-    /// Adapted from Singleton Application
-    /// http://www.switchonthecode.com/tutorials/wpf-writing-a-single-instance-application
     /// </summary>
 
     public class SynclessApplication : Application

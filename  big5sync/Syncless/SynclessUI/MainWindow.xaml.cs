@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -42,8 +48,23 @@ namespace SynclessUI
         private Dictionary<string, string> _tagStatusNotificationDictionary =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-        public IUIControllerInterface Gui;
+        public IUIControllerInterface LogicLayer;
 
+        public SyncProgress CurrentProgress { get; set; }
+
+        public string SelectedTag
+        {
+            get { return (string)Application.Current.Properties["SelectedTag"]; }
+            set { Application.Current.Properties["SelectedTag"] = value; }
+        }
+
+        private HashSet<string> CancellingTags { get; set; }
+
+        private string TagFilter
+        {
+            get { return TxtBoxFilterTag.Text.Trim(); }
+            set { TxtBoxFilterTag.Text = value; }
+        }
 
         public MainWindow()
         {
@@ -53,59 +74,12 @@ namespace SynclessUI
             InitializeKeyboardShortcuts();
         }
 
-        public SyncProgressWatcher Watcher { get; set; }
-        public SyncProgress CurrentProgress { get; set; }
-
-        public string SelectedTag
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            get { return (string) Application.Current.Properties["SelectedTag"]; }
-            set { Application.Current.Properties["SelectedTag"] = value; }
+            DragMove();
         }
 
-        public HashSet<string> CancellingTags { get; set; }
-
-        private string TagFilter
-        {
-            get { return TxtBoxFilterTag.Text.Trim(); }
-            set { TxtBoxFilterTag.Text = value; }
-        }
-
-        private void DisplayLoadingAnimation()
-        {
-            if (Settings.Default.EnableAnimation)
-            {
-                var loading = (Storyboard) Resources["MainWindowOnLoaded"];
-                loading.Begin();
-            }
-        }
-
-        private void DisplayUnloadingAnimation()
-        {
-            if (Settings.Default.EnableAnimation)
-            {
-                var unloading = (Storyboard) Resources["MainWindowUnloaded"];
-                unloading.Begin();
-
-                DateTime dateTime = DateTime.Now;
-
-                while (DateTime.Now < dateTime.AddMilliseconds(1000))
-                {
-                    Dispatcher.Invoke(DispatcherPriority.Background,
-                                      (DispatcherOperationCallback) delegate(object unused) { return null; }, null);
-                }
-            }
-        }
-
-        private void DisplayWelcomeScreen(object sender, EventArgs e)
-        {
-            if (Settings.Default.DisplayWelcomeScreen)
-            {
-                WelcomeScreenWindow wsw = new WelcomeScreenWindow(this);
-                wsw.ShowDialog();
-                Topmost = true;
-                Topmost = false;
-            }
-        }
+        #region Initializing Syncless
 
         /// <summary>
         ///     Starts up the system logic layer and initializes it
@@ -118,9 +92,9 @@ namespace SynclessUI
                 DisplayLoadingAnimation();
                 _appPath = Assembly.GetExecutingAssembly().Location;
                 Application.Current.Properties["AppPath"] = _appPath;
-                Gui = ServiceLocator.GUI;
+                LogicLayer = ServiceLocator.GUI;
 
-                if (Gui.Initiate(this))
+                if (LogicLayer.Initiate(this))
                 {
                     if (Settings.Default.EnableShellIntegration)
                     {
@@ -165,21 +139,165 @@ namespace SynclessUI
             }
         }
 
-        private void timeWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void DisplayLoadingAnimation()
         {
-            InitiateTimeSyncHelper();
+            if (Settings.Default.EnableAnimation)
+            {
+                Storyboard loading = (Storyboard)Resources["MainWindowOnLoaded"];
+                loading.Begin();
+            }
         }
 
-        public void NotifyBalloon(string title, string text)
+        private void DisplayUnloadingAnimation()
         {
-            if (Settings.Default.EnableTrayNotification)
+            if (Settings.Default.EnableAnimation)
             {
-                TaskbarIcon.ShowBalloonTip(title, text, BalloonIcon.Info);
-            }
+                Storyboard unloading = (Storyboard)Resources["MainWindowUnloaded"];
+                unloading.Begin();
 
-            if (Settings.Default.EnableNotificationSounds)
+                DateTime dateTime = DateTime.Now;
+
+                while (DateTime.Now < dateTime.AddMilliseconds(1000))
+                {
+                    Dispatcher.Invoke(DispatcherPriority.Background,
+                                      (DispatcherOperationCallback)delegate(object unused) { return null; }, null);
+                }
+            }
+        }
+
+        private void DisplayWelcomeScreen(object sender, EventArgs e)
+        {
+            if (Settings.Default.DisplayWelcomeScreen)
             {
-                SystemSounds.Exclamation.Play();
+                WelcomeScreenWindow wsw = new WelcomeScreenWindow(this);
+                wsw.ShowDialog();
+                Topmost = true;
+                Topmost = false;
+            }
+        }
+
+        #endregion
+
+        #region De-Initializing Syncless
+
+        private void TerminateNow(bool showAnimation)
+        {
+            SaveApplicationSettings();
+            if (Settings.Default.EnableShellIntegration == false)
+            {
+                RegistryHelper.RemoveRegistry();
+            }
+            _notificationWatcher.Stop();
+            _priorityNotificationWatcher.Stop();
+
+            if (showAnimation)
+                DisplayUnloadingAnimation();
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            try
+            {
+                if (_closenormally)
+                {
+                    // Prepares the SLL for termination
+                    if (LogicLayer.PrepareForTermination())
+                    {
+                        bool result = DialogHelper.ShowWarning(this, "Exit", "Are you sure you want to exit Syncless?" +
+                                                                             "\nExiting Syncless will disable seamless synchronization.");
+
+                        if (result)
+                        {
+                            // Terminates the SLL and closes the UI
+                            LogicLayer.Terminate();
+                            TerminateNow(true);
+                        }
+                        else
+                        {
+                            e.Cancel = true;
+                        }
+                    }
+                    else
+                    {
+                        bool result = DialogHelper.ShowWarning(this, "Exit",
+                                                               "Are you sure you want to exit Syncless?" +
+                                                               "\nAll current synchronization operations will be completed and" +
+                                                               "\nany unfinished synchronization operations will be removed.");
+
+                        if (!result)
+                        {
+                            e.Cancel = true;
+                        }
+                        else
+                        {
+                            DialogWindow terminationWindow = DialogHelper.ShowIndeterminate(this,
+                                                                                            "Termination in Progress",
+                                                                                            "Please wait for the current synchronization to complete.");
+                            TaskbarIcon.Visibility = Visibility.Hidden;
+                            terminationWindow.Show();
+                            BackgroundWorker bgWorker = new BackgroundWorker();
+                            bgWorker.DoWork += bw_DoWork;
+                            bgWorker.RunWorkerCompleted += bw_RunWorkerCompleted;
+                            bgWorker.RunWorkerAsync(terminationWindow);
+                        }
+                    }
+                }
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
+            }
+        }
+
+        private void bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            DialogWindow terminationWindow = e.Argument as DialogWindow;
+            LogicLayer.Terminate();
+            e.Result = terminationWindow;
+        }
+
+        private void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            DialogWindow terminationWindow = e.Result as DialogWindow;
+            terminationWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
+            {
+                terminationWindow.
+                    CannotBeClosed =
+                    false;
+                terminationWindow.
+                    Close();
+            }));
+
+            TerminateNow(false);
+        }
+
+        #endregion
+
+        #region Tag List Panel
+
+        /// <summary>
+        ///     Gets the list of tags and then populates the Tag List Box and keeps a count
+        /// </summary>
+        public void InitializeTagList()
+        {
+            try
+            {
+                TagFilter = string.Empty;
+                List<string> taglist = LogicLayer.GetAllTags();
+
+                ListBoxTag.ItemsSource = taglist;
+                LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
+                SelectedTag = (string)ListBoxTag.SelectedItem;
+
+                if (taglist.Count != 0)
+                {
+                    SelectedTag = taglist[0];
+                    SelectTag(SelectedTag);
+                }
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
         }
 
@@ -191,11 +309,217 @@ namespace SynclessUI
             ViewTagInfo(ListBoxTag.SelectedItem.ToString());
         }
 
-        public void ViewTagInfo(string tagname)
+        private void ListBoxTag_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete && ListBoxTag.Items.Count > 0)
+            {
+                RemoveTag();
+            }
+        }
+
+        private void TxtBoxFilterTag_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
             {
-                TagView tv = Gui.GetTag(tagname);
+                if (LogicLayer != null)
+                {
+                    List<string> taglist = LogicLayer.GetAllTags();
+                    List<string> filteredtaglist = new List<string>();
+
+                    int initial = taglist.Count;
+
+                    foreach (string x in taglist)
+                    {
+                        if (x.ToLower().Contains(TagFilter.ToLower()))
+                            filteredtaglist.Add(x);
+                    }
+
+                    int after = filteredtaglist.Count;
+
+                    LblTagCount.Content = "[" + after + "/" + initial + "]";
+
+                    ListBoxTag.ItemsSource = null;
+                    ListBoxTag.ItemsSource = filteredtaglist;
+                }
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
+            }
+        }
+
+        public void SelectTag(string tagname)
+        {
+            try
+            {
+                if (tagname != null)
+                {
+                    List<string> taglist = LogicLayer.GetAllTags();
+                    int index = taglist.IndexOf(tagname);
+                    ListBoxTag.SelectedIndex = index;
+                    ViewTagInfo(tagname);
+                }
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
+            }
+        }
+
+        #endregion
+
+        #region Time Sync
+
+        private bool InitiateTimeSyncHelper()
+        {
+            Process timeSync = new Process();
+            timeSync.StartInfo.FileName = "SynclessTimeSync.exe";
+
+            try
+            {
+                timeSync.Start();
+                timeSync.WaitForExit();
+            }
+            catch (Win32Exception)
+            {
+                return false;
+            }
+
+            return timeSync.ExitCode == 0 ? true : false;
+        }
+
+        private void InitiateTimeSync()
+        {
+            bool result = InitiateTimeSyncHelper();
+
+            if (result)
+            {
+                DialogHelper.ShowInformation(this, "Time Synchronized Successfully",
+                                             "Your computer clock has been synchronized with an Internet Time Server.");
+            }
+            else
+            {
+                DialogHelper.ShowError(this, "Time Synchronized Unsuccessfully",
+                                       "Your computer clock could not be synchronized with an Internet Time Server.");
+            }
+        }
+
+        private void timeWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            InitiateTimeSyncHelper();
+        }
+
+        #endregion
+
+        #region Header Panel
+
+        private void OpenSynclessWebpage()
+        {
+            Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/"));
+        }
+
+        private void SynclessLogo_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            OpenSynclessWebpage();
+        }
+
+        private void SynclessLogoContainer_MouseEnter(object sender, MouseEventArgs e)
+        {
+            LogoHighlight.Visibility = Visibility.Visible;
+        }
+
+        #endregion
+
+        #region Application Command Panel: Exit/Minimize/Restore/Shortcuts
+
+        /// <summary>
+        ///     Sets the behavior of the close button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnClose_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Close();
+        }
+
+        /// <summary>
+        ///     Sets the behavior of the minimize button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnMin_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MinimizeWindow();
+        }
+
+        private void MinimizeWindow()
+        {
+            WindowState = WindowState.Minimized;
+            if (Settings.Default.MinimizeToTray)
+                ShowInTaskbar = false;
+        }
+
+        public void RestoreWindow()
+        {
+            ShowInTaskbar = true;
+            WindowState = WindowState.Normal;
+            Topmost = true;
+            Topmost = false;
+            Focus();
+        }
+
+        private void BtnOptions_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DisplayOptionsWindow();
+        }
+
+        private void BtnShortcuts_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DisplayShortcutsWindow();
+        }
+
+        #endregion
+
+        #region TagInfo Panel
+
+        /// <summary>
+        ///     If lists of tag is empty, reset the UI back to 0, else displayed the first Tag on the list.
+        /// </summary>
+        private void InitializeTagInfoPanel()
+        {
+            try
+            {
+                List<string> taglist = LogicLayer.GetAllTags();
+
+                if (taglist.Count == 0)
+                {
+                    TagTitle.Text = "Select a Tag";
+                    TagIcon.Visibility = Visibility.Hidden;
+                    TagStatusPanel.Visibility = Visibility.Hidden;
+                    SyncPanel.Visibility = Visibility.Hidden;
+                    BdrTaggedPath.Visibility = Visibility.Hidden;
+                    ProgressBarSync.Visibility = Visibility.Hidden;
+                    LblProgress.Visibility = Visibility.Hidden;
+                    SelectedTag = null;
+                    ListTaggedPath.ItemsSource = null;
+                }
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
+            }
+        }
+
+        private void TagIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DisplayTagDetailsWindow();
+        }
+
+        private void ViewTagInfo(string tagname)
+        {
+            try
+            {
+                TagView tv = LogicLayer.GetTag(tagname);
 
                 if (tv == null)
                 {
@@ -285,120 +609,12 @@ namespace SynclessUI
             }
         }
 
-        /// <summary>
-        ///     Gets the list of tags and then populates the Tag List Box and keeps a count
-        /// </summary>
-        public void InitializeTagList()
-        {
-            try
-            {
-                TagFilter = string.Empty;
-                List<string> taglist = Gui.GetAllTags();
-
-                ListBoxTag.ItemsSource = taglist;
-                LblTagCount.Content = "[" + taglist.Count + "/" + taglist.Count + "]";
-                SelectedTag = (string) ListBoxTag.SelectedItem;
-
-                if (taglist.Count != 0)
-                {
-                    SelectedTag = taglist[0];
-                    SelectTag(SelectedTag);
-                }
-            }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage(this);
-            }
-        }
-
-        public void SelectTag(string tagname)
-        {
-            try
-            {
-                if (tagname != null)
-                {
-                    List<string> taglist = Gui.GetAllTags();
-                    int index = taglist.IndexOf(tagname);
-                    ListBoxTag.SelectedIndex = index;
-                    ViewTagInfo(tagname);
-                }
-            }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage(this);
-            }
-        }
-
-        /// <summary>
-        ///     If lists of tag is empty, reset the UI back to 0, else displayed the first Tag on the list.
-        /// </summary>
-        private void InitializeTagInfoPanel()
-        {
-            try
-            {
-                List<string> taglist = Gui.GetAllTags();
-
-                if (taglist.Count == 0)
-                {
-                    TagTitle.Text = "Select a Tag";
-                    TagIcon.Visibility = Visibility.Hidden;
-                    TagStatusPanel.Visibility = Visibility.Hidden;
-                    SyncPanel.Visibility = Visibility.Hidden;
-                    BdrTaggedPath.Visibility = Visibility.Hidden;
-                    ProgressBarSync.Visibility = Visibility.Hidden;
-                    LblProgress.Visibility = Visibility.Hidden;
-                    SelectedTag = null;
-                    ListTaggedPath.ItemsSource = null;
-                }
-            }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage(this);
-            }
-        }
-
-        /// <summary>
-        ///     Sets the behavior of the close button
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnClose_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            Close();
-        }
-
-        /// <summary>
-        ///     Sets the behavior of the minimize button
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnMin_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            MinimizeWindow();
-        }
-
-        private void MinimizeWindow()
-        {
-            WindowState = WindowState.Minimized;
-            if (Settings.Default.MinimizeToTray)
-                ShowInTaskbar = false;
-        }
-
-        public void RestoreWindow()
-        {
-            ShowInTaskbar = true;
-            WindowState = WindowState.Normal;
-            Topmost = true;
-            Topmost = false;
-            Focus();
-        }
-
         private void BtnSyncMode_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("Hi");
             if (!_manualSyncEnabled)
             {
-                bool success = Gui.CancelSwitch(SelectedTag);
+                bool success = LogicLayer.CancelSwitch(SelectedTag);
                 if (!success)
                 {
                     DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
@@ -409,11 +625,11 @@ namespace SynclessUI
 
             try
             {
-                if (!Gui.GetTag(SelectedTag).IsLocked && !(GetTagStatus(SelectedTag) == "Finalizing"))
+                if (!LogicLayer.GetTag(SelectedTag).IsLocked && !(GetTagStatus(SelectedTag) == "Finalizing"))
                 {
-                    if (string.Compare((string) LblSyncMode.Content, "Manual") == 0)
+                    if (string.Compare((string)LblSyncMode.Content, "Manual") == 0)
                     {
-                        if (Gui.SwitchMode(SelectedTag, TagMode.Seamless))
+                        if (LogicLayer.SwitchMode(SelectedTag, TagMode.Seamless))
                         {
                             ProgressBarSync.Value = 0;
                             SetProgressBarColor(0);
@@ -429,9 +645,9 @@ namespace SynclessUI
                                                    SelectedTag + " could not be switched to Seamless Mode.");
                         }
                     }
-                    else if (string.Compare((string) LblSyncMode.Content, "Seamless") == 0)
+                    else if (string.Compare((string)LblSyncMode.Content, "Seamless") == 0)
                     {
-                        if (Gui.SwitchMode(SelectedTag, TagMode.Manual))
+                        if (LogicLayer.SwitchMode(SelectedTag, TagMode.Manual))
                         {
                             _syncProgressNotificationDictionary.Remove(SelectedTag);
                             _tagStatusNotificationDictionary.Remove(SelectedTag);
@@ -448,7 +664,7 @@ namespace SynclessUI
                 }
                 else
                 {
-                    bool success = Gui.CancelSwitch(SelectedTag);
+                    bool success = LogicLayer.CancelSwitch(SelectedTag);
                     if (!success)
                     {
                         DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
@@ -462,25 +678,95 @@ namespace SynclessUI
             }
         }
 
-        private void UpdateTagState()
+        private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
         {
-            TagView view = Gui.GetTag(SelectedTag);
-            if (view == null)
+            try
             {
+                PathChanged();
+
+                if (LblSyncNow.Content.Equals("Sync Now"))
+                {
+                    BtnSyncNow.IsEnabled = false;
+
+                    try
+                    {
+                        if (LogicLayer.GetTag(SelectedTag).PathStringList.Count > 1)
+                        {
+                            if (LogicLayer.StartManualSync(SelectedTag))
+                            {
+                                ProgressBarSync.Visibility = Visibility.Visible;
+                                LblProgress.Visibility = Visibility.Visible;
+                                BtnPreview.Visibility = Visibility.Hidden;
+                                CancelButtonMode();
+                                const string message = "Synchronization Request Has Been Queued";
+                                LblStatusText.Content = message;
+                                _tagStatusNotificationDictionary[SelectedTag] = message;
+                                _syncProgressNotificationDictionary[SelectedTag] = 0;
+                                ProgressBarSync.Value = 0;
+                                SetProgressBarColor(0);
+                            }
+                            else
+                            {
+                                DialogHelper.ShowError(this, "Synchronization Error",
+                                                       SelectedTag + " could not be synchronized.");
+                                SyncButtonMode();
+                            }
+                        }
+                        else
+                        {
+                            DialogHelper.ShowError(this, "Nothing to Synchronize",
+                                                   "You can only synchronize when there are two or more folders.");
+                            SyncButtonMode();
+                        }
+                    }
+                    catch (UnhandledException)
+                    {
+                        DialogHelper.DisplayUnhandledExceptionMessage(this);
+                    }
+
+                    BtnSyncNow.IsEnabled = true;
+                }
+                else
+                {
+                    BtnSyncNow.IsEnabled = false;
+                    bool success = LogicLayer.CancelManualSync(SelectedTag);
+                    if (success)
+                    {
+                        CancellingTags.Add(SelectedTag);
+                        LblSyncNow.Content = "Cancelling..";
+                    }
+                    else
+                    {
+                        DialogHelper.ShowError(this, "Unable to Cancel",
+                                               "Please wait until synchronization is complete.");
+                        BtnSyncNow.IsEnabled = true;
+                    }
+                }
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
+            }
+        }
+
+        private void BtnPreview_Click(object sender, RoutedEventArgs e)
+        {
+            if (!_manualSyncEnabled || LogicLayer.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
+            {
+                DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
+                                       "You cannot preview while it is synchronizing.");
                 return;
             }
-            switch (view.TagState)
+
+            if (LogicLayer.GetTag(SelectedTag).PathStringList.Count > 1)
             {
-                case TagState.Seamless:
-                    SeamlessMode();
-                    break;
-                case TagState.Manual:
-                    ManualMode();
-                    break;
-                case TagState.SeamlessToManual:
-                case TagState.ManualToSeamless:
-                    SwitchingMode();
-                    break;
+                PreviewSyncWindow psw = new PreviewSyncWindow(this, SelectedTag);
+                psw.ShowDialog();
+            }
+            else
+            {
+                DialogHelper.ShowError(this, "Nothing to Preview",
+                                       "You can only preview only when there are two or more folders.");
             }
         }
 
@@ -510,7 +796,7 @@ namespace SynclessUI
             LblSyncMode.SetResourceReference(MarginProperty, "ToggleOffMargin");
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOffForeground");
 
-            TagView tv = Gui.GetTag(SelectedTag);
+            TagView tv = LogicLayer.GetTag(SelectedTag);
             if (tv.TagState == TagState.ManualToSeamless)
             {
                 if (CurrentProgress != null && CurrentProgress.TagName == SelectedTag)
@@ -578,7 +864,7 @@ namespace SynclessUI
 
                 if (SelectedTag != null)
                 {
-                    TagView tv = Gui.GetTag(SelectedTag);
+                    TagView tv = LogicLayer.GetTag(SelectedTag);
 
                     if (tv.IsLocked)
                     {
@@ -627,69 +913,86 @@ namespace SynclessUI
             LblSyncNow.ToolTip = "Start Manual Synchronization";
         }
 
-        private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
+        #endregion
+
+        #region Drag & Drop Functionality
+
+        private void LayoutRoot_Drop(object sender, DragEventArgs e)
         {
             try
             {
-                PathChanged();
+                HideDropIndicator();
 
-                if (LblSyncNow.Content.Equals("Sync Now"))
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
-                    BtnSyncNow.IsEnabled = false;
-
-                    try
-                    {
-                        if (Gui.GetTag(SelectedTag).PathStringList.Count > 1)
+                    string[] foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+                    if (foldernames != null)
+                        foreach (string i in foldernames)
                         {
-                            if (Gui.StartManualSync(SelectedTag))
+                            string path = i;
+
+                            // convert potential shortcuts into folders
+                            string shortcutfolderpath = FileHelper.GetShortcutTargetFile(i);
+                            if (shortcutfolderpath != null)
                             {
-                                ProgressBarSync.Visibility = Visibility.Visible;
-                                LblProgress.Visibility = Visibility.Visible;
-                                BtnPreview.Visibility = Visibility.Hidden;
-                                CancelButtonMode();
-                                const string message = "Synchronization Request Has Been Queued";
-                                LblStatusText.Content = message;
-                                _tagStatusNotificationDictionary[SelectedTag] = message;
-                                _syncProgressNotificationDictionary[SelectedTag] = 0;
-                                ProgressBarSync.Value = 0;
-                                SetProgressBarColor(0);
+                                path = shortcutfolderpath;
                             }
-                            else
+
+                            // to detect folders
+                            try
                             {
-                                DialogHelper.ShowError(this, "Synchronization Error",
-                                                       SelectedTag + " could not be synchronized.");
-                                SyncButtonMode();
+                                DirectoryInfo folder = new DirectoryInfo(path);
+                                if (folder.Exists && !FileHelper.IsFile(path))
+                                {
+                                    TagWindow tw = new TagWindow(this, path, SelectedTag, false);
+                                }
+                            }
+                            catch
+                            {
                             }
                         }
-                        else
-                        {
-                            DialogHelper.ShowError(this, "Nothing to Synchronize",
-                                                   "You can only synchronize when there are two or more folders.");
-                            SyncButtonMode();
-                        }
-                    }
-                    catch (UnhandledException)
-                    {
-                        DialogHelper.DisplayUnhandledExceptionMessage(this);
-                    }
-
-                    BtnSyncNow.IsEnabled = true;
                 }
-                else
+                TxtBoxFilterTag.IsHitTestVisible = true;
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
+            }
+        }
+
+        private void LayoutRoot_DragEnter(object sender, DragEventArgs e)
+        {
+            try
+            {
+                TxtBoxFilterTag.IsHitTestVisible = false;
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
-                    BtnSyncNow.IsEnabled = false;
-                    bool success = Gui.CancelManualSync(SelectedTag);
-                    if (success)
-                    {
-                        CancellingTags.Add(SelectedTag);
-                        LblSyncNow.Content = "Cancelling..";
-                    }
-                    else
-                    {
-                        DialogHelper.ShowError(this, "Unable to Cancel",
-                                               "Please wait until synchronization is complete.");
-                        BtnSyncNow.IsEnabled = true;
-                    }
+                    string[] foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+                    if (foldernames != null)
+                        foreach (string i in foldernames)
+                        {
+                            string path = i;
+
+                            // convert potential shortcuts into folders
+                            string shortcutfolderpath = FileHelper.GetShortcutTargetFile(path);
+                            if (shortcutfolderpath != null)
+                            {
+                                path = shortcutfolderpath;
+                            }
+
+                            // to detect folders
+                            try
+                            {
+                                DirectoryInfo folder = new DirectoryInfo(path);
+                                if (folder.Exists && !FileHelper.IsFile(path))
+                                {
+                                    ShowDropIndicator();
+                                }
+                            }
+                            catch
+                            {
+                            }
+                        }
                 }
             }
             catch (UnhandledException)
@@ -698,13 +1001,84 @@ namespace SynclessUI
             }
         }
 
+        private void LayoutRoot_DragLeave(object sender, DragEventArgs e)
+        {
+            HideDropIndicator();
+            TxtBoxFilterTag.IsHitTestVisible = true;
+        }
+
+        private void ShowDropIndicator()
+        {
+            DropIndicator.Visibility = Visibility.Visible;
+            DropIndicator.Focusable = false;
+        }
+
+        private void HideDropIndicator()
+        {
+            DropIndicator.Visibility = Visibility.Hidden;
+        }
+
+        #endregion
+
+        #region Sync Progress Status
+        public double GetSyncProgressPercentage(string tagname)
+        {
+            return CurrentProgress.TagName == tagname
+                       ? CurrentProgress.PercentComplete
+                       : _syncProgressNotificationDictionary[tagname];
+        }
+
+        public string GetTagStatus(string tagname)
+        {
+            try
+            {
+                string status = _tagStatusNotificationDictionary[tagname];
+
+                return status;
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        private void SetProgressBarColor(double percentageComplete)
+        {
+            byte rcolor = 0, gcolor = 0;
+            const byte bcolor = 0;
+
+            if (percentageComplete <= 50)
+            {
+                rcolor = 211;
+                gcolor = (byte)(percentageComplete / 50 * 211);
+            }
+            else
+            {
+                rcolor = (byte)((100 - percentageComplete) / 50 * 211);
+                gcolor = 211;
+            }
+
+            ProgressBarSync.Foreground = new SolidColorBrush(Color.FromArgb(255, rcolor, gcolor, bcolor));
+        }
+
+        public void ResetTagSyncStatus(string currentTag)
+        {
+            _syncProgressNotificationDictionary.Remove(currentTag);
+            _tagStatusNotificationDictionary.Remove(currentTag);
+            LblStatusText.Content = "";
+        }
+
+        #endregion
+
+        #region Core Syncless Functionality
+
         public bool CreateTag(string tagName)
         {
             try
             {
                 try
                 {
-                    TagView tv = Gui.CreateTag(tagName);
+                    TagView tv = LogicLayer.CreateTag(tagName);
                     if (tv != null)
                     {
                         InitializeTagList();
@@ -728,29 +1102,53 @@ namespace SynclessUI
             return true;
         }
 
-        private void TxtBoxFilterTag_TextChanged(object sender, TextChangedEventArgs e)
+        private void RemoveTag()
         {
             try
             {
-                if (Gui != null)
+                if (SelectedTag != null)
                 {
-                    List<string> taglist = Gui.GetAllTags();
-                    var filteredtaglist = new List<string>();
-
-                    int initial = taglist.Count;
-
-                    foreach (string x in taglist)
+                    if (!LogicLayer.GetTag(SelectedTag).IsLocked)
                     {
-                        if (x.ToLower().Contains(TagFilter.ToLower()))
-                            filteredtaglist.Add(x);
+                        bool result = DialogHelper.ShowWarning(this, "Remove Tag",
+                                                               "Are you sure you want to remove " + SelectedTag +
+                                                               "?");
+
+                        if (result)
+                        {
+                            if (!LogicLayer.GetTag(SelectedTag).IsLocked)
+                            {
+                                bool success = LogicLayer.DeleteTag(SelectedTag);
+                                if (success)
+                                {
+                                    _syncProgressNotificationDictionary.Remove(SelectedTag);
+                                    _tagStatusNotificationDictionary.Remove(SelectedTag);
+
+                                    InitializeTagList();
+                                    InitializeTagInfoPanel();
+                                }
+                                else
+                                {
+                                    DialogHelper.ShowError(this, "Remove Tag Error",
+                                                           "" + SelectedTag + " could not be removed.");
+                                }
+                            }
+                            else
+                            {
+                                DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
+                                                       "You cannot remove a tag while the tag is synchronizing.");
+                            }
+                        }
                     }
-
-                    int after = filteredtaglist.Count;
-
-                    LblTagCount.Content = "[" + after + "/" + initial + "]";
-
-                    ListBoxTag.ItemsSource = null;
-                    ListBoxTag.ItemsSource = filteredtaglist;
+                    else
+                    {
+                        DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
+                                               "You cannot remove a tag while the tag is synchronizing.");
+                    }
+                }
+                else
+                {
+                    DialogHelper.ShowError(this, "No Tag Selected", "Please select a tag to remove.");
                 }
             }
             catch (UnhandledException)
@@ -771,7 +1169,7 @@ namespace SynclessUI
                 {
                     string currentTag = SelectedTag;
 
-                    if (!Gui.GetTag(currentTag).IsLocked)
+                    if (!LogicLayer.GetTag(currentTag).IsLocked)
                     {
                         if (ListTaggedPath.SelectedIndex == -1)
                         {
@@ -779,14 +1177,14 @@ namespace SynclessUI
                         }
                         else
                         {
-                            TagView tv = Gui.GetTag(currentTag);
+                            TagView tv = LogicLayer.GetTag(currentTag);
 
                             if (tv != null)
                             {
                                 if (!tv.IsLocked)
                                 {
-                                    int count = Gui.Untag(currentTag,
-                                                          new DirectoryInfo((string) ListTaggedPath.SelectedValue));
+                                    int count = LogicLayer.Untag(currentTag,
+                                                          new DirectoryInfo((string)ListTaggedPath.SelectedValue));
 
                                     if (count == 1)
                                     {
@@ -832,126 +1230,13 @@ namespace SynclessUI
             }
         }
 
-        public void ResetTagSyncStatus(string currentTag)
-        {
-            _syncProgressNotificationDictionary.Remove(currentTag);
-            _tagStatusNotificationDictionary.Remove(currentTag);
-            LblStatusText.Content = "";
-        }
-
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
-            try
-            {
-                if (_closenormally)
-                {
-                    // Prepares the SLL for termination
-                    if (Gui.PrepareForTermination())
-                    {
-                        bool result = DialogHelper.ShowWarning(this, "Exit", "Are you sure you want to exit Syncless?" +
-                                                                             "\nExiting Syncless will disable seamless synchronization.");
-
-                        if (result)
-                        {
-                            // Terminates the SLL and closes the UI
-                            Gui.Terminate();
-                            TerminateNow(true);
-                        }
-                        else
-                        {
-                            e.Cancel = true;
-                        }
-                    }
-                    else
-                    {
-                        bool result = DialogHelper.ShowWarning(this, "Exit",
-                                                               "Are you sure you want to exit Syncless?" +
-                                                               "\nAll current synchronization operations will be completed and" +
-                                                               "\nany unfinished synchronization operations will be removed.");
-
-                        if (!result)
-                        {
-                            e.Cancel = true;
-                        }
-                        else
-                        {
-                            DialogWindow terminationWindow = DialogHelper.ShowIndeterminate(this,
-                                                                                            "Termination in Progress",
-                                                                                            "Please wait for the current synchronization to complete.");
-                            TaskbarIcon.Visibility = Visibility.Hidden;
-                            terminationWindow.Show();
-                            var bgWorker = new BackgroundWorker();
-                            bgWorker.DoWork += bw_DoWork;
-                            bgWorker.RunWorkerCompleted += bw_RunWorkerCompleted;
-                            bgWorker.RunWorkerAsync(terminationWindow);
-                        }
-                    }
-                }
-            }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage(this);
-            }
-        }
-
-        private void bw_DoWork(object sender, DoWorkEventArgs e)
-        {
-            var terminationWindow = e.Argument as DialogWindow;
-            Gui.Terminate();
-            e.Result = terminationWindow;
-        }
-
-        private void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            var terminationWindow = e.Result as DialogWindow;
-            terminationWindow.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action) (() =>
-                                                                                              {
-                                                                                                  terminationWindow.
-                                                                                                      CannotBeClosed =
-                                                                                                      false;
-                                                                                                  terminationWindow.
-                                                                                                      Close();
-                                                                                              }));
-
-            TerminateNow(false);
-        }
-
-        private void TerminateNow(bool showAnimation)
-        {
-            SaveApplicationSettings();
-            if (Settings.Default.EnableShellIntegration == false)
-            {
-                RegistryHelper.RemoveRegistry();
-            }
-            _notificationWatcher.Stop();
-            _priorityNotificationWatcher.Stop();
-
-            if (showAnimation)
-                DisplayUnloadingAnimation();
-        }
-
-        private void RemoveTagRightClick_Click(object sender, RoutedEventArgs e)
-        {
-            RemoveTag();
-        }
-
-        private void DetailsRightClick_Click(object sender, RoutedEventArgs e)
-        {
-            DisplayTagDetailsWindow();
-        }
-
-        private void TagRightClick_Click(object sender, RoutedEventArgs e)
-        {
-            DisplayTagWindow();
-        }
-
         private void DisplayTagDetailsWindow()
         {
             if (SelectedTag != null)
             {
-                if (!Gui.GetTag(SelectedTag).IsLocked)
+                if (!LogicLayer.GetTag(SelectedTag).IsLocked)
                 {
-                    var tdw = new TagDetailsWindow(this, SelectedTag);
+                    TagDetailsWindow tdw = new TagDetailsWindow(this, SelectedTag);
                     tdw.ShowDialog();
                 }
                 else
@@ -968,12 +1253,7 @@ namespace SynclessUI
 
         private void DisplayLogWindow()
         {
-            var lw = new LogWindow(this);
-        }
-
-        private void BtnOptions_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DisplayOptionsWindow();
+            LogWindow lw = new LogWindow(this);
         }
 
         private void DisplayOptionsWindow()
@@ -983,52 +1263,47 @@ namespace SynclessUI
                 Application.Current.Properties["OptionsWindowIsOpened"] = false;
             }
 
-            if (!(bool) Application.Current.Properties["OptionsWindowIsOpened"])
+            if (!(bool)Application.Current.Properties["OptionsWindowIsOpened"])
             {
-                var ow = new OptionsWindow(this);
+                OptionsWindow ow = new OptionsWindow(this);
                 ow.ShowDialog();
             }
         }
 
-        private static void OpenSynclessWebpage()
+        private void DisplayUnmonitorContextMenu()
         {
-            Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/"));
-        }
+            ContextMenu driveMenu = new ContextMenu();
 
-        private void SynclessLogo_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            OpenSynclessWebpage();
-        }
-
-        private void BtnPreview_Click(object sender, RoutedEventArgs e)
-        {
-            if (!_manualSyncEnabled || Gui.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
+            List<string> removableDrives = DriveHelper.GetUSBDriveLetters();
+            if (removableDrives.Count == 0)
             {
-                DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
-                                       "You cannot preview while it is synchronizing.");
-                return;
-            }
-
-            if (Gui.GetTag(SelectedTag).PathStringList.Count > 1)
-            {
-                var psw = new PreviewSyncWindow(this, SelectedTag);
-                psw.ShowDialog();
+                MenuItem driveMenuItem = new MenuItem();
+                driveMenuItem.Header = "No Removable Drives Found";
+                driveMenu.Items.Add(driveMenuItem);
             }
             else
             {
-                DialogHelper.ShowError(this, "Nothing to Preview",
-                                       "You can only preview only when there are two or more folders.");
+                foreach (string letter in removableDrives)
+                {
+                    MenuItem driveMenuItem = new MenuItem();
+                    driveMenuItem.Header = letter;
+                    driveMenuItem.Click += driveMenuItem_Click;
+                    driveMenu.Items.Add(driveMenuItem);
+                }
             }
+
+            driveMenu.PlacementTarget = this;
+            driveMenu.IsOpen = true;
         }
 
         private void driveMenuItem_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var source = (MenuItem) sender;
-                var driveletter = (string) source.Header;
-                var drive = new DriveInfo(driveletter);
-                if (!Gui.AllowForRemoval(drive))
+                MenuItem source = (MenuItem)sender;
+                string driveletter = (string)source.Header;
+                DriveInfo drive = new DriveInfo(driveletter);
+                if (!LogicLayer.AllowForRemoval(drive))
                 {
                     DialogHelper.ShowError(this, "Unmonitor Error",
                                            "Syncless could not unmonitor " + driveletter + " from seamless mode.");
@@ -1046,120 +1321,40 @@ namespace SynclessUI
             }
         }
 
-        private void SynclessLogoContainer_MouseEnter(object sender, MouseEventArgs e)
+        #endregion
+
+        #region Tag Info Panel Context Menu
+
+        private void RemoveTagRightClick_Click(object sender, RoutedEventArgs e)
         {
-            LogoHighlight.Visibility = Visibility.Visible;
+            RemoveTag();
         }
 
-        private void BtnShortcuts_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DisplayShortcutsWindow();
-        }
-
-        private void TagIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void DetailsRightClick_Click(object sender, RoutedEventArgs e)
         {
             DisplayTagDetailsWindow();
         }
 
-        private void LayoutRoot_Drop(object sender, DragEventArgs e)
+        private void TagRightClick_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                HideDropIndicator();
-
-                if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                {
-                    var foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
-                    if (foldernames != null)
-                        foreach (string i in foldernames)
-                        {
-                            string path = i;
-
-                            // convert potential shortcuts into folders
-                            string shortcutfolderpath = FileHelper.GetShortcutTargetFile(i);
-                            if (shortcutfolderpath != null)
-                            {
-                                path = shortcutfolderpath;
-                            }
-
-                            // to detect folders
-                            try
-                            {
-                                var folder = new DirectoryInfo(path);
-                                if (folder.Exists && !FileHelper.IsFile(path))
-                                {
-                                    var tw = new TagWindow(this, path, SelectedTag, false);
-                                }
-                            }
-                            catch
-                            {
-                            }
-                        }
-                }
-                TxtBoxFilterTag.IsHitTestVisible = true;
-            }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage(this);
-            }
+            DisplayTagWindow();
         }
 
-        private void LayoutRoot_DragEnter(object sender, DragEventArgs e)
+        #endregion
+
+        #region Notification
+
+        public void NotifyBalloon(string title, string text)
         {
-            try
+            if (Settings.Default.EnableTrayNotification)
             {
-                TxtBoxFilterTag.IsHitTestVisible = false;
-                if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                {
-                    var foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
-                    if (foldernames != null)
-                        foreach (string i in foldernames)
-                        {
-                            string path = i;
-
-                            // convert potential shortcuts into folders
-                            string shortcutfolderpath = FileHelper.GetShortcutTargetFile(path);
-                            if (shortcutfolderpath != null)
-                            {
-                                path = shortcutfolderpath;
-                            }
-
-                            // to detect folders
-                            try
-                            {
-                                var folder = new DirectoryInfo(path);
-                                if (folder.Exists && !FileHelper.IsFile(path))
-                                {
-                                    ShowDropIndicator();
-                                }
-                            }
-                            catch
-                            {
-                            }
-                        }
-                }
+                TaskbarIcon.ShowBalloonTip(title, text, BalloonIcon.Info);
             }
-            catch (UnhandledException)
+
+            if (Settings.Default.EnableNotificationSounds)
             {
-                DialogHelper.DisplayUnhandledExceptionMessage(this);
+                SystemSounds.Exclamation.Play();
             }
-        }
-
-        private void LayoutRoot_DragLeave(object sender, DragEventArgs e)
-        {
-            HideDropIndicator();
-            TxtBoxFilterTag.IsHitTestVisible = true;
-        }
-
-        private void ShowDropIndicator()
-        {
-            DropIndicator.Visibility = Visibility.Visible;
-            DropIndicator.Focusable = false;
-        }
-
-        private void HideDropIndicator()
-        {
-            DropIndicator.Visibility = Visibility.Hidden;
         }
 
         public void NotifyCancelComplete(string tagname)
@@ -1204,49 +1399,7 @@ namespace SynclessUI
             _tagStatusNotificationDictionary[tagname] = message;
         }
 
-        public double GetSyncProgressPercentage(string tagname)
-        {
-            return CurrentProgress.TagName == tagname
-                       ? CurrentProgress.PercentComplete
-                       : _syncProgressNotificationDictionary[tagname];
-        }
-
-        public string GetTagStatus(string tagname)
-        {
-            try
-            {
-                string status = _tagStatusNotificationDictionary[tagname];
-
-                return status;
-            }
-            catch
-            {
-                return "";
-            }
-        }
-
-        public void SetSyncProgress(string tagname, SyncProgress progress)
-        {
-        }
-
-        private void SetProgressBarColor(double percentageComplete)
-        {
-            byte rcolor = 0, gcolor = 0;
-            const byte bcolor = 0;
-
-            if (percentageComplete <= 50)
-            {
-                rcolor = 211;
-                gcolor = (byte) (percentageComplete/50*211);
-            }
-            else
-            {
-                rcolor = (byte) ((100 - percentageComplete)/50*211);
-                gcolor = 211;
-            }
-
-            ProgressBarSync.Foreground = new SolidColorBrush(Color.FromArgb(255, rcolor, gcolor, bcolor));
-        }
+        #endregion
 
         #region Progress Notification
 
@@ -1324,7 +1477,7 @@ namespace SynclessUI
                 BtnSyncMode.IsEnabled = true;
                 _manualSyncEnabled = true;
 
-                if (Gui.GetTag(SelectedTag).IsSeamless)
+                if (LogicLayer.GetTag(SelectedTag).IsSeamless)
                 {
                     BtnSyncNow.Visibility = Visibility.Hidden;
                     BtnPreview.Visibility = Visibility.Hidden;
@@ -1372,8 +1525,8 @@ namespace SynclessUI
                 LblStatusText.Content = message;
                 ProgressBarSync.Value = percentageComplete;
                 SetProgressBarColor(percentageComplete);
-                if (Gui.GetTagState(SelectedTag) == TagState.ManualToSeamless ||
-                    Gui.GetTagState(SelectedTag) == TagState.SeamlessToManual)
+                if (LogicLayer.GetTagState(SelectedTag) == TagState.ManualToSeamless ||
+                    LogicLayer.GetTagState(SelectedTag) == TagState.SeamlessToManual)
                 {
                     SwitchingMode();
                 }
@@ -1425,11 +1578,11 @@ namespace SynclessUI
 
         #endregion
 
-        #region Tag Info Panel Context Menu
+        #region Events Handlers for Tag Info Panel Context Menu
 
         private void OpenInExplorerRightClick_Click(object sender, RoutedEventArgs e)
         {
-            OpenFolderInWindowsExplorer();
+            OpenFolderInWindowsExplorerHelper();
         }
 
         private void UntagRightClick_Click(object sender, RoutedEventArgs e)
@@ -1439,15 +1592,15 @@ namespace SynclessUI
 
         private void ListTaggedPath_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            OpenFolderInWindowsExplorer();
+            OpenFolderInWindowsExplorerHelper();
         }
 
-        private void OpenFolderInWindowsExplorer()
+        private void OpenFolderInWindowsExplorerHelper()
         {
-            var path = (string) ListTaggedPath.SelectedItem;
+            string path = (string)ListTaggedPath.SelectedItem;
             if (path != "")
             {
-                var runExplorer = new ProcessStartInfo();
+                ProcessStartInfo runExplorer = new ProcessStartInfo();
                 runExplorer.FileName = "explorer.exe";
                 runExplorer.Arguments = path;
                 Process.Start(runExplorer);
@@ -1456,7 +1609,7 @@ namespace SynclessUI
 
         #endregion
 
-        #region Implements Methods & Supporting Methods in IUIInterface
+        #region Methods & Helper Methods Implementation in IUIInterface
 
         public string getAppPath()
         {
@@ -1478,6 +1631,32 @@ namespace SynclessUI
             UpdateTagInfo_ThreadSafe(tagName);
         }
 
+        public void PathChanged()
+        {
+            try
+            {
+                ListTaggedPath.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                                                      (Action)(() =>
+                                                      {
+                                                          if (SelectedTag == null)
+                                                          {
+                                                              return;
+                                                          }
+                                                          TagView tv = LogicLayer.GetTag(SelectedTag);
+
+                                                          ListTaggedPath.ItemsSource = tv.PathStringList;
+                                                          BdrTaggedPath.Visibility =
+                                                              tv.PathStringList.Count == 0
+                                                                  ? Visibility.Hidden
+                                                                  : Visibility.Visible;
+                                                      }));
+            }
+            catch (UnhandledException)
+            {
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
+            }
+        }
+
         private void UpdateTagInfo_ThreadSafe(string tagName)
         {
             Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action) (() =>
@@ -1496,7 +1675,7 @@ namespace SynclessUI
                 ListBoxTag.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                                                   (Action) (() =>
                                                                 {
-                                                                    List<string> taglist = Gui.GetAllTags();
+                                                                    List<string> taglist = LogicLayer.GetAllTags();
                                                                     ListBoxTag.ItemsSource = taglist;
                                                                     LblTagCount.Content = "[" + taglist.Count + "/" +
                                                                                           taglist.Count + "]";
@@ -1508,35 +1687,9 @@ namespace SynclessUI
             }
         }
 
-        public void PathChanged()
-        {
-            try
-            {
-                ListTaggedPath.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                                                      (Action) (() =>
-                                                                    {
-                                                                        if (SelectedTag == null)
-                                                                        {
-                                                                            return;
-                                                                        }
-                                                                        TagView tv = Gui.GetTag(SelectedTag);
-
-                                                                        ListTaggedPath.ItemsSource = tv.PathStringList;
-                                                                        BdrTaggedPath.Visibility =
-                                                                            tv.PathStringList.Count == 0
-                                                                                ? Visibility.Hidden
-                                                                                : Visibility.Visible;
-                                                                    }));
-            }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage(this);
-            }
-        }
-
         #endregion
 
-        #region Commandline Interface: Tag/Untag
+        #region Commandline Interface: Tag/Untag/Clean
 
         public void ProcessCommandLine(string[] args)
         {
@@ -1558,7 +1711,7 @@ namespace SynclessUI
 
             try
             {
-                var di = new DirectoryInfo(clipath);
+                DirectoryInfo di = new DirectoryInfo(clipath);
                 tagname = di.Name;
             }
             catch (Exception)
@@ -1567,7 +1720,7 @@ namespace SynclessUI
                 return;
             }
 
-            var tw = new TagWindow(this, clipath, tagname, true);
+            TagWindow tw = new TagWindow(this, clipath, tagname, true);
         }
 
         public void CliUntag(string clipath)
@@ -1590,7 +1743,7 @@ namespace SynclessUI
                 return;
             }
 
-            var tw = new UntagWindow(this, clipath, true);
+            UntagWindow tw = new UntagWindow(this, clipath, true);
         }
 
         public void CliClean(string clipath)
@@ -1601,11 +1754,9 @@ namespace SynclessUI
                 return;
             }
 
-            DirectoryInfo di = null;
-
             try
             {
-                di = new DirectoryInfo(clipath);
+                new DirectoryInfo(clipath);
             }
             catch (ArgumentException)
             {
@@ -1619,7 +1770,7 @@ namespace SynclessUI
 
         #endregion
 
-        #region Keyboard Shortcuts
+        #region Keyboard Commands
 
         private void InitializeKeyboardShortcuts()
         {
@@ -1639,171 +1790,171 @@ namespace SynclessUI
 
         private void InitializeTimeSyncCommand()
         {
-            var TimeSyncCommand = new RoutedCommand();
+            RoutedCommand TimeSyncCommand = new RoutedCommand();
 
-            var cb = new CommandBinding(TimeSyncCommand, TimeSyncCommandExecute, TimeSyncCommandCanExecute);
+            CommandBinding cb = new CommandBinding(TimeSyncCommand, TimeSyncCommandExecute, TimeSyncCommandCanExecute);
             CommandBindings.Add(cb);
 
             BtnTimeSync.Command = TimeSyncCommand;
 
-            var kg = new KeyGesture(Key.Y, ModifierKeys.Control);
-            var ib = new InputBinding(TimeSyncCommand, kg);
+            KeyGesture kg = new KeyGesture(Key.Y, ModifierKeys.Control);
+            InputBinding ib = new InputBinding(TimeSyncCommand, kg);
             InputBindings.Add(ib);
         }
 
         private void InitializeExitCommand()
         {
-            var ExitCommand = new RoutedCommand();
+            RoutedCommand ExitCommand = new RoutedCommand();
 
-            var cb = new CommandBinding(ExitCommand, ExitCommandExecute, ExitCommandCanExecute);
+            CommandBinding cb = new CommandBinding(ExitCommand, ExitCommandExecute, ExitCommandCanExecute);
             CommandBindings.Add(cb);
 
-            var kg = new KeyGesture(Key.W, ModifierKeys.Control);
-            var ib = new InputBinding(ExitCommand, kg);
+            KeyGesture kg = new KeyGesture(Key.W, ModifierKeys.Control);
+            InputBinding ib = new InputBinding(ExitCommand, kg);
             InputBindings.Add(ib);
         }
 
         private void InitializeLogCommand()
         {
-            var LogCommand = new RoutedCommand();
+            RoutedCommand LogCommand = new RoutedCommand();
 
-            var cb = new CommandBinding(LogCommand, LogCommandExecute, LogCommandCanExecute);
+            CommandBinding cb = new CommandBinding(LogCommand, LogCommandExecute, LogCommandCanExecute);
             CommandBindings.Add(cb);
 
             BtnLog.Command = LogCommand;
 
-            var kg = new KeyGesture(Key.L, ModifierKeys.Control);
-            var ib = new InputBinding(LogCommand, kg);
+            KeyGesture kg = new KeyGesture(Key.L, ModifierKeys.Control);
+            InputBinding ib = new InputBinding(LogCommand, kg);
             InputBindings.Add(ib);
         }
 
         private void InitializeShortcutsCommand()
         {
-            var ShortcutsCommand = new RoutedCommand();
+            RoutedCommand ShortcutsCommand = new RoutedCommand();
 
-            var cb = new CommandBinding(ShortcutsCommand, ShortcutsCommandExecute, ShortcutsCommandCanExecute);
+            CommandBinding cb = new CommandBinding(ShortcutsCommand, ShortcutsCommandExecute, ShortcutsCommandCanExecute);
             CommandBindings.Add(cb);
 
-            var kg = new KeyGesture(Key.S, ModifierKeys.Control);
-            var ib = new InputBinding(ShortcutsCommand, kg);
-            var kg1 = new KeyGesture(Key.OemQuestion, ModifierKeys.Shift);
-            var ib1 = new InputBinding(ShortcutsCommand, kg1);
+            KeyGesture kg = new KeyGesture(Key.S, ModifierKeys.Control);
+            InputBinding ib = new InputBinding(ShortcutsCommand, kg);
+            KeyGesture kg1 = new KeyGesture(Key.OemQuestion, ModifierKeys.Shift);
+            InputBinding ib1 = new InputBinding(ShortcutsCommand, kg1);
             InputBindings.Add(ib);
             InputBindings.Add(ib1);
         }
 
         private void InitializeMinimizeCommand()
         {
-            var MinimizeCommand = new RoutedCommand();
+            RoutedCommand MinimizeCommand = new RoutedCommand();
 
-            var cb = new CommandBinding(MinimizeCommand, MinimizeCommandExecute, MinimizeCommandCanExecute);
+            CommandBinding cb = new CommandBinding(MinimizeCommand, MinimizeCommandExecute, MinimizeCommandCanExecute);
             CommandBindings.Add(cb);
 
-            var kg = new KeyGesture(Key.M, ModifierKeys.Control);
-            var ib = new InputBinding(MinimizeCommand, kg);
+            KeyGesture kg = new KeyGesture(Key.M, ModifierKeys.Control);
+            InputBinding ib = new InputBinding(MinimizeCommand, kg);
             InputBindings.Add(ib);
         }
 
         private void InitializeOptionsCommand()
         {
-            var OptionsCommand = new RoutedCommand();
+            RoutedCommand OptionsCommand = new RoutedCommand();
 
-            var cb = new CommandBinding(OptionsCommand, OptionsCommandExecute, OptionsCommandCanExecute);
+            CommandBinding cb = new CommandBinding(OptionsCommand, OptionsCommandExecute, OptionsCommandCanExecute);
             CommandBindings.Add(cb);
 
-            var kg = new KeyGesture(Key.O, ModifierKeys.Control);
-            var ib = new InputBinding(OptionsCommand, kg);
+            KeyGesture kg = new KeyGesture(Key.O, ModifierKeys.Control);
+            InputBinding ib = new InputBinding(OptionsCommand, kg);
             InputBindings.Add(ib);
         }
 
         private void InitializeUnmonitorCommand()
         {
-            var UnmonitorCommand = new RoutedCommand();
+            RoutedCommand UnmonitorCommand = new RoutedCommand();
 
-            var cb = new CommandBinding(UnmonitorCommand, UnmonitorCommandExecute, UnmonitorCommandCanExecute);
+            CommandBinding cb = new CommandBinding(UnmonitorCommand, UnmonitorCommandExecute, UnmonitorCommandCanExecute);
             CommandBindings.Add(cb);
 
             BtnUnmonitor.Command = UnmonitorCommand;
 
-            var kg = new KeyGesture(Key.I, ModifierKeys.Control);
-            var ib = new InputBinding(UnmonitorCommand, kg);
+            KeyGesture kg = new KeyGesture(Key.I, ModifierKeys.Control);
+            InputBinding ib = new InputBinding(UnmonitorCommand, kg);
             InputBindings.Add(ib);
         }
 
         private void InitializeTagDetailsCommand()
         {
-            var DetailsCommand = new RoutedCommand();
+            RoutedCommand DetailsCommand = new RoutedCommand();
 
-            var cb = new CommandBinding(DetailsCommand, DetailsCommandExecute, DetailsCommandCanExecute);
+            CommandBinding cb = new CommandBinding(DetailsCommand, DetailsCommandExecute, DetailsCommandCanExecute);
             CommandBindings.Add(cb);
 
             BtnDetails.Command = DetailsCommand;
 
-            var kg = new KeyGesture(Key.D, ModifierKeys.Control);
-            var ib = new InputBinding(DetailsCommand, kg);
+            KeyGesture kg = new KeyGesture(Key.D, ModifierKeys.Control);
+            InputBinding ib = new InputBinding(DetailsCommand, kg);
             InputBindings.Add(ib);
         }
 
         private void InitializeUntagCommand()
         {
-            var UntagCommand = new RoutedCommand();
+            RoutedCommand UntagCommand = new RoutedCommand();
 
-            var cb = new CommandBinding(UntagCommand, UntagCommandExecute, UntagCommandCanExecute);
+            CommandBinding cb = new CommandBinding(UntagCommand, UntagCommandExecute, UntagCommandCanExecute);
             CommandBindings.Add(cb);
 
             btnUntag.Command = UntagCommand;
 
-            var kg = new KeyGesture(Key.U, ModifierKeys.Control);
-            var ib = new InputBinding(UntagCommand, kg);
+            KeyGesture kg = new KeyGesture(Key.U, ModifierKeys.Control);
+            InputBinding ib = new InputBinding(UntagCommand, kg);
             InputBindings.Add(ib);
         }
 
         private void InitializeTagCommand()
         {
-            var TagCommand = new RoutedCommand();
+            RoutedCommand TagCommand = new RoutedCommand();
 
-            var cb = new CommandBinding(TagCommand, TagCommandExecute, TagCommandCanExecute);
+            CommandBinding cb = new CommandBinding(TagCommand, TagCommandExecute, TagCommandCanExecute);
             CommandBindings.Add(cb);
 
             btnTag.Command = TagCommand;
 
-            var kg = new KeyGesture(Key.T, ModifierKeys.Control);
-            var ib = new InputBinding(TagCommand, kg);
+            KeyGesture kg = new KeyGesture(Key.T, ModifierKeys.Control);
+            InputBinding ib = new InputBinding(TagCommand, kg);
             InputBindings.Add(ib);
         }
 
         private void InitializeRemoveTagCommand()
         {
-            var RemoveTagCommand = new RoutedCommand();
+            RoutedCommand RemoveTagCommand = new RoutedCommand();
 
-            var cb = new CommandBinding(RemoveTagCommand, RemoveTagCommandExecute, RemoveTagCommandCanExecute);
+            CommandBinding cb = new CommandBinding(RemoveTagCommand, RemoveTagCommandExecute, RemoveTagCommandCanExecute);
             CommandBindings.Add(cb);
 
             btnRemove.Command = RemoveTagCommand;
 
-            var kg = new KeyGesture(Key.R, ModifierKeys.Control);
-            var ib = new InputBinding(RemoveTagCommand, kg);
+            KeyGesture kg = new KeyGesture(Key.R, ModifierKeys.Control);
+            InputBinding ib = new InputBinding(RemoveTagCommand, kg);
             InputBindings.Add(ib);
         }
 
         private void InitializeCreateTagCommand()
         {
-            var CreateTagCommand = new RoutedCommand();
+            RoutedCommand CreateTagCommand = new RoutedCommand();
 
-            var cb = new CommandBinding(CreateTagCommand, CreateTagCommandExecute, CreateTagCommandCanExecute);
+            CommandBinding cb = new CommandBinding(CreateTagCommand, CreateTagCommandExecute, CreateTagCommandCanExecute);
             CommandBindings.Add(cb);
 
             BtnCreate.Command = CreateTagCommand;
 
-            var kg = new KeyGesture(Key.N, ModifierKeys.Control);
-            var ib = new InputBinding(CreateTagCommand, kg);
+            KeyGesture kg = new KeyGesture(Key.N, ModifierKeys.Control);
+            InputBinding ib = new InputBinding(CreateTagCommand, kg);
             InputBindings.Add(ib);
         }
 
         private void CreateTagCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
-            var ctw = new CreateTagWindow(this);
+            CreateTagWindow ctw = new CreateTagWindow(this);
             ctw.ShowDialog();
         }
 
@@ -1819,62 +1970,6 @@ namespace SynclessUI
             RemoveTag();
         }
 
-        private void RemoveTag()
-        {
-            try
-            {
-                if (SelectedTag != null)
-                {
-                    if (!Gui.GetTag(SelectedTag).IsLocked)
-                    {
-                        bool result = DialogHelper.ShowWarning(this, "Remove Tag",
-                                                               "Are you sure you want to remove " + SelectedTag +
-                                                               "?");
-
-                        if (result)
-                        {
-                            if (!Gui.GetTag(SelectedTag).IsLocked)
-                            {
-                                bool success = Gui.DeleteTag(SelectedTag);
-                                if (success)
-                                {
-                                    _syncProgressNotificationDictionary.Remove(SelectedTag);
-                                    _tagStatusNotificationDictionary.Remove(SelectedTag);
-
-                                    InitializeTagList();
-                                    InitializeTagInfoPanel();
-                                }
-                                else
-                                {
-                                    DialogHelper.ShowError(this, "Remove Tag Error",
-                                                           "" + SelectedTag + " could not be removed.");
-                                }
-                            }
-                            else
-                            {
-                                DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
-                                                       "You cannot remove a tag while the tag is synchronizing.");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
-                                               "You cannot remove a tag while the tag is synchronizing.");
-                    }
-                }
-                else
-                {
-                    DialogHelper.ShowError(this, "No Tag Selected", "Please select a tag to remove.");
-                }
-            }
-            catch (UnhandledException)
-            {
-                DialogHelper.DisplayUnhandledExceptionMessage(this);
-            }
-        }
-
-
         private void RemoveTagCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -1889,7 +1984,7 @@ namespace SynclessUI
 
         private void DisplayTagWindow()
         {
-            var tw = new TagWindow(this, "", SelectedTag, false);
+            TagWindow tw = new TagWindow(this, "", SelectedTag, false);
         }
 
         private void TagCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -1952,32 +2047,6 @@ namespace SynclessUI
             DisplayUnmonitorContextMenu();
         }
 
-        private void DisplayUnmonitorContextMenu()
-        {
-            var driveMenu = new ContextMenu();
-
-            List<string> removableDrives = DriveHelper.GetUSBDriveLetters();
-            if (removableDrives.Count == 0)
-            {
-                var driveMenuItem = new MenuItem();
-                driveMenuItem.Header = "No Removable Drives Found";
-                driveMenu.Items.Add(driveMenuItem);
-            }
-            else
-            {
-                foreach (string letter in removableDrives)
-                {
-                    var driveMenuItem = new MenuItem();
-                    driveMenuItem.Header = letter;
-                    driveMenuItem.Click += driveMenuItem_Click;
-                    driveMenu.Items.Add(driveMenuItem);
-                }
-            }
-
-            driveMenu.PlacementTarget = this;
-            driveMenu.IsOpen = true;
-        }
-
         private void UnmonitorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -2032,43 +2101,9 @@ namespace SynclessUI
             e.Handled = true;
         }
 
-        private bool InitiateTimeSyncHelper()
-        {
-            Process timeSync = new Process();
-            timeSync.StartInfo.FileName = "SynclessTimeSync.exe";
-
-            try
-            {
-                timeSync.Start();
-                timeSync.WaitForExit();
-            }
-            catch (Win32Exception)
-            {
-                return false;
-            }
-
-            return timeSync.ExitCode == 0 ? true : false;
-        }
-
-        private void InitiateTimeSync()
-        {
-            bool result = InitiateTimeSyncHelper();
-
-            if (result)
-            {
-                DialogHelper.ShowInformation(this, "Time Synchronized Successfully",
-                                             "Your computer clock has been synchronized with an Internet Time Server.");
-            }
-            else
-            {
-                DialogHelper.ShowError(this, "Time Synchronized Unsuccessfully",
-                                       "Your computer clock could not be synchronized with an Internet Time Server.");
-            }
-        }
-
         private void DisplayShortcutsWindow()
         {
-            var sw = new ShortcutsWindow(this);
+            ShortcutsWindow sw = new ShortcutsWindow(this);
 
             sw.ShowDialog();
         }
@@ -2080,19 +2115,6 @@ namespace SynclessUI
         private void SaveApplicationSettings()
         {
             Settings.Default.Save();
-        }
-
-        private void ListBoxTag_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Delete && ListBoxTag.Items.Count > 0)
-            {
-                RemoveTag();
-            }
-        }
-
-        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
         }
 
         #endregion

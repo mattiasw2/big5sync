@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * 
+ */
+
+using System;
+using System.Windows.Threading;
 using Syncless.Core;
 using Syncless.Notification;
-using SynclessUI;
-using System.Windows.Controls;
-using System.Windows.Threading;
-using System.Windows;
 
 namespace SynclessUI.Notification
 {

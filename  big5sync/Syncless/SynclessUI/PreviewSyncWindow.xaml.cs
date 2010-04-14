@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * 
+ */
+
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -77,7 +83,7 @@ namespace SynclessUI
         private void _previewWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             string selectedTag = e.Argument as string;
-            RootCompareObject rco = _main.Gui.PreviewSync(selectedTag);
+            RootCompareObject rco = _main.LogicLayer.PreviewSync(selectedTag);
             if (_previewWorker.CancellationPending)
             {
                 e.Cancel = true;
@@ -101,7 +107,7 @@ namespace SynclessUI
             {
                 _previewSyncData.Rows.Clear();
 
-                var visitor = new PreviewVisitor(_previewSyncData);
+                PreviewVisitor visitor = new PreviewVisitor(_previewSyncData);
 
                 if (rco != null)
                 {
@@ -118,7 +124,7 @@ namespace SynclessUI
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            _main.Gui.CancelPreview(_selectedTag);
+            _main.LogicLayer.CancelPreview(_selectedTag);
             _previewWorker.CancelAsync();
             BtnClose.IsEnabled = false;
             Close();

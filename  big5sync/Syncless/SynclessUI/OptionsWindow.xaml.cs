@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * 
+ * Author: Steve Teo Wai Ming
+ * 
+ */
+
+using System;
 using System.Windows;
 using System.Windows.Input;
 using Syncless.CompareAndSync;
@@ -26,7 +32,7 @@ namespace SynclessUI
             _main = main;
 
             // Get Current Sync Config
-            _currentSyncConfig = _main.Gui.GetSyncConfig();
+            _currentSyncConfig = _main.LogicLayer.GetSyncConfig();
 
             InitializeComponent();
             InitializeSyncConfigComponents();
@@ -133,7 +139,7 @@ namespace SynclessUI
             BtnOk.IsEnabled = false;
 
             // Updates the Sync Config
-            _main.Gui.UpdateSyncConfig(_currentSyncConfig);
+            _main.LogicLayer.UpdateSyncConfig(_currentSyncConfig);
 
             ReinitializeShellIntegration();
 
@@ -163,7 +169,7 @@ namespace SynclessUI
 
             if (shellIntegrationChoice)
             {
-                var appPath = (string) Application.Current.Properties["AppPath"];
+                string appPath = (string)Application.Current.Properties["AppPath"];
                 RegistryHelper.CreateRegistry(appPath);
             }
             else
