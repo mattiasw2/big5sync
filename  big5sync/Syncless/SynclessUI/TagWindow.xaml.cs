@@ -284,8 +284,8 @@ namespace SynclessUI
                                             }
                                             else
                                             {
-                                                DialogHelper.ShowError(this, "Tag Error",
-                                                                       "Tag Error Occured. Please Try Again.");
+                                                DialogHelper.ShowError(this, "Tag Not Found",
+                                                                       "Please Try Again.");
                                                 Close();
                                             }
                                         }
