@@ -235,7 +235,18 @@ namespace SynclessUI
                 int index = ListBoxFilters.SelectedIndex;
                 filters.RemoveAt(index);
 
-                PopulateListBoxFilter(true);
+                PopulateListBoxFilter(false);
+
+                if(ListBoxFilters.Items.Count != 0)
+                {
+                    if (ListBoxFilters.Items.Count - 1 < index)
+                        ListBoxFilters.SelectedIndex = index - 1;
+                    else
+                        ListBoxFilters.SelectedIndex = index;
+                } else
+                {
+                    ListBoxFilters.SelectedIndex = -1;
+                }
             }
         }
 
