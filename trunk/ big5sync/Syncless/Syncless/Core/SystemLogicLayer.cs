@@ -515,7 +515,13 @@ namespace Syncless.Core
                 {
                     ProfilingLayer.Instance.UpdateDrive(dce.Info);
                     Merge(dce.Info);
+                    string logical = ProfilingLayer.Instance.GetLogicalIdFromDrive(dce.Info);
+                    List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByLogicalId(logical);
 
+                    foreach (Tag t in tagList)
+                    {
+                        SwitchMonitorTag(t, t.IsSeamless);
+                    }
                 }
                 else
                 {

@@ -12,46 +12,27 @@ namespace Syncless.Profiling
     public class ProfileDrive
     {
         #region attributes
-        private long _lastUpdated;
+
         /// <summary>
         /// Last updated date
         /// </summary>
-        public long LastUpdated
-        {
-            get { return _lastUpdated; }
-            set { _lastUpdated = value; }
-        }
-        
-        private DriveInfo _info;
+        public long LastUpdated { get; set; }
+
         /// <summary>
         /// Drive info
         /// </summary>
-        public DriveInfo Info
-        {
-            get { return _info; }
-            set { _info = value; }
-        }
-        
-        private string _guid;
+        public DriveInfo Info { get; set; }
+
         /// <summary>
         /// GUID
         /// </summary>
-        public string Guid
-        {
-            get { return _guid; }
-            set { _guid = value; }
-        }
-        
-        private string _driveName;
+        public string Guid { get; set; }
+
         /// <summary>
         /// Drive name
         /// </summary>
-        public string DriveName
-        {
-            get { return _driveName; }
-            set { _driveName = value; }
-        }
-        
+        public string DriveName { get; set; }
+
         /// <summary>
         /// Physical id
         /// </summary>
@@ -59,9 +40,9 @@ namespace Syncless.Profiling
         {
             get 
             { 
-                if (_info != null)
+                if (Info != null)
                 {
-                    return ProfilingHelper.ExtractDriveName(_info.Name);
+                    return ProfilingHelper.ExtractDriveName(Info.Name);
                 }
                 return null;
             }
@@ -72,7 +53,7 @@ namespace Syncless.Profiling
         /// </summary>
         public string LogicalId
         {
-            get { return _guid; }
+            get { return Guid; }
         }
         #endregion
 
@@ -83,9 +64,9 @@ namespace Syncless.Profiling
         /// <param name="driveName">The name of the drive</param>
         public ProfileDrive(string guid,string driveName)
         {
-            this._info = null;
-            this._driveName = driveName;
-            this._guid = guid;
+            Info = null;
+            DriveName = driveName;
+            Guid = guid;
         }
 
         /// <summary>
@@ -96,7 +77,7 @@ namespace Syncless.Profiling
         public bool Equals(ProfileDrive drive)
         {
             int matchCount = 0;
-            if (this.LogicalId.Equals(drive.LogicalId))
+            if (LogicalId.Equals(drive.LogicalId))
             {
                 matchCount++;
             }
