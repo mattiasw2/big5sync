@@ -56,6 +56,6 @@ However, this also brings in a number of issues. One of which is when a series o
 == !SaveLoadHelper ==
 
 Saves the data into different locations. The locations saved include the following :
-1) The Directory containing the executable.
-2) All local drives if the local drive contains a GUID attached to it.
-3) All external drives if the drive contains a GUID attached to it.
+ #  The Directory containing the executable.
+ #  All local drives if the local drive contains a GUID attached to it.
+ #  All external drives if the drive contains a GUID attached to it.
