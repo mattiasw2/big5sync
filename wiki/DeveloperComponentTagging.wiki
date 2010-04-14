@@ -76,6 +76,47 @@ Conversion from `TaggingProfile` to _tagging.xml_:
   # `CreateFilterElementList`(`XmlDocument`, `Tag`)
   # `CreateFilterElement`(`XmlDocument`, `Filter`)
 
+= Description of Metadata File =
+
+The Tagging component makes use of metadata with file name _tagging.xml_ to keep track of the list of tags user has modified.
+
+== General Structure ==
+
+{{{
+<tagging>
+  <profile name="School" createdDate="120420101755" lastUpdatedDate="120420101819">
+    <tag name="Lecture" createdDate="120420101803" lastUpdatedDate="120420101819" isDeleted="False" deletedDate="0">
+      <folders>
+        <taggedFolder createdDate="120420101809" lastUpdatedDate="120420101819" isDeleted="False" deletedDate="0">
+          <path>001:\Lecture Notes</path>
+        </taggedFolder>
+        <taggedFolder createdDate="120420101813" lastUpdatedDate="120420101813" isDeleted="False" deletedDate="0">
+          <path>001:\Notes</path>
+        </taggedFolder>
+      </folders>
+      <filters lastUpdatedDate="120420101819">
+        <filter mode="Include" type="Extension">
+          <pattern>*.pdf</pattern>
+        </filter>
+        <filter mode="Include" type="Extension">
+          <pattern>*.doc</pattern>
+        </filter>
+        <filter mode="Exclude" type="Extension">
+          <pattern>*.htm</pattern>
+        </filter>
+      </filters>
+      <config>
+        <seamless>False</seamless>
+      </config>
+    </tag>
+  </profile>
+</tagging>
+}}}
+
+== Explanation of Xml Tag Names ==
+
+
+
 = Explanation of Algorithms =
 
 == Merging Multiple _tagging.xml_ ==
