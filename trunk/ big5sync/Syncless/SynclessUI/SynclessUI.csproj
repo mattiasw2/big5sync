@@ -250,10 +250,8 @@
     <Resource Include="Icons\createtag.ico" />
     <Resource Include="Icons\dropindicator.ico" />
     <Resource Include="Icons\file.ico" />
-    <Resource Include="Icons\green-sync-arrow.png" />
     <Resource Include="Icons\infinity.ico" />
     <Resource Include="Icons\log.ico" />
-    <Resource Include="Icons\red-sync-arrow.png" />
     <Resource Include="Icons\seamless-yellow.ico" />
     <Resource Include="Icons\tag-yellow.ico" />
     <Resource Include="Icons\timesync-yellow.ico" />
@@ -274,7 +272,6 @@
     <Resource Include="Icons\tag.ico" />
     <Resource Include="Icons\taglist.ico" />
     <Resource Include="Icons\untag.ico" />
-    <Resource Include="Icons\yellow-sync-arrow.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
@@ -320,6 +317,12 @@
       <WrapperTool>tlbimp</WrapperTool>
       <Isolated>False</Isolated>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\delete-sync-arrow.png" />
+    <Resource Include="Icons\new-sync-arrow.png" />
+    <Resource Include="Icons\rename-sync-arrow.png" />
+    <Resource Include="Icons\update-sync-arrow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

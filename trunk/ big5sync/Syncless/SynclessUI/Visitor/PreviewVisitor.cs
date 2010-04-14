@@ -24,20 +24,20 @@ namespace SynclessUI.Visitor
         public const string DestLastModifiedTime = "destlastmodifiedtime";
         public const string DestSize = "destsize";
 
-        private const string CopyConstant = "Icons\\green-sync-arrow.png";
-        private const string DeleteConstant = "Icons\\red-sync-arrow.png";
-        private const string UpdateConstant = "-=>";
-        private const string RenameConstant = "Icons\\yellow-sync-arrow.png";
+        private const string CopyArrow = "Icons\\new-sync-arrow.png";
+        private const string DeleteArrow = "Icons\\delete-sync-arrow.png";
+        private const string UpdateArrow = "Icons\\update-sync-arrow.png";
+        private const string RenameArrow = "Icons\\rename-sync-arrow.png";
 
         private const string FileCopyToolTip = "File will be copied from Source to Destination";
         private const string FileUpdateToolTip = "File will be updated from Source to Destination";
-        private const string FileDeleteToolTip = "File has been deleted from Source and will be likewise in Destination";
-        private const string FileRenameToolTip = "File has been renamed in Source and will be likewise in Destination";
+        private const string FileDeleteToolTip = "File has been deleted from Source and will be in Destination";
+        private const string FileRenameToolTip = "File has been renamed in Source and will be in Destination";
 
         private const string FolderCopyToolTip = "Folder will be copied from Source to Destination";
         private const string FolderUpdateToolTip = "Folder will be updated from Source to Destination";
-        private const string FolderDeleteToolTip = "Folder has been deleted from Source and will be likewise in Destination";
-        private const string FolderRenameToolTip = "Folder has been renamed in Source and will be likewise in Destination";
+        private const string FolderDeleteToolTip = "Folder has been deleted from Source and will be in Destination";
+        private const string FolderRenameToolTip = "Folder has been renamed in Source and will be in Destination";
 		
         private const string FolderIcon = "Icons\\folder.ico";
         private const string FileIcon = "Icons\\file.ico";
@@ -76,20 +76,20 @@ namespace SynclessUI.Visitor
                             case MetaChangeType.NoChange:
                                 source = Path.Combine(fco.GetSmartParentPath(maxPriorityPos), fco.Name);
                                 dest = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
-                                operation = fco.Exists[i] ? UpdateConstant : CopyConstant;
+                                operation = fco.Exists[i] ? UpdateArrow : CopyArrow;
                                 tooltip = fco.Exists[i] ? FileUpdateToolTip : FileCopyToolTip;
                                 break;
                             case MetaChangeType.Delete:
                                 source = Path.Combine(fco.GetSmartParentPath(maxPriorityPos), fco.Name);
                                 dest = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
-                                operation = DeleteConstant;
+                                operation = DeleteArrow;
                                 tooltip = FileDeleteToolTip;
                                 break;
                             case MetaChangeType.Rename:
                                 string oldName = Path.Combine(fco.GetSmartParentPath(i), fco.Name);
                                 source = File.Exists(oldName) ? oldName : Path.Combine(fco.GetSmartParentPath(maxPriorityPos), fco.NewName);
                                 dest = Path.Combine(fco.GetSmartParentPath(i), fco.NewName);
-                                operation = File.Exists(oldName) ? RenameConstant : CopyConstant;
+                                operation = File.Exists(oldName) ? RenameArrow : CopyArrow;
                                 tooltip = File.Exists(oldName) ? FileRenameToolTip : FileCopyToolTip;
                                 break;
                         }
@@ -148,20 +148,20 @@ namespace SynclessUI.Visitor
                             case MetaChangeType.Update:
                                 source = Path.Combine(folder.GetSmartParentPath(maxPriorityPos), folder.Name);
                                 dest = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
-                                operation = CopyConstant;
+                                operation = CopyArrow;
                                 tooltip = folder.Exists[i] ? FolderUpdateToolTip : FolderCopyToolTip;
                                 break;
                             case MetaChangeType.Delete:
                                 source = Path.Combine(folder.GetSmartParentPath(maxPriorityPos), folder.Name);
                                 dest = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
-                                operation = DeleteConstant;
+                                operation = DeleteArrow;
                                 tooltip = FolderDeleteToolTip;
                                 break;
                             case MetaChangeType.Rename:
                                 string oldFolderName = Path.Combine(folder.GetSmartParentPath(i), folder.Name);
                                 source = File.Exists(oldFolderName) ? oldFolderName : Path.Combine(folder.GetSmartParentPath(maxPriorityPos), folder.NewName);
                                 dest = Path.Combine(folder.GetSmartParentPath(i), folder.NewName);
-                                operation = Directory.Exists(oldFolderName) ? RenameConstant : CopyConstant;
+                                operation = Directory.Exists(oldFolderName) ? RenameArrow : CopyArrow;
                                 tooltip = Directory.Exists(oldFolderName) ? FolderRenameToolTip : FolderCopyToolTip;
                                 break;
                         }

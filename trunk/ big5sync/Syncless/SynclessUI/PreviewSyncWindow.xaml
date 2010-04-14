@@ -13,6 +13,7 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="20"/>
 			<RowDefinition Height="30"/>
+			<RowDefinition Height="50"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="30"/>
 			<RowDefinition Height="20"/>
@@ -27,23 +28,18 @@
 			</Rectangle.Fill>
 		</Rectangle>
 		<Label x:Name="LblPreview" Content="Preview Synchronization Changes" Foreground="#FFEEEEEE" FontFamily="Fonts/#BankGothic Md BT" FontSize="21.333" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left" Height="30" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Margin="0" IsHitTestVisible="False"/>
-		<StackPanel x:Name="CommandPanel" Margin="0" Grid.Column="1" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+		<StackPanel x:Name="CommandPanel" Margin="0" Grid.Column="1" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
 			<Button x:Name="BtnClose" Margin="0" Click="BtnCancel_Click" IsCancel="True" IsDefault="True">
 				<Label x:Name="LblCancel" FontFamily="Century Gothic" FontSize="9.333" Content="Cancel" FontWeight="Bold"/>
 			</Button>
 		</StackPanel>
 		<Image x:Name="TagIcon" HorizontalAlignment="Right" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,-25,-25,0" Grid.ColumnSpan="2" Source="Icons/folder.ico"/>
-        <toolkit:DataGrid x:Name="dataGrid" ItemsSource="{Binding PreviewSyncData, ElementName=Window}" Margin="5,5,0,5" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="2" IsReadOnly="True" FontFamily="Century Gothic" MinHeight="100" MinWidth="750" Height="Auto" Width="Auto" MaxHeight="300" MaxWidth="750" RowBackground="#FF666666" AlternatingRowBackground="#FF555555" HorizontalGridLinesBrush="#FF828790" VerticalGridLinesBrush="#FF828790" CanUserResizeRows="False" FontSize="10.667" ClipboardCopyMode="None">
+        <toolkit:DataGrid x:Name="dataGrid" ItemsSource="{Binding PreviewSyncData, ElementName=Window}" Margin="5,5,0,5" AutoGenerateColumns="False" Grid.Column="1" Grid.Row="3" IsReadOnly="True" FontFamily="Century Gothic" MinHeight="100" MinWidth="750" Height="Auto" Width="Auto" MaxHeight="300" MaxWidth="750" RowBackground="#FF666666" AlternatingRowBackground="#FF555555" HorizontalGridLinesBrush="#FF828790" VerticalGridLinesBrush="#FF828790" CanUserResizeRows="False" FontSize="10.667" ClipboardCopyMode="None">
             <toolkit:DataGrid.Columns>
                 <toolkit:DataGridTemplateColumn Header="Source" IsReadOnly="True" Width="0.255*" SortMemberPath="source" CanUserReorder="False">
                     <toolkit:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock VerticalAlignment="Top"><Image Width="16" Height="16" Source="{Binding Path=sourceicon}" VerticalAlignment="Top" /><TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding source}" MouseLeftButtonDown="Path_MouseLeftButtonDown" TextDecorations="Underline" Cursor="Hand" ToolTip="Click to Open"  ContextMenuOpening="Path_ContextMenuOpening" />
-							<TextBlock.ContextMenu>
-								<ContextMenu>
-									<MenuItem x:Name="OpenInExplorerRightClick" Header="Open In Windows Explorer" Click="OpenInExplorerRightClick_Click" ><MenuItem.Icon><Image Width="16" Height="16" Source="Icons/details.ico"/></MenuItem.Icon></MenuItem>
-								</ContextMenu>
-							</TextBlock.ContextMenu>
+                            <TextBlock VerticalAlignment="Top"><Image Width="16" Height="16" Source="{Binding Path=sourceicon}" VerticalAlignment="Top" /><TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding source}" MouseLeftButtonDown="Path_MouseLeftButtonDown" TextDecorations="Underline" Cursor="Hand" ToolTip="Click to Open"></TextBlock>
 							</TextBlock>
                         </DataTemplate>
                     </toolkit:DataGridTemplateColumn.CellTemplate>
@@ -74,12 +70,7 @@
 			        <toolkit:DataGridTemplateColumn.CellTemplate>
 			            <DataTemplate>
 							<TextBlock VerticalAlignment="Top">
-								<Image Width="16" Height="16" Source="{Binding Path=desticon}" VerticalAlignment="Top" /><TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding destination}" MouseLeftButtonDown="Path_MouseLeftButtonDown" TextDecorations="Underline" Cursor="Hand" ToolTip="Click to Open" ContextMenuOpening="Path_ContextMenuOpening" />
-							<TextBlock.ContextMenu>
-								<ContextMenu>
-									<MenuItem x:Name="OpenInExplorerRightClick" Header="Open In Windows Explorer" Click="OpenInExplorerRightClick_Click" ><MenuItem.Icon><Image Width="16" Height="16" Source="Icons/details.ico"/></MenuItem.Icon></MenuItem>
-								</ContextMenu>
-							</TextBlock.ContextMenu>
+								<Image Width="16" Height="16" Source="{Binding Path=desticon}" VerticalAlignment="Top" /><TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding destination}" MouseLeftButtonDown="Path_MouseLeftButtonDown" TextDecorations="Underline" Cursor="Hand" ToolTip="Click to Open"></TextBlock>
 	                        </TextBlock>
 			            </DataTemplate>
 			        </toolkit:DataGridTemplateColumn.CellTemplate>
@@ -99,7 +90,7 @@
 				<toolkit:DataGridTextColumn Binding="{Binding destsize}" Header="Size (Bytes)" Foreground="White" Width="0.11*" CanUserReorder="False" />
             </toolkit:DataGrid.Columns>
         </toolkit:DataGrid>
-        <Grid VerticalAlignment="Center" Grid.Column="1" Grid.Row="3" Width="500" HorizontalAlignment="Left" Margin="0,1,0,0">
+        <Grid VerticalAlignment="Center" Grid.Column="1" Grid.Row="4" Width="500" HorizontalAlignment="Left" Margin="0,1,0,0">
         	<ProgressBar x:Name="ProgressBarAnalyzing" VerticalAlignment="Center" Height="20" Foreground="{DynamicResource RedColor}" IsIndeterminate="True" Margin="5,0,0,0" >
         		<ProgressBar.Resources>
         			<SolidColorBrush x:Key="GreenColor" Color="#FF00D300"/>
@@ -109,7 +100,28 @@
         	<Label x:Name="LblProgress" HorizontalAlignment="Center" FontFamily="Century Gothic" FontWeight="Bold" VerticalAlignment="Center" Content="Analyzing" FontSize="10.667"/>
 			
         </Grid>
-        <Label x:Name="LblChanges" HorizontalAlignment="Left" Content="{Binding Items.Count, ElementName=dataGrid, Mode=Default}" Grid.Column="1" Grid.Row="3" Foreground="White" Margin="500,0,0,0" FontFamily="Century Gothic" FontSize="10.667" ContentStringFormat="{}{0} Changes Due" VerticalAlignment="Center" Visibility="Hidden"/>
+        <Label x:Name="LblChanges" HorizontalAlignment="Left" Content="{Binding Items.Count, ElementName=dataGrid, Mode=Default}" Grid.Column="1" Grid.Row="4" Foreground="White" Margin="500,0,0,0" FontFamily="Century Gothic" FontSize="10.667" ContentStringFormat="{}{0} Changes Due" VerticalAlignment="Center" Visibility="Hidden"/>
+        <Label HorizontalAlignment="Left" Margin="5,4.5,0,4.5" Content="Legend:" Grid.Column="1" Grid.Row="2" FontFamily="Century Gothic" Foreground="White" FontSize="10.667"/>
+        <StackPanel Margin="60,4.5,0,4.5" Grid.Column="1" Grid.Row="2" Orientation="Vertical"  HorizontalAlignment="Left" VerticalAlignment="Top">
+        	<StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+        		<Image Margin="0,4,0,0" VerticalAlignment="Top" Width="25" Height="15" Source="Icons\new-sync-arrow.png"/>
+        		<Label Margin="0" Content="File/Folder will be copied from Source to Destination" FontFamily="Century Gothic" Foreground="White" FontSize="10.667" Height="61"/>
+        	</StackPanel>
+        	<StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Margin="0,-40,0,0">
+        		<Image Margin="0,4,0,0" VerticalAlignment="Top" Width="25" Height="15" Source="Icons/update-sync-arrow.png"/>
+        		<Label Margin="0" Content="File/Folder will be updated from Source to Destination" FontFamily="Century Gothic" Foreground="White" FontSize="10.667" Height="61" />
+        	</StackPanel>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Right" Margin="0,4.5,-5,0" VerticalAlignment="Top" Grid.Column="1" Grid.Row="2" Orientation="Vertical">
+        	<StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+        		<Image Margin="0,4,0,0" VerticalAlignment="Top" Width="25" Height="15" Source="Icons/delete-sync-arrow.png"/>
+        		<Label Margin="0" Content="File/Folder has been deleted from Source and will be in Destination" FontFamily="Century Gothic" Foreground="White" FontSize="10.667" Height="61" />
+        	</StackPanel>
+        	<StackPanel HorizontalAlignment="Left" Margin="0,-40,0,0" Orientation="Horizontal">
+        		<Image Margin="0,4,0,0" VerticalAlignment="Top" Width="25" Height="15" Source="Icons/rename-sync-arrow.png"/>
+        		<Label Margin="0" Content="File/Folder has been renamed in Source and will be in Destination" FontFamily="Century Gothic" Foreground="White" FontSize="10.667" Height="61" />
+        	</StackPanel>
+        </StackPanel>
 	</Grid>
 	
 	<Window.Triggers>

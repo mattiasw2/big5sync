@@ -24,9 +24,7 @@ namespace SynclessUI
         private readonly DataTable _previewSyncData;
         private readonly string _selectedTag;
         private BackgroundWorker _previewWorker;
-        private RootCompareObject _rco;
         private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
-		private TextBlock pathBox;
 
         public PreviewSyncWindow(MainWindow main, string selectedTag)
         {
@@ -147,30 +145,6 @@ namespace SynclessUI
             }
         }
 
-        private void OpenInExplorerRightClick_Click(object sender, RoutedEventArgs e)
-        {
-            if(pathBox == null)
-                return;
-
-            string path = pathBox.Text;
-
-            if (CheckPathExist(path))
-            {
-                var runExplorer = new ProcessStartInfo();
-                runExplorer.FileName = "explorer.exe";
-                runExplorer.Arguments = path;
-                Process.Start(runExplorer);
-            } else
-            {
-                DialogHelper.ShowError(this, "Error Opening File/Folder", "The file/folder may not exist.");
-            }
-        }
-
-        private void Path_ContextMenuOpening(object sender, ContextMenuEventArgs e)
-		{
-			pathBox = (TextBlock) sender;
-		}
-
         private void Path_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             TextBlock pathBox = (TextBlock) sender;
@@ -185,9 +159,7 @@ namespace SynclessUI
                     Process.Start(openWithInfo);
                 }
                 catch (Win32Exception)
-                {
-                    //YC: Display some error msg?
-                }
+                {}
             }
             else
                 DialogHelper.ShowError(this, "Error Opening File/Folder", "The file/folder may not exist.");
