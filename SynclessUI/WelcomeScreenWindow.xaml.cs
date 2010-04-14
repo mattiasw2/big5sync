@@ -1,13 +1,9 @@
-﻿/*
- * 
- * Author: Steve Teo Wai Ming
- * 
- */
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using Syncless.Core.Exceptions;
+using SynclessUI.Helper;
 using SynclessUI.Properties;
 
 namespace SynclessUI
@@ -33,8 +29,8 @@ namespace SynclessUI
             // Sets up general window properties
             try
             {
-                ShowInTaskbar = false;
-                Owner = main;
+                this.ShowInTaskbar = false;
+                this.Owner = main;
             }
             catch (InvalidOperationException)
             {
@@ -108,42 +104,22 @@ namespace SynclessUI
 
         #region Web Page Links
 		
-        /// <summary>
-        /// Opens the Hyperlink in the browser to the TimeSync section of the user guide.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void GridTimeSync_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
         	Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#Time_Synchronization"));
         }
 
-        /// <summary>
-        /// Opens the Hyperlink in the browser to the Seamless section of the user guide.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void GridSeamless_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
         	Process.Start(
                 new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#4._Switch_to_Seamless_Mode"));
         }
 
-        /// <summary>
-        /// Opens the Hyperlink in the browser to the Sync Multiple Folders section of the user guide.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void GridMultipleFolders_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
 			Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#N-way_Synchronization"));
         }
 
-        /// <summary>
-        /// Opens the Hyperlink in the browser to the Tagging section of the user guide.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void GridEasyTag_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
 			Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/wiki/UserGuide#1._Tag_Folders"));
