@@ -69,6 +69,7 @@ namespace SynclessUI
         private string TagFilter
         {
             get { return TxtBoxFilterTag.Text.Trim(); }
+            set { TxtBoxFilterTag.Text = value; }
         }
 
         private void DisplayLoadingAnimation()
@@ -293,6 +294,7 @@ namespace SynclessUI
         {
             try
             {
+                TagFilter = string.Empty;
                 List<string> taglist = Gui.GetAllTags();
 
                 ListBoxTag.ItemsSource = taglist;
