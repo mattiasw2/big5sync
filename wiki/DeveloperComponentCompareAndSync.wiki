@@ -315,6 +315,8 @@ After applying the above algorithm, we should get the following, with the priori
 
 Clearly, D\Note.txt is the most updated file. To end it off, !SyncerVisitor will then look for the file or folder with the highest priority at each node, and execute the necessary action base on the !ChangeType. Once that is done, XMLWriterVisitor will visit it and write the updated values, such as the hash and last modified date, back to the metadata. For a more detailed overview of how the tree and the visitors work, please take a look at this [http://big5sync.googlecode.com/files/%5BTeam1%5DMerged_Tree_Overview_2.0.pps presentation].
 
+== Seamless Mode ==
+Seamless mode is much more simpler than manual mode. It simply receives *AutoSyncRequest* objects, and processes them accordingly.
 
 = Extending !CompareAndSync =
 Further functionality can be added into !CompareAndSync should a developer wish to. He can simply create his own visitor that visits each node and performs the action he decides. A good example would be to generate a report after a synchronization. A developer can simply code a visitor to create a report based on the attributes of each node.
