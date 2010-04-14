@@ -185,7 +185,7 @@ namespace SynclessUI
 
         private void TerminateNow(bool showAnimation)
         {
-            SaveApplicationSettings();
+            Settings.Default.Save();
             if (Settings.Default.EnableShellIntegration == false)
             {
                 RegistryHelper.RemoveRegistry();
@@ -512,21 +512,26 @@ namespace SynclessUI
 
                 if (taglist != null & taglist.Count == 0)
                 {
-                    TagTitle.Text = "Select a Tag";
-                    TagIcon.Visibility = Visibility.Hidden;
-                    TagStatusPanel.Visibility = Visibility.Hidden;
-                    SyncPanel.Visibility = Visibility.Hidden;
-                    BdrTaggedPath.Visibility = Visibility.Hidden;
-                    ProgressBarSync.Visibility = Visibility.Hidden;
-                    LblProgress.Visibility = Visibility.Hidden;
-                    SelectedTag = null;
-                    ListTaggedPath.ItemsSource = null;
+                    ResetTagInfoPanel();
                 }
             }
             catch (UnhandledException)
             {
                 DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
+        }
+
+        private void ResetTagInfoPanel()
+        {
+            TagTitle.Text = "Select a Tag";
+            TagIcon.Visibility = Visibility.Hidden;
+            TagStatusPanel.Visibility = Visibility.Hidden;
+            SyncPanel.Visibility = Visibility.Hidden;
+            BdrTaggedPath.Visibility = Visibility.Hidden;
+            ProgressBarSync.Visibility = Visibility.Hidden;
+            LblProgress.Visibility = Visibility.Hidden;
+            SelectedTag = null;
+            ListTaggedPath.ItemsSource = null;
         }
 
         private void TagIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -542,7 +547,7 @@ namespace SynclessUI
 
                 if (tv == null)
                 {
-                    InitializeTagInfoPanel();
+                    ResetTagInfoPanel();
                     return;
                 }
                 SelectedTag = tagname;
@@ -1149,7 +1154,7 @@ namespace SynclessUI
                                     _tagStatusNotificationDictionary.Remove(SelectedTag);
 
                                     InitializeTagList();
-                                    InitializeTagInfoPanel();
+                                    ResetTagInfoPanel();
                                 }
                                 else
                                 {
@@ -1235,7 +1240,7 @@ namespace SynclessUI
                                 DialogHelper.ShowError(this, "Tag Does Not Exist",
                                                        "The tag which you tried to untag does not exist.");
 
-                                InitializeTagInfoPanel();
+                                ResetTagInfoPanel();
 
                                 return;
                             }
@@ -2138,15 +2143,6 @@ namespace SynclessUI
             ShortcutsWindow sw = new ShortcutsWindow(this);
 
             sw.ShowDialog();
-        }
-
-        #endregion
-
-        #region Application Settings
-
-        private void SaveApplicationSettings()
-        {
-            Settings.Default.Save();
         }
 
         #endregion

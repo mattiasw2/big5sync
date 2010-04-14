@@ -9,6 +9,9 @@ using Microsoft.Win32;
 
 namespace SynclessUI.Helper
 {
+    /// <summary>
+    /// Helps to modify the regisy to enable/disable shell integration
+    /// </summary>
     internal static class RegistryHelper
     {
         private static string _appPath;
@@ -41,7 +44,7 @@ namespace SynclessUI.Helper
                         Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessClean");
                     cleanKey.SetValue(null, "Syncless - Clean");
                 }
-                catch { }
+                catch {}
 
                 try
                 {
@@ -49,7 +52,7 @@ namespace SynclessUI.Helper
                         Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessClean\command");
                     cleanKeyCommand.SetValue(null, path + " -CleanMeta %1");
                 }
-                catch { }
+                catch {}
             }
         }
 
@@ -64,7 +67,7 @@ namespace SynclessUI.Helper
                 RegistryKey untagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessUntag");
                 untagKey.SetValue(null, "Syncless - Untag");
             }
-            catch { }
+            catch {}
 
             try
             {
@@ -72,7 +75,7 @@ namespace SynclessUI.Helper
                     Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessUntag\command");
                 untagKeyCommand.SetValue(null, path + " -UTFolder %1");
             }
-            catch { }
+            catch {}
         }
 
         /// <summary>
@@ -86,7 +89,7 @@ namespace SynclessUI.Helper
                 RegistryKey tagKey = Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessTag");
                 tagKey.SetValue(null, "Syncless - Tag");
             }
-            catch { }
+            catch {}
 
             try
             {
@@ -94,7 +97,7 @@ namespace SynclessUI.Helper
                     Registry.CurrentUser.CreateSubKey(@"Software\Classes\Folder\shell\SynclessTag\command");
                 tagKeyCommand.SetValue(null, path + " -TFolder %1");
             }
-            catch { }
+            catch {}
         } 
         #endregion
 
@@ -107,17 +110,13 @@ namespace SynclessUI.Helper
             {
                 Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\SynclessTag");
             }
-            catch
-            {
-            }
+            catch {}
 
             try
             {
                 Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\SynclessUntag");
             }
-            catch
-            {
-            }
+            catch {}
 
             if (CheckDebugModeOn())
             {
@@ -125,16 +124,14 @@ namespace SynclessUI.Helper
                 {
                     Registry.CurrentUser.DeleteSubKeyTree(@"Software\Classes\Folder\shell\SynclessClean");
                 }
-                catch
-                {
-                }
+                catch {}
             }
         }
 
         /// <summary>
-        /// Checks if the debug file is in the application folder
+        /// Checks for the presence of the debug file is in the application folder
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True if the debug file is found, false if it is not</returns>
         public static bool CheckDebugModeOn()
         {
             FileInfo fi1 = null;

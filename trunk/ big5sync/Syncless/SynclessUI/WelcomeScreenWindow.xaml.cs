@@ -13,7 +13,7 @@ using SynclessUI.Properties;
 namespace SynclessUI
 {
     /// <summary>
-    /// Interaction logic for WelcomeScreenWindow.xaml
+    /// Interaction logic for WelcomeScreenWindow.xaml.
     /// </summary>
     public partial class WelcomeScreenWindow : Window
     {

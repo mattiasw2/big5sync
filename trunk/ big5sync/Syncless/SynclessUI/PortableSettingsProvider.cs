@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * 
+ * Code of Portable Settings Provider from http://www.codeproject.com/KB/vb/CustomSettingsProvider.aspx
+ * (C# version by gpgemini)
+ * 
+ */
+
+using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Configuration;
@@ -11,8 +18,6 @@ namespace SynclessUI
     /// <summary>
     /// PortableSettingsProvider class ensures that application settings can be saved to the application folder itself
     /// instead of the user profile. Used in the configuration of Application Settings.
-    /// Code of Portable Settings Provider from
-    /// http://www.codeproject.com/KB/vb/CustomSettingsProvider.aspx  (C# version by gpgemini) 
     /// </summary>
 
     public class PortableSettingsProvider : SettingsProvider

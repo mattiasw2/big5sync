@@ -12,6 +12,9 @@ using Syncless.Notification;
 
 namespace SynclessUI.Notification
 {
+    /// <summary>
+    /// NotificationWatcher to dequeue any notification in the UINotificationQueue
+    /// </summary>
     internal class NotificationWatcher : IQueueObserver
     {
         private MainWindow _main;
@@ -19,6 +22,10 @@ namespace SynclessUI.Notification
         private Thread workerThread;
         private readonly EventWaitHandle _wh = new AutoResetEvent(false);
 
+        /// <summary>
+        /// Initializes the MainWindow 
+        /// </summary>
+        /// <param name="main">Reference to the MainWindow</param>
         public NotificationWatcher(MainWindow main)
         {
             _main = main;
@@ -27,31 +34,45 @@ namespace SynclessUI.Notification
 
             workerThread = new Thread(Run);
         }
+
+        /// <summary>
+        /// Update the wait handle to signalled.
+        /// </summary>
         public void Update()
         {
             _wh.Set();
-            //workerThread.Interrupt();
         }
-        public delegate void RunDel();
 
+        /// <summary>
+        /// Starts the workerThread
+        /// </summary>
         public void Start()
         {
             workerThread.Start();
         }
+
+        /// <summary>
+        /// Stop/Aborts the workerThread
+        /// </summary>
         public void Stop()
         {
             workerThread.Abort();
         }
+
+        /// <summary>
+        /// Run method of the workerThread, constantly gets notifications from the UINotificationQueue if there is,
+        /// if there isnt, wait until wait handle has a signal.
+        /// </summary>
         private void Run()
         {
             while (true)
             {
+                // if no notification found, put into wait state
                 if (!ServiceLocator.UINotificationQueue().HasNotification())
                 {
                     try
                     {
                         _wh.WaitOne();
-                        //Thread.Sleep(SLEEP_TIME);
                         continue;
                     }
                     catch (ThreadInterruptedException)
@@ -65,6 +86,7 @@ namespace SynclessUI.Notification
                 }
                 else
                 {
+                    // retrieve the next notification and handle it
                     try
                     {
                         AbstractNotification notification = ServiceLocator.UINotificationQueue().Dequeue();
@@ -80,8 +102,13 @@ namespace SynclessUI.Notification
 
         }
 
+        /// <summary>
+        /// Handles any dequeued notification from the UINotificationQueue by notifying the UI
+        /// </summary>
+        /// <param name="notification">Notification to handle</param>
         private void Handle(AbstractNotification notification)
         {
+            // Handles Sync Start Notification
             if (notification.NotificationCode.Equals(NotificationCode.SyncStartNotification))
             {
                 SyncStartNotification ssNotification = notification as SyncStartNotification;
@@ -89,13 +116,12 @@ namespace SynclessUI.Notification
                 {
                     _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
                     {
-                        Console.WriteLine("Sync Start Notify");
                         _main.CurrentProgress = ssNotification.Progress;
                         new SyncProgressWatcher(_main, ssNotification.TagName, ssNotification.Progress);
-                        Console.WriteLine("Sync Start Notify End");
                     }));
                 }
             }
+            // Handles Sync Complete Notification
             else if (notification.NotificationCode.Equals(NotificationCode.SyncCompleteNotification))
             {
                 SyncCompleteNotification scNotification = notification as SyncCompleteNotification;
@@ -104,12 +130,11 @@ namespace SynclessUI.Notification
                     _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                         (Action)(() =>
                         {
-                            Console.WriteLine("Sync Complete Notify");
                             _main.TagChanged(scNotification.TagName);
-                            Console.WriteLine("Sync Complete Notify End");
                         }));
                 }
             }
+            // Handles Nothing to Sync Notification
             else if (notification.NotificationCode.Equals(NotificationCode.NothingToSyncNotification))
             {
                 NothingToSyncNotification ntsNotification = notification as NothingToSyncNotification;
@@ -123,6 +148,7 @@ namespace SynclessUI.Notification
                         }));
                 }
             }
+            // Handles Auto Sync Complete Notification
             else if (notification.NotificationCode.Equals(NotificationCode.AutoSyncCompleteNotification))
             {
                 AutoSyncCompleteNotification ascNotification = notification as AutoSyncCompleteNotification;

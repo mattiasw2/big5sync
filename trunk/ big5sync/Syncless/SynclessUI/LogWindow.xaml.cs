@@ -32,7 +32,8 @@ namespace SynclessUI
         private bool _showFileSystemLog = Settings.Default.ShowFileSystemLog;
 
         /// <summary>
-        /// Initializes the LogWindow. LogWindow will not show upon any error during Initialization
+        /// Initializes the LogWindow. LogWindow will not show if any error is encountered during initialization
+        /// of the log data table.
         /// </summary>
         /// <param name="main">Reference to the Main Window</param>
         public LogWindow(MainWindow main)
@@ -44,7 +45,8 @@ namespace SynclessUI
             Owner = _main;
             ShowInTaskbar = false;
 
-            // Attemps to initialize and populate the Log DataTable
+            // Attempts to initialize and populate the Log DataTable. If any error occurs, esp if log file corrupted
+            // , display error msg.
             try
             {
                 InitializeLogDataTable();

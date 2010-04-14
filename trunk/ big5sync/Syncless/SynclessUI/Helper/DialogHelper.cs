@@ -8,20 +8,42 @@ using System.Windows;
 
 namespace SynclessUI.Helper
 {
+    /// <summary>
+    /// Helper class to generate Various Types of Customized Dialog Windows with Various Settings
+    /// </summary>
     public static class DialogHelper
     {
+        /// <summary>
+        /// Generates a customized Error Dialog Box
+        /// </summary>
+        /// <param name="window">Parent Window</param>
+        /// <param name="caption">Caption of the window</param>
+        /// <param name="message">Message of the window</param>
         public static void ShowError(Window window, string caption, string message)
         {
             DialogWindow dw = new DialogWindow(window, caption, message, DialogType.Error);
             dw.ShowDialog();
         }
 
+        /// <summary>
+        /// Generates a customized Information Dialog Box
+        /// </summary>
+        /// <param name="window">Parent Window</param>
+        /// <param name="caption">Caption of the window</param>
+        /// <param name="message">Message of the window</param>
         public static void ShowInformation(Window window, string caption, string message)
         {
             DialogWindow dw = new DialogWindow(window, caption, message, DialogType.Information);
             dw.ShowDialog();
         }
 
+        /// <summary>
+        /// Generates a customized Warning Dialog Box
+        /// </summary>
+        /// <param name="window">Parent Window</param>
+        /// <param name="caption">Caption of the window</param>
+        /// <param name="message">Message of the window</param>
+        /// <returns>The choice of the user, which is recorded through the Application Current Properties</returns>
         public static bool ShowWarning(Window window, string caption, string message)
         {
             DialogWindow dw = new DialogWindow(window, caption, message, DialogType.Warning);
@@ -34,12 +56,23 @@ namespace SynclessUI.Helper
             
         }
 
+        /// <summary>
+        /// Generates an unclosable DialogBox with an indeterminate progress bar. Eg. TerminationWindow
+        /// </summary>
+        /// <param name="window">Parent Window</param>
+        /// <param name="caption">Caption of the window</param>
+        /// <param name="message">Message of the window</param>
+        /// <returns>The dialog window itself</returns>
         public static DialogWindow ShowIndeterminate(Window window, string caption, string message)
         {
             DialogWindow dw = new DialogWindow(window, caption, message, DialogType.Indeterminate);
             return dw;
         }
 
+        /// <summary>
+        /// Generates a general UnhandledExceptionMessage if called upon
+        /// </summary>
+        /// <param name="window">Parent Window</param>
         public static void DisplayUnhandledExceptionMessage(Window window)
         {
             ShowError(window, "Unexpected Error",

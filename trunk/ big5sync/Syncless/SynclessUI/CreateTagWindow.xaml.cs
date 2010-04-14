@@ -88,7 +88,7 @@ namespace SynclessUI
 
         #region General Window Components & Related Events
         /// <summary>
-        /// Focuses on the tag name box on load
+        /// Focuses on the tagname textbox on load
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

@@ -50,6 +50,9 @@ namespace SynclessUI
                     LblTag_Details.Content = "Tag Details for " + _tagname;
                     TxtBoxPattern.IsEnabled = false;
                     CmbBoxMode.IsEnabled = false;
+                } else
+                {
+                    DialogHelper.ShowError(this, "Error Retrieving Filters", "An error occurred while trying to retrieve the tag filters");
                 }
             }
             catch (UnhandledException)
@@ -100,7 +103,7 @@ namespace SynclessUI
         /// <summary>
         /// Populates the ListBoxFilter by generating the new list and updates other elements of the UI correspondingly
         /// </summary>
-        /// <param name="selectOriginal">Specifies if the original list selection shld be selected after repopulation</param>
+        /// <param name="selectOriginal">Specifies if the original selected filter shld be re-selected after repopulation</param>
         private void PopulateListBoxFilter(bool selectOriginal)
         {
             int index = -1;
@@ -132,15 +135,17 @@ namespace SynclessUI
         }
 
         /// <summary>
-        /// Generates the filter list for the ListBoxFilter
+        /// Generates the filter list for the ListBoxFilter based on the collection Filters
         /// </summary>
         /// <returns>The generated filter list</returns>
         private List<string> GenerateFilterListHelper()
         {
             List<string> filterList = new List<string>();
+            // keeps a sequential running order of index, eg. 1. 2. 3.
             int filterIndex = 1;
             foreach (Filter f in filters)
             {
+                // For Extension Filters
                 if (f is ExtensionFilter)
                 {
                     ExtensionFilter ef = (ExtensionFilter)f;
@@ -177,7 +182,7 @@ namespace SynclessUI
 
         /// <summary>
         /// Checks if there are redundant filters. Does this by removing all filters one by one and checking if a similar
-        /// filter can be found.
+        /// filter can be found. After removing, it adds back.
         /// </summary>
         /// <returns>Returns true if a duplicate filter is found. Else returns false.</returns>
         private bool CheckDuplicateFilters()
@@ -185,9 +190,11 @@ namespace SynclessUI
             for (int i = 0; i < filters.Count; i++)
             {
                 Filter fi = filters[i];
+                // Removes the filter temporarily
                 filters.RemoveAt(i);
                 if (filters.Contains(fi))
                 {
+                    // Adds the filter back
                     filters.Insert(i, fi);
                     return true;
                 }
@@ -197,7 +204,13 @@ namespace SynclessUI
             return false;
         }
 
-        private bool CheckDuplicateFilters(Filter f, int indexOfFilter)
+        /// <summary>
+        /// This checks for duplicate filters by supplying in filter to check for and the index of which it is in the list
+        /// </summary>
+        /// <param name="f">Filter to check duplicates with</param>
+        /// <param name="indexOfCurrentSelectedFilter">Current Selected Filter index</param>
+        /// <returns></returns>
+        private bool CheckDuplicateFilters(Filter f, int indexOfCurrentSelectedFilter)
         {
             for (int i = 0; i < filters.Count; i++)
             {
@@ -207,11 +220,8 @@ namespace SynclessUI
                 if (tempFilter.Equals(f))
                 {
                     // if duplicate filter found is not the filter supplied
-                    if(indexOfFilter != i)
+                    if (indexOfCurrentSelectedFilter != i)
                         return true;
-                    // else if continue searching
-                    else
-                        continue;
                 }
             }
 
@@ -233,7 +243,7 @@ namespace SynclessUI
         }
 
         /// <summary>
-        /// Removes the filter from filters and repopulates the ListBoxFilter
+        /// Removes the selected filter from filters and repopulates the ListBoxFilter
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -246,6 +256,8 @@ namespace SynclessUI
 
                 PopulateListBoxFilter(false);
 
+                // if there are still other filters are removing
+                // select the closest filter to the one which was removed.
                 if(ListBoxFilters.Items.Count != 0)
                 {
                     if (ListBoxFilters.Items.Count - 1 < index)
@@ -260,7 +272,7 @@ namespace SynclessUI
         }
 
         /// <summary>
-        /// On selection change, update the filter information.
+        /// On filter selection change, update the filter information on the Right hand side
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -327,14 +339,15 @@ namespace SynclessUI
         }
 
         /// <summary>
-        /// Event Handler for TxtBoxPattern_PreviewLostKeyboardFocus. Detects if pattern is empty, and stops users from
-        /// changing focus.
+        /// Event Handler for TxtBoxPattern_PreviewLostKeyboardFocus. Detects if pattern is empty or duplicate filter already exists
+        /// and stops users from changing focus.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void TxtBoxPattern_PreviewLostKeyboardFocus(object sender,
                                                             System.Windows.Input.KeyboardFocusChangedEventArgs e)
         {
+            // if the new focus point is not on the cancel or remove filter buttons
             if (BtnCancel != e.NewFocus && BtnRemoveFilter != e.NewFocus)
             {
                 string pattern = TxtBoxPattern.Text.Trim();
@@ -345,6 +358,7 @@ namespace SynclessUI
                 else if (CmbBoxMode.SelectedIndex == 1)
                     mode = FilterMode.EXCLUDE;
 
+                // prevent filters with empty extension mask
                 if (pattern == string.Empty)
                 {
                     DialogHelper.ShowError(this, "Extension Mask Cannot be Empty", "Please input a valid extension mask.");
@@ -352,6 +366,8 @@ namespace SynclessUI
 
                     return;
                 }
+
+                // create a temporary extension filter , and then check for duplicates in the current filter list
 
                 Filter tempFilter = FilterFactory.CreateExtensionFilter(pattern, mode);
 
