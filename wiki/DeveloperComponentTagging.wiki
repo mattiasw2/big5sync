@@ -128,7 +128,7 @@ Let's take a look at the pseudo-code for the merging of profiles:
   return counter
 }}}
 
-The counter indicates the number of tags merged or added. The `LogicLayerNotificationQueue` is a queue in the main logic layer accessed through the `ServiceLocator`.
+The counter indicates the number of tags merged or added. The `LogicLayerNotificationQueue` is a queue in the main logic layer accessed through the `ServiceLocator`. For merging of tags, the algorithm will be explained in the following section.
 
 === Merging the Tag ===
 
@@ -142,21 +142,27 @@ Let's take a look at the pseudo-code for the merging the tags:
   if currentTag and newTag share the same name && both tags were modified at different time
       if newTag was deleted && currentTag exists
           if both tags were created at the same time
-              delete currentTag from currentProfile
+              enqueue RemoveTagNotification for newTag to LogicLayerNotificationQueue
               return true
           else
               return false
       if currentTag was deleted && newTag exists
           if newTag was created later than currentTag
-              add newTag to currentProfile
-      else
+              add newTag to TaggingLayer
+              enqueue AddTagNotification for newTag to LogicLayerNotificationQueue
+              return true
+      for each tagged path in newTag
           merge paths from currentTag and newTag
       return true
   else
       return false
 }}}
 
-Basically, the system will check whether a tag is marked as deleted in one profile but exists in another profile. If that is the case, then further checks will be done on the creation time and deletion time in both tags to decide whether to add the _newTag_ to the _currentProfile_ or to delete the _currentTag_ from the _currentProfile_. If _newTag_ is added to _currentProfile_, the system needs to check whether there are any changes to the list of tagged folders in both tags. For merging of tagged paths, the algorithm will be explained in the following section.
+Basically, the system will check whether a tag is marked as deleted in one profile but exists in another profile. If that is the case, then further checks will be done on the creation time and deletion time in both tags to decide whether to add the _newTag_ to the _currentProfile_ or to delete the _currentTag_ from the _currentProfile_. If _newTag_ is added to _currentProfile_, the system needs to check whether there are any changes to the list of tagged folders in both tags. 
+
+For each tag added, a `AddTagNotification` will be enqueued containing the name of the tag. Likewise, for each tag removed, a `RemoveTagNotification` will be enqueued containing the name of the tag.
+
+For merging of tagged paths, the algorithm will be explained in the following section.
 
 === Merging the !TaggedPath ===
 
@@ -166,20 +172,25 @@ Let's take a look at the pseudo-code for the merging of paths:
 
 {{{
   if newPath is not found in currentTag
+      enqueue MonitorPathNotification for newPath in currentTag to LogicLayerNotificationQueue
       add newPath to currentTag
   else
      if newPath is updated at a later time than the updated time of currentPath
          if newPath was deleted && currentPath exists
              if newPath was deleted later than the creation of currentPath
                  remove currentPath from currentTag
+                 enqueue UnMonitorPathNotification for currentPath in currentTag to LogicLayerNotificationQueue
          else if currentPath was deleted && newPath exists
              if newPath was created later than the deletion of currentPath
                  add newPath to currentTag
+                 enqueue MonitorPathNotification for newPath in currentTag to LogicLayerNotificationQueue
 }}}
 
 The system first checks whether _newPath_ exists in _currentTag_, if it does not exist, then _newPath_ should be added to _currentTag_. If _newPath_ exists in _currentTag_, then the system needs to check whether there are changes made to the tagged path.
 
 If the updated time of _newPath_ is earlier than that of _currentPath_, the system will not do anything. Otherwise, further checks will be done on the deletion time and creation time of both paths and perform addition/removal of path accordingly.
+
+For each tagged path added, a `MonitorPathNotification` will be enqueued. The notification will contain the path name to be monitored and the tag name of the tag it belongs to. Likewise, for each tagged path removed, a `UnmonitorPathNotification` will be enqueued. The notification will contain the path name to be unmonitored and the tag name of the tag it belongs to.
 
 = Extending Tagging =
 
