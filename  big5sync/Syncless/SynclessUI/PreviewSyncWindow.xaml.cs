@@ -113,7 +113,7 @@ namespace SynclessUI
                 }
             } catch(UnhandledException)
             {
-                DialogHelper.DisplayUnhandledExceptionMessage();
+                DialogHelper.DisplayUnhandledExceptionMessage(this);
             }
         }
 
