@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Syncless.Core.Exceptions;
+using Syncless.Core.View;
 using Syncless.Filters;
 using SynclessUI.Helper;
 
@@ -404,25 +405,34 @@ namespace SynclessUI
             try
             {
                 // Check if particular tag is locked
-                if (_main.LogicLayer.GetTag(_tagname).IsLocked)
-                {
-                    BtnOk.IsEnabled = true;
-                    DialogHelper.ShowError(this, _tagname + " is Synchronizing",
-                                           "You cannot update tag details while the tag is synchronizing.");
-                    return;
-                }
+                TagView tag = _main.LogicLayer.GetTag(_tagname);
 
-                // Check if there are duplicate filters 
-                if (CheckDuplicateFilters())
+                if(tag != null)
                 {
-                    DialogHelper.ShowError(this, "Duplicate Filters", "Please remove all duplicate filters.");
-                    BtnOk.IsEnabled = true;
-                    return;
-                }
+                    if (tag.IsLocked)
+                    {
+                        BtnOk.IsEnabled = true;
+                        DialogHelper.ShowError(this, _tagname + " is Synchronizing",
+                                               "You cannot update tag details while the tag is synchronizing.");
+                        return;
+                    }
 
-                // Update filter list
-                _main.LogicLayer.UpdateFilterList(_tagname, filters);
-                Close();
+                    // Check if there are duplicate filters 
+                    if (CheckDuplicateFilters())
+                    {
+                        DialogHelper.ShowError(this, "Duplicate Filters", "Please remove all duplicate filters.");
+                        BtnOk.IsEnabled = true;
+                        return;
+                    }
+
+                    // Update filter list
+                    _main.LogicLayer.UpdateFilterList(_tagname, filters);
+                    Close();
+                } else
+                {
+                    DialogHelper.ShowError(this, "Tag Not Found", "Please try again later.");
+                    _main.Close();
+                }
             }
             catch (UnhandledException)
             {

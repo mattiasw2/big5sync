@@ -146,7 +146,7 @@ namespace SynclessUI
                         }
                     } else
                     {
-                        DialogHelper.ShowError(this, "Tag not Found", "The tag " + t + " was not found.");
+                        DialogHelper.ShowError(this, "Tag not Found", "Please try again.");
                     }
                 }
                 
