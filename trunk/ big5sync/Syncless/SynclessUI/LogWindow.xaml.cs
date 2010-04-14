@@ -325,11 +325,11 @@ namespace SynclessUI
             }
             catch (IOException)
             {
-                DialogHelper.ShowError(this, "Clear Log Failed", "Unable to clear log at the moment. Please try again later.");
+                DialogHelper.ShowError(this, "Clear Log Failed", "Unable to clear logs at the moment. Please try again later.");
             }
             catch (UnauthorizedAccessException)
             {
-                DialogHelper.ShowError(this, "Clear Log Failed", "Unable to clear log at the moment. Please try again later.");
+                DialogHelper.ShowError(this, "Clear Log Failed", "Unable to clear logs at the moment. Please try again later.");
             }
             catch (UnhandledException)
             {
