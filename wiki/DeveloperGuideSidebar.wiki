@@ -34,7 +34,7 @@
   * Testing Syncless
     * [TestSeamlessSyncerTester Using Test Driver]
     * [TestCases Test Cases]
-  * [DeveloperAPIOverview API]
+  * [http://big5sync.googlecode.com/files/SynclessAPIV2.0.zip API]
   * [DeveloperGuideRecommendations Recommended Resources]
   * [DeveloperGuideReferences References]
   * [SynclessGlossary Glossary of Terms]
