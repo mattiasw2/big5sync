@@ -98,17 +98,43 @@ The system recognizes the differences in _tagging.xml_ files found in various so
 
 Merging of different _tagging.xml_ files will be done only if they contain the same tagging profile, ie. the name of the profile contained in all files is the same.
 
+== How to Merge ==
+
+=== Merging the Profile ===
+
 We denote the profile that *Syncless* is currently working on as _currentProfile_, and any other profile detected during drive-in/drive-out event will be denoted as _newProfile_. _currentProfile_ and _newProfile_ should share the same profile name.
 
 For each _newProfile_, the system will attempt to merge _currentProfile_ with _newProfile_. 
 
-== How to Merge ==
+Let's take a look at the pseudo-code for the merging of profiles:
+
+{{{
+  if currentProfile is null or newProfile is null
+      return -1
+  if currentProfile and newProfile have different profile names
+      return -1
+  for each newTag in taglist of newProfile
+      find the currentTag with the same name in taglist of currentProfile
+      if currentTag is found
+          merge currentTag with newTag
+          if merge is successful
+              increment counter
+      else
+          add newTag to taglist of TaggingLayer
+          add newTag to monitorList
+          increment counter
+  for each tag in monitorList
+      enqueue AddTagNotification to LogicLayerNotificationQueue
+  return counter
+}}}
+
+The counter indicates the number of tags merged or added. The `LogicLayerNotificationQueue` is a queue in the main logic layer accessed through the `ServiceLocator`.
+
+=== Merging the Tag ===
 
 For clearer illustration, we denote the tag found in _newProfile_ as _newTag_ and the tag found in _currentProfile_ as _currentTag_.
 
 For each _newTag_, if it has not already existed in _currentProfile_, it indicates that _newTag_ has been created elsewhere and should be added to _currentProfile_ so that details of _newTag_ can be displayed to the user. If _newTag_ exists in _currentProfile_, the system will do further check whether any modification has been made to the equivalent _currentTag_.
-
-=== Merging the Tag ===
 
 Let's take a look at the pseudo-code for the merging the tags:
 
