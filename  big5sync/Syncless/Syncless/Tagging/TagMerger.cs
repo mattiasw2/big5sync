@@ -95,12 +95,13 @@ namespace Syncless.Tagging
                 //if new Tag is deleted and current is not
                 if (newTag.IsDeleted && !current.IsDeleted)
                 {
-                    //check the creation date is the same , then delete
+                    //delete only if deleted date is more than created date.
                     if (newTag.DeletedDate > current.CreatedDate)
                     {
                         ServiceLocator.LogicLayerNotificationQueue().Enqueue(new RemoveTagNotification(newTag));
                         return true;
                     }
+                    //do nothing
                     return false;
                 }
                 //for each taggedPath found in the new Tag.
