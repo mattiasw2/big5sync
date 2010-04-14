@@ -124,9 +124,6 @@ Before going in depth into the design, we will first take a look at the data tra
 === Request ===
 Requests are data transfer objects sent to !CompareAndSync when a comparison or synchronization action is to be done. The *Request* object is an abstract class, from which all other requests will extend from. *!AutoSyncRequest* and *!ManualRequest* are the respective requests for seamless and manual mode. *!ManualRequest* is further extended to *!ManualSyncRequest* and *!ManualCompareRequest*.
 
-
-
-
 = Explanation of Algorithms =
 The main algorithm we are going to discuss here is the manual component comparison. Yes, Syncless' main aim is seamless synchronization, but the manual synchronization is in fact activated every time a user launches the application, or connects a removable storage drive to it. In a way, it is "seamless" too. Thus, it is as important as the seamless component.
 
