@@ -10,12 +10,13 @@ using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using Syncless.Core.Exceptions;
+using Syncless.Core.View;
 using SynclessUI.Helper;
 
 namespace SynclessUI
 {
     /// <summary>
-    /// Interaction logic for UntagWindow.xaml
+    /// Interaction logic for UntagWindow.xaml. This window is activated when the user untags a folder from the Shell
     /// </summary>
     public partial class UntagWindow : Window
     {
@@ -23,36 +24,42 @@ namespace SynclessUI
         private bool _notifyUser;
         private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
 
-        public UntagWindow(MainWindow main, string clipath, bool notifyUser)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="main">Reference to Main Window</param>
+        /// <param name="path">Path to untag from</param>
+        /// <param name="notifyUser">If true, tray notification enabled. Else if false, do not notify.</param>
+        public UntagWindow(MainWindow main, string path, bool notifyUser)
         {
+            InitializeComponent();
+
+            // Set up window properties
+            _main = main;
+            _notifyUser = notifyUser;
+            Owner = _main;
+            ShowInTaskbar = false;
+
             try
             {
-                InitializeComponent();
+                // Gets tag list for folder which was tagged
+                List<string> tagListByFolder = null;
 
-                _main = main;
-                _notifyUser = notifyUser;
-                Owner = _main;
-                ShowInTaskbar = false;
-
-                List<string> tagListByFolder = new List<string>();
-                DirectoryInfo di = null;
+                // Check if directory selected is valid, and if it is, get the tag list of folders.
+                DirectoryInfo di;
                 try
                 {
-                    di = new DirectoryInfo(clipath);
-                }
-                catch
-                {
-                }
-
-                if (di != null)
-                {
+                    di = new DirectoryInfo(path);
                     tagListByFolder = _main.LogicLayer.GetTags(di);
                 }
+                catch {}
 
+                // if there are tags on the folder
                 if (tagListByFolder != null && tagListByFolder.Count != 0)
                 {
-                    TxtBoxPath.Text = clipath;
+                    TxtBoxPath.Text = path;
                     taglist.ItemsSource = tagListByFolder;
+                    // Populate the list and selects the first tag on the list if there is only 1 tag involved.
                     if (tagListByFolder.Count == 1)
                     {
                         taglist.SelectedIndex = 0;
@@ -76,17 +83,28 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Path to untag
+        /// </summary>
         private string Path
         {
             get { return TxtBoxPath.Text; }
         }
 
+        /// <summary>
+        /// Event handler for BtnOk_Click event. Trys to untag every tag that was selected and then closes the window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
             BtnOk.IsEnabled = false;
             try
             {
-                string lasttagged = "";
+                // gets the last untagged tag
+                string lastuntagged = "";
+
+                // if no tag selected for tagging
                 if (taglist.SelectedIndex == -1)
                 {
                     DialogHelper.ShowError(this, "Tag not Selected",
@@ -95,34 +113,45 @@ namespace SynclessUI
                     return;
                 }
 
+                // for every tag selected, untag them if it is not locked
                 foreach (string t in taglist.SelectedItems)
                 {
-                    if (!_main.LogicLayer.GetTag(t).IsLocked)
+                    TagView currentTag = _main.LogicLayer.GetTag(t);
+                    if (currentTag != null)
                     {
-                        int result = _main.LogicLayer.Untag(t, new DirectoryInfo(Path));
-                        lasttagged = t;
-                        if (result != 1)
+                        // if current tag is not locked
+                        if(!currentTag.IsLocked)
                         {
-                            DialogHelper.ShowError(this, "Untagging Error", t + " could not be untagged from " + Path);
-                        }
-                        else
-                        {
-                            if (_notifyUser)
+                            int result = _main.LogicLayer.Untag(t, new DirectoryInfo(Path));
+                            lastuntagged = t;
+                            if (result != 1)
                             {
-                                _main.NotifyBalloon("Untagging Successful", Path + " has been untagged from " + t);
-                                //success
+                                DialogHelper.ShowError(this, "Untagging Error", t + " could not be untagged from " + Path);
+                            }
+                            else
+                            {
+                                // if tray notification is enabled, inform user
+                                if (_notifyUser)
+                                {
+                                    _main.NotifyBalloon("Untagging Successful", Path + " has been untagged from " + t);
+                                }
+
                                 _main.ResetTagSyncStatus(t);
                             }
                         }
-                    }
-                    else
+                        else
+                        {
+                            DialogHelper.ShowError(this, t + " is Synchronizing",
+                                                   "You cannot untag a folder while the tag is synchronizing.");
+                        }
+                    } else
                     {
-                        DialogHelper.ShowError(this, t + " is Synchronizing",
-                                               "You cannot untag a folder while the tag is synchronizing.");
-                        BtnOk.IsEnabled = true;
+                        DialogHelper.ShowError(this, "Tag not Found", "The tag " + t + " was not found.");
                     }
                 }
-                _main.SelectTag(lasttagged);
+                
+                // select the last tag that was untagged
+                _main.SelectTag(lastuntagged);
                 Close();
             }
             catch (UnhandledException)
@@ -132,23 +161,44 @@ namespace SynclessUI
             }
         }
 
+
+        /// <summary>
+        /// Event handler for BtnCancel_Click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
             BtnCancel.IsEnabled = false;
             Close();
         }
 
+        /// <summary>
+        /// Event handler for Canvas_MouseLeftButtonDown event. Allows user to drag the canvas.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
         }
 
+        /// <summary>
+        /// On closing animation complete, set the boolean to false and closes the window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FormFadeOut_Completed(object sender, EventArgs e)
         {
             _closingAnimationNotCompleted = false;
             Close();
         }
 
+        /// <summary>
+        /// Event handler for Window_Closing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (_closingAnimationNotCompleted)

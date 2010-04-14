@@ -30,8 +30,8 @@ namespace SynclessUI
         /// </summary>
         /// <param name="parentWindow">Reference to the parent window</param>
         /// <param name="caption">Caption to Show in Dialog Box</param>
-        /// <param name="message">Messageto Show in Dialog Box</param>
-        /// <param name="dt">Enumerated type - Dialog Type</param>
+        /// <param name="message">Message to Show in Dialog Box</param>
+        /// <param name="dt">Enumerated type - DialogType</param>
         public DialogWindow(Window parentWindow, string caption, string message, DialogType dt)
         {
             InitializeComponent();
@@ -171,7 +171,8 @@ namespace SynclessUI
         }
 
         /// <summary>
-        /// Command Panel - Ok Button for Warning Dialog Type. Sets the chosen choice to true
+        /// Command Panel - Ok Button for Warning Dialog Type.
+        /// Sets the chosen choice to true in the current properties for later retrieval by DialogHelper.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -183,7 +184,8 @@ namespace SynclessUI
         }
 
         /// <summary>
-        /// Command Panel - Cancel Button for Warning Dialog Type. Sets the chosen choice to false
+        /// Command Panel - Cancel Button for Warning Dialog Type.
+        /// Sets the chosen choice to false in the current properties for later retrieval by DialogHelper.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -220,18 +222,20 @@ namespace SynclessUI
         }
 
         /// <summary>
-        /// Event handler for Window_Closing.
+        /// Event handler for Window_Closing. Handles for both all types of closing windows.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Window_Closing(object sender, CancelEventArgs e)
         {
+            // if window can't be closed like how termination window is, reject all closing calls.
             if (CannotBeClosed)
             {
                 e.Cancel = true;
                 return;
             }
 
+            // if animation not complete, calls for closing animation
             if (_closingAnimationNotCompleted)
             {
                 BtnOkCP1.IsCancel = false;

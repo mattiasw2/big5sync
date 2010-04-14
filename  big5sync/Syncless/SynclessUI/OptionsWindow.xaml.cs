@@ -161,7 +161,7 @@ namespace SynclessUI
         }
 
         /// <summary>
-        /// Modifies registry based on shell integration choice
+        /// Modifies registry based on shell integration choice. Either add into or removes from registry.
         /// </summary>
         private void ReinitializeShellIntegration()
         {
@@ -179,7 +179,7 @@ namespace SynclessUI
         }
 
         /// <summary>
-        /// Saves all application options
+        /// Saves all application options into the settings
         /// </summary>
         private void SaveOptionsToSettings()
         {
@@ -271,12 +271,22 @@ namespace SynclessUI
 
         #region Tab Menu
 
+        /// <summary>
+        /// When the TabItem General is clicked, change the description
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TabItemGeneral_PreviewMouseLeftButtonDown(object sender,
                                                                System.Windows.Input.MouseButtonEventArgs e)
         {
             TabItemDescription.Content = "General and User Interface Settings";
         }
 
+        /// <summary>
+        /// When the TabItem Archiving is clicked, change the description
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TabItemArchiving_PreviewMouseLeftButtonDown(object sender,
                                                                  System.Windows.Input.MouseButtonEventArgs e)
         {

@@ -11,10 +11,18 @@ namespace SynclessUI.Helper
 {
     public static class FileHelper
     {
+        /// <summary>
+        /// Syncless File Types To Detect
+        /// </summary>
         private const string SYNCLESS = ".syncless";
         private const string ARCHIVE = "_synclessarchive";
         private const string CONFLICT = "_synclessconflict";
 
+        /// <summary>
+        /// Check if a path is a file
+        /// </summary>
+        /// <param name="path">Path to check for</param>
+        /// <returns>True if it is a file, false if it is not a file</returns>
         public static bool IsFile(string path)
         {
             try
@@ -31,16 +39,21 @@ namespace SynclessUI.Helper
             }
         }
 
-        // Credits of http://www.saunalahti.fi/janij/blog/2006-12.html
-
-        public static string GetShortcutTargetFile(string shortcutFilename)
+        /// <summary>
+        /// Gets the shortcut link behind the given path
+        /// Credits of http://www.saunalahti.fi/janij/blog/2006-12.html
+        /// </summary>
+        /// <param name="shortcutPath">The path of the shortcut to check up on</param>
+        /// <returns>The link of the shortcut</returns>
+        public static string GetShortcutTargetFile(string shortcutPath)
         {
-            string extension = Path.GetExtension(shortcutFilename);
+            string extension = Path.GetExtension(shortcutPath);
 
+            // Check if the file extension is that of a shortcut file
             if (extension.ToLower() == ".lnk")
             {
-                string pathOnly = Path.GetDirectoryName(shortcutFilename);
-                string filenameOnly = Path.GetFileName(shortcutFilename);
+                string pathOnly = Path.GetDirectoryName(shortcutPath);
+                string filenameOnly = Path.GetFileName(shortcutPath);
 
                 Shell shell = new ShellClass();
                 Folder folder = shell.NameSpace(pathOnly);
@@ -56,6 +69,11 @@ namespace SynclessUI.Helper
             return null; // not found
         }
 
+        /// <summary>
+        /// Check if the given path is a Syncless Folder
+        /// </summary>
+        /// <param name="path">Path to check for</param>
+        /// <returns>True if path is a Syncless Folder; otherwise False</returns>
         public static bool IsSynclessFolder(string path)
         {
             string[] tokens = path.Split(new char[] { '\\' });
@@ -69,6 +87,11 @@ namespace SynclessUI.Helper
             return false;
         }
 
+        /// <summary>
+        /// Check if a path is a CDRom Drive
+        /// </summary>
+        /// <param name="path">Path to check for</param>
+        /// <returns>True if the path is a CD Rom Drive, False if not.</returns>
         public static bool IsCDRomDrive(string path)
         {
             DirectoryInfo d = new DirectoryInfo(path);
@@ -77,10 +100,8 @@ namespace SynclessUI.Helper
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
     }
 }

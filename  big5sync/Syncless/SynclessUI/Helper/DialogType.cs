@@ -6,6 +6,9 @@
 
 namespace SynclessUI.Helper
 {
+    /// <summary>
+    /// DialogType Enumeration
+    /// </summary>
     public enum DialogType
     {
         Error,
