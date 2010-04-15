@@ -66,6 +66,8 @@
 || 10. || Rename the folder with 2 different names , rename the file with 2 different names || 1) Rename the folder with 2 different names<br>2) Rename the files with 2 different names<br>3) Sync over || Folder will show at least 2 names. Files will show 2 different names ||
 || 11. || Create a folder with a file inside in all folders || 1) Create a folder and file in all different folders<br>2) Sync over || XML will be updated in all folders ||
 || 12. || Sync files/ folders with large file size / large number of files || 1) Sync it over || All changes will be propagated ||
+|| 13. || Rename 2 folders + creating a new file at the non-renamed || 1) Create a folder and sync over<br>2) Rename 2 of the folder and add a new file in the non-renamed folder<br>3) Sync over || All folders will have the renamed folder and the new file in it ||
+|| 14. || Folder and name with the same path || 1) Name a folder and a file to file.txt<br>2) Sync now || A conflict folder will appear ||
 
 [#Test_Cases Back to top]
 
