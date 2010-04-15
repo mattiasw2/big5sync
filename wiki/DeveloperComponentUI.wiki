@@ -45,6 +45,28 @@ The user interface makes use of session settings to keep track of settings in a 
 == Shell Integration ==
 The UI makes use of the `RegistryHelper` to write registry entries to enable shell integration. It also uses the `CommandLineHelper` to handle command line arguments, which any action from the shell uses.
 
+= WPF Features In Play =
+
+== Animation ==
+All windows makes use of animation through storyboarding and triggers. All animations are stored in the `.xaml` class of each window. To edit them, please use Microsoft Express Blend.  
+
+== Commands ==
+Almost all keyboard commands in `MainWindow` have been initialized through commands.
+
+Refer to the following sample code below:
+
+            RoutedCommand TimeSyncCommand = new RoutedCommand();
+
+            CommandBinding cb = new CommandBinding(TimeSyncCommand, TimeSyncCommandExecute, TimeSyncCommandCanExecute);
+            CommandBindings.Add(cb);
+
+            BtnTimeSync.Command = TimeSyncCommand;
+
+            KeyGesture kg = new KeyGesture(Key.Y, ModifierKeys.Control);
+            InputBinding ib = new InputBinding(TimeSyncCommand, kg);
+            InputBindings.Add(ib);
+
+
 = UI Design Principles & Philosophy =
 
 Our overall goal is to make the whole tagging and synchronization process as simple and seamless as ever.
