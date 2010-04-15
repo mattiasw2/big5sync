@@ -13,14 +13,16 @@ The User Interface (UI) component is in charge of handling all interactions betw
 The UI component consists of several important sub-components, including the single instance layer - `SingleInstanceManager` , `SynclessApplication`, windows - `MainWindow`, `TagWindow`, `UntagWindow`, `TagDetailsWindow`, `ShortcutsWindow`, `LogWindow`, `WelcomeScreenWindow`, `PreviewSyncWindow`, `DialogWindow`, `CreateTagWindow`, `OptionsWindow`, helper components - `CommandLineHelper`, `RegistryHelper`, `FileFolderHelper`, `DialogType`, `DialogHelper`, resource dictionary - `AppResourceDictionary`, notification components - `NotificationWatcher`, `PriorityNotificationWatcher`, `SyncProgressWatcher`, preview sync components - `PreviewVisitor`, `SyncUIHelper` , misc components - `PortableSettingsProvider`.
 
 = Third-Party Components =
+`PortableSettingsProvider.cs` - Save application settings to the application folder, user settings become portable.
 
-`PortableSettingsProvider.cs` - Save Application Settings to the Application Folder, user settings become portable. Essential for application portability.
 `Hardcodet.Wpf.TaskbarNotification.dll` - WPFTrayNotification Icon
+
 `Ookii.Dialogs.Wpf.dll` - Folder Browser Dialog for Vista and Above 
 
-== WPF ToolKit ==
+== WPF !ToolKit ==
 `System.Windows.Controls.Input.Toolkit.dll` - AutoCompleteBox in TagWindow
-`WPFToolkit.dll` - Datagrid in LogWindow and PreviewSyncWindow
+
+`WPFToolkit.dll` - Datagrid in !`LogWindow` and !`PreviewSyncWindow`
 
 = Description of Design =
 
