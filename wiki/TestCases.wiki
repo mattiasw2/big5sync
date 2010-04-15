@@ -47,6 +47,7 @@
 || 12. || Create a new folder in each folder || 1) Create a new folder in each folder<br>2) Sync them || XML should reflect all the created folders ||
 || 13. || Rename all the folders || 1) Rename all the folder<br>2) Sync them || XML should reflect all the created folders ||
 || 14. || Untag the folder and tag it again || 1) Create a folder in all and sync<br>2) Untag the folder , delete the folder in the rest<br>3) Retag the folder and sync || Will repropagate the deleted folder ||
+|| 15. || Renaming 2 of the folder || 1) Create a folder and sync over<br>2) Rename 2 of the folder || All folders will be renamed ||
 
 [#Test_Cases Back to top]
 
