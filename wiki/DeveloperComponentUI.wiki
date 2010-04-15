@@ -55,16 +55,21 @@ Almost all keyboard commands in `MainWindow` have been initialized through comma
 
 Refer to the following sample code below:
 
-            RoutedCommand TimeSyncCommand = new RoutedCommand();
+{{{
+private void InitializeTimeSyncCommand()
+{
+    RoutedCommand TimeSyncCommand = new RoutedCommand();
 
-            CommandBinding cb = new CommandBinding(TimeSyncCommand, TimeSyncCommandExecute, TimeSyncCommandCanExecute);
-            CommandBindings.Add(cb);
+    CommandBinding cb = new CommandBinding(TimeSyncCommand, TimeSyncCommandExecute, TimeSyncCommandCanExecute);
+    CommandBindings.Add(cb);
 
-            BtnTimeSync.Command = TimeSyncCommand;
+    BtnTimeSync.Command = TimeSyncCommand;
 
-            KeyGesture kg = new KeyGesture(Key.Y, ModifierKeys.Control);
-            InputBinding ib = new InputBinding(TimeSyncCommand, kg);
-            InputBindings.Add(ib);
+    KeyGesture kg = new KeyGesture(Key.Y, ModifierKeys.Control);
+    InputBinding ib = new InputBinding(TimeSyncCommand, kg);
+    InputBindings.Add(ib);
+}
+}}}
 
 
 = UI Design Principles & Philosophy =
