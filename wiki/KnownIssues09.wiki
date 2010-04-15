@@ -1,5 +1,5 @@
 #summary Developers' Guide - Known Issues - V0.9
-#labels Phase-Implementation,V0.9,DeveloperGuide,UserGuide
+#labels Phase-Implementation,V0.9,DeveloperGuide,UserGuide,Deprecated
 #sidebar DeveloperGuideSidebar
 
 <wiki:toc max_depth="5" />
