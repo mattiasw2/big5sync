@@ -1,5 +1,5 @@
 #summary Developers' Guide - Handling special cases
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0,DeveloperGuide,UserGuide
 #sidebar DeveloperGuideSidebar
 
 <wiki:toc max_depth="5" />
