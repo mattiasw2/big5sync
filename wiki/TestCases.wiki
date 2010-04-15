@@ -119,7 +119,6 @@
 || 13. || Sync now and Cancel || 1) Sync now with a big folder<br>2) Go to another tag and sync now too<br>3) While analyzing the large file , cancel the analyze. Preview button will show<br>4) Then switch mode || Other tag synchronization should continue ||
 || 14. || Sync and untag from windows explorer || 1) Sync a few tags<br>2) Untag them from windows explorer || Should not display any progress bar ||
 
-
 [#Test_Cases Back to top]
 
 == Filter ==
@@ -128,23 +127,18 @@
 || 1. || Empty filters || 1) Create a filter<br>2) Set Ext. Mask to empty string<br>3) Click OK || Since it is an empty filter, it should allow the update of the file ||
 || 2. || Same filters || 1) Click on add filter<br>2) Click on add filter again || Should not allow you to set the filter ||
 
-
 [#Test_Cases Back to top]
-
 
 == TimeSync ==
 
 || *No.* || *Summary* || *Steps* || *Expected Output* ||
 || 1. || Timesync || 1) Change the time clock<br>2) Click on timesync || Time will be synchronised ||
 
-
 [#Test_Cases Back to top]
-
 
 == Removable Storage ==
 
 || *No.* || *Summary* || *Steps* || *Expected Output* ||
 || 1. || Safely remove a removable storage || 1) Go to tray and safely remove thumbdrive || Removable drive should be removed successfully and updated on the tag window display ||
-
 
 [#Test_Cases Back to top]
