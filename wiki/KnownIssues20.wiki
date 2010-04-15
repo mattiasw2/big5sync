@@ -19,7 +19,7 @@ Sometimes unhandled exception is thrown at program start up. We are still lookin
 
 == Cannot Sync File With Very Long Name ==
 
-As of version 1.0, the file/folder with !PathTooLongException will simply not be synced. No error will be thrown. Will try to implement a notification to inform user of such error in future releases. Refer to [http://code.google.com/p/big5sync/issues/detail?id=8 Issue 8]
+As of version 2.0, the file/folder with !PathTooLongException will simply not be synced. No error will be thrown. Will try to implement a notification to inform user of such error in future releases. Refer to [http://code.google.com/p/big5sync/issues/detail?id=8 Issue 8]
 
 == Unable to Handle External Disk With Not Enough Space ==
 
