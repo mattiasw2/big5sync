@@ -43,7 +43,7 @@ The traditional way to keep a few folders in sync is to create multiple jobs bec
 Seamless synchronization allows folders that are tagged to be synchronized automatically if there are changes to the files within the folders. You can just leave the program running while attending to other tasks at hand. At the end of the day, you will find that all your folders are in sync!  
 
 === Filtering ===
-Syncless currently provides basic filtering capabilities for files. There are 2 main kinds of filters, inclusion and exclusion filters. Exclusion filters will always have a higher priority over inclusion filters. In this section, we are going to take a look at how we can construct filters to suit our needs.
+Syncless currently provides basic filtering capabilities for files. There are 2 main kinds of filters, inclusion and exclusion filters. Exclusion filters will always have a higher priority over inclusion filters. In this user guide, we are going to take a look at how we can construct filters to suit our needs.
 
 === Archiving ===
 With the archiving feature, you do not need to worry about losing an important file if you accidentally delete it and the change is propagated to other folders in the same tag. Syncless will either send the deleted file to Recycle Bin, or keep up to 10 copies of the deleted file in an archive folder, depending on your preference. This archive folder will be created in all the other folders in the same tag. Note that the file itself will not be archived in the folder where the file deletion is initiated by the user.
