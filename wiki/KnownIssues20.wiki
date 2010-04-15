@@ -13,15 +13,15 @@ Note: As much as we try to keep this page updated, please take a look at the pro
 
 There might be errors accessing some hard disks. See [http://code.google.com/p/big5sync/issues/detail?id=40 Issue 40] for more information.
 
-== Exception Thrown at Program Start Up ==
+== Exception Thrown At Program Start Up ==
 
 Sometimes unhandled exception is thrown at program start up. We are still looking into it. Refer to [http://code.google.com/p/big5sync/issues/detail?id=185 Issue 185].
 
-== Cannot Sync File with Very Long Name ==
+== Cannot Sync File With Very Long Name ==
 
 As of version 2.0, the file/folder with !PathTooLongException will simply not be synced. No error will be thrown. Will try to implement a notification to inform user of such error in future releases. The user may view the logs to see what is happening. Refer to [http://code.google.com/p/big5sync/issues/detail?id=8 Issue 8].
 
-== Unable to Handle Disk with Not Enough Space ==
+== Unable To Handle Disk With Not Enough Space ==
 
 As of version 2.0, when a disk runs out of space, synchronizing will complete the synchronization, without hanging or crashing. The user may view the logs to see what is happening. Refer to [http://code.google.com/p/big5sync/issues/detail?id=8 Issue 8].
 
