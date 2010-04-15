@@ -50,6 +50,7 @@ The UI has made used of the notification queue and priority notification queue, 
 
 The main notification components that are of concern are the `NotificationWatcher`, `PriorityNotificationWatcher`, `SyncProgressWatcher`.
 
+=== Responsibilites ===
 # `NotificationWatcher` - to dequeue any notification in the UINotificationQueue
 # `PriorityNotificationWatcher` - to dequeue any notification in the UIPriorityQueue
 # `SyncProgressWatcher` - to watch a particular SyncProgress as an observer for any changes to the SyncProgress
