@@ -1,5 +1,5 @@
 #summary Developers' Guide - Test Cases
-#labels Phase-QA,V2.0
+#labels Phase-QA,V2.0,DeveloperGuide
 #sidebar DeveloperGuideSidebar
 
 <wiki:toc max_depth="3">
