@@ -1,4 +1,5 @@
-#summary What's In It For You After 1.5?
+#summary What's In It For You After 2.0?
+#labels V2.0
 <wiki:toc max_depth="6" />
 
 = Features =
