@@ -32,7 +32,7 @@ Why choose Syncless over other synchronization tools? The reason is simple. Sync
 
   * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder can be either sent to Recycle Bin or archived up to 10 copies. 
 
-  * *Time Synchronization*: Why worry that your files be out-of-sync when you can actually synchronize the system clocks across all your computers?
+  * *Time Synchronization*: Syncless can automatically keep your computer clock in sync with an internet time server to ensure accurate synchronisation. 
 
   * *Portability*: Be the ultimate on-the-go warrior and carry Syncless on your thumb-drive instead of leaving it on your computer.
 
