@@ -50,6 +50,10 @@ The UI has made used of the notification queue and priority notification queue, 
 
 The main notification components that are of concern are the `NotificationWatcher`, `PriorityNotificationWatcher`, `SyncProgressWatcher`.
 
+# `NotificationWatcher` - to dequeue any notification in the UINotificationQueue
+# `PriorityNotificationWatcher` - to dequeue any notification in the UIPriorityQueue
+# `SyncProgressWatcher` - to watch a particular SyncProgress as an observer for any changes to the SyncProgress
+
 == Preview Synchronization ==
 The Preview Synchronization makes use of the visitor pattern which has been used in the [http://code.google.com/p/big5sync/wiki/DeveloperComponentCompareAndSync Syncless.CompareAndSync] component. 
 
