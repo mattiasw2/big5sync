@@ -12,7 +12,7 @@ http://big5sync.googlecode.com/files/mainpagelogosmall.png
 
 = Preface =
 
-This user's guide provides a detailed insight into the functionality available in *_Syncless_*. If you wish to have a quick overview of the basic functions provided in *_Syncless_*, you can refer to the *Getting Started* section [#Getting_Started here]. If you wish to print out this guide, you may download the print-friendly version [http://big5sync.googlecode.com/files/UserGuideV2.0.pdf here]!
+This user's guide provides a detailed insight into the functionality available in *_Syncless_*. If you wish to have a quick overview of the basic functions provided in *_Syncless_*, you can refer to the *Getting Started* section [#Getting_Started here]. If you wish to print out this guide, you may download the print-friendly version [http://big5sync.googlecode.com/files/UserGuideV2-0.pdf here]!
 
 = Welcome to Syncless =
 
