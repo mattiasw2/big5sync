@@ -13,13 +13,14 @@ The User Interface (UI) component is in charge of handling all interactions betw
 The UI component consists of several important sub-components, including the single instance layer - `SingleInstanceManager` , `SynclessApplication`, windows - `MainWindow`, `TagWindow`, `UntagWindow`, `TagDetailsWindow`, `ShortcutsWindow`, `LogWindow`, `WelcomeScreenWindow`, `PreviewSyncWindow`, `DialogWindow`, `CreateTagWindow`, `OptionsWindow`, helper components - `CommandLineHelper`, `RegistryHelper`, `FileFolderHelper`, `DialogType`, `DialogHelper`, resource dictionary - `AppResourceDictionary`, notification components - `NotificationWatcher`, `PriorityNotificationWatcher`, `SyncProgressWatcher`, preview sync components - `PreviewVisitor`, `SyncUIHelper` , misc components - `PortableSettingsProvider`.
 
 = Third-Party Components =
+In order to enhance the usability of Syncless, third-party components have been used.
+
 `PortableSettingsProvider.cs` - Save application settings to the application folder, user settings become portable.
 
 `Hardcodet.Wpf.TaskbarNotification.dll` - WPFTrayNotification Icon
 
-`Ookii.Dialogs.Wpf.dll` - Folder Browser Dialog for Vista and Above 
+`Ookii.Dialogs.Wpf.dll` - Folder Browser Dialog for Windows Vista and Above 
 
-== WPF !ToolKit ==
 `System.Windows.Controls.Input.Toolkit.dll` - !AutoCompleteBox in `TagWindow`
 
 `WPFToolkit.dll` - Datagrid in `LogWindow` and `PreviewSyncWindow`
