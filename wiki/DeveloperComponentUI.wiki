@@ -69,6 +69,18 @@ private void InitializeTimeSyncCommand()
     InputBinding ib = new InputBinding(TimeSyncCommand, kg);
     InputBindings.Add(ib);
 }
+
+private void TimeSyncCommandExecute(object sender, ExecutedRoutedEventArgs e)
+{
+    e.Handled = true;
+    InitiateTimeSync();
+}
+
+private void TimeSyncCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
+{
+    e.CanExecute = true;
+    e.Handled = true;
+}
 }}}
 
 
