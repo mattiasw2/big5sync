@@ -6,7 +6,7 @@
 
 = Overview =
 
-The User Interface (UI) component is in charge of handling all interactions between the user and the control layer. It is implemented using WPF for its powerful framework which allows for the creation of clean, professional look-and-feel. It also allows for the true separation of the UI from the `SystemLogicLayer`, allowing other developers to create their own UI to interact with our Logic Layer.
+The User Interface (UI) component is in charge of handling all interactions between the user and the control layer. It is implemented using the Windows Presentation Foundation (WPF) framework which allows for the creation of a clean and professional look-and-feel. It also allows for the true separation of the UI from the `SystemLogicLayer`, allowing other developers to create their own UI to interact with our Logic Layer.
 
 = Classes =
 
@@ -36,7 +36,7 @@ The UI makes use of the `RegistryHelper` to write registry entries to enable she
 
 Our overall goal is to make the tagging process as simple as ever and synchronization seamless.
 
-  # Seamless - When Syncless is synchronizing files in the background, users should not  forget their Syncless is on.
+  # Seamless - When Syncless is synchronizing files in the background, users should forget their Syncless is on.
   # Minimalist - Our interface aims to prevent cognitive overload on users.
   # Intuitive - Users should find applications functions intuitive. 
   # Accessible - Users should be able to use Syncless they choose, whether by keyboard or by mouse, or tagging from the shell or just simply dragging and dropping.
@@ -48,11 +48,13 @@ To create a UI for Syncless, the developer just need to follow a few steps.
   # Implement `Syncless.Core.IUInterface`. This is to provide the System Core with a way to to update the interface as and when necessary.
   # Use `Syncless.Core.ServiceLocator` to get the `IUIControllerInterface`. This provide the list of methods which the UI developer can use to call from the UI.
   # Call the Initiate method in the `IUIControllerInterface` to initiate the `SystemLogicLayer`.
+  # 
 
 = Credits =
-We would like to thank the following resources/developers for their valuable contributions to challenges that WPF developers will encounter in the course of development.
+We would like to thank the following resources/developers for their valuable contributions to challenges that we have encountered in the course of developing the UI.
 
   * *Singleton Application* - http://www.switchonthecode.com/tutorials/wpf-writing-a-single-instance-application
   * *Combined File & Folder Browser Dialog* - http://dotnetzip.codeplex.com/SourceControl/changeset/view/29832#432677
-  * *WPF !ToolKit* - http://www.codeplex.com/wpf (For its !DataGrid and Autocomplete Box, which WPF sorely lacks)
+  * *WPF !ToolKit* - http://www.codeplex.com/wpf (For its !DataGrid and AutoCompleteBox, which the current WPF release is lacking)
   * *Portable Settings Provider* - http://www.codeproject.com/KB/vb/CustomSettingsProvider.aspx (C# version by gpgemini)
+  * *Vista-Style Folder Browser Dialog* - http://www.ookii.org/software/dialogs/
