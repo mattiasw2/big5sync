@@ -14,14 +14,14 @@ The main reason for this implementation is to have the message come in a particu
 
 The main important classes for Notification include `NotificationQueue` and `INotificationQueue`. Many notifications are implemented in both UI and *System Logic Layer*. At UI layer, it needs to implement watchers to watch all notifications which belong to the `Notification.UINotification` namespace.
 
-== Notification that is currently Implemented(User Interface) ==
+== List of Notifications for User Interface ==
  #  `AutoSyncCompleteNotification` - informs the User Interface that a seamless synchronization request is completed.
  #  `CancelSyncNotification` - informs the User Interface that a synchronization request is cancelled.
  #  `NothingToSyncNotification` - informs the User Interface that there is nothing to synchronize.
  #  `SyncCompleteNotification` - informs the User Interface that the synchronization is completed.
  #  `SyncStartNotification` - informs the User Interface that the synchronization is started.
 
-== Notification that is currently Implemented(Logic Layer) ==
+== List of Notifications for Logic Layer ==
  #  `AddTagNotification` - informs the Logic Layer to add a tag. Used during merging of tagging profiles.
  #  `MonitorPathNotification` - informs the Logic Layer to start monitoring a path. Called after switching from manual to seamless mode.
  #  `MonitorTagNotification` - informs the Logic Layer to start monitoring a tag. Used during merging of tags.
