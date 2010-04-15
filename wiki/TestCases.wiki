@@ -129,10 +129,10 @@
 
 [#Test_Cases Back to top]
 
-== TimeSync ==
+== !TimeSync ==
 
 || *No.* || *Summary* || *Steps* || *Expected Output* ||
-|| 1. || Timesync || 1) Change the time clock<br>2) Click on timesync || Time will be synchronised ||
+|| 1. || !Timesync || 1) Change the time clock<br>2) Click on timesync || Time will be synchronised ||
 
 [#Test_Cases Back to top]
 
