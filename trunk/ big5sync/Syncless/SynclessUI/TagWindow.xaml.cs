@@ -1,7 +1,7 @@
 ﻿/*
  * 
  * Author: Steve Teo Wai Ming
- * 
+ * Credits: Used http://www.ookii.org/software/dialogs/ for the Vista-Style Folder Browser Dialog
  */
 
 using System;
