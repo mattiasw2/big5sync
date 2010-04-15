@@ -46,7 +46,7 @@ The user interface makes use of session settings to keep track of settings in a 
 The UI makes use of the `RegistryHelper` to write registry entries to enable shell integration. It also uses the `CommandLineHelper` to handle command line arguments, which any action from the shell uses.
 
 == Notification ==
-The UI has made use of the `NotificationQueue` and `PriorityNotificationQueue` provider by the ServiceLocator and the observer pattern for SyncProgressWatcher to interact with the [http://code.google.com/p/big5sync/wiki/DeveloperComponentNotification Syncless.Notification] component.
+The UI has made use of the `NotificationQueue` and `PriorityNotificationQueue` provider by the `Syncless.Core.ServiceLocator` and the observer pattern for `SyncProgressWatcher` to interact with the [http://code.google.com/p/big5sync/wiki/DeveloperComponentNotification Syncless.Notification] component.
 
 The main notification components that are of concern are the `NotificationWatcher`, `PriorityNotificationWatcher`, `SyncProgressWatcher`.
 
