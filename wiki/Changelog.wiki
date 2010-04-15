@@ -1,6 +1,10 @@
 #summary *Featured* - List of changes in different version
 #labels Featured
 
+= Changelog for version _1.999 =
+ * Various bug fixes for User Interface.
+ * 
+
 = Changelog for version _1.5_ =
  * Second internal release of *Syncless*
 
