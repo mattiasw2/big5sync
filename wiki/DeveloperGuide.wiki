@@ -14,7 +14,7 @@ http://big5sync.googlecode.com/files/mainpagelogosmall.png
 
 == Architecture ==
         
-Following the Model-View-Controller (MVC) model, the system is split into User Interface (UI) and System Logic Layer (SLL). The UI is completely separated from SLL. The SLL uses a facade pattern. It is further divided into several sub-components, all of which work independently of one another.
+Following the Model-View-Controller (MVC) model, the system is split into User Interface (UI) and System Logic Layer (SLL) and some models classes. The UI is completely separated from SLL. The SLL uses a facade pattern. It is further divided into several sub-components, all of which work independently of one another. 
 
 Communication between the UI and the SLL is done through a Service Locator and an Interface. This allows us to change the SLL without affecting the UI. On top of that, this also allows other developers to create their own user interfaces to work with SLL.
 
