@@ -38,12 +38,16 @@ Syncless cannot access some of the protected removable drives to retrieve guid.i
 If Folder A is tagged with Folder D and Folder B is tagged with Folder C, a recursion will occur and folders will be created in them until they hit the maximum file path length.
     http://big5sync.googlecode.com/files/RecursiveTagging.jpg
 
+Refer to [http://code.google.com/p/big5sync/issues/detail?id=6 Issue 6]
 = !CompareAndSync =
 
 == !UnauthorizedAccessException Encountered ==
 
 Sometimes an !UnauthorizedAccessException is thrown during a manual sync/compare job. As of now, it is not handled since it occurs very rarely, and are in the process of implementing a better system.
 
+== Finalizing Can be Optimized ==
+
+Finalizing can be optimized further. Refer to [http://code.google.com/p/big5sync/issues/detail?id=178 Issue 178]
 = Monitor =
 
 == Errors Detecting Tagged Folder Deletion in Seamless Mode==
@@ -70,9 +74,13 @@ For example, Folder A and Folder B both containing 1.txt file of size 3MB are ta
 
 = User Interface =
 
+== Progress Bar Remains on Screen after Tags are removed ==
+
+Sometime progress bar still remains on screen after tags are removed. Refer to [http://code.google.com/p/big5sync/issues/detail?id=201 Issue 201]
+
 == Changes Made After Every Sync Not Shown ==
 
-Currently, the program does not show a list of changes made to the filesystem after every synchronization.
+Currently, the program does not show a list of changes made to the filesystem after every synchronization. Refer to [http://code.google.com/p/big5sync/issues/detail?id=148 Issue 148]
 
 == Tag Properties Panel ==
 
