@@ -20,7 +20,7 @@ The UI component consists of several important sub-components, including the sin
 `Ookii.Dialogs.Wpf.dll` - Folder Browser Dialog for Vista and Above 
 
 == WPF !ToolKit ==
-`System.Windows.Controls.Input.Toolkit.dll` - AutoCompleteBox in TagWindow
+`System.Windows.Controls.Input.Toolkit.dll` - AutoCompleteBox in `TagWindow`
 
 `WPFToolkit.dll` - Datagrid in `LogWindow` and `PreviewSyncWindow`
 
@@ -70,4 +70,4 @@ We would like to thank the following resources/developers for their contribution
   * *WPF !ToolKit* - http://www.codeplex.com/wpf (For its !DataGrid and AutoCompleteBox, which the current WPF release is lacking)
   * *Portable Settings Provider* - http://www.codeproject.com/KB/vb/CustomSettingsProvider.aspx (C# version by gpgemini)
   * *Vista-Style Folder Browser Dialog* - http://www.ookii.org/software/dialogs/
-  * *WPF NotifyIcon* - http://www.codeproject.com/KB/WPF/wpf_notifyicon.aspx
+  * *WPF !NotifyIcon* - http://www.codeproject.com/KB/WPF/wpf_notifyicon.aspx
