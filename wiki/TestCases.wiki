@@ -22,6 +22,11 @@
 || 11. || Rename a file from 2 folder || 1) Rename a file from 2 folders<br>2) Sync over || The file that is non-renamed will have syncless archive ||
 || 12. || Delete the same file in every folder || 1) Delete the file in each folder<br>2) Sync them || XML will be updated ||
 || 13. || Untag a folder and tag it again || 1) Untag a folder<br>2) Delete the files in it<br>3) Tag the folder removed in (1)<br>4) Sync again || The file will be repropagated again ||
+|| 14. || Rename a file from all folders || 1) Rename the files in all folder<br>2) Sync now || XML will be updated ||
+|| 15. || Update the file from all folders || 1) Update the file in all folders<br>2) Sync now || XML will be updated ||
+|| 16. || Rename each file to a different name || 1) Create a file and sync over<br>2) Rename the file in each directory<br>3) Sync over || XML should reflect all changes + all folder will reflect all number of file name ||
+|| 17. || Multiple Sync now || 1)  For the first tag , sync a large file<br>2) Go to the other multiple tag and sync now || Everything should be sync in order ||
+|| 18. || Sync with a removable storage and plug it out while syncing || 1) Create a tag with some folders from local directory and thumbdrive || 2) While synchronizing , plug it out || The program should not hang , while the other folders should not be affected ||
 
 [#Test_Cases Back to top]
 
