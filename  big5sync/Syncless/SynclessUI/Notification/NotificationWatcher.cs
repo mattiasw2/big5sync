@@ -94,8 +94,7 @@ namespace SynclessUI.Notification
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e.ToString());
-                        //Handle Exception by printing the debug log.
+                        ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
                     }
                 }
             }

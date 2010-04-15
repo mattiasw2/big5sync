@@ -48,30 +48,45 @@ namespace SynclessUI
         private Dictionary<string, string> _tagStatusNotificationDictionary =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
+        /// <summary>
+        /// Reference to the SystemLogicLayer whose subset of functionality is exposed to the User Interace.
+        /// </summary>
         public IUIControllerInterface LogicLayer;
 
+        /// <summary>
+        /// Current SyncProgress for keeping track of synchronizations
+        /// </summary>
         public SyncProgress CurrentProgress { get; set; }
 
+        /// <summary>
+        /// Gets/Sets the Current Tag on the TagList Panel. This is stored in the current application properties
+        /// </summary>
         public string SelectedTag
         {
             get { return (string)Application.Current.Properties["SelectedTag"]; }
-            set { Application.Current.Properties["SelectedTag"] = value; }
+            private set { Application.Current.Properties["SelectedTag"] = value; }
         }
 
         private HashSet<string> CancellingTags { get; set; }
 
+        /// <summary>
+        /// Gets/Sets the Current Tag Filter.
+        /// </summary>
         private string TagFilter
         {
             get { return TxtBoxFilterTag.Text.Trim(); }
             set { TxtBoxFilterTag.Text = value; }
         }
 
+        /// <summary>
+        /// Initializes the MainWindow
+        /// </summary>
         public MainWindow()
         {
             CancellingTags = new HashSet<string>();
             InitializeComponent();
             InitializeSyncless();
-            InitializeKeyboardShortcuts();
+            InitializeAllCommands();
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -117,12 +132,7 @@ namespace SynclessUI
                     _priorityNotificationWatcher = new PriorityNotificationWatcher(this);
                     _priorityNotificationWatcher.Start();
 
-                    if (Settings.Default.SynchronizeTime)
-                    {
-                        BackgroundWorker timeWorker = new BackgroundWorker();
-                        timeWorker.DoWork += timeWorker_DoWork;
-                        timeWorker.RunWorkerAsync();
-                    }
+                    InitializeTimeSyncOnStartup();
                 }
                 else
                 {
@@ -279,7 +289,8 @@ namespace SynclessUI
         #region Tag List Panel
 
         /// <summary>
-        ///     Gets the list of tags and then populates the Tag List Box and keeps a count
+        /// Get the Lists of Tag from the LogicLayer and populates the TagList, after which displays the first tag
+        /// if the list is not empty.
         /// </summary>
         public void InitializeTagList()
         {
@@ -360,6 +371,10 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Sets the Selected Tag on the TagList and then view the Tag on the TagInfoPanel
+        /// </summary>
+        /// <param name="tagname">Tag to Select</param>
         public void SelectTag(string tagname)
         {
             try
@@ -386,6 +401,10 @@ namespace SynclessUI
 
         #region Time Sync
 
+        /// <summary>
+        /// Helper Method to Initiate the Time Sync Program After the Time Sync icon is clicked
+        /// </summary>
+        /// <returns>True if the Time Sync was successful, False otherwise.</returns>
         private bool InitiateTimeSyncHelper()
         {
             Process timeSync = new Process();
@@ -404,6 +423,9 @@ namespace SynclessUI
             return timeSync.ExitCode == 0 ? true : false;
         }
 
+        /// <summary>
+        /// Calls the Time Sync Helper and displays the result
+        /// </summary>
         private void InitiateTimeSync()
         {
             bool result = InitiateTimeSyncHelper();
@@ -420,6 +442,25 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Starts the TimeSync on Application Startup if the user enables the auto time sync on startup.
+        /// Runs the TimeSync program on a background worker.
+        /// </summary>
+        private void InitializeTimeSyncOnStartup()
+        {
+            if (Settings.Default.SynchronizeTime)
+            {
+                BackgroundWorker timeWorker = new BackgroundWorker();
+                timeWorker.DoWork += timeWorker_DoWork;
+                timeWorker.RunWorkerAsync();
+            }
+        }
+
+        /// <summary>
+        /// Background worker to do TimeSync on Startup
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void timeWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             InitiateTimeSyncHelper();
@@ -429,16 +470,21 @@ namespace SynclessUI
 
         #region Header Panel
 
-        private void OpenSynclessWebpage()
+        /// <summary>
+        /// Opens the Syncless Webpage after the Syncless Logo has been clicked
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="sender"></param>
+        private void SynclessLogo_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Process.Start(new ProcessStartInfo("http://code.google.com/p/big5sync/"));
         }
 
-        private void SynclessLogo_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            OpenSynclessWebpage();
-        }
-
+        /// <summary>
+        /// Upon entering the Syncless Logo, the white highlight at the bottom will be displayed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SynclessLogoContainer_MouseEnter(object sender, MouseEventArgs e)
         {
             LogoHighlight.Visibility = Visibility.Visible;
@@ -471,6 +517,10 @@ namespace SynclessUI
             MinimizeWindow();
         }
 
+        /// <summary>
+        /// Sets the Window in a minimized state and totally minimizes to the taskbar
+        /// if the user has set the MinimizeToTray setting
+        /// </summary>
         private void MinimizeWindow()
         {
             WindowState = WindowState.Minimized;
@@ -478,6 +528,9 @@ namespace SynclessUI
                 ShowInTaskbar = false;
         }
 
+        /// <summary>
+        /// Restores the Main Window
+        /// </summary>
         public void RestoreWindow()
         {
             ShowInTaskbar = true;
@@ -487,14 +540,34 @@ namespace SynclessUI
             Focus();
         }
 
+        /// <summary>
+        /// Displays the Option Window after clicking on the options icon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnOptions_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DisplayOptionsWindow();
         }
 
+        /// <summary>
+        /// Displays the shortcuts Window after clicking on the shortcuts icon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnShortcuts_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DisplayShortcutsWindow();
+        }
+
+        /// <summary>
+        /// Displays the shortcut window
+        /// </summary>
+        private void DisplayShortcutsWindow()
+        {
+            ShortcutsWindow sw = new ShortcutsWindow(this);
+
+            sw.ShowDialog();
         }
 
         #endregion
@@ -948,14 +1021,22 @@ namespace SynclessUI
 
         #region Drag & Drop Functionality
 
+        /// <summary>
+        /// Mechanism which will handle any item that has been dragged into Syncless and dropped onto it.
+        /// After dropping and if item is a valid folder, the tag window will be displayed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LayoutRoot_Drop(object sender, DragEventArgs e)
         {
             try
             {
                 HideDropIndicator();
 
+                // If it is of file/drop type
                 if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
+                    // Get all items that have been dropped and loops through them
                     string[] foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
                     if (foldernames != null)
                         foreach (string i in foldernames)
@@ -963,24 +1044,23 @@ namespace SynclessUI
                             string path = i;
 
                             // convert potential shortcuts into folders
-                            string shortcutfolderpath = FileHelper.GetShortcutTargetFile(i);
+                            string shortcutfolderpath = FileFolderHelper.GetShortcutTargetFile(i);
                             if (shortcutfolderpath != null)
                             {
                                 path = shortcutfolderpath;
                             }
 
-                            // to detect folders
+                            // Check for the existence of folders
                             try
                             {
                                 DirectoryInfo folder = new DirectoryInfo(path);
-                                if (folder.Exists && !FileHelper.IsFile(path))
+                                if (folder.Exists && !FileFolderHelper.IsFile(path))
                                 {
+                                    // displays the tag window for each folder
                                     TagWindow tw = new TagWindow(this, path, SelectedTag, false);
                                 }
-                            }
-                            catch
-                            {
-                            }
+                            } catch {}  // do nothing, and this is the desired behavior. move on with the tagging process
+                                        // if an exception was encountered.
                         }
                 }
                 TxtBoxFilterTag.IsHitTestVisible = true;
@@ -991,13 +1071,21 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Event handler after any item has been dragged into the Main Window.
+        /// The items will be checked to see if they are folders. If one of them is, the tag to drop image will be displayed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LayoutRoot_DragEnter(object sender, DragEventArgs e)
         {
             try
             {
                 TxtBoxFilterTag.IsHitTestVisible = false;
+                // If it is of file/drop type
                 if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
+                    // Get all items that have been dropped and loops through them
                     string[] foldernames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
                     if (foldernames != null)
                         foreach (string i in foldernames)
@@ -1005,24 +1093,25 @@ namespace SynclessUI
                             string path = i;
 
                             // convert potential shortcuts into folders
-                            string shortcutfolderpath = FileHelper.GetShortcutTargetFile(path);
+                            string shortcutfolderpath = FileFolderHelper.GetShortcutTargetFile(path);
                             if (shortcutfolderpath != null)
                             {
                                 path = shortcutfolderpath;
                             }
 
-                            // to detect folders
+                            // Check for the existence of folders
                             try
                             {
                                 DirectoryInfo folder = new DirectoryInfo(path);
-                                if (folder.Exists && !FileHelper.IsFile(path))
+                                if (folder.Exists && !FileFolderHelper.IsFile(path))
                                 {
-                                    ShowDropIndicator();
+                                    ShowDropIndicator(); // Shows drop image
+                                    break;  // breaks out of the loop as the image will be displayed as long as one of the
+                                            // item dragged in is a folder
                                 }
                             }
-                            catch
-                            {
-                            }
+                            catch {}   // do nothing, and this is the desired behavior. move on with the tagging process
+                                       // if an exception was encountered.
                         }
                 }
             }
@@ -1032,18 +1121,30 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Behavior when the mouse is in drag and drop mode and has left the MainWindow
+        /// Hides the Drop to Tag Image restores back the hit test mode of the Main Window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LayoutRoot_DragLeave(object sender, DragEventArgs e)
         {
             HideDropIndicator();
             TxtBoxFilterTag.IsHitTestVisible = true;
         }
 
+        /// <summary>
+        /// Shows Drop To Tag Image on the Main Window
+        /// </summary>
         private void ShowDropIndicator()
         {
             DropIndicator.Visibility = Visibility.Visible;
             DropIndicator.Focusable = false;
         }
 
+        /// <summary>
+        /// Hides the Tag to Drop Image on the Main Window
+        /// </summary>
         private void HideDropIndicator()
         {
             DropIndicator.Visibility = Visibility.Hidden;
@@ -1052,6 +1153,13 @@ namespace SynclessUI
         #endregion
 
         #region Sync Progress Status
+
+        /// <summary>
+        /// Lookup the current Synchronization Progress Percentage if the selected tag is the tag currently
+        /// in synchronization or refers to the dictionary if it is not.
+        /// </summary>
+        /// <param name="tagname">Tag to lookup for progress percentage</param>
+        /// <returns></returns>
         public double GetSyncProgressPercentage(string tagname)
         {
             return CurrentProgress.TagName == tagname
@@ -1059,6 +1167,11 @@ namespace SynclessUI
                        : _syncProgressNotificationDictionary[tagname];
         }
 
+        /// <summary>
+        /// Get the current tag status from the Dictionary
+        /// </summary>
+        /// <param name="tagname">Tag to lookup for status</param>
+        /// <returns></returns>
         public string GetTagStatus(string tagname)
         {
             try
@@ -1092,10 +1205,14 @@ namespace SynclessUI
             ProgressBarSync.Foreground = new SolidColorBrush(Color.FromArgb(255, rcolor, gcolor, bcolor));
         }
 
-        public void ResetTagSyncStatus(string currentTag)
+        /// <summary>
+        /// Removes all Tag + Synchronization Status from a particular tag
+        /// </summary>
+        /// <param name="tag">Tag to reset</param>
+        public void ResetTagSyncStatus(string tag)
         {
-            _syncProgressNotificationDictionary.Remove(currentTag);
-            _tagStatusNotificationDictionary.Remove(currentTag);
+            _syncProgressNotificationDictionary.Remove(tag);
+            _tagStatusNotificationDictionary.Remove(tag);
             LblStatusText.Content = "";
         }
 
@@ -1103,6 +1220,11 @@ namespace SynclessUI
 
         #region Core Syncless Functionality
 
+        /// <summary>
+        /// Creates a new tag
+        /// </summary>
+        /// <param name="tagName">Tag to create</param>
+        /// <returns>True if it can be created. False if the tag already exists.</returns>
         public bool CreateTag(string tagName)
         {
             try
@@ -1327,6 +1449,11 @@ namespace SynclessUI
             driveMenu.IsOpen = true;
         }
 
+        private void DisplayTagWindow()
+        {
+            TagWindow tw = new TagWindow(this, "", SelectedTag, false);
+        }
+
         private void driveMenuItem_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -1375,6 +1502,11 @@ namespace SynclessUI
 
         #region Notification
 
+        /// <summary>
+        /// Displays a notification via a balloon in the Taskbar if tray notification is enabled.
+        /// </summary>
+        /// <param name="title">Title of the Balloon</param>
+        /// <param name="text">Text of the Balloon</param>
         public void NotifyBalloon(string title, string text)
         {
             if (Settings.Default.EnableTrayNotification)
@@ -1388,6 +1520,11 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Notify the UI that the cancellation is complete and refreshes the UI according to the Cancel State
+        /// if the currently selected tag is the tag which the cancellation has completed for.
+        /// </summary>
+        /// <param name="tagname">Tagname to cancel</param>
         public void NotifyCancelComplete(string tagname)
         {
             if (SelectedTag == tagname)
@@ -1400,19 +1537,24 @@ namespace SynclessUI
                 ProgressBarSync.Visibility = Visibility.Hidden;
                 LblProgress.Visibility = Visibility.Hidden;
                 _syncProgressNotificationDictionary.Remove(SelectedTag);
-                CancellingTags.Remove(tagname);
             }
-            else
-            {
-                CancellingTags.Remove(tagname);
-            }
+            CancellingTags.Remove(tagname);
         }
 
+        /// <summary>
+        /// Notify the UI that the auto sychronization is completed via tray notification.
+        /// </summary>
+        /// <param name="path">Path that has been synchronized</param>
         public void NotifyAutoSyncComplete(string path)
         {
             NotifyBalloon("Synchronization Completed", path + " is now synchronized.");
         }
 
+        /// <summary>
+        /// Notify the UI that there is nothing to synchronize and refreshes the UI according to the 
+        /// nothing to synchronize state if the currently selected tag is the tag which the notification is for
+        /// </summary>
+        /// <param name="tagname">Tagname to notify</param>
         public void NotifyNothingToSync(string tagname)
         {
             string message = "Nothing to Synchronize";
@@ -1426,7 +1568,6 @@ namespace SynclessUI
                 _manualSyncEnabled = true;
             }
 
-            LblStatusText.Content = message;
             _tagStatusNotificationDictionary[tagname] = message;
         }
 
@@ -1434,6 +1575,10 @@ namespace SynclessUI
 
         #region Progress Notification
 
+        /// <summary>
+        /// Notify that a synchronization has started and refreshes the UI if the tag of the progress is the currently selected tag
+        /// </summary>
+        /// <param name="progress">Progress to notify</param>
         public void ProgressNotifySyncStart(SyncProgress progress)
         {
             const string message = "Synchronization Started";
@@ -1447,6 +1592,10 @@ namespace SynclessUI
             NotifyBalloon("Synchronization Started", progress.TagName + " is being synchronized.");
         }
 
+        /// <summary>
+        /// Notify that analyzing has started and refreshes the UI if the tag of the progress is the currently selected tag
+        /// </summary>
+        /// <param name="progress">Progress to notify</param>
         public void ProgressNotifyAnalyzing(SyncProgress progress)
         {
             const string message = "Analyzing Folders";
@@ -1467,6 +1616,10 @@ namespace SynclessUI
             _tagStatusNotificationDictionary[tagname] = message;
         }
 
+        /// <summary>
+        /// Notify that synchronizing has started and refreshes the UI if the tag of the progress is the currently selected tag
+        /// </summary>
+        /// <param name="progress">Progress to notify</param>
         public void ProgressNotifySynchronizing(SyncProgress progress)
         {
             if (SelectedTag == progress.TagName)
@@ -1478,6 +1631,10 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Notify that finalizing has started and refreshes the UI if the tag of the progress is the currently selected tag
+        /// </summary>
+        /// <param name="progress">Progress to notify</param>
         public void ProgressNotifyFinalizing(SyncProgress progress)
         {
             if (SelectedTag == progress.TagName)
@@ -1489,6 +1646,10 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Notify that synchronization has completed and refreshes the UI if the tag of the progress is the currently selected tag
+        /// </summary>
+        /// <param name="progress">Progress to notify</param>
         public void ProgressNotifySyncComplete(SyncProgress progress)
         {
             string message = "Synchronization Completed at " + DateTime.Now;
@@ -1522,6 +1683,10 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Notify that that a state changed has occured and refreshes the UI if the tag of the progress is the currently selected tag
+        /// </summary>
+        /// <param name="progress">Progress to notify</param>
         public void ProgressNotifyChange(SyncProgress progress)
         {
             string message = string.Empty;
@@ -1571,6 +1736,11 @@ namespace SynclessUI
 
         #region Events Handlers for Taskbar Icon Context Menu Items
 
+        /// <summary>
+        /// Exits Syncless from the Taskbar Context Menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TaskbarExitItem_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -1580,26 +1750,51 @@ namespace SynclessUI
             catch (InvalidOperationException) {}
         }
 
+        /// <summary>
+        /// Displays the Option Window from the Taskbar Context Menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TaskbarOptionsItem_Click(object sender, RoutedEventArgs e)
         {
             DisplayOptionsWindow();
         }
 
+        /// <summary>
+        /// Displays the Tag Window from the Taskbar Context Menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TaskbarTagItem_Click(object sender, RoutedEventArgs e)
         {
             DisplayTagWindow();
         }
 
+        /// <summary>
+        /// Displays the list of removable drives to unmonitor from the Taskbar Context Menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TaskbarUnmonitorItem_Click(object sender, RoutedEventArgs e)
         {
             DisplayUnmonitorContextMenu();
         }
 
+        /// <summary>
+        /// Restores the Main Window from the Taskbar Context Menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TaskbarOpenItem_Click(object sender, RoutedEventArgs e)
         {
             RestoreWindow();
         }
 
+        /// <summary>
+        /// Restoress the Main Window from by click on the Taskbar Icon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TaskbarIcon_TrayLeftMouseDown(object sender, RoutedEventArgs e)
         {
             RestoreWindow();
@@ -1640,26 +1835,43 @@ namespace SynclessUI
 
         #region Methods & Helper Methods Implementation in IUIInterface
 
+        /// <summary>
+        /// Get the Directory Name for the Syncless Application
+        /// </summary>
+        /// <returns>The directory name where Syncless is opened from</returns>
         public string getAppPath()
         {
             return Path.GetDirectoryName(_appPath);
         }
 
+        /// <summary>
+        /// Called by the LogicLayer to refresh the Tag Info Panel if a drive changed event detected, and that tag is currently the selected tag
+        /// </summary>
         public void DriveChanged()
         {
             UpdateTagList_ThreadSafe();
         }
 
+        /// <summary>
+        /// Called by the LogicLayer to refresh the Tag List when tags have been changed.
+        /// </summary>
         public void TagsChanged()
         {
             UpdateTagList_ThreadSafe();
         }
 
+        /// <summary>
+        /// Called by the LogicLayer to refresh the Tag Info Panel if a Tag has been changed, and that tag is currently the selected tag
+        /// </summary>
+        /// <param name="tagName">Tag name to refresh</param>
         public void TagChanged(string tagName)
         {
             UpdateTagInfo_ThreadSafe(tagName);
         }
 
+        /// <summary>
+        /// Called by the LogicLayer to refresh the Path List if the path has been changed
+        /// </summary>
         public void PathChanged()
         {
             try
@@ -1727,6 +1939,10 @@ namespace SynclessUI
 
         #region Commandline Interface: Tag/Untag/Clean
 
+        /// <summary>
+        /// Method which passes any commandline arguments to CommandlineHelper for parsing
+        /// </summary>
+        /// <param name="args"></param>
         public void ProcessCommandLine(string[] args)
         {
             if (args.Length != 0)
@@ -1735,11 +1951,15 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Displays the tag window for a given p.ath
+        /// </summary>
+        /// <param name="clipath">Path from Commandline</param>
         public void CliTag(string clipath)
         {
             string tagname = "";
 
-            if (FileHelper.IsFile(clipath))
+            if (FileFolderHelper.IsFile(clipath))
             {
                 DialogHelper.ShowError(this, "Tagging not Allowed", "You cannot tag a file.");
                 return;
@@ -1759,15 +1979,17 @@ namespace SynclessUI
             TagWindow tw = new TagWindow(this, clipath, tagname, true);
         }
 
+        /// <summary>
+        /// Displays the Untag by folder Window for a given path
+        /// </summary>
+        /// <param name="clipath">Path from Commandline</param>
         public void CliUntag(string clipath)
         {
-            if (FileHelper.IsFile(clipath))
+            if (FileFolderHelper.IsFile(clipath))
             {
                 DialogHelper.ShowError(this, "Untagging not Allowed", "You cannot tag a file.");
                 return;
             }
-
-            DirectoryInfo di = null;
 
             try
             {
@@ -1782,9 +2004,13 @@ namespace SynclessUI
             UntagWindow tw = new UntagWindow(this, clipath, true);
         }
 
+        /// <summary>
+        /// Cleans a path of all meta-data files.
+        /// </summary>
+        /// <param name="clipath">Path from Commandline</param>
         public void CliClean(string clipath)
         {
-            if (FileHelper.IsFile(clipath))
+            if (FileFolderHelper.IsFile(clipath))
             {
                 DialogHelper.ShowError(this, "Cleaning not Allowed", "You cannot clean a file.");
                 return;
@@ -1806,9 +2032,12 @@ namespace SynclessUI
 
         #endregion
 
-        #region Keyboard Commands
+        #region Commands
 
-        private void InitializeKeyboardShortcuts()
+        /// <summary>
+        /// Initialize All KeyboardCommands
+        /// </summary>
+        private void InitializeAllCommands()
         {
             InitializeCreateTagCommand();
             InitializeRemoveTagCommand();
@@ -1824,6 +2053,9 @@ namespace SynclessUI
             InitializeTimeSyncCommand();
         }
 
+        /// <summary>
+        /// Initialize TimeSyncCommand
+        /// </summary>
         private void InitializeTimeSyncCommand()
         {
             RoutedCommand TimeSyncCommand = new RoutedCommand();
@@ -1838,6 +2070,9 @@ namespace SynclessUI
             InputBindings.Add(ib);
         }
 
+        /// <summary>
+        /// Initialize ExitCommand
+        /// </summary>
         private void InitializeExitCommand()
         {
             RoutedCommand ExitCommand = new RoutedCommand();
@@ -1850,6 +2085,9 @@ namespace SynclessUI
             InputBindings.Add(ib);
         }
 
+        /// <summary>
+        /// Initialize LogCommand
+        /// </summary>
         private void InitializeLogCommand()
         {
             RoutedCommand LogCommand = new RoutedCommand();
@@ -1864,6 +2102,9 @@ namespace SynclessUI
             InputBindings.Add(ib);
         }
 
+        /// <summary>
+        /// Initialize ShortcutsCommand
+        /// </summary>
         private void InitializeShortcutsCommand()
         {
             RoutedCommand ShortcutsCommand = new RoutedCommand();
@@ -1879,6 +2120,9 @@ namespace SynclessUI
             InputBindings.Add(ib1);
         }
 
+        /// <summary>
+        /// Initialize MinimizeCommand
+        /// </summary>
         private void InitializeMinimizeCommand()
         {
             RoutedCommand MinimizeCommand = new RoutedCommand();
@@ -1891,6 +2135,9 @@ namespace SynclessUI
             InputBindings.Add(ib);
         }
 
+        /// <summary>
+        /// Initialize OptionsCommand
+        /// </summary>
         private void InitializeOptionsCommand()
         {
             RoutedCommand OptionsCommand = new RoutedCommand();
@@ -1903,6 +2150,9 @@ namespace SynclessUI
             InputBindings.Add(ib);
         }
 
+        /// <summary>
+        /// Initialize UnmonitorCommand
+        /// </summary>
         private void InitializeUnmonitorCommand()
         {
             RoutedCommand UnmonitorCommand = new RoutedCommand();
@@ -1917,6 +2167,9 @@ namespace SynclessUI
             InputBindings.Add(ib);
         }
 
+        /// <summary>
+        /// Initialize TagDetailsCommand
+        /// </summary>
         private void InitializeTagDetailsCommand()
         {
             RoutedCommand DetailsCommand = new RoutedCommand();
@@ -1931,6 +2184,9 @@ namespace SynclessUI
             InputBindings.Add(ib);
         }
 
+        /// <summary>
+        /// Initialize UntagCommand
+        /// </summary>
         private void InitializeUntagCommand()
         {
             RoutedCommand UntagCommand = new RoutedCommand();
@@ -1945,6 +2201,9 @@ namespace SynclessUI
             InputBindings.Add(ib);
         }
 
+        /// <summary>
+        /// Initialize TagCommand
+        /// </summary>
         private void InitializeTagCommand()
         {
             RoutedCommand TagCommand = new RoutedCommand();
@@ -1959,6 +2218,9 @@ namespace SynclessUI
             InputBindings.Add(ib);
         }
 
+        /// <summary>
+        /// Initialize RemoveTagCommand
+        /// </summary>
         private void InitializeRemoveTagCommand()
         {
             RoutedCommand RemoveTagCommand = new RoutedCommand();
@@ -1973,6 +2235,9 @@ namespace SynclessUI
             InputBindings.Add(ib);
         }
 
+        /// <summary>
+        /// Initialize CreateTagCommand
+        /// </summary>
         private void InitializeCreateTagCommand()
         {
             RoutedCommand CreateTagCommand = new RoutedCommand();
@@ -1987,6 +2252,11 @@ namespace SynclessUI
             InputBindings.Add(ib);
         }
 
+        /// <summary>
+        /// Code Exected When Create Tag Command is called. Displays Create Tag Window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CreateTagCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
@@ -1994,77 +2264,132 @@ namespace SynclessUI
             ctw.ShowDialog();
         }
 
+        /// <summary>
+        /// EventHandler to determined if Create Tag Command can be executed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CreateTagCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Code Exected When Remove Tag Command is called. Calls the RemoveTag();
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RemoveTagCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
             RemoveTag();
         }
 
+        /// <summary>
+        /// EventHandler to determined if RemoveTag Command can be executed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RemoveTagCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;
         }
-
+        
+        /// <summary>
+        /// Code Exected When Tag Command is called. Display Tag Window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TagCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
             DisplayTagWindow();
         }
 
-        private void DisplayTagWindow()
-        {
-            TagWindow tw = new TagWindow(this, "", SelectedTag, false);
-        }
-
+        /// <summary>
+        /// EventHandler to determined if Tag Command can be executed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TagCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;
         }
 
+        /// <summary>
+        /// EventHandler to determined if Untag Command can be executed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UntagCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
             Untag();
         }
 
+        /// <summary>
+        /// EventHandler to determined if Untag Command can be executed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UntagCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Code Exected When Details Command is called. Display Tag Details
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DetailsCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
             DisplayTagDetailsWindow();
         }
 
+        /// <summary>
+        /// EventHandler to determined if Details Command can be executed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DetailsCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Code Exected When Log Command is called. Displays Log Window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LogCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
             DisplayLogWindow();
         }
 
+        /// <summary>
+        /// EventHandler to determined if Log Command can be executed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LogCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Code Exected When Exit Command is called. Exits Syncless
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ExitCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
@@ -2074,77 +2399,125 @@ namespace SynclessUI
             } catch {}
         }
 
+        /// <summary>
+        /// EventHandler to determined if Exit Command can be executed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ExitCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Code Exected When Unmonitor Command is called. Displayed all removable drives
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UnmonitorCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
             DisplayUnmonitorContextMenu();
         }
 
+        /// <summary>
+        /// EventHandler to determined if Unmonitor Command can be executed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UnmonitorCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Code Exected When OptionsCommand is called. Displays Option Window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OptionsCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
             DisplayOptionsWindow();
         }
 
+        /// <summary>
+        /// EventHandler to determined if Options Command can be executed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OptionsCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Code Exected When Minimize Command is called. Minimizes Syncless
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MinimizeCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
             MinimizeWindow();
         }
 
+        /// <summary>
+        /// EventHandler to determined if Minimize Command can be executed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MinimizeCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Code Exected When ShortcutsCommand is called. Display Shortcuts Window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ShortcutsCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
             DisplayShortcutsWindow();
         }
 
+        /// <summary>
+        /// EventHandler to determined if Shortcuts Command can be executed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ShortcutsCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;
         }
 
+        /// <summary>
+        /// Code Exected When TimeSyncCommand is called. Initiate Time Sync
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TimeSyncCommandExecute(object sender, ExecutedRoutedEventArgs e)
         {
             e.Handled = true;
             InitiateTimeSync();
         }
 
+        /// <summary>
+        /// EventHandler to determined if TimeSync Command can be executed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TimeSyncCommandCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
             e.Handled = true;
-        }
-
-        private void DisplayShortcutsWindow()
-        {
-            ShortcutsWindow sw = new ShortcutsWindow(this);
-
-            sw.ShowDialog();
         }
 
         #endregion

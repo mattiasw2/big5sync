@@ -120,7 +120,7 @@
     <Compile Include="DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helper\FileHelper.cs" />
+    <Compile Include="Helper\FileFolderHelper.cs" />
     <Compile Include="Helper\DialogHelper.cs" />
     <Compile Include="Helper\DialogType.cs" />
     <Compile Include="LogWindow.xaml.cs">

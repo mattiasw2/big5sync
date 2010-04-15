@@ -9,10 +9,13 @@ using Shell32;
 
 namespace SynclessUI.Helper
 {
-    public static class FileHelper
+    /// <summary>
+    /// Helper class to help the UI to handle the checking of files and folders for the purpose of validation
+    /// </summary>
+    public static class FileFolderHelper
     {
         /// <summary>
-        /// Syncless File Types To Detect
+        /// Syncless Folder Types To Detect
         /// </summary>
         private const string SYNCLESS = ".syncless";
         private const string ARCHIVE = "_synclessarchive";

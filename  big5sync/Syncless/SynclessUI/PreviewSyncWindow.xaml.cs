@@ -32,11 +32,19 @@ namespace SynclessUI
         private BackgroundWorker _previewWorker;
         private bool _closingAnimationNotCompleted = true; // status of whether closing animation is complete
 
+        /// <summary>
+        /// The Preview Sync DataTable which will be used to populate with data from the PreviewVisitor
+        /// </summary>
         public DataTable PreviewSyncData
         {
             get { return _previewSyncData; }
         }
 
+        /// <summary>
+        /// Initializes the PreviewSyncWindow
+        /// </summary>
+        /// <param name="main">Reference to the Main Window</param>
+        /// <param name="selectedTag">Tagname to preview</param>
         public PreviewSyncWindow(MainWindow main, string selectedTag)
         {
             _selectedTag = selectedTag;

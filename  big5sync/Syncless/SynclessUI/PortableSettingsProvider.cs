@@ -17,7 +17,8 @@ namespace SynclessUI
 {
     /// <summary>
     /// PortableSettingsProvider class ensures that application settings can be saved to the application folder itself
-    /// instead of the user profile. Used in the configuration of Application Settings.
+    /// instead of the user profile. Used in the configuration of Application Settings. Code is totally from
+    /// from http://www.codeproject.com/KB/vb/CustomSettingsProvider.aspx and not done by the developers of Syncless
     /// </summary>
 
     public class PortableSettingsProvider : SettingsProvider
