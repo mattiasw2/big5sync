@@ -1,5 +1,5 @@
 #summary Developers' Guide - Diagram - SystemLogicLayer
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0
 #sidebar DeveloperGuideSidebar
 == !CreateTag ==
 
@@ -11,8 +11,8 @@ http://big5sync.googlecode.com/files/SLLTagFolderSequenceDiagram.jpg
 
 == !UntagFolder ==
 
-http://big5sync.googlecode.com/files/SLLUntagFolder.jpg
+http://big5sync.googlecode.com/files/SLLUntagFolderSequenceDiagram.png
 
 == !DeleteTag ==
 
-http://big5sync.googlecode.com/files/SLLDeleteTag.jpg
+http://big5sync.googlecode.com/files/SLLDeleteTagSequenceDiagram.png
