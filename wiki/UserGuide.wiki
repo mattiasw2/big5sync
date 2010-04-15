@@ -215,33 +215,34 @@ You can personalize Syncless through the http://big5sync.googlecode.com/files/Ap
 
 http://big5sync.googlecode.com/files/Default_General_Settings_Window.png
 
+_Options enabled by default are prefixed with `*`_
 
-==== Show Welcome Screen on Application Start ====
+==== `*`Show Welcome Screen on Application Start ====
 
 Syncless has an informative welcome screen which highlights the unique features of Syncless. Each feature has a link to the Synclses online User Guide where the feature is explained in more details. You can choose to show the welcome screen on startup by checking the option.
 
 
-==== Enable Shell Integration ====
+==== `*`Enable Shell Integration ====
 
 Syncless makes tagging easy for you by integrating directly into Windows Explorer. You can simply right-click on any folder you wish to tag. In the case where you rather not have this function, you can uncheck the option.
 
 
-==== Enable Window Animation on Application Start/Exit ====
+==== `*`Enable Window Animation on Application Start/Exit ====
 
 Syncless's main window will animate upon start up or exit. You may choose to disable the function by unchecking the option.
 
 
-==== Enable Tray Notifications ====
+==== `*`Enable Tray Notifications ====
 
 Syncless notifies you through tray notification upon initialization/completion of synchronization. Enable/disable the function by checking/unchecking the option.
 
 
-==== Enable Notification Sounds ====
+==== `*`Enable Notification Sounds ====
 
 Syncless not only notifies you of synchronization initialization/completion through tray notification. It also plays notification sounds to notify you when you are not viewing the screen. Enable the function by checking the option.
 
 
-==== When Minimizing, Minimize to Tray ====
+==== `*`When Minimizing, Minimize to Tray ====
 
 Syncless can minimize to tray so that your task bar will be kept as clean as possible. However, if you wish to access Syncless more quickly through the task bar, you can disable the function by unchecking the option.
 
@@ -257,13 +258,14 @@ Syncless makes synchronization even safer by providing archiving option. Just in
 
 http://big5sync.googlecode.com/files/Default_Archive_Settings_Window.png
 
+_Options enabled by default are prefixed with `*`_
 
 ==== Send to Recycle Bin ====
 
 To send deleted files to Recycle Bin, simply check the option. Uncheck the option if you do not wish to send any file to Recycle Bin.
 
 
-==== Move Last N Changes to `_`synclessArchive ====
+==== `*`Move Last N Changes to `_`synclessArchive ====
 
 To move deleted files to Syncless' archive folder (`_`synclessArchive), simply check the option. You can select up to 10 archive files to keep by moving the slider. Uncheck the option if you do not wish to move any file to Syncless' archive folder.
 
