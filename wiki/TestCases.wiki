@@ -1,5 +1,5 @@
 #summary Developers' Guide - Test Cases
-#labels Phase-QA
+#labels Phase-QA,V2.0
 #sidebar DeveloperGuideSidebar
 
 <wiki:toc max_depth="3">
@@ -132,7 +132,7 @@
 == !TimeSync ==
 
 || *No.* || *Summary* || *Steps* || *Expected Output* ||
-|| 1. || !Timesync || 1) Change the time clock<br>2) Click on timesync || Time will be synchronised ||
+|| 1. || Timesync || 1) Change the time clock<br>2) Click on timesync || Time will be synchronised ||
 
 [#Test_Cases Back to top]
 
