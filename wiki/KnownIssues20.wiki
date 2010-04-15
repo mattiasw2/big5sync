@@ -56,3 +56,6 @@ Currently, the program does not show a list of changes made to the filesystem af
 
 == Datagrid Rendering Issue ==
 Slight rendering issue on Log Window. The log table might automatically resize after scrolling the window, most likely due to a custom component bug.
+
+== No Notification When Cancelling/Switching To Seamless Mode ==
+Refer to [http://code.google.com/p/big5sync/issues/detail?id=203 Issue 203].
