@@ -46,9 +46,22 @@ The user interface makes use of session settings to keep track of settings in a 
 The UI makes use of the `RegistryHelper` to write registry entries to enable shell integration. It also uses the `CommandLineHelper` to handle command line arguments, which any action from the shell uses.
 
 = WPF Features In Play =
+The user interface has made use of features such as data binding, animation and commands in WPF. The following explains animation and commands
 
 == Animation ==
-All windows makes use of animation through storyboarding and triggers. All animations are stored in the `.xaml` class of each window. To edit them, please use Microsoft Express Blend 3.0 - http://www.microsoft.com/expression/products/Blend_Overview.aspx
+All windows makes use of animation through storyboarding and triggers. All animations are stored in the `.xaml` class of each window. To edit the animation or trigger itself, please use Microsoft Express Blend 3.0 - http://www.microsoft.com/expression/products/Blend_Overview.aspx
+
+In order to start storyboards manually, please refer to the sample code below. It will locate for the Storyboard `MainWindowOnLoaded` in the window's resources and then begin loading.
+
+{{{
+private void DisplayLoadingAnimation()
+{
+        ..
+        Storyboard loading = (Storyboard)Resources["MainWindowOnLoaded"];
+        loading.Begin();
+        ..
+}
+}}}
 
 == Commands ==
 Almost all keyboard shortcuts and toolbar functionality in `MainWindow` have been initialized through commands.
