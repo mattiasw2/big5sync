@@ -54,8 +54,5 @@ Sometime progress bar still remains on screen after tags are removed. Refer to [
 == Changes Made after Every Sync Not Shown ==
 Currently, the program does not show a list of changes made to the filesystem after every synchronization. Refer to [http://code.google.com/p/big5sync/issues/detail?id=148 Issue 148]
 
-== Unable to detect U3 Partitions ==
-Syncless is unable to detect U3 partitions on a thumbdrive. This means that features like tagging and unmonitoring will not be available for it.
-
 == Datagrid Rendering Issue ==
 Slight rendering issue on Log Window. The log table might automatically resize after scrolling the window, most likely due to a custom component bug.
