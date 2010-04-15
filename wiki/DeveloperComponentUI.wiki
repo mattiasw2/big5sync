@@ -54,7 +54,7 @@ The main notification components that are of concern are the `NotificationWatche
   * `PriorityNotificationWatcher` - to dequeue any notification in the `UIPriorityQueue`
   * `SyncProgressWatcher` - to watch a particular !`SyncProgress` as an observer for any changes to the !`SyncProgress`
 
-=== NotificationWatcher & PriorityNotificationWatcher ===
+=== !NotificationWatcher & !PriorityNotificationWatcher ===
 `NotificationWatcher` and `PriorityNotificationWatcher` both run threads to dequeue any notification. After handling the notification, they will notify the `MainWindow`to refresh itself. Refer to the sample code in `NotificationWatcher`
 
 {{{
@@ -73,7 +73,7 @@ if (notification.NotificationCode.Equals(NotificationCode.SyncStartNotification)
 }
 }}}
 
-=== SyncProgressWatcher ===
+=== !SyncProgressWatcher ===
 
 SyncProgressWatcher is initialized when a `NotificationCode.SyncStartNotification` is received. It then adds itself as a watcher to the SyncProgress and notifies the `MainWindow` to refresh itself whenever the progress is changed. Refer to the sample code below in `SyncProgressWatcher`
 
