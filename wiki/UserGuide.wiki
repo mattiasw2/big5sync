@@ -213,7 +213,7 @@ You can personalize Syncless through the http://big5sync.googlecode.com/files/Ap
 
 === General and User Interface Settings ===
 
-http://big5sync.googlecode.com/files/General_Settings_Window.png
+http://big5sync.googlecode.com/files/Default_General_Settings_Window.png
 
 
 ==== Show Welcome Screen on Application Start ====
@@ -255,7 +255,7 @@ Worried that your files are out-of-sync because the system clocks are not consis
 
 Syncless makes synchronization even safer by providing archiving option. Just in case you accidentally delete a file and perform synchronization on this file, you can still retrieve it from either the Recycle Bin or the Syncless' archive folder.
 
-http://big5sync.googlecode.com/files/Archive_Settings_Window.png
+http://big5sync.googlecode.com/files/Default_Archive_Settings_Window.png
 
 
 ==== Send to Recycle Bin ====
