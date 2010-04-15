@@ -41,10 +41,6 @@ If Folder A is tagged with Folder D and Folder B is tagged with Folder C, a recu
 Refer to [http://code.google.com/p/big5sync/issues/detail?id=6 Issue 6]
 = !CompareAndSync =
 
-== !UnauthorizedAccessException Encountered ==
-
-Sometimes an !UnauthorizedAccessException is thrown during a manual sync/compare job. As of now, it is not handled since it occurs very rarely, and are in the process of implementing a better system.
-
 == Finalizing Can be Optimized ==
 
 Finalizing can be optimized further. Refer to [http://code.google.com/p/big5sync/issues/detail?id=178 Issue 178]
