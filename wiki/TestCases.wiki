@@ -142,3 +142,10 @@
 || 1. || Safely remove a removable storage || 1) Go to tray and safely remove thumbdrive || Removable drive should be removed successfully and updated on the tag window display ||
 
 [#Test_Cases Back to top]
+
+== Monitoring and Unmonitoring ==
+
+|| *No.* || *Summary* || *Steps* || *Expected Output* ||
+|| 1. || Safely remove a removable storage || 1) Tag A , B  into Tag '1'<br>2) Tag B , C in Tag '2'<br>3) Switch both to seamless<br>4) Put a file in folder B<br>5) Ensure that the file in B goes to A and C<br>6) Put a file in C , ensure that it goes to A<br>7) Put a file in A , ensure that it goes to C<br>8) Switch Tag '2' to manual<br>9) Put a file in C , it should not go to A or B<br>10) Put a file in B , it should go to A<br>11) Put a file in A , it should go to B , not C<br>12) Switch Tag '1' to manual. Put a file in all A , B and C ... nothing will happen || NA ||
+
+[#Test_Cases Back to top]
