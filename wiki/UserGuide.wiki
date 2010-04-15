@@ -16,6 +16,8 @@ This user's guide provides a detailed insight into the functionality available i
 
 = Welcome to Syncless =
 
+http://big5sync.googlecode.com/files/Welcome_Window.png
+
 Synchronization is taken on a whole new level with _*Syncless*_. This user's guide familiarizes you with the basic features in _*Syncless*_ and introduces you to the concepts of *tagging* and *n-way* _seamless synchronization_ in _*Syncless*_.
 
 _*Syncless*_ allows you to synchronize your files and folders automatically through the use of tags, even across removable drives. With _*Syncless*_, you can quickly tag multiple folders and configure them to be either in _seamless_ or _manual_ synchronization mode. Syncless is designed to have the finest usability that caters to each individual's workflow. Lastly, Syncless is a portable application, so it will run off any removable drive with no installation required.
