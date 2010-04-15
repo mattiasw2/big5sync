@@ -275,6 +275,15 @@ Access the preview result window through the http://big5sync.googlecode.com/file
 
 http://big5sync.googlecode.com/files/Preview_Window.png
 
+Each operation is explained by the arrow legend as shown below:
+
+http://big5sync.googlecode.com/files/Preview_New.png
+
+http://big5sync.googlecode.com/files/Preview_Updated.png
+
+http://big5sync.googlecode.com/files/Preview_Delete.png
+
+http://big5sync.googlecode.com/files/Preview_Rename.png
 
 === Viewing Logs ===
 
