@@ -51,9 +51,7 @@ The UI makes heavy use of the
 == Preview Synchronization ==
 The Preview Synchronization makes use of the visitor pattern which has been used in the [http://code.google.com/p/big5sync/wiki/DeveloperComponentCompareAndSync Syncless.CompareAndSync] component. 
 
-
-Firstly, the Preview Synchronization 
-
+The algorithm in `PreviewVisitor`, which is similar to that of the `SyncerVisitor` in `Syncless.CompareAndSync` is used to populate the datagrid in `PreviewSyncWindow`.
 
 = WPF Features In Play =
 The user interface has made use of features such as data binding, customization of controls, animation and commands in WPF. The following explains animation and commands.
