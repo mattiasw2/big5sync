@@ -149,3 +149,17 @@
 || 1. || Safely remove a removable storage || 1) Tag A , B  into Tag '1'<br>2) Tag B , C in Tag '2'<br>3) Switch both to seamless<br>4) Put a file in folder B<br>5) Ensure that the file in B goes to A and C<br>6) Put a file in C , ensure that it goes to A<br>7) Put a file in A , ensure that it goes to C<br>8) Switch Tag '2' to manual<br>9) Put a file in C , it should not go to A or B<br>10) Put a file in B , it should go to A<br>11) Put a file in A , it should go to B , not C<br>12) Switch Tag '1' to manual. Put a file in all A , B and C ... nothing will happen || NA ||
 
 [#Test_Cases Back to top]
+
+== Tagging Merge ==
+
+|| *No.* || *Steps* || *Expected Output* ||
+|| 1. || 1) Delete all the .syncless<br>2) Create tag ‘A’ in Computer  1. Tag folder A in computer 1 , tag folder B in thumbdrive<br>3) Go to computer 2 || Tag A will appear , folder B will appear ||
+|| 2. || 1) Tag folder C in computer 2<br>2) Tag folder D in thumbdrive<br>3) Go to computer 1 || Folder C will be tagged but not shown. Folder D will be shown ||
+|| 3. || 1) Create tag B in computer 1<br>2) Tag folder E in computer 1 , tag folder F in thumb<br>3)Untag folder B from tag A<br>4) Go to computer 2 || Folder B will be untagged. Tag B will appear ||
+|| 4. || 1) Delete tag A<br>2) Go to computer A || Ensure Tag A is unmonitored and deleted ||
+|| 5. || 1) Create tag A in computer 1<br>2) Create tag A in computer 2
+( Thumbdrive is always in computer 1)<br>3) Tag something to A in thumbdrive<br>4) Plug the thumbdrive to computer 2 || When plugged into computer 2 , can see path ||
+|| 6. || 1) Create tag B in computer 1<br>2) Create tag B in computer 2<br>3) Delete tag B in computer 1<br>4) Plug into computer 2 || B will be deleted from computer 2 ||
+|| 7. || 1) Create tag C in computer 1<br>2) Delete tag C in computer 1<br>3) Create tag C in computer 2<br>4) Plug into computer 2 || C should not be deleted ||
+
+[#Test_Cases Back to top]
