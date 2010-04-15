@@ -58,3 +58,4 @@ We would like to thank the following resources/developers for their valuable con
   * *WPF !ToolKit* - http://www.codeplex.com/wpf (For its !DataGrid and AutoCompleteBox, which the current WPF release is lacking)
   * *Portable Settings Provider* - http://www.codeproject.com/KB/vb/CustomSettingsProvider.aspx (C# version by gpgemini)
   * *Vista-Style Folder Browser Dialog* - http://www.ookii.org/software/dialogs/
+  * *WPF NotifyIcon* - http://www.codeproject.com/KB/WPF/wpf_notifyicon.aspx
