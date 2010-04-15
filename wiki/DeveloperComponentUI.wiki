@@ -56,10 +56,10 @@ In order to start storyboards manually, please refer to the sample code below. I
 {{{
 private void DisplayLoadingAnimation()
 {
-        ..
-        Storyboard loading = (Storyboard)Resources["MainWindowOnLoaded"];
-        loading.Begin();
-        ..
+    ..
+    Storyboard loading = (Storyboard)Resources["MainWindowOnLoaded"];
+    loading.Begin();
+    ..
 }
 }}}
 
