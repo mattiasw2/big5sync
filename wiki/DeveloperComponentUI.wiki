@@ -10,7 +10,7 @@ The User Interface (UI) component is in charge of handling all interactions betw
 
 = Classes =
 
-The UI component consists of several important sub-components, including the single instance layer - `SingleInstanceManager` , `SynclessApplication`, windows - `MainWindow`, `TagWindow`, `UntagWindow`, `TagDetailsWindow`, `ShortcutsWindow`, `LogWindow`, `WelcomeScreenWindow`, `PreviewSyncWindow`, `DialogWindow`, `CreateTagWindow`, `OptionsWindow`, helper components - `CommandLineHelper`, `RegistryHelper`, `FileFolderHelper`, `DialogType`, `DialogHelper`, resource dictionary - `AppResourceDictionary`, misc components - `PortableSettingsProvider`.
+The UI component consists of several important sub-components, including the single instance layer - `SingleInstanceManager` , `SynclessApplication`, windows - `MainWindow`, `TagWindow`, `UntagWindow`, `TagDetailsWindow`, `ShortcutsWindow`, `LogWindow`, `WelcomeScreenWindow`, `PreviewSyncWindow`, `DialogWindow`, `CreateTagWindow`, `OptionsWindow`, helper components - `CommandLineHelper`, `RegistryHelper`, `FileFolderHelper`, `DialogType`, `DialogHelper`, resource dictionary - `AppResourceDictionary`, notification components - `NotificationWatcher`, `PriorityNotificationWatcher`, `SyncProgressWatcher`, preview sync components - `PreviewVisitor`, `SyncUIHelper` , misc components - `PortableSettingsProvider`.
 
 = Description of Design =
 
@@ -37,11 +37,11 @@ The UI makes use of the `RegistryHelper` to write registry entries to enable she
 Our overall goal is to make the whole tagging and synchronization process as simple and seamless as ever.
 
   # Seamless - When Syncless is synchronizing files in the background, users should forget that Syncless is on.
-  # Minimalist - Our interface aims to prevent cognitive overload on users.
   # Intuitive - Users should find Syncless' functionality intuitive.
+  # Minimalist - Our interface aims to prevent cognitive overload on users.
+  # Best of Class - Aim to adopt the best UI practices from application and web development.
   # Accessible - Users should be able to use Syncless, whether by keyboard/mouse, from the shell or drag and drag.
-  # Best-of-Class - Aim to adopt the best UI practices from application and web development.
-  
+
 = Developing an Alternative User Interface for Syncless =
      
 To create a UI for Syncless, the developer just need to follow a few steps.
