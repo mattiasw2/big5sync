@@ -48,10 +48,10 @@ The UI makes use of the `RegistryHelper` to write registry entries to enable she
 = WPF Features In Play =
 
 == Animation ==
-All windows makes use of animation through storyboarding and triggers. All animations are stored in the `.xaml` class of each window. To edit them, please use Microsoft Express Blend.  
+All windows makes use of animation through storyboarding and triggers. All animations are stored in the `.xaml` class of each window. To edit them, please use Microsoft Express Blend 3.0 - http://www.microsoft.com/expression/products/Blend_Overview.aspx
 
 == Commands ==
-Almost all keyboard commands in `MainWindow` have been initialized through commands.
+Almost all keyboard shortcuts and toolbar functionality in `MainWindow` have been initialized through commands.
 
 Refer to the following sample code below:
 
@@ -83,6 +83,10 @@ private void TimeSyncCommandCanExecute(object sender, CanExecuteRoutedEventArgs 
 }
 }}}
 
+`TimeSyncCommandExecute` contains the actual code to execute the actual TimeSync functionality.
+`TimeSyncCommandCanExecute` contains the code to ensure that the command can be executed.
+`TimeSyncCommand` is the actual command which will be assign to components like `BtnTimeSync`
+`CommandBinding` binds all the above 3 together.
 
 = UI Design Principles & Philosophy =
 
