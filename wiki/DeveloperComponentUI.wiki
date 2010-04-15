@@ -22,7 +22,7 @@ The UI component consists of several important sub-components, including the sin
 == WPF !ToolKit ==
 `System.Windows.Controls.Input.Toolkit.dll` - AutoCompleteBox in TagWindow
 
-`WPFToolkit.dll` - Datagrid in !`LogWindow` and !`PreviewSyncWindow`
+`WPFToolkit.dll` - Datagrid in `LogWindow` and `PreviewSyncWindow`
 
 = Description of Design =
 
