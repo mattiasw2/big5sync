@@ -1,4 +1,4 @@
-#summary A page containing all Syncless videos.
+#summary *Featured* - A page containing all Syncless videos.
 #labels Featured
 
 = Syncless 0.9 Sneak Preview =
