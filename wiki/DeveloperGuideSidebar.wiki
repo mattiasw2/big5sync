@@ -7,6 +7,7 @@
       * [UserGuide#Why_Use_Syncless? Why Use Syncless?]
       * [UserGuide#What_is_a_Tag? What is a Tag?]
       * [UserGuide#What_You'll_Need What You'll Need]
+      * [UserGuide#What_Is_Recommended What Is Recommended]
       * [UserGuide#The_Syncless_Interface The Syncless Interface]
     * [UserGuide#Getting_Started Getting Started]
       * [UserGuide#Understanding_the_Syncless_Interface Understanding the Syncless Interface]
