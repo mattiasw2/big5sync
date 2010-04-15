@@ -91,7 +91,7 @@
 || 5. || Copy a folder with a file into any of the tagged folder || 1) Copy a folder with a file || Folder will be propagated with the file inside ||
 || 6. || Propagating a locked file || 1) Open MS word<br>2) Tag 2 folder that is seamless || All files (if any) will sync over except for the locked file | File will not be propagated if there is no changes ||
 || 7. || Propagating a file that has path that is too long || 1) Create a file with maximum file path<br>2) Tag 2 folder<br>3) Delete the file || The file with maximum file path will not be sync over to the other folder. If the file is renamed to acceptable filepath , it should sync over automatically ||
-|| 8. || !ToDo in Seamless || 1) Tag 3 folders , with 1 being a thumbdrive<br>2) Create a file in all 3 of them<br>3) Untag the removable storage media<br>4) Delete the file in the remaining folder. The deletion will propagate to the other folder<br>5) Update the thumbdrive from another computer<br>6) Insert the same thumbdrive back || All 3 tagged folders will have the new updated folder ||
+|| 8. || !ToDo in Seamless || 1) Tag 3 folders , with 1 being a thumbdrive<br>2) Create a file in one of the folder<br>3) Safety remove the removable storage media<br>4) Delete the file in one of the remainding folder. The deletion will propagate to the other folder<br>5) Update the thumbdrive from another computer<br>6) Insert the same thumbdrive back || All 3 tagged folders will have the new updated file ||
 || 9. || Seamless delete propagation || 1) Create a folder<br>2) After the folder is propagated , delete that folder || Ensure no folder is being recreated after deletion ||
 || 10. || Seamless copy and paste || 1) Create a tag , switch it to seamless<br>2) Tag 3 folders which are empty<br>3) Throw a folder with some files into either of the folder (try 2nd and 3rd folder) || Folders and files should be propagated over ||
 || 11. || Seamless tagging of folders || 1) Create a tag (Set it to seamless) with 2 folders from a removable storage<br>2) Tag the 3rd folder from local directory<br>3) Put a file in the local directory and wait to sync over || Folder and files should be propagated over ||
@@ -114,10 +114,10 @@
 || 8. || Syncing a locked file || 1) Sync a locked (MS word) file over<br>2) Locked file is not synced over || All other UI component should be working normally ||
 || 9. || Closing Syncless while syncing || 1) Sync a large folder<br>2) Quit Syncless || Should show the termination bar ||
 || 10. || Closing Syncless with many components open || 1) Open log<br>2) Click on tag at tray<br>3) Click on exit at tray || Should terminate syncless properly ||
-|| 11. || Untagging with no tags || 1) Create a tag<br>2) Delete the tag<br>3) Click on untag || Nothing should happen ||
+|| 11. || Untagging with no tags || 1) Create a tag<br>2) Tag some folders<br>3) Untag all folders<br>4) Try Untagging again || Nothing should happen ||
 || 12. || Spamming Cancel and Sync Now button || 1) Spam the Cancel and Sync Now button || Cancel button should disappear only at synchronization stage ||
 || 13. || Sync now and Cancel || 1) Sync now with a big folder<br>2) Go to another tag and sync now too<br>3) While analyzing the large file , cancel the analyze. Preview button will show<br>4) Then switch mode || Other tag synchronization should continue ||
-|| 14. || Sync and untag from windows explorer || 1) Sync a few tags<br>2) Untag them from windows explorer || Should not display any progress bar ||
+|| 14. || Sync and untag from windows explorer || 1) Sync a few tags<br>2) Untag them from windows explorer after sync complete || Should not display any progress bar ||
 
 [#Test_Cases Back to top]
 
