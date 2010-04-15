@@ -8,33 +8,33 @@
 
 The *Notification* component provides a low coupling medium for the control layer to pass information to the *User Interface*. It also allows the lower facade layer to pass information to the Logic layer.
 
-The main reason for this implementation is to have the message come in a particular order for processing and at the same time, allow other function in the system to work asynchronously.
+The main reason for this implementation is to have the message come in a particular order for processing and at the same time, allow the other functions in the system to work asynchronously.
 
 = Classes =
 
-The main important classes for Notification include `NotificationQueue` and `INotificationQueue`. Many notifications are implemented in both UI and *System Logic Layer*. At UI layer, it needs to implement watchers to watch all notifications which belong to the `Notification.UINotification` namespace.
+The main classes for Notification include `NotificationQueue` and `INotificationQueue`. Many notifications are implemented in both UI and *System Logic Layer*. At UI layer, it needs to implement watchers to watch all notifications which belong to the `Notification.UINotification` namespace.
 
-== List of Notifications for User Interface ==
- #  `AutoSyncCompleteNotification` - informs the User Interface that a seamless synchronization request is completed.
- #  `CancelSyncNotification` - informs the User Interface that a synchronization request is cancelled.
- #  `NothingToSyncNotification` - informs the User Interface that there is nothing to synchronize.
- #  `SyncCompleteNotification` - informs the User Interface that the synchronization is completed.
- #  `SyncStartNotification` - informs the User Interface that the synchronization is started.
+== Notifications for User Interface ==
+ #  `AutoSyncCompleteNotification` - Informs the User Interface that a seamless synchronization request is completed.
+ #  `CancelSyncNotification` - Informs the User Interface that a synchronization request is cancelled.
+ #  `NothingToSyncNotification` - Informs the User Interface that there is nothing to synchronize.
+ #  `SyncCompleteNotification` - Informs the User Interface that the synchronization is completed.
+ #  `SyncStartNotification` - Informs the User Interface that the synchronization is started.
 
-== List of Notifications for Logic Layer ==
- #  `AddTagNotification` - informs the Logic Layer to add a tag. Used during merging of tagging profiles.
- #  `MonitorPathNotification` - informs the Logic Layer to start monitoring a path. Called after switching from manual to seamless mode.
- #  `MonitorTagNotification` - informs the Logic Layer to start monitoring a tag. Used during merging of tags.
- #  `RemoveTagNotification` - informs the Logic Layer to remove a tag. Used during removing of a tag.
- #  `SaveNotification` - informs the Logic Layer to perform a save on Xml files. Used when `SystemLogicLayer` is initiated, terminated or when there are changes made to the file system.
- #  `TaggedFolderDeletedNotification` - informs the Logic Layer that a tagged folder is deleted. Used during merging of tagging profiles.
- #  `TaggedPathDeletedNotification` - informs the Logic Layer that a tagged path is deleted. Used during merging of tagging profiles.
- #  `UnMonitorPathNotification` - informs the Logic Layer to start unmonitoring a path. Called after switching from manual to seamless mode.
+== Notifications for Logic Layer ==
+ #  `AddTagNotification` - Informs the Logic Layer to add a tag. Used during merging of tagging profiles.
+ #  `MonitorPathNotification` - Informs the Logic Layer to start monitoring a path. Called after switching from manual to seamless mode.
+ #  `MonitorTagNotification` - Informs the Logic Layer to start monitoring a tag. Used during merging of tags.
+ #  `RemoveTagNotification` - Informs the Logic Layer to remove a tag. Used during removing of a tag.
+ #  `SaveNotification` - Informs the Logic Layer to perform a save on Xml files. Used when `SystemLogicLayer` is initiated, terminated or when there are changes made to the file system.
+ #  `TaggedFolderDeletedNotification` - Informs the Logic Layer that a tagged folder is deleted. Used during merging of tagging profiles.
+ #  `TaggedPathDeletedNotification` - Informs the Logic Layer that a tagged path is deleted. Used during merging of tagging profiles.
+ #  `UnMonitorPathNotification` - Informs the Logic Layer to start unmonitoring a path. Called after switching from manual to seamless mode.
 
 = Description of Design =
 
 == Observer Pattern ==
-The Notification component makes use of the observer pattern to notify its watchers to resume their threads if new notification is added to the queue. 
+The Notification component makes use of the observer pattern to notify its watchers to resume their threads if new notifications are added to the queue. 
 
 == Factory Pattern ==
 Factory pattern is also used to create notification objects. A `NotificationFactory` class provides methods to create such notification objects such that whichever method that performs the call does not need to know the exact class that is used to create the object.
