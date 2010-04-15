@@ -35,16 +35,38 @@ namespace SynclessUI
     /// </summary>
     public partial class MainWindow : Window, IUIInterface
     {
-        private string _appPath;
-        private bool _closenormally = true;
+        /// <summary>
+        /// Path of the Application
+        /// </summary>
+        private string _appPath; 
+        /// <summary>
+        /// Status if Syncless has closed normally. Set to false when Syncless fails to initialize on startup
+        /// </summary>
+        private bool _closednormally = true;
+        /// <summary>
+        /// Status to check if Manual Sync Operations is enabled
+        /// </summary>
         private bool _manualSyncEnabled = true;
 
+        /// <summary>
+        /// Notification Watcher
+        /// </summary>
         private NotificationWatcher _notificationWatcher;
-        private PriorityNotificationWatcher _priorityNotificationWatcher;
+        
+        /// <summary>
+        /// Priority Notification Watcher
+        /// </summary>
+        private PriorityNotificationWatcher _priorityNotificationWatcher; 
 
+        /// <summary>
+        /// Dictionary to store the sync progress percentage of every tag in use
+        /// </summary>
         private Dictionary<string, double> _syncProgressNotificationDictionary =
             new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
 
+        /// <summary>
+        /// Dictionary to store the tag status of every tag in use
+        /// </summary>
         private Dictionary<string, string> _tagStatusNotificationDictionary =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
@@ -67,6 +89,9 @@ namespace SynclessUI
             private set { Application.Current.Properties["SelectedTag"] = value; }
         }
 
+        /// <summary>
+        /// Set of all tags that are in cancelling mode
+        /// </summary>
         private HashSet<string> CancellingTags { get; set; }
 
         /// <summary>
@@ -97,7 +122,7 @@ namespace SynclessUI
         #region Initializing Syncless
 
         /// <summary>
-        ///     Starts up the system logic layer and initializes it
+        /// Starts up the system logic layer and initializes it
         /// </summary>
         private void InitializeSyncless()
         {
@@ -109,36 +134,42 @@ namespace SynclessUI
                 Application.Current.Properties["AppPath"] = _appPath;
                 LogicLayer = ServiceLocator.GUI;
 
+                // Initialize LogicLayer
                 if (LogicLayer.Initiate(this))
                 {
+                    // Initialize Shell Integration
                     if (Settings.Default.EnableShellIntegration)
                     {
                         RegistryHelper.CreateRegistry(_appPath);
                     }
 
+                    // Initialize tag panels
                     InitializeTagInfoPanel();
                     InitializeTagList();
+
                     Show();
                     Topmost = true;
                     Topmost = false;
 
+                    // Display Welcome Screen
                     if (!Settings.Default.EnableAnimation)
                     {
                         DisplayWelcomeScreen(this, null);
                     }
 
+                    // Initialize Notification Watchers
                     _notificationWatcher = new NotificationWatcher(this);
                     _notificationWatcher.Start();
                     _priorityNotificationWatcher = new PriorityNotificationWatcher(this);
                     _priorityNotificationWatcher.Start();
 
-                    InitializeTimeSyncOnStartup();
+                    InitializeTimeSyncOnStartup(); // Start Time Sync
                 }
                 else
                 {
                     DialogHelper.ShowError(this, "Syncless Initialization Error",
-                                           "Syncless has failed to initialize and will now exit.");
-                    _closenormally = false;
+                                           "Syncless has failed to initialize and will now exit.\nPlease refer to http://code.google.com/p/big5sync/wiki/FAQs for more info");
+                    _closednormally = false;
 
                     try
                     {
@@ -152,6 +183,9 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Displays the Grand Loading Animation
+        /// </summary>
         private void DisplayLoadingAnimation()
         {
             if (Settings.Default.EnableAnimation)
@@ -161,6 +195,9 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Displays the Grand Unloading Animation
+        /// </summary>
         private void DisplayUnloadingAnimation()
         {
             if (Settings.Default.EnableAnimation)
@@ -178,6 +215,12 @@ namespace SynclessUI
             }
         }
 
+
+        /// <summary>
+        /// Displays the Welcome Screen
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DisplayWelcomeScreen(object sender, EventArgs e)
         {
             if (Settings.Default.DisplayWelcomeScreen)
@@ -193,25 +236,36 @@ namespace SynclessUI
 
         #region De-Initializing Syncless
 
+        /// <summary>
+        /// Helper Method to do all methods to terminate Syncless
+        /// </summary>
+        /// <param name="showAnimation"></param>
         private void TerminateNow(bool showAnimation)
         {
-            Settings.Default.Save();
-            if (Settings.Default.EnableShellIntegration == false)
+            Settings.Default.Save(); // Save all settings
+            if (Settings.Default.EnableShellIntegration == false) // Disable Shell Integration if necessary
             {
                 RegistryHelper.RemoveRegistry();
             }
+            // Stop notification watchers
             _notificationWatcher.Stop();
             _priorityNotificationWatcher.Stop();
 
+            // Shows unloading animation
             if (showAnimation)
                 DisplayUnloadingAnimation();
         }
 
+        /// <summary>
+        /// Carrys out all necessary steps to properly terminate Syncless when the user wants to close Syncless
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             try
             {
-                if (_closenormally)
+                if (_closednormally)
                 {
                     // Prepares the SLL for termination
                     if (LogicLayer.PrepareForTermination())
@@ -227,11 +281,13 @@ namespace SynclessUI
                         }
                         else
                         {
+                            // Cancels the closing event
                             e.Cancel = true;
                         }
                     }
                     else
                     {
+                        // If Syncless not prepared for termination
                         bool result = DialogHelper.ShowWarning(this, "Exit",
                                                                "Are you sure you want to exit Syncless?" +
                                                                "\nAll current synchronization operations will be completed and" +
@@ -239,10 +295,12 @@ namespace SynclessUI
 
                         if (!result)
                         {
+                            // if user decides not to
                             e.Cancel = true;
                         }
                         else
                         {
+                            // Shows the termination window via a background worker
                             DialogWindow terminationWindow = DialogHelper.ShowIndeterminate(this,
                                                                                             "Termination in Progress",
                                                                                             "Please wait for the current synchronization to complete.");
@@ -262,6 +320,11 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Termination Window Background Worker Work to Do
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bw_DoWork(object sender, DoWorkEventArgs e)
         {
             DialogWindow terminationWindow = e.Argument as DialogWindow;
@@ -269,6 +332,12 @@ namespace SynclessUI
             e.Result = terminationWindow;
         }
 
+        /// <summary>
+        /// When the background worker for the termination window has completed, sets the dialog window to be closable
+        /// and closes Syncless
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             DialogWindow terminationWindow = e.Result as DialogWindow;
@@ -276,7 +345,7 @@ namespace SynclessUI
             {
                 terminationWindow.
                     CannotBeClosed =
-                    false;
+                    false; // Syncless can be finally closed
                 terminationWindow.
                     Close();
             }));
@@ -320,6 +389,11 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Any Selection change on the list of tags result in it being viewed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListBoxTag_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ListBoxTag.SelectedItem == null) return;
@@ -328,6 +402,11 @@ namespace SynclessUI
             ViewTagInfo(ListBoxTag.SelectedItem.ToString());
         }
 
+        /// <summary>
+        /// If the user press on the delete key on an unempty tag list, calls the remove tag process.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListBoxTag_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Delete && ListBoxTag.Items.Count > 0)
@@ -336,6 +415,12 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// For every text change in the tag filter, get all tags and filter the tag list based on the filter as 
+        /// long as it contains the charactes in the tag filter and refreshes the list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TxtBoxFilterTag_TextChanged(object sender, TextChangedEventArgs e)
         {
             try
@@ -350,6 +435,7 @@ namespace SynclessUI
 
                         int initial = taglist.Count;
 
+                        // Looks through the tag list and takes those tags which contains the character
                         foreach (string x in taglist)
                         {
                             if (x.ToLower().Contains(TagFilter.ToLower()))
@@ -358,6 +444,7 @@ namespace SynclessUI
 
                         int after = filteredtaglist.Count;
 
+                        // Displays Tag Count
                         LblTagCount.Content = "[" + after + "/" + initial + "]";
 
                         ListBoxTag.ItemsSource = null;
@@ -594,6 +681,9 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Resets the tag info panel to the original state
+        /// </summary>
         private void ResetTagInfoPanel()
         {
             TagTitle.Text = "Select a Tag";
@@ -607,17 +697,27 @@ namespace SynclessUI
             ListTaggedPath.ItemsSource = null;
         }
 
+        /// <summary>
+        /// Display the tag details window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TagIcon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DisplayTagDetailsWindow();
         }
 
+        /// <summary>
+        /// View the tag in the tag info panel
+        /// </summary>
+        /// <param name="tagname">Tag to be viewed</param>
         private void ViewTagInfo(string tagname)
         {
             try
             {
                 TagView tv = LogicLayer.GetTag(tagname);
 
+                // if tag not found, reset the panel and initialize the tag list
                 if (tv == null)
                 {
                     ResetTagInfoPanel();
@@ -627,13 +727,16 @@ namespace SynclessUI
                 SelectedTag = tagname;
                 TagTitle.Text = tv.TagName;
 
+                // Show Path List
                 ListTaggedPath.ItemsSource = tv.PathStringList;
 
+                // Sets visibility of the various components in the tag info panel
                 TagIcon.Visibility = Visibility.Visible;
                 TagStatusPanel.Visibility = Visibility.Visible;
                 SyncPanel.Visibility = Visibility.Visible;
                 BdrTaggedPath.Visibility = tv.PathStringList.Count == 0 ? Visibility.Hidden : Visibility.Visible;
 
+                // If there is stored current progress percentage
                 if (_syncProgressNotificationDictionary.ContainsKey(tagname))
                 {
                     double percentageComplete = GetSyncProgressPercentage(tagname);
@@ -649,6 +752,7 @@ namespace SynclessUI
                     SetProgressBarColor(0);
                 }
 
+                // if there is stored tag status
                 if (_tagStatusNotificationDictionary.ContainsKey(tagname))
                 {
                     string tagStatus = GetTagStatus(tagname);
@@ -673,6 +777,7 @@ namespace SynclessUI
                     LblProgress.Visibility = Visibility.Hidden;
                 }
 
+                // Refreshes the tag info panel according to the tag info according current mode of the tag.
                 switch (tv.TagState)
                 {
                     case TagState.SeamlessToManual:
@@ -690,6 +795,8 @@ namespace SynclessUI
                         ManualMode();
                         break;
                 }
+                
+                // if tag is in a state of cancellation
                 if (CancellingTags.Contains(SelectedTag))
                 {
                     BtnSyncNow.IsEnabled = false;
@@ -707,11 +814,16 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Event handler for BtnSyncMode Click and does the approriate events depending on what mode it is in
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSyncMode_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("Hi");
             if (!_manualSyncEnabled)
             {
+                // If in Manual Sync, Cancel Synchronization
                 bool success = LogicLayer.CancelSwitch(SelectedTag);
                 if (!success)
                 {
@@ -723,8 +835,10 @@ namespace SynclessUI
 
             try
             {
+                // if tag is not locked
                 if (!LogicLayer.GetTag(SelectedTag).IsLocked && !(GetTagStatus(SelectedTag) == "Finalizing"))
                 {
+                    // Button is in Manual mode now, change to seamless
                     if (string.Compare((string)LblSyncMode.Content, "Manual") == 0)
                     {
                         if (LogicLayer.SwitchMode(SelectedTag, TagMode.Seamless))
@@ -734,15 +848,13 @@ namespace SynclessUI
                             const string message = "Please Wait";
                             LblStatusText.Content = message;
                             _tagStatusNotificationDictionary[SelectedTag] = message;
-
-                            Console.WriteLine("User -> Switching");
                         }
                         else
                         {
                             DialogHelper.ShowError(this, "Change Synchronization Mode Error",
                                                    SelectedTag + " could not be switched to Seamless Mode.");
                         }
-                    }
+                    } // if button is in seamless mode, switch to manual mode
                     else if (string.Compare((string)LblSyncMode.Content, "Seamless") == 0)
                     {
                         if (LogicLayer.SwitchMode(SelectedTag, TagMode.Manual))
@@ -762,6 +874,7 @@ namespace SynclessUI
                 }
                 else
                 {
+                    // if the tag is not locked, allow the user to cancel the switching
                     bool success = LogicLayer.CancelSwitch(SelectedTag);
                     if (!success)
                     {
@@ -776,20 +889,29 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Handles the BtnSyncNow click and does the approriate events depending on what mode it is in
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSyncNow_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                // Calls a path changed just in case some path has changed
                 PathChanged();
 
+                // if Button is in sync now mode
                 if (LblSyncNow.Content.Equals("Sync Now"))
                 {
-                    BtnSyncNow.IsEnabled = false;
+                    BtnSyncNow.IsEnabled = false; // disable spamming
 
                     try
                     {
+                        // if more than one path to sync
                         if (LogicLayer.GetTag(SelectedTag).PathStringList.Count > 1)
                         {
+                            // start manual sync
                             if (LogicLayer.StartManualSync(SelectedTag))
                             {
                                 ProgressBarSync.Visibility = Visibility.Visible;
@@ -814,7 +936,7 @@ namespace SynclessUI
                         {
                             DialogHelper.ShowError(this, "Nothing to Synchronize",
                                                    "You can only synchronize when there are two or more folders.");
-                            SyncButtonMode();
+                            SyncButtonMode(); // set back to sync button mode
                         }
                     }
                     catch (UnhandledException)
@@ -824,10 +946,12 @@ namespace SynclessUI
 
                     BtnSyncNow.IsEnabled = true;
                 }
-                else
+                else // button is in syncing mode currently
                 {
                     BtnSyncNow.IsEnabled = false;
                     bool success = LogicLayer.CancelManualSync(SelectedTag);
+                    
+                    // set to cancelling mode
                     if (success)
                     {
                         CancellingTags.Add(SelectedTag);
@@ -847,8 +971,14 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Event handler for BtnPreview
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnPreview_Click(object sender, RoutedEventArgs e)
         {
+            // if in the various modes below, preview cannot proceed
             if (!_manualSyncEnabled || LogicLayer.GetTag(SelectedTag).IsLocked || GetTagStatus(SelectedTag) == "Finalizing")
             {
                 DialogHelper.ShowError(this, SelectedTag + " is Synchronizing",
@@ -856,6 +986,7 @@ namespace SynclessUI
                 return;
             }
 
+            // Preview enabled only if more than 1 path
             if (LogicLayer.GetTag(SelectedTag).PathStringList.Count > 1)
             {
                 PreviewSyncWindow psw = new PreviewSyncWindow(this, SelectedTag);
@@ -868,6 +999,9 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Sets The Tag Info Panel to Seamless Mode
+        /// </summary>
         private void SeamlessMode()
         {
             LblSyncMode.Content = "Seamless";
@@ -879,11 +1013,13 @@ namespace SynclessUI
             LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOnForeground");
             ProgressBarSync.Visibility = Visibility.Hidden;
             LblProgress.Visibility = Visibility.Hidden;
-            Console.WriteLine("In Seamless Mode");
             LblStatusTitle.Visibility = Visibility.Hidden;
             LblStatusText.Visibility = Visibility.Hidden;
         }
 
+        /// <summary>
+        /// Sets The Tag Info Panel to Switching Mode
+        /// </summary>
         private void SwitchingMode()
         {
             LblSyncMode.Content = "Please Wait";
@@ -897,6 +1033,7 @@ namespace SynclessUI
             TagView tv = LogicLayer.GetTag(SelectedTag);
             if(tv != null)
             {
+                // if state is manual switching to seamless
                 if (tv.TagState == TagState.ManualToSeamless)
                 {
                     if (CurrentProgress != null && CurrentProgress.TagName == SelectedTag)
@@ -921,7 +1058,7 @@ namespace SynclessUI
                         ProgressBarSync.Visibility = Visibility.Hidden;
                         LblProgress.Visibility = Visibility.Hidden;
                     }
-                }
+                } // else if stats is seamless to manual
                 else if (tv.TagState == TagState.SeamlessToManual)
                 {
                     ProgressBarSync.Visibility = Visibility.Visible;
@@ -929,11 +1066,13 @@ namespace SynclessUI
                 }
             }
 
-            Console.WriteLine("In Switching Mode");
             LblStatusTitle.Visibility = Visibility.Visible;
             LblStatusText.Visibility = Visibility.Visible;
         }
 
+        /// <summary>
+        /// Sets The Tag Info Panel to Manual Mode
+        /// </summary>
         private void ManualMode()
         {
             try
@@ -945,9 +1084,12 @@ namespace SynclessUI
                 LblSyncMode.SetResourceReference(MarginProperty, "ToggleOffMargin");
                 LblSyncMode.SetResourceReference(ForegroundProperty, "ToggleOffForeground");
 
+                // Check the current tag status of the selected tag
                 if (_tagStatusNotificationDictionary.ContainsKey(SelectedTag))
                 {
                     ProgressBarSync.Visibility = Visibility.Visible;
+                    
+                    // check if the tag is in analyzing mode
                     if (CurrentProgress.TagName == SelectedTag && CurrentProgress.State == SyncState.Analyzing)
                     {
                         LblProgress.Visibility = Visibility.Hidden;
@@ -959,10 +1101,10 @@ namespace SynclessUI
                     }
                 }
 
-                Console.WriteLine("In Manual Mode");
                 LblStatusTitle.Visibility = Visibility.Visible;
                 LblStatusText.Visibility = Visibility.Visible;
 
+                // Set the visibility of BtnSyncNow and BtnPreview depending on whether what synchronization mode it is in
                 if (SelectedTag != null)
                 {
                     TagView tv = LogicLayer.GetTag(SelectedTag);
@@ -1005,12 +1147,18 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Sets the BtnSyncNow to the cancel sync mode
+        /// </summary>
         private void CancelButtonMode()
         {
             LblSyncNow.Content = "Cancel Sync";
             LblSyncNow.ToolTip = "Cancel Current Synchronization";
         }
 
+        /// <summary>
+        /// Sets the BtnSyncNow to the initial mode
+        /// </summary>
         private void SyncButtonMode()
         {
             LblSyncNow.Content = "Sync Now";
@@ -1186,6 +1334,11 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Sets the colour of the progress bar depending on the percentage. Change in colour of the progress bar
+        /// is based on the percentage of the progress which is passed in
+        /// </summary>
+        /// <param name="percentageComplete">Progress Bar Percentage</param>
         private void SetProgressBarColor(double percentageComplete)
         {
             byte rcolor = 0, gcolor = 0;
@@ -1255,6 +1408,9 @@ namespace SynclessUI
             return true;
         }
 
+        /// <summary>
+        /// Remove the currently selected tag if it is not locked
+        /// </summary>
         private void RemoveTag()
         {
             try
@@ -1266,6 +1422,7 @@ namespace SynclessUI
                         bool result = DialogHelper.ShowWarning(this, "Remove Tag",
                                                                "Are you sure you want to remove " + SelectedTag + "?");
 
+                        // if users really want to remove
                         if (result)
                         {
                             if (!LogicLayer.GetTag(SelectedTag).IsLocked)
@@ -1273,6 +1430,8 @@ namespace SynclessUI
                                 bool success = LogicLayer.DeleteTag(SelectedTag);
                                 if (success)
                                 {
+                                    // Wipe all trace of the tag from the stored statuses and reset the taginfo panel and the initialize tag list.
+
                                     _syncProgressNotificationDictionary.Remove(SelectedTag);
                                     _tagStatusNotificationDictionary.Remove(SelectedTag);
 
@@ -1309,6 +1468,9 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Untags the currently selected path from the Tag, but only if the tag is not locked
+        /// </summary>
         private void Untag()
         {
             try
@@ -1321,8 +1483,10 @@ namespace SynclessUI
                 {
                     string currentTag = SelectedTag;
 
+                    // if tag is not locked
                     if (!LogicLayer.GetTag(currentTag).IsLocked)
                     {
+                        // if no path was selected
                         if (ListTaggedPath.SelectedIndex == -1)
                         {
                             DialogHelper.ShowError(this, "No Path Selected", "Please select a path to untag.");
@@ -1383,6 +1547,9 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Displays the Tag Details Window, but only if the tag is not synchronizing.
+        /// </summary>
         private void DisplayTagDetailsWindow()
         {
             if (SelectedTag != null)
@@ -1404,13 +1571,21 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Displays the Log Window
+        /// </summary>
         private void DisplayLogWindow()
         {
             LogWindow lw = new LogWindow(this);
         }
 
+        /// <summary>
+        /// Displays the option window, and make it single instance as multiple options can be called via the 
+        /// context tray if it is not.
+        /// </summary>
         private void DisplayOptionsWindow()
         {
+            // Single Instance handling
             if (Application.Current.Properties["OptionsWindowIsOpened"] == null)
             {
                 Application.Current.Properties["OptionsWindowIsOpened"] = false;
@@ -1423,6 +1598,9 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Displays the Unmonitor Context Menu, and populates the drive with all USB Drive letters
+        /// </summary>
         private void DisplayUnmonitorContextMenu()
         {
             ContextMenu driveMenu = new ContextMenu();
@@ -1449,11 +1627,19 @@ namespace SynclessUI
             driveMenu.IsOpen = true;
         }
 
+        /// <summary>
+        /// Displays the Default Tag Window
+        /// </summary>
         private void DisplayTagWindow()
         {
             TagWindow tw = new TagWindow(this, "", SelectedTag, false);
         }
 
+        /// <summary>
+        /// Unmonitors the drive which is clicked under the Unmonitor Context Menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void driveMenuItem_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -1481,18 +1667,33 @@ namespace SynclessUI
 
         #endregion
 
-        #region Tag Info Panel Context Menu
+        #region Tag List Panel Context Menu
 
+        /// <summary>
+        /// Calls the Remove Tag via Context Menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RemoveTagRightClick_Click(object sender, RoutedEventArgs e)
         {
             RemoveTag();
         }
 
+        /// <summary>
+        /// Displays Tag Details Window via Context Menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DetailsRightClick_Click(object sender, RoutedEventArgs e)
         {
             DisplayTagDetailsWindow();
         }
 
+        /// <summary>
+        /// Displays Tag Window via Context Menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TagRightClick_Click(object sender, RoutedEventArgs e)
         {
             DisplayTagWindow();
@@ -1804,21 +2005,39 @@ namespace SynclessUI
 
         #region Events Handlers for Tag Info Panel Context Menu
 
+        /// <summary>
+        /// Calls the Window Explorer Helper from Tag Info Panel Context Menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OpenInExplorerRightClick_Click(object sender, RoutedEventArgs e)
         {
             OpenFolderInWindowsExplorerHelper();
         }
 
+        /// <summary>
+        /// Calls the Untag from Tag Info Panel Context Menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UntagRightClick_Click(object sender, RoutedEventArgs e)
         {
             Untag();
         }
 
+        /// <summary>
+        /// Opens Windows Explorer upon path double click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListTaggedPath_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             OpenFolderInWindowsExplorerHelper();
         }
 
+        /// <summary>
+        /// Helper method to open the folder in Windows Explorer
+        /// </summary>
         private void OpenFolderInWindowsExplorerHelper()
         {
             string path = (string)ListTaggedPath.SelectedItem;
@@ -1902,6 +2121,10 @@ namespace SynclessUI
             }
         }
 
+        /// <summary>
+        /// Refreshes the currently selected tag
+        /// </summary>
+        /// <param name="tagName"></param>
         private void UpdateTagInfo_ThreadSafe(string tagName)
         {
             Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action) (() =>
@@ -1913,6 +2136,9 @@ namespace SynclessUI
             }));
         }
 
+        /// <summary>
+        /// Refreshes the whole tag list
+        /// </summary>
         private void UpdateTagList_ThreadSafe()
         {
             try
