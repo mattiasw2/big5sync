@@ -312,7 +312,7 @@ After applying the above algorithm, we should get the following, with the priori
 
 || A\Note.txt (1) || B\Note.txt (1) || C\Note.txt (0) || D\Note.txt (2) || E\Note.txt(0) ||
 
-Clearly, D\Note.txt is the most updated file. To end it off, !SyncerVisitor will then look for the file or folder with the highest priority at each node, and execute the necessary action base on the !ChangeType. Once that is done, XMLWriterVisitor will visit it and write the updated values, such as the hash and last modified date, back to the metadata. For a more detailed overview of how the tree and the visitors work, please take a look at this [http://big5sync.googlecode.com/files/%5BTeam1%5DMerged_Tree_Overview_2.0.pps presentation].
+Clearly, D\Note.txt is the most updated file. To end it off, !SyncerVisitor will then look for the file or folder with the highest priority at each node, and execute the necessary action base on the !ChangeType. Once that is done, XMLWriterVisitor will visit it and write the updated values, such as the hash and last modified date, back to the metadata. For a more detailed overview of how the tree and the visitors work, please take a look at this [http://big5sync.googlecode.com/files/Merged_Tree_Overview_V2.0.pps presentation].
 
 == Seamless Mode ==
 Seamless mode is much more simpler than manual mode. It simply receives *!AutoSyncRequest* objects, and processes them accordingly.
