@@ -1543,16 +1543,18 @@ namespace Syncless.Core
             InitiateSave();
             //Retrieve all the Path string from the list of path that are not deleted from the tag.
             List<string> pathList = new List<string>();
-            foreach (TaggedPath path in tag.FilteredPathList)
-            {
-                pathList.Add(path.PathName);
-            }
+            
             //Convert all the paths to physical path.
             //if mode is seamless, start monitoring all of them.
             //if mode is manual, unmonitor all of them.
-            List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(pathList);
+           
             if (mode)
             {
+                foreach (TaggedPath path in tag.FilteredPathList)
+                {
+                    pathList.Add(path.PathName);
+                }
+                List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(pathList);
                 foreach (string path in convertedPath)
                 {
                     try
@@ -1566,6 +1568,25 @@ namespace Syncless.Core
             }
             else
             {
+                foreach (TaggedPath path in tag.FilteredPathList)
+                {
+                    List<Tag> tagList = TaggingLayer.Instance.RetrieveTagByPath(path.PathName);
+                    bool found = false;
+                    foreach (Tag tempTag in tagList)
+                    {
+                        if (tempTag.TagName != tag.TagName && tempTag.IsSeamless)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found)
+                    {
+                        continue;
+                    }
+                    pathList.Add(path.PathName);
+                }
+                List<string> convertedPath = ProfilingLayer.Instance.ConvertAndFilterToPhysical(pathList);
                 foreach (string path in convertedPath)
                 {
                     try
