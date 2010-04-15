@@ -110,7 +110,7 @@ You can see a set of test cases [http://code.google.com/p/big5sync/wiki/TestCase
 
 = API =
 
-You can download the Combined HTML Help File [http://big5sync.googlecode.com/files/SynclessAPIV2.0.zip here]!
+You can download the Combined HTML Help File [http://big5sync.googlecode.com/files/SynclessCompleteAPIV2.0.zip here]!
 
 = Recommended Resources =
 [http://code.google.com/p/big5sync/wiki/DeveloperGuideRecommendations These] are additional resources which may help the developer in understanding how to develop for Syncless further.
