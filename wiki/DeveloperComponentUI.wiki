@@ -103,13 +103,15 @@ private void TimeSyncCommandCanExecute(object sender, CanExecuteRoutedEventArgs 
 
 = UI Design Principles & Philosophy =
 
-Our overall goal is to make the whole tagging and synchronization process as simple and seamless as ever.
+Our overall goal is to make the whole tagging and synchronization process as simple and seamless as ever. This can be remembered with the following acronym, SIMBA.
 
-  # Seamless - When Syncless is synchronizing files in the background, users should forget that Syncless is on.
+  # Seamless - Users should forget that Syncless is synchronizing their files in the background in seamless mode.
   # Intuitive - Users should find Syncless' functionality intuitive.
-  # Minimalist - Our interface aims to prevent cognitive overload on users.
-  # Best of Class - Aim to adopt the best UI practices from application and web development.
-  # Accessible - Users should be able to use Syncless, whether by keyboard/mouse, from the shell or drag and drag.
+  # Minimalist - Aims to prevent cognitive overload on users.
+  # Best of Class - Aims to adopt the best UI practices from application and web development.
+  # Accessible - Users can use Syncless with their workflow preference.
+
+In addition, the user interface has been made as pleasing as possible, with the appropriate use of colours, controls and meaningful icons. Many user interface guidelines have been adopted so as to make the program.
 
 = Developing an Alternative User Interface for Syncless =
      
