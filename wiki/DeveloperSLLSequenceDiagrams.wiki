@@ -1,5 +1,5 @@
 #summary Developers' Guide - Diagram - SystemLogicLayer
-#labels Phase-Implementation,V2.0
+#labels Phase-Implementation,V2.0,DeveloperGuide
 #sidebar DeveloperGuideSidebar
 == !CreateTag ==
 
