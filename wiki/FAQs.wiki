@@ -1,5 +1,5 @@
-#summary This pages contains a list of frequently asked questions.
-#labels Featured,Phase-Support,V2.0
+#summary *Featured* - This pages contains a list of frequently asked questions.
+#labels Featured,Phase-Support,V2.0,UserGuide
 
 <wiki:toc max_depth="4">
 
