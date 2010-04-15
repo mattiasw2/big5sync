@@ -54,24 +54,37 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         /// <param name="numOfPaths">The total number of folders to keep in sync.</param>
         public void Visit(FolderCompareObject folder, int numOfPaths)
         {
-            RootCompareObject root = folder as RootCompareObject;
-
-            for (int index = 0; index < numOfPaths; index++)
+            try
             {
-                string path = root == null ? Path.Combine(folder.GetSmartParentPath(index), folder.Name) : root.Paths[index];
-                DirectoryInfo f = new DirectoryInfo(path);
+                RootCompareObject root = folder as RootCompareObject;
 
-                if (f.Exists)
+                for (int index = 0; index < numOfPaths; index++)
                 {
-                    if (_progress != null)
-                    {
-                        _progress.Message = f.FullName;
-                        _progress.Update();
-                    }
+                    string path = root == null ? Path.Combine(folder.GetSmartParentPath(index), folder.Name) : root.Paths[index];
+                    DirectoryInfo f = new DirectoryInfo(path);
 
-                    ProcessFolders(folder, numOfPaths, f, index);
-                    ProcessFiles(folder, numOfPaths, f, index);
+                    if (f.Exists)
+                    {
+                        if (_progress != null)
+                        {
+                            _progress.Message = f.FullName;
+                            _progress.Update();
+                        }
+
+                        ProcessFolders(folder, numOfPaths, f, index);
+                        ProcessFiles(folder, numOfPaths, f, index);
+                    }
                 }
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.UNKNOWN, "Error retrieving contents of folder due to unauthorized access."));
+            }
+            catch (PathTooLongException e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.UNKNOWN, "Error retrieving contents of folder due to path being too long."));
             }
         }
 
@@ -98,48 +111,65 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         /// <param name="index">The index indicating which sync folder it belongs to.</param>
         private void ProcessFiles(FolderCompareObject folder, int numOfPaths, DirectoryInfo f, int index)
         {
-            FileInfo[] fileInfos = f.GetFiles();
-            foreach (FileInfo info in fileInfos)
+            try
             {
-                if (_filterChain.ApplyFilter(_filter, info.FullName))
+                FileInfo[] fileInfos = f.GetFiles();
+
+                foreach (FileInfo info in fileInfos)
                 {
-                    if (_progress != null)
+                    if (_filterChain.ApplyFilter(_filter, info.FullName))
                     {
-                        _progress.Message = info.FullName;
-                        _progress.Update();
-                    }
-
-                    BaseCompareObject o = folder.GetChild(info.Name); // Gets a child with the same name.
-                    FileCompareObject fco = null;
-                    bool conflict = false;
-
-                    if (o == null) // If o is null, create a new file compare object
-                        fco = new FileCompareObject(info.Name, numOfPaths, folder);
-                    else
-                    {
-                        try
+                        if (_progress != null)
                         {
-                            fco = (FileCompareObject)o; // Case o to a FileCompareObject is o is not null
+                            _progress.Message = info.FullName;
+                            _progress.Update();
                         }
-                        catch (InvalidCastException) // If invalid cast, it means there is a FolderCompareObject with the exact same name.
+
+                        BaseCompareObject o = folder.GetChild(info.Name); // Gets a child with the same name.
+                        FileCompareObject fco = null;
+                        bool conflict = false;
+
+                        if (o == null) // If o is null, create a new file compare object
+                            fco = new FileCompareObject(info.Name, numOfPaths, folder);
+                        else
                         {
-                            _typeConflicts.Add(info.FullName); // Add to to conflicts
-                            conflict = true;
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CONFLICT, "Conflicted file detected " + info.FullName));
+                            try
+                            {
+                                fco = (FileCompareObject)o; // Case o to a FileCompareObject is o is not null
+                            }
+                            catch (InvalidCastException)
+                            // If invalid cast, it means there is a FolderCompareObject with the exact same name.
+                            {
+                                _typeConflicts.Add(info.FullName); // Add to to conflicts
+                                conflict = true;
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(
+                                    new LogData(LogEventType.FSCHANGE_CONFLICT,
+                                                "Conflicted file detected " + info.FullName));
+                            }
                         }
-                    }
 
-                    if (!conflict)
-                    {
-                        fco.CreationTimeUtc[index] = info.CreationTimeUtc.Ticks;
-                        fco.LastWriteTimeUtc[index] = info.LastWriteTimeUtc.Ticks;
-                        fco.Length[index] = info.Length;
-                        fco.Exists[index] = true;
+                        if (!conflict)
+                        {
+                            fco.CreationTimeUtc[index] = info.CreationTimeUtc.Ticks;
+                            fco.LastWriteTimeUtc[index] = info.LastWriteTimeUtc.Ticks;
+                            fco.Length[index] = info.Length;
+                            fco.Exists[index] = true;
 
-                        if (o == null)
-                            folder.AddChild(fco); // Add the newly created FileCompareObject to this current folder
+                            if (o == null)
+                                folder.AddChild(fco); // Add the newly created FileCompareObject to this current folder
+                        }
                     }
                 }
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.UNKNOWN, "Error retrieving contents of folder due to unauthorized access."));
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.UNKNOWN, "Error retrieving contents of folder due to directory not being found."));
             }
         }
 
@@ -153,50 +183,67 @@ namespace Syncless.CompareAndSync.Manual.Visitor
         /// <param name="index">The index indicating which sync folder it belongs to.</param>
         private void ProcessFolders(FolderCompareObject folder, int numOfPaths, DirectoryInfo f, int index)
         {
-            DirectoryInfo[] infos = f.GetDirectories();
-
-            foreach (DirectoryInfo info in infos)
+            try
             {
-                if (_filterChain.ApplyFilter(_filter, info.FullName))
+                DirectoryInfo[] infos = f.GetDirectories();
+
+                foreach (DirectoryInfo info in infos)
                 {
-                    if (_progress != null)
+                    if (_filterChain.ApplyFilter(_filter, info.FullName))
                     {
-                        _progress.Message = info.FullName;
-                        _progress.Update();
-                    }
-
-                    BaseCompareObject o = folder.GetChild(info.Name); // Gets a child with the same name.
-                    FolderCompareObject fco;
-                    bool conflict = false;
-
-                    if (o == null) // If o is null, create a new folder compare object.
-                        fco = new FolderCompareObject(info.Name, numOfPaths, folder); // Create a new folder compare object
-                    else
-                    {
-                        try
+                        if (_progress != null)
                         {
-                            fco = (FolderCompareObject)o; // Cast o to a FolderCompareObject.
+                            _progress.Message = info.FullName;
+                            _progress.Update();
                         }
-                        catch (InvalidCastException) // Happens when a file has the same name as the folder.
+
+                        BaseCompareObject o = folder.GetChild(info.Name); // Gets a child with the same name.
+                        FolderCompareObject fco;
+                        bool conflict = false;
+
+                        if (o == null) // If o is null, create a new folder compare object.
+                            fco = new FolderCompareObject(info.Name, numOfPaths, folder);
+                        // Create a new folder compare object
+                        else
                         {
-                            for (int i = 0; i < numOfPaths; i++)
+                            try
                             {
-                                if (o.Exists[i])
-                                    _typeConflicts.Add(Path.Combine(o.GetSmartParentPath(i), o.Name));
+                                fco = (FolderCompareObject)o; // Cast o to a FolderCompareObject.
                             }
-                            folder.RemoveChild(info.Name); //Remove file object
-                            fco = new FolderCompareObject(info.Name, numOfPaths, folder); // Create a new folder compare object
-                            conflict = true;
-                            ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.FSCHANGE_CONFLICT, "Conflicted file detected " + info.FullName));
+                            catch (InvalidCastException) // Happens when a file has the same name as the folder.
+                            {
+                                for (int i = 0; i < numOfPaths; i++)
+                                {
+                                    if (o.Exists[i])
+                                        _typeConflicts.Add(Path.Combine(o.GetSmartParentPath(i), o.Name));
+                                }
+                                folder.RemoveChild(info.Name); //Remove file object
+                                fco = new FolderCompareObject(info.Name, numOfPaths, folder);
+                                // Create a new folder compare object
+                                conflict = true;
+                                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(
+                                    new LogData(LogEventType.FSCHANGE_CONFLICT,
+                                                "Conflicted file detected " + info.FullName));
+                            }
                         }
+
+                        fco.CreationTimeUtc[index] = info.CreationTimeUtc.Ticks;
+                        fco.Exists[index] = true;
+
+                        if (o == null || conflict)
+                            folder.AddChild(fco); // Add the newly created FolderCompareObject to this current folder
                     }
-
-                    fco.CreationTimeUtc[index] = info.CreationTimeUtc.Ticks;
-                    fco.Exists[index] = true;
-
-                    if (o == null || conflict)
-                        folder.AddChild(fco); // Add the newly created FolderCompareObject to this current folder
                 }
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.UNKNOWN, "Error retrieving contents of folder due to unauthorized access."));
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                ServiceLocator.GetLogger(ServiceLocator.DEBUG_LOG).Write(e);
+                ServiceLocator.GetLogger(ServiceLocator.USER_LOG).Write(new LogData(LogEventType.UNKNOWN, "Error retrieving contents of folder due to directory not being found."));
             }
         }
 
