@@ -10,7 +10,7 @@ The User Interface (UI) component is in charge of handling all interactions betw
 
 = Classes =
 
-The UI component consists of several important sub-components, including the single instance layer - `SingleInstanceManager` , `SynclessApplication`, windows - `MainWindow`, `TagWindow`, `UntagWindow`, `TagDetailsWindow`, `ShortcutsWindow` and `OptionsWindow`, helper components - `CommandLineHelper`, `RegistryHelper`, resource dictionary - `AppResourceDictionary`, misc components - `PortableSettingsProvider`, `FolderBrowseDialogEx` and `MinimizeToTray`.
+The UI component consists of several important sub-components, including the single instance layer - `SingleInstanceManager` , `SynclessApplication`, windows - `MainWindow`, `TagWindow`, `UntagWindow`, `TagDetailsWindow`, `ShortcutsWindow` and `OptionsWindow`, helper components - `CommandLineHelper`, `RegistryHelper`, `FileFolderHelper`, resource dictionary - `AppResourceDictionary`, misc components - `PortableSettingsProvider`.
 
 = Description of Design =
 
