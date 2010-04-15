@@ -1,5 +1,5 @@
 #summary What's In It For You After 2.0?
-#labels V2.0,Phase-Support
+#labels V2.0,Phase-Support,UserGuide
 #sidebar DeveloperGuideSidebar
 
 <wiki:toc max_depth="6" />
