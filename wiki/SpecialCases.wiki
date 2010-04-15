@@ -35,17 +35,6 @@ The reason for doing so is because it is in actual fact, a rename conflict, but 
 Assume the initial folder structure is "A\B\C", and the user renames it to "1\2\3". Syncless is able to detect N-levels of rename will attempt to merge and rename accordingly at each level.
 
 === Conflicts ===
-#summary Developers' Guide - Component - CompareAndSync
-#sidebar DeveloperGuideSidebar
-
-<wiki:toc max_depth="6" />
-
-= Overview =
-The *!CompareAndSync* component in *Syncless* is the part of the system that handles the comparison and syncing of files and folders. From a logical point of view, it can be briefly split into 2 subcomponents; the manual subcomponent that handles all manual operations, and the seamless subcomponent that handles all the automated synchronization requests from another component, the *Monitor*.
-
-Both sub-components are implemented very differently, as manual synchronization and automated synchronization are largely different. For the manual component, a *tree* is built containing the directory structure and files of all the folders to be kept in sync. Using the *Tree Visitor Pattern*, various *Visitors* will then "visit" the tree and do various tasks. A queue is used to ensure only one synchronization job can occur at any one time. On the other hand, each file/folder change is handled independently in the seamless subcomponent. Similarly, a queue is used to ensure only one synchronization job can occur at any one time.
-
-== Conflicts ==
 In Syncless, our vision is to as much as possible, discard the idea of conflicts. However, there are 2 cases which we cannot automatically resolve, and they are:
 
   # Incompatible Type Conflict - This happens when you have a file and a folder with the same name in two or more different folders. For example, C:\A\Temp, where Temp is a file, and C:\B\Temp, where Temp is a folder, and you attempt to synchronize C:\A and C:\B.
