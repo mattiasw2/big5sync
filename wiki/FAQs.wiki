@@ -11,15 +11,14 @@ Syncless is a tagged-based file Synchronization tool that provide seamless synch
 === My Syncless fail to initialize. ===
 
 There are many causes for Syncless to fail to initialize. Some of the possible cases are :
-# Syncless do not have read/write access to some of the harddisk. Syncless require read/write access on the root folder of the disk that the you tag. 
-
-# Syncless requires .Net Framework 3.5 *SP1* to run. Please ensure that you have the required version. 
+ #  Syncless do not have read/write access to some of the harddisk. Syncless require read/write access on the root folder of the disk that the you tag. 
+ #  Syncless requires .Net Framework 3.5 *SP1* to run. Please ensure that you have the required version. 
 
 === The profiles refuse to die after deleting the profile files. ===
 
 Syncless save profile in many area to assist in merging of the profiles across multiple computer and thumbdrive. It also allow Syncless to recover some of yours tag in case profiles are not saved properly. Profiles are saved in the following location
-# Application folder of Syncless;
-# All drives that is identified by Syncless. It is contain in the folder .syncless (i.e C:\.syncless)
+ #  Application folder of Syncless;
+ #  All drives that is identified by Syncless. It is contain in the folder .syncless (i.e C:\.syncless)
 
 The list of profile are tagging.xml and profiling.xml.
 
