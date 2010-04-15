@@ -15,7 +15,7 @@ The UI component consists of several important sub-components, including the sin
 = Description of Design =
 
 == Single Instance Layer ==
-In order to support many of the other fundamental features which Syncless has such as shell integration and possible future CLI support, the UI had to converted to a single instance application which support arguments. App.xaml had to be removed and replaced with the combination of `SingleInstanceManager` and `SynclessApplication`.
+In order to support many of the other fundamental features which Syncless has such as shell integration and possible future CLI support, the UI had to convert to a single instance application which support arguments. App.xaml had to be removed and replaced with the combination of `SingleInstanceManager` and `SynclessApplication`.
 
 == Separation of View from Control & Logic ==
 
@@ -34,24 +34,24 @@ The UI makes use of the `RegistryHelper` to write registry entries to enable she
 
 = UI Design Principles & Philosophy =
 
-Our overall goal is to make the tagging process as simple as ever and synchronization seamless.
+Our overall goal is to make the whole tagging and synchronization process as simple and seamless as ever.
 
-  # Seamless - When Syncless is synchronizing files in the background, users should forget their Syncless is on.
+  # Seamless - When Syncless is synchronizing files in the background, users should forget that Syncless is on.
   # Minimalist - Our interface aims to prevent cognitive overload on users.
-  # Intuitive - Users should find applications functions intuitive. 
-  # Accessible - Users should be able to use Syncless they choose, whether by keyboard or by mouse, or tagging from the shell or just simply dragging and dropping.
+  # Intuitive - Users should find Syncless' functionality intuitive.
+  # Accessible - Users should be able to use Syncless, whether by keyboard/mouse, from the shell or drag and drag.
   # Best-of-Class - Aim to adopt the best UI practices from application and web development.
   
-= Developing a Alternative UI for Syncless =
+= Developing an alternative User Interface for Syncless =
      
 To create a UI for Syncless, the developer just need to follow a few steps.
-  # Implement `Syncless.Core.IUInterface`. This is to provide the System Core with a way to to update the interface as and when necessary.
+  # Implement `Syncless.Core.IUInterface`. This is to provide the System Core with a way to update the interface as and when necessary.
   # Use `Syncless.Core.ServiceLocator` to get the `IUIControllerInterface`. This provide the list of methods which the UI developer can use to call from the UI.
   # Call the Initiate method in the `IUIControllerInterface` to initiate the `SystemLogicLayer`.
-  # 
+  # Refer to the Developer API: `Syncless.Core.IUIControllerInterface` for all the methods which will be used.
 
 = Credits =
-We would like to thank the following resources/developers for their valuable contributions to challenges that we have encountered in the course of developing the UI.
+We would like to thank the following resources/developers for their contributions/controls to challenges that we have encountered in the course of developing the UI.
 
   * *Singleton Application* - http://www.switchonthecode.com/tutorials/wpf-writing-a-single-instance-application
   * *Combined File & Folder Browser Dialog* - http://dotnetzip.codeplex.com/SourceControl/changeset/view/29832#432677
