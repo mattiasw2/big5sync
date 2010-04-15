@@ -48,7 +48,7 @@ Syncless currently provides basic filtering capabilities for files. There are 2 
 === Archiving ===
 With the archiving feature, you do not need to worry about losing an important file if you accidentally delete it and the change is propagated to other folders in the same tag. Syncless will either send the deleted file to Recycle Bin, or keep up to 10 copies of the deleted file in an archive folder, depending on your preference. This archive folder will be created in all the other folders in the same tag. Note that the file itself will not be archived in the folder where the file deletion is initiated by the user.
 
-To illustrate, let us say you tag D:\Lecture and E:\Notes to a tag named 'Lecture', both containing the file Chapter1.pdf. You accidentally deleted Chapter1.pdf under D:\Lecture. Syncless will keep a copy of Chapter1.pdf in the archive folder under E:\Notes. If you need to restore that file, simply copy the archived file back to D:\Lecture. 
+To illustrate, let's say you tag D:\Lecture and E:\Notes to a tag named 'Lecture', both containing the file Chapter1.pdf. You accidentally deleted Chapter1.pdf under D:\Lecture. Syncless will keep a copy of Chapter1.pdf in the archive folder under E:\Notes. If you need to restore that file, simply copy the archived file back to D:\Lecture. 
 
 === Time Synchronization ===
 Files may be out-of-sync if the system clocks are not consistent across multiple computers. Why worry that your most updated file be overwritten because the system clock is set earlier than the actual time? Simply allow Syncless to synchronize your system clock with the Internet Time Server and you can be assured that the file will remain as the most updated version across all your computers.
