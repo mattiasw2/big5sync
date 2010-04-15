@@ -129,6 +129,7 @@ Before you continue, you may want to find out what each button in Syncless does.
 
   * http://big5sync.googlecode.com/files/Cancel_Sync_Button.png : Cancel synchronization, only available during analyzing or queued stage in manual mode
 
+  * http://big5sync.googlecode.com/files/Cancelling_Sync_Button.png : Preparing to cancel synchronization
 
 == How to Tag and Synchronize? ==
 
