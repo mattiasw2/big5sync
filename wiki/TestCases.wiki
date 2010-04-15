@@ -109,7 +109,7 @@
 || 3. || Closing Syncless with other components running || 1) Create any component<br>2) Close syncless through the tray || All components should be closed after Syncless closes ||
 || 4. || Click on every single button on the menu of syncless || Try all buttons || Should display their own respective winforms ||
 || 5. || Only 1 instance of winform component should be displayed at any time || 1) Click on any winform component at the menu of syncless<br>2) Click on syncless on the taskbar to bring syncless to the front<br>3) Click on any shortcut of the same winform component || Should only show 1 instance of the winform at any time ||
-|| 6. || Cleaning / Tagging and Untagging folders from windows explorer || 1) Do the different steps respectively || Should produce the respective output ||
+|| 6. || Tagging and Untagging folders from windows explorer || 1) Do the different steps respectively || Should produce the respective output ||
 || 7. || Tagging a drive || 1) Go to windows explorer and tag a drive || Should prompt you for confirmation ||
 || 8. || Syncing a locked file || 1) Sync a locked (MS word) file over<br>2) Locked file is not synced over || All other UI component should be working normally ||
 || 9. || Closing Syncless while syncing || 1) Sync a large folder<br>2) Quit Syncless || Should show the termination bar ||
@@ -118,6 +118,15 @@
 || 12. || Spamming Cancel and Sync Now button || 1) Spam the Cancel and Sync Now button || Cancel button should disappear only at synchronization stage ||
 || 13. || Sync now and Cancel || 1) Sync now with a big folder<br>2) Go to another tag and sync now too<br>3) While analyzing the large file , cancel the analyze. Preview button will show<br>4) Then switch mode || Other tag synchronization should continue ||
 || 14. || Sync and untag from windows explorer || 1) Sync a few tags<br>2) Untag them from windows explorer || Should not display any progress bar ||
+
+
+[#Test_Cases Back to top]
+
+== Filter ==
+
+|| *No.* || *Summary* || *Steps* || *Expected Output* ||
+|| 1. || Empty filters || 1) Create a filter<br>2) Set Ext. Mask to empty string<br>3) Click OK || Since it is an empty filter, it should allow the update of the file ||
+|| 2. || Same filters || 1) Click on add filter<br>2) Click on add filter again || Should not allow you to set the filter ||
 
 
 [#Test_Cases Back to top]
