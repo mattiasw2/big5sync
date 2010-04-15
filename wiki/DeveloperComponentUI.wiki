@@ -40,7 +40,7 @@ The UI can then make use of these methods to interact with the logic layer. This
 The UI makes use of the `AppResourceDictionary` to hold templates of controls and other resources such as `BrushStyles` or `ColorResources`, so as to allow for their reusability in other controls.
 
 == Application Settings ==
-The user interface makes use of session settings to keep track of settings in a session of Syncless running and and properties in C# for persistance of resources such as application settings. However, since Syncless is intended to be portable, application settings need to be stored along with Syncless instead of being stored to the User Settings locale, thus we have adapted the `PortableSettingsProvider` for use as a `CustomSettingsProvider`.
+The user interface makes use of session settings to keep track of settings in a session of Syncless running and and properties in C# for persistance of resources such as application settings. However, since Syncless is intended to be portable, application settings need to be stored along with Syncless instead of being stored to the User Settings locale. Thus we have adapted the `PortableSettingsProvider` for use as a `CustomSettingsProvider`.
 
 == Shell Integration ==
 The UI makes use of the `RegistryHelper` to write registry entries to enable shell integration. It also uses the `CommandLineHelper` to handle command line arguments, which any action from the shell uses.
