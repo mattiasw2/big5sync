@@ -46,13 +46,47 @@ The user interface makes use of session settings to keep track of settings in a 
 The UI makes use of the `RegistryHelper` to write registry entries to enable shell integration. It also uses the `CommandLineHelper` to handle command line arguments, which any action from the shell uses.
 
 == Notification ==
-The UI has made used of the notification queue and priority notification queue, using the observer pattern to interact with the [http://code.google.com/p/big5sync/wiki/DeveloperComponentNotification Syncless.Notification] component.
+The UI has made use of the `NotificationQueue` and `PriorityNotificationQueue` provider by the ServiceLocator and the observer pattern for SyncProgressWatcher to interact with the [http://code.google.com/p/big5sync/wiki/DeveloperComponentNotification Syncless.Notification] component.
 
 The main notification components that are of concern are the `NotificationWatcher`, `PriorityNotificationWatcher`, `SyncProgressWatcher`.
 
-  * `NotificationWatcher` - to dequeue any notification in the UINotificationQueue
-  * `PriorityNotificationWatcher` - to dequeue any notification in the UIPriorityQueue
-  * `SyncProgressWatcher` - to watch a particular !SyncProgress as an observer for any changes to the !SyncProgress
+  * `NotificationWatcher` - to dequeue any notification in the `UINotificationQueue`
+  * `PriorityNotificationWatcher` - to dequeue any notification in the `UIPriorityQueue`
+  * `SyncProgressWatcher` - to watch a particular !`SyncProgress` as an observer for any changes to the !`SyncProgress`
+
+=== NotificationWatcher & PriorityNotificationWatcher ===
+`NotificationWatcher` and `PriorityNotificationWatcher` both run threads to dequeue any notification. After handling the notification, they will notify the `MainWindow`to refresh itself. Refer to the sample code in `NotificationWatcher`
+
+{{{
+// Handles Sync Start Notification
+if (notification.NotificationCode.Equals(NotificationCode.SyncStartNotification))
+{
+    SyncStartNotification ssNotification = notification as SyncStartNotification;
+    if (ssNotification != null)
+    {
+        _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
+        {
+            _main.CurrentProgress = ssNotification.Progress;
+            new SyncProgressWatcher(_main, ssNotification.TagName, ssNotification.Progress);
+        }));
+    }
+}
+}}}
+
+=== SyncProgressWatcher ===
+
+SyncProgressWatcher is initialized when a `NotificationCode.SyncStartNotification` is received. It then adds itself as a watcher to the SyncProgress and notifies the `MainWindow` to refresh itself whenever the progress is changed. Refer to the sample code below in `SyncProgressWatcher`
+
+{{{
+private void SyncStart()
+{
+    _main.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
+    {
+        _main.ProgressNotifySyncStart(Progress);
+        StateChanged();
+    }));
+}
+}}}
 
 == Preview Synchronization ==
 The Preview Synchronization makes use of the visitor pattern which has been used in the [http://code.google.com/p/big5sync/wiki/DeveloperComponentCompareAndSync Syncless.CompareAndSync] component. 
