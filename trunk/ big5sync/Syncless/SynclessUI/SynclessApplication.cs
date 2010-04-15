@@ -15,6 +15,9 @@ namespace SynclessUI
 
     public class SynclessApplication : Application
     {
+        /// <summary>
+        /// Reference to the Main Window
+        /// </summary>
         public MainWindow main { get; private set; }
 
         /// <summary>

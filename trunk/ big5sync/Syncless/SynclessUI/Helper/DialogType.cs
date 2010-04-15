@@ -11,9 +11,21 @@ namespace SynclessUI.Helper
     /// </summary>
     public enum DialogType
     {
+        /// <summary>
+        /// Error Dialog Type
+        /// </summary>
         Error,
+        /// <summary>
+        /// Information Dialog Type
+        /// </summary>
         Information,
+        /// <summary>
+        /// Warning Dialog Type
+        /// </summary>
         Warning,
+        /// <summary>
+        /// Indeterminate Dialog Type
+        /// </summary>
         Indeterminate
     }
 }

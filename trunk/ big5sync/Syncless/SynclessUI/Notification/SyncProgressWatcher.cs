@@ -20,6 +20,9 @@ namespace SynclessUI.Notification
         private MainWindow _main;
         private SyncProgress _progress;
 
+        /// <summary>
+        /// Current Progress to be tracked by the SyncProgressWatcher
+        /// </summary>
         public SyncProgress Progress
         {
             get { return _progress; }

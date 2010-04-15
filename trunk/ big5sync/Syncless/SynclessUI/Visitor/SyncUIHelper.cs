@@ -11,7 +11,7 @@ using Syncless.CompareAndSync.Manual.Visitor;
 namespace SynclessUI.Visitor
 {
     /// <summary>
-    /// Helper class to Traverse Files & Folder traverse the whole tree so as to allow the visitor to visit each node
+    /// Helper class to Traverse Files/Folder traverse the whole tree so as to allow the visitor to visit each node
     /// </summary>
     public class SyncUIHelper
     {

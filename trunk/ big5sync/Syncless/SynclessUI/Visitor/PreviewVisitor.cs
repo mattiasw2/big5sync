@@ -24,18 +24,65 @@ namespace SynclessUI.Visitor
 
         private DataTable _syncData;
 
-        // Constants for all the datagrid columns, which is used in PreviewVisitor and PreviewSyncWindow
+        // Constants for the names of all the datagrid columns, which is used in PreviewVisitor and PreviewSyncWindow
+        /// <summary>
+        /// Name for the Source Column
+        /// </summary>
         public const string Source = "source";
+        
+        /// <summary>
+        /// Name for the Destination Column
+        /// </summary>
         public const string Dest = "destination";
+
+        /// <summary>
+        /// Name for the Operation Column
+        /// </summary>
         public const string Operation = "operation";
+
+        /// <summary>
+        /// Name for the Tooltip Column
+        /// </summary>
         public const string Tooltip = "tooltip";
+
+        /// <summary>
+        /// Name for the Source Icon Column
+        /// </summary>
         public const string SourceIcon = "sourceicon";
+
+        /// <summary>
+        /// Name for the Destination Icon Column
+        /// </summary>
         public const string DestIcon = "desticon";
+
+        /// <summary>
+        /// Name for the Source Last Modified Date Column
+        /// </summary>
         public const string SourceLastModifiedDate = "sourcelastmodifieddate";
+
+        /// <summary>
+        /// Name for the Source Last Modified Time Column
+        /// </summary>
         public const string SourceLastModifiedTime = "sourcelastmodifiedtime";
+        
+        /// <summary>
+        /// Name for the Source Size Column
+        /// </summary>
         public const string SourceSize = "sourcesize";
+
+        /// <summary>
+        /// Name for the Destination Last Modified Date Column
+        /// </summary>
         public const string DestLastModifiedDate = "destlastmodifieddate";
+
+        /// <summary>
+        /// Name for the Destionation Last Modified Time Column
+        /// </summary>
         public const string DestLastModifiedTime = "destlastmodifiedtime";
+
+        /// <summary>
+        /// Name for the Destination Size Column
+        /// </summary>
         public const string DestSize = "destsize";
 
         //Path for each of the SyncOperations 
@@ -240,6 +287,10 @@ namespace SynclessUI.Visitor
             }
         }
 
+        /// <summary>
+        /// Visits the RootCompareObject and does nothing
+        /// </summary>
+        /// <param name="root">The RootCompareObject to visit</param>
         public void Visit(RootCompareObject root)
         {
             //Do nothing

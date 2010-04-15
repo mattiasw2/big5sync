@@ -186,9 +186,9 @@ namespace SynclessUI
                 if (path != "")
                 {
                     DirectoryInfo di = new DirectoryInfo(path);
-                    if (di.Exists && !FileHelper.IsFile(path)) // detect zip files and such files
+                    if (di.Exists && !FileFolderHelper.IsFile(path)) // detect zip files and such files
                     {
-                        if (FileHelper.IsCDRomDrive(path))
+                        if (FileFolderHelper.IsCDRomDrive(path))
                         {
                             DialogHelper.ShowError(this, "Invalid Folder",
                                                    "You cannot tag any folder from a CD/DVD-Rom drive.");
@@ -197,7 +197,7 @@ namespace SynclessUI
                                 _isInvalidFolder = true;
                             }
                         }
-                        else if (FileHelper.IsSynclessFolder(path))
+                        else if (FileFolderHelper.IsSynclessFolder(path))
                         {
                             DialogHelper.ShowError(this, "Invalid Folder", "You cannot tag this folder.");
                             if (!_isTaggedNormally)
@@ -246,7 +246,7 @@ namespace SynclessUI
                 if (TagToUse != "")
                 {
                     // Make sure path has substance and is not a file
-                    if (_path != "" && !FileHelper.IsFile(_path))
+                    if (_path != "" && !FileFolderHelper.IsFile(_path))
                     {
                         // trigger the warning choices
                         bool tocontinue1 = TriggerLongPathWarning();
@@ -259,7 +259,7 @@ namespace SynclessUI
                             {
                                 DirectoryInfo di = new DirectoryInfo(_path);
                                 // Check once again if the folder exists and that the path selected is not a File
-                                if (di.Exists && !FileHelper.IsFile(_path))
+                                if (di.Exists && !FileFolderHelper.IsFile(_path))
                                 {
                                     _main.CreateTag(TagToUse);
 
