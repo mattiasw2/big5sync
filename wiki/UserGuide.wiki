@@ -302,7 +302,7 @@ Simply type in part of the tag name and Syncless will display the full name for 
 
 Do you have many tags to maintain and have difficulty finding that exact tag from the long list? Syncless supports filtering of tags so that you can search for the tag you want just by entering the tag name.
 
-Let us say you have many tags in the tag list. 
+Let's say you have many tags in the tag list. 
 
 http://big5sync.googlecode.com/files/Multiple_Tag_Names.png
 
