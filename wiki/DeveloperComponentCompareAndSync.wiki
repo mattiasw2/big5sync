@@ -1,5 +1,5 @@
 #summary Developers' Guide - Component - CompareAndSync
-#labels Phase-Implementation
+#labels Phase-Implementation,V2.0,DeveloperGuide
 #sidebar DeveloperGuideSidebar
 
 <wiki:toc max_depth="6" />
