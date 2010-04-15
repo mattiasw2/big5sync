@@ -19,17 +19,11 @@ Sometimes unhandled exception is thrown at program start up. We are still lookin
 
 == Cannot Sync File with Very Long Name ==
 
-As of version 2.0, the file/folder with !PathTooLongException will simply not be synced. No error will be thrown. Will try to implement a notification to inform user of such error in future releases. Refer to [http://code.google.com/p/big5sync/issues/detail?id=8 Issue 8]
+As of version 2.0, the file/folder with !PathTooLongException will simply not be synced. No error will be thrown. Will try to implement a notification to inform user of such error in future releases. The user may view the logs to see what is happening. Refer to [http://code.google.com/p/big5sync/issues/detail?id=8 Issue 8]
 
 == Unable to Handle Disk with Not Enough Space ==
 
-As of version 2.0, when a disk runs out of space, synchronizing will simply 
-
-= Profiling =
-
-== Unable to Load Profile from Protected Removable Drive ==
-
-Syncless cannot access some of the protected removable drives to retrieve guid.id or write metadata into the drive.
+As of version 2.0, when a disk runs out of space, synchronizing will complete the synchronization, without hanging or crashing. The user may view the logs to see what is happening. Refer to [http://code.google.com/p/big5sync/issues/detail?id=8 Issue 8]
 
 = Tagging =
 
