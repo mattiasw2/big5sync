@@ -42,7 +42,7 @@ Our overall goal is to make the whole tagging and synchronization process as sim
   # Accessible - Users should be able to use Syncless, whether by keyboard/mouse, from the shell or drag and drag.
   # Best-of-Class - Aim to adopt the best UI practices from application and web development.
   
-= Developing an alternative User Interface for Syncless =
+= Developing an Alternative User Interface for Syncless =
      
 To create a UI for Syncless, the developer just need to follow a few steps.
   # Implement `Syncless.Core.IUInterface`. This is to provide the System Core with a way to update the interface as and when necessary.
