@@ -6,7 +6,7 @@
 
 = Overview =
 
-The *Logging* component is in charge of handling all user, debug and developer logging actions. It is implemented using log4net API.
+The *Logging* component is in charge of handling all user, debug and developer logging actions. It is implemented using [http://logging.apache.org/log4net/ log4net].
 
 = Classes =
 
