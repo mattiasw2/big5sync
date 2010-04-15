@@ -28,7 +28,7 @@ Why choose Syncless over other synchronization tools? The reason is simple. Sync
 
   * *Seamless Synchronization*: Any changes in the tagged folders can be detected and synchronized without any human intervention.
 
-  * *Filtering*:  Use Syncless's filtering features for the ultimate control in synchronization. Currently, Syncless is able to include or exclude files and folders by extension and path. Other filters will be available in later versions.
+  * *Filtering*:  Use Syncless's filtering features for the ultimate control in synchronization. Currently, Syncless is able to include or exclude files and folders by extension and path.
 
   * *Archiving*: Syncless archives files and folders which have been removed. Every file and folder can be either sent to Recycle Bin or archived up to 10 copies. 
 
