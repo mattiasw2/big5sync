@@ -10,7 +10,7 @@ The User Interface (UI) component is in charge of handling all interactions betw
 
 = Classes =
 
-The UI component consists of several important sub-components, including the single instance layer - `SingleInstanceManager` , `SynclessApplication`, windows - `MainWindow`, `TagWindow`, `UntagWindow`, `TagDetailsWindow`, `ShortcutsWindow`, `LogWindow`, `WelcomeScreenWindow`, `PreviewSyncWindow`, `DialogWindow`, `CreateTagWindow`, `OptionsWindow`, helper components - `CommandLineHelper`, `RegistryHelper`, `FileFolderHelper`, `DialogType`, `DialogHelper`, resource dictionary - `AppResourceDictionary`, notification components - `NotificationWatcher`, `PriorityNotificationWatcher`, `SyncProgressWatcher`, preview sync components - `PreviewVisitor`, `SyncUIHelper` , misc components - `PortableSettingsProvider`.
+The UI component consists of several important sub-components, including the single instance components - `SingleInstanceManager` , `SynclessApplication`, windows - `MainWindow`, `TagWindow`, `UntagWindow`, `TagDetailsWindow`, `ShortcutsWindow`, `LogWindow`, `WelcomeScreenWindow`, `PreviewSyncWindow`, `DialogWindow`, `CreateTagWindow`, `OptionsWindow`, helper components - `CommandLineHelper`, `RegistryHelper`, `FileFolderHelper`, `DialogType`, `DialogHelper`, resource dictionary - `AppResourceDictionary`, notification components - `NotificationWatcher`, `PriorityNotificationWatcher`, `SyncProgressWatcher`, preview sync components - `PreviewVisitor`, `SyncUIHelper` , misc components - `PortableSettingsProvider`.
 
 = Third-Party Components =
 In order to enhance the usability of Syncless, third-party components have been used.
@@ -27,7 +27,7 @@ In order to enhance the usability of Syncless, third-party components have been 
 
 = Description of Design =
 
-== Single Instance Layer ==
+== Single Instance Components ==
 In order to support many of the other fundamental features which Syncless has such as shell integration and possible future CLI support, the UI had to convert to a single instance application which support arguments. App.xaml had to be removed and replaced with the combination of `SingleInstanceManager` and `SynclessApplication`.
 
 == Separation of View from Control & Logic ==
