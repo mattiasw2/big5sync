@@ -111,7 +111,7 @@ Our overall goal is to make the whole tagging and synchronization process as sim
   # Best of Class - Aims to adopt the best UI practices from application and web development.
   # Accessible - Users can use Syncless with their workflow preference.
 
-In addition, the user interface has been made as pleasing as possible, with the appropriate use of colours, controls and meaningful icons. Many user interface guidelines have been adopted so as to make the program.
+In addition, the user interface has been made as pleasing as possible, with the appropriate use of colours, controls, meaningful icons and with the consideration of user interface guidelines always in mind.
 
 = Developing an Alternative User Interface for Syncless =
      
