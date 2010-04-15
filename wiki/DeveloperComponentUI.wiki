@@ -45,6 +45,16 @@ The user interface makes use of session settings to keep track of settings in a 
 == Shell Integration ==
 The UI makes use of the `RegistryHelper` to write registry entries to enable shell integration. It also uses the `CommandLineHelper` to handle command line arguments, which any action from the shell uses.
 
+== Notification ==
+The UI makes heavy use of the 
+
+== Preview Synchronization ==
+The Preview Synchronization makes use of the visitor pattern which has been used in the [http://code.google.com/p/big5sync/wiki/DeveloperComponentCompareAndSync Syncless.CompareAndSync] component. 
+
+
+Firstly, the Preview Synchronization 
+
+
 = WPF Features In Play =
 The user interface has made use of features such as data binding, customization of controls, animation and commands in WPF. The following explains animation and commands.
 
