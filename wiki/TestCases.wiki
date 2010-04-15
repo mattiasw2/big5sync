@@ -109,7 +109,7 @@
 || 3. || Closing Syncless with other components running || 1) Create any component<br>2) Close syncless through the tray || All components should be closed after Syncless closes ||
 || 4. || Click on every single button on the menu of syncless || Try all buttons || Should display their own respective winforms ||
 || 5. || Only 1 instance of winform component should be displayed at any time || 1) Click on any winform component at the menu of syncless<br>2) Click on syncless on the taskbar to bring syncless to the front<br>3) Click on any shortcut of the same winform component || Should only show 1 instance of the winform at any time ||
-|| 6. || Cleaning / Tagging and Untagging folders from windows explorer || 1) Do the different steps respectively || All files (if any) will sync over except for the locked file || Should produce the respective output ||
+|| 6. || Cleaning / Tagging and Untagging folders from windows explorer || 1) Do the different steps respectively || Should produce the respective output ||
 || 7. || Tagging a drive || 1) Go to windows explorer and tag a drive || Should prompt you for confirmation ||
 || 8. || Syncing a locked file || 1) Sync a locked (MS word) file over<br>2) Locked file is not synced over || All other UI component should be working normally ||
 || 9. || Closing Syncless while syncing || 1) Sync a large folder<br>2) Quit Syncless || Should show the termination bar ||
