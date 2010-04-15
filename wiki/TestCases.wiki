@@ -150,7 +150,7 @@
 
 [#Test_Cases Back to top]
 
-== Tagging Merge ==
+== Tag Merging ==
 
 || *No.* || *Steps* || *Expected Output* ||
 || 1. || 1) Delete all the .syncless<br>2) Create tag ‘A’ in Computer 1. Tag folder A in computer 1, tag folder B in thumbdrive<br>3) Go to computer 2 || Tag A will appear, folder B will appear ||
