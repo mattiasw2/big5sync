@@ -130,3 +130,21 @@
 
 
 [#Test_Cases Back to top]
+
+
+== TimeSync ==
+
+|| *No.* || *Summary* || *Steps* || *Expected Output* ||
+|| 1. || Timesync || 1) Change the time clock<br>2) Click on timesync || Time will be synchronised ||
+
+
+[#Test_Cases Back to top]
+
+
+== Removable Storage ==
+
+|| *No.* || *Summary* || *Steps* || *Expected Output* ||
+|| 1. || Safely remove a removable storage || 1) Go to tray and safely remove thumbdrive || Removable drive should be removed successfully and updated on the tag window display ||
+
+
+[#Test_Cases Back to top]
