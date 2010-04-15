@@ -209,7 +209,7 @@ You can personalize Syncless through the http://big5sync.googlecode.com/files/Ap
 
 === General and User Interface Settings ===
 
-http://big5sync.googlecode.com/files/Application_Settings_Window.png
+http://big5sync.googlecode.com/files/General_Settings_Window.png
 
 
 ==== Show Welcome Screen on Application Start ====
@@ -251,7 +251,7 @@ Worried that your files are out-of-sync because the system clocks are not consis
 
 Syncless makes synchronization even safer by providing archiving option. Just in case you accidentally delete a file and perform synchronization on this file, you can still retrieve it from either the Recycle Bin or the Syncless' archive folder.
 
-http://big5sync.googlecode.com/files/Archiving_Option_Window.png
+http://big5sync.googlecode.com/files/Archive_Settings_Window.png
 
 
 ==== Send to Recycle Bin ====
@@ -273,11 +273,8 @@ Want to know what changes will be made to your files and folders before committi
 
 Access the preview result window through the http://big5sync.googlecode.com/files/Preview_Sync_Button.png button.
 
-http://big5sync.googlecode.com/files/Preview_Sync_Window.png
+http://big5sync.googlecode.com/files/Preview_Window.png
 
-The arrow indicates the direction of synchronization and type of operation to be performed. For instance, green arrow indicates that the file/folder is new in the destination. To find out what each arrow indicates, simply point your mouse over the arrow and read the tool tip.
-
-http://big5sync.googlecode.com/files/Sync_Preview_Arrow_Tool_Tip.png
 
 === Viewing Logs ===
 
@@ -285,7 +282,7 @@ You do not have to remember the changes you have made to your folders and files.
 
 Access the event log through the http://big5sync.googlecode.com/files/ViewLogButton.png button.
 
-http://big5sync.googlecode.com/files/Log_Window.png
+http://big5sync.googlecode.com/files/View_Log_Window.png
 
 You can filter out log messages by checking/unchecking the following options.
 
@@ -315,7 +312,7 @@ http://big5sync.googlecode.com/files/Filtered_Tag_Names.png
 
 Syncless helps you to save time and increase productivity by providing keyboard shortcuts to the many commonly used operations. Below is the list of keyboard shortcuts provided by Syncless.
 
-http://big5sync.googlecode.com/files/Shortcut_Window.png
+http://big5sync.googlecode.com/files/Shortcut_List_Window.png
 
 If you forget the shortcut keys, simply go to http://big5sync.googlecode.com/files/ShortcutButton.png at the window toolbar and view the list again.
 
