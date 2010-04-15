@@ -4,10 +4,8 @@
 
 <wiki:toc max_depth="6" />
 
-= Features =
-
 == Reporting of Sync Results ==
-We are in the process of coming up with a clean and clear interface on presenting preview and synchronization results, and this will be implemented very soon.
+Currently, there is no way to see the synchronization results after each sync. This may come in a future release.
 
 == Uni-Directional Synchronization ==
 Currently, our software simply keeps every folder under the same tag in sync. In future, we will look at including options for setting sources and targets, so that the synchronization is uni-directional.
@@ -19,4 +17,4 @@ Currently, Syncless only provides file extension filters. In the future, we will
 Currently, all profiles will be merged. In the future, the user will be able to name their profiles and only profiles with the same name will be merged.
 
 == Suggestion Box ==
-A place where you can mail us your suggestion.
+A place where you can mail us your suggestions.
