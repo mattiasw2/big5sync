@@ -34,7 +34,7 @@
 				<Label x:Name="LblCancel" FontFamily="Century Gothic" FontSize="9.333" Content="Cancel" FontWeight="Bold"/>
 			</Button>
 		</StackPanel>
-		<Label x:Name="LblVersion" FontFamily="Century Gothic" Foreground="White" Content="Syncless Version 1.999" FontWeight="Normal" Grid.Column="1" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+		<Label x:Name="LblVersion" FontFamily="Century Gothic" Foreground="White" Content="Syncless Version 2.0" FontWeight="Normal" Grid.Column="1" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
 		<Image x:Name="TagIcon" HorizontalAlignment="Right" Grid.Column="1" Width="80" Height="80" Grid.RowSpan="2" VerticalAlignment="Top" Margin="0,-25,-25,0" Grid.ColumnSpan="2" Source="Icons/option.ico"/>
 		<Grid Grid.Column="1" Grid.Row="2" Height="250">
     <Label x:Name="TabItemDescription" VerticalAlignment="Top" Content="General and User Interface Settings" Margin="0,22,0,0" FontFamily="Century Gothic" Padding="5,4,1,4" Background="White" FontWeight="Bold"/>
