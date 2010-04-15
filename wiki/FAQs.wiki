@@ -1,0 +1,17 @@
+#summary This pages contains a list of frequently asked questions.
+
+
+=== Question: What is Syncless ? ===
+Answer: 
+Syncless is a tagged-based file Synchronization tool that provide seamless synchronization for multiple folders. 
+
+ 
+=== Question: My Syncless fail to initialize ===
+Answer:
+There are many causes for Syncless to fail to initialize. Some of the possible cases are :
+1)Syncless do not have read/write access to some of the harddisk. Syncless require read/write access on the root folder of the disk that the you tag. 
+
+2)Syncless requires .Net Framework 3.5 *SP1* to run. Please ensure that you have the required version. 
+
+=== Question: Who are we ? ===
+Answer: We are a group from student from [http://www.nus.edu.sg National University of Singapore] that took a software engineering module, and this is our school project. We decide that it should not be just a school project, so we took a step ahead and created Syncless.
