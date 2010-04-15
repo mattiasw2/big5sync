@@ -144,7 +144,7 @@ private void TimeSyncCommandCanExecute(object sender, CanExecuteRoutedEventArgs 
 }
 }}}
 
-`TimeSyncCommandExecute` contains the actual code to execute the actual TimeSync functionality.
+`TimeSyncCommandExecute` contains the actual code to execute the actual !TimeSync functionality.
 `TimeSyncCommandCanExecute` contains the code to ensure that the command can be executed.
 `TimeSyncCommand` is the actual command which will be assign to components like `BtnTimeSync`
 `CommandBinding` binds all the above 3 together.
