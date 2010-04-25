@@ -8,7 +8,7 @@
 Syncless is a tagged-based file Synchronization tool that provides seamless synchronization for multiple folders. 
 
  
-=== My Syncless fail to initialize. ===
+=== My Syncless fails to initialize. ===
 
 There are many causes for Syncless to fail to initialize. Some of the possible cases are :
  #  Syncless does not have read/write access to some of the hard disk drives. Syncless requires read/write access on the root folder of the disk that you tag. 
