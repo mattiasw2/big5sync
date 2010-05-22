@@ -1,6 +1,10 @@
 #summary *Featured* - List of changes in different version
 #labels Featured
 
+= Changelog for version _2.1_ =
+ * Added support to minimize Syncless on startup. The option can be found in Settings under general settings.
+ * A new tab for notification in settings.. 
+
 = Changelog for version _2.0_ =
  * Some minor bug fixes
 
