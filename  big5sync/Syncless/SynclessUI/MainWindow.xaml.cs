@@ -112,6 +112,12 @@ namespace SynclessUI
             InitializeComponent();
             InitializeSyncless();
             InitializeAllCommands();
+
+            if (Settings.Default.MinimizeOnStartup)
+            {
+                MinimizeWindow();
+            }
+
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
