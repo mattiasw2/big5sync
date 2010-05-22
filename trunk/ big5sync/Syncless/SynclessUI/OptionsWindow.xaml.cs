@@ -84,6 +84,7 @@ namespace SynclessUI
             ChkBoxEnableNotificationSounds.IsChecked = Settings.Default.EnableNotificationSounds;
             ChkBoxDisplayWelcomeScreen.IsChecked = Settings.Default.DisplayWelcomeScreen;
             ChkBoxSynchronizeTime.IsChecked = Settings.Default.SynchronizeTime;
+            ChkBoxMinimizeOnStartup.IsChecked = Settings.Default.MinimizeOnStartup;
         }
 
         #endregion
@@ -190,6 +191,8 @@ namespace SynclessUI
             Settings.Default.EnableNotificationSounds = (bool)ChkBoxEnableNotificationSounds.IsChecked;
             Settings.Default.DisplayWelcomeScreen = (bool)ChkBoxDisplayWelcomeScreen.IsChecked;
             Settings.Default.SynchronizeTime = (bool)ChkBoxSynchronizeTime.IsChecked;
+            Settings.Default.MinimizeOnStartup = (bool) ChkBoxMinimizeOnStartup.IsChecked;
+
             Settings.Default.Save();
         }
 
